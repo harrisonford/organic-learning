@@ -7,6 +7,7 @@ told which. We watch accuracy, answer time and reward per time class evolve.
 
     python experiments/timed_life.py [episodes] [out.jsonl]      # with deadlines
     NO_DEADLINES=1 python experiments/timed_life.py ...          # control: only the small tick cost
+    RAW=1 python experiments/timed_life.py ...                   # the barebones brain on raw organs
 """
 
 import json
@@ -18,6 +19,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from organic.brain import Brain  # noqa: E402
+from organic.raw_brain import RawBrain  # noqa: E402
 from organic.evaluate import same_answer  # noqa: E402
 from organic.scenes import LOGIC_INTENTS, RELATION_INTENTS, SINGLE_INTENTS, episode, reward, time_class  # noqa: E402
 
@@ -29,7 +31,8 @@ EVERY = int(os.environ.get("EVERY", 500))
 ALL = SINGLE_INTENTS + LOGIC_INTENTS + RELATION_INTENTS
 
 rng = np.random.default_rng(SEED)
-brain = Brain(seed=SEED, **json.loads(os.environ.get("BRAIN", "{}")))
+BrainClass = RawBrain if os.environ.get("RAW") else Brain
+brain = BrainClass(seed=SEED, **json.loads(os.environ.get("BRAIN", "{}")))
 test_rng = np.random.default_rng(99)
 test = [episode(test_rng, "test", ALL) for _ in range(360)]
 log = open(out_path, "w")
@@ -52,7 +55,7 @@ for age in range(1, N + 1):
     e = episode(rng, "train", ALL)
     _, tick, got = brain.think(e["image"], e["question"], e["answer"], reward=lambda t, ok, i=e["intent"]: reward(i, t, ok, deadlines))
     lived_reward.append(got)
-    if age % 2000 == 0:
+    if age % 2000 == 0 and isinstance(brain, Brain):
         brain.sleep(replay=0)
     if age % EVERY == 0:
         m = measure()
