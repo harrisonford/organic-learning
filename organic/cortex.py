@@ -253,9 +253,12 @@ class Cortex:
         surprise = 1.0 - float(probs[gpos])  # global neuromodulator
 
         # problem affinity of every reasonably close cluster
-        cand = np.where(r["aff"][: self.C] > self.theta_active)[0]
+        # P = aff * compat with compat <= 1, so only clusters at least this close
+        # to the stimulus can be specialists (or familiar)
+        floor = max(self.theta_active, min(self.theta_problem, self.theta_familiar or 1.0))
+        cand = np.where(r["aff"][: self.C] >= floor)[0]
         a_c = self._cluster_activity(cand, s)
-        compat = (a_c * self.Wout[cand][:, :, target]).sum(axis=1) / (a_c.sum(axis=1) + 1e-8)
+        compat = (a_c * self.Wout[cand, :, target]).sum(axis=1) / (a_c.sum(axis=1) + 1e-8)
         P = r["aff"][cand] * compat
         chosen = P >= self.theta_problem
         if self.theta_familiar is not None:

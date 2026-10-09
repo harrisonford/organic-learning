@@ -42,8 +42,9 @@ for k, (name, n) in enumerate(phases):
 every = int(os.environ.get("EVERY", 250))
 os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
-rng = np.random.default_rng(0)
-brain = Brain(**json.loads(os.environ.get("BRAIN", "{}")))  # e.g. BRAIN={"hear_categories": true}
+SEED = int(os.environ.get("SEED", 0))
+rng = np.random.default_rng(SEED)
+brain = Brain(seed=SEED, **json.loads(os.environ.get("BRAIN", "{}")))  # e.g. BRAIN={"sprouting": true}
 log = open(out_path, "w")
 t0 = time.time()
 births_before = 0
@@ -65,7 +66,8 @@ for age in range(1, len(schedule) + 1):
             "new_clusters": int(brain.speech.births - births_before),
             "word_forms": int(brain.V),
             "sensory": {k: int(a.C) for k, a in brain.areas.items()},
-            "sprouted": {a.name: int(a.area.C) for a, _ in brain.sprouted},
+            "sprouted": {a.name: int(a.size()) for a, _ in brain.sprouted},
+            "sprout_myelin": {a.name: round(p.myelin, 3) for a, p in brain.sprouted},
             "events": [ev for ev in brain.events if ev[0] > age - every],
             "base_acc": float(np.mean(list(base.values()))),
             "logic_acc": float(np.mean(list(logic.values()))),

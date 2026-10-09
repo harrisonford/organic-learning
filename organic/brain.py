@@ -51,9 +51,8 @@ class Brain:
     hear_categories = False  # defaults for brains saved before these existed
     fatigue_decay = 0.4
     sprouting = False
-    sprouted = ()
 
-    def __init__(self, seed=0, lam=1.5, spread=0.3, fatigue=0.9, coincidence_weight=0.8, category_blend=0.5, rem_weight=0.6, hear_categories=False, fatigue_decay=0.4, sprouting=False):
+    def __init__(self, seed=0, lam=1.5, spread=0.3, fatigue=0.9, coincidence_weight=0.8, category_blend=0.5, rem_weight=0.6, hear_categories=False, fatigue_decay=0.4, sprouting=False, stable_sprouts=False):
         self.eye = Eye()
         self.ear = Ear(seed=seed + 7)
         self.areas = {
@@ -95,9 +94,18 @@ class Brain:
         self.sprouting = sprouting
         self.sprouted = []  # list of (SproutedArea, Pathway)
         self.sprout_weight = 0.8
+        self.stable_sprouts = stable_sprouts
+        self.surprise_trace = 0.5
         self.surprise_window, self.surprise_history = [], []
         self.last_sprout = 0
         self.events = []
+
+    def __setstate__(self, state):
+        """Load brains saved by older versions: fill in parts they did not have yet."""
+        self.__dict__.update(state)
+        defaults = {"stable_sprouts": False, "surprise_trace": 0.5, "sprouted": [], "sprout_weight": 0.8, "surprise_window": [], "surprise_history": [], "last_sprout": 0, "events": []}
+        for k, v in defaults.items():
+            self.__dict__.setdefault(k, v)
 
     # -------------------------------------------------------------- lexicon
 
@@ -246,7 +254,7 @@ class Brain:
     def speech_input(self, q_code, said, co, remaining, sprouted=()):
         parts = [q_code, self.ear.said(said, self.inner_voice), self.co_weight * co, self.rem_weight * remaining]
         for (area, path), code in zip(self.sprouted, sprouted):
-            n = np.linalg.norm(code)
+            n = np.linalg.norm(code)  # each sprouted area's output, by pathway gain
             parts.append(self.sprout_weight * path.gain * (code / n if n > 0 else code))
         s = np.concatenate(parts)
         return s / np.linalg.norm(s)
@@ -280,9 +288,11 @@ class Brain:
     def _sprout(self):
         name = f"sprout{len(self.sprouted) + 1}"
         blocks = [("question", self.ear.width), ("comparator", self.co_dim)] + [(a, 64) for a in ("shape", "color", "where", "number")]
-        area = SproutedArea(name, blocks, seed=len(self.sprouted) + 101)
-        self.sprouted.append((area, Pathway(f"{name}->speech")))
-        self.speech.grow_inputs(area.area.axon_dim)
+        area = SproutedArea(name, blocks, seed=len(self.sprouted) + 101, stable=self.stable_sprouts)
+        # a young area starts half-connected (critical period); whether its
+        # pathway matures is then decided by the dopamine-like signal below
+        self.sprouted.append((area, Pathway(f"{name}->speech", myelin=0.3 if self.stable_sprouts else 0.05)))
+        self.speech.grow_inputs(area.out_dim)
         self.last_sprout = self.age
         self.events.append((self.age, f"sprouted {name}"))
 
@@ -319,16 +329,18 @@ class Brain:
         if len(scene["objects"]) == 1:
             return 0
         heard = [i for i in (self.known(u) for u in q_words) if i is not None]
-        best, best_score = 0, 3.0
+        if not heard:
+            return 0
+        # biased competition (Desimone & Duncan 1995): objects compete for
+        # attention; heard words add a bias to the objects they describe
+        scores = []
         for k in range(len(scene["objects"])):
             ls = self.lifts(scene, k)
-            score = 1.0
-            for a in ("shape", "color", "where"):
-                if a in ls and heard:
-                    score = max(score, float(ls[a][heard].max()))
-            if score > best_score:
-                best, best_score = k, score
-        return best
+            scores.append(sum(np.log(max(float(ls[a][heard].max()), 1.0)) for a in ("shape", "color", "where") if a in ls))
+        order = np.argsort(scores)[::-1]
+        if scores[order[0]] - scores[order[1]] > np.log(1.2):
+            return int(order[0])
+        return 0  # no clear bias: the most salient object wins
 
     def _joint_attention(self, scene, attention, w):
         """While listening, look at the object that the heard word is about."""
@@ -426,8 +438,14 @@ class Brain:
             for name, p in self.pathways.items():
                 active = name == "number" and scene["number"] is not None or (name != "number" and scene["objects"])
                 p.carry(1.0 if active else 0.0)
+            ep_surprise = float(np.mean(surprises))
+            self.surprise_trace = 0.99 * self.surprise_trace + 0.01 * ep_surprise
             for _, p in self.sprouted:
-                p.carry(1.0)
+                if self.stable_sprouts:
+                    # dopamine-gated: myelinate when things go better than usual
+                    p.myelin = float(np.clip(p.myelin + 0.02 * (self.surprise_trace - ep_surprise), 0.0, 1.0))
+                else:
+                    p.carry(1.0)
             self.hippocampus.store((image, question, answer))
             self._monitor(float(np.mean(surprises)))
         return self.text(said), (correct / len(target) if target else None)
@@ -440,8 +458,14 @@ class Brain:
             return
         V = self.V
         idx = lambda ws: [self.known(w) for w in ws]  # noqa: E731
-        whole = np.zeros(V, np.float32)
-        whole[idx(said)] = 1.0  # what the speaker said about the scene
+        ov = self.overlap()
+
+        def heard_vector(ws):
+            """Heard forms, and every form sharing auditory neurons with them
+            ("it is small" also excites the neurons of "small")."""
+            return ov[:, idx(ws)].max(axis=1) if ws else np.zeros(V, np.float32)
+
+        whole = heard_vector(said)  # what the speaker said about the scene
         # homeostasis: word neurons track their own average activity during vision
         self.visual_episodes += 1
         rate = max(0.003, 1.0 / self.visual_episodes)
@@ -453,8 +477,7 @@ class Brain:
             if single:
                 heard = whole
             elif k in heard_by_object:
-                heard = np.zeros(V, np.float32)
-                heard[idx(heard_by_object[k])] = 1.0
+                heard = heard_vector(heard_by_object[k])
             else:
                 continue
             for a in self.object_areas:
@@ -499,7 +522,7 @@ class Brain:
 
     def report(self):
         areas = " ".join(f"{k}={a.C}" for k, a in self.areas.items())
-        areas += "".join(f" {a.name}={a.area.C}" for a, _ in self.sprouted)
+        areas += "".join(f" {a.name}={a.size()}" for a, _ in self.sprouted)
         myel = " ".join(f"{k}={p.myelin:.2f}" for k, p in self.pathways.items())
         neurons = sum(a.neuron_count() for a in self.areas.values()) + self.speech.neuron_count() + self.V
         return (
