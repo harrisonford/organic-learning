@@ -190,7 +190,8 @@ class V1:
     def __init__(self, kinds=16, window=3, channels=6, k_active=2, seed=0):
         self.kinds = kinds
         self.window = window
-        self.dim = window * window * channels
+        self.channels = channels
+        self.dim = window * window * (channels // 2)  # signed opponent channels
         rng = np.random.default_rng(seed)
         w = rng.normal(0, 1, (kinds, self.dim)).astype(np.float32)
         self.W = w / np.linalg.norm(w, axis=1, keepdims=True)
@@ -199,21 +200,32 @@ class V1:
         self.frozen = False
 
     def patches(self, g):
-        """Every (ring, angle) window of ganglion activity; angles wrap around."""
-        R, A, C = g.shape
+        """Every (ring, angle) window of ganglion activity; angles wrap around.
+
+        ON and OFF cells are combined into signed opponent signals and each
+        window loses its mean (local contrast normalization, as in retina and
+        LGN), so what is left is the spatial pattern. Returns the normalized
+        patterns and their contrast energy.
+        """
+        signed = g[..., 0::2] - g[..., 1::2]  # lum, L-M, S-(L+M)
+        R, A, C = signed.shape
         h = self.window // 2
-        padded = np.concatenate([g[:, -h:], g, g[:, :h]], axis=1)
+        padded = np.concatenate([signed[:, -h:], signed, signed[:, :h]], axis=1)
         padded = np.pad(padded, ((h, h), (0, 0), (0, 0)))
-        out = np.empty((R, A, self.dim), np.float32)
+        out = np.empty((R, A, self.window, self.window, C), np.float32)
         for i in range(R):
             for j in range(A):
-                out[i, j] = padded[i : i + self.window, j : j + self.window].ravel()
-        return out
+                out[i, j] = padded[i : i + self.window, j : j + self.window]
+        out = out - out.mean(axis=(2, 3), keepdims=True)
+        out = out.reshape(R, A, -1)
+        energy = np.linalg.norm(out, axis=-1)
+        return out / (energy[..., None] + 1e-6), energy
 
     def respond(self, g):
-        """Rectified, sparse (k-winners per location) simple-cell responses."""
-        p = self.patches(g)
-        y = np.maximum(p @ self.W.T, 0)  # (R, A, K)
+        """Rectified, sparse (k-winners per location) simple-cell responses,
+        scaled by local contrast."""
+        p, energy = self.patches(g)
+        y = np.maximum(p @ self.W.T, 0) * energy[..., None]  # (R, A, K)
         if self.k_active < self.kinds:
             kth = np.partition(y, -self.k_active, axis=-1)[..., -self.k_active][..., None]
             y = np.where(y >= kth, y, 0)
@@ -224,14 +236,14 @@ class V1:
         if self.frozen:
             return
         rng = rng or np.random.default_rng()
-        p = self.patches(g).reshape(-1, self.dim)
-        norms = np.linalg.norm(p, axis=1)
+        p, energy = self.patches(g)
+        p, norms = p.reshape(-1, self.dim), energy.ravel()
         # Hebbian change needs real activity: only well-driven windows teach
         active = np.nonzero(norms > 0.3 * norms.max())[0] if norms.max() > 1e-3 else []
         if len(active) == 0:
             return
         for idx in rng.choice(active, min(n_samples, len(active)), replace=False):
-            x = p[idx] / norms[idx]
+            x = p[idx]
             # conscience: frequent winners are handicapped so every cell finds a niche
             score = self.W @ x - 0.3 * (self.wins / (self.wins.mean() + 1e-8) - 1)
             c = int(np.argmax(score))
@@ -256,10 +268,10 @@ def retinal_wave(rng, size=40):
     return np.clip(img, 0, 1)
 
 
-def develop_v1(retina, experience, waves=1500, rng=None, kinds=16):
+def develop_v1(retina, experience, waves=1500, rng=None, kinds=16, window=3):
     """Development: spontaneous waves, then visual experience, then freeze."""
     rng = rng or np.random.default_rng(0)
-    v1 = V1(kinds=kinds, seed=int(rng.integers(1 << 30)))
+    v1 = V1(kinds=kinds, window=window, seed=int(rng.integers(1 << 30)))
     for n in range(waves):
         img = retinal_wave(rng)
         _, pyr = retina._pyramid(img)

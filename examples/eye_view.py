@@ -13,6 +13,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from organic.natural import natural_views  # noqa: E402
 from organic.retina import Retina, develop_v1, retinal_wave  # noqa: E402
 from organic.scenes import LOGIC_INTENTS, RELATION_INTENTS, SINGLE_INTENTS, episode  # noqa: E402
 
@@ -54,9 +55,10 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     rng = np.random.default_rng(1)
     retina = Retina()
-    print("developing V1 (retinal waves, then visual experience)...")
-    experience = [episode(rng, "train", SINGLE_INTENTS + RELATION_INTENTS)["image"] for _ in range(300)]
-    v1 = develop_v1(retina, experience, waves=1500, rng=rng)
+    print("developing V1 (retinal waves, then natural images)...")
+    experience = natural_views(rng, 600)
+    window = int(os.environ.get("V1_WINDOW", 3))
+    v1 = develop_v1(retina, experience, waves=1500, rng=rng, window=window)
 
     rows = []
     for _ in range(4):
@@ -89,7 +91,8 @@ def main():
     # V1 cells in a grid: each shown as its window (rings down, angles across)
     # for the three opponent channels (ON minus OFF; gray = 0)
     K = v1.kinds
-    Wk = v1.W.reshape(K, 3, 3, 6)
+    n = v1.window
+    Wk = v1.W.reshape(K, n, n, 3)
     cell, cols = 48, 4
     tile_w, tile_h = 3 * cell + 24, cell + 38
     img = Image.new("RGB", (cols * tile_w, ((K + cols - 1) // cols) * tile_h), "white")
@@ -97,13 +100,13 @@ def main():
     for k in range(K):
         x0, y0 = (k % cols) * tile_w, (k // cols) * tile_h
         scale = np.abs(Wk[k]).max() + 1e-8
-        for c, (on, off, name) in enumerate([(0, 1, "lum"), (2, 3, "L-M"), (4, 5, "S-LM")]):
-            v = (Wk[k, :, :, on] - Wk[k, :, :, off]) / scale
+        for c, name in enumerate(["lum", "L-M", "S-LM"]):
+            v = Wk[k, :, :, c] / scale
             gray = (v * 0.5 + 0.5)[..., None].repeat(3, -1)
             img.paste(to_img(gray).resize((cell, cell), Image.NEAREST), (x0 + c * cell, y0))
             dd.text((x0 + c * cell + 2, y0 + cell + 2), name, fill=(0, 0, 0))
         dd.text((x0, y0 + cell + 18), f"cell {k}: won {int(v1.wins[k])}", fill=(0, 0, 0))
-    img.save(os.path.join(OUT, "eye_v1.png"))
+    img.save(os.path.join(OUT, f"eye_v1_w{n}.png"))
 
     # a retinal wave, for the record
     to_img(retinal_wave(np.random.default_rng(3))).resize((W, W), Image.NEAREST).save(os.path.join(OUT, "eye_wave.png"))
