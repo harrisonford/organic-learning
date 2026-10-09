@@ -143,6 +143,39 @@ Nothing tells the brain what *not* means. Its speech area grew clusters that
 tie the sound of the question to the pattern of match/mismatch neurons,
 and *not* collapses to chance without them.
 
+**Fast and slow thinking in one brain** (`experiments/timed_life.py`,
+`experiments/timed_analysis.py`). The eye now has two speeds, like primates: a
+coarse magnocellular *glance* at the whole scene that reaches cortex at tick 1
+(own unsupervised areas: gist color, gist where, gist form), and fine detail
+that needs a saccade (color and where at tick 2, foveated form at tick 3, one
+more tick per extra object). At every tick the brain silently plans its answer
+from what has arrived, and it speaks when its confidence passes the
+*patience* of the speech clusters doing the planning (a basal-ganglia-like gate).
+Some questions secretly have deadlines (color/size/where: 1 tick; shape/what/
+funny: 3), others have none but must be right (logic, relations, counting).
+The brain is never told which. After speaking it only receives a scalar
+reward (right and on time = 1, late = halved per tick, wrong = 0, each tick
+costs 0.02). Patience is tuned by that outcome: right but late → hastier;
+wrong after answering early → more patient.
+
+The glance alone is enough for color (purity 1.00) and decent for place/size
+(~0.85), but poor for form (0.5–0.7). That speed/accuracy tradeoff comes from the
+organ; nothing was tuned to produce it. After 8000 moments (two seeds each):
+
+| patience of the clusters planning... | fast questions | normal | precise |
+|---|---|---|---|
+| with hidden deadlines | **0.39–0.42** | 0.52–0.54 | 0.58–0.63 |
+| control: no deadlines, only the tick cost | 0.45–0.47 | 0.55–0.57 | 0.59–0.61 |
+
+Even without deadlines, contexts split by what information can do for them:
+early answers to color questions tend to be right, early answers to logic
+tend to be wrong. Time pressure pushes the fast contexts further toward haste
+(answered at tick 1.7 vs 2.1), while precise contexts stay patient either way.
+It is not optimal yet. For fast questions, answering at tick 1 is right 67% of
+the time and at tick 2 87%, so under a 1-tick deadline the best policy is to answer at
+tick 1, and the brain still often waits. Patience moves slowly because each
+reward is shared among all the clusters that took part in the silent plan.
+
 ## Things that did not work (kept as options, off by default)
 
 - **Sprouting new areas, first version** (`Brain(sprouting=True)`): when surprise
@@ -186,3 +219,5 @@ and *not* collapses to chance without them.
   tasks, match/mismatch neurons, curriculum experiments.
 - Stage 4: relation tasks, biased-competition attention, binding through
   shared auditory neurons, per-cluster input reach, area sprouting experiments.
+- Stage 5: two-speed vision (magnocellular glance + parvocellular detail),
+  thinking in ticks, reward-tuned patience, hidden deadlines (system 1 / 2).
