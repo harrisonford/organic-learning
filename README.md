@@ -176,6 +176,58 @@ the time and at tick 2 87%, so under a 1-tick deadline the best policy is to ans
 tick 1, and the brain still often waits. Patience moves slowly because each
 reward is shared among all the clusters that took part in the silent plan.
 
+## The barebones brain on raw organs (`organic/raw_brain.py`)
+
+Following the inventory in [docs/STRUCTURE.md](docs/STRUCTURE.md), a second
+brain keeps only the generic rules and round, untuned numbers:
+
+- **Organs:** the raw eye (`organic/retina.py`) and the raw-byte ear.
+  - **Retina:** a foveated log-polar grid, L/M/S cones, ON/OFF center-surround
+    and color-opponent ganglion cells. A fast transient magnocellular map and a
+    sustained parvocellular map one tick later.
+  - **Saccades:** the eye jumps to the strongest peripheral contrast, with
+    inhibition of return. It has no notion of objects
+    ([scan paths](docs/eye_saccades.png)).
+  - **V1:** developed once, then frozen. Competitive Hebbian learning on
+    contrast-normalized windows of the retinotopic map, first during
+    spontaneous retinal waves, then on natural photographs (never the task
+    scenes). All 16 cells found a niche: oriented edges along rings and
+    spokes, diagonals, and color-opponent cells ([V1 cells](docs/eye_v1.png)).
+- **One area per organ output stream** (V1 map, magno map, gaze), growing by
+  novelty. Each area keeps a leaky state (it halves every tick and new input adds
+  to it), so a percept builds up over the ticks and fixations of a moment.
+- **Speech:** the affinity cortex, fed only by the question echo and its own echo.
+  Vision acts only through Hebbian priming from the areas' state.
+  Fatigue, patience and reward are kept.
+
+After 8000 moments with hidden deadlines (2 seeds) and without (1 seed):
+
+| | fast | normal | precise | answer tick (fast) |
+|---|---|---|---|---|
+| designed brain (old eye, designed circuits) | 0.91 | 0.46 | 0.58 | 1.7 |
+| raw brain, hidden deadlines | 0.50–0.54 | 0.38 | 0.42–0.51 | 4.3–4.6 |
+| raw brain, no deadlines | 0.46 | 0.38 | 0.54 | 5.2 |
+
+How strongly each area's experienced assemblies predict each family of words
+(`experiments/raw_specialization.py`; the families are only used to read the
+result):
+
+| area | color | shape | place | size | yes/no |
+|---|---|---|---|---|---|
+| v1 | 6.1–6.7 | 7.7–8.4 | 6.5–9.0 | 4.5–6.4 | 4.1–5.6 |
+| magno | 3.5–4.0 | 4.0–4.9 | 4.1–4.4 | 3.8–4.2 | 3.6–5.5 |
+| gaze | 1.5–1.6 | 1.7 | **2.9–3.1** | 1.5 | 1.5–1.6 |
+
+- Accuracy collapses, as expected without the designed circuits. Logic is back near
+  chance.
+- **The gaze area became a "where" area by itself:** it predicts place words about
+  twice as strongly as anything else, on both seeds. Nothing told it that eye
+  position relates to "left" or "top".
+- **V1 is a memory of views, not of things:** 5600 assemblies, ~430 with real
+  experience. A red square glimpsed from slightly different fixations is a
+  different pattern each time, and nothing builds invariance yet.
+- Time pressure nudges fast questions earlier (tick 4.3–4.6 vs 5.2), but weakly.
+
 ## Things that did not work (kept as options, off by default)
 
 - **Sprouting new areas, first version** (`Brain(sprouting=True)`): when surprise
@@ -221,3 +273,5 @@ reward is shared among all the clusters that took part in the silent plan.
   shared auditory neurons, per-cluster input reach, area sprouting experiments.
 - Stage 5: two-speed vision (magnocellular glance + parvocellular detail),
   thinking in ticks, reward-tuned patience, hidden deadlines (system 1 / 2).
+- Stage 6: inventory of designed structure; a raw retina organ with a
+  developmental V1; a barebones brain with leaky activity over time.

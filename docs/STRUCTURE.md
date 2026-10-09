@@ -88,3 +88,14 @@ guidance in the system. Next step: rebuild the eye as a raw, retina-like organ.
 3. Freeze all remaining parameters at round, untuned values.
 4. Keep the tasks and experiments as probes. Performance will drop. What we
    watch is whether structure differentiates as tasks are added.
+
+## Status
+
+- The raw eye exists (`organic/retina.py`, V1 frozen in `data/v1.npy`).
+- `organic/raw_brain.py` implements steps 1-3 of the reset (generic areas per
+  organ stream, no designed circuits, round parameters) and adds leaky
+  activity over ticks. The designed brain (`organic/brain.py`) is kept for
+  comparison.
+- Still designed in the raw brain: the patience update rule, fatigue,
+  resonant binding through shared auditory neurons, homeostatic word
+  baselines, and the ear's segmentation rule.
