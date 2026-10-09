@@ -5,7 +5,12 @@ import numpy as np
 from .scenes import episode
 
 
+def norm(text):
+    return " ".join(text.replace(",", " , ").replace("?", " ? ").split())
+
+
 def same_answer(out, human, intent, n_objects):
+    out, human = norm(out), norm(human)
     if intent == "what" and n_objects > 1:
         # describing several things in a different order is fine
         def parts(text):
@@ -17,11 +22,11 @@ def same_answer(out, human, intent, n_objects):
     return out == human
 
 
-def evaluate(brain, split, n=300, seed=99, show=0, printer=print):
+def evaluate(brain, split, n=300, seed=99, show=0, printer=print, intents=None):
     rng = np.random.default_rng(seed)
     hits, per = 0, {}
     for i in range(n):
-        e = episode(rng, split)
+        e = episode(rng, split, intents)
         out, _ = brain.live(e["image"], e["question"], learn=False)
         ok = same_answer(out, e["answer"], e["intent"], len(e["objects"]))
         hits += ok
@@ -33,11 +38,11 @@ def evaluate(brain, split, n=300, seed=99, show=0, printer=print):
 
 
 def explain(brain, image, question):
-    """Show, word by word, what the speech area expected and how vision gated it."""
+    """Show, unit by unit, what the speech area expected and how vision gated it."""
     trace = []
     out, _ = brain.live(image, question, learn=False, trace=trace)
     lines = [f"Q: {question}", f"A: {out}"]
     for step, cands in enumerate(trace):
-        row = "  ".join(f"{w}(vote {v:.2f} x gain {g:.2f} -> {p:.2f})" for w, v, g, p in cands[:4])
+        row = "  ".join(f"{w.decode(errors='replace')!r}(vote {v:.2f} x gain {g:.2f} -> {p:.2f})" for w, v, g, p in cands[:4])
         lines.append(f"  step {step}: {row}")
     return "\n".join(lines)

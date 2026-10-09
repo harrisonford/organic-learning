@@ -38,16 +38,19 @@ import numpy as np
 
 from .area import SensoryArea
 from .cortex import Cortex
-from .ear import Ear
+from .ear import SILENCE, Ear
 from .eye import Eye
 from .hippocampus import Hippocampus
 from .pathway import Pathway
 
-END = "<end>"
+END = SILENCE  # an answer ends when the speaker falls silent
 
 
 class Brain:
-    def __init__(self, seed=0, lam=1.5, spread=0.3, fatigue=0.9, coincidence_weight=0.8, category_blend=0.5, rem_weight=0.6):
+    hear_categories = False  # defaults for brains saved before these existed
+    fatigue_decay = 0.4
+
+    def __init__(self, seed=0, lam=1.5, spread=0.3, fatigue=0.9, coincidence_weight=0.8, category_blend=0.5, rem_weight=0.6, hear_categories=False, fatigue_decay=0.4):
         self.eye = Eye()
         self.ear = Ear(seed=seed + 7)
         self.areas = {
@@ -58,7 +61,7 @@ class Brain:
         }
         self.object_areas = ("shape", "color", "where")
         self.pathways = {k: Pathway(f"{k}->speech") for k in self.areas}
-        self.co_dim = 16
+        self.co_dim = 12  # match / mismatch neurons (6 each)
         self.rem_dim = 6  # "how many salient things have I not attended yet"
         self.speech = Cortex(
             dim=2 * self.ear.width + self.co_dim + self.rem_dim,
@@ -73,9 +76,13 @@ class Brain:
         self.lam = lam  # how strongly priming gates word neurons
         self.spread = spread  # activation spread within emergent word categories
         self.fatigue_strength = fatigue
+        self.fatigue_decay = fatigue_decay  # how much of a word-form's fatigue remains after each unit
         self.co_weight = coincidence_weight
         self.category_blend = category_blend
         self.rem_weight = rem_weight
+        # heard words also carry a sense of their emergent category, so
+        # "either red or blue" and "either white or green" feel alike
+        self.hear_categories = hear_categories
         self.vcap = 64
         self.baseline = np.zeros(self.vcap, np.float32)  # homeostatic average activity
         self.assoc = np.zeros((self.vcap, self.vcap), np.float32)  # word-word slot associations
@@ -84,8 +91,9 @@ class Brain:
 
     # -------------------------------------------------------------- lexicon
 
-    def word(self, w):
-        i = self.speech.output_neuron(f"word:{w}")
+    def unit(self, u):
+        """The word-form neuron for a unit the ear produced (grown if new)."""
+        i = self.speech.output_neuron(u.hex())
         if i >= self.vcap:
             old = self.vcap
             while self.vcap <= i:
@@ -106,7 +114,14 @@ class Brain:
         return np.arange(self.V)
 
     def name(self, i):
-        return self.speech.outputs[i].split(":", 1)[1]
+        return bytes.fromhex(self.speech.outputs[i])
+
+    def known(self, u):
+        return self.speech.out_index.get(u.hex())
+
+    @staticmethod
+    def text(units):
+        return b"".join(units).decode("utf-8", "replace")
 
     # ----------------------------------------------------------- perception
 
@@ -143,8 +158,24 @@ class Brain:
             if e is None:
                 continue
             lift = (e + k) / (self.baseline[:V] + k)
-            out[a] = np.clip(lift, 0.05, 10.0)
+            out[a] = self.resonate(np.clip(lift, 0.05, 10.0))
         return out
+
+    def overlap(self):
+        """How much each pair of word-forms shares auditory neurons (cached)."""
+        V = self.V
+        if getattr(self, "_overlap", None) is None or self._overlap.shape[0] != V:
+            S = np.stack([self.ear.sound(self.name(i)) for i in range(V)])
+            W = np.clip(S @ S.T, 0, 1) ** 2
+            W[W < 0.15] = 0
+            np.fill_diagonal(W, 1.0)
+            self._overlap = W.astype(np.float32)
+        return self._overlap
+
+    def resonate(self, lift):
+        """A word-form is primed through the auditory neurons it shares with
+        primed forms: "red?" feels primed when "red" is (strongest input wins)."""
+        return (self.overlap() * lift[None, :]).max(axis=1)
 
     def priming(self, lifts):
         """Facilitation of word neurons by each area, scaled by how much of the
@@ -156,26 +187,42 @@ class Brain:
             g *= np.maximum(lift, 1.0) ** (self.lam * self.pathways[a].gain)
         return g
 
-    def coincidence(self, q_words, lifts):
-        """Neurons that fire when a heard word is also one vision is priming."""
+    def comparator(self, q_units, lifts):
+        """Match and mismatch neurons (prediction-error-like).
+
+        A heard unit is *grounded* if some sensory area has a specific trace
+        for it (the area knows what it looks like). Match neurons count heard,
+        grounded units that what is seen right now supports; mismatch neurons
+        count heard, grounded units that are expected but absent. Neither
+        knows anything about "and", "or" or "not".
+        """
         v = np.zeros(self.co_dim, np.float32)
         if not lifts:
             return v
-        total = np.ones(self.V, np.float32)
+        V = self.V
+        k = 0.02
+        support = np.ones(V, np.float32)
+        grounded = np.zeros(V, bool)
         for a, lift in lifts.items():
-            total *= np.maximum(lift, 1.0) ** self.pathways[a].gain
-        known = [self.speech.out_index[f"word:{w}"] for w in q_words if f"word:{w}" in self.speech.out_index]
-        if not known:
-            return v
-        m = float(np.log(total[known].max()))
-        centers = np.linspace(0, 4, self.co_dim)
-        return np.exp(-0.5 * ((m - centers) / 0.45) ** 2).astype(np.float32)
+            support *= np.maximum(lift, 1.0) ** self.pathways[a].gain
+            area = self.areas[a]
+            area._ensure(V=V)
+            best = self.resonate(((area.Wname[: area.C, :V] + k) / (self.baseline[:V] + k)).max(axis=0))
+            grounded |= best > 3.0
+        idx = {self.known(u) for u in q_units} - {None}
+        match = sum(1 for i in idx if grounded[i] and support[i] > 2.7)
+        miss = sum(1 for i in idx if grounded[i] and support[i] <= 2.7)
+        half = self.co_dim // 2
+        centers = np.arange(half)
+        v[:half] = np.exp(-0.5 * ((match - centers) / 0.4) ** 2)
+        v[half:] = np.exp(-0.5 * ((miss - centers) / 0.4) ** 2)
+        return v
 
     def inner_voice(self, w):
         """How my own word feels: its sound blended with the sounds of the words
         it substitutes for, so a word carries a sense of its emergent category."""
         v = self.ear.sound(w)
-        i = self.speech.out_index.get(f"word:{w}")
+        i = self.known(w)
         if i is None or i >= self.V:
             return v
         row = self.assoc[i, : self.V]
@@ -217,9 +264,9 @@ class Brain:
 
     def _joint_attention(self, scene, attention, w):
         """While listening, look at the object that the heard word is about."""
-        if len(scene["objects"]) < 2 or f"word:{w}" not in self.speech.out_index:
+        wi = self.known(w)
+        if len(scene["objects"]) < 2 or wi is None:
             return False
-        wi = self.speech.out_index[f"word:{w}"]
         best, best_lift = None, 2.0
         for k in range(len(scene["objects"])):
             if k in attention["visited"]:
@@ -240,23 +287,19 @@ class Brain:
         """
         self.age += 1
         scene = self.look(image, learn)
-        q_words = self.ear.words(question)
+        q_words = self.ear.units(question, learn)
         for w in q_words:
-            self.word(w)
+            self.unit(w)
         target = None
         if answer is not None:
-            target = self.ear.words(answer) + [END]
+            target = self.ear.units(answer, learn) + [END]
             for w in target:
-                self.word(w)
-        if learn:
-            self.ear.listen(q_words)
-            if target:
-                self.ear.listen(target)
-        q_code = self.ear.question(q_words)
+                self.unit(w)
+        q_code = self.ear.question(q_words, self.inner_voice if self.hear_categories else None)
         group = self.lexicon()
         fatigue = np.zeros(self.vcap, np.float32)
         for w in q_words:  # just-heard words are a little fatigued too
-            fatigue[self.speech.out_index[f"word:{w}"]] = 0.3
+            fatigue[self.known(w)] = 0.3
         attention = {"at": 0 if scene["objects"] else None, "visited": set()}
         said, heard_by_object = [], {}
         correct = 0
@@ -264,13 +307,13 @@ class Brain:
         for t in range(steps):
             lifts = self.lifts(scene, attention["at"])
             prime = self.priming(lifts)
-            co = self.coincidence(q_words, lifts)
+            co = self.comparator(q_words, lifts)
             s = self.speech_input(q_code, said, co, self._remaining_code(scene, attention))
             gain = self.word_gain(prime, fatigue[: self.V])
             lateral = self._lateral()
             if target:
                 w = target[t]
-                wi = self.speech.out_index[f"word:{w}"]
+                wi = self.known(w)
                 r = self.speech.learn(s, wi, group, gain, lateral)
                 correct += r["correct"]
                 if learn:
@@ -292,16 +335,18 @@ class Brain:
                     trace.append([(self.name(i), float(raw[i] / raw.sum()), float(gain[i]), float(p[i])) for i in top])
             if w == END:
                 break
-            fatigue *= 0.4
-            fatigue[self.speech.out_index[f"word:{w}"]] = 1.0
+            fatigue *= self.fatigue_decay
+            fatigue[self.known(w)] = 1.0
             said.append(w)
             if target:
                 self._joint_attention(scene, attention, w)
             if attention["at"] is not None:
                 heard_by_object.setdefault(attention["at"], []).append(w)
-                said_idx = {self.speech.out_index[f"word:{x}"] for x in heard_by_object[attention["at"]]}
+                said_idx = [self.known(x) for x in heard_by_object[attention["at"]]]
                 names = self._names(lifts)
-                if names and all(n in said_idx for n in names):
+                ov = self.overlap()
+                # a name counts as said if a said word-form shares its sound
+                if names and all(ov[n, said_idx].max() > 0.3 for n in names):
                     self._shift(scene, attention)
 
         if learn and target is not None:
@@ -310,7 +355,7 @@ class Brain:
                 active = name == "number" and scene["number"] is not None or (name != "number" and scene["objects"])
                 p.carry(1.0 if active else 0.0)
             self.hippocampus.store((image, question, answer))
-        return " ".join(said), (correct / len(target) if target else None)
+        return self.text(said), (correct / len(target) if target else None)
 
     # ------------------------------------------------------------- learning
 
@@ -319,7 +364,7 @@ class Brain:
         if not scene["objects"]:
             return
         V = self.V
-        idx = lambda ws: [self.speech.out_index[f"word:{w}"] for w in ws]  # noqa: E731
+        idx = lambda ws: [self.known(w) for w in ws]  # noqa: E731
         whole = np.zeros(V, np.float32)
         whole[idx(said)] = 1.0  # what the speaker said about the scene
         # homeostasis: word neurons track their own average activity during vision
@@ -383,5 +428,5 @@ class Brain:
         neurons = sum(a.neuron_count() for a in self.areas.values()) + self.speech.neuron_count() + self.V
         return (
             f"neurons~{neurons} | assemblies: {areas} speech-clusters={self.speech.C} "
-            f"words={self.V} | myelin: {myel}"
+            f"word-forms={self.V} | myelin: {myel}"
         )

@@ -1,86 +1,157 @@
 # organic-learning
 
-An experiment in learning **without backpropagation**. A single cortex grows
-neurons when it meets problems it has no affinity for. Only the neurons that
-have affinity for a problem change their weights, and they change them with
-local rules. Optimization quality is *not* the goal yet. The goal is to be as
-organic as possible and see what emerges.
+An experiment in learning **without backpropagation**. A brain made of
+growing populations of neurons looks at a scene, hears a question as raw
+bytes, and answers in its own words. Nothing in it computes a gradient.
+Structure grows where nothing has affinity for the current problem, and only
+the parts that have affinity for a problem change. Optimization quality is
+not the goal yet. The aim is to stay as close as we can to how real neurons
+organize themselves, and to watch what emerges.
 
 ```
- image ──► VisionOrgan  ─┐   (fixed retina: blur + oriented edges)
-                         ├──► sensory sheet ──► Cortex (growing clusters) ──► output neurons
- text  ──► LanguageOrgan ┘   (fixed word "sounds", fading echo of last words)       vision:circle, language:hello, ...
+ image ─► EYE (saccades, fixed) ─► form ──► [shape area]  ┐ unsupervised: assemblies grow by novelty
+                                 ─► color ─► [color area]  │
+                                 ─► where ─► [where area]  │ Hebbian traces: assembly <-> word-forms heard
+                                 ─► count ─► [number area] ┘        │ priming (facilitation) through
+                                                                    │ myelinated pathways
+ bytes ─► EAR (fixed + statistical learning) ─► emergent units      ▼
+           question echo (habituated) ───────────┐        [speech area] ──► word-form neurons ──► bytes out
+           echo of my own speech ────────────────┼──────►  grows clusters    (fatigue, emergent
+           match / mismatch neurons ─────────────┤         by affinity        categories)
+           "things not yet named" (dorsal) ──────┘
+                                         HIPPOCAMPUS: stores episodes, replays them in sleep
 ```
 
-## The paradigm
+## What each part does, and the biology it borrows
 
-- **Cluster = a small set of neurons** with a shared *identity* vector `z`,
-  per-neuron input and output synapses, *myelin* (output gain / trust),
-  *stability* (consolidation), and a usage history.
-- **Affinity to the stimulus**: `aff_c = cos(z_c, s)`.
-- **Affinity to the problem**: `P_c = aff_c · compat_c`, where `compat_c` is
-  how much the cluster's outgoing synapses already lean toward the observed
-  outcome.
-- **Neurogenesis**: a new cluster is born, imprinted with the stimulus and
-  wired to the outcome, in two cases. Either no cluster has enough problem
-  affinity and the organism didn't answer confidently and correctly, or it
-  answered wrong because clusters that know the answer felt *less familiar*
-  with the stimulus than the ones that voted wrong (ART-style match tracking).
-- **Affinity-gated local learning**: only the specialists (`P_c ≥ θ`) change.
-  - instar: `ΔW_in = lr · a · (s − W_in)`
-  - outstar: `ΔW_out = lr · a · (outcome − W_out)`
-  - identity drift toward the stimuli the cluster serves, plus a small amount of
-    exploratory noise
-  - `lr = η · P_c · (1 − stability_c) · (0.2 + m)`, where `m = 1 − p(target)`
-    is a single, global "surprise" neuromodulator. No per-weight error, no
-    chain rule.
-- **Myelination**: clusters that take part in correct answers gain myelin
-  (louder vote) and stability (less plastic). Clusters that vote strongly for
-  wrong answers lose myelin.
-- **Associations** between co-active specialists:
-  `ΔA_ij = η(α a_i a_j + β sim(z_i, z_j) − γ A_ij)`. They spread activation
-  to related clusters.
-- **Sleep**: old, unused, demyelinated clusters die (apoptosis), and weak
-  associations decay and are pruned.
-- **Organs** are hard-wired and never trained. Each writes into its own region
-  of the sensory sheet and owns a group of output neurons that grows when it
-  meets a new label or word. The cortex is never told which region is which:
-  vision and language *territories* emerge from where clusters' identities
-  settle.
+| part | mechanism | inspiration |
+|---|---|---|
+| **Eye** (`organic/eye.py`) | finds salient blobs and saccades to each; foveates (centers and scales) the object; splits form / color (hue-tuned ring) / where / count into separate population-coded streams; parts inside a blob are grouped with it | retina, superior colliculus, ventral vs dorsal streams, V4 hue cells, IPS number neurons |
+| **Ear** (`organic/ear.py`) | hears **raw UTF-8 bytes**. Hebbian next-byte statistics; a new unit starts where the next byte's entropy jumps. At birth every byte is its own unit; word-like units emerge with experience. Units excite byte and n-gram neurons; frequent units habituate | [Byte Latent Transformer](https://arxiv.org/abs/2412.09871) entropy patching, infant statistical word segmentation (Saffran 1996), combination-sensitive auditory neurons, stimulus-specific adaptation |
+| **Sensory areas** (`organic/area.py`) | no labels. A stimulus nothing responds to (below *vigilance*) gives birth to a new assembly; otherwise the winners' tuning drifts toward it at rate 1/n | adaptive resonance, competitive learning, experience-dependent plasticity |
+| **Cross-modal binding** | assemblies keep Hebbian traces of the word-forms heard in answers while they are active; word-forms are homeostatic, so an area delivers *lift* (how much more expected than usual) | Hebbian learning, homeostatic intrinsic plasticity |
+| **Priming** | areas *facilitate* word-forms (never veto), scaled by pathway myelin; forms sharing auditory neurons with a primed form are primed too | semantic priming, gain modulation |
+| **Myelinated pathways** (`organic/pathway.py`) | conduction delay vs an integration deadline; myelin grows with activity | activity-dependent myelination (Gibson et al. 2014) |
+| **Match / mismatch neurons** | count heard units that vision supports / that are grounded but absent. They know nothing about *and*, *or*, *not* | prediction-error neurons, coincidence detection |
+| **Speech area** (`organic/cortex.py`) | imitates answers unit by unit. Problem affinity = stimulus affinity × whether the cluster's outputs lean to the heard unit. No affinity → **neurogenesis**; a familiar context widens its expectations; only clusters with affinity learn (instar/outstar), scaled by a global surprise signal; plasticity falls with use | the original idea of this repo, ART match tracking, neuromodulated three-factor plasticity, synaptic consolidation |
+| **Emergent categories** | word-forms that compete for the same slot become associated, and activation spreads among them, so *colors*, *shapes*, *places*, *yes/no* form without labels; one's own words echo with a hint of their category | distributional learning in children |
+| **Attention** | in a multi-object scene, attention leaves an object once it has been named (inhibition of return). While listening, it jumps to the object a heard word is about (joint attention) | IOR, infant joint attention |
+| **Fatigue** | word-forms that just fired are suppressed for a moment, so speech doesn't loop | neural adaptation |
+| **Hippocampus & sleep** (`organic/hippocampus.py`) | stores episodes; in sleep it replays them, merges duplicate clusters and lets unused ones die | complementary learning systems, consolidation, apoptosis |
+
+## Tasks
+
+`organic/scenes.py` renders 40×40 scenes with 1–3 objects (6 shapes, including
+a smiley face, × 6 colors × 2 sizes × 9 places) and pairs each with a
+question and what a person would answer:
+
+- *what is in this image?* → *i see a yellow star and a purple square*
+- *what color is it?*, *what shape is it?*, *where is it?*, *how big is it?*
+- *is this funny?* → *haha yes, it is a funny face* / *not really, it is just a red cross*
+- *is it a star?*, *is it blue?* → *no, it is a circle*
+- *how many shapes are there?* → *there are three shapes*
+- logic: *am i red?*, *is it red and big?*, *is it big and small?*, *is it either red or blue?*, *is it not red?* → *yes* / *no*
+
+Tests use new images, **color+shape pairs never seen in life** (green
+triangle, blue star, purple face, white circle), and **phrasings never heard**.
 
 ## Run
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python examples/demo.py
+.venv/bin/python examples/multimodal_demo.py      # raise a brain, test it, talk to it
+.venv/bin/python examples/ask.py                  # ask it your own questions
+.venv/bin/python experiments/curriculum.py        # add logic mid-life, watch the structure grow
+.venv/bin/python examples/demo.py                 # stage 1: the first, flat organism
 ```
 
-The demo raises one organism on interleaved experience: 900 noisy 16×16 shapes
-(circle, square, triangle, cross, hline, vline) and 34 short dialogues. Each
-"day" ends with sleep. Then it tests the organism on 300 unseen shapes and a
-set of prompts, some of which it has never heard. It writes
-`out/vision_predictions.png`.
+`experiments/` also has the probes used while developing the theory:
+`area_purity.py` (do unsupervised areas find human categories?),
+`ear_segmentation.py` (units emerging from bytes), `logic_ablation.py`
+(is logic answered from what is seen?), `sweep.py`, `inspect_brain.py`
+(per-word traces of the vote, the gain from vision, and the final choice).
 
-Typical result (about 4 s on CPU):
+## Results so far
+
+These are honest numbers from a young system. Nothing has been tuned for accuracy beyond
+removing mechanisms that were clearly broken.
+
+![conversations](docs/conversations.png)
+
+**Unsupervised perception finds the human categories.** Assemblies grown by
+novelty alone, with no labels (`experiments/area_purity.py`, vigilance 0.86–0.9):
+shape 8–12 assemblies at 100% purity, color 6 at 100%, place×size 19–22 at 98%.
+
+**Units emerge from raw bytes** (`experiments/ear_segmentation.py`):
 
 ```
-day 4: vision online acc=0.89
-   neurons=2976 clusters=372 ... | territories: vision=1096, language=1880, mixed=0
-accuracy 0.87 (chance 0.17)
-  you: hey , how are you ?      org: i am fine , thank you
-  you: what color is grass ?    org: the grass is green
-  you: what do dogs say ?       org: cats say meow        <- confuses similar contexts
-  you: do you like dogs ?       org: yes , i like music very much
+birth:  w | h | a | t |   | c | o | l | o | r |   | i | s |   | i | t | ?
+10:     what c | olo | r is  | it?
+1000:   what  | color is  | it?          i see |  a  | red |   | star |  and a  | blue |   | cross
 ```
 
-## Honest limitations / next directions
+As in BLT, predictable runs fuse ("color is ", "haha yes, it "), and boundaries
+form where the next byte is uncertain.
 
-- Language is mostly associative recall of the contexts it has heard. It
-  generalizes only by similarity between word-echo vectors, and nothing
-  composes meaning.
-- Vision relies on near-prototype matching, so it is not translation-invariant
-  beyond what the pooled edge features give it.
-- The cortex is flat: a cluster maps sensations directly to outputs. Next
-  steps could be a hierarchy of clusters feeding clusters, conduction delays /
-  timing (the myelination-as-timing idea), cross-modal association (seeing a
-  circle while hearing "circle"), and neuron-level growth inside clusters.
+**One brain, raised on raw bytes** (6000 moments of life: scenes + questions,
+logic from birth, ~8% small talk with eyes closed; `examples/multimodal_demo.py`):
+
+| test | score | notes |
+|---|---|---|
+| new scenes | 0.72 | color 0.90, shape 0.88, where 0.71, funny 0.73, logic: am-i 0.95, and 0.94, either 0.88, not 0.78 |
+| never-seen color+shape pairs | 0.69 | color 1.00, shape 0.89, is-color 0.93: vision and naming compose |
+| never-heard phrasings | 0.27 | shape 0.82 and logic ~0.5–0.7 transfer; most phrasings don't yet |
+| small talk | 6/6 | "hey, how are you?" (never heard) → "i am fine, thank you" |
+
+What fails: describing several objects and counting tend to loop ("…and a
+white cross and a white cross…"), because the ear fused " and " onto shape
+names, so the brain loses track of what it has already named. Yes/no about
+shape (0.55) is weak.
+
+**The structure grows to meet a new kind of problem** (`experiments/curriculum.py`).
+The brain lives 3000 moments with base tasks only, then logic questions start
+to appear:
+
+![curriculum](docs/curriculum.png)
+
+Neurogenesis had settled to ~10–30 clusters per 250 moments. When logic
+arrives it jumps (+81) and stays higher for a while, the ear forms new units
+(543 → 696 word-forms), and logic accuracy climbs from chance to ~0.8 while
+the base tasks are kept.
+
+**…and logic is answered from what is seen, not from word statistics**
+(`experiments/logic_ablation.py`):
+
+| | am i | and | either…or | not | all |
+|---|---|---|---|---|---|
+| normal | 0.89 | 0.83 | 0.78 | 0.83 | **0.83** |
+| match/mismatch neurons silenced | 0.76 | 0.75 | 0.66 | 0.56 | 0.69 |
+| eyes closed | 0.77 | 0.76 | 0.55 | 0.52 | 0.66 |
+
+Nothing tells the brain what *not* means. Its speech area grew clusters that
+tie the sound of the question to the pattern of match/mismatch neurons,
+and *not* collapses to chance without them.
+
+## Open questions / next directions
+
+- **Fused units:** the ear segments by predictability, not by meaning. "red star and a "
+  can become one unit. Binding through shared auditory neurons helps; should
+  segmentation also feel the pull of meaning (top-down)?
+- **Structure beyond clusters:** today growth happens inside fixed areas.
+  Could the brain sprout a new *area* (e.g. a logic/comparison area) when
+  one region keeps paying surprise despite neurogenesis?
+- **Phrasing transfer:** heard words could carry their emergent category, as
+  the brain's own words already do (`hear_categories`, under test).
+- **Time:** conduction delays only gate priming strength; spike timing and
+  synchrony are not modeled yet.
+- **Speed:** everything is plain numpy and Python loops; a life of 6000 moments
+  takes about 30 minutes on one core.
+
+## History
+
+- Stage 1 (`examples/demo.py`, `organic/organism.py`): one flat cortex,
+  word-level text and 16×16 shapes, affinity-driven neurogenesis.
+- Stage 2: eye with saccades, unsupervised sensory areas, cross-modal
+  priming, speech area, hippocampus, multimodal Q&A, word-level ear.
+- Stage 3: the ear hears raw bytes (BLT-style entropy segmentation), logic
+  tasks, match/mismatch neurons, curriculum experiments.

@@ -91,17 +91,57 @@ def random_object(rng, held_out, size=None, taken=()):
 
 # ways people ask; the last phrasing of each intent is never used in training
 ASK = {
-    "what": ["what is in this image ?", "what do you see ?", "what is this ?", "what can you see in the picture ?"],
-    "color": ["what color is it ?", "which color is this ?", "what color is the shape ?", "tell me its color"],
-    "shape": ["what shape is it ?", "which shape is this ?", "what kind of shape is it ?"],
-    "where": ["where is it ?", "where is the shape ?", "where can you see it ?"],
-    "size": ["is it big or small ?", "how big is it ?", "what size is it ?"],
-    "funny": ["is this funny ?", "isn't this funny ?", "does this make you laugh ?"],
-    "is_shape": ["is it a {x} ?", "is this a {x} ?", "do you see a {x} ?"],
-    "is_color": ["is it {x} ?", "is this {x} ?", "is the shape {x} ?"],
-    "count": ["how many shapes are there ?", "how many things do you see ?", "count the shapes"],
+    "what": ["what is in this image?", "what do you see?", "what is this?", "what can you see in the picture?"],
+    "color": ["what color is it?", "which color is this?", "what color is the shape?", "tell me its color"],
+    "shape": ["what shape is it?", "which shape is this?", "what kind of shape is it?"],
+    "where": ["where is it?", "where is the shape?", "where can you see it?"],
+    "size": ["is it big or small?", "how big is it?", "what size is it?"],
+    "funny": ["is this funny?", "isn't this funny?", "does this make you laugh?"],
+    "is_shape": ["is it a {x}?", "is this a {x}?", "do you see a {x}?"],
+    "is_color": ["is it {x}?", "is this {x}?", "is the shape {x}?"],
+    "count": ["how many shapes are there?", "how many things do you see?", "count the shapes"],
 }
 SINGLE_INTENTS = ["what", "color", "shape", "where", "size", "funny", "is_shape", "is_color", "count"]
+
+# logic: yes/no questions about one or two properties of the thing seen
+# ("am i ..." treats the object as the listener's own body)
+ASK.update(
+    {
+        "am_i": ["am i {a}?", "am i {a} and {b}?", "would you say i am {a}?"],
+        "and": ["is it {a} and {b}?", "is this {a} and {b}?", "is it both {a} and {b}?"],
+        "either": ["is it either {a} or {b}?", "is this either {a} or {b}?", "is it one of {a} or {b}?"],
+        "not": ["is it not {a}?", "is this not {a}?", "isn't it {a}?"],
+    }
+)
+LOGIC_INTENTS = ["am_i", "and", "either", "not"]
+PROPERTIES = list(COLORS) + ["big", "small"]
+
+
+def holds(prop, o):
+    return prop in (o["color"], o["size"])
+
+
+def logic(intent, template, o, rng):
+    """Pick properties (true about half the time) and say yes or no."""
+
+    def pick(want):
+        options = [p for p in PROPERTIES if holds(p, o) == want]
+        return options[rng.integers(len(options))]
+
+    a = pick(rng.random() < 0.5)
+    b = pick(rng.random() < 0.5)
+    while b == a:
+        b = PROPERTIES[rng.integers(len(PROPERTIES))]
+    q = template.replace("{a}", a).replace("{b}", b)
+    if intent == "either":
+        truth = holds(a, o) or holds(b, o)
+    elif intent == "not":
+        truth = not holds(a, o)
+    elif "{b}" in template:  # and, am i ... and ...
+        truth = holds(a, o) and holds(b, o)
+    else:
+        truth = holds(a, o)
+    return q, "yes" if truth else "no"
 
 
 def answer(intent, objs, x, rng):
@@ -122,19 +162,19 @@ def answer(intent, objs, x, rng):
         return f"it is {o['size']}"
     if intent == "funny":
         if sh == "face":
-            return "haha yes , it is a funny face"
-        return f"not really , it is just a {co} {sh}"
+            return "haha yes, it is a funny face"
+        return f"not really, it is just a {co} {sh}"
     if intent == "is_shape":
-        return f"yes , it is a {sh}" if x == sh else f"no , it is a {sh}"
+        return f"yes, it is a {sh}" if x == sh else f"no, it is a {sh}"
     if intent == "is_color":
-        return f"yes , it is {co}" if x == co else f"no , it is {co}"
+        return f"yes, it is {co}" if x == co else f"no, it is {co}"
     if intent == "count":
         n = len(objs)
         return "there is one shape" if n == 1 else f"there are {NUMBERS[n]} shapes"
     raise ValueError(intent)
 
 
-def episode(rng, split="train"):
+def episode(rng, split="train", intents=None):
     """One moment of life: a scene, a question and a person's answer.
 
     split: 'train'   - training combos and phrasings
@@ -144,7 +184,8 @@ def episode(rng, split="train"):
     """
     held = split == "combo"
     n = 1
-    intent = SINGLE_INTENTS[rng.integers(len(SINGLE_INTENTS))]
+    intents = intents or SINGLE_INTENTS
+    intent = intents[rng.integers(len(intents))]
     if intent in ("count", "what") and split != "combo" and rng.random() < 0.4:
         n = int(rng.integers(2, 4))
     objs, taken = [], []
@@ -157,6 +198,10 @@ def episode(rng, split="train"):
         q = phrasings[-1]
     else:
         q = phrasings[rng.integers(len(phrasings) - 1)]
+    if intent in LOGIC_INTENTS:
+        image = render(objs, rng)
+        q, a = logic(intent, q, objs[0], rng)
+        return {"image": image, "objects": objs, "intent": intent, "question": q, "answer": a}
     x = None
     if intent == "is_shape":
         x = objs[0]["shape"] if rng.random() < 0.5 else SHAPES[rng.integers(len(SHAPES))]
