@@ -62,3 +62,18 @@ def test_brain_lives_and_answers_all_tasks():
         out, _ = brain.live(e["image"], e["question"], learn=False)
         assert isinstance(out, str)
     assert brain.known(SILENCE) is not None
+
+
+def test_retina_streams_and_saccades():
+    from organic.retina import Retina, develop_v1
+
+    rng = np.random.default_rng(3)
+    retina = Retina()
+    e = episode(rng)
+    stream = retina.view(e["image"], ticks=7)
+    assert len(stream) == 7
+    assert stream[0].parvo.sum() == 0  # parvocellular signal arrives a tick later
+    assert stream[0].magno.sum() > 0  # magnocellular fires at fixation onset
+    assert stream[0].fixation != stream[3].fixation  # it saccades
+    develop_v1(retina, [e["image"]], waves=20, rng=rng)
+    assert retina.view(e["image"], ticks=2)[1].v1.shape == (retina.rings, retina.angles, 16)
