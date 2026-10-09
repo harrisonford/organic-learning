@@ -47,6 +47,10 @@ from .sprout import SproutedArea
 END = SILENCE  # an answer ends when the speaker falls silent
 
 
+def norm_text(text):
+    return " ".join(text.replace(",", " , ").replace("?", " ? ").split())
+
+
 class Brain:
     hear_categories = False  # defaults for brains saved before these existed
     fatigue_decay = 0.4
@@ -60,7 +64,12 @@ class Brain:
             "color": SensoryArea("color", Eye.color_dim, vigilance=0.9),
             "where": SensoryArea("where", Eye.where_dim, vigilance=0.88),
             "number": SensoryArea("number", Eye.number_dim, vigilance=0.9),
+            # fast, coarse (magnocellular) glance at the whole scene
+            "gist_color": SensoryArea("gist_color", Eye.gist_color_dim, vigilance=0.9),
+            "gist_where": SensoryArea("gist_where", Eye.gist_where_dim, vigilance=0.9),
+            "gist_form": SensoryArea("gist_form", Eye.gist_form_dim, vigilance=0.9),
         }
+        self.scene_areas = ("number", "gist_color", "gist_where", "gist_form")
         self.object_areas = ("shape", "color", "where")
         self.pathways = {k: Pathway(f"{k}->speech") for k in self.areas}
         self.co_dim = 12  # match / mismatch neurons (6 each)
@@ -96,6 +105,8 @@ class Brain:
         self.sprout_weight = 0.8
         self.stable_sprouts = stable_sprouts
         self.surprise_trace = 0.5
+        self.now = None  # current tick within a moment (None = no time limit)
+        self.time_cost = 0.02  # what each tick of waiting costs (felt via reward)
         self.surprise_window, self.surprise_history = [], []
         self.last_sprout = 0
         self.events = []
@@ -103,7 +114,7 @@ class Brain:
     def __setstate__(self, state):
         """Load brains saved by older versions: fill in parts they did not have yet."""
         self.__dict__.update(state)
-        defaults = {"stable_sprouts": False, "surprise_trace": 0.5, "sprouted": [], "sprout_weight": 0.8, "surprise_window": [], "surprise_history": [], "last_sprout": 0, "events": []}
+        defaults = {"now": None, "time_cost": 0.02, "stable_sprouts": False, "surprise_trace": 0.5, "sprouted": [], "sprout_weight": 0.8, "surprise_window": [], "surprise_history": [], "last_sprout": 0, "events": []}
         for k, v in defaults.items():
             self.__dict__.setdefault(k, v)
 
@@ -146,7 +157,7 @@ class Brain:
     def look(self, image, learn):
         """Saccade over the scene and let the sensory areas respond."""
         if image is None:
-            return {"fixations": [], "objects": [], "number": None}
+            return {"fixations": [], "objects": [], "number": None, "gist": {}}
         fix = self.eye.look(image)
         objects = []
         for f in fix:
@@ -158,7 +169,19 @@ class Brain:
                 }
             )
         number = self.areas["number"].perceive(self.eye.number(len(fix)), learn) if fix else None
-        return {"fixations": fix, "objects": objects, "number": number}
+        glance = self.eye.glance(image)
+        gist = {a: self.areas[a].perceive(glance[a], learn) for a in ("gist_color", "gist_where", "gist_form")}
+        return {"fixations": fix, "objects": objects, "number": number, "gist": gist}
+
+    @staticmethod
+    def arrival(scene, area, k=0):
+        """Tick at which a signal reaches cortex. The glance is fast; each
+        saccade takes a tick; fine form needs the fovea to settle one more."""
+        if area.startswith("gist"):
+            return 1
+        if area == "number":
+            return 1 + len(scene["objects"])
+        return (3 if area == "shape" else 2) + k
 
     def lifts(self, scene, attended):
         """Per-area lift over the lexicon, as delivered by each pathway."""
@@ -166,11 +189,16 @@ class Brain:
         k = 0.02
         out = {}
         sources = {}
+        now = self.now if self.now is not None else 10**9
         if scene["objects"] and attended is not None:
             for a in self.object_areas:
-                sources[a] = scene["objects"][attended][a]
-        if scene["number"] is not None:
+                if self.arrival(scene, a, attended) <= now:
+                    sources[a] = scene["objects"][attended][a]
+        if scene["number"] is not None and self.arrival(scene, "number") <= now:
             sources["number"] = scene["number"]
+        for a, v in scene.get("gist", {}).items():
+            if self.arrival(scene, a) <= now:
+                sources[a] = v
         for a, (idx, act) in sources.items():
             e = self.areas[a].expectation(idx, act, V)
             if e is None:
@@ -352,7 +380,7 @@ class Brain:
             if k in attention["visited"]:
                 continue
             ls = self.lifts(scene, k)
-            lift = max(ls[a][wi] for a in ("shape", "color") if a in ls)
+            lift = max((ls[a][wi] for a in ("shape", "color") if a in ls), default=0.0)
             if lift > best_lift:
                 best, best_lift = k, lift
         if best is not None and best != attention["at"]:
@@ -360,14 +388,18 @@ class Brain:
             return True
         return False
 
-    def live(self, image, question, answer=None, learn=True, temperature=0.0, max_words=16, rng=None, trace=None):
+    def live(self, image, question, answer=None, learn=True, temperature=0.0, max_words=16, rng=None, trace=None, tick=None, scene=None):
         """Experience a moment. With an answer: imitate it. Without: respond.
 
         trace: optional list; each speaking step appends its top candidates.
+        tick: only signals that have arrived by this tick are available
+        (None = everything). scene: an already perceived scene.
         """
         if learn:
             self.age += 1  # only lived experience counts, not tests
-        scene = self.look(image, learn)
+        self.now = tick
+        if scene is None:
+            scene = self.look(image, learn)
         q_words = self.ear.units(question, learn)
         for w in q_words:
             self.unit(w)
@@ -383,6 +415,7 @@ class Brain:
             fatigue[self.known(w)] = 0.3
         attention = {"at": self._search(scene, q_words), "visited": set()}
         said, heard_by_object, surprises = [], {}, []
+        confidence, involved = 1.0, {}
         correct = 0
         steps = len(target) if target else max_words
         for t in range(steps):
@@ -413,6 +446,9 @@ class Brain:
                     w = self.name(int(rng.choice(len(q), p=q / q.sum())))
                 else:
                     w = self.name(int(np.argmax(p)))
+                confidence = min(confidence, float(p[self.known(w)]))
+                for c, g in zip(r["active"], r["g"]):
+                    involved[int(c)] = involved.get(int(c), 0.0) + float(g)
                 if trace is not None:
                     raw = r["raw"] + lateral @ r["raw"]
                     top = np.argsort(-p)[:5]
@@ -436,7 +472,7 @@ class Brain:
         if learn and target is not None:
             self._bind(scene, q_words, said, heard_by_object)
             for name, p in self.pathways.items():
-                active = name == "number" and scene["number"] is not None or (name != "number" and scene["objects"])
+                active = bool(scene["objects"])
                 p.carry(1.0 if active else 0.0)
             ep_surprise = float(np.mean(surprises))
             self.surprise_trace = 0.99 * self.surprise_trace + 0.01 * ep_surprise
@@ -448,7 +484,54 @@ class Brain:
                     p.carry(1.0)
             self.hippocampus.store((image, question, answer))
             self._monitor(float(np.mean(surprises)))
+        self.now = None
+        self.last_confidence, self.last_involved = confidence, involved
         return self.text(said), (correct / len(target) if target else None)
+
+    # ------------------------------------------------- thinking against time
+
+    def think(self, image, question, answer=None, reward=None, learn=True, max_tick=6):
+        """Plan silently at each tick with what has arrived; speak when sure enough.
+
+        The organism is never told how much time a question allows. It only
+        gets `reward(tick, correct)` back after speaking (a dopamine-like
+        scalar) and hears what the person would have said. Patience lives on
+        the speech clusters that shaped the answer, and is tuned by outcome:
+        right but late -> hastier; wrong after answering early -> more patient.
+        Returns (answer, tick, reward).
+        """
+        scene = self.look(image, learn)
+        for t in range(max_tick + 1):
+            out, _ = self.live(image, question, learn=False, tick=t, scene=scene)
+            involved = self.last_involved
+            total = sum(involved.values())
+            patience = sum(self.speech.patience[c] * g for c, g in involved.items()) / total if total else 1.0
+            if self.last_confidence >= patience or t == max_tick:
+                break
+        got = None
+        if answer is not None:
+            correct = norm_text(out) == norm_text(answer)
+            got = reward(t, correct) if reward else None
+            if learn:
+                self.live(image, question, answer, learn=True, tick=t, scene=scene)
+                if got is not None:
+                    self._tune_patience(involved, t, correct, got, max_tick)
+        return out, t, got
+
+    def _tune_patience(self, involved, t, correct, got, max_tick, eta=0.05):
+        total = sum(involved.values()) or 1.0
+        best_possible = 1.0 - self.time_cost * t
+        if correct and got < best_possible - 1e-6:
+            step = -eta  # right, but it cost me: hurry up
+        elif not correct and t < max_tick:
+            step = +eta  # spoke too soon: wait for more
+        elif correct:
+            step = -0.2 * eta  # fine: a little urgency is never wasted
+        else:
+            return
+        for c, g in involved.items():
+            if c < self.speech.C:
+                self.speech.patience[c] = float(np.clip(self.speech.patience[c] + step * g / total, 0.02, 0.99))
 
     # ------------------------------------------------------------- learning
 
@@ -472,6 +555,8 @@ class Brain:
         self.baseline[:V] += rate * (whole - self.baseline[:V])
         if scene["number"] is not None:
             self.areas["number"].bind(*scene["number"], whole)
+        for a, v in scene.get("gist", {}).items():
+            self.areas[a].bind(*v, whole)
         single = len(scene["objects"]) == 1
         for k, obj in enumerate(scene["objects"]):
             if single:

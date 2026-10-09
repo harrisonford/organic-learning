@@ -80,6 +80,9 @@ class Cortex:
         self.born = np.zeros(self.cap, np.int64)
         self.uid = np.zeros(self.cap, np.int64)  # stable id, survives compaction
         self.reach = np.zeros(self.cap, np.int64)  # how many inputs it has synapses on
+        # how sure the organism must feel before acting on what this cluster
+        # suggests (a basal-ganglia-like gate, tuned by reward)
+        self.patience = np.zeros(self.cap, np.float32)
         self.next_uid = 0
 
         self.outputs = []  # output neuron names, e.g. "vision:circle"
@@ -95,6 +98,8 @@ class Cortex:
         self.__dict__.update(state)
         if "reach" not in state:
             self.reach = np.full(self.cap, self.dim, np.int64)
+        if "patience" not in state:
+            self.patience = np.full(self.cap, 0.5, np.float32)
 
     # ------------------------------------------------------------------ growth
 
@@ -127,6 +132,7 @@ class Cortex:
         self.myelin, self.stability = grow(self.myelin), grow(self.stability)
         self.usage, self.born, self.uid = grow(self.usage), grow(self.born), grow(self.uid)
         self.reach = grow(self.reach)
+        self.patience = grow(self.patience)
 
     def grow_inputs(self, extra):
         """New afferent axons arrive: every cluster gets `extra` silent synapses."""
@@ -152,6 +158,7 @@ class Cortex:
         self.born[c] = self.t
         self.uid[c] = self.next_uid
         self.reach[c] = self.dim
+        self.patience[c] = 0.5
         self.next_uid += 1
         self.C += 1
         self.births += 1
@@ -344,7 +351,7 @@ class Cortex:
         died = int(dead.sum())
         if died:
             dead_uids = set(self.uid[np.where(dead)[0]].tolist())
-            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach"):
+            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience"):
                 a = getattr(self, arr)
                 a[: len(keep)] = a[keep]
             self.C = len(keep)

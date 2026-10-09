@@ -16,6 +16,11 @@ visual cortex do before any learning is involved:
    - number (intraparietal-like): how many things were fixated, coded by
      log-Gaussian number neurons (Nieder & Miller 2003).
 
+Two speeds, as in primates: a fast, coarse magnocellular glance at the whole
+scene (low resolution, available almost at once) and the slow, fine
+parvocellular detail that needs a saccade to each object. The eye only says
+what it saw and when it arrives; it never decides which is good enough.
+
 Population codes everywhere: each quantity is represented by many broadly
 tuned neurons, so similar values give similar activity patterns.
 """
@@ -159,6 +164,45 @@ class Eye:
             ]
         )
         return Fixation(form, color, where, (cx / W, cy / H), size)
+
+    gist_color_dim = 16
+    gist_where_dim = 5 + 5 + 4
+    gist_form_dim = 64
+
+    def glance(self, img):
+        """Magnocellular gist: one low-resolution look at the whole scene."""
+        img = np.asarray(img, np.float32)
+        H, W = img.shape[:2]
+        low = img.reshape(8, H // 8, 8, W // 8, 3).mean(axis=(1, 3))  # 8x8 retina
+        lum = low.mean(axis=2)
+        sal = np.maximum(lum, low.max(axis=2) - low.min(axis=2))
+        mask = sal > 0.6 * sal.max() if sal.max() > 0.15 else np.zeros_like(sal, bool)
+        if mask.any():
+            rgb = (low[mask] * sal[mask][:, None]).sum(axis=0) / sal[mask].sum()
+            ys, xs = np.nonzero(mask)
+            cy, cx = (ys.mean() + 0.5) / 8, (xs.mean() + 0.5) / 8
+            extent = (max(np.ptp(ys), np.ptp(xs)) + 1) / 8
+        else:
+            rgb, cx, cy, extent = np.zeros(3, np.float32), 0.5, 0.5, 0.0
+        r, g, b = rgb
+        hue = np.arctan2(np.sqrt(3) * (g - b), 2 * r - g - b)
+        sat = float(rgb.max() - rgb.min())
+        color = np.concatenate(
+            [
+                ring_tuning(hue, 12, 0.6) * min(1.0, sat * 2.5),
+                tuning(sat, np.array([0.0, 0.5]), 0.3),
+                tuning(float(rgb.mean()), np.array([0.3, 0.9]), 0.3),
+            ]
+        )
+        where = np.concatenate(
+            [
+                tuning(cx, np.linspace(0, 1, 5), 0.15),
+                tuning(cy, np.linspace(0, 1, 5), 0.15),
+                tuning(extent, np.linspace(0.1, 0.7, 4), 0.15),
+            ]
+        )
+        form = (lum - lum.mean()).ravel()
+        return {"gist_color": color, "gist_where": where, "gist_form": form}
 
     def number(self, n_fixations):
         """Number neurons: log-scale tuning, so 1 vs 2 is clearer than 7 vs 8."""

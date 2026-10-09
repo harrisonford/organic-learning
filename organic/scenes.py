@@ -243,3 +243,27 @@ def episode(rng, split="train", intents=None):
         x = objs[0]["color"] if rng.random() < 0.5 else list(COLORS)[rng.integers(len(COLORS))]
     q = q.replace("{x}", x or "")
     return {"image": render(objs, rng), "objects": objs, "intent": intent, "question": q, "answer": answer(intent, objs, x, rng)}
+
+
+# How much time a person gives each kind of question (in ticks). The organism
+# is never told: it only receives the reward after it answers.
+TIME_LIMIT = {
+    "color": 1, "size": 1, "where": 1, "is_color": 1,
+    "shape": 3, "is_shape": 3, "funny": 3, "what": 3, "am_i": 3,
+    # no deadline: logic, counting and relations just need to be right
+}
+TIME_COST = 0.02  # every tick of waiting costs a little, for every question
+
+
+def time_class(intent):
+    limit = TIME_LIMIT.get(intent)
+    return "fast" if limit == 1 else "normal" if limit else "precise"
+
+
+def reward(intent, tick, correct, deadlines=True):
+    """What answering `correct`ly (or not) at `tick` is worth."""
+    value = 1.0 if correct else 0.0
+    limit = TIME_LIMIT.get(intent) if deadlines else None
+    if limit is not None and tick > limit:
+        value *= 0.5 ** (tick - limit)
+    return value - TIME_COST * tick
