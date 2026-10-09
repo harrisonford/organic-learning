@@ -45,6 +45,9 @@ class Cortex:
         eta=0.25,
         identity_drift=0.15,
         noise=0.002,
+        theta_familiar=None,
+        associate=True,
+        maturation=None,
         seed=0,
     ):
         self.dim = dim
@@ -56,6 +59,13 @@ class Cortex:
         self.eta = eta
         self.drift = identity_drift
         self.noise = noise
+        # a context this familiar may lead to new outcomes without growing a
+        # new cluster: the cluster widens its expectations instead (None = off)
+        self.theta_familiar = theta_familiar
+        self.associate = associate  # Hebbian links between co-active clusters
+        # synapses consolidate with experience: plasticity ~ 1 / (1 + uses / maturation),
+        # so a mature cluster's expectations become a long-run average (None = off)
+        self.maturation = maturation
         self.rng = np.random.default_rng(seed)
 
         self.C = 0  # number of living clusters
@@ -142,8 +152,15 @@ class Cortex:
             a = a / (a.max(axis=1, keepdims=True) + 1e-8)
         return a
 
-    def forward(self, s, group):
-        """Let activity flow from the stimulus to the output neurons of a group."""
+    def forward(self, s, group, gain=None, lateral=None):
+        """Let activity flow from the stimulus to the output neurons of a group.
+
+        gain: optional multiplicative modulation of each output neuron in the
+        group (priming from other areas, fatigue). It changes which neuron wins
+        without touching any synapse.
+        lateral: optional (len(group), len(group)) spread of activation between
+        output neurons before gating.
+        """
         if self.C == 0 or len(group) == 0:
             return None
         aff = self.Z[: self.C] @ s
@@ -174,20 +191,25 @@ class Cortex:
         votes = np.einsum("kn,kno->ko", a, self.Wout[top][:, :, group])
         votes = votes / (a.sum(axis=1, keepdims=True) + 1e-8)  # per-cluster output tendency
         o = ((g * self.myelin[top])[:, None] * votes).sum(axis=0)
+        raw = o
+        if lateral is not None:
+            o = o + lateral @ o
+        if gain is not None:
+            o = o * gain
         probs = o / o.sum() if o.sum() > 0 else np.full(len(group), 1.0 / len(group))
-        return {"aff": aff, "active": top, "a": a, "g": g, "votes": votes, "probs": probs}
+        return {"aff": aff, "active": top, "a": a, "g": g, "votes": votes, "probs": probs, "raw": raw}
 
     # ---------------------------------------------------------------- learning
 
-    def learn(self, s, target, group):
+    def learn(self, s, target, group, gain=None, lateral=None):
         """Experience one problem (stimulus s should evoke output neuron `target`)."""
         self.t += 1
         gpos = int(np.where(group == target)[0][0])
-        r = self.forward(s, group)
+        r = self.forward(s, group, gain, lateral)
 
         if r is None or r["probs"] is None:
             self.neurogenesis(s, target)
-            return {"grew": True, "correct": False}
+            return {"grew": True, "correct": False, "forward": r}
 
         probs = r["probs"]
         correct = int(np.argmax(probs)) == gpos
@@ -198,7 +220,12 @@ class Cortex:
         a_c = self._cluster_activity(cand, s)
         compat = (a_c * self.Wout[cand][:, :, target]).sum(axis=1) / (a_c.sum(axis=1) + 1e-8)
         P = r["aff"][cand] * compat
-        specialists = cand[P >= self.theta_problem]
+        chosen = P >= self.theta_problem
+        if self.theta_familiar is not None:
+            familiar = r["aff"][cand] >= self.theta_familiar
+            P = np.where(familiar, np.maximum(P, r["aff"][cand]), P)
+            chosen |= familiar
+        specialists = cand[chosen]
 
         # match tracking: the stimulus felt more familiar to clusters that got it
         # wrong than to any cluster that knows the answer -> grow a finer one
@@ -212,12 +239,14 @@ class Cortex:
             self.neurogenesis(s, target)
             grew = True
         if len(specialists) > 0:
-            spec_a = a_c[P >= self.theta_problem]
-            spec_P = P[P >= self.theta_problem]
+            spec_a = a_c[chosen]
+            spec_P = P[chosen]
             outcome = np.zeros(len(group), np.float32)
             outcome[gpos] = 1.0
             for c, a, p in zip(specialists, spec_a, spec_P):
                 lr = self.eta * p * (1.0 - self.stability[c]) * (0.2 + surprise)
+                if self.maturation:
+                    lr = max(lr / (1.0 + self.usage[c] / self.maturation), 0.01)
                 z = self.Z[c] + lr * self.drift * (s - self.Z[c])
                 self.Z[c] = z / np.linalg.norm(z)
                 # instar: active neurons' input weights move toward the stimulus
@@ -239,11 +268,11 @@ class Cortex:
                 if w and gi > 0.2:
                     self.myelin[c] = max(0.05, self.myelin[c] * 0.9)
 
-        return {"grew": grew, "correct": correct}
+        return {"grew": grew, "correct": correct, "forward": r}
 
     def _associate(self, clusters, acts, alpha=1.0, beta=0.5, gamma=0.05, eta=0.05):
         """Hebbian association between co-active specialist clusters."""
-        if len(clusters) < 2:
+        if len(clusters) < 2 or not self.associate:
             return
         strength = acts.mean(axis=1)
         for x in range(len(clusters)):
@@ -259,10 +288,16 @@ class Cortex:
 
     # ------------------------------------------------------------------- sleep
 
-    def sleep(self, min_age=200, myelin_floor=0.2):
-        """Apoptosis of useless clusters and pruning of weak associations."""
+    def sleep(self, min_age=200, myelin_floor=0.2, merge_above=None):
+        """Consolidation, apoptosis of useless clusters, pruning of weak associations.
+
+        merge_above: clusters whose identities are this similar are fused into
+        one (the more used one absorbs the other), so redundant copies of the
+        same memory collapse into a single, more general one.
+        """
+        merged = self._merge(merge_above) if merge_above else np.zeros(self.C, bool)
         age = self.t - self.born[: self.C]
-        dead = (age > min_age) & (self.myelin[: self.C] < myelin_floor) & (self.usage[: self.C] <= 2)
+        dead = merged | (age > min_age) & (self.myelin[: self.C] < myelin_floor) & (self.usage[: self.C] <= 2)
         keep = np.where(~dead)[0]
         died = int(dead.sum())
         if died:
@@ -280,6 +315,33 @@ class Cortex:
             if i not in dead_uids
         }
         return died
+
+    def _merge(self, threshold):
+        C = self.C
+        absorbed = np.zeros(C, bool)
+        if C < 2:
+            return absorbed
+        sim = self.Z[:C] @ self.Z[:C].T
+        np.fill_diagonal(sim, -1)
+        order = np.argsort(-self.usage[:C])  # most used clusters absorb first
+        for i in order:
+            if absorbed[i]:
+                continue
+            mates = np.where((sim[i] > threshold) & ~absorbed)[0]
+            mates = mates[mates != i]
+            for j in mates:
+                if self.usage[j] > self.usage[i]:
+                    continue
+                wi, wj = float(self.usage[i]), float(self.usage[j])
+                f = wj / (wi + wj)
+                z = (1 - f) * self.Z[i] + f * self.Z[j]
+                self.Z[i] = z / np.linalg.norm(z)
+                self.Win[i] = (1 - f) * self.Win[i] + f * self.Win[j]
+                self.Wout[i] = (1 - f) * self.Wout[i] + f * self.Wout[j]
+                self.myelin[i] = max(self.myelin[i], self.myelin[j])
+                self.usage[i] += self.usage[j]
+                absorbed[j] = True
+        return absorbed
 
     # ------------------------------------------------------------------- stats
 
