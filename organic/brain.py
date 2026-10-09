@@ -42,6 +42,7 @@ from .ear import SILENCE, Ear
 from .eye import Eye
 from .hippocampus import Hippocampus
 from .pathway import Pathway
+from .sprout import SproutedArea
 
 END = SILENCE  # an answer ends when the speaker falls silent
 
@@ -49,8 +50,10 @@ END = SILENCE  # an answer ends when the speaker falls silent
 class Brain:
     hear_categories = False  # defaults for brains saved before these existed
     fatigue_decay = 0.4
+    sprouting = False
+    sprouted = ()
 
-    def __init__(self, seed=0, lam=1.5, spread=0.3, fatigue=0.9, coincidence_weight=0.8, category_blend=0.5, rem_weight=0.6, hear_categories=False, fatigue_decay=0.4):
+    def __init__(self, seed=0, lam=1.5, spread=0.3, fatigue=0.9, coincidence_weight=0.8, category_blend=0.5, rem_weight=0.6, hear_categories=False, fatigue_decay=0.4, sprouting=False):
         self.eye = Eye()
         self.ear = Ear(seed=seed + 7)
         self.areas = {
@@ -88,6 +91,13 @@ class Brain:
         self.assoc = np.zeros((self.vcap, self.vcap), np.float32)  # word-word slot associations
         self.visual_episodes = 0
         self.age = 0
+        # structural plasticity at the level of areas (see sprout.py)
+        self.sprouting = sprouting
+        self.sprouted = []  # list of (SproutedArea, Pathway)
+        self.sprout_weight = 0.8
+        self.surprise_window, self.surprise_history = [], []
+        self.last_sprout = 0
+        self.events = []
 
     # -------------------------------------------------------------- lexicon
 
@@ -233,9 +243,48 @@ class Brain:
         blend = v + self.category_blend * others / max(total, 1.0)
         return blend / np.linalg.norm(blend) * np.linalg.norm(v)
 
-    def speech_input(self, q_code, said, co, remaining):
-        s = np.concatenate([q_code, self.ear.said(said, self.inner_voice), self.co_weight * co, self.rem_weight * remaining])
+    def speech_input(self, q_code, said, co, remaining, sprouted=()):
+        parts = [q_code, self.ear.said(said, self.inner_voice), self.co_weight * co, self.rem_weight * remaining]
+        for (area, path), code in zip(self.sprouted, sprouted):
+            n = np.linalg.norm(code)
+            parts.append(self.sprout_weight * path.gain * (code / n if n > 0 else code))
+        s = np.concatenate(parts)
         return s / np.linalg.norm(s)
+
+    def _sprout_codes(self, scene, attention, q_code, co, learn):
+        if not self.sprouted:
+            return ()
+        zero = np.zeros(64, np.float32)
+        outs = {}
+        if scene["objects"] and attention["at"] is not None:
+            for a in self.object_areas:
+                outs[a] = self.areas[a].output(*scene["objects"][attention["at"]][a])
+        if scene["number"] is not None:
+            outs["number"] = self.areas["number"].output(*scene["number"])
+        sources = [q_code, co] + [outs.get(a, zero) for a in ("shape", "color", "where", "number")]
+        return [area.respond(sources, learn) for area, _ in self.sprouted]
+
+    def _monitor(self, surprise, window=500):
+        """Chronic surprise that neurogenesis is not fixing -> grow a new area."""
+        self.surprise_window.append(surprise)
+        if len(self.surprise_window) < window:
+            return
+        now = float(np.mean(self.surprise_window))
+        self.surprise_window = []
+        prev = self.surprise_history[-1] if self.surprise_history else None
+        self.surprise_history.append(now)
+        stuck = prev is not None and (prev - now) < 0.03 * prev
+        if self.sprouting and stuck and now > 0.15 and self.age - self.last_sprout >= 2000 and len(self.sprouted) < 3:
+            self._sprout()
+
+    def _sprout(self):
+        name = f"sprout{len(self.sprouted) + 1}"
+        blocks = [("question", self.ear.width), ("comparator", self.co_dim)] + [(a, 64) for a in ("shape", "color", "where", "number")]
+        area = SproutedArea(name, blocks, seed=len(self.sprouted) + 101)
+        self.sprouted.append((area, Pathway(f"{name}->speech")))
+        self.speech.grow_inputs(area.area.axon_dim)
+        self.last_sprout = self.age
+        self.events.append((self.age, f"sprouted {name}"))
 
     def word_gain(self, prime, fatigue):
         return prime * (1.0 - self.fatigue_strength * fatigue)
@@ -262,6 +311,25 @@ class Brain:
             to = free[0] if free else None  # saccades go to the most salient free object
         attention["at"] = to
 
+    def _search(self, scene, q_words):
+        """Feature-based attention: heard words that vision knows pull the eye
+        to the object that matches them best; otherwise the most salient one."""
+        if not scene["objects"]:
+            return None
+        if len(scene["objects"]) == 1:
+            return 0
+        heard = [i for i in (self.known(u) for u in q_words) if i is not None]
+        best, best_score = 0, 3.0
+        for k in range(len(scene["objects"])):
+            ls = self.lifts(scene, k)
+            score = 1.0
+            for a in ("shape", "color", "where"):
+                if a in ls and heard:
+                    score = max(score, float(ls[a][heard].max()))
+            if score > best_score:
+                best, best_score = k, score
+        return best
+
     def _joint_attention(self, scene, attention, w):
         """While listening, look at the object that the heard word is about."""
         wi = self.known(w)
@@ -285,7 +353,8 @@ class Brain:
 
         trace: optional list; each speaking step appends its top candidates.
         """
-        self.age += 1
+        if learn:
+            self.age += 1  # only lived experience counts, not tests
         scene = self.look(image, learn)
         q_words = self.ear.units(question, learn)
         for w in q_words:
@@ -300,15 +369,16 @@ class Brain:
         fatigue = np.zeros(self.vcap, np.float32)
         for w in q_words:  # just-heard words are a little fatigued too
             fatigue[self.known(w)] = 0.3
-        attention = {"at": 0 if scene["objects"] else None, "visited": set()}
-        said, heard_by_object = [], {}
+        attention = {"at": self._search(scene, q_words), "visited": set()}
+        said, heard_by_object, surprises = [], {}, []
         correct = 0
         steps = len(target) if target else max_words
         for t in range(steps):
             lifts = self.lifts(scene, attention["at"])
             prime = self.priming(lifts)
             co = self.comparator(q_words, lifts)
-            s = self.speech_input(q_code, said, co, self._remaining_code(scene, attention))
+            spr = self._sprout_codes(scene, attention, q_code, co, learn and target is not None)
+            s = self.speech_input(q_code, said, co, self._remaining_code(scene, attention), spr)
             gain = self.word_gain(prime, fatigue[: self.V])
             lateral = self._lateral()
             if target:
@@ -316,6 +386,8 @@ class Brain:
                 wi = self.known(w)
                 r = self.speech.learn(s, wi, group, gain, lateral)
                 correct += r["correct"]
+                f = r["forward"]
+                surprises.append(1.0 - float(f["probs"][wi]) if f is not None and f.get("probs") is not None else 1.0)
                 if learn:
                     self._learn_slot(r["forward"], wi)
             else:
@@ -354,7 +426,10 @@ class Brain:
             for name, p in self.pathways.items():
                 active = name == "number" and scene["number"] is not None or (name != "number" and scene["objects"])
                 p.carry(1.0 if active else 0.0)
+            for _, p in self.sprouted:
+                p.carry(1.0)
             self.hippocampus.store((image, question, answer))
+            self._monitor(float(np.mean(surprises)))
         return self.text(said), (correct / len(target) if target else None)
 
     # ------------------------------------------------------------- learning
@@ -424,6 +499,7 @@ class Brain:
 
     def report(self):
         areas = " ".join(f"{k}={a.C}" for k, a in self.areas.items())
+        areas += "".join(f" {a.name}={a.area.C}" for a, _ in self.sprouted)
         myel = " ".join(f"{k}={p.myelin:.2f}" for k, p in self.pathways.items())
         neurons = sum(a.neuron_count() for a in self.areas.values()) + self.speech.neuron_count() + self.V
         return (

@@ -79,6 +79,7 @@ class Cortex:
         self.usage = np.zeros(self.cap, np.int64)
         self.born = np.zeros(self.cap, np.int64)
         self.uid = np.zeros(self.cap, np.int64)  # stable id, survives compaction
+        self.reach = np.zeros(self.cap, np.int64)  # how many inputs it has synapses on
         self.next_uid = 0
 
         self.outputs = []  # output neuron names, e.g. "vision:circle"
@@ -88,6 +89,12 @@ class Cortex:
         self.t = 0
         self.births = 0
         self.deaths = 0
+
+    def __setstate__(self, state):
+        """Load brains saved before clusters had a reach (they reach everything)."""
+        self.__dict__.update(state)
+        if "reach" not in state:
+            self.reach = np.full(self.cap, self.dim, np.int64)
 
     # ------------------------------------------------------------------ growth
 
@@ -119,6 +126,14 @@ class Cortex:
         self.Z, self.Win, self.Wout = grow(self.Z), grow(self.Win), grow(self.Wout)
         self.myelin, self.stability = grow(self.myelin), grow(self.stability)
         self.usage, self.born, self.uid = grow(self.usage), grow(self.born), grow(self.uid)
+        self.reach = grow(self.reach)
+
+    def grow_inputs(self, extra):
+        """New afferent axons arrive: every cluster gets `extra` silent synapses."""
+        pad = lambda a, axis: np.concatenate([a, np.zeros(a.shape[:axis] + (extra,) + a.shape[axis + 1 :], a.dtype)], axis=axis)  # noqa: E731
+        self.Z = pad(self.Z, 1)
+        self.Win = pad(self.Win, 2)
+        self.dim += extra
 
     def neurogenesis(self, s, target):
         """Birth of a new cluster, imprinted with the stimulus and the target."""
@@ -136,6 +151,7 @@ class Cortex:
         self.usage[c] = 1
         self.born[c] = self.t
         self.uid[c] = self.next_uid
+        self.reach[c] = self.dim
         self.next_uid += 1
         self.C += 1
         self.births += 1
@@ -143,9 +159,30 @@ class Cortex:
 
     # ----------------------------------------------------------------- sensing
 
+    def _seen(self, s, r):
+        """The part of the stimulus a cluster with reach r has synapses for."""
+        if r == len(s):
+            return s
+        part = s[:r]
+        n = np.linalg.norm(part)
+        return np.concatenate([part / n if n > 0 else part, np.zeros(len(s) - r, s.dtype)])
+
+    def _affinity(self, s, idx=None):
+        idx = np.arange(self.C) if idx is None else idx
+        aff = np.empty(len(idx), np.float32)
+        reach = self.reach[idx]
+        for r in np.unique(reach):
+            m = reach == r
+            aff[m] = self.Z[idx[m]] @ self._seen(s, r)
+        return aff
+
     def _cluster_activity(self, idx, s):
         """Neuron activity inside clusters: rectified match, k-winners-take-all."""
-        a = np.maximum(self.Win[idx] @ s, 0.0)  # (k, n)
+        a = np.zeros((len(idx), self.n), np.float32)
+        reach = self.reach[idx]
+        for r in np.unique(reach):
+            m = reach == r
+            a[m] = np.maximum(self.Win[idx[m]] @ self._seen(s, r), 0.0)
         if a.size:
             kth = np.partition(a, self.n // 2, axis=1)[:, self.n // 2][:, None]
             a = np.where(a >= kth, a, 0.0)
@@ -163,7 +200,7 @@ class Cortex:
         """
         if self.C == 0 or len(group) == 0:
             return None
-        aff = self.Z[: self.C] @ s
+        aff = self._affinity(s)
         # spreading activation through learned associations between clusters
         k = min(self.active_k, self.C)
         top = np.argpartition(-aff, k - 1)[:k]
@@ -244,14 +281,16 @@ class Cortex:
             outcome = np.zeros(len(group), np.float32)
             outcome[gpos] = 1.0
             for c, a, p in zip(specialists, spec_a, spec_P):
+                s_c = self._seen(s, self.reach[c])
                 lr = self.eta * p * (1.0 - self.stability[c]) * (0.2 + surprise)
                 if self.maturation:
                     lr = max(lr / (1.0 + self.usage[c] / self.maturation), 0.01)
-                z = self.Z[c] + lr * self.drift * (s - self.Z[c])
+                z = self.Z[c] + lr * self.drift * (s_c - self.Z[c])
                 self.Z[c] = z / np.linalg.norm(z)
                 # instar: active neurons' input weights move toward the stimulus
-                self.Win[c] += lr * a[:, None] * (s[None, :] - self.Win[c])
-                self.Win[c] += self.noise * self.rng.standard_normal(self.Win[c].shape)
+                self.Win[c] += lr * a[:, None] * (s_c[None, :] - self.Win[c])
+                rc = self.reach[c]
+                self.Win[c][:, :rc] += self.noise * self.rng.standard_normal((self.n, rc))
                 # outstar: active neurons' output weights move toward what happened
                 wo = self.Wout[c][:, group]
                 self.Wout[c][:, group] = wo + lr * a[:, None] * (outcome[None, :] - wo)
@@ -302,7 +341,7 @@ class Cortex:
         died = int(dead.sum())
         if died:
             dead_uids = set(self.uid[np.where(dead)[0]].tolist())
-            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid"):
+            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach"):
                 a = getattr(self, arr)
                 a[: len(keep)] = a[keep]
             self.C = len(keep)
@@ -327,7 +366,7 @@ class Cortex:
         for i in order:
             if absorbed[i]:
                 continue
-            mates = np.where((sim[i] > threshold) & ~absorbed)[0]
+            mates = np.where((sim[i] > threshold) & ~absorbed & (self.reach[:C] == self.reach[i]))[0]
             mates = mates[mates != i]
             for j in mates:
                 if self.usage[j] > self.usage[i]:

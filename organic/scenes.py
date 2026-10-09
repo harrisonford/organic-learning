@@ -114,6 +114,37 @@ ASK.update(
     }
 )
 LOGIC_INTENTS = ["am_i", "and", "either", "not"]
+
+# relations: two objects of different colors; the answer names one of them
+ASK.update(
+    {
+        "bigger": ["which one is bigger?", "which is the big one?", "which shape is larger?"],
+        "smaller": ["which one is smaller?", "which is the small one?", "which shape is tinier?"],
+        "left": ["which one is on the left?", "which is more to the left?", "which shape is leftmost?"],
+        "right": ["which one is on the right?", "which is more to the right?", "which shape is rightmost?"],
+    }
+)
+RELATION_INTENTS = ["bigger", "smaller", "left", "right"]
+
+
+def relation_scene(intent, rng):
+    """Two objects of different colors that differ in what the question asks about."""
+    a = random_object(rng, False, size="big" if intent in ("bigger", "smaller") else "small")
+    while True:
+        b = random_object(rng, False, size="small", taken=[a["cell"]])
+        if b["color"] != a["color"] and (intent in ("bigger", "smaller") or b["cell"][0] != a["cell"][0]):
+            break
+    objs = [a, b]
+    if intent == "bigger":
+        pick = a
+    elif intent == "smaller":
+        pick = b
+    elif intent == "left":
+        pick = min(objs, key=lambda o: o["cell"][0])
+    else:
+        pick = max(objs, key=lambda o: o["cell"][0])
+    rng.shuffle(objs)
+    return objs, f"the {pick['color']} one"
 PROPERTIES = list(COLORS) + ["big", "small"]
 
 
@@ -198,6 +229,9 @@ def episode(rng, split="train", intents=None):
         q = phrasings[-1]
     else:
         q = phrasings[rng.integers(len(phrasings) - 1)]
+    if intent in RELATION_INTENTS:
+        objs, a = relation_scene(intent, rng)
+        return {"image": render(objs, rng), "objects": objs, "intent": intent, "question": q, "answer": a}
     if intent in LOGIC_INTENTS:
         image = render(objs, rng)
         q, a = logic(intent, q, objs[0], rng)

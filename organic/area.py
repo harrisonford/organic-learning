@@ -24,7 +24,7 @@ import numpy as np
 
 
 class SensoryArea:
-    def __init__(self, name, dim, vigilance=0.9, temp=0.03, neurons_per_assembly=6, min_rate=0.01):
+    def __init__(self, name, dim, vigilance=0.9, temp=0.03, neurons_per_assembly=6, min_rate=0.01, axon_dim=64, seed=0):
         self.name = name
         self.dim = dim
         self.vigilance = vigilance
@@ -39,13 +39,18 @@ class SensoryArea:
         self.Wname = np.zeros((self.cap, self.vcap), np.float32)  # word co-occurrence traces
         self.named = np.zeros(self.cap, np.float32)  # how much naming experience
         self.births = 0
+        # each assembly's axons reach downstream neurons in its own fixed random
+        # pattern, so the area's output can be read as one vector
+        self.axon_dim = axon_dim
+        self.axons = np.zeros((self.cap, axon_dim), np.float32)
+        self.rng = np.random.default_rng(seed + sum(map(ord, name)))
 
     # ---------------------------------------------------------------- growth
 
     def _ensure(self, C=None, V=None):
         if C is not None and C >= self.cap:
             self.cap *= 2
-            for k in ("Z", "usage", "Wname", "named"):
+            for k in ("Z", "usage", "Wname", "named", "axons"):
                 a = getattr(self, k)
                 b = np.zeros((self.cap,) + a.shape[1:], a.dtype)
                 b[: a.shape[0]] = a
@@ -64,6 +69,9 @@ class SensoryArea:
         self.usage[c] = 1
         self.Wname[c] = 0
         self.named[c] = 0
+        a = np.zeros(self.axon_dim, np.float32)
+        a[self.rng.choice(self.axon_dim, 8, replace=False)] = self.rng.choice([-1.0, 1.0], 8)
+        self.axons[c] = a / np.sqrt(8)
         self.C += 1
         self.births += 1
         return c
@@ -115,6 +123,12 @@ class SensoryArea:
             return None
         self._ensure(V=V)
         return (act[:, None] * self.Wname[idx, :V]).sum(axis=0)
+
+    def output(self, idx, act):
+        """What downstream neurons receive from the active assemblies."""
+        if len(idx) == 0:
+            return np.zeros(self.axon_dim, np.float32)
+        return (act[:, None] * self.axons[idx]).sum(axis=0)
 
     def neuron_count(self):
         return self.C * self.n
