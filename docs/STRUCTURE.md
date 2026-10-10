@@ -154,3 +154,20 @@ Generic change to competition in all areas: an assembly's lingering activity
 (the leaky state the brain already keeps) adds a bias of 0.2 (times its
 normalized state) to its affinity, both for who wins and for whether a new
 assembly is born.
+
+Result (6000 moments, 2 seeds):
+
+| | shape, trained positions | shape, new positions | assemblies per shape |
+|---|---|---|---|
+| trace rule, no sprouting | 0.77 / 0.65 | 0.66 / 0.34 | v1 ~24 |
+| trace rule + sprouting | 0.16 / 0.28 | 0.04 / 0.20 | every area ~24 |
+
+Not fruitful either. The chain still runs five generations deep (children are
+smaller: ~3000 assemblies instead of ~9000). No area becomes invariant: a 0.2
+bias cannot bridge successive views of one object (an edge, then a corner), which
+differ more than that. Common cause of both rounds: a novelty trigger cannot
+tell "I need a new level" from "my input is simply rich", so it builds chains.
+
+Per the plan, the harder option is paused. Next: the easier rule (one fixed
+higher level per area), where the open question is no longer *when* to grow
+a level but *how strong* the trace must be for views to group at all.
