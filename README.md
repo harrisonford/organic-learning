@@ -178,7 +178,7 @@ reward is shared among all the clusters that took part in the silent plan.
 
 ## The barebones brain on raw organs (`organic/raw_brain.py`)
 
-Following the inventory in [docs/STRUCTURE.md](docs/STRUCTURE.md), a second
+Following the inventory in [docs/HISTORY.md](docs/HISTORY.md) (current structure: [docs/STRUCTURE.md](docs/STRUCTURE.md)), a second
 brain keeps only the generic rules and round, untuned numbers:
 
 - **Organs:** the raw eye (`organic/retina.py`) and the raw-byte ear.
