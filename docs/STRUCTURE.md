@@ -128,3 +128,29 @@ seen during life), brains that sprout beat brains that do not on held-out
 positions across two seeds, or the sprouted area's assemblies are measurably
 more position-invariant than their source's. If not, switch to the easier
 rule and record why.
+
+### Harder option, round 1: not fruitful (runaway chain)
+
+Novelty-driven sprouting, children fed by the parent's leaky state, same
+growth rule everywhere. Probe: shape/color naming, objects seen only in the
+left and middle columns, tested also in the right column. 6000 moments, 2 seeds.
+
+| | shape, trained positions | shape, new positions | areas |
+|---|---|---|---|
+| no sprouting | 0.80 / 0.65 | 0.66 / 0.38 | 3 |
+| sprouting | 0.20 / 0.20 | 0.04 / 0.16 | 8 (chain) |
+
+Each child found its input *more* novel than its parent did (novelty 0.16, 0.25,
+0.29, 0.33, 0.35), so it sprouted again: five generations of ~9000 assemblies.
+Their noisy priming ruined speech. No invariance appeared: ~25 assemblies per shape
+in every area. Reason: reading a history of views does not make things invariant if the growth rule
+still makes a new assembly for every new combination. Temporal contiguity needs
+the *trace rule* (Földiák 1991): the assembly that was just active stays
+favoured for a moment, so the next view joins it.
+
+### Harder option, round 2: trace rule in every area
+
+Generic change to competition in all areas: an assembly's lingering activity
+(the leaky state the brain already keeps) adds a bias of 0.2 (times its
+normalized state) to its affinity, both for who wins and for whether a new
+assembly is born.

@@ -67,7 +67,7 @@ def norm_text(text):
 
 
 class RawBrain:
-    def __init__(self, seed=0, vigilance=0.8, decay=0.5, ticks=9, sprouting=False):
+    def __init__(self, seed=0, vigilance=0.8, decay=0.5, ticks=9, sprouting=False, trace=0.0):
         self.retina = Retina(seed=seed)
         v1 = V1(kinds=16, window=3, seed=seed)
         v1.W = np.load(V1_FILE).astype(np.float32)
@@ -82,6 +82,8 @@ class RawBrain:
         self.sprouting = sprouting
         self.novelty = {k: [] for k in self.areas}  # 1 if an input gave birth, else 0
         self.events = []
+        # trace rule: lingering activity favours the assemblies that were just active
+        self.trace = trace
         self.speech = Cortex(dim=2 * self.ear.width, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
         self.decay = decay
         self.ticks = ticks
@@ -156,7 +158,8 @@ class RawBrain:
                 s = self.decay * s
                 if k in signals:
                     before = area.C
-                    idx, act = area.perceive(signals[k], learn)
+                    bias = self.trace * s / s.max() if self.trace and len(s) and s.max() > 0 else None
+                    idx, act = area.perceive(signals[k], learn, bias)
                     if learn:
                         self.novelty[k].append(1.0 if area.C > before else 0.0)
                     if len(s) < area.C:

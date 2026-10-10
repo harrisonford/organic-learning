@@ -78,8 +78,13 @@ class SensoryArea:
 
     # ------------------------------------------------------------- perceive
 
-    def perceive(self, x, learn=True):
-        """Respond to a stimulus. Returns (assembly indices, activity)."""
+    def perceive(self, x, learn=True, bias=None):
+        """Respond to a stimulus. Returns (assembly indices, activity).
+
+        bias: optional per-assembly boost from lingering activity (trace rule):
+        assemblies that were just active are favoured, so successive inputs
+        tend to join them instead of giving birth to new ones.
+        """
         n = np.linalg.norm(x)
         if n == 0:
             return np.zeros(0, np.int64), np.zeros(0, np.float32)
@@ -89,6 +94,9 @@ class SensoryArea:
                 return np.zeros(0, np.int64), np.zeros(0, np.float32)
             return np.array([self._born(x)]), np.ones(1, np.float32)
         aff = self.Z[: self.C] @ x
+        if bias is not None and len(bias):
+            aff = aff.copy()
+            aff[: len(bias)] += bias[: self.C]
         best = int(np.argmax(aff))
         if aff[best] < self.vigilance and learn:
             c = self._born(x)

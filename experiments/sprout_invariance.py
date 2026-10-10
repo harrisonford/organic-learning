@@ -37,7 +37,7 @@ def moment(rng, cols):
     return {"image": render([o], rng), "objects": [o], "intent": intent, "question": q, "answer": answer(intent, [o], None, rng)}
 
 
-brain = RawBrain(seed=SEED, sprouting=bool(os.environ.get("SPROUT")))
+brain = RawBrain(seed=SEED, sprouting=bool(os.environ.get("SPROUT")), trace=float(os.environ.get("TRACE", 0)))
 rng = np.random.default_rng(SEED)
 trng = np.random.default_rng(99)
 tests = {"trained positions": [moment(trng, TRAIN_COLS) for _ in range(150)], "new positions": [moment(trng, TEST_COLS) for _ in range(150)]}
