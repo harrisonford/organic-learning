@@ -1,173 +1,166 @@
-# Structural decisions and configuration
+# The current structure: what it is, what it does, and why
 
-An honest inventory of what is designed by hand versus what emerges. The aim
-of the project is a brain that is barebones and raw: simple growth rules,
-with structure that evolves. Anything listed under sections 3 and 4 below is
-guidance from the designer and should shrink over time.
+This describes the main line: the barebones brain on raw organs
+(`organic/raw_brain.py`). The earlier designed brain and the hierarchy
+experiments are recorded in [HISTORY.md](HISTORY.md).
 
-Policy going forward:
+## What we are studying
 
-- **Organs** (eye, ear) may be fixed in behaviour, like what evolution hands
-  an animal. They are improved separately, as organs, never to make one task
-  work.
-- **The rest of the brain** should only have simple, generic rules. Task-shaped
-  circuits and tuned parameters are debts to be removed.
+1. **Time constraints.** One structure should handle both fast, rough answers
+   (system 1) and slow, careful ones (system 2), without being told which a
+   question needs.
+2. **Evolving structure.** New kinds of problems should make the structure
+   grow and reorganize through simple rules, not through circuits we design
+   per task.
 
-## 1. Innate organs (fixed, hand-built)
+Performance is not a goal at this stage. Real competence probably needs a
+structure and a life orders of magnitude larger.
 
-| organ | what it hard-codes |
-|---|---|
-| Eye (`organic/eye.py`) | finds salient blobs (fixed threshold), groups parts enclosed by another blob, saccades largest-first, centers and scales each object; splits each object into pre-made streams: form (luminance + 4 edge orientations), color (12 hue-tuned neurons + saturation + brightness), where (x, y, size), number (count of fixations); a coarse 8x8 glance (color, where, form). Arrival ticks: glance 1, color/where 2, form 3, +1 per extra object. |
-| Ear (`organic/ear.py`) | raw UTF-8 bytes; Hebbian next-byte counts over the last 1-4 bytes; a new unit starts where surprise rises > 0.5 bits; bytes and 2-3 byte sequences excite fixed random neurons (by position and anywhere); frequent units habituate; fixed echo shapes for "what was asked" (8 units deep) and "what I said" (3 units). |
+## Policy
 
-Debt: **the eye hands the brain exactly the attributes the questions ask
-about** (color, shape, place, size, count). This is the largest piece of
-guidance in the system. Next step: rebuild the eye as a raw, retina-like organ.
+- **Organs** (eye, ear) may be fixed, like what evolution hands an animal.
+  They are improved separately, as organs, never to make a task work.
+- **The rest of the brain** uses only generic rules with round, untuned
+  numbers. Anything designed for a task is a debt (listed at the end).
 
-## 2. Generic learning rules (closest to the original idea)
+## A moment of life, step by step
 
-- Sensory areas: a new assembly when nothing responds above *vigilance*;
-  otherwise the winners drift toward the stimulus at rate 1/n.
-- Speech cortex: a cluster is 8 neurons. Problem affinity = stimulus affinity
-  × whether its outputs lean to the heard unit. No affinity: neurogenesis.
-  Only clusters with affinity learn (instar/outstar), with plasticity scaled
-  by surprise and falling with use.
-- Per-cluster myelin (up when helping a correct answer, down when voting wrong)
-  and stability.
-- Sleep: near-identical clusters merge, useless ones die; hippocampal replay.
-- Hebbian traces between what is seen and what is heard; homeostatic word
-  baselines.
+1. A scene appears and a question is heard (raw bytes).
+2. The eye looks for 9 ticks: 3 fixations of 3 ticks each. Each tick it sends
+   what it sees.
+3. Each brain area updates its activity: half of the old activity remains and
+   the new response adds to it. A percept builds up over the moment.
+4. At every tick the speech area silently plans an answer from the current
+   activity. If it is confident enough (its *patience* is met), it speaks; at
+   the last tick it speaks anyway.
+5. Afterwards it hears what a person would have said (imitation) and gets a
+   scalar reward (right, wrong, late). It learns from both.
 
-## 3. Wiring designed by hand (task-shaped guidance)
+## The organs (fixed)
 
-| decision | added for | how much it steers |
+### Eye (`organic/retina.py`)
+
+| part | what it does | design decisions |
 |---|---|---|
-| one sensory area per attribute (shape / color / where / number / glance) | easy naming | high: mirrors the questions |
-| vision reaches speech only as priming (gain on word-forms), never as input | held-out color+shape pairs | high |
-| match / mismatch neurons (counts of heard-and-seen, heard-but-absent) | yes/no and logic | high: logic mostly rides on this |
-| "objects not yet named" signal into speech | stopping description loops | high |
-| attention: inhibition of return once the shape and color words are said; joint attention; heard words bias object competition | multi-object and relation tasks | high: designer chose which areas "name" an object |
-| emergent word categories + activation spread within them + category-colored self-echo | unseen combinations | medium |
-| word fatigue | repetition | low-medium |
-| only answer words bind to vision, not question words | cleaner lifts | medium |
-| pathway myelin vs an integration deadline | biological flavour | low |
-| patience gate with designer-chosen update signs; confidence = least certain word of the plan | system 1 / system 2 | medium |
-| area sprouting (off by default) | structural growth experiment | n/a |
+| receptors | a log-polar grid around the point of fixation: 14 rings × 16 directions, dense and sharp in the center, sparse and blurred toward the edge, covering the whole view | grid size and growth rate chosen by hand |
+| cones | three types (L, M, S) computed from RGB | fixed mixing weights |
+| ganglion cells | each receptor compares its center with a 3× wider surround: brightness ON/OFF, red-green ON/OFF, blue-yellow ON/OFF | standard retina model |
+| magno pathway | brightness change only; fires at the start of each fixation (transient) and arrives first | |
+| parvo pathway | all six channels, sustained, arrives one tick later | |
+| saccades | starts at the center; after 3 ticks jumps to the strongest peripheral contrast, avoiding the last 4 places it looked (within 5 px) | fixation length and inhibition-of-return radius chosen by hand; no notion of objects |
+| eye position | where the eye points, as a population code (7 + 7 neurons) | |
+| V1 | 16 kinds of simple cells tile the map, each looking at a 3×3 window; 2 strongest kinds respond per location; responses scale with local contrast | learned once, then frozen (see below) |
 
-## 4. Parameters tuned by looking at accuracy (designer optimization)
+**How V1 developed:** competitive Hebbian learning on contrast-normalized
+windows (only well-driven windows teach, winners that win too often are
+handicapped). First 1500 spontaneous "retinal waves" (drifting gray
+blobs), then 600 crops of natural photographs, never the task scenes. Result:
+oriented edges in several directions and color-opponent cells. Stored in
+`data/v1.npy`.
 
-| parameter | value | where |
+### Ear (`organic/ear.py`)
+
+| part | what it does | design decisions |
 |---|---|---|
-| category spread | 0.3 | speech |
-| "not yet named" weight | 0.6 | speech |
-| priming strength λ | 1.5 | speech |
-| category blend | 0.5 | speech |
-| competition temperature | 0.02 | speech |
-| familiarity threshold | 0.97 | speech |
-| maturation | 5 | speech |
-| vigilance | 0.86-0.9 | sensory areas |
-| sound-overlap cutoff | 0.15 | priming, binding |
-| grounded / supported thresholds | 3.0 / 2.7 | match / mismatch neurons |
-| attention bias margin | 1.2 | attention |
-| segmentation rise | 0.5 bits (picked because units looked word-like) | ear |
+| input | raw UTF-8 bytes, then silence | |
+| statistics | counts which byte follows the last 1-4 bytes (Hebbian) | context length 4 |
+| segmentation | a new unit starts where the surprise of the next byte jumps by more than 1.2 bits, or where it has no idea at all; at birth every byte is its own unit | 1.2 bits is the value actually used (0.5 was explored in a test but never set) |
+| sound | each byte and each 2-3 byte sequence excites a fixed random set of neurons, by position and anywhere in the unit | |
+| habituation | units heard often excite less | |
+| echoes | "what was asked": the last 8 units, fading, plus the gist; "what I said": the last 3 units | echo depths chosen by hand |
 
-## 5. Environment
+## The brain (`organic/raw_brain.py`)
 
-- Learning signal: imitation (hearing the human answer = supervised next-unit
-  learning) plus a scalar reward for timed tasks.
-- Data: templated scenes and questions, hidden deadlines, held-out color+shape
-  combinations and phrasings.
+### Areas: one per organ output stream
 
-## Possible barebones reset
+`v1` (the V1 map, 3584 signals), `magno` (224) and `gaze` (14).
+No areas for color, shape or place.
 
-1. One generic sheet per organ (raw pixels at two speeds, raw bytes), so any
-   specialization into color / shape / where must emerge.
-2. Remove the match/mismatch neurons, the "not yet named" signal, the
-   naming-based attention rules and the category spread/blend. Keep growth,
-   Hebbian association, surprise and reward.
-3. Freeze all remaining parameters at round, untuned values.
-4. Keep the tasks and experiments as probes. Performance will drop. What we
-   watch is whether structure differentiates as tasks are added.
+- **Growth by novelty:** if no assembly matches an input closely enough
+  (vigilance 0.8), a new assembly is born for it; otherwise the best matches
+  respond and drift toward it (more slowly the more experienced they are).
+- **Activity in time:** each area keeps a leaky state: ×0.5 per tick plus the
+  new response.
+- **Axon patterns:** each assembly projects through a fixed random pattern
+  (256 signals), so an area's whole state can be read by another area.
 
-## Status
+### Binding vision to words
 
-- The raw eye exists (`organic/retina.py`, V1 frozen in `data/v1.npy`).
-- `organic/raw_brain.py` implements steps 1-3 of the reset (generic areas per
-  organ stream, no designed circuits, round parameters) and adds leaky
-  activity over ticks. The designed brain (`organic/brain.py`) is kept for
-  comparison.
-- Still designed in the raw brain: the patience update rule, fatigue,
-  resonant binding through shared auditory neurons, homeostatic word
-  baselines, and the ear's segmentation rule.
+- After a moment, every assembly that was active during it strengthens its
+  link to the word-forms of the answer (a running average of how often each
+  word-form is heard while it is active).
+- Each word-form keeps its own average activity (homeostasis). An area then
+  raises a word-form by how much *more* it expects it than usual. It never
+  lowers one; competition does that.
+- A word-form is also raised when another word-form that shares its sounds is
+  raised ("red?" when "red" is).
 
-## Open decision: how hierarchy appears
+### Speech: the affinity / neurogenesis cortex (`organic/cortex.py`)
 
-The raw brain's V1 area memorizes views, not things (thousands of
-assemblies, few reused). Biology gets invariance from **temporal contiguity**:
-successive glimpses in a moment are usually of the same thing, so an area that
-learns from the *recent history* of a lower area's activity groups the views
-of one object (Földiák 1991; Li & DiCarlo 2008). Two ways to let that happen:
+This is the original idea of the project.
 
-**Easier: a fixed rule.** Every area's leaky state feeds one higher area that
-grows by novelty like any other. The designer decides that hierarchy exists
-and how deep it goes. Generic (no task knowledge), but structural guidance.
+- Input: only the echo of the question and the echo of what it has said so far.
+  Vision acts only by raising word-forms.
+- A cluster is 8 neurons with an identity (what situation it stands for).
+- **Affinity to a problem** = how close the situation is to the cluster's
+  identity × how much its outputs already lean to the word that came.
+- **No affinity → neurogenesis:** a new cluster is born for the situation.
+  Also when clusters that know the answer feel less familiar than the ones
+  that got it wrong.
+- A very familiar situation with a new outcome widens its expectations
+  instead of growing.
+- Only clusters with affinity learn: inputs move toward the situation, outputs
+  toward what happened. Learning is scaled by surprise (a global signal) and
+  slows down as a cluster gets used.
+- Myelin per cluster: up when it helps a correct answer, down when it votes
+  wrong.
+- Word-forms that just fired are tired for a moment (fatigue).
+- Sleep every 2000 moments: nearly identical clusters merge.
 
-**Harder: the brain decides.** An area watches its own novelty. If, long after
-infancy, most of what it sees still gives birth to new assemblies ("everything
-looks new"), it sprouts a higher area fed by the recent history (leaky state)
-of its own activity, read through its assemblies' fixed axon patterns. The new
-area is subject to the same rule, so depth can grow where needed and nowhere
-else. Earlier sprouting in the designed brain (random expansion triggered by
-speech surprise) failed or was neutral; this version differs in what triggers
-it (local, persistent novelty), what it reads (a source's history, not random
-mixtures) and whom it serves (any downstream reader, not only speech).
+### Time: patience and reward (system 1 / system 2)
 
-Plan: explore the harder option first, time-boxed. It counts as fruitful if,
-on a probe that needs invariance (naming shapes and colors at positions never
-seen during life), brains that sprout beat brains that do not on held-out
-positions across two seeds, or the sprouted area's assemblies are measurably
-more position-invariant than their source's. If not, switch to the easier
-rule and record why.
+- Confidence of a plan = the probability of its least certain word.
+- Every cluster has a *patience* (starts at 0.5). The plan is spoken when its
+  confidence reaches the patience of the clusters that shaped it.
+- After answering, a scalar reward: right on time = 1, late = halved per tick
+  over the hidden deadline, wrong = 0, minus 0.02 per tick waited.
+- Patience update: right but late → lower; wrong after answering early →
+  higher; right and on time → slightly lower.
 
-### Harder option, round 1: not fruitful (runaway chain)
+## Environment (the world the brain lives in)
 
-Novelty-driven sprouting, children fed by the parent's leaky state, same
-growth rule everywhere. Probe: shape/color naming, objects seen only in the
-left and middle columns, tested also in the right column. 6000 moments, 2 seeds.
+- 40×40 scenes with 1-3 objects (6 shapes × 6 colors × 2 sizes × 9 places).
+- Questions about a scene (color, shape, where, size, funny, yes/no, counting,
+  logic, relations) and plain chat; answers are what a person would say.
+- Hidden deadlines: color, size, where, "is it red?": 1 tick. Shape, what,
+  funny, "am i ...": 3 ticks. Logic, counting, relations: none.
+- The brain never sees the question type, the deadlines or any label.
 
-| | shape, trained positions | shape, new positions | areas |
-|---|---|---|---|
-| no sprouting | 0.80 / 0.65 | 0.66 / 0.38 | 3 |
-| sprouting | 0.20 / 0.20 | 0.04 / 0.16 | 8 (chain) |
+## What has emerged so far
 
-Each child found its input *more* novel than its parent did (novelty 0.16, 0.25,
-0.29, 0.33, 0.35), so it sprouted again: five generations of ~9000 assemblies.
-Their noisy priming ruined speech. No invariance appeared: ~25 assemblies per shape
-in every area. Reason: reading a history of views does not make things invariant if the growth rule
-still makes a new assembly for every new combination. Temporal contiguity needs
-the *trace rule* (Földiák 1991): the assembly that was just active stays
-favoured for a moment, so the next view joins it.
+- **V1 edge and color-opponent cells** from waves and photographs.
+- **Word-like units** from raw bytes.
+- **Hasty and patient clusters (designed brain):** with hidden deadlines, the
+  clusters that plan answers to fast questions became hastier (patience
+  0.39-0.42 vs 0.45-0.47 without deadlines), and the ones that plan precise
+  questions stayed patient (~0.6).
+- **Growth bursts per new task (designed brain):** each new kind of question
+  set off a burst of new clusters, while earlier tasks were kept.
+- **A "where" area in the raw brain:** the gaze area came to predict place
+  words about twice as strongly as anything else, with nothing telling it to.
+- **Not emerging yet:** invariance (V1 memorizes views, ~24 assemblies per
+  shape) and useful new areas (sprouting built runaway chains).
 
-### Harder option, round 2: trace rule in every area
+## Remaining debts (designed, not emerged)
 
-Generic change to competition in all areas: an assembly's lingering activity
-(the leaky state the brain already keeps) adds a bias of 0.2 (times its
-normalized state) to its affinity, both for who wins and for whether a new
-assembly is born.
-
-Result (6000 moments, 2 seeds):
-
-| | shape, trained positions | shape, new positions | assemblies per shape |
-|---|---|---|---|
-| trace rule, no sprouting | 0.77 / 0.65 | 0.66 / 0.34 | v1 ~24 |
-| trace rule + sprouting | 0.16 / 0.28 | 0.04 / 0.20 | every area ~24 |
-
-Not fruitful either. The chain still runs five generations deep (children are
-smaller: ~3000 assemblies instead of ~9000). No area becomes invariant: a 0.2
-bias cannot bridge successive views of one object (an edge, then a corner), which
-differ more than that. Common cause of both rounds: a novelty trigger cannot
-tell "I need a new level" from "my input is simply rich", so it builds chains.
-
-Per the plan, the harder option is paused. Next: the easier rule (one fixed
-higher level per area), where the open question is no longer *when* to grow
-a level but *how strong* the trace must be for views to group at all.
+| debt | where | note |
+|---|---|---|
+| patience update signs and "confidence = least certain word" | speech | chosen by the designer |
+| the brain knows the 0.02 tick cost when judging "late" | speech | it should infer it from reward alone |
+| fatigue (0.9, halves per tick) | speech | generic but hand-set |
+| raising word-forms through shared sounds (cutoff 0.15) | binding | generic but hand-set |
+| one area per organ stream | brain layout | follows the organ's outputs, not the tasks |
+| imitation of the person's answer | learning signal | the main teacher; reward only tunes timing |
+| cortex numbers: vigilance 0.8, familiarity 0.95, problem threshold 0.55, competition 0.04, learning 0.25, maturation 5 | everywhere | round values, but chosen by the designer |
+| fixation length 3, 9 ticks per moment, decay 0.5 | time | hand-set |
+| trace rule (off by default) and sprouting (off by default) | areas | see HISTORY.md |
