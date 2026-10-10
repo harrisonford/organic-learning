@@ -36,6 +36,15 @@ Thinking against time
     passes the patience of the clusters doing the planning. Patience is tuned
     by a scalar reward after speaking.
 
+Sprouting (optional, the brain decides)
+    Every area watches its own novelty: the fraction of its inputs that gave
+    birth to a new assembly. If, long after infancy, that stays high
+    ("everything still looks new"), the area sprouts a child area fed by the
+    recent history (leaky state) of its own activity, read through its
+    assemblies' fixed axon patterns. Successive glimpses in a moment are
+    usually of the same thing, so the child can come to group views
+    (temporal contiguity). Children follow the same rule.
+
 What is deliberately absent: match/mismatch neurons, an "objects not yet
 named" signal, attention rules, word-category spread, per-attribute areas.
 """
@@ -58,7 +67,7 @@ def norm_text(text):
 
 
 class RawBrain:
-    def __init__(self, seed=0, vigilance=0.8, decay=0.5, ticks=9):
+    def __init__(self, seed=0, vigilance=0.8, decay=0.5, ticks=9, sprouting=False):
         self.retina = Retina(seed=seed)
         v1 = V1(kinds=16, window=3, seed=seed)
         v1.W = np.load(V1_FILE).astype(np.float32)
@@ -66,7 +75,13 @@ class RawBrain:
         self.retina.v1 = v1
         self.ear = Ear(seed=seed + 7)
         dims = {"v1": self.retina.rings * self.retina.angles * v1.kinds, "magno": self.retina.rings * self.retina.angles, "gaze": 14}
-        self.areas = {k: SensoryArea(k, d, vigilance=vigilance, seed=seed) for k, d in dims.items()}
+        self.vigilance = vigilance
+        self.seed = seed
+        self.areas = {k: SensoryArea(k, d, vigilance=vigilance, seed=seed, axon_dim=256) for k, d in dims.items()}
+        self.parent = {}  # sprouted area -> the area whose history feeds it
+        self.sprouting = sprouting
+        self.novelty = {k: [] for k in self.areas}  # 1 if an input gave birth, else 0
+        self.events = []
         self.speech = Cortex(dim=2 * self.ear.width, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
         self.decay = decay
         self.ticks = ticks
@@ -130,13 +145,20 @@ class RawBrain:
         for tick in self.retina.view(image, ticks=self.ticks):
             signals = self._organ_signals(tick)
             new = {}
-            for k, area in self.areas.items():
+            for k, area in self.areas.items():  # parents come before their children
+                if k in self.parent:
+                    src = new[self.parent[k]]
+                    if src.sum() > 0:
+                        signals[k] = src @ self.areas[self.parent[k]].axons[: len(src)]
                 s = states[k]
                 if len(s) < area.C:
                     s = np.concatenate([s, np.zeros(area.C - len(s), np.float32)])
                 s = self.decay * s
                 if k in signals:
+                    before = area.C
                     idx, act = area.perceive(signals[k], learn)
+                    if learn:
+                        self.novelty[k].append(1.0 if area.C > before else 0.0)
                     if len(s) < area.C:
                         s = np.concatenate([s, np.zeros(area.C - len(s), np.float32)])
                     s[idx] += act
@@ -228,6 +250,8 @@ class RawBrain:
                 self._tune_patience(involved, t, correct, got, len(history) - 1)
             if self.age % 2000 == 0:
                 self.speech.sleep(min_age=2000, merge_above=0.995)
+            if self.sprouting:
+                self._consider_sprouting()
         return out, t, got
 
     def _bind(self, history, target):
@@ -248,6 +272,25 @@ class RawBrain:
                 idx = np.nonzero(s > 0.05 * s.max())[0]
                 self.areas[k].bind(idx, s[idx] / s[idx].max(), h)
 
+    def _consider_sprouting(self, window=2000, still_new=0.1, infancy=1000, max_areas=8):
+        """An area that keeps finding everything new grows a child on its history."""
+        if self.age < infancy:
+            return
+        for k in list(self.areas):
+            hist = self.novelty[k]
+            if len(hist) < window:
+                continue
+            rate = float(np.mean(hist[-window:]))
+            self.novelty[k] = hist[-window:]
+            has_child = k in self.parent.values()
+            if rate > still_new and not has_child and len(self.areas) < max_areas:
+                name = f"{k}+"
+                src = self.areas[k]
+                self.areas[name] = SensoryArea(name, src.axon_dim, vigilance=self.vigilance, seed=self.seed + len(self.areas), axon_dim=256)
+                self.parent[name] = k
+                self.novelty[name] = []
+                self.events.append((self.age, f"{k} sprouted {name} (novelty {rate:.2f})"))
+
     def _tune_patience(self, involved, t, correct, got, last, eta=0.05):
         total = sum(involved.values()) or 1.0
         if correct and got < 1.0 - self.time_cost * t - 1e-6:
@@ -264,4 +307,6 @@ class RawBrain:
 
     def report(self):
         areas = " ".join(f"{k}={a.C}" for k, a in self.areas.items())
+        if self.events:
+            areas += " | " + "; ".join(f"{e} at {a}" for a, e in self.events)
         return f"assemblies: {areas} | speech clusters={self.speech.C} word-forms={self.V}"

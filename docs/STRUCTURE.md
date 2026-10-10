@@ -99,3 +99,32 @@ guidance in the system. Next step: rebuild the eye as a raw, retina-like organ.
 - Still designed in the raw brain: the patience update rule, fatigue,
   resonant binding through shared auditory neurons, homeostatic word
   baselines, and the ear's segmentation rule.
+
+## Open decision: how hierarchy appears
+
+The raw brain's V1 area memorizes views, not things (thousands of
+assemblies, few reused). Biology gets invariance from **temporal contiguity**:
+successive glimpses in a moment are usually of the same thing, so an area that
+learns from the *recent history* of a lower area's activity groups the views
+of one object (Földiák 1991; Li & DiCarlo 2008). Two ways to let that happen:
+
+**Easier: a fixed rule.** Every area's leaky state feeds one higher area that
+grows by novelty like any other. The designer decides that hierarchy exists
+and how deep it goes. Generic (no task knowledge), but structural guidance.
+
+**Harder: the brain decides.** An area watches its own novelty. If, long after
+infancy, most of what it sees still gives birth to new assemblies ("everything
+looks new"), it sprouts a higher area fed by the recent history (leaky state)
+of its own activity, read through its assemblies' fixed axon patterns. The new
+area is subject to the same rule, so depth can grow where needed and nowhere
+else. Earlier sprouting in the designed brain (random expansion triggered by
+speech surprise) failed or was neutral; this version differs in what triggers
+it (local, persistent novelty), what it reads (a source's history, not random
+mixtures) and whom it serves (any downstream reader, not only speech).
+
+Plan: explore the harder option first, time-boxed. It counts as fruitful if,
+on a probe that needs invariance (naming shapes and colors at positions never
+seen during life), brains that sprout beat brains that do not on held-out
+positions across two seeds, or the sprouted area's assemblies are measurably
+more position-invariant than their source's. If not, switch to the easier
+rule and record why.
