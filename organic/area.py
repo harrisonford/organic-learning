@@ -24,7 +24,7 @@ import numpy as np
 
 
 class SensoryArea:
-    def __init__(self, name, dim, vigilance=0.9, temp=0.03, neurons_per_assembly=6, min_rate=0.01, axon_dim=64, seed=0):
+    def __init__(self, name, dim, vigilance=0.9, temp=0.03, neurons_per_assembly=6, min_rate=0.01, axon_dim=64, seed=0, population=0, capacity=None):
         self.name = name
         self.dim = dim
         self.vigilance = vigilance
@@ -39,6 +39,13 @@ class SensoryArea:
         self.Wname = np.zeros((self.cap, self.vcap), np.float32)  # word co-occurrence traces
         self.named = np.zeros(self.cap, np.float32)  # how much naming experience
         self.births = 0
+        # population > 0: that many best-matching assemblies respond, graded
+        # (a distributed code: similar inputs share active assemblies), and a
+        # novel input recruits a new assembly *in addition* to them
+        self.population = population
+        # capacity: a fixed budget of assemblies; when full, a novel input
+        # recycles the least-used one (neuron turnover)
+        self.capacity = capacity
         # each assembly's axons reach downstream neurons in its own fixed random
         # pattern, so the area's output can be read as one vector
         self.axon_dim = axon_dim
@@ -63,6 +70,17 @@ class SensoryArea:
             self.Wname = b
 
     def _born(self, x):
+        if self.capacity is not None and self.C >= self.capacity:
+            c = int(np.argmin(self.usage[: self.C]))  # turnover: the least-used assembly is recycled
+            self.Z[c] = x
+            self.usage[c] = 1
+            self.Wname[c] = 0
+            self.named[c] = 0
+            a = np.zeros(self.axon_dim, np.float32)
+            a[self.rng.choice(self.axon_dim, 8, replace=False)] = self.rng.choice([-1.0, 1.0], 8)
+            self.axons[c] = a / np.sqrt(8)
+            self.births += 1
+            return c
         self._ensure(C=self.C)
         c = self.C
         self.Z[c] = x
@@ -78,7 +96,7 @@ class SensoryArea:
 
     # ------------------------------------------------------------- perceive
 
-    def perceive(self, x, learn=True, bias=None):
+    def perceive(self, x, learn=True, bias=None, plasticity=1.0):
         """Respond to a stimulus. Returns (assembly indices, activity).
 
         bias: optional per-assembly boost from lingering activity (trace rule):
@@ -98,6 +116,8 @@ class SensoryArea:
             aff = aff.copy()
             aff[: len(bias)] += bias[: self.C]
         best = int(np.argmax(aff))
+        if self.population:
+            return self._population(x, aff, learn, plasticity)
         if aff[best] < self.vigilance and learn:
             c = self._born(x)
             return np.array([c]), np.ones(1, np.float32)
@@ -110,10 +130,29 @@ class SensoryArea:
         if learn:
             for c, a in zip(idx, act):
                 self.usage[c] += 1
-                rate = a / self.usage[c]
+                rate = min(1.0, plasticity * a / self.usage[c])
                 z = self.Z[c] + rate * (x - self.Z[c])
                 self.Z[c] = z / np.linalg.norm(z)
         return idx, act
+
+    def _population(self, x, aff, learn, plasticity):
+        k = min(self.population, self.C)
+        idx = np.argpartition(-aff, k - 1)[:k]
+        act = np.exp((aff[idx] - aff[idx].max()) / self.temp)
+        act /= act.sum()
+        novel = aff[idx].max() < self.vigilance
+        if learn:
+            for c, a in zip(idx, act):
+                self.usage[c] += a
+                rate = min(1.0, plasticity * a / self.usage[c])
+                z = self.Z[c] + rate * (x - self.Z[c])
+                self.Z[c] = z / np.linalg.norm(z)
+            if novel:
+                c = self._born(x)
+                keep = idx != c
+                idx = np.append(idx[keep], c)
+                act = np.append(act[keep] * 0.5, 0.5)
+        return idx, act.astype(np.float32)
 
     # -------------------------------------------------------------- binding
 
