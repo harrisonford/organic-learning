@@ -59,3 +59,35 @@ Nearest-neighbour tests on 2000 test photos (5000 reference photos), seed 0:
 Diagnosis: (1) prototypes of raw pixel patches are too literal (memorized,
 then recycled); (2) nothing makes successive views converge; (3) the settle
 reward is easily met by habit.
+
+## Second organ (2026-10-12): parts, prediction across fixations, belief-change motor
+
+Changes: a frozen bank of 64 local parts (developed on 10000 unlabeled CIFAR
+photos) describes each view; one object group integrates the three views of
+every fixation over the whole moment and predicts the next medium view before
+each saccade (prediction error scales its plasticity); its output is a
+population vector (blend of what its active assemblies stand for); the motor
+organ is rewarded by Bayesian surprise (how far the object group's belief
+moved because of the fixation).
+
+| at age 50,000 | fine, tick 1 -> 12 | coarse, tick 1 -> 12 | surprise at next view |
+|---|---|---|---|
+| raw pixels | 0.37 | 0.81 | |
+| first organ | 0.36 -> 0.23 | 0.80 -> 0.72 | |
+| second organ, belief-change motor (2 seeds) | 0.25 -> 0.27 | 0.78 -> 0.76 | 0.31 |
+| second organ, fixed center | 0.24 -> 0.28 | 0.79 -> 0.78 | 0.39 |
+| second organ, random gaze | 0.25 -> 0.23 | 0.79 -> 0.76 | 0.37 |
+
+- Fixed: looking longer no longer hurts (except with random gaze).
+- Not fixed: overall quality is below raw pixels. Neighbours are slightly more about content
+  ([neighbours](organ2_bayes_neighbours.png)) but still mostly background and
+  colour. The object group recycled ~19,800 assemblies through 4096 slots:
+  it keeps forgetting.
+- The belief-change motor was gamed: 100% of saccades go to the top-left corner
+  for every image ([gaze](organ2_bayes_gaze.png)). That view is always the most
+  different from the starting center view, so it always moves the belief most.
+  Lesson: any reward that one fixed location can maximize regardless of the
+  image turns into a habit. The motor's reward is compared to a single global
+  average; real dopamine signals a prediction error *per action* (this look
+  vs what looking there usually gives), which would leave only image-dependent
+  value to learn.
