@@ -21,7 +21,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from organic import cifar  # noqa: E402
-from organic.peye import ProgressiveEye  # noqa: E402
+from organic.peye import Parts, ProgressiveEye, ProgressiveEye2, develop_parts  # noqa: E402
 
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 50000
 out_path = sys.argv[2] if len(sys.argv) > 2 else "out/organ.jsonl"
@@ -34,7 +34,19 @@ REF, TEST = int(os.environ.get("REF", 5000)), int(os.environ.get("TEST", 2000))
 xtr, ytr = cifar.load("train")
 xte, yte = cifar.load("test")
 rng = np.random.default_rng(SEED)
-eye = ProgressiveEye(motor=MOTOR, trace=TRACE, seed=SEED)
+ORGAN = int(os.environ.get("ORGAN", 1))
+if ORGAN == 2:
+    parts_file = os.path.join(os.path.dirname(__file__), "..", "data", "parts.npy")
+    if os.path.exists(parts_file):
+        parts = Parts()
+        parts.W = np.load(parts_file)
+        parts.frozen = True
+    else:  # development on unlabeled photos, then frozen and kept as part of the organ
+        parts = develop_parts(xtr[rng.permutation(len(xtr))[:10000]], np.random.default_rng(123))
+        np.save(parts_file, parts.W)
+    eye = ProgressiveEye2(parts, motor=MOTOR, trace=TRACE, seed=SEED)
+else:
+    eye = ProgressiveEye(motor=MOTOR, trace=TRACE, seed=SEED)
 ref_idx = np.arange(REF)  # reference images (also seen in life, like familiar things)
 test_idx = np.arange(TEST)
 
@@ -89,7 +101,7 @@ for epoch in range(epochs):
             fine, coarse, targets = evaluate()
             s = np.mean(surprise_window[-2000:], axis=0)
             rec = {"age": age, "motor": MOTOR, "trace": TRACE, "seed": SEED, "fine": fine, "coarse": coarse,
-                   "assemblies": {a.name: int(a.C) for a in eye.groups + [eye.top]}, "births": {a.name: int(a.births) for a in eye.groups + [eye.top]},
+                   "assemblies": eye.report(),
                    "surprise_mid_fine": [float(v) for v in s], "gaze_targets": [float(v) for v in targets], "seconds": round(time.time() - t0)}
             log.write(json.dumps(rec) + "\n")
             log.flush()

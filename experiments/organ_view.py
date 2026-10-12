@@ -87,6 +87,9 @@ for k in range(8):
     g.paste(im, (5 * 40 + 8 + k * (32 * S + 6), 20))
 g.save(os.path.join(OUT, f"organ_{tag}_gaze.png"))
 
+if not hasattr(eye, "predict_mid"):
+    print("saved", tag)
+    sys.exit()
 # predictions: coarse view -> expected medium view at the gaze target
 p = Image.new("RGB", (6 * (3 * 8 * 6 + 20), 8 * 6 + 40), "white")
 dp = ImageDraw.Draw(p)
