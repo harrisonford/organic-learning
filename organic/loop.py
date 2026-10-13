@@ -63,7 +63,10 @@ class LoopBrain:
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
         self.sense = SensoryArea("seen", 3 * D + T, vigilance=0.8, seed=seed, axon_dim=256, population=16, temp=0.1, capacity=4096)
-        self.dim = self.ear.width + self.sense.dim + T
+        # the orchestrator reads the organ's own output (like visual projection
+        # neurons feeding the fly's central brain directly), accumulated leakily
+        # over the fixations of a moment
+        self.dim = self.ear.width + 3 * D + T
         self.orch = Cortex(dim=self.dim, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
         self.eye_out = [self.orch.output_neuron(f"eye:{t}") for t in range(T)]
         self.goal_loop, self.reflex_loop = goal_loop, reflex_loop
@@ -80,10 +83,11 @@ class LoopBrain:
         v = state @ self.sense.Z[: len(state)]
         return v / (np.linalg.norm(v) + 1e-8)
 
-    def _situation(self, q_code, state, target):
+    def _situation(self, q_code, seen, target):
         g = np.zeros(self.eye.T, np.float32)
         g[target] = 1.0
-        s = np.concatenate([q_code, self._seen(state), 0.5 * g])
+        n = np.linalg.norm(seen)
+        s = np.concatenate([q_code, seen / n if n > 0 else seen, 0.5 * g])
         return s / np.linalg.norm(s)
 
     def _words(self):
@@ -104,11 +108,12 @@ class LoopBrain:
         reflex = self.eye.salience(img) if self.reflex_loop else np.zeros(self.eye.T, np.float32)
         state = np.zeros(0, np.float32)
         latest = [np.zeros(self.eye.D, np.float32) for _ in range(3)]
+        seen = np.zeros(3 * self.eye.D, np.float32)  # leaky trace of the organ's output
         target, path, choices = 12, [12], []  # choices: (tick, clusters, weights, neuron acts, target)
         said, tick, snapshot = None, 0, None
         for f in range(self.fixations):
             if f > 0:  # choose where to look next: goal loop + reflex loop compete
-                s = self._situation(q_code, state, target)
+                s = self._situation(q_code, seen, target)
                 goal = np.zeros(self.eye.T, np.float32)
                 r = self.orch.forward(s, eye_group) if self.goal_loop else None
                 if r is not None and r["probs"] is not None and r["raw"].sum() > 0:
@@ -125,6 +130,8 @@ class LoopBrain:
                 path.append(target)
             for level, code in enumerate(self.eye.views(img, target)):
                 latest[level] = code
+                seen = 0.7 * seen
+                seen[level * self.eye.D : (level + 1) * self.eye.D] += code
                 state = np.concatenate([state, np.zeros(max(0, self.sense.C - len(state)), np.float32)]) * 0.7
                 x = np.concatenate([latest[0], latest[1], latest[2], 0.5 * np.eye(self.eye.T, dtype=np.float32)[target]])
                 idx, act = self.sense.perceive(x, learn)
@@ -132,7 +139,7 @@ class LoopBrain:
                 state[idx] += act
                 tick += 1
                 # silently plan an answer; speak when sure enough
-                s = self._situation(q_code, state, target)
+                s = self._situation(q_code, seen, target)
                 r = self.orch.forward(s, words) if len(words) else None
                 if r is not None and r["probs"] is not None:
                     total = r["g"].sum()
@@ -150,7 +157,7 @@ class LoopBrain:
             reward = (1.0 if correct else 0.0) - time_cost * tick
             if learn:
                 self.age += 1
-                s = snapshot[0] if snapshot else self._situation(q_code, state, target)
+                s = snapshot[0] if snapshot else self._situation(q_code, seen, target)
                 self.orch.learn(s, self.orch.out_index[f"word:{answer}"], words)  # imitation
                 if snapshot:
                     self._tune_patience(snapshot[1], correct, tick)
