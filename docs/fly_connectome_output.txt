@@ -1,0 +1,46 @@
+connection rows: 16847997 | columns: ['pre_pt_root_id', 'post_pt_root_id', 'neuropil', 'syn_count', 'gaba_avg', 'ach_avg', 'glut_avg', 'oct_avg', 'ser_avg', 'da_avg']
+neuron pairs: 15,091,983  (with >=5 synapses: 2,700,513)  synapses: 54,492,922
+
+1. Feedforward vs feedback between the eye (optic lobe) and the central brain
+  visual projection neurons -> central brain neurons         2,181,780 synapses
+  visual centrifugal neurons -> optic lobe neurons           1,281,831 synapses
+  feedback / feedforward = 0.59
+
+2. Where descending (motor command) neurons get their input
+  from central                 66.4%
+  from descending              11.4%
+  from ascending               10.2%
+  from visual_projection        6.7%
+  from sensory                  4.1%
+  from visual_centrifugal       0.5%
+  from optic                    0.3%
+  from sensory_ascending        0.2%
+  from motor                    0.0%
+  from endocrine                0.0%
+
+   hops from photoreceptors to descending neurons (edges >= 5 synapses):
+  1 hops: 2  2 hops: 94  3 hops: 703  4 hops: 407  5 hops: 47  6 hops: 2  7 hops: 1  (unreached: 47)
+
+3. Efference copy: what drives the neurons that feed back into the eye?
+  from central                 42.5%
+  from optic                   26.9%
+  from visual_projection       19.5%
+  from visual_centrifugal       5.3%
+  from ascending                3.6%
+  from descending               2.0%
+  from sensory                  0.2%
+  from sensory_ascending        0.0%
+  descending neurons -> visual centrifugal: 13,477 synapses; -> optic lobe: 3,135
+  neurons that strongly drive both descending and centrifugal neurons: 5116 (38% of those driving centrifugal neurons)
+
+4. Convergence: how many visual feature channels (VPN types) reach each descending neuron directly
+  descending neurons with direct VPN input: 477 of 1303 | VPN types per such DN: median 3, max 24
+  VPN types sending most synapses directly onto DNs: LPLC4 (14,099), LT51 (7,155), LPLC2 (6,394), LC4 (5,568), MTe01b (4,819), LPLC1 (4,168), LC31a (3,919), LLPC2 (2,795), LLPC1 (2,455), OCG01e (2,252)
+
+5. Location -> action: LC4 looming detectors onto the giant fibre (DNp01)
+  left   LC4 -> ipsilateral/contra GF, n= 54: correlation of synapse count with pos_x: -0.08
+  left   LC4 -> ipsilateral/contra GF, n= 54: correlation of synapse count with pos_y: -0.22
+  left   LC4 -> ipsilateral/contra GF, n= 54: correlation of synapse count with pos_z: +0.02
+  right  LC4 -> ipsilateral/contra GF, n= 50: correlation of synapse count with pos_x: +0.29
+  right  LC4 -> ipsilateral/contra GF, n= 50: correlation of synapse count with pos_y: -0.08
+  right  LC4 -> ipsilateral/contra GF, n= 50: correlation of synapse count with pos_z: -0.25
