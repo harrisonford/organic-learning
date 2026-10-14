@@ -62,6 +62,9 @@ class NoisyEye:
 
 
 class LoopBrain2:
+    use_stay = True  # defaults for brains saved before the switches existed
+    use_gains = True
+
     def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
         self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
