@@ -62,8 +62,9 @@ class NoisyEye:
 
 
 class LoopBrain2:
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8):
-        self.eye = NoisyEye(parts, size=size, gains=gains, seed=seed)
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True):
+        self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
+        self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
         self.commands = [f"eye:{t}" for t in range(T)] + ["eye:stay"] + [f"gain:{k}" for k in range(gains)] + ["gain:none"]
@@ -150,6 +151,8 @@ class LoopBrain2:
                 reflex[:T] = change / (change.max() + 1e-8) * min(1.0, change.max() * 10)
             prev_glance = glance
             reflex[target] -= 1.0  # "moving" to where it already is means nothing
+            if not self.use_stay:
+                reflex[T] = -1e9  # the stay command is not available
             k, rm = self._choose(s, self.move_group, reflex, explore)
             if rm is not None and rm.get("a") is not None:
                 choices.append((tick, rm["active"], rm["g"], rm["a"], int(self.move_group[k])))
@@ -161,11 +164,12 @@ class LoopBrain2:
             fine_sum, fine_n = np.zeros(D, np.float32), 0
             path.append(target)
             last_cmd = f"eye:{target}"
-            kg, rg = self._choose(s, self.gain_group, np.zeros(self.gains + 1), explore)
-            gain = None if kg == self.gains else kg
-            gains_used.append(gain)
-            if rg is not None and rg.get("a") is not None:
-                choices.append((tick, rg["active"], rg["g"], rg["a"], int(self.gain_group[kg])))
+            if self.use_gains:
+                kg, rg = self._choose(s, self.gain_group, np.zeros(self.gains + 1), explore)
+                gain = None if kg == self.gains else kg
+                gains_used.append(gain)
+                if rg is not None and rg.get("a") is not None:
+                    choices.append((tick, rg["active"], rg["g"], rg["a"], int(self.gain_group[kg])))
         reward = None
         if answer is not None:
             correct = said == answer

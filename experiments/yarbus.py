@@ -48,7 +48,13 @@ parts.W = np.load(os.path.join(os.path.dirname(__file__), "..", "data", "parts.n
 parts.frozen = True
 DESIGN = int(os.environ.get("DESIGN", 1))
 Brain = LoopBrain2 if DESIGN == 2 else LoopBrain
-brain = Brain(parts, seed=SEED, goal_loop=LOOPS in ("both", "goal"), reflex_loop=LOOPS in ("both", "reflex"))
+import json as _json  # noqa: E402
+
+extra = _json.loads(os.environ.get("BRAIN", "{}"))  # e.g. {"noise": 0, "use_stay": false, "use_gains": false}
+if os.environ.get("RESUME"):  # continue a saved life
+    brain = pickle.load(open(os.environ["RESUME"], "rb"))
+else:
+    brain = Brain(parts, seed=SEED, goal_loop=LOOPS in ("both", "goal"), reflex_loop=LOOPS in ("both", "reflex"), **extra)
 rng = np.random.default_rng(SEED)
 test = [moment(np.random.default_rng(1000 + i)) for i in range(240)]
 log = open(out_path, "w")
@@ -70,7 +76,10 @@ def evaluate():
                 "gaze_to_asked_side": float(np.nanmean([g for _, _, g, _ in v])) if any(not np.isnan(g) for _, _, g, _ in v) else None} for k, v in sorted(per.items())}
 
 
-for age in range(1, N + 1):
+start = brain.age
+if start:
+    rng = np.random.default_rng(SEED + start)  # fresh experiences for the continued life
+for age in range(start + 1, start + N + 1):
     e = moment(rng)
     brain.live(e["image"], e["question"], e["answer"])
     if age % EVERY == 0:

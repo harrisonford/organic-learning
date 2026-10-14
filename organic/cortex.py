@@ -175,6 +175,8 @@ class Cortex:
         return np.concatenate([part / n if n > 0 else part, np.zeros(len(s) - r, s.dtype)])
 
     def _affinity(self, s, idx=None):
+        if idx is None and self.C and self.reach[0] == self.reach[self.C - 1] and (self.reach[: self.C] == self.reach[0]).all():
+            return self.Z[: self.C] @ self._seen(s, int(self.reach[0]))  # common case: no copy
         idx = np.arange(self.C) if idx is None else idx
         aff = np.empty(len(idx), np.float32)
         reach = self.reach[idx]
@@ -185,11 +187,18 @@ class Cortex:
 
     def _cluster_activity(self, idx, s):
         """Neuron activity inside clusters: rectified match, k-winners-take-all."""
-        a = np.zeros((len(idx), self.n), np.float32)
         reach = self.reach[idx]
-        for r in np.unique(reach):
-            m = reach == r
-            a[m] = np.maximum(self.Win[idx[m]] @ self._seen(s, r), 0.0)
+        if len(idx) > self.C // 4 and (self.reach[: self.C] == self.reach[0]).all():
+            # many candidates: one product over a view of every cluster, then pick rows
+            full = (self.Win[: self.C].reshape(-1, self.dim) @ self._seen(s, int(self.reach[0]))).reshape(self.C, self.n)
+            a = np.maximum(full[idx], 0.0)
+        elif len(idx) and (reach == reach[0]).all():
+            a = np.maximum(self.Win[idx] @ self._seen(s, int(reach[0])), 0.0)  # one gather, one product
+        else:
+            a = np.zeros((len(idx), self.n), np.float32)
+            for r in np.unique(reach):
+                m = reach == r
+                a[m] = np.maximum(self.Win[idx[m]] @ self._seen(s, r), 0.0)
         if a.size:
             kth = np.partition(a, self.n // 2, axis=1)[:, self.n // 2][:, None]
             a = np.where(a >= kth, a, 0.0)
