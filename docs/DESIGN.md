@@ -36,3 +36,28 @@ Learning, unchanged in spirit:
 - **Answers** are learned by imitation.
 - **Patience** is tuned by the outcome.
 - **The orchestrator** grows clusters by affinity.
+
+## Results: Yarbus test, design 1 vs design 2 (20,000 moments, 2 seeds each)
+
+Design 1 (`organic/loop.py`), age 20,000:
+
+| brain | color left / right | shape left / right | gaze -> asked side, color q's | gaze -> asked side, shape q's |
+|---|---|---|---|---|
+| both loops | 0.82-0.87 / 0.77-0.79 | 0.27-0.37 / 0.36 | 0.90-1.00 / 0.80-1.00 | 0.50-0.78 / 0.47-0.53 |
+| goal loop only | 0.52-0.77 / 0.65-0.74 | 0.27-0.44 / 0.20-0.40 | 0.46-0.93 / 0.69-0.72 | 0.63-0.66 / 0.33-0.43 |
+| reflex only | 0.45 / 0.47-0.56 | 0.27-0.32 / 0.18-0.30 | 0.30 / 0.60-0.65 | 0.48 / 0.41-0.45 |
+
+- Question-dependent gaze emerged from outcome-only learning (eligibility
+  traces, per-command prediction error). With both loops the eye goes to the
+  asked side for color questions 90-100% of the time; the reflex-only eye keeps
+  one habit whatever the question.
+- Both loops beat either alone: the reflex explores early, the goal loop takes over.
+- Shape stays weak (~0.3-0.4) even when the eye looks at the right side: the fine
+  view / parts code does not separate the shapes well enough.
+- Answers come late (tick 8-11 of 12), even for color.
+
+Design 2 (`organic/loop2.py`) regressed: color 0.52-0.79, shape 0.18-0.35, less
+consistent gaze, and the "stay" command was almost never used (0-0.1 per
+moment). Candidate causes (untested): photoreceptor noise blurs weak shape
+information; 35 commands instead of 25 adds early randomness and credit noise;
+staying costs time at once while its payoff is rare and delayed.
