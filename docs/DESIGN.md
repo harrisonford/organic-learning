@@ -61,3 +61,40 @@ consistent gaze, and the "stay" command was almost never used (0-0.1 per
 moment). Candidate causes (untested): photoreceptor noise blurs weak shape
 information; 35 commands instead of 25 adds early randomness and credit noise;
 staying costs time at once while its payoff is rare and delayed.
+
+## Does more training help? (long lives to age 80,000) and design-2 diagnosis
+
+Long lives (2 seeds, average of the last three checkpoints):
+
+| | color | shape | gaze -> asked side | clusters |
+|---|---|---|---|---|
+| design 1, age 20,000 | 0.80-0.83 | 0.32-0.37 | 0.74-0.75 | ~3,400 |
+| design 1, age 80,000 | 0.74-0.82 | 0.30-0.37 | 0.66-0.77 | ~12,400 |
+| design 2, age 20,000 | 0.58-0.78 | 0.23-0.30 | 0.50-0.60 | ~4,100 |
+| design 2, age 80,000 | 0.57-0.69 | 0.18-0.25 | 0.62-0.71 | ~15,000 |
+
+Four times more life did not help: design 1 plateaued by age 8,000-20,000;
+design 2's gaze improved slightly, its answers did not. Both kept growing
+clusters (3-4x) without improving: memorizing situations, not generalizing.
+
+Design 2, one change at a time (20,000 moments, 2 seeds):
+
+| design 2 with... | color | shape | gaze -> asked side |
+|---|---|---|---|
+| none of the new features | 0.65-0.68 | 0.24-0.34 | 0.51-0.70 |
+| noise only | 0.56-0.71 | 0.26-0.28 | 0.38-0.59 |
+| stay only | 0.46-0.71 | 0.34-0.35 | 0.32-0.55 |
+| gains only | 0.55-0.74 | 0.20-0.32 | 0.51-0.67 |
+
+No single new feature explains the regression; even design 2 without them is
+below design 1, so the cause is shared: the change-only reflex (no early pull
+toward the objects), the efference copy, or the fixation timing. "Stay" was
+discovered by one seed (~2 per moment) but did not help.
+
+Diagnosis: the ceiling is structural. Profiling showed 3,200 of 3,640
+orchestrator clusters feel familiar with every situation; the question echo and
+the overall look of the scene are shared by all moments, so affinity is not
+selective, competition does all the work and growth turns into memorization.
+Next: adaptation of the orchestrator's input (respond to what differs from the
+usual, as the ear's habituation does), the contrast reflex back in design 2, then
+the eye's shape perception.
