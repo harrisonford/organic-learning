@@ -58,7 +58,10 @@ class Eye:
 
 
 class LoopBrain:
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, fixations=4, size=40):
+    adapt = False  # defaults for brains saved before adaptation existed
+    mean_input = None
+
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, fixations=4, size=40, adapt=False):
         self.eye = Eye(parts, size=size)
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
@@ -74,6 +77,9 @@ class LoopBrain:
         self.value = np.zeros(T, np.float32)  # what looking at each target usually earns
         self.rng = np.random.default_rng(seed)
         self.age = 0
+        self.adapt = adapt
+        self.mean_input = None
+        self.learning = True
 
     # ------------------------------------------------------------------ helpers
 
@@ -88,7 +94,22 @@ class LoopBrain:
         g[target] = 1.0
         n = np.linalg.norm(seen)
         s = np.concatenate([q_code, seen / n if n > 0 else seen, 0.5 * g])
-        return s / np.linalg.norm(s)
+        return self._adapt(s / np.linalg.norm(s), self.learning)
+
+    def _adapt(self, s, learn):
+        """Stimulus-specific adaptation: each input neuron slowly learns its own
+        average activity and passes on only the deviation from it, so what is
+        always there fades and what distinguishes this situation stands out."""
+        if not self.adapt:
+            return s
+        if self.mean_input is None:
+            self.mean_input = np.zeros_like(s)
+        if learn:
+            self.mean_input += 0.001 * (s - self.mean_input)
+        d = s - self.mean_input
+        n = np.linalg.norm(d)
+        return d / n if n > 0 else s
+
 
     def _words(self):
         return np.array([i for i, o in enumerate(self.orch.outputs) if o.startswith("word:")], np.int64)
@@ -100,6 +121,7 @@ class LoopBrain:
 
         Returns (answer said, tick, reward, gaze path)."""
         img = np.asarray(img, np.float32)
+        self.learning = learn
         q_code = self.ear.question(self.ear.units(question, learn))
         if answer is not None:
             self.orch.output_neuron(f"word:{answer}")

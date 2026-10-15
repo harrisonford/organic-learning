@@ -55,6 +55,15 @@ class NoisyEye:
         n = np.linalg.norm(code)
         return code / n if n > 0 else code
 
+    def salience(self, img):
+        """Static contrast at each target (as in design 1's reflex)."""
+        sal = np.zeros(self.T, np.float32)
+        lum = img.mean(axis=2)
+        for t, (cx, cy) in enumerate(self.sensor.targets):
+            patch = self.sensor._crop(img, cx, cy, 8).mean(axis=2)
+            sal[t] = abs(patch.mean() - lum.mean()) + patch.std()
+        return sal / (sal.max() + 1e-8)
+
     def glance(self, img):
         """Coarse luminance at each target region (for the change reflex)."""
         lum = np.clip(img + self.rng.normal(0, self.noise, img.shape).astype(np.float32), 0, 1).mean(axis=2)
@@ -64,10 +73,15 @@ class NoisyEye:
 class LoopBrain2:
     use_stay = True  # defaults for brains saved before the switches existed
     use_gains = True
+    adapt = False
+    mean_input = None
+    reflex = "change"
 
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True):
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change"):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
         self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
+        self.adapt, self.mean_input, self.learning = adapt, None, True
+        self.reflex = reflex  # "change" (danger-like: onset, motion) or "contrast" (static salience)
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
         self.commands = [f"eye:{t}" for t in range(T)] + ["eye:stay"] + [f"gain:{k}" for k in range(gains)] + ["gain:none"]
@@ -91,7 +105,22 @@ class LoopBrain2:
             e[self.commands.index(last_cmd)] = 1.0
         n = np.linalg.norm(seen)
         s = np.concatenate([q_code, seen / n if n > 0 else seen, 0.5 * g, 0.5 * e])
-        return s / np.linalg.norm(s)
+        return self._adapt(s / np.linalg.norm(s), self.learning)
+
+    def _adapt(self, s, learn):
+        """Stimulus-specific adaptation: each input neuron slowly learns its own
+        average activity and passes on only the deviation from it, so what is
+        always there fades and what distinguishes this situation stands out."""
+        if not self.adapt:
+            return s
+        if self.mean_input is None:
+            self.mean_input = np.zeros_like(s)
+        if learn:
+            self.mean_input += 0.001 * (s - self.mean_input)
+        d = s - self.mean_input
+        n = np.linalg.norm(d)
+        return d / n if n > 0 else s
+
 
     def _words(self):
         return np.array([i for i, o in enumerate(self.orch.outputs) if o.startswith("word:")], np.int64)
@@ -112,6 +141,7 @@ class LoopBrain2:
     def live(self, img, question, answer=None, learn=True, explore=True, time_cost=0.02):
         """Returns (answer said, tick, reward, gaze path, number of stays, gains used)."""
         img = np.asarray(img, np.float32)
+        self.learning = learn
         q_code = self.ear.question(self.ear.units(question, learn))
         if answer is not None:
             self.orch.output_neuron(f"word:{answer}")
@@ -149,7 +179,9 @@ class LoopBrain2:
             # after a fine sample: stay, or move (and set the gain for the next fixation)
             glance = self.eye.glance(img)
             reflex = np.zeros(T + 1, np.float32)
-            if self.reflex_loop and prev_glance is not None:
+            if self.reflex_loop and self.reflex == "contrast":
+                reflex[:T] = 0.5 * self.eye.salience(img)
+            elif self.reflex_loop and prev_glance is not None:
                 change = np.abs(glance - prev_glance)
                 reflex[:T] = change / (change.max() + 1e-8) * min(1.0, change.max() * 10)
             prev_glance = glance

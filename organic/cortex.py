@@ -273,6 +273,8 @@ class Cortex:
         # to the stimulus can be specialists (or familiar)
         floor = max(self.theta_active, min(self.theta_problem, self.theta_familiar or 1.0))
         cand = np.where(r["aff"][: self.C] >= floor)[0]
+        # how selective affinity is: fraction of clusters close enough to compete
+        self.familiar_fraction = 0.99 * getattr(self, "familiar_fraction", len(cand) / self.C) + 0.01 * len(cand) / self.C
         a_c = self._cluster_activity(cand, s)
         compat = (a_c * self.Wout[cand, :, target]).sum(axis=1) / (a_c.sum(axis=1) + 1e-8)
         P = r["aff"][cand] * compat
