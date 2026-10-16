@@ -98,3 +98,32 @@ selective, competition does all the work and growth turns into memorization.
 Next: adaptation of the orchestrator's input (respond to what differs from the
 usual, as the ear's habituation does), the contrast reflex back in design 2, then
 the eye's shape perception.
+
+## Input adaptation and the contrast reflex (20,000 moments, 2 seeds)
+
+Adaptation: each input to the orchestrator slowly learns its own average
+(over ~1000 moments) and passes on only the deviation from it (stimulus-specific
+adaptation, like the ear's habituation). Contrast reflex: design 2 with design
+1's static-contrast reflex instead of the change-only one.
+
+Average of the last three checkpoints (chance 0.17; 12 ticks per moment, the
+first fixation is ticks 1-3):
+
+| | color | shape | answer tick, color | answer tick, shape | familiar fraction |
+|---|---|---|---|---|---|
+| design 1 | 0.80-0.82 | 0.32-0.35 | 8.6-9.8 | 10.5-10.6 | ~0.85 |
+| design 1 + adaptation | 0.78-0.83 | 0.46-0.59 | 2.5-3.4 | 7.2-9.0 | 0.02 |
+| design 2 + contrast reflex | 0.75-0.78 | 0.28-0.35 | ~11 | ~11 | ~0.85 |
+| design 2 + contrast reflex + adaptation | 0.71-0.83 | 0.45-0.59 | 3.4-5.3 | 8.1-9.3 | 0.02 |
+
+- System 1 / system 2 emerged in one structure: with adaptation, color questions
+  are answered during the first fixation (ticks 2.5-5, from the coarse glance)
+  and shape questions only after the eye has moved to the object (ticks 7-9).
+  Nothing labels the question type or its deadline; it is the same patience
+  mechanism, working now that affinity is selective.
+- Shape accuracy rose from ~0.33 to ~0.5: non-selective affinity was the main
+  bottleneck (familiar fraction 0.85 -> 0.02).
+- The design-2 regression came from the change-only reflex: with the contrast
+  reflex back it matches design 1.
+- Cost: about twice as many clusters (~6,800 vs ~3,400).
+- "Stay" is still never used.
