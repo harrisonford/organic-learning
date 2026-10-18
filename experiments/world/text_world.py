@@ -34,7 +34,7 @@ def log(msg):
 
 
 n = sum(1 for _ in open(out)) if os.path.exists(out) else 0
-k = n // 40
+k = n // 16
 while True:
     if text_used() + 2 > SHARE:
         log("daily share reached; sleeping")
@@ -43,11 +43,11 @@ while True:
     theme = THEMES[k % len(THEMES)]
     k += 1
     try:
-        w = adults.ask(WRITER, f"Write 50 different short questions a child might be asked about {theme} (variation {k}), each with a 1-3 word lowercase answer. "
-                       'Reply only with JSON: [{"q": "...", "a": "..."}]', purpose="text", temperature=0.8)
+        w = adults.ask(WRITER, f"Write 20 different short questions a child might be asked about {theme} (variation {k}), each with a 1-3 word lowercase answer. "
+                       'Reply only with JSON: [{"q": "...", "a": "..."}]', purpose="text", temperature=0.8, timeout=600)
         pairs = [p for p in (parse_json(w["text"]) or []) if isinstance(p, dict) and p.get("q") and p.get("a")]
         qs = [p["q"] for p in pairs]
-        c = adults.ask(CHECKER, "Answer each question in 1-3 lowercase words. Reply only with a JSON list of answers in the same order.\n" + json.dumps(qs), purpose="text")
+        c = adults.ask(CHECKER, "Answer each question in 1-3 lowercase words. Reply only with a JSON list of answers in the same order.\n" + json.dumps(qs), purpose="text", timeout=600)
         answers = parse_json(c["text"]) or []
     except Exception as e:  # noqa: BLE001
         log(f"failed: {e}")

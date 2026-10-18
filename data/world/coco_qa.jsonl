@@ -178,3 +178,67 @@
 {"file": "000000003156.jpg", "q": "what is the person doing?", "a": "sitting", "a_check": "fixing toilet", "agree": false, "kind": "activity"}
 {"file": "000000003156.jpg", "q": "who is it?", "a": "man", "a_check": "man", "agree": true, "kind": "identity"}
 {"file": "000000003156.jpg", "q": "where is he?", "a": "room", "a_check": "in bathroom", "agree": false, "kind": "where"}
+{"file": "000000003255.jpg", "q": "is there snow?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000003255.jpg", "q": "is it outdoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000003255.jpg", "q": "what color is the sky?", "a": "blue", "a_check": "blue", "agree": true, "kind": "color"}
+{"file": "000000003255.jpg", "q": "is there a person?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000003255.jpg", "q": "what is the person doing?", "a": "skiing", "a_check": "walking", "agree": false, "kind": "activity"}
+{"file": "000000003501.jpg", "q": "is there food?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000003501.jpg", "q": "is it on a plate?", "a": "yes", "a_check": "no", "agree": false, "kind": "where"}
+{"file": "000000003501.jpg", "q": "what color is the broccoli?", "a": "green", "a_check": "green", "agree": true, "kind": "color"}
+{"file": "000000003501.jpg", "q": "what is the white food?", "a": "rice", "a_check": "rice", "agree": true, "kind": "identity"}
+{"file": "000000003501.jpg", "q": "what is the red food?", "a": "meat", "a_check": "meat", "agree": true, "kind": "identity"}
+{"file": "000000003553.jpg", "q": "is there a skateboard?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000003553.jpg", "q": "are there legs?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000003553.jpg", "q": "is it outdoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000003553.jpg", "q": "what color are the pants?", "a": "black", "a_check": "black", "agree": true, "kind": "color"}
+{"file": "000000003553.jpg", "q": "what is the person doing?", "a": "skateboarding", "a_check": "skateboarding", "agree": true, "kind": "activity"}
+{"file": "000000003661.jpg", "q": "is there fruit?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000003661.jpg", "q": "what color are they?", "a": "yellow", "a_check": "yellow", "agree": true, "kind": "color"}
+{"file": "000000003661.jpg", "q": "are they bananas?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000003661.jpg", "q": "where are they?", "a": "table", "a_check": "table", "agree": true, "kind": "where"}
+{"file": "000000003661.jpg", "q": "how many bananas?", "a": "three", "a_check": "three", "agree": true, "kind": "count"}
+{"file": "000000003845.jpg", "q": null}
+{"file": "000000003934.jpg", "q": null}
+{"file": "000000004134.jpg", "q": null}
+{"file": "000000004395.jpg", "q": null}
+{"file": "000000004495.jpg", "q": "is this a room?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000004495.jpg", "q": "what color is the sofa?", "a": "blue", "a_check": "blue plaid", "agree": false, "kind": "color"}
+{"file": "000000004495.jpg", "q": "what is on the wall?", "a": "picture", "a_check": "a picture", "agree": false, "kind": "identity"}
+{"file": "000000004495.jpg", "q": "where is the television?", "a": "on stand", "a_check": "on a stand", "agree": false, "kind": "where"}
+{"file": "000000004495.jpg", "q": "how many chairs?", "a": "one", "a_check": "one", "agree": true, "kind": "count"}
+{"file": "000000004765.jpg", "q": "is there a person?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000004765.jpg", "q": "what color is the shirt?", "a": "yellow", "a_check": "yellow", "agree": true, "kind": "color"}
+{"file": "000000004765.jpg", "q": "what is the person doing?", "a": "surfing", "a_check": "surfing", "agree": true, "kind": "activity"}
+{"file": "000000004765.jpg", "q": "where is the surfer?", "a": "ocean", "a_check": "on a wave", "agree": false, "kind": "where"}
+{"file": "000000004765.jpg", "q": "how many people?", "a": "one", "a_check": "one", "agree": true, "kind": "count"}
+{"file": "000000004795.jpg", "q": "what animal is this?", "a": "cat", "a_check": "cat", "agree": true, "kind": "identity"}
+{"file": "000000004795.jpg", "q": "is it indoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000004795.jpg", "q": "what color is the cat?", "a": "gray", "a_check": "grey", "agree": false, "kind": "color"}
+{"file": "000000004795.jpg", "q": "what is the cat doing?", "a": "looking", "a_check": "sitting", "agree": false, "kind": "activity"}
+{"file": "000000004795.jpg", "q": "what is behind the cat?", "a": "monitor", "a_check": "computer screen", "agree": false, "kind": "identity"}
+{"file": "000000005001.jpg", "q": "are there people?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
+{"file": "000000005001.jpg", "q": "what color is the balloon?", "a": "blue", "a_check": "blue", "agree": true, "kind": "color"}
+{"file": "000000005001.jpg", "q": "what are people doing?", "a": "cutting ribbon", "a_check": "cutting ribbon", "agree": true, "kind": "activity"}
+{"file": "000000005001.jpg", "q": "how many balloons?", "a": "one", "a_check": "one", "agree": true, "kind": "count"}
+{"file": "000000005001.jpg", "q": "is it outdoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000005037.jpg", "q": "is there a bus?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000005037.jpg", "q": "is it indoors?", "a": "no", "a_check": "no", "agree": true, "kind": "where"}
+{"file": "000000005037.jpg", "q": "what color is the bus?", "a": "white", "a_check": "white and pink", "agree": false, "kind": "color"}
+{"file": "000000005037.jpg", "q": "are lights on?", "a": "yes", "a_check": "no", "agree": false, "kind": "gist"}
+{"file": "000000005037.jpg", "q": "what is on top?", "a": "sign", "a_check": "nothing", "agree": false, "kind": "text"}
+{"file": "000000005060.jpg", "q": "is there a mirror?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000005060.jpg", "q": "is it indoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000005060.jpg", "q": "what color is the frame?", "a": "brown", "a_check": "brown", "agree": true, "kind": "color"}
+{"file": "000000005060.jpg", "q": "is there a person?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000005060.jpg", "q": "what is the person doing?", "a": "sitting", "a_check": "taking picture", "agree": false, "kind": "activity"}
+{"file": "000000005193.jpg", "q": "are there people?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000005193.jpg", "q": "is it indoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000005193.jpg", "q": "are there flags?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000005193.jpg", "q": "how many flags?", "a": "two", "a_check": "two", "agree": true, "kind": "count"}
+{"file": "000000005193.jpg", "q": "what is someone doing?", "a": "taking photo", "a_check": "taking picture", "agree": false, "kind": "activity"}
+{"file": "000000005477.jpg", "q": "is there a plane?", "a": "yes", "a_check": "yes", "agree": true, "kind": "identity"}
+{"file": "000000005477.jpg", "q": "is it outdoors?", "a": "yes", "a_check": "yes", "agree": true, "kind": "where"}
+{"file": "000000005477.jpg", "q": "what color is the plane?", "a": "yellow", "a_check": "gold", "agree": false, "kind": "color"}
+{"file": "000000005477.jpg", "q": "is it flying?", "a": "no", "a_check": "no", "agree": true, "kind": "activity"}
+{"file": "000000005477.jpg", "q": "are there clouds?", "a": "yes", "a_check": "yes", "agree": true, "kind": "gist"}
