@@ -140,7 +140,7 @@ class LoopBrain2:
             k = int(np.argmax(drive + 1e-6 * self.rng.standard_normal(len(drive))))
         return k, r
 
-    def live(self, img, question, answer=None, learn=True, explore=True, time_cost=0.02):
+    def live(self, img, question, answer=None, learn=True, explore=True, time_cost=0.02, deadline=None):
         """Returns (answer said, tick, reward, gaze path, number of stays, gains used)."""
         img = np.asarray(img, np.float32)
         self.learning = learn
@@ -210,7 +210,10 @@ class LoopBrain2:
         reward = None
         if answer is not None:
             correct = said == answer
-            reward = (1.0 if correct else 0.0) - time_cost * tick
+            value = 1.0 if correct else 0.0
+            if deadline is not None and tick > deadline:  # the world's hidden time limit
+                value *= 0.5 ** (tick - deadline)
+            reward = value - time_cost * tick
             if learn:
                 self.age += 1
                 if self.sleep_cleanup and self.age % 2000 == 0:
@@ -219,7 +222,8 @@ class LoopBrain2:
                 s = snapshot[0] if snapshot else self._situation(q_code, seen, target, last_cmd)
                 self.orch.learn(s, self.orch.out_index[f"word:{answer}"], words)  # imitation
                 if snapshot:
-                    self._tune_patience(snapshot[1], correct)
+                    late = correct and reward < 1.0 - time_cost * tick - 1e-6  # felt only through the reward
+                    self._tune_patience(snapshot[1], correct, late)
                 self._credit(choices, reward, tick)
         return said, tick, reward, path, stays, gains_used
 
@@ -232,8 +236,8 @@ class LoopBrain2:
             for c, gc, ac in zip(active, g, a):
                 self.orch.Wout[c, :, col] = np.clip(self.orch.Wout[c, :, col] + eta * delta * e * gc * ac, 0.0, 1.0)
 
-    def _tune_patience(self, r, correct, eta=0.05):
-        step = -0.2 * eta if correct else +eta
+    def _tune_patience(self, r, correct, late=False, eta=0.05):
+        step = -eta if late else (-0.2 * eta if correct else +eta)
         total = r["g"].sum() or 1.0
         for c, gc in zip(r["active"], r["g"]):
             self.orch.patience[c] = float(np.clip(self.orch.patience[c] + step * gc / total, 0.02, 0.99))
