@@ -18,13 +18,13 @@ import random
 import zlib
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 DATA = os.path.expanduser("~/datasets")
 SIZE = 64
 NUMBER = {0: "zero", 1: "one", 2: "two", 3: "three", 4: "four"}
 # hidden time limits (ticks) by kind of question; None = no deadline, only be right
-DEADLINE = {"gist": 2, "presence": 2, "color": 4, "where": 4, "count": None, "identity": None, "activity": None, "text": None}
+DEADLINE = {"talk": 3, "gist": 2, "presence": 2, "color": 4, "where": 4, "count": None, "identity": None, "activity": None, "text": None}
 
 
 def thumb(path):
@@ -68,6 +68,47 @@ def coco_annotation_questions(rng):
     return out
 
 
+SIGN_WORDS = ["stop", "exit", "open", "closed", "sale", "push", "pull", "danger", "hello", "welcome", "free", "taxi", "hotel", "bank", "cafe",
+              "park", "school", "police", "fire", "help", "yes", "no", "left", "right", "up", "down", "red", "blue", "green", "cat", "dog", "bus",
+              "car", "pizza", "horse", "bird", "boat", "train", "cake", "book", "chair", "clock", "tree", "sun", "moon", "home", "milk", "bread"]
+
+
+def reading_questions():
+    """Words written on photos: 'what does it say?' (the eye has to read)."""
+    files = sorted(f for f in os.listdir(os.path.join(DATA, "val2017")) if f.endswith(".jpg"))
+    out = []
+    for f in files:
+        h = zlib.crc32(("read" + f).encode())
+        if h % 3:
+            continue
+        word = SIGN_WORDS[(h // 3) % len(SIGN_WORDS)]
+        out.append((("read", f, word, (h // 997) % 3), "what does it say?", word, "text"))
+    return out
+
+
+def render_word(img, word, place):
+    im = Image.fromarray((img * 255).astype(np.uint8))
+    d = ImageDraw.Draw(im)
+    font = ImageFont.load_default(size=14)
+    x, y = [(4, 6), (8, 24), (4, 42)][place]
+    box = d.textbbox((x, y), word, font=font)
+    d.rectangle([box[0] - 2, box[1] - 2, box[2] + 2, box[3] + 2], fill=(255, 255, 255))
+    d.text((x, y), word, fill=(0, 0, 0), font=font)
+    return np.asarray(im, np.float32) / 255
+
+
+def talk_questions():
+    """Spoken questions with eyes closed (text world, pairs both adults agreed on)."""
+    path = os.path.join(os.path.dirname(__file__), "..", "data", "world", "text_qa.jsonl")
+    out = []
+    if os.path.exists(path):
+        for i, line in enumerate(open(path)):
+            d = json.loads(line)
+            if d.get("agree"):
+                out.append((("dark", i), d["q"], d["a"], "talk"))
+    return out
+
+
 def coco_adult_questions():
     path = os.path.join(os.path.dirname(__file__), "..", "data", "world", "coco_qa.jsonl")
     out = []
@@ -100,7 +141,7 @@ class World:
 
     def __init__(self, seed=0, test_fraction=0.1, use_cifar=True):
         rng = random.Random(seed)
-        items = coco_annotation_questions(rng) + coco_adult_questions()
+        items = coco_annotation_questions(rng) + coco_adult_questions() + reading_questions() + talk_questions()
         self.cifar = None
         if use_cifar:
             c, self.cifar = cifar100_questions()
@@ -115,7 +156,11 @@ class World:
 
     def image(self, ref):
         if ref not in self._cache:
-            if isinstance(ref, tuple):
+            if isinstance(ref, tuple) and ref[0] == "dark":  # eyes closed
+                self._cache[ref] = np.zeros((SIZE, SIZE, 3), np.float32)
+            elif isinstance(ref, tuple) and ref[0] == "read":
+                self._cache[ref] = render_word(thumb(os.path.join(DATA, "val2017", ref[1])), ref[2], ref[3])
+            elif isinstance(ref, tuple):
                 im = Image.fromarray(self.cifar[ref[1]]).resize((SIZE, SIZE), Image.BILINEAR)
                 self._cache[ref] = np.asarray(im, np.float32) / 255
             else:
@@ -123,7 +168,16 @@ class World:
         return self._cache[ref]
 
     def moment(self, split="train"):
-        ref, q, a, kind = self.rng.choice(self.train if split == "train" else self.test)
+        """A kind of question is picked uniformly, then an item of that kind
+        (so abundant kinds like presence do not crowd out the rest)."""
+        pool = self.train if split == "train" else self.test
+        if not hasattr(self, "_by_kind") or self._by_kind[0] is not pool:
+            by = {}
+            for it in pool:
+                by.setdefault(it[3], []).append(it)
+            self._by_kind = (pool, by)
+        by = self._by_kind[1]
+        ref, q, a, kind = self.rng.choice(by[self.rng.choice(sorted(by))])
         return {"image": self.image(ref), "question": q, "answer": a, "kind": kind, "deadline": DEADLINE.get(kind)}
 
     def summary(self):

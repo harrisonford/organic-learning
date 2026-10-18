@@ -55,7 +55,7 @@ class Adults:
     def _save(self, s):
         json.dump(s, open(self.state_file, "w"))
 
-    def _wait_turn(self):
+    def _wait_turn(self, purpose=None):
         while True:
             s = self._state()
             if s["count"] >= PER_DAY:
@@ -65,6 +65,8 @@ class Adults:
             if len(s["recent"]) < PER_MINUTE:
                 s["recent"].append(now)
                 s["count"] += 1
+                if purpose:
+                    s[f"{purpose}_count"] = s.get(f"{purpose}_count", 0) + 1
                 self._save(s)
                 return
             time.sleep(60 - (now - min(s["recent"])) + 0.5)
@@ -82,7 +84,7 @@ class Adults:
 
     # ---------------------------------------------------------------- calls
 
-    def ask(self, model, content, max_tokens=4000, temperature=0.2):
+    def ask(self, model, content, max_tokens=4000, temperature=0.2, purpose=None):
         """content: a string or an OpenAI-style list of text/image parts."""
         body = {"model": model, "messages": [{"role": "user", "content": content}], "max_tokens": max_tokens, "temperature": temperature}
         k = hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
@@ -91,7 +93,7 @@ class Adults:
         if model == JEV and not self._jev_allowed():
             raise RuntimeError("Jev budget cap reached")
         for attempt in range(6):
-            self._wait_turn()
+            self._wait_turn(purpose)
             req = urllib.request.Request(URL, data=json.dumps(body).encode(), headers={"Authorization": f"Bearer {self.key}", "Content-Type": "application/json"})
             t0 = time.time()
             try:

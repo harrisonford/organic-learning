@@ -19,7 +19,7 @@ from PIL import Image
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from organic.adults import Adults, image_part, parse_json  # noqa: E402
 
-DAILY = 440
+DAILY = 340  # photo annotation share; text world 100, reserve 60 (total 500 = half the allowance)
 WRITER, CHECKER = "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"
 src, out = os.path.expanduser(sys.argv[1]), sys.argv[2]
 files = sorted(f for f in os.listdir(src) if f.endswith(".jpg"))
@@ -37,8 +37,9 @@ CHECK = ("Answer each question about these {n} small photos (numbered in order) 
 
 
 def used_today():
+    """Requests counted against this daemon's share: everything except the text world's (up to its 100)."""
     s = adults._state()
-    return s["count"]
+    return s["count"] - min(s.get("text_count", 0), 100)
 
 
 def log(msg):
