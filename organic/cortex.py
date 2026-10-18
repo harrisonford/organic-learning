@@ -83,6 +83,8 @@ class Cortex:
         # how sure the organism must feel before acting on what this cluster
         # suggests (a basal-ganglia-like gate, tuned by reward)
         self.patience = np.zeros(self.cap, np.float32)
+        self.last_active = np.zeros(self.cap, np.int64)  # when it last took part (for sleep)
+        self.last_consolidation = 0
         self.next_uid = 0
 
         self.outputs = []  # output neuron names, e.g. "vision:circle"
@@ -100,6 +102,9 @@ class Cortex:
             self.reach = np.full(self.cap, self.dim, np.int64)
         if "patience" not in state:
             self.patience = np.full(self.cap, 0.5, np.float32)
+        if "last_active" not in state:
+            self.last_active = self.born.copy()
+            self.last_consolidation = 0
 
     # ------------------------------------------------------------------ growth
 
@@ -133,6 +138,7 @@ class Cortex:
         self.usage, self.born, self.uid = grow(self.usage), grow(self.born), grow(self.uid)
         self.reach = grow(self.reach)
         self.patience = grow(self.patience)
+        self.last_active = grow(self.last_active)
 
     def grow_inputs(self, extra):
         """New afferent axons arrive: every cluster gets `extra` silent synapses."""
@@ -159,6 +165,7 @@ class Cortex:
         self.uid[c] = self.next_uid
         self.reach[c] = self.dim
         self.patience[c] = 0.5
+        self.last_active[c] = self.t
         self.next_uid += 1
         self.C += 1
         self.births += 1
@@ -237,6 +244,7 @@ class Cortex:
                 top = np.unique(np.concatenate([top, np.fromiter(bonus.keys(), np.int64)]))
                 top = top[aff[top] > self.theta_active]
 
+        self.last_active[top] = self.t
         a = self._cluster_activity(top, s)
         # lateral inhibition: the closest clusters dominate the vote
         g = np.exp((aff[top] - aff[top].max()) / self.temp)
@@ -362,7 +370,7 @@ class Cortex:
         died = int(dead.sum())
         if died:
             dead_uids = set(self.uid[np.where(dead)[0]].tolist())
-            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience"):
+            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
                 a = getattr(self, arr)
                 a[: len(keep)] = a[keep]
             self.C = len(keep)
@@ -402,6 +410,59 @@ class Cortex:
                 self.usage[i] += self.usage[j]
                 absorbed[j] = True
         return absorbed
+
+    def consolidate(self, merge_sim=0.97, out_sim=0.9, retire_after=30000, keep_used=4):
+        """Sleep cleanup (generic, no task knowledge).
+
+        Merge: a cluster born since the last sleep that stands for nearly the
+        same situation as an existing one (identity similarity > merge_sim) and
+        expects nearly the same outcomes (output similarity > out_sim) is folded
+        into it, weighted by experience.
+        Retire: clusters that have not taken part in anything for retire_after
+        learning events and were barely used (usage <= keep_used) die.
+        Returns (merged, retired).
+        """
+        C = self.C
+        dead = np.zeros(C, bool)
+        merged = 0
+        new = np.where(self.born[:C] >= self.last_consolidation)[0]
+        if len(new) and C > 1:
+            outs = self.Wout[:C].mean(axis=1)
+            outs = outs / (np.linalg.norm(outs, axis=1, keepdims=True) + 1e-8)
+            for start in range(0, len(new), 512):
+                rows = new[start : start + 512]
+                sims = self.Z[rows] @ self.Z[:C].T
+                sims[np.arange(len(rows)), rows] = -1
+                for r, c in enumerate(rows):
+                    if dead[c]:
+                        continue
+                    j = int(np.argmax(np.where(dead, -1, sims[r])))
+                    if sims[r, j] < merge_sim or self.reach[j] != self.reach[c] or float(outs[c] @ outs[j]) < out_sim:
+                        continue
+                    wi, wj = float(self.usage[j]), float(self.usage[c])
+                    f = wj / (wi + wj)
+                    z = (1 - f) * self.Z[j] + f * self.Z[c]
+                    self.Z[j] = z / np.linalg.norm(z)
+                    self.Win[j] = (1 - f) * self.Win[j] + f * self.Win[c]
+                    self.Wout[j] = (1 - f) * self.Wout[j] + f * self.Wout[c]
+                    self.patience[j] = (1 - f) * self.patience[j] + f * self.patience[c]
+                    self.myelin[j] = max(self.myelin[j], self.myelin[c])
+                    self.usage[j] += self.usage[c]
+                    self.last_active[j] = max(self.last_active[j], self.last_active[c])
+                    dead[c] = True
+                    merged += 1
+        idle = self.t - self.last_active[:C]
+        retire = (idle > retire_after) & (self.usage[:C] <= keep_used) & ~dead
+        dead |= retire
+        keep = np.where(~dead)[0]
+        if dead.any():
+            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
+                a = getattr(self, arr)
+                a[: len(keep)] = a[keep]
+            self.C = len(keep)
+            self.deaths += int(dead.sum())
+        self.last_consolidation = self.t
+        return merged, int(retire.sum())
 
     # ------------------------------------------------------------------- stats
 

@@ -73,14 +73,16 @@ class NoisyEye:
 class LoopBrain2:
     use_stay = True  # defaults for brains saved before the switches existed
     use_gains = True
+    sleep_cleanup = False
     adapt = False
     mean_input = None
     reflex = "change"
 
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change"):
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
         self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
         self.adapt, self.mean_input, self.learning = adapt, None, True
+        self.sleep_cleanup, self.sleep_log = sleep_cleanup, []
         self.reflex = reflex  # "change" (danger-like: onset, motion) or "contrast" (static salience)
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
@@ -211,6 +213,9 @@ class LoopBrain2:
             reward = (1.0 if correct else 0.0) - time_cost * tick
             if learn:
                 self.age += 1
+                if self.sleep_cleanup and self.age % 2000 == 0:
+                    merged, retired = self.orch.consolidate()
+                    self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
                 s = snapshot[0] if snapshot else self._situation(q_code, seen, target, last_cmd)
                 self.orch.learn(s, self.orch.out_index[f"word:{answer}"], words)  # imitation
                 if snapshot:

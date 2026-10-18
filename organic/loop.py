@@ -58,10 +58,11 @@ class Eye:
 
 
 class LoopBrain:
+    sleep_cleanup = False
     adapt = False  # defaults for brains saved before adaptation existed
     mean_input = None
 
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, fixations=4, size=40, adapt=False):
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, fixations=4, size=40, adapt=False, sleep_cleanup=False):
         self.eye = Eye(parts, size=size)
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
@@ -78,6 +79,8 @@ class LoopBrain:
         self.rng = np.random.default_rng(seed)
         self.age = 0
         self.adapt = adapt
+        self.sleep_cleanup = sleep_cleanup
+        self.sleep_log = []
         self.mean_input = None
         self.learning = True
 
@@ -179,6 +182,9 @@ class LoopBrain:
             reward = (1.0 if correct else 0.0) - time_cost * tick
             if learn:
                 self.age += 1
+                if self.sleep_cleanup and self.age % 2000 == 0:
+                    merged, retired = self.orch.consolidate()
+                    self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
                 s = snapshot[0] if snapshot else self._situation(q_code, seen, target)
                 self.orch.learn(s, self.orch.out_index[f"word:{answer}"], words)  # imitation
                 if snapshot:

@@ -85,7 +85,7 @@ for age in range(start + 1, start + N + 1):
     if age % EVERY == 0:
         m = evaluate()
         rec = {"age": age, "loops": LOOPS, "seed": SEED, "design": DESIGN, "measure": m, "clusters": int(brain.orch.C), "seen_assemblies": int(getattr(brain, "sense", None).C) if hasattr(brain, "sense") else None,
-               "patience": float(brain.orch.patience[: brain.orch.C].mean()), "familiar_fraction": float(getattr(brain.orch, "familiar_fraction", float("nan"))), "seconds": round(time.time() - t0)}
+               "patience": float(brain.orch.patience[: brain.orch.C].mean()), "familiar_fraction": float(getattr(brain.orch, "familiar_fraction", float("nan"))), "sleep": getattr(brain, "sleep_log", [])[-3:], "seconds": round(time.time() - t0)}
         log.write(json.dumps(rec) + "\n")
         log.flush()
         print(f"age {age:>5} " + " | ".join(f"{k}: acc {v['acc']:.2f} tick {v['tick']:.1f} stays {v['stays']:.1f} gaze->asked {v['gaze_to_asked_side'] if v['gaze_to_asked_side'] is None else round(v['gaze_to_asked_side'], 2)}" for k, v in m.items())
