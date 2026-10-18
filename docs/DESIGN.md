@@ -127,3 +127,24 @@ first fixation is ticks 1-3):
   reflex back it matches design 1.
 - Cost: about twice as many clusters (~6,800 vs ~3,400).
 - "Stay" is still never used.
+
+## Longer lives with adaptation (age 20,000 -> 80,000, nothing changed)
+
+Windows of 2,000 moments:
+
+| brain | shape, 20k -> 80k | color | shape answer tick | gaze -> asked side (shape) |
+|---|---|---|---|---|
+| design 1 + adaptation, seed 0 | 0.50 -> 0.73 (70k), 0.68 (80k) | 0.80-0.87 | 8.0 -> 7.5 | 0.61 -> 0.65-0.69 |
+| design 1 + adaptation, seed 1 | 0.54 -> 0.57 | ~0.80 | 8.1 -> 7.5 | 0.66 -> 0.68 |
+| design 2 + adaptation, seed 0 | 0.55 -> 0.68 | ~0.78 | 8.4 -> 7.7 | 0.72 -> 0.82 |
+| design 2 + adaptation, seed 1 | 0.55 -> 0.65 (70k), 0.62 (80k) | ~0.83 | 8.6 -> 6.7 | 0.83 -> 0.90 |
+
+- Shape keeps improving with life alone in three of four brains (~0.5 -> 0.62-0.73).
+- In design 2 gaze for shape questions becomes more consistently aimed at the
+  asked side, and shape answers come a little sooner: it learns where to look
+  and when it has seen enough.
+- The fast/slow split holds throughout (color ~tick 3, shape ~tick 7-8).
+- Growth does not level off (~1,700 clusters per 10,000 moments, ~17,000 at age
+  80,000); familiarity stays selective (0.022 -> 0.033). Some memorization
+  continues; sleep-time merging or pruning of unused clusters may be needed.
+- "Stay" was never used.
