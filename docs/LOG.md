@@ -31,3 +31,20 @@ everything detached and resumable; long lives.
 - **Runs:** sleep-cleanup lives on the Yarbus task (design 2 + contrast reflex
   + adaptation, 80k moments, 2 seeds); photo-world lives (300k moments,
   2 seeds); counterpart benchmark scheduled for tomorrow's reserve.
+
+### Photo world, first checkpoints (age 10,000-20,000 of 300,000)
+
+Baseline = always giving the most common training answer for that kind.
+
+| kind | brain | baseline | answer tick |
+|---|---|---|---|
+| reading (48 words) | 0.18 -> 0.39 | 0.02 | ~10-11 |
+| presence | 0.61-0.66 | 0.61 | ~1.1 |
+| where is the person | 0.38-0.52 | 0.49 | 3-4 |
+| counting | 0.49-0.51 | 0.56 | 3-4 |
+| identity ("biggest thing", 83 answers) | 0.20-0.23 | 0.32 | 7-8 |
+
+Reading is clearly learned early; presence is answered almost instantly and
+reading / identity late, matching their hidden deadlines. Other kinds are at or
+below the majority baseline so far. Color, gist, activity and talk have too
+few test items yet (3-5) to judge; they grow as the adults write more.
