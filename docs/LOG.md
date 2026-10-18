@@ -48,3 +48,44 @@ Reading is clearly learned early; presence is answered almost instantly and
 reading / identity late, matching their hidden deadlines. Other kinds are at or
 below the majority baseline so far. Color, gist, activity and talk have too
 few test items yet (3-5) to judge; they grow as the adults write more.
+
+## 2026-10-18
+
+### Sleep cleanup (design 2 + contrast reflex + adaptation + sleep, age 80,000)
+
+| | color | shape | gaze -> asked side (shape) | clusters |
+|---|---|---|---|---|
+| without cleanup (seeds 0/1) | 0.78 / 0.83 | 0.68 / 0.62 | 0.82 / 0.90 | 17,930 / 16,266 |
+| with cleanup, seed 1 (age 80k) | 0.78 | 0.61-0.64 | 0.88-0.89 | 15,202 |
+| with cleanup, seed 0 (age 74k) | 0.78 | 0.54-0.68 | 0.62-0.86 | 17,634 |
+
+Cleanup trims growth modestly (seed 1: -7%) without hurting accuracy; it
+cannot stop growth, because new clusters are distinct memories, not copies.
+
+### Counterpart benchmark (80 held-out items, 4 per request)
+
+| model | presence | count | identity | where | reading | s / request |
+|---|---|---|---|---|---|---|
+| Nemotron 3.5 Super VL (free) | 0.94 | 0.69 | 0.31 | 0.00* | 1.00 | 17.1 |
+| Dots 3 Note (free) | 0.94 | 0.06 | 0.31 | 0.00* | 1.00 | 16.2 |
+| Jev router (paid flash models) | 0.81 | 0.38 | 0.25 | 0.00* | 1.00 | 5.1 |
+
+*"where" scores 0 only because the models answer "left" and the expected
+answer is "on the left" (exact matching); not a real failure. Jev routed to
+DeepSeek / Gemini / GLM flash models and cost $0.035 for 20 requests.
+
+### Photo world at age 100,000: not learned
+
+| kind | seed 0 / 1 | baseline |
+|---|---|---|
+| presence | 0.51 / 0.52 | 0.61 |
+| counting | 0.46 / 0.49 | 0.56 |
+| identity | 0.21 / 0.19 | 0.32 |
+| where | 0.47 / 0.42 | 0.49 |
+| reading | 0.24 / 0.39 | 0.02 |
+
+Diagnosis (nearest-neighbour probe on the eye's output): for real photos the
+parts-code eye carries no usable information for presence, identity or where
+(probe at or below baseline); only reading (0.32). The eye organ, built for
+coloured shapes on black, is the bottleneck: the brain cannot learn what the
+eye does not deliver.
