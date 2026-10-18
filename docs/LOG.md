@@ -89,3 +89,19 @@ parts-code eye carries no usable information for presence, identity or where
 (probe at or below baseline); only reading (0.32). The eye organ, built for
 coloured shapes on black, is the bottleneck: the brain cannot learn what the
 eye does not deliver.
+
+Same probe on the retina eye with its developed V1 (stored as `retina-eye-v1`):
+
+| question | baseline | 1 fixation | 3 fixations |
+|---|---|---|---|
+| is there a person? | 0.57 | 0.57 | 0.57 |
+| reading | 0.02 | 0.36 | 0.36 |
+| biggest thing | 0.26 | 0.14 | 0.14 |
+| where is the person | 0.44 | 0.35 | 0.34 |
+
+No better. For real photos, no raw retina-like code (with or without V1)
+makes these questions separable by similarity. In animals that job belongs to
+a deep, wide visual cortex grown during development (V1 -> V2 -> V4 -> IT; the
+fly's 77,000-neuron optic lobes); this brain has nothing between the organ and
+the orchestrator. Proposed: let such a hierarchy self-organize on natural
+photos with the same growth and Hebbian rules.
