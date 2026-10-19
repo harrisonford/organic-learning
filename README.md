@@ -1,5 +1,7 @@
 # organic-learning
 
+**Picking this up? Start with [docs/STATUS.md](docs/STATUS.md).**
+
 An experiment in learning **without backpropagation**. A brain made of
 growing populations of neurons looks at a scene, hears a question as raw
 bytes, and answers in its own words. Nothing in it computes a gradient.
