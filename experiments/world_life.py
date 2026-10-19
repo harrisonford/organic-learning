@@ -14,6 +14,7 @@ questions written by the adults join in.
 import json
 import os
 import pickle
+import resource
 import sys
 import time
 
@@ -33,6 +34,8 @@ cfg = {"reflex": "contrast", "adapt": True, "sleep_cleanup": True, **json.loads(
 parts = Parts()
 parts.W = np.load(os.path.join(os.path.dirname(__file__), "..", "data", "parts.npy"))
 parts.frozen = True
+if os.environ.get("CORTEX"):  # a visual cortex developed beforehand (experiments/develop_cortex.py)
+    cfg["cortex"] = pickle.load(open(os.environ["CORTEX"], "rb"))
 if os.environ.get("RESUME"):
     brain = pickle.load(open(os.environ["RESUME"], "rb"))
 else:
@@ -62,10 +65,11 @@ for age in range(start + 1, start + N + 1):
     if age % EVERY == 0:
         res = evaluate()
         rec = {"age": age, "seed": SEED, "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])), "clusters": int(brain.orch.C),
-               "familiar": float(getattr(brain.orch, "familiar_fraction", float("nan"))), "sleep": brain.sleep_log[-3:], "world": world.summary(), "seconds": round(time.time() - t0)}
+               "familiar": float(getattr(brain.orch, "familiar_fraction", float("nan"))), "sleep": brain.sleep_log[-3:], "world": world.summary(), "seconds": round(time.time() - t0),
+               "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2)}
         log.write(json.dumps(rec) + "\n")
         log.flush()
         print(f"age {age:>7} reward {rec['lived_reward']:.2f} clusters {rec['clusters']} familiar {rec['familiar']:.3f} | "
-              + " | ".join(f"{k}: {v['acc']:.2f} t{v['tick']:.1f}" for k, v in res.items()) + f" | {time.time() - t0:.0f}s", flush=True)
+              + " | ".join(f"{k}: {v['acc']:.2f} t{v['tick']:.1f}" for k, v in res.items()) + f" | {rec['memory_gb']} GB | {time.time() - t0:.0f}s", flush=True)
         pickle.dump(brain, open(out_path.replace(".jsonl", ".pkl"), "wb"))
         world = World(seed=0)  # new adult questions join the world (same photo split)

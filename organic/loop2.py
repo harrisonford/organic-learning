@@ -77,8 +77,9 @@ class LoopBrain2:
     adapt = False
     mean_input = None
     reflex = "change"
+    cortex = None
 
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False):
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False, cortex=None):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
         self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
         self.adapt, self.mean_input, self.learning = adapt, None, True
@@ -86,8 +87,11 @@ class LoopBrain2:
         self.reflex = reflex  # "change" (danger-like: onset, motion) or "contrast" (static salience)
         self.ear = Ear(seed=seed + 7)
         T, D = self.eye.T, self.eye.D
+        # visual cortex (optional): deeper layers reach the orchestrator later
+        self.cortex = cortex
+        self.cortex_dims = [l.kinds for l in cortex.layers[1:]] if cortex is not None else []
         self.commands = [f"eye:{t}" for t in range(T)] + ["eye:stay"] + [f"gain:{k}" for k in range(gains)] + ["gain:none"]
-        self.dim = self.ear.width + 3 * D + T + len(self.commands)
+        self.dim = self.ear.width + 3 * D + T + len(self.commands) + sum(self.cortex_dims)
         self.orch = Cortex(dim=self.dim, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
         self.cmd = {c: self.orch.output_neuron(c) for c in self.commands}
         self.move_group = np.array([self.cmd[f"eye:{t}"] for t in range(T)] + [self.cmd["eye:stay"]])
@@ -99,14 +103,24 @@ class LoopBrain2:
         self.rng = np.random.default_rng(seed)
         self.age = 0
 
-    def _situation(self, q_code, seen, target, last_cmd):
+    def _cortex_now(self, codes, tick):
+        """Layer 2 arrives at tick 2, layer 3 at tick 3 (deeper is slower)."""
+        parts = []
+        for li, dim in enumerate(self.cortex_dims):
+            parts.append(codes[li] if codes is not None and tick >= li + 2 else np.zeros(dim, np.float32))
+        return np.concatenate(parts) if parts else np.zeros(0, np.float32)
+
+    def _situation(self, q_code, seen, target, last_cmd, cortex=None):
         g = np.zeros(self.eye.T, np.float32)
         g[target] = 1.0
         e = np.zeros(len(self.commands), np.float32)  # efference copy of the last command
         if last_cmd is not None:
             e[self.commands.index(last_cmd)] = 1.0
         n = np.linalg.norm(seen)
-        s = np.concatenate([q_code, seen / n if n > 0 else seen, 0.5 * g, 0.5 * e])
+        parts = [q_code, seen / n if n > 0 else seen, 0.5 * g, 0.5 * e]
+        if self.cortex_dims:
+            parts.append(cortex if cortex is not None else np.zeros(sum(self.cortex_dims), np.float32))
+        s = np.concatenate(parts)
         return self._adapt(s / np.linalg.norm(s), self.learning)
 
     def _adapt(self, s, learn):
@@ -155,6 +169,9 @@ class LoopBrain2:
         prev_glance = None
         path, stays, gains_used, choices = [12], 0, [], []
         said, snapshot, tick = None, None, 0
+        codes = None
+        if self.cortex is not None:  # the cortex processes the whole view once; layers arrive over ticks
+            codes = [c for c in self.cortex.code(img, grid=1)[1:]]
         while tick < self.max_ticks:
             level = min(phase, 2)
             code = self.eye.view(img, target, level, gain)
@@ -166,7 +183,7 @@ class LoopBrain2:
             seen[level * D : (level + 1) * D] = code if level == 2 else seen[level * D : (level + 1) * D] + code
             tick += 1
             # silently plan an answer
-            s = self._situation(q_code, seen, target, last_cmd)
+            s = self._situation(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
             r = self.orch.forward(s, words) if len(words) else None
             if r is not None and r["probs"] is not None:
                 total = r["g"].sum()
@@ -219,7 +236,7 @@ class LoopBrain2:
                 if self.sleep_cleanup and self.age % 2000 == 0:
                     merged, retired = self.orch.consolidate()
                     self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
-                s = snapshot[0] if snapshot else self._situation(q_code, seen, target, last_cmd)
+                s = snapshot[0] if snapshot else self._situation(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 self.orch.learn(s, self.orch.out_index[f"word:{answer}"], words)  # imitation
                 if snapshot:
                     late = correct and reward < 1.0 - time_cost * tick - 1e-6  # felt only through the reward

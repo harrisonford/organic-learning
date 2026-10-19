@@ -10,3 +10,10 @@ Traceback (most recent call last):
                                                       ^^^^^^^^^
 AttributeError: 'list' object has no attribute 'get'
 [2026-10-19 11:43:07] 304 photos done, 4696 to go
+[2026-10-19 12:18:21] 404 photos annotated, 51 requests today
+[2026-10-19 12:56:38] 504 photos annotated, 105 requests today
+[2026-10-19 13:00:07] batch 000000057725.jpg failed: 'choices'
+[2026-10-19 13:12:30] batch 000000061268.jpg failed: 'choices'
+[2026-10-19 13:13:19] batch 000000061584.jpg failed: HTTP Error 400: Bad Request
+[2026-10-19 13:16:58] batch 000000063552.jpg failed: 'choices'
+[2026-10-19 13:26:22] batch 000000066523.jpg failed: 'choices'
