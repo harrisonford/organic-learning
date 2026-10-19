@@ -67,6 +67,10 @@ while i < len(todo):
         for k, im in enumerate(imgs):
             cparts += [{"type": "text", "text": f"Photo {k + 1}:"}, image_part(im)]
         check = parse_json(adults.ask(CHECKER, cparts)["text"]) or {}
+        if isinstance(check, list):  # some replies are a bare list of lists, one per photo
+            check = {str(k + 1): v for k, v in enumerate(check)}
+        if not isinstance(qa, dict):
+            qa = {}
     except Exception as e:  # noqa: BLE001 - keep the daemon alive
         log(f"batch {batch[0]} failed: {e}")
         if "budget" in str(e):

@@ -1,0 +1,1961 @@
+{
+ "nvidia/nemotron-3.5-super-vl:free": {
+  "accuracy": {
+   "count": 0.6875,
+   "identity": 0.3125,
+   "presence": 0.9375,
+   "text": 1.0,
+   "where": 0.0
+  },
+  "n": 80,
+  "mean_seconds_per_request": 17.0765,
+  "rows": [
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one",
+    "seconds_per_request": 12.84,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 12.84,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 12.84,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 12.84,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "many",
+    "said": "1",
+    "seconds_per_request": 39.27,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "1",
+    "seconds_per_request": 39.27,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "0",
+    "seconds_per_request": 39.27,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "0",
+    "seconds_per_request": 39.27,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "two",
+    "said": "two",
+    "seconds_per_request": 35.53,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one",
+    "seconds_per_request": 35.53,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "three",
+    "said": "three",
+    "seconds_per_request": 35.53,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "many",
+    "said": "ten",
+    "seconds_per_request": 35.53,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one",
+    "seconds_per_request": 4.97,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 4.97,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 4.97,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 4.97,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "dining table",
+    "said": "counter",
+    "seconds_per_request": 16.67,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "motorcycle",
+    "said": "motorcycle",
+    "seconds_per_request": 16.67,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "potted plant",
+    "said": "door",
+    "seconds_per_request": 16.67,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "couch",
+    "said": "bed",
+    "seconds_per_request": 16.67,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "car",
+    "seconds_per_request": 19.44,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "man",
+    "seconds_per_request": 19.44,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "horse",
+    "said": "horse",
+    "seconds_per_request": 19.44,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "bed",
+    "said": "rack",
+    "seconds_per_request": 19.44,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "bed",
+    "said": "picture frame",
+    "seconds_per_request": 24.37,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "face",
+    "seconds_per_request": 24.37,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "person",
+    "seconds_per_request": 24.37,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "adults",
+    "seconds_per_request": 24.37,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "oven",
+    "said": "oven",
+    "seconds_per_request": 10.95,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "refrigerator",
+    "said": "cabinets",
+    "seconds_per_request": 10.95,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "sheep",
+    "said": "sheep",
+    "seconds_per_request": 10.95,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "cat",
+    "said": "trampoline",
+    "seconds_per_request": 10.95,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 20.56,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a giraffe?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 20.56,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 20.56,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a train?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 20.56,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 4.09,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a bicycle?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 4.09,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 4.09,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a chair?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 4.09,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a train?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 95.32,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 95.32,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a bus?",
+    "a": "yes",
+    "said": "no",
+    "seconds_per_request": 95.32,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a boat?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 95.32,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 18.5,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a dog?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 18.5,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a chair?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 18.5,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 18.5,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "danger",
+    "said": "danger",
+    "seconds_per_request": 1.86,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "closed",
+    "said": "closed",
+    "seconds_per_request": 1.86,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "hotel",
+    "said": "hotel",
+    "seconds_per_request": 1.86,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "open",
+    "said": "open",
+    "seconds_per_request": 1.86,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "home",
+    "said": "home",
+    "seconds_per_request": 2.39,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "down",
+    "said": "down",
+    "seconds_per_request": 2.39,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "boat",
+    "said": "boat",
+    "seconds_per_request": 2.39,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "bus",
+    "said": "bus",
+    "seconds_per_request": 2.39,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "cake",
+    "said": "cake",
+    "seconds_per_request": 2.73,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "left",
+    "said": "left",
+    "seconds_per_request": 2.73,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "blue",
+    "said": "blue",
+    "seconds_per_request": 2.73,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "sun",
+    "said": "sun",
+    "seconds_per_request": 2.73,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "welcome",
+    "said": "welcome",
+    "seconds_per_request": 5.3,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "hello",
+    "said": "hello",
+    "seconds_per_request": 5.3,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "down",
+    "said": "down",
+    "seconds_per_request": 5.3,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "dog",
+    "said": "dog",
+    "seconds_per_request": 5.3,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "shop",
+    "seconds_per_request": 4.88,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "park",
+    "seconds_per_request": 4.88,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "bathroom",
+    "seconds_per_request": 4.88,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "kitchen",
+    "seconds_per_request": 4.88,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "on couch",
+    "seconds_per_request": 11.85,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "in kitchen",
+    "seconds_per_request": 11.85,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "on bike",
+    "seconds_per_request": 11.85,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "on bench",
+    "seconds_per_request": 11.85,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "tennis court",
+    "seconds_per_request": 5.1,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "sidewalk",
+    "seconds_per_request": 5.1,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "closet",
+    "seconds_per_request": 5.1,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "room",
+    "seconds_per_request": 5.1,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "outdoors",
+    "seconds_per_request": 4.91,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "platform",
+    "seconds_per_request": 4.91,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "indoors",
+    "seconds_per_request": 4.91,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "bedroom",
+    "seconds_per_request": 4.91,
+    "routed_to": "nvidia/nemotron-3.5-super-vl:free"
+   }
+  ]
+ },
+ "dots-studio/dots-3-note-preview:free": {
+  "accuracy": {
+   "count": 0.0625,
+   "identity": 0.3125,
+   "presence": 0.9375,
+   "text": 1.0,
+   "where": 0.0
+  },
+  "n": 80,
+  "mean_seconds_per_request": 16.2305,
+  "rows": [
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one person",
+    "seconds_per_request": 24.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "two people",
+    "seconds_per_request": 24.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "no people",
+    "seconds_per_request": 24.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "no people",
+    "seconds_per_request": 24.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "many",
+    "said": "two",
+    "seconds_per_request": 16.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one",
+    "seconds_per_request": 16.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "none",
+    "seconds_per_request": 16.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "none",
+    "seconds_per_request": 16.17,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "two",
+    "said": "two people",
+    "seconds_per_request": 23.29,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one person",
+    "seconds_per_request": 23.29,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "three",
+    "said": "three people",
+    "seconds_per_request": 23.29,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "many",
+    "said": "many people",
+    "seconds_per_request": 23.29,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one person",
+    "seconds_per_request": 14.0,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "no people",
+    "seconds_per_request": 14.0,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "no people",
+    "seconds_per_request": 14.0,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "no people",
+    "seconds_per_request": 14.0,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "dining table",
+    "said": "table",
+    "seconds_per_request": 23.5,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "motorcycle",
+    "said": "motorcycle",
+    "seconds_per_request": 23.5,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "potted plant",
+    "said": "door",
+    "seconds_per_request": 23.5,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "couch",
+    "said": "bed",
+    "seconds_per_request": 23.5,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "tree",
+    "seconds_per_request": 19.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "man",
+    "seconds_per_request": 19.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "horse",
+    "said": "horse",
+    "seconds_per_request": 19.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "bed",
+    "said": "shelves",
+    "seconds_per_request": 19.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "bed",
+    "said": "picture",
+    "seconds_per_request": 15.65,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "person",
+    "seconds_per_request": 15.65,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "people",
+    "seconds_per_request": 15.65,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "people",
+    "seconds_per_request": 15.65,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "oven",
+    "said": "oven",
+    "seconds_per_request": 20.88,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "refrigerator",
+    "said": "cabinets",
+    "seconds_per_request": 20.88,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "sheep",
+    "said": "sheep",
+    "seconds_per_request": 20.88,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "cat",
+    "said": "horse",
+    "seconds_per_request": 20.88,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 10.6,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a giraffe?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 10.6,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 10.6,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a train?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 10.6,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 21.23,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a bicycle?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 21.23,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 21.23,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a chair?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 21.23,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a train?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 28.89,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 28.89,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a bus?",
+    "a": "yes",
+    "said": "no",
+    "seconds_per_request": 28.89,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a boat?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 28.89,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 10.8,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a dog?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 10.8,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a chair?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 10.8,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 10.8,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "danger",
+    "said": "danger",
+    "seconds_per_request": 5.11,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "closed",
+    "said": "closed",
+    "seconds_per_request": 5.11,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "hotel",
+    "said": "hotel",
+    "seconds_per_request": 5.11,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "open",
+    "said": "open",
+    "seconds_per_request": 5.11,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "home",
+    "said": "home",
+    "seconds_per_request": 4.92,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "down",
+    "said": "down",
+    "seconds_per_request": 4.92,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "boat",
+    "said": "boat",
+    "seconds_per_request": 4.92,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "bus",
+    "said": "bus",
+    "seconds_per_request": 4.92,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "cake",
+    "said": "cake",
+    "seconds_per_request": 5.93,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "left",
+    "said": "left",
+    "seconds_per_request": 5.93,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "blue",
+    "said": "blue",
+    "seconds_per_request": 5.93,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "sun",
+    "said": "sun",
+    "seconds_per_request": 5.93,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "welcome",
+    "said": "welcome",
+    "seconds_per_request": 5.36,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "hello",
+    "said": "hello",
+    "seconds_per_request": 5.36,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "down",
+    "said": "down",
+    "seconds_per_request": 5.36,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "dog",
+    "said": "dog",
+    "seconds_per_request": 5.36,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "in the kitchen",
+    "seconds_per_request": 20.42,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "on the grass",
+    "seconds_per_request": 20.42,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "in the bathroom",
+    "seconds_per_request": 20.42,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "in the kitchen",
+    "seconds_per_request": 20.42,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "on a couch",
+    "seconds_per_request": 14.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "in the kitchen",
+    "seconds_per_request": 14.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "on a motorcycle",
+    "seconds_per_request": 14.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "on a bench",
+    "seconds_per_request": 14.75,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "tennis court",
+    "seconds_per_request": 24.51,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "sidewalk",
+    "seconds_per_request": 24.51,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "museum",
+    "seconds_per_request": 24.51,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "holding phone",
+    "seconds_per_request": 24.51,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "outdoors",
+    "seconds_per_request": 14.68,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "train station",
+    "seconds_per_request": 14.68,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "indoors",
+    "seconds_per_request": 14.68,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "in a room",
+    "seconds_per_request": 14.68,
+    "routed_to": "dots-studio/dots-3-note-preview:free"
+   }
+  ]
+ },
+ "typesafe/jev-router": {
+  "accuracy": {
+   "count": 0.375,
+   "identity": 0.25,
+   "presence": 0.8125,
+   "text": 1.0,
+   "where": 0.0
+  },
+  "n": 80,
+  "mean_seconds_per_request": 5.113,
+  "rows": [
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one",
+    "seconds_per_request": 7.99,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 7.99,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 7.99,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 7.99,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "many",
+    "said": "1",
+    "seconds_per_request": 10.09,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "1",
+    "seconds_per_request": 10.09,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "0",
+    "seconds_per_request": 10.09,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "0",
+    "seconds_per_request": 10.09,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "two",
+    "said": "2",
+    "seconds_per_request": 13.88,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "1",
+    "seconds_per_request": 13.88,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "three",
+    "said": "3",
+    "seconds_per_request": 13.88,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "many",
+    "said": "10",
+    "seconds_per_request": 13.88,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "one",
+    "said": "one",
+    "seconds_per_request": 5.43,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "zero",
+    "seconds_per_request": 5.43,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "none",
+    "seconds_per_request": 5.43,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "count",
+    "q": "how many people are there?",
+    "a": "zero",
+    "said": "none",
+    "seconds_per_request": 5.43,
+    "routed_to": "google/gemini-3.8-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "dining table",
+    "said": "table",
+    "seconds_per_request": 2.6,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "motorcycle",
+    "said": "motorcycle",
+    "seconds_per_request": 2.6,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "potted plant",
+    "said": "building",
+    "seconds_per_request": 2.6,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "couch",
+    "said": "curtain",
+    "seconds_per_request": 2.6,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "tree",
+    "seconds_per_request": 2.43,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "tree",
+    "seconds_per_request": 2.43,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "horse",
+    "said": "horse",
+    "seconds_per_request": 2.43,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "bed",
+    "said": "window",
+    "seconds_per_request": 2.43,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "bed",
+    "said": "tv",
+    "seconds_per_request": 1.69,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "girl",
+    "seconds_per_request": 1.69,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "person",
+    "seconds_per_request": 1.69,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "person",
+    "said": "field",
+    "seconds_per_request": 1.69,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "oven",
+    "said": "oven",
+    "seconds_per_request": 1.85,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "refrigerator",
+    "said": "cabinets",
+    "seconds_per_request": 1.85,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "sheep",
+    "said": "field",
+    "seconds_per_request": 1.85,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "identity",
+    "q": "what is the biggest thing here?",
+    "a": "cat",
+    "said": "chair",
+    "seconds_per_request": 1.85,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 6.88,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a giraffe?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 6.88,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 6.88,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a train?",
+    "a": "no",
+    "said": "yes",
+    "seconds_per_request": 6.88,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 2.13,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a bicycle?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 2.13,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "yes",
+    "seconds_per_request": 2.13,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a chair?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 2.13,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a train?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 2.54,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 2.54,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a bus?",
+    "a": "yes",
+    "said": "no",
+    "seconds_per_request": 2.54,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a boat?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 2.54,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 1.93,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a dog?",
+    "a": "yes",
+    "said": "yes",
+    "seconds_per_request": 1.93,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a chair?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 1.93,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "presence",
+    "q": "is there a person?",
+    "a": "no",
+    "said": "no",
+    "seconds_per_request": 1.93,
+    "routed_to": "z-ai/glm-5.3-flash"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "danger",
+    "said": "danger",
+    "seconds_per_request": 1.22,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "closed",
+    "said": "closed",
+    "seconds_per_request": 1.22,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "hotel",
+    "said": "hotel",
+    "seconds_per_request": 1.22,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "open",
+    "said": "open",
+    "seconds_per_request": 1.22,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "home",
+    "said": "home",
+    "seconds_per_request": 1.85,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "down",
+    "said": "down",
+    "seconds_per_request": 1.85,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "boat",
+    "said": "boat",
+    "seconds_per_request": 1.85,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "bus",
+    "said": "bus",
+    "seconds_per_request": 1.85,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "cake",
+    "said": "cake",
+    "seconds_per_request": 4.32,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "left",
+    "said": "left",
+    "seconds_per_request": 4.32,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "blue",
+    "said": "blue",
+    "seconds_per_request": 4.32,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "sun",
+    "said": "sun",
+    "seconds_per_request": 4.32,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "welcome",
+    "said": "welcome",
+    "seconds_per_request": 2.38,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "hello",
+    "said": "hello",
+    "seconds_per_request": 2.38,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "down",
+    "said": "down",
+    "seconds_per_request": 2.38,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "text",
+    "q": "what does it say?",
+    "a": "dog",
+    "said": "dog",
+    "seconds_per_request": 2.38,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "in kitchen",
+    "seconds_per_request": 4.94,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "in park",
+    "seconds_per_request": 4.94,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "in bathroom",
+    "seconds_per_request": 4.94,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "in kitchen",
+    "seconds_per_request": 4.94,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "at desk",
+    "seconds_per_request": 4.4,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "in bathroom",
+    "seconds_per_request": 4.4,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "on motorcycle",
+    "seconds_per_request": 4.4,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "on bench",
+    "seconds_per_request": 4.4,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "tennis court",
+    "seconds_per_request": 9.62,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "sidewalk",
+    "seconds_per_request": 9.62,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "museum",
+    "seconds_per_request": 9.62,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "indoors",
+    "seconds_per_request": 9.62,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "under sheep",
+    "seconds_per_request": 14.09,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the right",
+    "said": "on platform",
+    "seconds_per_request": 14.09,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "on the left",
+    "said": "at window",
+    "seconds_per_request": 14.09,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   },
+   {
+    "kind": "where",
+    "q": "where is the person?",
+    "a": "in the middle",
+    "said": "in room",
+    "seconds_per_request": 14.09,
+    "routed_to": "deepseek/deepseek-v4.1-flash-1017"
+   }
+  ]
+ }
+}
