@@ -105,3 +105,33 @@ a deep, wide visual cortex grown during development (V1 -> V2 -> V4 -> IT; the
 fly's 77,000-neuron optic lobes); this brain has nothing between the organ and
 the orchestrator. Proposed: let such a hierarchy self-organize on natural
 photos with the same growth and Hebbian rules.
+
+## 2026-10-19: visual cortex
+
+`organic/visual_cortex.py`: three retinotopic layers (V1 -> V2 -> V4/IT-like)
+learning with the same competitive Hebbian rule as V1 and the parts bank, on
+contrast-normalized windows, sparse and max-pooled; developed layer by layer on
+unlabeled training photos (`experiments/develop_cortex.py`).
+
+Nearest-neighbour probe on held-out photos (baseline = most common answer):
+
+| question | baseline | eye alone | small cortex L1 / L2 / L3 | big cortex L1 / L2 / L3 |
+|---|---|---|---|---|
+| CIFAR-100 identity | 0.01 | 0.07 | 0.08 / 0.09 / 0.10 | 0.11 / 0.10 / 0.08 |
+| is there a person? | 0.57 | 0.55-0.58 | 0.60 / 0.55 / 0.58 | 0.60 / 0.54 / 0.59 |
+| biggest thing | 0.32 | 0.12-0.14 | 0.25 / 0.27 / 0.28 | 0.22 / 0.24 / 0.26 |
+| where is the person | 0.40 | 0.40-0.45 | 0.27 / 0.34 / 0.35 | 0.30 / 0.32 / 0.39 |
+| reading | 0.04 | 0.32 | 0.09 / 0.07 / 0.08 | 0.07 / 0.05 / 0.07 |
+
+(small: 64/128/256 kinds, 6,000 samples per layer; big: 128/256/512 kinds, 30,000)
+
+- The cortex adds real but modest information about *what* is in a photo
+  (identity 0.10 vs 0.07 for the eye alone, 10x chance), and in the small
+  cortex deeper layers do better.
+- Size of a fixed cortex is not the lever (big = small).
+- Pooling loses letter detail, so reading stays with the eye's fovea; the
+  orchestrator receives both.
+
+Wired into the loop brain: layers 2 and 3, pooled over the whole view (384
+numbers), arrive at ticks 2 and 3. Very long lives started: seed 0 to
+1,000,000 moments, seed 1 to 500,000, resumable, memory logged.
