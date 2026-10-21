@@ -135,3 +135,35 @@ Nearest-neighbour probe on held-out photos (baseline = most common answer):
 Wired into the loop brain: layers 2 and 3, pooled over the whole view (384
 numbers), arrive at ticks 2 and 3. Very long lives started: seed 0 to
 1,000,000 moments, seed 1 to 500,000, resumable, memory logged.
+
+## 2026-10-21: long lives finished; one fixed test set for all brains
+
+Lives finished: cortex seed 0 at 1,000,000 moments (~43 h), seed 1 at 500,000.
+Size at the end: seed 0 has 57,038 clusters (456,304 neurons), ~1.19 billion
+numbers (identities 100M, input synapses 803M, output synapses 284M); seed 1
+~0.76 billion. Organs + cortex: ~0.37M. Only a handful of clusters respond per
+tick, and most numbers are stored situation prototypes, so the count is not
+comparable to a 1B-parameter language model's shared features.
+
+All saved brains on one fixed held-out set (`experiments/compare_brains.py`,
+up to 200 per kind; baseline = most common training answer):
+
+| kind | baseline | no cortex, 300k (2 seeds) | cortex, 1M / 500k |
+|---|---|---|---|
+| talk | 0.09 | 0.27-0.29 | 0.55 |
+| color | 0.13 | 0.36 | 0.41-0.42 |
+| identity | 0.04 | 0.09 | 0.10-0.14 |
+| gist | 0.92 | 0.65-0.67 | 0.79-0.82 |
+| counting | 0.41 | 0.31-0.34 (tick ~6.6) | 0.35-0.39 (tick ~3.5) |
+| where | 0.41 | 0.62-0.65 | 0.57-0.59 |
+| reading | 0.01 | 0.23-0.36 | 0.20-0.21 |
+| activity | 0.19 | 0.29-0.31 | 0.27-0.29 |
+| presence | 0.90 | 0.80-0.81 | 0.79-0.82 |
+
+Cortex brains do better on "what" (color, identity, gist) and count faster;
+slightly worse on reading and where (pooling blurs position and letters). The
+talk gain is mostly data: spoken questions grew while these lives ran. The two
+groups also differ in life length and world size, so this is not a clean
+cortex-only comparison. Presence, gist and counting stay below the majority
+baseline. Most progress happens in the first 50-100k moments; later growth
+(to ~1.2 billion numbers) mostly adds memory, not skill.

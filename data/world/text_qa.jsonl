@@ -968,3 +968,719 @@
 {"q": "who is your favorite person?", "a": "dad", "a_check": "no one", "agree": false, "theme": "family members"}
 {"q": "who makes you lunch?", "a": "mom", "a_check": "no one", "agree": false, "theme": "family members"}
 {"q": "who is your family?", "a": "my family", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "what color is a fire truck?", "a": "red", "a_check": "red", "agree": true, "theme": "vehicles"}
+{"q": "who drives the bus?", "a": "driver", "a_check": "driver", "agree": true, "theme": "vehicles"}
+{"q": "what flies in the sky?", "a": "plane", "a_check": "bird", "agree": false, "theme": "vehicles"}
+{"q": "what floats on water?", "a": "boat", "a_check": "boat", "agree": true, "theme": "vehicles"}
+{"q": "what has two wheels?", "a": "motorcycle", "a_check": "bicycle", "agree": false, "theme": "vehicles"}
+{"q": "what makes a choo choo sound?", "a": "train", "a_check": "train", "agree": true, "theme": "vehicles"}
+{"q": "what has sirens and lights?", "a": "ambulance", "a_check": "ambulance", "agree": true, "theme": "vehicles"}
+{"q": "what carries children to school?", "a": "bus", "a_check": "school bus", "agree": false, "theme": "vehicles"}
+{"q": "what has four wheels?", "a": "car", "a_check": "car", "agree": true, "theme": "vehicles"}
+{"q": "what do we ride on tracks?", "a": "train", "a_check": "train", "agree": true, "theme": "vehicles"}
+{"q": "what do police cars have?", "a": "sirens", "a_check": "lights", "agree": false, "theme": "vehicles"}
+{"q": "what hauls big loads?", "a": "truck", "a_check": "truck", "agree": true, "theme": "vehicles"}
+{"q": "what color is a school bus?", "a": "yellow", "a_check": "yellow", "agree": true, "theme": "vehicles"}
+{"q": "what has a steering wheel?", "a": "car", "a_check": "car", "agree": true, "theme": "vehicles"}
+{"q": "what flies high above clouds?", "a": "plane", "a_check": "airplane", "agree": false, "theme": "vehicles"}
+{"q": "what sails on the sea?", "a": "boat", "a_check": "ship", "agree": false, "theme": "vehicles"}
+{"q": "what has an engine and seats?", "a": "car", "a_check": "car", "agree": true, "theme": "vehicles"}
+{"q": "what do we ride in the rain?", "a": "car", "a_check": "umbrella", "agree": false, "theme": "vehicles"}
+{"q": "what has two headlights?", "a": "car", "a_check": "car", "agree": true, "theme": "vehicles"}
+{"q": "what has a driver and many seats?", "a": "bus", "a_check": "bus", "agree": true, "theme": "vehicles"}
+{"q": "what color is the sky?", "a": "blue", "a_check": "blue", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is grass?", "a": "green", "a_check": "green", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a banana?", "a": "yellow", "a_check": "yellow", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is an apple?", "a": "red", "a_check": "red", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a pumpkin?", "a": "orange", "a_check": "orange", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a cloud?", "a": "white", "a_check": "white", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a violet?", "a": "purple", "a_check": "purple", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a toy car?", "a": "red", "a_check": "red", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a pear?", "a": "yellow", "a_check": "yellow", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a lemon?", "a": "yellow", "a_check": "yellow", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a snowman?", "a": "white", "a_check": "white", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a strawberry?", "a": "red", "a_check": "red", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a grape?", "a": "purple", "a_check": "purple", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a leaf?", "a": "green", "a_check": "green", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a firetruck?", "a": "red", "a_check": "red", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a school bus?", "a": "yellow", "a_check": "yellow", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a polar bear?", "a": "white", "a_check": "white", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a sunset?", "a": "orange", "a_check": "orange", "agree": true, "theme": "colors of everyday things"}
+{"q": "what color is a cherry?", "a": "red", "a_check": "red", "agree": true, "theme": "colors of everyday things"}
+{"q": "what is the opposite of hot?", "a": "cold", "a_check": "cold", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of big?", "a": "small", "a_check": "small", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of up?", "a": "down", "a_check": "down", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of in?", "a": "out", "a_check": "out", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of on?", "a": "off", "a_check": "off", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of fast?", "a": "slow", "a_check": "slow", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of happy?", "a": "sad", "a_check": "sad", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of open?", "a": "closed", "a_check": "closed", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of wet?", "a": "dry", "a_check": "dry", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of day?", "a": "night", "a_check": "night", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of push?", "a": "pull", "a_check": "pull", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of full?", "a": "empty", "a_check": "empty", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of hard?", "a": "soft", "a_check": "soft", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of clean?", "a": "dirty", "a_check": "dirty", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of front?", "a": "back", "a_check": "back", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of left?", "a": "right", "a_check": "right", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of loud?", "a": "quiet", "a_check": "quiet", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of tall?", "a": "short", "a_check": "short", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of win?", "a": "lose", "a_check": "lose", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of light?", "a": "dark", "a_check": "dark", "agree": true, "theme": "opposites"}
+{"q": "what is a chair for?", "a": "sit", "a_check": "sit", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a spoon for?", "a": "eat", "a_check": "eat", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a book for?", "a": "read", "a_check": "read", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a bed for?", "a": "sleep", "a_check": "sleep", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a shoe for?", "a": "walk", "a_check": "wear", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a toy for?", "a": "play", "a_check": "play", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a pen for?", "a": "write", "a_check": "write", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a glass for?", "a": "drink", "a_check": "drink", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a plate for?", "a": "serve food", "a_check": "eat", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a clock for?", "a": "tell time", "a_check": "tell time", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a door for?", "a": "enter", "a_check": "open", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a hat for?", "a": "wear", "a_check": "wear", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a phone for?", "a": "call", "a_check": "call", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a ball for?", "a": "throw", "a_check": "play", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a glove for?", "a": "wear", "a_check": "wear", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a towel for?", "a": "dry off", "a_check": "dry", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a lamp for?", "a": "light room", "a_check": "light", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a blanket for?", "a": "keep warm", "a_check": "keep warm", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a mirror for?", "a": "see face", "a_check": "see reflection", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a bag for?", "a": "carry things", "a_check": "carry", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what day comes after monday", "a": "tuesday", "a_check": "tuesday", "agree": true, "theme": "days, months and seasons"}
+{"q": "how many days in a week", "a": "seven", "a_check": "seven", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month follows december", "a": "january", "a_check": "january", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the first month of the year", "a": "january", "a_check": "january", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month has twenty-eight days", "a": "february", "a_check": "february", "agree": true, "theme": "days, months and seasons"}
+{"q": "what season is known for snow", "a": "winter", "a_check": "winter", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season comes after summer", "a": "autumn", "a_check": "autumn", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the last month of the year", "a": "december", "a_check": "december", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month has thirty-one days", "a": "july", "a_check": "march", "agree": false, "theme": "days, months and seasons"}
+{"q": "what day do we rest on", "a": "sunday", "a_check": "sunday", "agree": true, "theme": "days, months and seasons"}
+{"q": "how many months are in a year", "a": "twelve", "a_check": "twelve", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season has flowers", "a": "spring", "a_check": "spring", "agree": true, "theme": "days, months and seasons"}
+{"q": "what day follows tuesday", "a": "wednesday", "a_check": "wednesday", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month has thirty days", "a": "april", "a_check": "april", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the hottest season", "a": "summer", "a_check": "summer", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season leaves change color in", "a": "autumn", "a_check": "autumn", "agree": true, "theme": "days, months and seasons"}
+{"q": "what day comes before wednesday", "a": "tuesday", "a_check": "tuesday", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month is known for halloween", "a": "october", "a_check": "october", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the first month", "a": "january", "a_check": "january", "agree": true, "theme": "days, months and seasons"}
+{"q": "which day is the start of the weekend", "a": "saturday", "a_check": "saturday", "agree": true, "theme": "days, months and seasons"}
+{"q": "what makes you happy?", "a": "treat", "a_check": "sunshine", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you sad?", "a": "missing mom", "a_check": "loss", "agree": false, "theme": "feelings and what causes them"}
+{"q": "when do you feel proud?", "a": "good drawing", "a_check": "hard work", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you angry?", "a": "unfair play", "a_check": "lies", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you scared?", "a": "dark room", "a_check": "danger", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel when hungry?", "a": "empty tummy", "a_check": "starving", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you excited?", "a": "birthday party", "a_check": "adventure", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you shy?", "a": "new people", "a_check": "judgment", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you laugh?", "a": "tickles", "a_check": "humor", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you jealous?", "a": "her toy", "a_check": "comparison", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you calm?", "a": "deep breath", "a_check": "peace", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you surprised?", "a": "loud noise", "a_check": "unexpected", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel when loved?", "a": "warm hug", "a_check": "safe", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you nervous?", "a": "test day", "a_check": "uncertainty", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you bored?", "a": "nothing to do", "a_check": "nothing", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you proud?", "a": "winning game", "a_check": "success", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you embarrassed?", "a": "spilled milk", "a_check": "awkward moments", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel confident?", "a": "i can try", "a_check": "capable", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel when missed?", "a": "grandma hugs", "a_check": "missing someone", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you grateful?", "a": "family help", "a_check": "kindness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what color is the sky on a sunny day?", "a": "blue", "a_check": "blue", "agree": true, "theme": "weather"}
+{"q": "what do we wear when it rains?", "a": "raincoat", "a_check": "umbrella", "agree": false, "theme": "weather"}
+{"q": "what falls from clouds when it's wet?", "a": "rain", "a_check": "rain", "agree": true, "theme": "weather"}
+{"q": "what is frozen water droplets called?", "a": "snow", "a_check": "snow", "agree": true, "theme": "weather"}
+{"q": "what tool measures rain?", "a": "rain gauge", "a_check": "rain gauge", "agree": true, "theme": "weather"}
+{"q": "what do we call a very windy day?", "a": "stormy", "a_check": "windy", "agree": false, "theme": "weather"}
+{"q": "what is the opposite of rainy?", "a": "sunny", "a_check": "dry", "agree": false, "theme": "weather"}
+{"q": "what do you feel when it's hot?", "a": "warm", "a_check": "warm", "agree": true, "theme": "weather"}
+{"q": "what season has falling leaves?", "a": "autumn", "a_check": "autumn", "agree": true, "theme": "weather"}
+{"q": "what happens to puddles in the sun?", "a": "dry up", "a_check": "dry up", "agree": true, "theme": "weather"}
+{"q": "what is a tornado made of?", "a": "wind", "a_check": "wind", "agree": true, "theme": "weather"}
+{"q": "what do we use to stay dry?", "a": "umbrella", "a_check": "raincoat", "agree": false, "theme": "weather"}
+{"q": "what season is coldest?", "a": "winter", "a_check": "winter", "agree": true, "theme": "weather"}
+{"q": "what does wind blow?", "a": "leaves", "a_check": "air", "agree": false, "theme": "weather"}
+{"q": "what is a rainbow made of?", "a": "colors", "a_check": "light", "agree": false, "theme": "weather"}
+{"q": "what is ice on windows called?", "a": "frost", "a_check": "frost", "agree": true, "theme": "weather"}
+{"q": "what covers the sky on a cloudy day?", "a": "clouds", "a_check": "clouds", "agree": true, "theme": "weather"}
+{"q": "what season has blooming flowers?", "a": "spring", "a_check": "spring", "agree": true, "theme": "weather"}
+{"q": "what do you see in a clear sky?", "a": "sun", "a_check": "sun", "agree": true, "theme": "weather"}
+{"q": "what is fog made of?", "a": "mist", "a_check": "water", "agree": false, "theme": "weather"}
+{"q": "where is your nose?", "a": "nose", "a_check": "face", "agree": false, "theme": "parts of the body"}
+{"q": "what are your eyes?", "a": "two eyes", "a_check": "for seeing", "agree": false, "theme": "parts of the body"}
+{"q": "show me your tummy.", "a": "tummy", "a_check": "abdomen", "agree": false, "theme": "parts of the body"}
+{"q": "where are your knees?", "a": "knees", "a_check": "leg joints", "agree": false, "theme": "parts of the body"}
+{"q": "point to your hair.", "a": "my hair", "a_check": "head", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to hear?", "a": "two ears", "a_check": "ears", "agree": false, "theme": "parts of the body"}
+{"q": "show me your fingers.", "a": "fingers", "a_check": "hands", "agree": false, "theme": "parts of the body"}
+{"q": "where is your thumb?", "a": "thumb", "a_check": "hand", "agree": false, "theme": "parts of the body"}
+{"q": "point to your chin.", "a": "chin", "a_check": "chin", "agree": true, "theme": "parts of the body"}
+{"q": "where is your neck?", "a": "neck", "a_check": "base of neck", "agree": false, "theme": "parts of the body"}
+{"q": "what are your feet for?", "a": "two feet", "a_check": "to walk", "agree": false, "theme": "parts of the body"}
+{"q": "show me your lips.", "a": "lips", "a_check": "mouth", "agree": false, "theme": "parts of the body"}
+{"q": "where is your forehead?", "a": "forehead", "a_check": "top of head", "agree": false, "theme": "parts of the body"}
+{"q": "point to your elbows.", "a": "elbows", "a_check": "arms", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to smell?", "a": "nose", "a_check": "nose", "agree": true, "theme": "parts of the body"}
+{"q": "show me your tongue.", "a": "tongue", "a_check": "mouth", "agree": false, "theme": "parts of the body"}
+{"q": "where are your shoulders?", "a": "shoulders", "a_check": "shoulders", "agree": true, "theme": "parts of the body"}
+{"q": "point to your back.", "a": "back", "a_check": "behind you", "agree": false, "theme": "parts of the body"}
+{"q": "where is your belly button?", "a": "belly button", "a_check": "stomach", "agree": false, "theme": "parts of the body"}
+{"q": "show me your leg.", "a": "leg", "a_check": "leg", "agree": true, "theme": "parts of the body"}
+{"q": "where do you buy milk?", "a": "grocery store", "a_check": "grocery store", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a doctor?", "a": "hospital", "a_check": "hospital", "agree": true, "theme": "places in a town"}
+{"q": "where do you catch a bus?", "a": "bus stop", "a_check": "bus stop", "agree": true, "theme": "places in a town"}
+{"q": "where do you mail a letter?", "a": "post office", "a_check": "post office", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a movie?", "a": "cinema", "a_check": "cinema", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy books?", "a": "library", "a_check": "bookstore", "agree": false, "theme": "places in a town"}
+{"q": "where do you play soccer?", "a": "park", "a_check": "park", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy clothes?", "a": "mall", "a_check": "clothing store", "agree": false, "theme": "places in a town"}
+{"q": "where do you see a train?", "a": "train station", "a_check": "train station", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy bread?", "a": "bakery", "a_check": "bakery", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy coffee?", "a": "cafe", "a_check": "coffee shop", "agree": false, "theme": "places in a town"}
+{"q": "where do you see a fire?", "a": "fire station", "a_check": "fire station", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy toys?", "a": "toy store", "a_check": "toy store", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a clock?", "a": "clock tower", "a_check": "wall clock", "agree": false, "theme": "places in a town"}
+{"q": "where do you swim?", "a": "swimming pool", "a_check": "pool", "agree": false, "theme": "places in a town"}
+{"q": "where do you see a police officer?", "a": "police station", "a_check": "police station", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy gas?", "a": "gas station", "a_check": "gas station", "agree": true, "theme": "places in a town"}
+{"q": "where do you read books?", "a": "public library", "a_check": "library", "agree": false, "theme": "places in a town"}
+{"q": "where do you buy fruit?", "a": "fruit market", "a_check": "grocory store", "agree": false, "theme": "places in a town"}
+{"q": "where do you see a fountain?", "a": "town square", "a_check": "park", "agree": false, "theme": "places in a town"}
+{"q": "is the sky blue?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do dogs meow?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can fish swim?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is grass purple?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do stars shine at night?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can humans fly without wings?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is water wet?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do cats bark?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do lions roar?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is the sun hot?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do birds have fur?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can apples grow underground?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is fire hot?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do penguins live at the north pole?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "are humans mammals?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can you taste with your ears?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is snow cold?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do trees give us oxygen?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "are wheels round?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is a triangle a shape?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "what do you say when someone says hello?", "a": "hello", "a_check": "hello", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you greet your teacher in the morning?", "a": "good morning", "a_check": "good morning", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when you leave a room?", "a": "good bye", "a_check": "bye", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you politely get someone's attention?", "a": "excuse me", "a_check": "excuse me", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when someone helps you?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you start a conversation with a friend?", "a": "hello", "a_check": "hey", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when you meet someone new?", "a": "good to meet", "a_check": "nice to meet", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you respond to how are you?", "a": "i'm fine", "a_check": "i am fine", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say before opening a gift?", "a": "thank you", "a_check": "open please", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you ask to join a game?", "a": "can i play", "a_check": "can i play", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say if you accidentally bump into someone?", "a": "excuse me", "a_check": "sorry", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you welcome a visitor to your home?", "a": "welcome", "a_check": "welcome", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when it is time for bed?", "a": "good night", "a_check": "goodnight", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you ask for something politely?", "a": "please help", "a_check": "please may i", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when you make a mistake?", "a": "i'm sorry", "a_check": "my bad", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you respond to a kind compliment?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when answering the phone?", "a": "hello", "a_check": "hello", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you say goodbye to a friend?", "a": "good bye", "a_check": "bye", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when someone shares a toy?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you start a greeting politely?", "a": "hello there", "a_check": "hello", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what shape is this?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape has three sides?", "a": "triangle", "a_check": "triangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is it big or small?", "a": "big", "a_check": "big", "agree": true, "theme": "shapes and sizes"}
+{"q": "how many sides does a square have?", "a": "four", "a_check": "four", "agree": true, "theme": "shapes and sizes"}
+{"q": "is it tall or short?", "a": "tall", "a_check": "short", "agree": false, "theme": "shapes and sizes"}
+{"q": "what shape is a plate?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "has it four equal sides?", "a": "square", "a_check": "yes", "agree": false, "theme": "shapes and sizes"}
+{"q": "is it round or pointy?", "a": "round", "a_check": "round", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape has no corners?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is it large or tiny?", "a": "large", "a_check": "large", "agree": true, "theme": "shapes and sizes"}
+{"q": "how many corners does a triangle have?", "a": "three", "a_check": "three", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape is a yield sign?", "a": "triangle", "a_check": "triangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "has it six sides?", "a": "six sides", "a_check": "yes", "agree": false, "theme": "shapes and sizes"}
+{"q": "what shape is a door?", "a": "rectangle", "a_check": "rectangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is it thin or thick?", "a": "thin", "a_check": "thin", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape is a slice of pizza?", "a": "triangle", "a_check": "triangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "has it eight sides?", "a": "octagon", "a_check": "yes", "agree": false, "theme": "shapes and sizes"}
+{"q": "is it round or square?", "a": "round", "a_check": "round", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape is a clock?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is it wide or narrow?", "a": "wide", "a_check": "wide", "agree": true, "theme": "shapes and sizes"}
+{"q": "how many apples?", "a": "one", "a_check": "five", "agree": false, "theme": "counting things"}
+{"q": "how many eyes?", "a": "two", "a_check": "two", "agree": true, "theme": "counting things"}
+{"q": "how many legs on a chair?", "a": "four", "a_check": "four", "agree": true, "theme": "counting things"}
+{"q": "how many balloons?", "a": "three", "a_check": "none", "agree": false, "theme": "counting things"}
+{"q": "how many fingers?", "a": "five", "a_check": "ten", "agree": false, "theme": "counting things"}
+{"q": "how many wheels on a car?", "a": "six", "a_check": "four", "agree": false, "theme": "counting things"}
+{"q": "how many toes on one foot?", "a": "five", "a_check": "five", "agree": true, "theme": "counting things"}
+{"q": "how many hands do you have?", "a": "two", "a_check": "two", "agree": true, "theme": "counting things"}
+{"q": "how many cookies left?", "a": "zero", "a_check": "none", "agree": false, "theme": "counting things"}
+{"q": "how many birds on the wire?", "a": "eight", "a_check": "none", "agree": false, "theme": "counting things"}
+{"q": "how many crayons?", "a": "nine", "a_check": "none", "agree": false, "theme": "counting things"}
+{"q": "how many sides on a square?", "a": "four", "a_check": "four", "agree": true, "theme": "counting things"}
+{"q": "how many planets in space?", "a": "eight", "a_check": "eight", "agree": true, "theme": "counting things"}
+{"q": "how many months in a year?", "a": "twelve", "a_check": "twelve", "agree": true, "theme": "counting things"}
+{"q": "how many siblings do you have?", "a": "two", "a_check": "none", "agree": false, "theme": "counting things"}
+{"q": "how many lives does a cat have?", "a": "nine", "a_check": "nine", "agree": true, "theme": "counting things"}
+{"q": "how many colors in a rainbow?", "a": "seven", "a_check": "seven", "agree": true, "theme": "counting things"}
+{"q": "how many pieces of pizza?", "a": "eight", "a_check": "eight", "agree": true, "theme": "counting things"}
+{"q": "how many toes on two feet?", "a": "ten", "a_check": "ten", "agree": true, "theme": "counting things"}
+{"q": "how many fingers on one hand?", "a": "five", "a_check": "five", "agree": true, "theme": "counting things"}
+{"q": "who is your mother?", "a": "mom", "a_check": "mom", "agree": true, "theme": "family members"}
+{"q": "who is your father?", "a": "dad", "a_check": "dad", "agree": true, "theme": "family members"}
+{"q": "do you have a sister?", "a": "yes", "a_check": "yes", "agree": true, "theme": "family members"}
+{"q": "do you have a brother?", "a": "no", "a_check": "yes", "agree": false, "theme": "family members"}
+{"q": "what is your grandmother's name?", "a": "grandma", "a_check": "grandma", "agree": true, "theme": "family members"}
+{"q": "what is your grandfather's name?", "a": "grandpa", "a_check": "grandpa", "agree": true, "theme": "family members"}
+{"q": "who takes care of you?", "a": "parents", "a_check": "mom", "agree": false, "theme": "family members"}
+{"q": "who is your favorite person?", "a": "mom", "a_check": "mom", "agree": true, "theme": "family members"}
+{"q": "who picks you up from school?", "a": "dad", "a_check": "mom", "agree": false, "theme": "family members"}
+{"q": "do you live with your family?", "a": "yes", "a_check": "yes", "agree": true, "theme": "family members"}
+{"q": "is your brother tall?", "a": "yes", "a_check": "no", "agree": false, "theme": "family members"}
+{"q": "is your sister friendly?", "a": "yes", "a_check": "yes", "agree": true, "theme": "family members"}
+{"q": "what do you call your aunt?", "a": "aunt", "a_check": "auntie", "agree": false, "theme": "family members"}
+{"q": "what do you call your uncle?", "a": "uncle", "a_check": "uncle", "agree": true, "theme": "family members"}
+{"q": "who do you play with most?", "a": "brother", "a_check": "friends", "agree": false, "theme": "family members"}
+{"q": "who reads you bedtime stories?", "a": "mom", "a_check": "mom", "agree": true, "theme": "family members"}
+{"q": "who makes your sandwiches?", "a": "mom", "a_check": "mom", "agree": true, "theme": "family members"}
+{"q": "do you have cousins?", "a": "yes", "a_check": "yes", "agree": true, "theme": "family members"}
+{"q": "who is your best family member?", "a": "sister", "a_check": "mom", "agree": false, "theme": "family members"}
+{"q": "who do you hug when sad?", "a": "mom", "a_check": "mom", "agree": true, "theme": "family members"}
+{"q": "what sport do you like?", "a": "soccer", "a_check": "basketball", "agree": false, "theme": "sports"}
+{"q": "who is your favorite player?", "a": "messi", "a_check": "michael jordan", "agree": false, "theme": "sports"}
+{"q": "what team do you root for?", "a": "lions", "a_check": "lakers", "agree": false, "theme": "sports"}
+{"q": "what shape is a basketball?", "a": "round", "a_check": "sphere", "agree": false, "theme": "sports"}
+{"q": "how many players on a soccer team?", "a": "eleven", "a_check": "eleven", "agree": true, "theme": "sports"}
+{"q": "what do you call a home run?", "a": "run", "a_check": "home run", "agree": false, "theme": "sports"}
+{"q": "what sport uses a racket?", "a": "tennis", "a_check": "tennis", "agree": true, "theme": "sports"}
+{"q": "what color is a baseball?", "a": "white", "a_check": "white", "agree": true, "theme": "sports"}
+{"q": "who wins the game?", "a": "team", "a_check": "winner", "agree": false, "theme": "sports"}
+{"q": "what do you kick in soccer?", "a": "ball", "a_check": "soccer ball", "agree": false, "theme": "sports"}
+{"q": "what sport is played on ice?", "a": "hockey", "a_check": "hockey", "agree": true, "theme": "sports"}
+{"q": "what do you score in football?", "a": "points", "a_check": "touchdown", "agree": false, "theme": "sports"}
+{"q": "what is the main equipment in golf?", "a": "club", "a_check": "club", "agree": true, "theme": "sports"}
+{"q": "what sport do you swim in?", "a": "pool", "a_check": "swimming", "agree": false, "theme": "sports"}
+{"q": "what do runners run on?", "a": "track", "a_check": "track", "agree": true, "theme": "sports"}
+{"q": "what do you call a perfect game?", "a": "strike", "a_check": "perfect game", "agree": false, "theme": "sports"}
+{"q": "what sport uses a net?", "a": "volleyball", "a_check": "volleyball", "agree": true, "theme": "sports"}
+{"q": "what do you wear on your feet?", "a": "shoes", "a_check": "shoes", "agree": true, "theme": "sports"}
+{"q": "what sport uses a bat?", "a": "baseball", "a_check": "baseball", "agree": true, "theme": "sports"}
+{"q": "what do you yell at a game?", "a": "go", "a_check": "go", "agree": true, "theme": "sports"}
+{"q": "what do you hit to make a beat?", "a": "drum", "a_check": "drum", "agree": true, "theme": "music and instruments"}
+{"q": "what do you blow into to play high notes?", "a": "trumpet", "a_check": "flute", "agree": false, "theme": "music and instruments"}
+{"q": "what has strings you pluck with your fingers?", "a": "guitar", "a_check": "guitar", "agree": true, "theme": "music and instruments"}
+{"q": "what do you shake to make a rattling sound?", "a": "maraca", "a_check": "maracas", "agree": false, "theme": "music and instruments"}
+{"q": "what do you bow across to make music?", "a": "violin", "a_check": "violin", "agree": true, "theme": "music and instruments"}
+{"q": "what do you blow across the top of?", "a": "flute", "a_check": "harmonica", "agree": false, "theme": "music and instruments"}
+{"q": "what has black and white keys you press?", "a": "piano", "a_check": "piano", "agree": true, "theme": "music and instruments"}
+{"q": "what do you hit with mallets?", "a": "xylophone", "a_check": "xylophone", "agree": true, "theme": "music and instruments"}
+{"q": "what do you play with a bow like a violin?", "a": "cello", "a_check": "violin", "agree": false, "theme": "music and instruments"}
+{"q": "what do you blow air into with a mouthpiece?", "a": "recorder", "a_check": "saxophone", "agree": false, "theme": "music and instruments"}
+{"q": "what has strings you bow or pluck?", "a": "harp", "a_check": "harp", "agree": true, "theme": "music and instruments"}
+{"q": "what do you hit with your foot for low sounds?", "a": "bass drum", "a_check": "bass drum", "agree": true, "theme": "music and instruments"}
+{"q": "what do you tap with your thumbs?", "a": "kalimba", "a_check": "cymbal", "agree": false, "theme": "music and instruments"}
+{"q": "what do you scrape with a stick?", "a": "guiro", "a_check": "washboard", "agree": false, "theme": "music and instruments"}
+{"q": "what do you blow through a thin piece of wood?", "a": "saxophone", "a_check": "recorder", "agree": false, "theme": "music and instruments"}
+{"q": "what do you play with your mouth and hum?", "a": "kazoo", "a_check": "didgeroroo", "agree": false, "theme": "music and instruments"}
+{"q": "what do you crash together for a loud sound?", "a": "cymbals", "a_check": "cymbal", "agree": false, "theme": "music and instruments"}
+{"q": "what do you spin or twist to make sound?", "a": "music box", "a_check": "washboard", "agree": false, "theme": "music and instruments"}
+{"q": "what do you blow into with a slide?", "a": "trombone", "a_check": "trombone", "agree": true, "theme": "music and instruments"}
+{"q": "what do you speak into to make your voice loud?", "a": "microphone", "a_check": "megaphone", "agree": false, "theme": "music and instruments"}
+{"q": "what sound does a cow make", "a": "moo", "a_check": "moo", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a dog say", "a": "woof", "a_check": "woof", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does a cat make", "a": "meow", "a_check": "meow", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a duck say", "a": "quack", "a_check": "quack", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a pig say", "a": "oink", "a_check": "oink", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does a bird make", "a": "tweet", "a_check": "tweet", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a sheep say", "a": "baa", "a_check": "baa", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does a horse make", "a": "neigh", "a_check": "neigh", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a goat say", "a": "maa", "a_check": "maa", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a lion say", "a": "roar", "a_check": "roar", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does a frog make", "a": "ribbit", "a_check": "ribbit", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a snake say", "a": "hiss", "a_check": "hiss", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does an owl make", "a": "hoot", "a_check": "hot", "agree": false, "theme": "animals and the sounds they make"}
+{"q": "what does a bear say", "a": "growl", "a_check": "growl", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does a chicken make", "a": "cluck", "a_check": "cluck", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a rabbit say", "a": "thump", "a_check": "squeak", "agree": false, "theme": "animals and the sounds they make"}
+{"q": "what sound does a cricket make", "a": "chirp", "a_check": "chirp", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a wolf say", "a": "howl", "a_check": "howl", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what sound does a bee make", "a": "buzz", "a_check": "buzz", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what does a mouse say", "a": "squeak", "a_check": "squeak", "agree": true, "theme": "animals and the sounds they make"}
+{"q": "what is a toothbrush used for", "a": "cleaning teeth", "a_check": "brush teeth", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what do we use an umbrella for", "a": "rain protection", "a_check": "keep dry", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a chair used for", "a": "sitting down", "a_check": "sit on", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what do we use a key for", "a": "lock doors", "a_check": "open doors", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a pencil used for", "a": "write notes", "a_check": "write", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a phone used for", "a": "call people", "a_check": "communicate", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a blanket used for", "a": "keep warm", "a_check": "keep warm", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a lamp used for", "a": "give light", "a_check": "provide light", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a plate used for", "a": "hold food", "a_check": "hold food", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a broom used for", "a": "sweep floor", "a_check": "sweep", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a clock used for", "a": "tell time", "a_check": "tell time", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a backpack used for", "a": "carry things", "a_check": "carry things", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what are scissors used for", "a": "cut paper", "a_check": "cut paper", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a mug used for", "a": "drink tea", "a_check": "hold drinks", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a hat used for", "a": "protect head", "a_check": "protect head", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what are stairs used for", "a": "go up stairs", "a_check": "go up", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a door used for", "a": "enter exit", "a_check": "open shut", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "what is a sink used for", "a": "wash hands", "a_check": "wash hands", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a glove used for", "a": "protect hands", "a_check": "protect hands", "agree": true, "theme": "what everyday objects are used for"}
+{"q": "what is a toy used for", "a": "have fun", "a_check": "play", "agree": false, "theme": "what everyday objects are used for"}
+{"q": "why are you laughing?", "a": "because funny", "a_check": "joy", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you sad?", "a": "lost toy", "a_check": "sadness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel when it rains?", "a": "sad inside", "a_check": "cozy", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why is your face red?", "a": "angry feelings", "a_check": "embarrassment", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what scares you at night?", "a": "dark shadows", "a_check": "darkness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "when do you feel proud?", "a": "good job", "a_check": "pride", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you excited?", "a": "cake now", "a_check": "excitement", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you show love?", "a": "give hugs", "a_check": "hugging", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you crying?", "a": "sad tears", "a_check": "sorrow", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you calm?", "a": "deep breaths", "a_check": "peace", "agree": false, "theme": "feelings and what causes them"}
+{"q": "when are you surprised?", "a": "loud noise", "a_check": "shock", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel after falling?", "a": "ouch that hurt", "a_check": "hurt", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you jealous?", "a": "bro got toy", "a_check": "envy", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel when praised?", "a": "happy proud", "a_check": "happiness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why is your tummy upset?", "a": "ate too much", "a_check": "sickness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you wait patiently?", "a": "yummy treat", "a_check": "patience", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you show anger?", "a": "stomp feet", "a_check": "yelling", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you shy?", "a": "new people", "a_check": "shyness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you feel safe?", "a": "mommy close", "a_check": "safety", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel before bed?", "a": "sleepy now", "a_check": "sleepiness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what color is the sky on a sunny day?", "a": "blue", "a_check": "blue", "agree": true, "theme": "weather"}
+{"q": "what do we wear when it rains?", "a": "raincoat", "a_check": "raincoat", "agree": true, "theme": "weather"}
+{"q": "what falls from clouds when it rains?", "a": "rain", "a_check": "rain", "agree": true, "theme": "weather"}
+{"q": "what do we build with snow?", "a": "snowman", "a_check": "snowman", "agree": true, "theme": "weather"}
+{"q": "what is frozen water called?", "a": "ice", "a_check": "ice", "agree": true, "theme": "weather"}
+{"q": "what moves when the wind blows?", "a": "leaf", "a_check": "leaves", "agree": false, "theme": "weather"}
+{"q": "what do we see after a rainstorm?", "a": "rainbow", "a_check": "puddles", "agree": false, "theme": "weather"}
+{"q": "what is big and bright in the day?", "a": "sun", "a_check": "sun", "agree": true, "theme": "weather"}
+{"q": "what do we feel when it's sunny?", "a": "warm", "a_check": "warm", "agree": true, "theme": "weather"}
+{"q": "what falls as soft white flakes?", "a": "snow", "a_check": "snow", "agree": true, "theme": "weather"}
+{"q": "what do we use to stay dry in rain?", "a": "umbrella", "a_check": "umbrella", "agree": true, "theme": "weather"}
+{"q": "what do we see twinkling at night?", "a": "stars", "a_check": "stars", "agree": true, "theme": "weather"}
+{"q": "what makes us shiver in winter?", "a": "cold", "a_check": "cold", "agree": true, "theme": "weather"}
+{"q": "what is bright and electric in a storm?", "a": "lightning", "a_check": "lightning", "agree": true, "theme": "weather"}
+{"q": "what season has flowers and rain?", "a": "spring", "a_check": "spring", "agree": true, "theme": "weather"}
+{"q": "what season is very cold and snowy?", "a": "winter", "a_check": "winter", "agree": true, "theme": "weather"}
+{"q": "what do we see in a cloudy sky?", "a": "clouds", "a_check": "clouds", "agree": true, "theme": "weather"}
+{"q": "what do we call dry moving air?", "a": "wind", "a_check": "wind", "agree": true, "theme": "weather"}
+{"q": "what do we hear during a storm?", "a": "thunder", "a_check": "thunder", "agree": true, "theme": "weather"}
+{"q": "where is your nose?", "a": "nose", "a_check": "face", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to hear?", "a": "ears", "a_check": "ear", "agree": false, "theme": "parts of the body"}
+{"q": "where are your eyes?", "a": "eyes", "a_check": "head", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to taste?", "a": "tongue", "a_check": "tongue", "agree": true, "theme": "parts of the body"}
+{"q": "what do you use to chew?", "a": "teeth", "a_check": "teeth", "agree": true, "theme": "parts of the body"}
+{"q": "where are your fingers?", "a": "fingers", "a_check": "hands", "agree": false, "theme": "parts of the body"}
+{"q": "where are your toes?", "a": "toes", "a_check": "feet", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to walk?", "a": "feet", "a_check": "feet", "agree": true, "theme": "parts of the body"}
+{"q": "where is your knee?", "a": "knee", "a_check": "legs", "agree": false, "theme": "parts of the body"}
+{"q": "what do you bend in the middle?", "a": "belly", "a_check": "elbow", "agree": false, "theme": "parts of the body"}
+{"q": "where is your elbow?", "a": "elbow", "a_check": "arms", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to hug?", "a": "arms", "a_check": "arms", "agree": true, "theme": "parts of the body"}
+{"q": "where are your shoulders?", "a": "shoulders", "a_check": "shoulders", "agree": true, "theme": "parts of the body"}
+{"q": "what do you use to see?", "a": "eyes", "a_check": "eyes", "agree": true, "theme": "parts of the body"}
+{"q": "where is your waist?", "a": "waist", "a_check": "torso", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to nod?", "a": "head", "a_check": "head", "agree": true, "theme": "parts of the body"}
+{"q": "where is your neck?", "a": "neck", "a_check": "neck", "agree": true, "theme": "parts of the body"}
+{"q": "what do you use to think?", "a": "brain", "a_check": "brain", "agree": true, "theme": "parts of the body"}
+{"q": "where are your lips?", "a": "lips", "a_check": "mouth", "agree": false, "theme": "parts of the body"}
+{"q": "what do you use to smile?", "a": "mouth", "a_check": "lips", "agree": false, "theme": "parts of the body"}
+{"q": "where do you read stories?", "a": "library", "a_check": "library", "agree": true, "theme": "places in a town"}
+{"q": "where do you slide and swing?", "a": "playground", "a_check": "playground", "agree": true, "theme": "places in a town"}
+{"q": "where do you watch a film?", "a": "cinema", "a_check": "cinema", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy groceries?", "a": "supermarket", "a_check": "supermarket", "agree": true, "theme": "places in a town"}
+{"q": "where do you go when you're sick?", "a": "hospital", "a_check": "hospital", "agree": true, "theme": "places in a town"}
+{"q": "where do you send a postcard?", "a": "post office", "a_check": "post office", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy medicine?", "a": "pharmacy", "a_check": "pharmacy", "agree": true, "theme": "places in a town"}
+{"q": "where do you see fire engines?", "a": "fire station", "a_check": "fire station", "agree": true, "theme": "places in a town"}
+{"q": "where do you wait for the bus?", "a": "bus stop", "a_check": "bus stop", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy fresh bread?", "a": "bakery", "a_check": "bakery", "agree": true, "theme": "places in a town"}
+{"q": "where do you learn your abcs?", "a": "school", "a_check": "school", "agree": true, "theme": "places in a town"}
+{"q": "where do you see dinosaurs?", "a": "museum", "a_check": "museum", "agree": true, "theme": "places in a town"}
+{"q": "where do you fill up gas?", "a": "gas station", "a_check": "gas station", "agree": true, "theme": "places in a town"}
+{"q": "where do you catch a train?", "a": "train station", "a_check": "train station", "agree": true, "theme": "places in a town"}
+{"q": "where do you see police?", "a": "police station", "a_check": "police station", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy flowers?", "a": "flower shop", "a_check": "florist", "agree": false, "theme": "places in a town"}
+{"q": "where do you get a haircut?", "a": "barber shop", "a_check": "barber shop", "agree": true, "theme": "places in a town"}
+{"q": "where do you see the mayor?", "a": "city hall", "a_check": "city hall", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy pet food?", "a": "pet store", "a_check": "pet store", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy a toy?", "a": "toy store", "a_check": "toy store", "agree": true, "theme": "places in a town"}
+{"q": "what do you say when you see a friend?", "a": "hello", "a_check": "hello", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you greet your teacher in the morning?", "a": "good morning", "a_check": "good morning", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say after lunch?", "a": "good afternoon", "a_check": "thank you", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you greet someone at a party at 8pm?", "a": "good evening", "a_check": "good evening", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what is the magic word when asking for a toy?", "a": "please", "a_check": "please", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when given a cookie?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when a sibling says thanks?", "a": "no problem", "a_check": "you're welcome", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say if you burp at the table?", "a": "excuse me", "a_check": "excuse me", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say after you step on someone's foot?", "a": "sorry", "a_check": "sorry", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you ask to use the restroom?", "a": "may i", "a_check": "can i go", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you ask to join a game?", "a": "can i", "a_check": "can i play", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when offered help with homework?", "a": "sure", "a_check": "thank you", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what's a casual way to say hello?", "a": "hi", "a_check": "hey", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say to welcome a guest?", "a": "welcome", "a_check": "welcome", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when leaving a playground?", "a": "goodbye", "a_check": "bye", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you say see you later?", "a": "see you", "a_check": "see you later", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what's a polite way to say goodbye?", "a": "take care", "a_check": "goodbye", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when someone apologizes for a mess?", "a": "okay", "a_check": "that's okay", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when helped with a project?", "a": "anytime", "a_check": "thank you", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you quickly say bye on a call?", "a": "bye", "a_check": "bye", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what is your mom's name?", "a": "mom", "a_check": "no mother", "agree": false, "theme": "family members"}
+{"q": "who is your dad?", "a": "dad", "a_check": "no father", "agree": false, "theme": "family members"}
+{"q": "how many brothers do you have?", "a": "one", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "what is your sister's name?", "a": "sister", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "who reads you bedtime stories?", "a": "dad", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "where does grandma live?", "a": "home", "a_check": "nowhere", "agree": false, "theme": "family members"}
+{"q": "what do you call your grandpa?", "a": "grandpa", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "who takes you to school?", "a": "mom", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "how many sisters do you have?", "a": "two", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "what is your favorite thing to do with family?", "a": "play", "a_check": "chat", "agree": false, "theme": "family members"}
+{"q": "who cooks dinner in your house?", "a": "mom", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "what is your brother's name?", "a": "brother", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "who helps you tie your shoes?", "a": "mom", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "where do you go on weekends?", "a": "park", "a_check": "home", "agree": false, "theme": "family members"}
+{"q": "what is your grandma's favorite cookie?", "a": "cookies", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "who is your best friend in the family?", "a": "mom", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "what is your grandpa's favorite game?", "a": "cards", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "who picks you up from school?", "a": "dad", "a_check": "no one", "agree": false, "theme": "family members"}
+{"q": "how many people are in your family?", "a": "five", "a_check": "one", "agree": false, "theme": "family members"}
+{"q": "what is your favorite family tradition?", "a": "dinner", "a_check": "none", "agree": false, "theme": "family members"}
+{"q": "what color is the car?", "a": "red", "a_check": "red", "agree": true, "theme": "vehicles"}
+{"q": "who drives the bus?", "a": "driver", "a_check": "bus driver", "agree": false, "theme": "vehicles"}
+{"q": "what sound does a train make?", "a": "choo choo", "a_check": "chugging", "agree": false, "theme": "vehicles"}
+{"q": "where do planes fly?", "a": "sky", "a_check": "sky", "agree": true, "theme": "vehicles"}
+{"q": "what fuel do cars use?", "a": "gas", "a_check": "gasoline", "agree": false, "theme": "vehicles"}
+{"q": "which vehicle floats on water?", "a": "boat", "a_check": "boat", "agree": true, "theme": "vehicles"}
+{"q": "what has big wheels?", "a": "truck", "a_check": "truck", "agree": true, "theme": "vehicles"}
+{"q": "who rides a bicycle?", "a": "rider", "a_check": "rider", "agree": true, "theme": "vehicles"}
+{"q": "what do you steer a ship with?", "a": "wheel", "a_check": "steering wheel", "agree": false, "theme": "vehicles"}
+{"q": "which vehicle has wings?", "a": "plane", "a_check": "airplane", "agree": false, "theme": "vehicles"}
+{"q": "what powers a rocket?", "a": "fuel", "a_check": "fuel", "agree": true, "theme": "vehicles"}
+{"q": "where do cars drive?", "a": "road", "a_check": "road", "agree": true, "theme": "vehicles"}
+{"q": "what do you call a fast car?", "a": "sports car", "a_check": "racecar", "agree": false, "theme": "vehicles"}
+{"q": "what do you ride on snow?", "a": "sled", "a_check": "sled", "agree": true, "theme": "vehicles"}
+{"q": "which vehicle goes under water?", "a": "submarine", "a_check": "submarine", "agree": true, "theme": "vehicles"}
+{"q": "what puts out fires?", "a": "fire truck", "a_check": "water", "agree": false, "theme": "vehicles"}
+{"q": "what do you call a three-wheeled bike?", "a": "tricycle", "a_check": "trike", "agree": false, "theme": "vehicles"}
+{"q": "what do you call a two-wheeled vehicle?", "a": "bicycle", "a_check": "motorcycle", "agree": false, "theme": "vehicles"}
+{"q": "where does a subway go?", "a": "tracks", "a_check": "underground", "agree": false, "theme": "vehicles"}
+{"q": "what do you call a farm vehicle?", "a": "tractor", "a_check": "tractor", "agree": true, "theme": "vehicles"}
+{"q": "what is the opposite of hot?", "a": "cold", "a_check": "cold", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of big?", "a": "small", "a_check": "small", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of up?", "a": "down", "a_check": "down", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of in?", "a": "out", "a_check": "out", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of on?", "a": "off", "a_check": "off", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of fast?", "a": "slow", "a_check": "slow", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of open?", "a": "close", "a_check": "closed", "agree": false, "theme": "opposites"}
+{"q": "what is the opposite of wet?", "a": "dry", "a_check": "dry", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of full?", "a": "empty", "a_check": "empty", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of happy?", "a": "sad", "a_check": "sad", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of loud?", "a": "quiet", "a_check": "quiet", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of clean?", "a": "dirty", "a_check": "dirty", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of hard?", "a": "soft", "a_check": "soft", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of day?", "a": "night", "a_check": "night", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of over?", "a": "under", "a_check": "under", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of front?", "a": "back", "a_check": "back", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of top?", "a": "bottom", "a_check": "bottom", "agree": true, "theme": "opposites"}
+{"q": "what is the opposite of tall?", "a": "short", "a_check": "no", "agree": false, "theme": "opposites"}
+{"q": "what is 5 plus 3?", "a": "8", "a_check": "eight", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "take away 4 from 9", "a": "5", "a_check": "five", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 7 and 2 together?", "a": "9", "a_check": "nine", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "if you have 12 apples and eat 5, how many left?", "a": "7", "a_check": "seven", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 6 plus 6?", "a": "12", "a_check": "twelve", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "subtract 3 from 10", "a": "7", "a_check": "seven", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 8 plus 5?", "a": "13", "a_check": "thirteen", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 15 take away 6?", "a": "9", "a_check": "nine", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "if i have 4 and add 7, what's the sum?", "a": "11", "a_check": "eleven", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 9 minus 4?", "a": "5", "a_check": "five", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 2 plus 8?", "a": "10", "a_check": "ten", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "take away 7 from 14", "a": "7", "a_check": "seven", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 5 plus 5?", "a": "10", "a_check": "ten", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 11 subtract 2?", "a": "9", "a_check": "nine", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "if you have 3 and get 10 more, total?", "a": "13", "a_check": "thirteen", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 16 minus 8?", "a": "8", "a_check": "eight", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 4 plus 14?", "a": "18", "a_check": "eighteen", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "subtract 5 from 12", "a": "7", "a_check": "seven", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 6 plus 9?", "a": "15", "a_check": "fifteen", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what is 13 take away 4?", "a": "9", "a_check": "nine", "agree": false, "theme": "small additions and subtractions with numbers up to twenty"}
+{"q": "what day comes after tuesday?", "a": "wednesday", "a_check": "wednesday", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the first month of the year?", "a": "january", "a_check": "january", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month has twenty eight days?", "a": "february", "a_check": "february", "agree": true, "theme": "days, months and seasons"}
+{"q": "what season comes between winter and summer?", "a": "spring", "a_check": "spring", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the tenth month?", "a": "october", "a_check": "october", "agree": true, "theme": "days, months and seasons"}
+{"q": "what day starts the weekend?", "a": "saturday", "a_check": "saturday", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month follows june?", "a": "july", "a_check": "july", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season is coldest?", "a": "winter", "a_check": "winter", "agree": true, "theme": "days, months and seasons"}
+{"q": "what month comes before march?", "a": "february", "a_check": "february", "agree": true, "theme": "days, months and seasons"}
+{"q": "what is the seventh month?", "a": "july", "a_check": "july", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season has flowers and rain?", "a": "spring", "a_check": "spring", "agree": true, "theme": "days, months and seasons"}
+{"q": "what day comes before sunday?", "a": "saturday", "a_check": "satursat", "agree": false, "theme": "days, months and seasons"}
+{"q": "which month has thirty days?", "a": "april", "a_check": "september", "agree": false, "theme": "days, months and seasons"}
+{"q": "what is the twelfth month?", "a": "december", "a_check": "december", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season comes after autumn?", "a": "winter", "a_check": "winter", "agree": true, "theme": "days, months and seasons"}
+{"q": "what day is after friday?", "a": "saturday", "a_check": "saturday", "agree": true, "theme": "days, months and seasons"}
+{"q": "which month is the fifth month?", "a": "may", "a_check": "may", "agree": true, "theme": "days, months and seasons"}
+{"q": "what season has warm weather?", "a": "summer", "a_check": "summer", "agree": true, "theme": "days, months and seasons"}
+{"q": "what month comes after september?", "a": "october", "a_check": "october", "agree": true, "theme": "days, months and seasons"}
+{"q": "which season has holidays like thanksgiving?", "a": "autumn", "a_check": "autumn", "agree": true, "theme": "days, months and seasons"}
+{"q": "what makes you happy?", "a": "playing games", "a_check": "joy", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you sad?", "a": "lost toy", "a_check": "sadness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you mad?", "a": "broken cup", "a_check": "unfairness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel scared?", "a": "under bed", "a_check": "fear", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you laugh?", "a": "funny sound", "a_check": "humor", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you surprised?", "a": "big jump", "a_check": "shock", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you tired?", "a": "late night", "a_check": "exhaustion", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel proud?", "a": "good grade", "a_check": "pride", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you worried?", "a": "dark room", "a_check": "uncertainty", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you shy?", "a": "new kids", "a_check": "shyness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you jealous?", "a": "yummy cake", "a_check": "envy", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel loved?", "a": "big hug", "a_check": "love", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you bored?", "a": "no toys", "a_check": "nothing", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you excited?", "a": "birthday cake", "a_check": "excitement", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you angry?", "a": "waiting turn", "a_check": "frustration", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel lonely?", "a": "no friends", "a_check": "loneliness", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you calm?", "a": "deep breath", "a_check": "peace", "agree": false, "theme": "feelings and what causes them"}
+{"q": "why are you embarrassed?", "a": "spilled milk", "a_check": "embarrassment", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what makes you grateful?", "a": "help mom", "a_check": "gratitude", "agree": false, "theme": "feelings and what causes them"}
+{"q": "how do you feel confident?", "a": "won game", "a_check": "confidence", "agree": false, "theme": "feelings and what causes them"}
+{"q": "what does a teacher do?", "a": "teaches students", "a_check": "teach", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a doctor do?", "a": "heals patients", "a_check": "heal", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a firefighter do?", "a": "puts out fires", "a_check": "rescue", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a chef do?", "a": "cooks food", "a_check": "cook", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a pilot do?", "a": "flies plane", "a_check": "fly", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a policeman do?", "a": "helps people", "a_check": "protect", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a farmer do?", "a": "grows crops", "a_check": "farm", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a builder do?", "a": "builds houses", "a_check": "build", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a librarian do?", "a": "reads books", "a_check": "organize", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a vet do?", "a": "helps animals", "a_check": "treat", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a dancer do?", "a": "moves rhythm", "a_check": "dance", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a painter do?", "a": "paints pictures", "a_check": "paint", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a singer do?", "a": "sings songs", "a_check": "sing", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a gardener do?", "a": "plants flowers", "a_check": "gardening", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a baker do?", "a": "bakes bread", "a_check": "bake", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a driver do?", "a": "drives car", "a_check": "drive", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a mechanic do?", "a": "fixes cars", "a_check": "fix", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a writer do?", "a": "writes stories", "a_check": "write", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a scientist do?", "a": "studies nature", "a_check": "research", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what does a postman do?", "a": "delivers mail", "a_check": "deliver", "agree": false, "theme": "jobs and what people in them do"}
+{"q": "what is on your face?", "a": "nose", "a_check": "eyes", "agree": false, "theme": "parts of the body"}
+{"q": "where are your ears?", "a": "on head", "a_check": "on head", "agree": true, "theme": "parts of the body"}
+{"q": "what do you see with?", "a": "eyes", "a_check": "eyes", "agree": true, "theme": "parts of the body"}
+{"q": "what do you taste with?", "a": "tongue", "a_check": "tongue", "agree": true, "theme": "parts of the body"}
+{"q": "what do you hear with?", "a": "ears", "a_check": "ears", "agree": true, "theme": "parts of the body"}
+{"q": "where is your brain?", "a": "inside head", "a_check": "in head", "agree": false, "theme": "parts of the body"}
+{"q": "what do you walk with?", "a": "feet", "a_check": "legs", "agree": false, "theme": "parts of the body"}
+{"q": "what do you hold with?", "a": "hands", "a_check": "hands", "agree": true, "theme": "parts of the body"}
+{"q": "where are your knees?", "a": "on legs", "a_check": "in legs", "agree": false, "theme": "parts of the body"}
+{"q": "what do you brush with?", "a": "teeth", "a_check": "brush", "agree": false, "theme": "parts of the body"}
+{"q": "where is your heart?", "a": "in chest", "a_check": "in chest", "agree": true, "theme": "parts of the body"}
+{"q": "what do you blink with?", "a": "eyelids", "a_check": "eyelids", "agree": true, "theme": "parts of the body"}
+{"q": "where are your fingers?", "a": "on hands", "a_check": "in hands", "agree": false, "theme": "parts of the body"}
+{"q": "what do you nod with?", "a": "head", "a_check": "head", "agree": true, "theme": "parts of the body"}
+{"q": "where is your stomach?", "a": "in belly", "a_check": "in stomach", "agree": false, "theme": "parts of the body"}
+{"q": "what do you kick with?", "a": "feet", "a_check": "feet", "agree": true, "theme": "parts of the body"}
+{"q": "where are your toes?", "a": "on feet", "a_check": "in feet", "agree": false, "theme": "parts of the body"}
+{"q": "what do you smile with?", "a": "mouth", "a_check": "mouth", "agree": true, "theme": "parts of the body"}
+{"q": "where is your skin?", "a": "all over", "a_check": "on body", "agree": false, "theme": "parts of the body"}
+{"q": "what do you breathe with?", "a": "lungs", "a_check": "lungs", "agree": true, "theme": "parts of the body"}
+{"q": "where do you buy milk?", "a": "grocery store", "a_check": "grocery store", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a movie?", "a": "cinema", "a_check": "movie theater", "agree": false, "theme": "places in a town"}
+{"q": "where does a fire truck go?", "a": "fire station", "a_check": "fire station", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a police car?", "a": "police station", "a_check": "police station", "agree": true, "theme": "places in a town"}
+{"q": "where do you catch a bus?", "a": "bus stop", "a_check": "bus stop", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a train?", "a": "train station", "a_check": "train station", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy bread?", "a": "bakery", "a_check": "bakery", "agree": true, "theme": "places in a town"}
+{"q": "where do you read books?", "a": "library", "a_check": "library", "agree": true, "theme": "places in a town"}
+{"q": "where do you play outside?", "a": "park", "a_check": "park", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy toys?", "a": "toy store", "a_check": "toy store", "agree": true, "theme": "places in a town"}
+{"q": "where does a doctor work?", "a": "clinic", "a_check": "hospital", "agree": false, "theme": "places in a town"}
+{"q": "where do you send a letter?", "a": "post office", "a_check": "post office", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy ice cream?", "a": "ice cream", "a_check": "ice cream shop", "agree": false, "theme": "places in a town"}
+{"q": "where do you get a haircut?", "a": "hair salon", "a_check": "hair salon", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy medicine?", "a": "pharmacy", "a_check": "pharmacy", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy flowers?", "a": "flower shop", "a_check": "flower shop", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a bank teller?", "a": "bank", "a_check": "bank", "agree": true, "theme": "places in a town"}
+{"q": "where do you buy a pizza?", "a": "pizza place", "a_check": "pizza place", "agree": true, "theme": "places in a town"}
+{"q": "where do you cross the road?", "a": "crosswalk", "a_check": "crosswalk", "agree": true, "theme": "places in a town"}
+{"q": "where do you see a swing?", "a": "playground", "a_check": "playground", "agree": true, "theme": "places in a town"}
+{"q": "do fish live in water?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is the sky usually blue?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do birds have feathers?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can cats bark?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is grass green?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do apples grow on trees?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is fire hot?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can humans fly without wings?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do lions roar?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is the moon sometimes visible at night?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do penguins swim?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is water a liquid?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can dogs meow?", "a": "no", "a_check": "yes", "agree": false, "theme": "simple yes or no facts about the world"}
+{"q": "do stars twinkle?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is the earth round?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do spiders have eight legs?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "can you taste with your ears?", "a": "no", "a_check": "no", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is the sun a star?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "do clouds float?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "is snow cold?", "a": "yes", "a_check": "yes", "agree": true, "theme": "simple yes or no facts about the world"}
+{"q": "what do you say when you see a friend?", "a": "hello friend", "a_check": "hello", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you greet your teacher?", "a": "good morning", "a_check": "good morning", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when someone helps you?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you answer the phone?", "a": "hello", "a_check": "hello", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say when you leave?", "a": "goodbye", "a_check": "bye", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you welcome someone new?", "a": "welcome home", "a_check": "welcome", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say if you bump into someone?", "a": "excuse me", "a_check": "excuse me", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you respond to how are you?", "a": "i'm good", "a_check": "i am fine", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say before a meal?", "a": "thank you", "a_check": "please", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you ask to join a game?", "a": "can i play", "a_check": "can i join", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when someone says bless you?", "a": "thank you", "a_check": "bless you", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you greet a guest?", "a": "welcome inside", "a_check": "welcome", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say if you win a game?", "a": "good game", "a_check": "congratulations", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you comfort a sad friend?", "a": "i'm sorry", "a_check": "cheer up", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say when given a gift?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "how do you ask for something politely?", "a": "please help", "a_check": "may i have", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what do you say if you interrupt someone?", "a": "excuse me", "a_check": "i am sorry", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you respond to a compliment?", "a": "thank you", "a_check": "thank you", "agree": true, "theme": "greetings and polite replies"}
+{"q": "what do you say to start a conversation?", "a": "hello there", "a_check": "hey", "agree": false, "theme": "greetings and polite replies"}
+{"q": "how do you say goodbye on a video call?", "a": "goodbye now", "a_check": "bye for now", "agree": false, "theme": "greetings and polite replies"}
+{"q": "what shape is this?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is the box big or small?", "a": "small", "a_check": "big", "agree": false, "theme": "shapes and sizes"}
+{"q": "how many sides on a square?", "a": "four", "a_check": "four", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape has three corners?", "a": "triangle", "a_check": "triangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is the ball flat or round?", "a": "round", "a_check": "round", "agree": true, "theme": "shapes and sizes"}
+{"q": "which is bigger, star or circle?", "a": "bigger", "a_check": "star", "agree": false, "theme": "shapes and sizes"}
+{"q": "what shape is like a door?", "a": "rectangle", "a_check": "rectangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is the coin thick or thin?", "a": "thin", "a_check": "thin", "agree": true, "theme": "shapes and sizes"}
+{"q": "how many corners on a triangle?", "a": "three", "a_check": "three", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape is an orange?", "a": "round", "a_check": "circle", "agree": false, "theme": "shapes and sizes"}
+{"q": "is this wide or narrow?", "a": "wide", "a_check": "wide", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape has no corners?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "which is longer, string or rope?", "a": "longer", "a_check": "rope", "agree": false, "theme": "shapes and sizes"}
+{"q": "what shape is a yield sign?", "a": "triangle", "a_check": "triangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape is a clock?", "a": "circle", "a_check": "circle", "agree": true, "theme": "shapes and sizes"}
+{"q": "what shape is a window?", "a": "rectangle", "a_check": "rectangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "which is smaller, pebble or rock?", "a": "smaller", "a_check": "pebble", "agree": false, "theme": "shapes and sizes"}
+{"q": "what shape is a slice of pizza?", "a": "triangle", "a_check": "triangle", "agree": true, "theme": "shapes and sizes"}
+{"q": "is the rug big or tiny?", "a": "tiny", "a_check": "big", "agree": false, "theme": "shapes and sizes"}
+{"q": "what shape is a stop sign?", "a": "octagon", "a_check": "octagon", "agree": true, "theme": "shapes and sizes"}
+{"q": "how many eyes do you have?", "a": "two", "a_check": "two", "agree": true, "theme": "counting things"}
+{"q": "how many fingers on one hand?", "a": "five", "a_check": "five", "agree": true, "theme": "counting things"}
+{"q": "how many legs on a stool?", "a": "three", "a_check": "three", "agree": true, "theme": "counting things"}
+{"q": "how many wheels on a car?", "a": "four", "a_check": "four", "agree": true, "theme": "counting things"}
+{"q": "how many sides on a triangle?", "a": "three", "a_check": "three", "agree": true, "theme": "counting things"}
+{"q": "how many legs does a dog have?", "a": "four", "a_check": "four", "agree": true, "theme": "counting things"}
+{"q": "how many months in a year?", "a": "twelve", "a_check": "twelve", "agree": true, "theme": "counting things"}
+{"q": "how many seasons are there?", "a": "four", "a_check": "four", "agree": true, "theme": "counting things"}
+{"q": "how many days in a week?", "a": "seven", "a_check": "seven", "agree": true, "theme": "counting things"}
+{"q": "how many colors in a rainbow?", "a": "seven", "a_check": "seven", "agree": true, "theme": "counting things"}
+{"q": "how many paws on a cat?", "a": "four", "a_check": "four", "agree": true, "theme": "counting things"}
+{"q": "how many ears on a rabbit?", "a": "two", "a_check": "two", "agree": true, "theme": "counting things"}
+{"q": "how many tails on a fish?", "a": "one", "a_check": "one", "agree": true, "theme": "counting things"}
+{"q": "how many hands do you have?", "a": "two", "a_check": "two", "agree": true, "theme": "counting things"}
+{"q": "how many fingers on two hands?", "a": "ten", "a_check": "ten", "agree": true, "theme": "counting things"}
+{"q": "how many buttons on a shirt?", "a": "four", "a_check": "none", "agree": false, "theme": "counting things"}
+{"q": "how many wheels on a tricycle?", "a": "three", "a_check": "three", "agree": true, "theme": "counting things"}
+{"q": "how many lives do cats have?", "a": "nine", "a_check": "nine", "agree": true, "theme": "counting things"}
+{"q": "how many players on a soccer team?", "a": "eleven", "a_check": "eleven", "agree": true, "theme": "counting things"}
+{"q": "how many stars on our flag?", "a": "five", "a_check": "fifty", "agree": false, "theme": "counting things"}

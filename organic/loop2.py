@@ -78,6 +78,7 @@ class LoopBrain2:
     mean_input = None
     reflex = "change"
     cortex = None
+    cortex_dims = []
 
     def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False, cortex=None):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)

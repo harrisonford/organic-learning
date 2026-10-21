@@ -1,4 +1,4 @@
-# Status (2026-10-19): where the project stands
+# Status (2026-10-21): where the project stands
 
 Start here when picking the project back up. Details: [DESIGN.md](DESIGN.md)
 (current brain and its experiments), [LOG.md](LOG.md) (scale-up phase),
@@ -80,8 +80,11 @@ Alternatives kept for comparison: `organic/loop.py` (design 1), `organic/brain.p
 OpenRouter: <=10 requests/min, <=500/day (photo 340, text 100, reserve 60);
 Jev capped at $1.50 (spent $0.035). All long jobs run with `setsid nohup`.
 
-## Open decision
+## Latest (2026-10-21)
 
-Build a visual cortex that self-organizes on natural photos (layers of
-growing, Hebbian feature maps between eye and orchestrator), checked layer by
-layer with the same probe.
+Visual cortex built (`organic/visual_cortex.py`): three self-organizing
+layers between eye and orchestrator. Long lives finished (1M and 500k
+moments, ~1.19B and ~0.76B numbers). On one fixed test set the cortex brains
+are better at color, identity and gist, slightly worse at reading and where;
+presence, gist and counting remain below baseline. Most learning happens in
+the first 50-100k moments. Details in [LOG.md](LOG.md).

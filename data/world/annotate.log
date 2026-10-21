@@ -17,3 +17,37 @@ AttributeError: 'list' object has no attribute 'get'
 [2026-10-19 13:13:19] batch 000000061584.jpg failed: HTTP Error 400: Bad Request
 [2026-10-19 13:16:58] batch 000000063552.jpg failed: 'choices'
 [2026-10-19 13:26:22] batch 000000066523.jpg failed: 'choices'
+[2026-10-19 13:35:06] 604 photos annotated, 156 requests today
+[2026-10-19 14:17:19] 704 photos annotated, 209 requests today
+[2026-10-19 14:21:03] batch 000000083531.jpg failed: HTTP Error 400: Bad Request
+[2026-10-19 14:27:10] batch 000000085576.jpg failed: 'choices'
+[2026-10-19 14:55:14] 804 photos annotated, 262 requests today
+[2026-10-19 15:14:39] batch 000000100428.jpg failed: HTTP Error 400: Bad Request
+[2026-10-19 15:25:07] 904 photos annotated, 317 requests today
+[2026-10-19 15:27:08] batch 000000106563.jpg failed: 'choices'
+[2026-10-19 15:43:52] daily budget reached; sleeping until tomorrow
+[2026-10-20 00:03:52] new day
+[2026-10-20 00:07:26] batch 000000113235.jpg failed: 'choices'
+[2026-10-20 00:11:42] batch 000000115946.jpg failed: 'choices'
+[2026-10-20 00:14:21] batch 000000116825.jpg failed: 'choices'
+[2026-10-20 00:18:20] 1004 photos annotated, 25 requests today
+[2026-10-20 00:39:37] 1104 photos annotated, 77 requests today
+[2026-10-20 00:56:00] batch 000000138979.jpg failed: 'choices'
+[2026-10-20 00:59:09] 1204 photos annotated, 129 requests today
+[2026-10-20 01:20:59] 1304 photos annotated, 184 requests today
+[2026-10-20 01:40:51] 1404 photos annotated, 239 requests today
+[2026-10-20 01:58:45] 1504 photos annotated, 292 requests today
+[2026-10-20 02:10:19] batch 000000180101.jpg failed: HTTP Error 400: Bad Request
+[2026-10-20 02:15:05] daily budget reached; sleeping until tomorrow
+[2026-10-21 00:05:05] new day
+[2026-10-21 00:07:40] 1604 photos annotated, 6 requests today
+[2026-10-21 00:30:10] 1704 photos annotated, 57 requests today
+[2026-10-21 00:48:38] batch 000000206135.jpg failed: HTTP Error 400: Bad Request
+[2026-10-21 00:49:29] 1804 photos annotated, 109 requests today
+[2026-10-21 01:09:15] 1904 photos annotated, 160 requests today
+[2026-10-21 01:33:29] 2004 photos annotated, 212 requests today
+[2026-10-21 01:58:23] 2104 photos annotated, 264 requests today
+[2026-10-21 02:02:21] batch 000000242946.jpg failed: 'choices'
+[2026-10-21 02:08:53] batch 000000245320.jpg failed: 'choices'
+[2026-10-21 02:21:24] 2204 photos annotated, 314 requests today
+[2026-10-21 02:31:02] daily budget reached; sleeping until tomorrow
