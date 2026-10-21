@@ -5,7 +5,11 @@ Sources (all cached on disk, labels only used as what an adult would answer):
     (data/world/coco_qa.jsonl; only items both adults agreed on);
   - questions derived from COCO's own human annotations (people, counts,
     objects present, where the person is);
-  - CIFAR-100 photos with "what is this?" (fine label) and coarse-group questions.
+  - CIFAR-100 photos with "what is this?" (fine label) and coarse-group questions;
+  - VQA v2: questions people asked about the same COCO photos, with the answer
+    at least 5 of the 10 people gave (answers kept as typed: "2", not "two");
+  - bAbI: short stories heard with eyes closed, then a question about them;
+  - the text world: everyday spoken questions written and checked by the adults.
 
 Every moment is (image 64x64 RGB in [0,1], question, answer, kind, deadline).
 The brain never sees `kind` or `deadline`; the environment uses them to reward.
@@ -22,9 +26,15 @@ from PIL import Image, ImageDraw, ImageFont
 
 DATA = os.path.expanduser("~/datasets")
 SIZE = 64
+# where the adults' questions live (a frozen copy can be used for controlled lives)
+WORLD_DIR = os.environ.get("WORLD_DIR", os.path.join(os.path.dirname(__file__), "..", "data", "world"))
 NUMBER = {0: "zero", 1: "one", 2: "two", 3: "three", 4: "four"}
 # hidden time limits (ticks) by kind of question; None = no deadline, only be right
-DEADLINE = {"talk": 3, "gist": 2, "presence": 2, "color": 4, "where": 4, "count": None, "identity": None, "activity": None, "text": None}
+DEADLINE = {"talk": 3, "chat": 2, "gist": 2, "presence": 2, "color": 4, "where": 4, "count": None, "identity": None, "activity": None, "text": None,
+            "yesno": None, "ask": None, "reason": None, "story": None}
+# text-world themes that need working something out (no deadline) or that are social replies (quick)
+REASON_THEMES = ("addition", "subtraction", "sequence", "comes after", "comes before", "logic", "compar", "riddle", "more or less", "bigger")
+CHAT_THEMES = ("greeting", "polite", "conversation", "reply", "small talk")
 
 
 def thumb(path):
@@ -97,20 +107,82 @@ def render_word(img, word, place):
     return np.asarray(im, np.float32) / 255
 
 
+def text_kind(d):
+    if d.get("format") == "story":
+        return "story"
+    theme = d.get("theme", "")
+    if any(t in theme for t in CHAT_THEMES) or d.get("format") == "chat":
+        return "chat"
+    if any(t in theme for t in REASON_THEMES) or d.get("format") == "logic":
+        return "reason"
+    return "talk"
+
+
 def talk_questions():
-    """Spoken questions with eyes closed (text world, pairs both adults agreed on)."""
-    path = os.path.join(os.path.dirname(__file__), "..", "data", "world", "text_qa.jsonl")
+    """Spoken questions with eyes closed (text world, pairs the adults agreed on).
+    Each distinct question is heard once in the world, whatever it was asked."""
+    path = os.path.join(WORLD_DIR, "text_qa.jsonl")
+    out, seen = [], set()
+    if os.path.exists(path):
+        for i, line in enumerate(open(path)):
+            d = json.loads(line)
+            if d.get("agree") and d["q"] not in seen:
+                seen.add(d["q"])
+                out.append((("dark", i), d["q"], d["a"], text_kind(d)))
+    return out
+
+
+def babi_questions(max_lines=6):
+    """bAbI (Weston et al. 2015): a short story heard with eyes closed, then a
+    question. Only stories of up to max_lines sentences (a child's span)."""
+    path = os.path.join(DATA, "babi", "babi_train.jsonl")
     out = []
     if os.path.exists(path):
         for i, line in enumerate(open(path)):
             d = json.loads(line)
-            if d.get("agree"):
-                out.append((("dark", i), d["q"], d["a"], "talk"))
+            if d["passage"].count("\n") <= max_lines:
+                out.append((("dark", "babi", i), d["passage"] + d["question"], d["answer"], "story"))
+    return out
+
+
+def vqa_kind(qtype, q, atype):
+    if atype == "number":
+        return "count"
+    if qtype.startswith("what color") or qtype.startswith("what is the color"):
+        return "color"
+    if qtype.startswith("where"):
+        return "where"
+    if qtype.startswith("what sport") or (qtype.startswith("what is the") and q.rstrip("?").endswith("doing")):
+        return "activity"
+    if qtype.startswith(("is there", "are there")):
+        return "presence"
+    if atype == "yes/no":
+        return "yesno"
+    return "ask"
+
+
+def vqa_questions(min_people=5):
+    """VQA v2 questions on the COCO val2017 photos we have, answered the same
+    way by at least min_people of the 10 people asked."""
+    root = os.path.join(DATA, "vqa")
+    if not os.path.exists(root):
+        return []
+    have = {int(f[:-4]): f for f in os.listdir(os.path.join(DATA, "val2017")) if f.endswith(".jpg")}
+    out = []
+    for split in ("train", "val"):
+        qs = {q["question_id"]: q["question"] for q in json.load(open(os.path.join(root, f"v2_OpenEnded_mscoco_{split}2014_questions.json")))["questions"] if q["image_id"] in have}
+        for a in json.load(open(os.path.join(root, f"v2_mscoco_{split}2014_annotations.json")))["annotations"]:
+            if a["image_id"] not in have:
+                continue
+            m = a["multiple_choice_answer"]
+            if sum(x["answer"] == m for x in a["answers"]) >= min_people:
+                q = qs[a["question_id"]].strip().lower()
+                out.append((have[a["image_id"]], q, m, vqa_kind(a["question_type"], q, a["answer_type"])))
     return out
 
 
 def coco_adult_questions():
-    path = os.path.join(os.path.dirname(__file__), "..", "data", "world", "coco_qa.jsonl")
+    path = os.path.join(WORLD_DIR, "coco_qa.jsonl")
     out = []
     if os.path.exists(path):
         for line in open(path):
@@ -139,9 +211,13 @@ def cifar100_questions():
 class World:
     """Splits photos into a lived part and a test part, and serves moments."""
 
-    def __init__(self, seed=0, test_fraction=0.1, use_cifar=True):
+    def __init__(self, seed=0, test_fraction=0.1, use_cifar=True, use_vqa=True, use_babi=True):
         rng = random.Random(seed)
         items = coco_annotation_questions(rng) + coco_adult_questions() + reading_questions() + talk_questions()
+        if use_vqa:
+            items += vqa_questions()
+        if use_babi:
+            items += babi_questions()
         self.cifar = None
         if use_cifar:
             c, self.cifar = cifar100_questions()
@@ -154,11 +230,13 @@ class World:
         self.rng = rng
         self._cache = {}
 
+    DARK = np.zeros((SIZE, SIZE, 3), np.float32)
+
     def image(self, ref):
+        if isinstance(ref, tuple) and ref[0] == "dark":  # eyes closed
+            return self.DARK
         if ref not in self._cache:
-            if isinstance(ref, tuple) and ref[0] == "dark":  # eyes closed
-                self._cache[ref] = np.zeros((SIZE, SIZE, 3), np.float32)
-            elif isinstance(ref, tuple) and ref[0] == "read":
+            if isinstance(ref, tuple) and ref[0] == "read":
                 self._cache[ref] = render_word(thumb(os.path.join(DATA, "val2017", ref[1])), ref[2], ref[3])
             elif isinstance(ref, tuple):
                 im = Image.fromarray(self.cifar[ref[1]]).resize((SIZE, SIZE), Image.BILINEAR)

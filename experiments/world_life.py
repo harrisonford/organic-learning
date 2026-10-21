@@ -1,14 +1,16 @@
 """A long life in the photo world, with hidden deadlines.
 
     python experiments/world_life.py [moments] [out.jsonl]
-    SEED=0  BRAIN='{...}'  EVERY=10000  RESUME=path.pkl
+    SEED=0  BRAIN='{...}'  EVERY=10000  RESUME=path.pkl  FREEZE=1  PER_KIND=0
 
 The brain (design 2 + contrast reflex + adaptation + sleep cleanup by default)
 looks at 64x64 photos, hears a question, answers when sure enough, and learns
 from what an adult would have said plus a reward that halves for every tick
 past the question's hidden deadline. Every EVERY moments it is tested on photos
 it has never seen, per kind of question, and the world is refreshed so new
-questions written by the adults join in.
+questions written by the adults join in (unless FREEZE=1: the same world all
+life long, for controlled comparisons). PER_KIND>0 tests on that many items of
+every kind instead of 600 random moments.
 """
 
 import json
@@ -43,7 +45,18 @@ else:
 world = World(seed=0)
 print(world.summary(), flush=True)
 test_rng = np.random.default_rng(99)
-test = [world.moment("test") for _ in range(600)]
+PER_KIND = int(os.environ.get("PER_KIND", 0))
+if PER_KIND:
+    by = {}
+    for it in world.test:
+        by.setdefault(it[3], []).append(it)
+    test = []
+    for kind in sorted(by):
+        for i in test_rng.choice(len(by[kind]), min(PER_KIND, len(by[kind])), replace=False):
+            ref, q, a, _ = by[kind][i]
+            test.append({"image": world.image(ref), "question": q, "answer": a, "kind": kind})
+else:
+    test = [world.moment("test") for _ in range(600)]
 log = open(out_path, "a")
 t0 = time.time()
 
@@ -72,4 +85,5 @@ for age in range(start + 1, start + N + 1):
         print(f"age {age:>7} reward {rec['lived_reward']:.2f} clusters {rec['clusters']} familiar {rec['familiar']:.3f} | "
               + " | ".join(f"{k}: {v['acc']:.2f} t{v['tick']:.1f}" for k, v in res.items()) + f" | {rec['memory_gb']} GB | {time.time() - t0:.0f}s", flush=True)
         pickle.dump(brain, open(out_path.replace(".jsonl", ".pkl"), "wb"))
-        world = World(seed=0)  # new adult questions join the world (same photo split)
+        if not os.environ.get("FREEZE"):
+            world = World(seed=0)  # new adult questions join the world (same photo split)
