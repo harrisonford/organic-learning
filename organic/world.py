@@ -9,7 +9,13 @@ Sources (all cached on disk, labels only used as what an adult would answer):
   - VQA v2: questions people asked about the same COCO photos, with the answer
     at least 5 of the 10 people gave (answers kept as typed: "2", not "two");
   - bAbI: short stories heard with eyes closed, then a question about them;
-  - the text world: everyday spoken questions written and checked by the adults.
+  - the text world: everyday spoken questions written and checked by the adults;
+  - DailyDialog (Li et al. 2017): something a person said and the short reply
+    the other person gave (replies of up to 4 words);
+  - CommonsenseQA (Talmor et al. 2019) and ARC-Easy (Clark et al. 2018): a
+    question asked together with its possible answers ("... a, b, c or d?");
+  - WinoGrande (Sakaguchi et al. 2020): a sentence with a gap and the two
+    things that could fill it ("... because the ... is bigger. home or house?").
 
 Every moment is (image 64x64 RGB in [0,1], question, answer, kind, deadline).
 The brain never sees `kind` or `deadline`; the environment uses them to reward.
@@ -45,11 +51,12 @@ def thumb(path):
     return np.asarray(im, np.float32) / 255
 
 
-def coco_annotation_questions(rng):
-    """Questions whose answers come from COCO's human annotations."""
-    ann = json.load(open(os.path.join(DATA, "annotations", "instances_val2017.json")))
+def coco_annotation_questions(rng, split="val2017", ref=None):
+    """Questions whose answers come from COCO's human annotations.
+    ref maps a COCO image id to how the world refers to that photo."""
+    ann = json.load(open(os.path.join(DATA, "annotations", f"instances_{split}.json")))
     cats = {c["id"]: c["name"] for c in ann["categories"]}
-    files = {im["id"]: (im["file_name"], im["width"], im["height"]) for im in ann["images"]}
+    files = {im["id"]: (ref(im["id"]) if ref else im["file_name"], im["width"], im["height"]) for im in ann["images"]}
     per = {}
     for a in ann["annotations"]:
         if a.get("iscrowd"):
@@ -145,6 +152,52 @@ def babi_questions(max_lines=6):
     return out
 
 
+def _speech(text):
+    """Undo the dataset's tokenization so it reads as it was said ("you ?" -> "you?")."""
+    t = " ".join(text.replace("’", "'").split()).lower()
+    for p in (" ?", " .", " ,", " !", " '"):
+        t = t.replace(p, p[1:])
+    return t
+
+
+def dialog_questions(max_reply=4, max_words=15):
+    path = os.path.join(DATA, "text", "daily_dialog_train.parquet")
+    out = []
+    if os.path.exists(path):
+        import pandas as pd
+        for i, dia in enumerate(pd.read_parquet(path)["dialog"]):
+            for j, (a, b) in enumerate(zip(dia[:-1], dia[1:])):
+                if len(b.split()) <= max_reply + 1 and len(a.split()) <= max_words:
+                    reply = _speech(b).rstrip(".!? ")
+                    if reply and len(reply.split()) <= max_reply:
+                        out.append((("dark", "dd", i, j), _speech(a), reply, "chat"))
+    return out
+
+
+def commonsense_questions():
+    out = []
+    for name, tag in (("commonsense_qa_train.parquet", "csqa"), ("arc_easy_train.parquet", "arc")):
+        path = os.path.join(DATA, "text", name)
+        if not os.path.exists(path):
+            continue
+        import pandas as pd
+        for i, r in pd.read_parquet(path).iterrows():
+            ch = [str(c).lower().rstrip(".") for c in r["choices"]["text"]]
+            if r["answerKey"] not in list(r["choices"]["label"]) or max(len(c.split()) for c in ch) > 3:
+                continue
+            ans = ch[list(r["choices"]["label"]).index(r["answerKey"])]
+            q = r["question"].strip().lower().rstrip("?") + "? " + ", ".join(ch[:-1]) + " or " + ch[-1] + "?"
+            out.append((("dark", tag, i), q, ans, "reason"))
+    path = os.path.join(DATA, "text", "winogrande_xl_train.parquet")
+    if os.path.exists(path):
+        import pandas as pd
+        for i, r in pd.read_parquet(path).iterrows():
+            o1, o2 = r["option1"].lower(), r["option2"].lower()
+            q = r["sentence"].strip().lower().replace("_", "...") + f" {o1} or {o2}?"
+            out.append((("dark", "wino", i), q, o1 if r["answer"] == "1" else o2, "reason"))
+    return out
+
+
 def vqa_kind(qtype, q, atype):
     if atype == "number":
         return "count"
@@ -161,13 +214,15 @@ def vqa_kind(qtype, q, atype):
     return "ask"
 
 
-def vqa_questions(min_people=5):
-    """VQA v2 questions on the COCO val2017 photos we have, answered the same
-    way by at least min_people of the 10 people asked."""
+def vqa_questions(min_people=5, have=None):
+    """VQA v2 questions on the COCO photos we have (have: image id -> ref;
+    default the val2017 photos), answered the same way by at least min_people
+    of the 10 people asked."""
     root = os.path.join(DATA, "vqa")
     if not os.path.exists(root):
         return []
-    have = {int(f[:-4]): f for f in os.listdir(os.path.join(DATA, "val2017")) if f.endswith(".jpg")}
+    if have is None:
+        have = {int(f[:-4]): f for f in os.listdir(os.path.join(DATA, "val2017")) if f.endswith(".jpg")}
     out = []
     for split in ("train", "val"):
         qs = {q["question_id"]: q["question"] for q in json.load(open(os.path.join(root, f"v2_OpenEnded_mscoco_{split}2014_questions.json")))["questions"] if q["image_id"] in have}
@@ -193,6 +248,25 @@ def coco_adult_questions():
     return out
 
 
+THUMBS = os.path.join(DATA, "coco_thumbs")
+
+
+def build_coco_train_items(seed=0):
+    """COCO train2017 (118k photos as 64x64 thumbnails): annotation questions
+    and VQA questions, computed once and stored (the source files are large)."""
+    ids = json.load(open(os.path.join(THUMBS, "train2017_ids.json")))
+    row = {iid: i for i, iid in enumerate(ids)}
+    items = coco_annotation_questions(random.Random(seed), "train2017", ref=lambda iid: ("thumb", row[iid]))
+    items += vqa_questions(have={iid: ("thumb", r) for iid, r in row.items()})
+    pickle.dump(items, open(os.path.join(THUMBS, "items.pkl"), "wb"))
+    return items
+
+
+def coco_train_questions():
+    path = os.path.join(THUMBS, "items.pkl")
+    return pickle.load(open(path, "rb")) if os.path.exists(path) else []
+
+
 def cifar100_questions():
     root = os.path.join(DATA, "cifar-100-python")
     if not os.path.exists(root):
@@ -211,13 +285,24 @@ def cifar100_questions():
 class World:
     """Splits photos into a lived part and a test part, and serves moments."""
 
-    def __init__(self, seed=0, test_fraction=0.1, use_cifar=True, use_vqa=True, use_babi=True):
+    def __init__(self, seed=0, test_fraction=0.1, use_cifar=True, use_vqa=True, use_babi=True, use_text=True, use_coco_train=True):
         rng = random.Random(seed)
+        # a frozen world can say which sources it was made of (WORLD_DIR/sources.json)
+        manifest = os.path.join(WORLD_DIR, "sources.json")
+        if os.path.exists(manifest):
+            m = json.load(open(manifest))
+            use_cifar, use_vqa, use_babi, use_text, use_coco_train = (m.get(k, False) for k in ("cifar", "vqa", "babi", "text", "coco_train"))
         items = coco_annotation_questions(rng) + coco_adult_questions() + reading_questions() + talk_questions()
         if use_vqa:
             items += vqa_questions()
         if use_babi:
             items += babi_questions()
+        if use_text:
+            items += dialog_questions() + commonsense_questions()
+        self.thumbs = None
+        if use_coco_train and os.path.exists(os.path.join(THUMBS, "items.pkl")):
+            items += coco_train_questions()
+            self.thumbs = np.load(os.path.join(THUMBS, "train2017_64.npy"), mmap_mode="r")
         self.cifar = None
         if use_cifar:
             c, self.cifar = cifar100_questions()
@@ -235,6 +320,8 @@ class World:
     def image(self, ref):
         if isinstance(ref, tuple) and ref[0] == "dark":  # eyes closed
             return self.DARK
+        if isinstance(ref, tuple) and ref[0] == "thumb":  # memory-mapped, not cached (118k photos)
+            return np.asarray(self.thumbs[ref[1]], np.float32) / 255
         if ref not in self._cache:
             if isinstance(ref, tuple) and ref[0] == "read":
                 self._cache[ref] = render_word(thumb(os.path.join(DATA, "val2017", ref[1])), ref[2], ref[3])
