@@ -221,8 +221,14 @@ def vqa_questions(min_people=5, have=None):
     root = os.path.join(DATA, "vqa")
     if not os.path.exists(root):
         return []
-    if have is None:
+    cache = os.path.join(root, f"items_{min_people}.pkl")
+    if have is None:  # the val2017 photos: parsed once, then read from disk (the source files are large)
+        if os.path.exists(cache):
+            return pickle.load(open(cache, "rb"))
         have = {int(f[:-4]): f for f in os.listdir(os.path.join(DATA, "val2017")) if f.endswith(".jpg")}
+        out = vqa_questions(min_people, have)
+        pickle.dump(out, open(cache, "wb"))
+        return out
     out = []
     for split in ("train", "val"):
         qs = {q["question_id"]: q["question"] for q in json.load(open(os.path.join(root, f"v2_OpenEnded_mscoco_{split}2014_questions.json")))["questions"] if q["image_id"] in have}
