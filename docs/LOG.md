@@ -167,3 +167,44 @@ groups also differ in life length and world size, so this is not a clean
 cortex-only comparison. Presence, gist and counting stay below the majority
 baseline. Most progress happens in the first 50-100k moments; later growth
 (to ~1.2 billion numbers) mostly adds memory, not skill.
+
+## 2026-10-21 (evening): richer world, controlled cortex comparison
+
+**World enriched** (details in [WORLD.md](WORLD.md)):
+- VQA v2: 21k human Q&A on our 5,000 photos.
+- COCO train2017: 118k photos as 64x64 thumbnails, with 1.08M annotation and VQA items.
+- Text kinds with their own hidden deadlines: chat (2 ticks), talk (3), reason (none), story (none).
+- New text sources: DailyDialog (8.9k replies), CommonsenseQA + ARC-Easy + WinoGrande (45k), bAbI (8k stories).
+- Text daemon v2: four formats, judge check instead of exact match, de-duplication, re-judging of old rejected pairs.
+- Budget moved to text: 240 text / 200 photos / 60 reserve per day.
+
+The full world is now 1.17M lived items (was ~150k).
+
+**Controlled comparison:** fresh lives in one frozen world (`data/world_ctl`), identical except for the visual cortex, two seeds each, all stopped at 100k moments, 60 test items per kind.
+
+| kind | cortex (s0, s1) | no cortex (s0, s1) |
+|---|---|---|
+| identity | **0.21** (0.22, 0.20) | 0.14 (0.15, 0.13) |
+| gist | **0.80** (0.78, 0.82) | 0.70 (0.77, 0.63) |
+| story | 0.44 (0.48, 0.40) | 0.39 (0.43, 0.35) |
+| count | 0.38 | 0.35 |
+| talk | 0.35 | 0.34 |
+| yesno | 0.39 | 0.38 |
+| activity | 0.25 | 0.23 |
+| color | 0.28 | 0.32 |
+| text (reading) | 0.13 (0.12, 0.15) | 0.24 (0.08, 0.40) |
+| presence | 0.78 | **0.88** (0.87, 0.90) |
+| where | 0.49 | **0.60** (0.60, 0.60) |
+| ask | 0.02 | 0.05 |
+| chat / reason | 0.00 | 0.00 (only 20 / 43 items in this frozen world) |
+
+Standard error per cell is about 0.06. Results:
+- Consistent across seeds: the cortex helps identity (+0.07) and gist (+0.10), and hurts where (-0.11) and presence (-0.10).
+- The cortex code is pooled over the whole view, so "where" information is lost there. That fits the earlier long-life result, now without the life-length confound.
+- Reading is noisy across seeds.
+
+**Growth:** in the richer world a life has 28-33k clusters and 6.6-9.4 GB at 100k moments. Earlier it was 17k clusters at 100k. More kinds of task make the structure grow faster.
+
+Lives had to run one at a time, because two together exhausted the 14 GB machine. `world_life.py` now stops cleanly when `MAX_GB` is exceeded.
+
+**Running:** `out/full_s0` is one life in the full 1.17M-item world (cortex, seed 0, world refreshed every 10k), capped at 11 GB.

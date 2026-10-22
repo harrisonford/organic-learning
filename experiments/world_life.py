@@ -85,5 +85,8 @@ for age in range(start + 1, start + N + 1):
         print(f"age {age:>7} reward {rec['lived_reward']:.2f} clusters {rec['clusters']} familiar {rec['familiar']:.3f} | "
               + " | ".join(f"{k}: {v['acc']:.2f} t{v['tick']:.1f}" for k, v in res.items()) + f" | {rec['memory_gb']} GB | {time.time() - t0:.0f}s", flush=True)
         pickle.dump(brain, open(out_path.replace(".jsonl", ".pkl"), "wb"))
+        if rec["memory_gb"] > float(os.environ.get("MAX_GB", 1e9)):  # the machine has 14 GB; stop before it runs out
+            print(f"stopping: memory {rec['memory_gb']} GB", flush=True)
+            break
         if not os.environ.get("FREEZE"):
             world = World(seed=0)  # new adult questions join the world (same photo split)
