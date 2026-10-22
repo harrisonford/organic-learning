@@ -225,3 +225,11 @@ Conclusions drawn from them are unreliable, especially "most learning happens in
 **Fix:** the moment generator is carried across rebuilds. `full_s0` was restarted from scratch.
 
 Also: free-model replies sometimes carry an error body without `choices`. These are now retried instead of failing the batch (31 failures on 10-21/22). The text daemon made only ~15 successful batches in its first day (~260 new items), because of those failures. Judge acceptance by format: fact 114/129, story 60/60, chat 35/39, logic 29/29.
+
+## 2026-10-22: memory-budget pruning
+
+Long lives now run under a hard budget: 24,000 clusters and 4,096 answers. When a budget is reached, the least used and least heard 10% are pruned. Full rationale, costs and how to undo it: [PRUNING.md](PRUNING.md).
+
+Also fixed: sleep ran before this moment's patience and command credit, which then went to shifted cluster indices. Sleep and pruning now run at the end of a moment.
+
+`full_s0` was restarted with the budget. The previous unbudgeted run is kept as `full_s0_nobudget`; it had reached 10k moments.

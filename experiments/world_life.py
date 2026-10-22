@@ -2,6 +2,7 @@
 
     python experiments/world_life.py [moments] [out.jsonl]
     SEED=0  BRAIN='{...}'  EVERY=10000  RESUME=path.pkl  FREEZE=1  PER_KIND=0
+    MAX_GB=11  MAX_CLUSTERS=24000  MAX_OUTPUTS=4096
 
 The brain (design 2 + contrast reflex + adaptation + sleep cleanup by default)
 looks at 64x64 photos, hears a question, answers when sure enough, and learns
@@ -42,6 +43,8 @@ if os.environ.get("RESUME"):
     brain = pickle.load(open(os.environ["RESUME"], "rb"))
 else:
     brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
+if os.environ.get("MAX_CLUSTERS") or os.environ.get("MAX_OUTPUTS"):  # memory budget (docs/PRUNING.md)
+    brain.orch.set_budget(int(os.environ.get("MAX_CLUSTERS", 0)) or None, int(os.environ.get("MAX_OUTPUTS", 0)) or None)
 world = World(seed=0)
 print(world.summary(), flush=True)
 test_rng = np.random.default_rng(99)
@@ -79,7 +82,8 @@ for age in range(start + 1, start + N + 1):
         res = evaluate()
         rec = {"age": age, "seed": SEED, "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])), "clusters": int(brain.orch.C),
                "familiar": float(getattr(brain.orch, "familiar_fraction", float("nan"))), "sleep": brain.sleep_log[-3:], "world": world.summary(), "seconds": round(time.time() - t0),
-               "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2)}
+               "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2),
+               "outputs": len(brain.orch.outputs), "pruned": (brain.orch.prune_log or [])[-4:]}
         log.write(json.dumps(rec) + "\n")
         log.flush()
         print(f"age {age:>7} reward {rec['lived_reward']:.2f} clusters {rec['clusters']} familiar {rec['familiar']:.3f} | "

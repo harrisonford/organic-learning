@@ -234,15 +234,18 @@ class LoopBrain2:
             reward = value - time_cost * tick
             if learn:
                 self.age += 1
-                if self.sleep_cleanup and self.age % 2000 == 0:
-                    merged, retired = self.orch.consolidate()
-                    self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
                 s = snapshot[0] if snapshot else self._situation(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 self.orch.learn(s, self.orch.out_index[f"word:{answer}"], words)  # imitation
                 if snapshot:
                     late = correct and reward < 1.0 - time_cost * tick - 1e-6  # felt only through the reward
                     self._tune_patience(snapshot[1], correct, late)
                 self._credit(choices, reward, tick)
+                # sleep and pruning reorder clusters, so they come last (after every
+                # use of this moment's cluster indices)
+                if self.sleep_cleanup and self.age % 2000 == 0:
+                    merged, retired = self.orch.consolidate()
+                    self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
+                self.orch.maybe_prune()
         return said, tick, reward, path, stays, gains_used
 
     def _credit(self, choices, reward, t_end, eta=0.1, fade=0.85):

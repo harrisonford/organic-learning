@@ -95,6 +95,15 @@ class Cortex:
         self.births = 0
         self.deaths = 0
 
+    # memory budget (None = unbounded); see prune() and docs/PRUNING.md
+    max_clusters = None
+    max_outputs = None
+    prune_fraction = 0.1
+    protect_young = 5000
+    out_heard = None
+    out_last = None
+    prune_log = None
+
     def __setstate__(self, state):
         """Load brains saved before clusters had a reach (they reach everything)."""
         self.__dict__.update(state)
@@ -110,11 +119,16 @@ class Cortex:
 
     def output_neuron(self, name):
         """Return the index of an output neuron, growing one if it is new."""
+        if self.out_heard is not None:
+            self.out_heard[name] = self.out_heard.get(name, 0) + 1
+            self.out_last[name] = self.t
         if name in self.out_index:
             return self.out_index[name]
+        if self.max_outputs and len(self.outputs) >= self.max_outputs:
+            self.prune_outputs()
         idx = len(self.outputs)
         if idx >= self.out_cap:
-            self.out_cap *= 2
+            self.out_cap = min(self.out_cap * 2, self.max_outputs) if self.max_outputs else self.out_cap * 2
             grown = np.zeros((self.cap, self.n, self.out_cap), np.float32)
             grown[:, :, : self.Wout.shape[2]] = self.Wout
             self.Wout = grown
@@ -126,7 +140,9 @@ class Cortex:
         return np.array([i for i, o in enumerate(self.outputs) if o.startswith(prefix)], np.int64)
 
     def _grow_capacity(self):
-        self.cap *= 2
+        # within a budget, never allocate past it (a little slack: births between prunes)
+        limit = self.max_clusters + 64 if self.max_clusters else None
+        self.cap = min(self.cap * 2, limit) if limit and self.cap < limit else self.cap * 2
 
         def grow(a):
             b = np.zeros((self.cap,) + a.shape[1:], a.dtype)
@@ -463,6 +479,109 @@ class Cortex:
             self.deaths += int(dead.sum())
         self.last_consolidation = self.t
         return merged, int(retire.sum())
+
+    # ------------------------------------------------------- memory budget
+
+    def set_budget(self, max_clusters=None, max_outputs=None, fraction=0.1, protect_young=5000, output_prefix="word:"):
+        """Impose a memory budget (a skull of fixed size). Not a learning rule:
+        a compromise for a 14 GB machine, documented in docs/PRUNING.md."""
+        self.max_clusters, self.max_outputs = max_clusters, max_outputs
+        self.prune_fraction, self.protect_young, self.output_prefix = fraction, protect_young, output_prefix
+        if self.out_heard is None:  # outputs heard before the budget count as heard once, now
+            self.out_heard = {o: 1 for o in self.outputs}
+            self.out_last = {o: self.t for o in self.outputs}
+        self.prune_log = self.prune_log or []
+        if max_outputs:
+            while len(self.outputs) > max_outputs:
+                self.prune_outputs(excess=len(self.outputs) - max_outputs)
+        if max_clusters:
+            while self.C > max_clusters:
+                self.prune(excess=self.C - max_clusters)
+        self.fit_capacity()
+
+    def maybe_prune(self):
+        """Call between experiences (never while cluster indices are held)."""
+        if self.max_clusters and self.C >= self.max_clusters:
+            return self.prune()
+        return 0
+
+    def _keep_clusters(self, keep):
+        for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
+            a = getattr(self, arr)
+            a[: len(keep)] = a[keep]
+        dead = self.C - len(keep)
+        self.C = len(keep)
+        self.deaths += dead
+
+    def prune(self, excess=0):
+        """Use it or lose it: remove the least valuable fraction of clusters.
+        Value = how often a cluster took part in learning, discounted by how
+        long it has been idle; clusters younger than protect_young learning
+        events go last (they have not had a chance yet), only when there are not
+        enough older ones (the budget is hard)."""
+        C = self.C
+        idle = (self.t - self.last_active[:C]).astype(np.float64)
+        value = self.usage[:C] / (1.0 + idle / 30000.0)
+        young = (self.t - self.born[:C]) < self.protect_young
+        value = np.where(young, value + 1e12, value)  # the young go last, only if the budget demands it
+        n = min(C - 1, max(excess, int(self.prune_fraction * C)))
+        if n <= 0:
+            return 0
+        drop = np.argpartition(value, n - 1)[:n]
+        keep = np.setdiff1d(np.arange(C), drop)
+        dead_uids = set(self.uid[drop].tolist())
+        self._keep_clusters(keep)
+        if self.assoc:
+            self.assoc = {i: {j: w for j, w in row.items() if j not in dead_uids} for i, row in self.assoc.items() if i not in dead_uids}
+        self.prune_log = (self.prune_log or []) + [("clusters", int(self.t), n, int(self.C))]
+        return n
+
+    def prune_outputs(self, excess=0):
+        """Forget the least heard answers (only outputs named with output_prefix,
+        so motor commands are never lost): value = times heard, discounted by
+        how long ago. Their output synapses are removed from every cluster."""
+        prefix = getattr(self, "output_prefix", "word:")
+        cand = [i for i, o in enumerate(self.outputs) if o.startswith(prefix)]
+        if not cand:
+            return 0
+        heard = np.array([self.out_heard.get(self.outputs[i], 1) for i in cand], np.float64)
+        idle = np.array([self.t - self.out_last.get(self.outputs[i], 0) for i in cand], np.float64)
+        value = heard / (1.0 + idle / 30000.0)
+        n = min(len(cand), max(excess, int(self.prune_fraction * len(self.outputs))))
+        drop = set(np.array(cand)[np.argpartition(value, n - 1)[:n]].tolist())
+        keep = [i for i in range(len(self.outputs)) if i not in drop]
+        for a in range(0, self.cap, 2048):  # in blocks: no full-size temporary copy
+            blk = self.Wout[a : a + 2048]
+            blk[:, :, : len(keep)] = blk[:, :, keep]
+            blk[:, :, len(keep) :] = 0
+        for i in drop:
+            self.out_heard.pop(self.outputs[i], None)
+            self.out_last.pop(self.outputs[i], None)
+        self.outputs = [self.outputs[i] for i in keep]
+        self.out_index = {o: i for i, o in enumerate(self.outputs)}
+        self.prune_log = (self.prune_log or []) + [("outputs", int(self.t), n, len(self.outputs))]
+        return n
+
+    def fit_capacity(self):
+        """Reallocate storage to the budget (memory is only returned this way)."""
+        cap = self.max_clusters + 64 if self.max_clusters else max(self.cap, 64)
+        out_cap = self.max_outputs if self.max_outputs else self.out_cap
+        if cap == self.cap and out_cap == self.out_cap:
+            return
+        C, O = self.C, len(self.outputs)
+
+        def fit(a, keep_cols=None):
+            b = np.zeros((cap,) + a.shape[1:], a.dtype) if keep_cols is None else np.zeros((cap, a.shape[1], out_cap), a.dtype)
+            if keep_cols is None:
+                b[:C] = a[:C]
+            else:
+                b[:C, :, :O] = a[:C, :, :O]
+            return b
+
+        for arr in ("Z", "Win", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
+            setattr(self, arr, fit(getattr(self, arr)))
+        self.Wout = fit(self.Wout, keep_cols=True)
+        self.cap, self.out_cap = cap, out_cap
 
     # ------------------------------------------------------------------- stats
 
