@@ -208,3 +208,20 @@ Standard error per cell is about 0.06. Results:
 Lives had to run one at a time, because two together exhausted the 14 GB machine. `world_life.py` now stops cleanly when `MAX_GB` is exceeded.
 
 **Running:** `out/full_s0` is one life in the full 1.17M-item world (cortex, seed 0, world refreshed every 10k), capped at 11 GB.
+
+## 2026-10-22: a replay bug in long lives
+
+The first full-world life (`out/full_s0_replayed.*`) reached reward 0.91 by 170k moments. Then reward fell to 0.62 within 30k moments, while clusters jumped from 18k to 25k and memory from 6.9 to 11.9 GB, which stopped the life.
+
+**Cause:** a bug in `world_life.py`. Every 10k moments the world is rebuilt to pick up new adult questions. The rebuild also re-created the moment generator with the same seed. So whenever the data files had not changed (the daemons sleep once their daily budget is spent), the brain relived **the same 10,000 moments** again and again. The high reward was memorizing a loop. The drop came at midnight, when the text daemon resumed and the sequence changed.
+
+**Affected:** every refreshing life:
+- `world_s0`/`world_s1` (300k);
+- `cortex_s0`/`cortex_s1` (1M / 500k);
+- `full_s0_replayed`.
+
+Conclusions drawn from them are unreliable, especially "most learning happens in the first 50-100k moments" and the long-life plateaus. **Not affected:** the controlled comparison (`ctl_*`), which used a frozen world with no rebuilds.
+
+**Fix:** the moment generator is carried across rebuilds. `full_s0` was restarted from scratch.
+
+Also: free-model replies sometimes carry an error body without `choices`. These are now retried instead of failing the batch (31 failures on 10-21/22). The text daemon made only ~15 successful batches in its first day (~260 new items), because of those failures. Judge acceptance by format: fact 114/129, story 60/60, chat 35/39, logic 29/29.

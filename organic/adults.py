@@ -98,6 +98,9 @@ class Adults:
             t0 = time.time()
             try:
                 d = json.load(urllib.request.urlopen(req, timeout=timeout))
+                if not d.get("choices"):  # an upstream error reported inside a 200 reply
+                    time.sleep(20 * (attempt + 1))
+                    continue
                 text = d["choices"][0]["message"].get("content")
                 if not text:  # a reasoning model ran out of room before answering
                     body["max_tokens"] = int(body["max_tokens"] * 2)

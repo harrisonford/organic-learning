@@ -89,4 +89,6 @@ for age in range(start + 1, start + N + 1):
             print(f"stopping: memory {rec['memory_gb']} GB", flush=True)
             break
         if not os.environ.get("FREEZE"):
-            world = World(seed=0)  # new adult questions join the world (same photo split)
+            rng = world.rng  # keep drawing moments where we were (a fresh rng would replay the same moments)
+            world = World(seed=0)
+            world.rng = rng  # new adult questions join the world (same photo split)
