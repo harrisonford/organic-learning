@@ -36,7 +36,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from organic.adults import PER_DAY, Adults, parse_json  # noqa: E402
 
 SHARE = 240  # text share of the 500/day; photos 200, reserve 60
-MODELS = ["nvidia/nemotron-3.5-lightning:free", "xingchen-agi/xing4.0-29b-a4b:free", "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"]
+# xing4.0 removed 2026-10-23: 0 usable batches in a day (upstream rate limits, malformed replies)
+MODELS = ["nvidia/nemotron-3.5-lightning:free", "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"]
 
 DOMAINS = [
     # nature and science
