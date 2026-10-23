@@ -286,3 +286,58 @@ Brain saves are now atomic (written to a temporary file, then renamed), so a res
 - **Producible:** only 50% of chat answers exist as output neurons (whole-answer output). It is 70% for talk and open questions, 80% for reason.
 - **Photo kinds keep drifting down** under the budget: where 0.23 (-0.11 over the last 6 records), color 0.12, count 0.26. Reward is 0.19.
 - **Text daemon:** xing4.0 dropped (0 usable batches in a day). The day had 31 good text batches and 27 failures.
+
+## 2026-10-23: how the ear cuts speech at 670k moments (`experiments/ear_breaks.py`)
+
+Units come only from the ear's own next-byte surprise (no tokenizer, no spaces rule).
+
+#### photo questions
+`what  | color is  | the  | bus?`
+`how many  | people are  | in the  | picture | ?`
+`is  | the  | man  | holding |   | an umbrella | ?`
+`what  | is  | the  | woman  | doing?`
+
+#### everyday chat
+`thank you |   | very  | much!`
+`good |   | morning | ,  | how a | re  | you | ?`
+`see you |   | tomorrow |   | at  | school | .`
+`i'm  | sorry | ,  | i  | didn't  | hear  | you.`
+
+#### stories (bAbI)
+`Mary  | moved to  | the  | bathroom | .⏎ | John  | went  | to  | the  | hallway | .⏎ | Wh | ere is  | Mary?`
+`Daniel  | picked  | up  | the  | football | .⏎ | Daniel  | went  | to  | the  | kitchen.⏎ | Wh | ere is  | the  | football | ?`
+
+#### reasoning
+`the  | trophy  | doesn't  | fit in the  | suitcase |  because  | the  | ...  | is  | too  | big.  | trophy  | or  | suitcase | ?`
+`what  | is  | 7 pl | us  | 5?`
+`hot  | is  | to cold |   | as  | up is  | to what?`
+
+#### never heard like this
+`the  | purple e | lephant |   | sang |  qu | iet | ly  | un | der |  the  | bridge | .`
+`astronauts |  eat |   | de | hydrate | d  | strawberries.`
+`my  | gra | ndmother's  | bicycle  | is  | old | er than  | me.`
+
+#### made-up words
+`the  | blo | rp | y  | zi | ndl | e flomped |   | the  | gax | .`
+`glim | merwi | ck  | and  | snor | fl | e went  | to  | thar | n.`
+
+#### other languages / symbols
+`¿ | dó | nde  | está |  la |  biblio | te | ca | ?`
+`je  | ne sais pas.`
+`3.14159 is  | pi, |  2+2 | =4`
+`🙂 hello  | 🙂`
+
+#### Word boundaries
+66% of the ear's breaks fall at a word start; 77% of word starts are breaks.
+
+#### Most common multi-word chunks
+`there a ` (62,325), `how many ` (48,106), `where is ` (45,665), `color is ` (37,716), `people are ` (32,521), `in the ` (23,505), `sport is ` (21,339), `on the ` (14,204), `travelled to ` (13,306), `back to ` (13,026), `journeyed to ` (12,978), `moved to ` (11,490), `ere is ` (9,862), `do you` (8,044), `color are ` (7,824), `to the ` (6,658), `north of ` (5,614), `south of ` (5,596), `east of ` (5,589), `garden is ` (4,804), `How do ` (4,456), `where do` (4,370), `ved to ` (3,766), `are the ` (3,751), `bigger than ` (3,583)
+
+#### Most common word pieces (no space inside)
+`you` (24,094), `pla` (18,374), `Wh` (17,988), `out` (6,028), `ha` (5,979), `like` (5,739), `right` (5,669), `do` (5,631), `te` (5,558), `la` (5,062), `me` (5,021), `ho` (5,014), `train` (4,841), `er` (4,688), `re` (4,541), `mo` (4,437), `After` (4,312), `li` (4,121), `shirt` (3,997), `sign` (3,975), `photo` (3,968), `make` (3,718), `look` (3,713), `ta` (3,704), `want` (3,704)
+
+#### Longest units heard at least 20 times
+`chest fits inside the `, `are there motorcycles?`, `box fits inside the `, `are there skateboard`, `please think it over`, `apple to John.⏎John `, `er fits inside the `, `are there giraffes?`, `are there vegetable`, `are there surfboard`, `s fits inside the `, `are there windows?`, `are there computer`, `are there stripes?`, `are there carrots?`
+
+111,654 units, 670,000 utterances heard.
+

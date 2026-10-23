@@ -98,6 +98,15 @@ def ear_state():
             "probes": [[u.decode("utf-8", "replace") for u in ear.units(t, learn=False)] for t in PROBES]}
 
 
+def save_ear():
+    """The ear alone (small), so it can be studied without loading the whole brain."""
+    path = out_path.replace(".jsonl", "_ear.pkl")
+    with open(path + ".tmp", "wb") as f:
+        pickle.dump(brain.ear, f)
+    os.replace(path + ".tmp", path)
+
+
+save_ear()
 start = brain.age
 rewards = []
 for age in range(start + 1, start + N + 1):
@@ -118,6 +127,7 @@ for age in range(start + 1, start + N + 1):
         with open(pkl + ".tmp", "wb") as f:  # atomic: a crash or restart mid-save keeps the previous save
             pickle.dump(brain, f)
         os.replace(pkl + ".tmp", pkl)
+        save_ear()
         if rec["memory_gb"] > float(os.environ.get("MAX_GB", 1e9)):  # the machine has 14 GB; stop before it runs out
             print(f"stopping: memory {rec['memory_gb']} GB", flush=True)
             break
