@@ -100,6 +100,8 @@ class Adults:
                 d = json.load(urllib.request.urlopen(req, timeout=timeout))
                 if not d.get("choices"):  # an upstream error reported inside a 200 reply
                     self.last_error = str(d.get("error", d))[:200]
+                    if "rate-limited" in self.last_error:  # this model is busy upstream: let the caller try another
+                        raise RuntimeError("upstream rate limit: " + model)
                     time.sleep(20 * (attempt + 1))
                     continue
                 text = d["choices"][0]["message"].get("content")
