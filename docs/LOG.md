@@ -233,3 +233,20 @@ Long lives now run under a hard budget: 24,000 clusters and 4,096 answers. When 
 Also fixed: sleep ran before this moment's patience and command credit, which then went to shifted cluster indices. Sleep and pruning now run at the end of a moment.
 
 `full_s0` was restarted with the budget. The previous unbudgeted run is kept as `full_s0_nobudget`; it had reached 10k moments.
+
+## 2026-10-22 (night): richer adults, services, language review
+
+- **Text daemon v3:**
+  - 11 formats: fact, why, define, wordplay, chat, dialogue, logic, analogy, order, story, mind.
+  - ~90 knowledge domains, 23 everyday situations, 15 people asking.
+  - All four free models take turns writing; a different one judges.
+  - A batch whose judging failed is kept and judged later (no wasted writer requests).
+  - The adults client reports what error replies say.
+- **Photo daemon v2:** each batch focuses on two of 14 angles (people, scene, materials, humour and danger, what happens next, everyday sense, animals, food...). The other model judges the writer's answers (as in text). After the 5,000 val photos it continues into the 118k train thumbnails.
+- **Reboot:** the machine rebooted on 10-22 (~22:07); all processes ended. The full life resumed from its 330k save. A resumed life now draws moments from an rng seeded by its age, so it does not relive its first moments.
+- **Systemd user services** (`experiments/systemd/`, installed in `~/.config/systemd/user`; lingering is on): `organic-text`, `organic-photo` (restart always) and `organic-life` (`experiments/life_service.sh`, resumes the current life from its last save). Reboots no longer stop the project.
+- **Language pathway review:** [LANGUAGE_BIOLOGY.md](LANGUAGE_BIOLOGY.md).
+  - The answer is in the question for 100% of reason items and 52% of story items.
+  - 39% of chat replies were never heard as an answer.
+  - The missing pieces are biological routes, not data: hearing-to-saying (dorsal stream, built by babbling), composed speech, listening over time with episodic binding, and cross-situational word grounding.
+  - No architecture change yet.

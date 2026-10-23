@@ -99,6 +99,7 @@ class Adults:
             try:
                 d = json.load(urllib.request.urlopen(req, timeout=timeout))
                 if not d.get("choices"):  # an upstream error reported inside a 200 reply
+                    self.last_error = str(d.get("error", d))[:200]
                     time.sleep(20 * (attempt + 1))
                     continue
                 text = d["choices"][0]["message"].get("content")
@@ -117,7 +118,7 @@ class Adults:
                 raise
             except (urllib.error.URLError, TimeoutError):
                 time.sleep(20 * (attempt + 1))
-        raise RuntimeError("no reply after retries")
+        raise RuntimeError("no reply after retries: " + getattr(self, "last_error", ""))
 
 
 def image_part(img, size=64, show=256):

@@ -1,0 +1,12 @@
+[Unit]
+Description=organic-learning: photo question daemon (adults write and judge photo Q&A)
+After=network-online.target
+[Service]
+WorkingDirectory=/home/archkris/organic-learning
+ExecStart=/home/archkris/organic-learning/.venv/bin/python experiments/world/annotate.py /home/archkris/datasets/val2017 data/world/coco_qa.jsonl
+StandardOutput=append:/home/archkris/organic-learning/out/annotate.log
+StandardError=append:/home/archkris/organic-learning/out/annotate.log
+Restart=always
+RestartSec=120
+[Install]
+WantedBy=default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=organic-learning: text world daemon (adults write spoken Q&A)
+After=network-online.target
+[Service]
+WorkingDirectory=/home/archkris/organic-learning
+ExecStart=/home/archkris/organic-learning/.venv/bin/python experiments/world/text_world.py data/world/text_qa.jsonl
+StandardOutput=append:/home/archkris/organic-learning/out/text_world.log
+StandardError=append:/home/archkris/organic-learning/out/text_world.log
+Restart=always
+RestartSec=120
+[Install]
+WantedBy=default.target

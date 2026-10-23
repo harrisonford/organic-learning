@@ -114,9 +114,13 @@ def render_word(img, word, place):
     return np.asarray(im, np.float32) / 255
 
 
+FORMAT_KIND = {"fact": "talk", "why": "talk", "define": "talk", "wordplay": "talk", "chat": "chat", "dialogue": "chat",
+               "logic": "reason", "analogy": "reason", "order": "reason", "story": "story", "mind": "story"}
+
+
 def text_kind(d):
-    if d.get("format") == "story":
-        return "story"
+    if d.get("format") in FORMAT_KIND and d.get("format") != "fact":
+        return FORMAT_KIND[d["format"]]
     theme = d.get("theme", "")
     if any(t in theme for t in CHAT_THEMES) or d.get("format") == "chat":
         return "chat"
@@ -249,8 +253,9 @@ def coco_adult_questions():
         for line in open(path):
             d = json.loads(line)
             if d.get("q") and d.get("agree"):
-                kind = d.get("kind", "") if d.get("kind") in DEADLINE else "identity"
-                out.append((d["file"], d["q"], d["a"], kind))
+                kind = d.get("kind", "") if d.get("kind") in DEADLINE else ("identity" if "angle" not in d else "ask")
+                ref = ("thumb", int(d["file"][6:])) if d["file"].startswith("thumb:") else d["file"]
+                out.append((ref, d["q"], d["a"], kind))
     return out
 
 

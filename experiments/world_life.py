@@ -46,6 +46,9 @@ else:
 if os.environ.get("MAX_CLUSTERS") or os.environ.get("MAX_OUTPUTS"):  # memory budget (docs/PRUNING.md)
     brain.orch.set_budget(int(os.environ.get("MAX_CLUSTERS", 0)) or None, int(os.environ.get("MAX_OUTPUTS", 0)) or None)
 world = World(seed=0)
+if brain.age:  # a resumed life continues with moments it has not drawn before
+    import random
+    world.rng = random.Random(1000003 * SEED + brain.age)
 print(world.summary(), flush=True)
 test_rng = np.random.default_rng(99)
 PER_KIND = int(os.environ.get("PER_KIND", 0))
