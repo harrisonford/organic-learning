@@ -1,0 +1,7 @@
+[Unit]
+Description=organic-learning: monitor every 6 hours
+[Timer]
+OnCalendar=00/6:30
+Persistent=true
+[Install]
+WantedBy=timers.target

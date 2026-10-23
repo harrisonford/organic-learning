@@ -14,6 +14,7 @@ life long, for controlled comparisons). PER_KIND>0 tests on that many items of
 every kind instead of 600 random moments.
 """
 
+import collections
 import json
 import os
 import pickle
@@ -67,12 +68,34 @@ log = open(out_path, "a")
 t0 = time.time()
 
 
+PROBES = ["what color is the ball?", "thank you very much!", "mary went to the kitchen. where is mary?", "is there a dog in the picture?"]
+
+
 def evaluate():
-    per = {}
+    """Accuracy and timing per kind, plus signals about how answers are produced:
+    modal = share of the most common reply, copied = reply is a word heard in the
+    question, producible = the right answer exists as an output neuron now."""
+    per, said_by = {}, {}
     for m in test:
         said, tick, _, path, stays, _ = brain.live(m["image"], m["question"], learn=False, explore=False)
-        per.setdefault(m["kind"], []).append((said == m["answer"], tick, stays))
-    return {k: {"n": len(v), "acc": float(np.mean([a for a, _, _ in v])), "tick": float(np.mean([t for _, t, _ in v])), "stays": float(np.mean([s for _, _, s in v]))} for k, v in sorted(per.items())}
+        per.setdefault(m["kind"], []).append((said == m["answer"], tick, stays, said is not None and f" {said} " in f" {m['question']} ".replace("?", " ").replace(".", " ").replace(",", " "),
+                                              f"word:{m['answer']}" in brain.orch.out_index))
+        said_by.setdefault(m["kind"], []).append(said)
+    res = {}
+    for k, v in sorted(per.items()):
+        c = collections.Counter(said_by[k])
+        res[k] = {"n": len(v), "acc": float(np.mean([x[0] for x in v])), "tick": float(np.mean([x[1] for x in v])), "stays": float(np.mean([x[2] for x in v])),
+                  "modal": c.most_common(1)[0][1] / len(v), "modal_word": c.most_common(1)[0][0], "distinct": len(c),
+                  "copied": float(np.mean([x[3] for x in v])), "producible": float(np.mean([x[4] for x in v]))}
+    return res
+
+
+def ear_state():
+    ear = brain.ear
+    tot = sum(ear.heard.values()) or 1
+    return {"units": len(ear.heard), "contexts": len(ear.counts), "utterances": ear.utterances,
+            "mean_unit_bytes": round(sum(len(u) * n for u, n in ear.heard.items()) / tot, 2),
+            "probes": [[u.decode("utf-8", "replace") for u in ear.units(t, learn=False)] for t in PROBES]}
 
 
 start = brain.age
@@ -86,12 +109,15 @@ for age in range(start + 1, start + N + 1):
         rec = {"age": age, "seed": SEED, "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])), "clusters": int(brain.orch.C),
                "familiar": float(getattr(brain.orch, "familiar_fraction", float("nan"))), "sleep": brain.sleep_log[-3:], "world": world.summary(), "seconds": round(time.time() - t0),
                "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2),
-               "outputs": len(brain.orch.outputs), "pruned": (brain.orch.prune_log or [])[-4:]}
+               "outputs": len(brain.orch.outputs), "pruned": (brain.orch.prune_log or [])[-4:], "ear": ear_state()}
         log.write(json.dumps(rec) + "\n")
         log.flush()
         print(f"age {age:>7} reward {rec['lived_reward']:.2f} clusters {rec['clusters']} familiar {rec['familiar']:.3f} | "
               + " | ".join(f"{k}: {v['acc']:.2f} t{v['tick']:.1f}" for k, v in res.items()) + f" | {rec['memory_gb']} GB | {time.time() - t0:.0f}s", flush=True)
-        pickle.dump(brain, open(out_path.replace(".jsonl", ".pkl"), "wb"))
+        pkl = out_path.replace(".jsonl", ".pkl")
+        with open(pkl + ".tmp", "wb") as f:  # atomic: a crash or restart mid-save keeps the previous save
+            pickle.dump(brain, f)
+        os.replace(pkl + ".tmp", pkl)
         if rec["memory_gb"] > float(os.environ.get("MAX_GB", 1e9)):  # the machine has 14 GB; stop before it runs out
             print(f"stopping: memory {rec['memory_gb']} GB", flush=True)
             break

@@ -1,0 +1,9 @@
+[Unit]
+Description=organic-learning: monitor report (data growth, life vs chance, language signals)
+[Service]
+Type=oneshot
+WorkingDirectory=/home/archkris/organic-learning
+ExecStart=/home/archkris/organic-learning/.venv/bin/python experiments/monitor.py
+StandardOutput=append:/home/archkris/organic-learning/out/monitor/monitor.log
+StandardError=append:/home/archkris/organic-learning/out/monitor/monitor.log
+Nice=10

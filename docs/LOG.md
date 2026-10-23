@@ -250,3 +250,21 @@ Also fixed: sleep ran before this moment's patience and command credit, which th
   - 39% of chat replies were never heard as an answer.
   - The missing pieces are biological routes, not data: hearing-to-saying (dorsal stream, built by babbling), composed speech, listening over time with episodic binding, and cross-situational word grounding.
   - No architecture change yet.
+
+## 2026-10-23: monitoring
+
+`experiments/monitor.py` runs every 6 hours (systemd timer `organic-monitor`). It writes `out/monitor/report.md` and appends to `out/monitor/history.jsonl`. The report covers:
+- world size per kind, with the majority-answer baseline;
+- text formats;
+- the daemons' daily yield;
+- the life per kind: accuracy vs baseline, trend, ticks;
+- the ear: units, mean unit length, how probe sentences are cut.
+
+Life records now also carry, per kind:
+- `modal`: the share of the most common reply (collapse onto one answer);
+- `copied`: whether the reply is a word heard in the question;
+- `producible`: whether the right answer exists as an output neuron right now.
+
+The report raises flags that point at the gaps in [LANGUAGE_BIOLOGY.md](LANGUAGE_BIOLOGY.md).
+
+Brain saves are now atomic (written to a temporary file, then renamed), so a restart during a save cannot corrupt the life.
