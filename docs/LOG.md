@@ -268,3 +268,21 @@ Life records now also carry, per kind:
 The report raises flags that point at the gaps in [LANGUAGE_BIOLOGY.md](LANGUAGE_BIOLOGY.md).
 
 Brain saves are now atomic (written to a temporary file, then renamed), so a restart during a save cannot corrupt the life.
+
+## 2026-10-23 (afternoon): monitor findings at 610k moments
+
+- **Word units have emerged in the ear without being taught.** "what | color is | the | ball?" and "mary | went | to | the | kitchen. | where is | mary?". The ear has 108k units, mean 5 bytes. Common pairs ("color is", "where is", "there a") are heard as one unit.
+- **Collapse onto common answers:**
+  - count: 53% "zero";
+  - identity: 53% "person";
+  - yesno: 55% "yes";
+  - gist: 78% "yes";
+  - "ask" (open questions): 45% "yes".
+  The brain falls back on frequent replies.
+- **Copying:**
+  - story: 38% of replies are a word heard in the story, and accuracy is 0.38 (+0.20 over majority, the best kind).
+  - reason: the answer is in the question for 99% of items, but only 18% of replies repeat a heard word, and accuracy is 0.04.
+  Story's "copies" are words it also learned as answers ("kitchen"). This is not a hearing-to-saying route.
+- **Producible:** only 50% of chat answers exist as output neurons (whole-answer output). It is 70% for talk and open questions, 80% for reason.
+- **Photo kinds keep drifting down** under the budget: where 0.23 (-0.11 over the last 6 records), color 0.12, count 0.26. Reward is 0.19.
+- **Text daemon:** xing4.0 dropped (0 usable batches in a day). The day had 31 good text batches and 27 failures.
