@@ -133,6 +133,8 @@ def judge(pairs, writer):
     checker = rng.choice([m for m in MODELS if m != writer])
     items = "\n".join(json.dumps({"question": p["q"], "proposed": p["a"]}) for p in pairs)
     judged = parse_json(adults.ask(checker, CHECK.format(items=items), purpose="text", timeout=600)["text"])
+    if isinstance(judged, dict):  # some replies wrap the list: {"results": [...]}
+        judged = next((v for v in judged.values() if isinstance(v, list)), None)
     if not isinstance(judged, list) or not judged:
         raise RuntimeError("judge reply not a list")
     return judged
@@ -158,15 +160,21 @@ while True:
         while text_used() + 2 > SHARE or adults._state()["count"] + 2 > PER_DAY:
             time.sleep(600)
     k += 1
-    if unjudged:  # finish what was written before writing more
-        pairs, fmt, topic, asker, writer = unjudged[0]
+    if unjudged:  # finish what was written before writing more (at most 3 tries: replies are cached)
+        pairs, fmt, topic, asker, writer, tries = unjudged[0]
         try:
             kept = record(pairs, judge(pairs, writer), fmt, topic, asker, writer)
             unjudged.pop(0)
             log(f"{fmt} / {topic}: judged later, {kept}/{len(pairs)} fine")
         except Exception as e:  # noqa: BLE001
-            log(f"judging failed again: {e}")
-            time.sleep(120)
+            if tries >= 2:
+                unjudged.pop(0)
+                record(pairs, [{}] * len(pairs), fmt, topic, asker, writer)  # kept on file, unjudged (agree false)
+                log(f"{fmt} / {topic}: judging failed 3 times ({e}); recorded unjudged")
+            else:
+                unjudged[0] = (pairs, fmt, topic, asker, writer, tries + 1)
+                log(f"judging failed again: {e}")
+                time.sleep(120)
         continue
     if backlog and k % 6 == 0:
         batch, backlog = backlog[:40], backlog[40:]
@@ -210,6 +218,6 @@ while True:
         kept = record(pairs, judge(pairs, writer), fmt, topic, asker, writer)
         log(f"{fmt} / {topic} / {asker} / {writer.split('/')[1]}: {len(pairs)} new, {kept} judged fine, {text_used()} text requests today")
     except Exception as e:  # noqa: BLE001
-        unjudged.append((pairs, fmt, topic, asker, writer))
+        unjudged.append((pairs, fmt, topic, asker, writer, 0))
         log(f"{fmt} / {topic}: written, judging failed ({e}); kept for later")
         time.sleep(60)

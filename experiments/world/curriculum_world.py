@@ -92,6 +92,8 @@ while True:
             continue
         listing = "\n".join(json.dumps({"q": x["q"], "answers": x["answers"]}) for x in items)
         judged = parse_json(adults.ask(checker, CHECK.format(who=who, items=listing), purpose="curriculum", timeout=600)["text"])
+        if isinstance(judged, dict):  # some replies wrap the list
+            judged = next((v for v in judged.values() if isinstance(v, list)), None)
         if not isinstance(judged, list):
             raise RuntimeError("judge reply not a list")
     except Exception as e:  # noqa: BLE001
