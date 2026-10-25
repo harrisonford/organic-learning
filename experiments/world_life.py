@@ -44,6 +44,8 @@ if os.environ.get("RESUME"):
     brain = pickle.load(open(os.environ["RESUME"], "rb"))
 else:
     brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
+if os.environ.get("EAR_HABITUATION") == "0":  # the ear's fixed habituation rule off
+    brain.ear.habituation = False
 if os.environ.get("MAX_CLUSTERS") or os.environ.get("MAX_OUTPUTS"):  # memory budget (docs/PRUNING.md)
     brain.orch.set_budget(int(os.environ.get("MAX_CLUSTERS", 0)) or None, int(os.environ.get("MAX_OUTPUTS", 0)) or None)
 world = World(seed=0)

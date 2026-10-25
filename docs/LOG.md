@@ -341,3 +341,22 @@ Units come only from the ear's own next-byte surprise (no tokenizer, no spaces r
 
 111,654 units, 670,000 utterances heard.
 
+
+## 2026-10-25: curriculum design, habituation test, profiling
+
+- **Life `full_s0` finished** at 1M moments. Final per-kind results are in `out/monitor/report.md`; the best kinds were story (+0.19 over the majority answer), reason, reading, activity and open questions (each about +0.05).
+- **Curriculum design:** [CURRICULUM.md](CURRICULUM.md).
+  - Stages from babbling to 4th grade, each gated by mastery of its own items plus retention of earlier stages.
+  - Spaced review: 70% current stage, 30% earlier.
+  - Leniency that shrinks stage by stage.
+  - A stop verdict when a stage cannot be passed.
+  - The language proposals are re-ordered by the stage that needs them.
+  - Curriculum daemon started (`organic-curriculum`, `data/world/curriculum.jsonl`): items per stage and subject, each with 2-4 acceptable answers, judged for correctness and fit to the stage.
+  - Budget: text world 140, curriculum 100, photos 200, reserve 60.
+- **Habituation test running** (`experiments/habituation_pipeline.sh`): two fresh 100k lives in the frozen world, the ear's fixed habituation rule on vs off. The question is whether the orchestrator's own input adaptation (each input neuron subtracts its slow average) does the job without the rule.
+- **Profile** (2k clusters, 41 ms per moment):
+  - cluster affinity 12%;
+  - visual cortex 16%;
+  - per-call numpy overhead on small arrays (mean, norm, reduce) about 30%;
+  - recomputing the list of word outputs each moment 5%.
+  At 23k clusters a moment took ~120 ms, dominated by streaming the cluster identities (23k x 1,760 floats, 160 MB) through affinity several times per moment, which is memory-bandwidth bound.

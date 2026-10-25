@@ -24,7 +24,7 @@ from PIL import Image
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from organic.adults import PER_DAY, Adults, image_part, parse_json  # noqa: E402
 
-DAILY = 200  # photo share; text world 240, reserve 60 (total 500 = half the allowance)
+DAILY = 200  # photo share; text world 140, curriculum 100, reserve 60 (total 500 = half the allowance)
 MODELS = ["nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"]
 ANGLES = [
     "the people: what they are doing, wearing, holding, how many, how they might feel",
@@ -63,9 +63,9 @@ rng = random.Random()
 
 
 def used_today():
-    """Requests counted against this daemon's share: everything except the text world's (up to its 240)."""
+    """Requests counted against this daemon's share: everything except the text world's and the curriculum's (up to their shares)."""
     s = adults._state()
-    return s["count"] - min(s.get("text_count", 0), 240)
+    return s["count"] - min(s.get("text_count", 0), 140) - min(s.get("curriculum_count", 0), 100)
 
 
 def log(msg):

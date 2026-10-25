@@ -132,9 +132,11 @@ class Ear:
             self.codes[unit] = v / (np.linalg.norm(v) + 1e-8)
         return self.codes[unit]
 
+    habituation = True  # off: every unit counts the same (tests whether adaptation downstream is enough)
+
     def salience(self, unit):
         """Habituated response: rare units stand out, ubiquitous ones fade."""
-        if self.utterances == 0:
+        if self.utterances == 0 or not self.habituation:
             return 1.0
         freq = (self.heard.get(unit, 0) + 1) / (self.utterances + 1)
         return float(np.clip(1.0 / np.sqrt(freq), 1.0, 8.0))

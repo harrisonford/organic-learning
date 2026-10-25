@@ -1,0 +1,12 @@
+[Unit]
+Description=organic-learning: curriculum daemon (adults write graded items)
+After=network-online.target
+[Service]
+WorkingDirectory=/home/archkris/organic-learning
+ExecStart=/home/archkris/organic-learning/.venv/bin/python experiments/world/curriculum_world.py data/world/curriculum.jsonl
+StandardOutput=append:/home/archkris/organic-learning/out/curriculum.log
+StandardError=append:/home/archkris/organic-learning/out/curriculum.log
+Restart=always
+RestartSec=120
+[Install]
+WantedBy=default.target

@@ -86,6 +86,17 @@ Each moment is independent: the brain does not remember what was said a moment a
 - Tokenizers, embeddings or attention trained by backpropagation.
 - Copy or pointer networks as such. The biological version of copying is gap 1: an auditory-motor map built by babbling.
 
+## Update (2026-10-25): in developmental order
+
+These gaps are not a to-do list to build at once. They line up with stages of development: babbling, first words, two words, phrases, sentences. [CURRICULUM.md](CURRICULUM.md) teaches in that order and adds each piece only when the brain gets stuck at the stage that needs it:
+- stage 0 needs the speech motor area built by babbling (gap 1, first half);
+- stage 1 needs the copy route and word-object links (gaps 1 and 4);
+- stage 2 needs sequencing (gap 2);
+- preschool and K need listening over ticks and episodic binding (gap 3);
+- grade 1 needs a rehearsed working memory and turn memory (gaps 3 and 5).
+
+Early stages are graded leniently (a babble that sounds like the word counts), and stricter at each stage.
+
 ## Recommendation
 
 Do nothing to the architecture yet, as agreed: data first. When we do change it, the order would be:
