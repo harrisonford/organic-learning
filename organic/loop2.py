@@ -155,7 +155,7 @@ class LoopBrain2:
             k = int(np.argmax(drive + 1e-6 * self.rng.standard_normal(len(drive))))
         return k, r
 
-    def live(self, img, question, answer=None, learn=True, explore=True, time_cost=0.02, deadline=None):
+    def live(self, img, question, answer=None, learn=True, explore=True, time_cost=0.02, deadline=None, grade=None):
         """Returns (answer said, tick, reward, gaze path, number of stays, gains used)."""
         img = np.asarray(img, np.float32)
         self.learning = learn
@@ -227,8 +227,10 @@ class LoopBrain2:
                     choices.append((tick, rg["active"], rg["g"], rg["a"], int(self.gain_group[kg])))
         reward = None
         if answer is not None:
-            correct = said == answer
-            value = 1.0 if correct else 0.0
+            # the environment's judgement: exact by default; a curriculum may grade leniently
+            # (partial credit), but the adult still says `answer` for imitation
+            value = float(grade(said)) if grade is not None else (1.0 if said == answer else 0.0)
+            correct = value >= 0.999
             if deadline is not None and tick > deadline:  # the world's hidden time limit
                 value *= 0.5 ** (tick - deadline)
             reward = value - time_cost * tick

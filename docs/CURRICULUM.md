@@ -61,3 +61,11 @@ The current brain would likely get stuck at **stage 0-1**. It cannot babble or r
 - **Mapping the existing sources onto stages** (table above), so nothing collected so far is wasted.
 - **Grading functions per stage** (local, as above), testable on the adults' own answers.
 - **A curriculum world:** serves moments by stage with spaced review, and tracks promotion. It can be run with today's brain to get the baseline verdict: where does the current structure stop?
+
+## Built (2026-10-25)
+
+- `organic/curriculum.py`: stages, sources mapped per stage, local graders with shrinking leniency, 70/30 spaced review, held-out tests per stage.
+- `experiments/curriculum_life.py`: a life with promotion (pass mark plus retention of earlier stages) and a stop verdict after `STAGE_BUDGET` moments at a stage.
+- `LoopBrain2.live(..., grade=fn)`: the environment can give partial reward; the adult's answer (to imitate) is unchanged.
+
+**Caveat on stage B with today's brain:** stage B passes in a few hundred moments, but this is not babbling. Echoing one of 58 known words is word recognition mapped to a learned word-form. True babbling needs the speech motor area (stage-0 proposal). Until then, stage B only checks that the brain can echo known words.
