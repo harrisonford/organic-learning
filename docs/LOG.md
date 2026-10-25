@@ -360,3 +360,14 @@ Units come only from the ear's own next-byte surprise (no tokenizer, no spaces r
   - per-call numpy overhead on small arrays (mean, norm, reduce) about 30%;
   - recomputing the list of word outputs each moment 5%.
   At 23k clusters a moment took ~120 ms, dominated by streaming the cluster identities (23k x 1,760 floats, 160 MB) through affinity several times per moment, which is memory-bandwidth bound.
+
+## 2026-10-25: habituation is not needed as a rule
+
+A controlled pair (`out/hab_on_s0`, `out/hab_off_s0`): fresh lives in the frozen world, seed 0, 100k moments, identical except for the ear's fixed habituation rule.
+- Same reward (0.63 / 0.63) and the same number of clusters (31,685 / 31,808).
+- The same segmentation.
+- Per kind within noise: off was +0.10 on yes/no, +0.07 on story and reading, -0.05 on color and talk.
+
+The orchestrator's own input adaptation (each input neuron subtracts its slow average) does what the rule did. **The rule is now off by default** (`Ear.habituation = False`), so habituation comes from structure.
+
+**Baseline curriculum life started** (`out/cur_s0`, via the `organic-life` service): today's brain through the stages, to get its verdict.

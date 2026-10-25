@@ -22,7 +22,8 @@ syllables drop.
    plus its n-grams regardless of position, so units that share pieces of
    sound overlap ("red", "red?", "it red and").
 4. Habituation (stimulus-specific adaptation): units heard all the time
-   ("is", "it", "?") excite less than rare, informative ones.
+   ("is", "it", "?") excite less than rare, informative ones. Off by default
+   since 2026-10-25: the orchestrator's input adaptation does this downstream.
 
 The silence after an utterance is heard too: it is the empty unit b"".
 """
@@ -132,7 +133,9 @@ class Ear:
             self.codes[unit] = v / (np.linalg.norm(v) + 1e-8)
         return self.codes[unit]
 
-    habituation = True  # off: every unit counts the same (tests whether adaptation downstream is enough)
+    # Off by default since 2026-10-25: a controlled pair (100k moments each) showed no difference with the
+    # fixed rule on or off; the orchestrator's own input adaptation does the job (docs/LOG.md)
+    habituation = False
 
     def salience(self, unit):
         """Habituated response: rare units stand out, ubiquitous ones fade."""
