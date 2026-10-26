@@ -79,8 +79,11 @@ class LoopBrain2:
     reflex = "change"
     cortex = None
     cortex_dims = []
+    cortex_grid = 1  # how the cortex's maps are summarized: grid x grid regions per layer
+    cortex_layers = (1, 2)  # which layers reach the orchestrator (layer i arrives at tick i + 2 - first)
 
-    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False, cortex=None):
+    def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False, cortex=None,
+                 cortex_grid=1, cortex_layers=(1, 2)):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
         self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
         self.adapt, self.mean_input, self.learning = adapt, None, True
@@ -90,7 +93,8 @@ class LoopBrain2:
         T, D = self.eye.T, self.eye.D
         # visual cortex (optional): deeper layers reach the orchestrator later
         self.cortex = cortex
-        self.cortex_dims = [l.kinds for l in cortex.layers[1:]] if cortex is not None else []
+        self.cortex_grid, self.cortex_layers = cortex_grid, tuple(cortex_layers)
+        self.cortex_dims = [cortex.layers[i].kinds * cortex_grid ** 2 for i in self.cortex_layers] if cortex is not None else []
         self.commands = [f"eye:{t}" for t in range(T)] + ["eye:stay"] + [f"gain:{k}" for k in range(gains)] + ["gain:none"]
         self.dim = self.ear.width + 3 * D + T + len(self.commands) + sum(self.cortex_dims)
         self.orch = Cortex(dim=self.dim, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
@@ -172,7 +176,8 @@ class LoopBrain2:
         said, snapshot, tick = None, None, 0
         codes = None
         if self.cortex is not None:  # the cortex processes the whole view once; layers arrive over ticks
-            codes = [c for c in self.cortex.code(img, grid=1)[1:]]
+            allc = self.cortex.code(img, grid=self.cortex_grid)
+            codes = [allc[i] for i in self.cortex_layers]
         while tick < self.max_ticks:
             level = min(phase, 2)
             code = self.eye.view(img, target, level, gain)

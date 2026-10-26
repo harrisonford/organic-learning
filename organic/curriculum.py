@@ -39,6 +39,10 @@ TODDLER_NOUNS = {"dog", "cat", "car", "bus", "bird", "horse", "cow", "sheep", "t
                  "cup", "banana", "apple", "orange", "cake", "pizza", "book", "clock", "teddy bear", "elephant", "bear", "giraffe", "zebra",
                  "baby", "bee", "bottle", "bowl", "boy", "butterfly", "dinosaur", "girl", "house", "lamp", "lion", "man", "woman", "mouse",
                  "rabbit", "snake", "table", "telephone", "television", "tiger", "turtle", "tv", "sports ball", "couch", "motorcycle"}
+# first words are picture-book words: single things a toddler names (the rest of the toddler nouns
+# come at preschool, and naming the biggest thing in a busy scene at kindergarten)
+PICTURE_BOOK = {"dog", "cat", "car", "bus", "bird", "horse", "cow", "train", "boat", "airplane", "baby", "bear", "apple", "banana",
+                "elephant", "chair", "bed", "cup", "clock", "bicycle", "tiger", "lion", "rabbit", "turtle", "mouse"}
 STOP = set("a an the is are was were be to of in on at and or it this that i you he she they we my your his her their its do does did "
            "what where who how why which there here with for".split())
 
@@ -178,7 +182,7 @@ def build_items(seed=0):
     # COCO annotation questions on val2017 photos
     for ref, q, a, kind in W.coco_annotation_questions(rng):
         if kind == "identity":
-            items.append((ref, q, [a], "W1" if a in TODDLER_NOUNS else "K", "coco:biggest"))
+            items.append((ref, q, [a], "K", "coco:biggest"))
         elif kind == "presence":
             items.append((ref, q, [a], "W2", "coco:presence"))
         elif kind == "count" and a in ("zero", "one", "two", "three"):
@@ -201,7 +205,7 @@ def build_items(seed=0):
     cifar, imgs = W.cifar100_questions()
     for ref, q, a, _ in cifar:
         if q == "what is this?":
-            items.append((ref, q, [a], "W1" if a in TODDLER_NOUNS else "G1", "cifar:name"))
+            items.append((ref, q, [a], "W1" if a in PICTURE_BOOK else "P" if a in TODDLER_NOUNS else "G1", "cifar:name"))
     return items, imgs
 
 

@@ -404,3 +404,23 @@ Both are learned choices, not rules.
   - "banana!" -> "bananm", "say tomato" -> "toma";
   - "what is your name?" -> "remember".
 - Curriculum change: first-words naming is limited to toddler nouns (dog, cat, car, cup, banana...); the rest of CIFAR and COCO naming moved to later stages.
+
+## 2026-10-26 (evening): first words hit the vision wall; picture-book W1 and spatial cortex input
+
+`kid_s0` (speaking brain, cortex pooled to one summary per layer) passed B (L0 released) and then stayed at W1 0.11-0.20 for 45k moments.
+
+A nearest-neighbour probe (`experiments/w1_vision_probe.py`) gives roughly the ceiling of prototype clusters:
+
+| naming task | 1x1, layers 2-3 (as used) | 2x2, layers 1-3 | 4x4, layers 1-3 |
+|---|---|---|---|
+| 34 toddler nouns (CIFAR) | 0.15 | 0.23 | 0.29 |
+| ~11 picture-book nouns (CIFAR) | 0.35 | 0.43 | 0.54 |
+| biggest thing in a COCO scene | 0.11-0.21 | 0.10 | 0.18 |
+
+So the brain sat at the ceiling of its own visual features. Changes:
+
+- **W1 is picture-book naming** of single objects (25 nouns; CIFAR). The other toddler nouns move to preschool. Naming the biggest thing in a busy scene moves to kindergarten: it is scene understanding, not a first-words skill.
+- **The cortex reaches the orchestrator with coarse spatial layout:** 2x2 regions per layer, all three layers. Layer 1 arrives at tick 2, layer 2 at tick 3, layer 3 at tick 4. Options `cortex_grid` / `cortex_layers`; old brains keep 1x1 / layers 2-3. 4x4 would not fit in memory.
+- **A fresh cumulative life `kid_s1`** (budget 30k clusters) replaces `kid_s0`. L0 stays the one released from `kid_s0`; the next levels come from `kid_s1`.
+
+First sign in the new brain: asked "what is this?", it echoes "this?" (echolalia). The learned copy-or-own-words choice should outgrow it.

@@ -272,7 +272,10 @@ class SpeakingBrain(LoopBrain2):
         prev_glance = None
         path, stays, gains_used, choices = [12], 0, [], []
         said, snapshot, tick, spoken = None, None, 0, []
-        codes = [c for c in self.cortex.code(img, grid=1)[1:]] if self.cortex is not None else None
+        codes = None
+        if self.cortex is not None:
+            allc = self.cortex.code(img, grid=self.cortex_grid)
+            codes = [allc[i] for i in self.cortex_layers]
         while tick < self.max_ticks:
             level = min(phase, 2)
             code = self.eye.view(img, target, level, gain)

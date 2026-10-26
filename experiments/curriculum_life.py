@@ -41,6 +41,8 @@ else:
     cfg = {"reflex": "contrast", "adapt": True, "sleep_cleanup": True}
     if os.environ.get("CORTEX"):
         cfg["cortex"] = pickle.load(open(os.environ["CORTEX"], "rb"))
+        cfg["cortex_grid"] = int(os.environ.get("CORTEX_GRID", 1))
+        cfg["cortex_layers"] = tuple(int(x) for x in os.environ.get("CORTEX_LAYERS", "1,2").split(","))
     if os.environ.get("SPEECH"):  # the speaking brain (organic/speech.py)
         from organic.speech import SpeakingBrain
         brain = SpeakingBrain(parts, seed=SEED, size=64, **cfg)
