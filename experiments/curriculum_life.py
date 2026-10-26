@@ -22,7 +22,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from organic.curriculum import NAMES, PASS, RETAIN, STAGES, Curriculum, grade  # noqa: E402
+from organic.curriculum import NAMES, PASS, RETAIN, STAGES, Curriculum, grade, tidy  # noqa: E402
 from organic.loop2 import LoopBrain2  # noqa: E402
 from organic.peye import Parts  # noqa: E402
 
@@ -41,7 +41,11 @@ else:
     cfg = {"reflex": "contrast", "adapt": True, "sleep_cleanup": True}
     if os.environ.get("CORTEX"):
         cfg["cortex"] = pickle.load(open(os.environ["CORTEX"], "rb"))
-    brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
+    if os.environ.get("SPEECH"):  # the speaking brain (organic/speech.py)
+        from organic.speech import SpeakingBrain
+        brain = SpeakingBrain(parts, seed=SEED, size=64, **cfg)
+    else:
+        brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": "B", "since": 0, "passed": {}, "promotions": []}
 if os.environ.get("EAR_HABITUATION") == "0":
     brain.ear.habituation = False
@@ -64,7 +68,7 @@ def evaluate(stages):
         for m in tests[s]:
             said, tick, *_ = brain.live(m["image"], m["question"], learn=False, explore=False)
             scores.append(grade(s, said, m["answers"]))
-            exact.append(said in m["answers"])
+            exact.append(tidy(said) in [tidy(a) for a in m["answers"]])
             ticks.append(tick)
         res[s] = {"score": float(np.mean(scores)), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores)}
     return res
@@ -82,6 +86,8 @@ rewards = []
 while brain.age < TOTAL:
     stage = state["stage"]
     m = world.moment(stage)
+    if stage == "B" and hasattr(brain, "babble"):  # infancy: babbling between the words heard
+        brain.babble(int(os.environ.get("BABBLE_PER", 3)))
     _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"], grade=lambda said, m=m: grade(m["stage"], said, m["answers"]))
     rewards.append(r)
     if brain.age % EVERY:
@@ -98,6 +104,14 @@ while brain.age < TOTAL:
           + " | ".join(f"{s} {v['score']:.2f}/{v['exact']:.2f}" for s, v in res.items()) + f" | clusters {brain.orch.C} | {'PROMOTED' if promoted else ''}", flush=True)
     if promoted:
         state["passed"][stage] = cur
+        # a release candidate: the brain as it was when it passed this stage
+        os.makedirs("out/levels", exist_ok=True)
+        tag = os.path.basename(out_path).replace(".jsonl", "")
+        save()
+        os.replace(out_path.replace(".jsonl", ".pkl"), f"out/levels/{tag}_{stage}.pkl")
+        save()
+        json.dump({"stage": stage, "name": NAMES[stage], "age": brain.age, "measure": res, "passed": dict(state["passed"]), "clusters": int(brain.orch.C),
+                   "brain": type(brain).__name__}, open(f"out/levels/{tag}_{stage}.json", "w"), indent=1)
         state["promotions"].append((stage, brain.age))
         if k + 1 == len(STAGES):
             verdict = "passed every stage"

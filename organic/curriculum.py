@@ -33,6 +33,12 @@ FIRST_WORDS = ["mama", "dada", "ball", "dog", "cat", "hi", "bye", "milk", "no", 
                "duck", "cookie", "juice", "banana", "apple", "water", "bath", "hat", "eyes", "nose", "mouth", "uh oh", "night night",
                "bird", "fish", "cow", "moo", "woof", "meow", "baa", "hot", "all gone", "thank you", "please", "bear", "bottle", "spoon",
                "cup", "door", "outside", "light", "truck", "bus", "train", "boat", "kitty", "doggy", "bunny", "teddy", "sock", "bed"]
+# things a toddler names first (picture-book and household nouns present in COCO / CIFAR-100);
+# naming anything else belongs to later stages
+TODDLER_NOUNS = {"dog", "cat", "car", "bus", "bird", "horse", "cow", "sheep", "train", "boat", "airplane", "truck", "bicycle", "chair", "bed",
+                 "cup", "banana", "apple", "orange", "cake", "pizza", "book", "clock", "teddy bear", "elephant", "bear", "giraffe", "zebra",
+                 "baby", "bee", "bottle", "bowl", "boy", "butterfly", "dinosaur", "girl", "house", "lamp", "lion", "man", "woman", "mouse",
+                 "rabbit", "snake", "table", "telephone", "television", "tiger", "turtle", "tv", "sports ball", "couch", "motorcycle"}
 STOP = set("a an the is are was were be to of in on at and or it this that i you he she they we my your his her their its do does did "
            "what where who how why which there here with for".split())
 
@@ -71,8 +77,14 @@ def in_order(said, ans):
     return 1.0 if len(pos) < 2 else sum(x < y for x, y in zip(pos, pos[1:])) / (len(pos) - 1)
 
 
+def tidy(s):
+    """How a parent hears it: case and the punctuation around it do not matter."""
+    return " ".join((s or "").lower().split()).strip(" .!?,;:")
+
+
 def grade(stage, said, answers):
     """Score in [0, 1]; leniency shrinks with the stage."""
+    said, answers = tidy(said), [tidy(a) for a in answers]
     if not said:
         return 0.0
     if any(said == a for a in answers):
@@ -166,7 +178,7 @@ def build_items(seed=0):
     # COCO annotation questions on val2017 photos
     for ref, q, a, kind in W.coco_annotation_questions(rng):
         if kind == "identity":
-            items.append((ref, q, [a], "W1", "coco:biggest"))
+            items.append((ref, q, [a], "W1" if a in TODDLER_NOUNS else "K", "coco:biggest"))
         elif kind == "presence":
             items.append((ref, q, [a], "W2", "coco:presence"))
         elif kind == "count" and a in ("zero", "one", "two", "three"):
@@ -189,7 +201,7 @@ def build_items(seed=0):
     cifar, imgs = W.cifar100_questions()
     for ref, q, a, _ in cifar:
         if q == "what is this?":
-            items.append((ref, q, [a], "W1", "cifar:name"))
+            items.append((ref, q, [a], "W1" if a in TODDLER_NOUNS else "G1", "cifar:name"))
     return items, imgs
 
 

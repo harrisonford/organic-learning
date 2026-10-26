@@ -25,9 +25,11 @@ sleep, budgets) is the loop brain's, unchanged.
 
   copy route       (milestone 3) the heard utterance stays as an auditory
                    trace; while speaking, each motor unit is primed by how well
-                   its learned sound matches what comes next in the trace,
-                   starting at any heard unit and then following on from where
-                   the last unit matched (self-hearing moves the place along).
+                   its learned sound matches what comes next in the trace. It
+                   starts after a pause (weighted by recency: the last word heard
+                   is the strongest trace), then follows on from where the last
+                   unit matched (self-hearing moves the place along), and the
+                   next pause in the trace pulls toward silence.
                    It works only as well as the auditory-motor map: without
                    babbling, nothing to copy with.
 
@@ -69,7 +71,8 @@ class Mouth:
             return SILENCE
         i = self.index[unit]
         slip = 0.3 / (1.0 + self.practice[i] / 50.0)
-        self.practice[i] += 1
+        if not getattr(self, "frozen", False):
+            self.practice[i] += 1
         out = bytearray(unit)
         for j in range(len(out)):
             if self.rng.random() < slip:
@@ -78,7 +81,7 @@ class Mouth:
 
     def hear_self(self, unit, came_out, ear):
         """Auditory-motor map: the sound of this gesture is what the ear heard when it was made."""
-        if unit == SILENCE:
+        if unit == SILENCE or getattr(self, "frozen", False):
             return
         i = self.index[unit]
         self.amap_n[i] += 1
@@ -188,7 +191,7 @@ class SpeakingBrain(LoopBrain2):
             del self.ear.codes[seg]
         return v
 
-    def _prime(self, trace, positions):
+    def _prime(self, trace, positions, weights=None):
         """Copy route: for each motor unit, how well its learned sound (auditory-motor
         map) matches what comes next in the heard trace at any of `positions`.
         Returns priming per unit (group order) and the position each unit matched at."""
@@ -200,11 +203,12 @@ class SpeakingBrain(LoopBrain2):
         for i, u in enumerate(units):
             if u:
                 lengths.setdefault(len(u), []).append(i)
-        for p in positions:
+        for j, p in enumerate(positions):
+            w = 1.0 if weights is None else weights[j]
             for L, idx in lengths.items():
                 if p + L > len(trace):
                     continue
-                m = amap[idx] @ self._segment_sound(trace[p : p + L])
+                m = w * (amap[idx] @ self._segment_sound(trace[p : p + L]))
                 better = m > prime[idx]
                 prime[np.array(idx)[better]] = m[better]
                 where[np.array(idx)[better]] = p
@@ -218,15 +222,19 @@ class SpeakingBrain(LoopBrain2):
         r = r0
         sil = self.mouth.index[SILENCE]
         pos, unit_end = None, None
-        ends = sorted(set(starts[1:]) | {len(trace)})
+        # copying starts after a pause (a space, or the start of what was heard); the
+        # more recent the word, the stronger its trace (recency: toddlers echo the last word)
+        starts = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
+        weights = [0.75 ** (len(starts) - 1 - j) for j in range(len(starts))]
+        ends = sorted({i for i, b in enumerate(trace) if b == 32} | {len(trace)})
         for _ in range(self.max_utterance):
             if r is None or r["probs"] is None:
                 break
             drive = r["probs"].copy()
             if self.copy_gain and trace:
-                prime, where = self._prime(trace, starts if pos is None else [pos])
+                prime, where = self._prime(trace, starts, weights) if pos is None else self._prime(trace, [pos])
                 if pos is not None and pos >= unit_end:
-                    prime[sil] = 1.0  # the heard unit being repeated is over
+                    prime[sil] = 1.0  # a pause in what was heard: the word being repeated is over
                 drive = drive + self.copy_gain * prime
             if explore:
                 p = np.exp(np.log(drive + 1e-9) / 0.5)
@@ -252,6 +260,7 @@ class SpeakingBrain(LoopBrain2):
         """As LoopBrain2.live, but the answer is spoken unit by unit. Returns the same tuple."""
         img = np.asarray(img, np.float32)
         self.learning = learn
+        self.mouth.frozen = not learn  # nothing changes while not learning (a frozen, served model)
         heard = self.ear.units(question, learn)
         q_code = self.ear.question(heard)
         self.heard_recent = 0.9 * self.heard_recent + 0.1 * q_code
