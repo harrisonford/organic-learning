@@ -64,13 +64,15 @@ t0 = time.time()
 def evaluate(stages):
     res = {}
     for s in stages:
-        scores, ticks, exact = [], [], []
+        scores, ticks, exact, by = [], [], [], {}
         for m in tests[s]:
             said, tick, *_ = brain.live(m["image"], m["question"], learn=False, explore=False)
             scores.append(grade(s, said, m["answers"]))
             exact.append(tidy(said) in [tidy(a) for a in m["answers"]])
             ticks.append(tick)
-        res[s] = {"score": float(np.mean(scores)), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores)}
+            by.setdefault(m["source"], []).append((scores[-1], said))
+        res[s] = {"score": float(np.mean(scores)), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
+                  "by_source": {src: {"score": float(np.mean([x for x, _ in v])), "n": len(v), "said": [y for _, y in v[:5]]} for src, v in by.items()}}
     return res
 
 
