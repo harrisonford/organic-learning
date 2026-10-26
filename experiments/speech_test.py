@@ -49,12 +49,15 @@ for age in range(1, N + 1):
     m = cur.moment(STAGE)
     brain.live(m["image"], m["question"], m["answer"], grade=lambda said, m=m: grade(m["stage"], said, m["answers"]))
     if age % EVERY == 0:
-        said = [brain.live(t["image"], t["question"], learn=False, explore=False)[0] for t in test]
+        said, copies = [], 0
+        for t in test:
+            said.append(brain.live(t["image"], t["question"], learn=False, explore=False)[0])
+            copies += getattr(brain, "copied", False)
         ex = np.mean([s in t["answers"] for s, t in zip(said, test)])
         sc = np.mean([grade(STAGE, s, t["answers"]) for s, t in zip(said, test)])
         nw = [brain.live(cur.image(("dark",)), f"say {w}!", learn=False, explore=False)[0] for w in NONWORDS]
         chunks = [u.decode("utf-8", "replace") for u in brain.mouth.units if len(u) > 1]
-        print(f"age {age:>6} exact {ex:.2f} score {sc:.2f} | clusters {brain.orch.C} | chunks {len(chunks)} (e.g. {chunks[-8:]}) | "
+        print(f"age {age:>6} exact {ex:.2f} score {sc:.2f} copy {copies / len(test):.2f} | clusters {brain.orch.C} | chunks {len(chunks)} (e.g. {chunks[-8:]}) | "
               f"says {[(t['question'][:14], s) for s, t in list(zip(said, test))[:4]]} | nonwords {list(zip(NONWORDS, nw))[:4]} "
               f"(sound {np.mean([sound_sim(n or '', w) for n, w in zip(nw, NONWORDS)]):.2f}) | {time.time() - t0:.0f}s", flush=True)
 pickle.dump(brain, open(os.environ.get("OUT", "/tmp/speech_brain.pkl"), "wb"))

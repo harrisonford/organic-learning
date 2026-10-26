@@ -21,8 +21,15 @@ it decides to speak, hears itself, and stops when it chooses silence.
                    speaking tick, the target is the next unit.
 
 Everything else (eye, cortex, orchestrator rules, patience, eye commands,
-sleep, budgets) is the loop brain's, unchanged. The copy route (hearing ->
-saying, docs/SPEECH.md point 3) is not here yet: this is milestone 1-2.
+sleep, budgets) is the loop brain's, unchanged.
+
+  copy route       (milestone 3) the heard utterance stays as an auditory
+                   trace; while speaking, each motor unit is primed by how well
+                   its learned sound matches what comes next in the trace,
+                   starting at any heard unit and then following on from where
+                   the last unit matched (self-hearing moves the place along).
+                   It works only as well as the auditory-motor map: without
+                   babbling, nothing to copy with.
 
 The live() loop is a copy of LoopBrain2.live with the answer part replaced, so
 that lives running with LoopBrain2 are not affected.
@@ -121,6 +128,10 @@ class SpeakingBrain(LoopBrain2):
             a = getattr(self.orch, arr)
             setattr(self.orch, arr, np.zeros(a.shape[:-1] + (self.dim,), np.float32))
         self.say = {u: self.orch.output_neuron(self._name(u)) for u in self.mouth.units}
+        # whether to let the copy route in is a choice, like the eye's gain neurons, credited by outcome
+        self.copy_group = np.array([self.orch.output_neuron("speak:copy"), self.orch.output_neuron("speak:own")])
+        for c in self.copy_group:
+            self.value[int(c)] = 0.0
         self.heard_recent = np.zeros(self.ear.width, np.float32)
         self.babbles = 0
 
@@ -167,22 +178,67 @@ class SpeakingBrain(LoopBrain2):
             self.babbles += 1
         return b"".join(seq).decode("utf-8", "replace")
 
-    def _speak(self, base, r0, explore):
-        """Say one unit per tick from the first choice until silence."""
+    copy_gain = 1.0  # strength of the hearing -> saying route (0: no copy route)
+
+    def _segment_sound(self, seg):
+        """The ear's code of a stretch of the heard trace (not kept as a unit)."""
+        new = seg not in self.ear.codes
+        v = self.ear.sound(seg)
+        if new:
+            del self.ear.codes[seg]
+        return v
+
+    def _prime(self, trace, positions):
+        """Copy route: for each motor unit, how well its learned sound (auditory-motor
+        map) matches what comes next in the heard trace at any of `positions`.
+        Returns priming per unit (group order) and the position each unit matched at."""
+        units = self.mouth.units
+        amap = self.mouth.amap / (np.linalg.norm(self.mouth.amap, axis=1, keepdims=True) + 1e-8)
+        prime = np.zeros(len(units), np.float32)
+        where = np.full(len(units), -1, np.int64)
+        lengths = {}
+        for i, u in enumerate(units):
+            if u:
+                lengths.setdefault(len(u), []).append(i)
+        for p in positions:
+            for L, idx in lengths.items():
+                if p + L > len(trace):
+                    continue
+                m = amap[idx] @ self._segment_sound(trace[p : p + L])
+                better = m > prime[idx]
+                prime[np.array(idx)[better]] = m[better]
+                where[np.array(idx)[better]] = p
+        return np.maximum(prime, 0) ** 2, where
+
+    def _speak(self, base, r0, explore, trace=b"", starts=()):
+        """Say one unit per tick from the first choice until silence. The orchestrator's
+        vote is joined by the copy route's priming from the heard trace."""
         group = self._motor_group()
         units, came = [], []
         r = r0
+        sil = self.mouth.index[SILENCE]
+        pos, unit_end = None, None
+        ends = sorted(set(starts[1:]) | {len(trace)})
         for _ in range(self.max_utterance):
             if r is None or r["probs"] is None:
                 break
+            drive = r["probs"].copy()
+            if self.copy_gain and trace:
+                prime, where = self._prime(trace, starts if pos is None else [pos])
+                if pos is not None and pos >= unit_end:
+                    prime[sil] = 1.0  # the heard unit being repeated is over
+                drive = drive + self.copy_gain * prime
             if explore:
-                p = np.exp((np.log(r["probs"] + 1e-9)) / 0.5)
+                p = np.exp(np.log(drive + 1e-9) / 0.5)
                 k = int(self.rng.choice(len(group), p=p / p.sum()))
             else:
-                k = int(np.argmax(r["probs"]))
+                k = int(np.argmax(drive))
             u = self.mouth.units[k]
             if u == SILENCE:
                 break
+            if self.copy_gain and trace and where[k] >= 0:  # follow the heard trace from where this matched
+                pos = int(where[k]) + len(u)
+                unit_end = next((e for e in ends if e > where[k]), len(trace))
             out = self.mouth.articulate(u)
             self.mouth.hear_self(u, out, self.ear)
             units.append(u)
@@ -226,7 +282,12 @@ class SpeakingBrain(LoopBrain2):
                 patience = float((self.orch.patience[r["active"]] * r["g"]).sum() / total) if total else 1.0
                 if r["probs"].max() >= patience or tick == self.max_ticks:
                     snapshot = (s, r, base)
-                    spoken, said = self._speak(base, r, explore and learn)
+                    starts = list(np.cumsum([0] + [len(h) for h in heard[:-1]]))
+                    kc, rc = self._choose(s, self.copy_group, np.zeros(2), explore)
+                    if rc is not None and rc.get("a") is not None:
+                        choices.append((tick, rc["active"], rc["g"], rc["a"], int(self.copy_group[kc])))
+                    self.copied = kc == 0
+                    spoken, said = self._speak(base, r, explore and learn, trace=question.encode("utf-8") if kc == 0 else b"", starts=starts)
                     tick += len(spoken)  # speaking takes time
                     break
             if level < 2:

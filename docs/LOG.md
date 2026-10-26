@@ -371,3 +371,23 @@ A controlled pair (`out/hab_on_s0`, `out/hab_off_s0`): fresh lives in the frozen
 The orchestrator's own input adaptation (each input neuron subtracts its slow average) does what the rule did. **The rule is now off by default** (`Ear.habituation = False`), so habituation comes from structure.
 
 **Baseline curriculum life started** (`out/cur_s0`, via the `organic-life` service): today's brain through the stages, to get its verdict.
+
+## 2026-10-26: first curriculum verdict, and the speaking brain
+
+**Baseline curriculum life (`out/cur_s0`, today's whole-answer brain, cortex on):** *stops at W1 (first words): score 0.19 < 0.5 after 300,000 moments.*
+- Stage B (echo) passed in the first 5k moments.
+- W1 hovered at 0.17-0.21 for 300k moments. W1 is mostly naming what is in a photo (CIFAR-100, COCO's biggest object), which this eye-plus-cortex cannot do at 64x64.
+- Stage B dropped from 0.83 to about 0.65 after promotion (at the edge of the 80% retention mark).
+
+The verdict is honest and points at vision, not language, as the first wall.
+
+**Speaking brain (`organic/speech.py`):**
+- Stage B, first words only: 86% exact echo. Motor chunks formed ("thank you", "all gone"). Slips are rare and toddler-like.
+- Copy route: nonword repetition rose from ~0 to 0.40 sound similarity. As a fixed route it caused echolalia; as a learned choice ("copy" vs "own words", credited by outcome) the brain learned to use its own words when the vocabulary was small (copy 5-14%).
+- With a wide echo vocabulary (4,099 words from the text world), it learned to copy most of the time (71-88%). Nonwords are partly repeated ("tam!", "pug!", "sorn!"; sound 0.27). Exact echo is 0.31-0.35 and lenient 0.69: it repeats too much ("say sorn!", "juice, juice", with punctuation) because it cannot yet choose *which* heard unit to repeat or where to stop.
+- Imitating every new word byte by byte grows clusters fast (19k clusters at 8k moments).
+
+Next for speech:
+- choosing which heard unit to repeat (an auditory attention shift, learned like gaze);
+- stopping at the end of that unit.
+Both are learned choices, not rules.

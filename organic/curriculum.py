@@ -93,10 +93,18 @@ def grade(stage, said, answers):
 # ------------------------------------------------------------------ sources
 
 def _babble():
+    """Echo games: first words, and the many other words a toddler hears adults say."""
     out = []
     for w in FIRST_WORDS:
         for fmt in ("{w}", "{w}!", "say {w}", "{w}, {w}"):
             out.append((("dark", "babble", w, fmt), fmt.format(w=w), [w], "B", "echo"))
+    vocab = set()
+    path = os.path.join(W.WORLD_DIR, "text_qa.jsonl")
+    for line in open(path) if os.path.exists(path) else []:
+        vocab.update(w for w in words(json.loads(line)["q"]) if w.isalpha() and 3 <= len(w) <= 10)
+    for w in sorted(vocab - set(FIRST_WORDS)):
+        fmt = ("{w}", "{w}!", "say {w}")[zlib.crc32(w.encode()) % 3]
+        out.append((("dark", "babble", w, fmt), fmt.format(w=w), [w], "B", "echo:wide"))
     return out
 
 
