@@ -391,3 +391,16 @@ Next for speech:
 - choosing which heard unit to repeat (an auditory attention shift, learned like gaze);
 - stopping at the end of that unit.
 Both are learned choices, not rules.
+
+## 2026-10-26: kid-a, first release (L0, echo, like a 12-month-old)
+
+- **New repo [kid-a](https://github.com/harrisonford/kid-a):** serves the brain, frozen, at every curriculum stage it has passed.
+  - Svelte 5 chat app with images and a gaze overlay; history stays in the browser.
+  - Standard-library Python API.
+  - Runs at `http://100.98.161.113:8787` on Tailscale only (`kid-a` user service).
+- **Training (`out/kid_s0`, `organic-life` service):** the speaking brain through the curriculum, cumulatively from stage B. Every promotion writes a candidate to `out/levels/`. The `kid-a-release` timer releases it as the next level.
+- **L0 "echo":** passed stage B at 5,000 moments, with 0.94 lenient and 0.87 exact on held-out echo items. From the API:
+  - "say blick" -> "blick", "say elephant" -> "elephant";
+  - "banana!" -> "bananm", "say tomato" -> "toma";
+  - "what is your name?" -> "remember".
+- Curriculum change: first-words naming is limited to toddler nouns (dog, cat, car, cup, banana...); the rest of CIFAR and COCO naming moved to later stages.
