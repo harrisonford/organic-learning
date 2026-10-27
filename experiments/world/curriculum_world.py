@@ -61,6 +61,22 @@ if os.path.exists(out):
         by_subject.setdefault((d["stage"], d["subject"]), []).append(d["q"])
 
 
+LIFE = os.path.join(os.path.dirname(__file__), "..", "..", "out", os.environ.get("CURRICULUM_LIFE", "kid_s1") + ".jsonl")
+ORDER = ["W1", "W2", "P", "K", "G1", "G2", "G3", "G4"]
+
+
+def focus():
+    """Half of the writing goes to the stage the brain is at now and the next one (a teacher
+    prepares for the class in front of them); the rest is spread over all stages."""
+    try:
+        with open(LIFE) as f:
+            stage = json.loads(f.readlines()[-1])["stage"]
+    except (OSError, IndexError, ValueError, KeyError):
+        return ORDER
+    k = ORDER.index(stage) if stage in ORDER else 0
+    return ORDER[k : k + 2]
+
+
 def used():
     return adults._state().get("curriculum_count", 0)
 
@@ -76,7 +92,7 @@ while True:
         while used() + 2 > SHARE or adults._state()["count"] + 2 > PER_DAY:
             time.sleep(600)
     k += 1
-    stage = rng.choice(list(STAGES))
+    stage = rng.choice(focus()) if rng.random() < 0.5 else rng.choice(list(STAGES))
     who, form, weight, subjects = STAGES[stage]
     subject = rng.choice(subjects)
     n = 10 if any(w in subject for w in ("paragraph", "story", "stories", "coding", "text")) else 25
