@@ -440,3 +440,14 @@ Nearest-neighbour probe on picture-book naming (16 CIFAR classes, majority 0.07)
 The sparse competitive layer loses more than the trace gains. Not pursued for now.
 
 Meanwhile `kid_s1` sits at W1 0.24-0.36 (pass 0.5) at 125k moments.
+
+## 2026-10-27: `kid_s2`, a 4x4 visual layout
+
+`kid_s1` (2x2 layout) stayed at W1 0.16-0.36 for 135k moments, and was stopped (files kept).
+
+The kid-a server now unloads its model after 5 idle minutes, which frees almost all RAM for training. `kid_s2`:
+- the cortex reaches the orchestrator with a 4x4 layout from all three layers (probe ceiling on picture books: 0.54, vs 0.43 at 2x2);
+- cluster budget 22k (each cluster is ~4x wider);
+- 4 math threads.
+
+L0 stays the kid_s0 release; L1 and beyond will come from `kid_s2`. The curriculum writer's focus has raised W1 text items from 25 to 166.
