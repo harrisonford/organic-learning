@@ -424,3 +424,19 @@ So the brain sat at the ceiling of its own visual features. Changes:
 - **A fresh cumulative life `kid_s1`** (budget 30k clusters) replaces `kid_s0`. L0 stays the one released from `kid_s0`; the next levels come from `kid_s1`.
 
 First sign in the new brain: asked "what is this?", it echoes "this?" (echolalia). The learned copy-or-own-words choice should outgrow it.
+
+## 2026-10-27: a trace-rule IT layer does not help (negative result)
+
+`experiments/trace_it_probe.py` tested an IT layer on top of the visual cortex:
+- 600 competitive units, 20 active, reading the layer 2+3 code with a 2x2 layout;
+- developed on 6,000 unlabeled CIFAR photos, each seen as 4 views (shift, flip, slight zoom);
+- with the Foldiak/VisNet trace rule vs the same rule without the trace.
+
+Nearest-neighbour probe on picture-book naming (16 CIFAR classes, majority 0.07):
+- layer 2+3 code (as used now): **0.378**
+- IT with trace: 0.170
+- IT without trace: 0.195
+
+The sparse competitive layer loses more than the trace gains. Not pursued for now.
+
+Meanwhile `kid_s1` sits at W1 0.24-0.36 (pass 0.5) at 125k moments.
