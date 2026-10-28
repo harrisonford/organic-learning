@@ -49,6 +49,8 @@ else:
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": "B", "since": 0, "passed": {}, "promotions": []}
+if hasattr(brain, "mouth") and os.environ.get("MOTOR_UNITS"):  # the motor repertoire's size (each unit widens every cluster)
+    brain.mouth.max_units = int(os.environ["MOTOR_UNITS"])
 if os.environ.get("EAR_HABITUATION") == "0":
     brain.ear.habituation = False
 if os.environ.get("MAX_CLUSTERS") or os.environ.get("MAX_OUTPUTS"):
