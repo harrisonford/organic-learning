@@ -386,9 +386,7 @@ class Cortex:
         died = int(dead.sum())
         if died:
             dead_uids = set(self.uid[np.where(dead)[0]].tolist())
-            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
-                a = getattr(self, arr)
-                a[: len(keep)] = a[keep]
+            self._compact(keep)
             self.C = len(keep)
             self.deaths += died
         else:
@@ -472,9 +470,7 @@ class Cortex:
         dead |= retire
         keep = np.where(~dead)[0]
         if dead.any():
-            for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
-                a = getattr(self, arr)
-                a[: len(keep)] = a[keep]
+            self._compact(keep)
             self.C = len(keep)
             self.deaths += int(dead.sum())
         self.last_consolidation = self.t
@@ -505,10 +501,19 @@ class Cortex:
             return self.prune()
         return 0
 
-    def _keep_clusters(self, keep):
+    def _compact(self, keep, block=1024):
+        """Move the kept clusters to the front of every array, in blocks (a whole-array
+        `a[keep]` would briefly double the largest arrays). `keep` is ascending, so a
+        block's sources lie at or after its destination and are not yet overwritten."""
+        keep = np.asarray(keep)
         for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
             a = getattr(self, arr)
-            a[: len(keep)] = a[keep]
+            for start in range(0, len(keep), block):
+                rows = keep[start : start + block]
+                a[start : start + len(rows)] = a[rows]
+
+    def _keep_clusters(self, keep):
+        self._compact(keep)
         dead = self.C - len(keep)
         self.C = len(keep)
         self.deaths += dead

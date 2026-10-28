@@ -451,3 +451,9 @@ The kid-a server now unloads its model after 5 idle minutes, which frees almost 
 - 4 math threads.
 
 L0 stays the kid_s0 release; L1 and beyond will come from `kid_s2`. The curriculum writer's focus has raised W1 text items from 25 to 166.
+
+## 2026-10-28: the OOM loop was pruning, not growth
+
+`kid_s2` was killed by the kernel every ~25-30 minutes for a day and a half. A diagnostic resume showed steady memory (8.1 GB) during learning. The kill came when the cluster count reached its budget and pruning compacted the arrays with `a[: len(keep)] = a[keep]`. That expression makes a full temporary copy of the input weights, about 6 GB with the 4x4 view, and pushed the process past 14 GB.
+
+Compaction (`Cortex._compact`, used by pruning, sleep consolidation and `sleep`) now copies in blocks of 1,024 clusters, in place. The motor-unit cap from the day before (900) stays as a guard, but it was not the cause.
