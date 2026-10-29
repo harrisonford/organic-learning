@@ -108,6 +108,7 @@ while brain.age < TOTAL:
     if stage == "BB":  # infancy before words: hearing the speech around it, babbling back
         m = world.moment("B" if brain.age % 3 == 0 else "W1" if brain.age % 3 == 1 else "P")
         heard = brain.ear.units(m["question"])
+        brain.mirror(m["question"])  # covert imitation of the speech it hears
         brain.heard_recent = 0.9 * brain.heard_recent + 0.1 * brain.ear.question(heard)
         brain.babble(int(os.environ.get("BABBLE_PER", 3)))
         brain.age += 1
@@ -150,6 +151,10 @@ while brain.age < TOTAL:
     elif brain.age - state["since"] >= STAGE_BUDGET:
         verdict = f"stops at {stage} ({NAMES[stage]}): score {cur:.2f} < {PASS[stage]} after {STAGE_BUDGET:,} moments" if cur < PASS[stage] else \
                   f"stops at {stage} ({NAMES[stage]}): passes it but cannot hold earlier stages"
+    if (brain.age // EVERY) % int(os.environ.get("REFRESH_EVERY", 10)) == 0:  # new items written by the adults join in
+        rng_state = world.rng.getstate()
+        world = Curriculum(seed=0)
+        world.rng.setstate(rng_state)
     rec["verdict"] = verdict
     log.write(json.dumps(rec) + "\n")
     log.flush()
