@@ -464,3 +464,23 @@ Compaction (`Cortex._compact`, used by pruning, sleep consolidation and `sleep`)
 - **New first stage BB (babbling, 6-10 months),** before echo. The brain hears the speech around it and babbles back. It passes when its babble's sound-likeness to heard speech reaches 0.22. A fresh test brain passed BB at 1,000 moments (0.25) and echo at 2,000; its babble kept improving afterwards (0.37 at 3,000).
 - **`SpeakingBrain.babble_when_silent`:** off in training. A served level babbles when it has nothing to say.
 - Release candidate for a babbler level: `out/levels/babbler_BB.*`, waiting for the level numbering decision.
+
+## 2026-10-29: babbling learned organically (covert imitation), no fixed limits
+
+The user's points on the first babbler:
+1. The drive toward expected sounds must be learned.
+2. No looking up a gesture's bytes in the ear's statistics.
+3. No fixed limits.
+4. No reward.
+
+Babbling is now:
+- **Covert imitation (`SpeakingBrain.mirror`).** Hearing someone speak activates, through the *learned* sound map, the gestures that would make those sounds. This is the same route as copying; nothing is said aloud. Consecutive gestures strengthen their link (Hebbian counts, `Mouth.habits`), and so does the last gesture's link to silence. With an empty sound map nothing resonates and a random gesture is linked: the habits start as noise.
+- **Babbling is spontaneous replay of those habits.** One pseudo-count per gesture keeps every gesture possible. There is no temperature and no target. A babble ends when its habits lead to silence. A guard of 200 gestures only prevents runaway loops.
+- **The sound map is taught by babbling itself** (self-hearing). So the order is the infant's: babble, hear yourself, map sounds to gestures, mirror others through the map, babble more like them.
+- **Results** (fresh brain, hearing everyday speech, 2 babbles per utterance):
+  - sound likeness: 0.12 after 300 utterances, 0.17 at 1k, 0.21 at 3k and at 6k;
+  - median babble length fell from 25 to 14 on its own (ending habits strengthen);
+  - examples: `d|%tis b-TlSg tin.6hak(...` early, then "what at cloe? is ik", "sou p?", "lis dowhens?", "whis mat athavere y?";
+  - it picks up the melody of what it hears, such as question endings.
+  This is a little below the earlier, partly designed version (0.26), which is the honest price. Mirroring costs 0.5 ms per utterance.
+- **No reward anywhere in babbling**, as decided.

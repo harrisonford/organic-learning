@@ -13,9 +13,12 @@ it decides to speak, hears itself, and stops when it chooses silence.
   map              running average of the ear's code of what actually came out
                    each time it was said (learned from babbling and from all
                    own speech, never wired).
-  babbling         spontaneous strings of 1-4 motor units, biased toward units
-                   that sound like recently heard speech (drift toward the
-                   language heard).
+  babbling         spontaneous replay of gesture habits; the habits come from
+                   covert imitation (hearing others activates, through the sound
+                   map, the gestures that would make those sounds, and gestures
+                   that follow each other link up, Hebbian). No drive toward
+                   any target, no length limit: a babble ends when its habits
+                   lead to silence.
   imitation        the adult's answer, as the child can say it with the units
                    it has (longest pieces first), followed by silence: at each
                    speaking tick, the target is the next unit.
@@ -53,6 +56,7 @@ class Mouth:
         self.practice = np.zeros(len(self.units), np.int64)
         self.pairs = {}
         self.chunk_after, self.max_units = chunk_after, max_units
+        self.habits = {}  # gesture -> {next gesture: count}, from covert imitation
         self.rng = np.random.default_rng(seed)
 
     def add(self, unit):
@@ -64,6 +68,23 @@ class Mouth:
         self.amap_n = np.append(self.amap_n, 0)
         self.practice = np.append(self.practice, 0)
         return True
+
+    def link(self, a, b):
+        """Hebbian: gesture b followed gesture a (in covert imitation)."""
+        if getattr(self, "frozen", False):
+            return
+        row = self.habits.setdefault(a, {})
+        row[b] = row.get(b, 0) + 1
+
+    def next_gesture(self, a, rng):
+        """What tends to follow gesture a, from the habits; any gesture remains possible
+        (one count each), so with no habits yet the choice is random."""
+        row = getattr(self, "habits", {}).get(a, {})
+        w = np.ones(len(self.units))
+        for b, c in row.items():
+            if b < len(w):
+                w[b] += c
+        return int(rng.choice(len(w), p=w / w.sum()))
 
     def articulate(self, unit):
         """What actually comes out: early gestures sometimes slip into another sound."""
@@ -167,41 +188,58 @@ class SpeakingBrain(LoopBrain2):
 
     # ----------------------------------------------------------- babbling
 
-    def _expected(self, context, unit):
-        """Log-probability the ear gives to hearing `unit` after `context` (its own
-        statistics of heard speech): how speech-like this gesture sounds here."""
-        lp, ctx = 0.0, bytearray(context)
-        for b in unit or b"\x00":
-            c = self.ear._predict(ctx)
-            if c is None:
-                return np.log(1.0 / 257)
-            lp += np.log((c[b if unit else 256] + 0.01) / (c.sum() + 0.01 * 257))
-            ctx.append(b)
-        return lp
+    babble_guard = 200  # only stops a runaway loop; a babble ends when its learned habits lead to silence
+
+    def mirror(self, text):
+        """Covert imitation: hearing someone speak activates, through the learned sound
+        map, the gestures that would make those sounds (the same route as copying). The
+        gestures that follow each other this way strengthen their link (Hebbian), and so
+        does the last one's link to silence. Nothing is said aloud. Early on the sound map
+        is empty, the resonance is noise, and so are the habits it leaves."""
+        trace = text.encode("utf-8")
+        units = self.mouth.units
+        sil = self.mouth.index[SILENCE]
+        amap = self.mouth.amap / (np.linalg.norm(self.mouth.amap, axis=1, keepdims=True) + 1e-8)
+        lengths = {}
+        for i, u in enumerate(units):
+            if u:
+                lengths.setdefault(len(u), []).append(i)
+        prev, pos = sil, 0
+        while pos < len(trace):
+            best, best_i = 0.0, None
+            for L, idx in lengths.items():
+                if pos + L > len(trace):
+                    continue
+                m = amap[idx] @ self._segment_sound(trace[pos : pos + L])
+                j = int(np.argmax(m))
+                if m[j] * L > best:  # a gesture that accounts for more of what was heard resonates more
+                    best, best_i = float(m[j]) * L, idx[j]
+            if best_i is None:  # nothing resonates: a random gesture (the map knows nothing yet)
+                best_i = int(self.rng.integers(len(units) - 1))
+                best_i = best_i if best_i != sil else 0
+            self.mouth.link(prev, best_i)
+            prev = best_i
+            pos += max(1, len(units[best_i]))
+        self.mouth.link(prev, sil)
 
     def babble(self, n=1, explore=True):
-        """Spontaneous sounds, heard by the ear; builds the auditory-motor map.
-
-        Each gesture is chosen by how speech-like it would sound after what has just
-        come out, by the ear's own statistics of the speech it has heard (infants'
-        babbling drifts toward the sounds of the language around them); silence ends
-        the babble when the ear would expect a pause. With little heard, the ear has no
-        expectations and babbling is close to random."""
+        """Spontaneous sounds: a replay of the gesture habits left by covert imitation,
+        heard by the ear (which teaches the sound map). Starts after silence and ends when
+        the habits lead back to silence."""
         units = self.mouth.units
         sil = self.mouth.index[SILENCE]
         for _ in range(n):
-            context, out = b"", []
-            for _step in range(8):
-                lp = np.array([self._expected(context, u) for u in units])
-                lp[sil] = self._expected(context, SILENCE) if context else -np.inf  # a babble has at least one sound
-                p = np.exp((lp - lp.max()) / (1.0 if explore else 0.7))
-                k = int(self.rng.choice(len(units), p=p / p.sum()))
-                if k == sil:
+            prev, out = sil, []
+            for _step in range(self.babble_guard):
+                k = self.mouth.next_gesture(prev, self.rng)
+                if k == sil and out:
                     break
+                if k == sil:
+                    continue
                 came = self.mouth.articulate(units[k])
                 self.mouth.hear_self(units[k], came, self.ear)
-                context += came
                 out.append(came)
+                prev = k
             self.babbles += 1
         return b"".join(out).decode("utf-8", "replace")
 
@@ -287,6 +325,8 @@ class SpeakingBrain(LoopBrain2):
         self.learning = learn
         self.mouth.frozen = not learn  # nothing changes while not learning (a frozen, served model)
         heard = self.ear.units(question, learn)
+        if learn:
+            self.mirror(question)  # covert imitation of what was heard
         q_code = self.ear.question(heard)
         self.heard_recent = 0.9 * self.heard_recent + 0.1 * q_code
         group = self._motor_group()
