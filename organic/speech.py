@@ -73,6 +73,8 @@ class Mouth:
         """Hebbian: gesture b followed gesture a (in covert imitation)."""
         if getattr(self, "frozen", False):
             return
+        if not hasattr(self, "habits"):  # mouths saved before covert imitation existed
+            self.habits = {}
         row = self.habits.setdefault(a, {})
         row[b] = row.get(b, 0) + 1
 
