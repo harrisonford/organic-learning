@@ -167,21 +167,46 @@ class SpeakingBrain(LoopBrain2):
 
     # ----------------------------------------------------------- babbling
 
+    def _expected(self, context, unit):
+        """Log-probability the ear gives to hearing `unit` after `context` (its own
+        statistics of heard speech): how speech-like this gesture sounds here."""
+        lp, ctx = 0.0, bytearray(context)
+        for b in unit or b"\x00":
+            c = self.ear._predict(ctx)
+            if c is None:
+                return np.log(1.0 / 257)
+            lp += np.log((c[b if unit else 256] + 0.01) / (c.sum() + 0.01 * 257))
+            ctx.append(b)
+        return lp
+
     def babble(self, n=1, explore=True):
-        """Spontaneous sounds, heard by the ear; builds the auditory-motor map."""
+        """Spontaneous sounds, heard by the ear; builds the auditory-motor map.
+
+        Each gesture is chosen by how speech-like it would sound after what has just
+        come out, by the ear's own statistics of the speech it has heard (infants'
+        babbling drifts toward the sounds of the language around them); silence ends
+        the babble when the ear would expect a pause. With little heard, the ear has no
+        expectations and babbling is close to random."""
         units = self.mouth.units
-        sims = self.mouth.amap @ self.heard_recent
+        sil = self.mouth.index[SILENCE]
         for _ in range(n):
-            p = np.exp(3.0 * sims) if explore else np.ones(len(units))
-            p[self.mouth.index[SILENCE]] = 0
-            p = p / p.sum()
-            seq = [units[i] for i in self.rng.choice(len(units), int(self.rng.integers(1, 5)), p=p)]
-            for u in seq:
-                self.mouth.hear_self(u, self.mouth.articulate(u), self.ear)
+            context, out = b"", []
+            for _step in range(8):
+                lp = np.array([self._expected(context, u) for u in units])
+                lp[sil] = self._expected(context, SILENCE) if context else -np.inf  # a babble has at least one sound
+                p = np.exp((lp - lp.max()) / (1.0 if explore else 0.7))
+                k = int(self.rng.choice(len(units), p=p / p.sum()))
+                if k == sil:
+                    break
+                came = self.mouth.articulate(units[k])
+                self.mouth.hear_self(units[k], came, self.ear)
+                context += came
+                out.append(came)
             self.babbles += 1
-        return b"".join(seq).decode("utf-8", "replace")
+        return b"".join(out).decode("utf-8", "replace")
 
     copy_gain = 1.0  # strength of the hearing -> saying route (0: no copy route)
+    babble_when_silent = False  # a served level babbles when it has nothing to say (off in training)
 
     def _segment_sound(self, seg):
         """The ear's code of a stretch of the heard trace (not kept as a unit)."""
@@ -357,4 +382,6 @@ class SpeakingBrain(LoopBrain2):
                     merged, retired = self.orch.consolidate()
                     self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
                 self.orch.maybe_prune()
+        if not learn and not said and self.babble_when_silent:  # nothing to say: it babbles (served levels)
+            said = self.babble(explore=False).strip()
         return said, tick, reward, path, stays, gains_used

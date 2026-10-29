@@ -22,10 +22,10 @@ from PIL import Image
 
 from . import world as W
 
-STAGES = ["B", "W1", "W2", "P", "K", "G1", "G2", "G3", "G4"]
-NAMES = {"B": "babbling", "W1": "first words", "W2": "two words", "P": "preschool", "K": "kindergarten",
+STAGES = ["BB", "B", "W1", "W2", "P", "K", "G1", "G2", "G3", "G4"]
+NAMES = {"BB": "babbling", "B": "echo", "W1": "first words", "W2": "two words", "P": "preschool", "K": "kindergarten",
          "G1": "first grade", "G2": "second grade", "G3": "third grade", "G4": "fourth grade"}
-PASS = {"B": 0.8, "W1": 0.5, "W2": 0.5, "P": 0.4, "K": 0.4, "G1": 0.4, "G2": 0.4, "G3": 0.4, "G4": 0.4}
+PASS = {"BB": 0.22, "B": 0.8, "W1": 0.5, "W2": 0.5, "P": 0.4, "K": 0.4, "G1": 0.4, "G2": 0.4, "G3": 0.4, "G4": 0.4}
 RETAIN = 0.8  # an earlier stage must stay at >= 80% of the score it had when passed
 
 # a toddler's first words (after the MacArthur-Bates CDI's most common early words)
@@ -246,7 +246,8 @@ class Curriculum:
         k = STAGES.index(stage)
         if k and self.rng.random() < self.review:
             back = min(k, 1 + int(self.rng.expovariate(0.7)))
-            stage = STAGES[k - back]
+            if STAGES[k - back] in self.train:  # babbling has no questions to review
+                stage = STAGES[k - back]
         ref, q, answers, st, src = self._pick(self.train[stage])
         return {"image": self.image(ref), "question": q, "answer": answers[0], "answers": answers, "stage": st, "source": src}
 

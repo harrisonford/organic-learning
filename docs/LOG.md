@@ -457,3 +457,10 @@ L0 stays the kid_s0 release; L1 and beyond will come from `kid_s2`. The curricul
 `kid_s2` was killed by the kernel every ~25-30 minutes for a day and a half. A diagnostic resume showed steady memory (8.1 GB) during learning. The kill came when the cluster count reached its budget and pruning compacted the arrays with `a[: len(keep)] = a[keep]`. That expression makes a full temporary copy of the input weights, about 6 GB with the 4x4 view, and pushed the process past 14 GB.
 
 Compaction (`Cortex._compact`, used by pruning, sleep consolidation and `sleep`) now copies in blocks of 1,024 clusters, in place. The motor-unit cap from the day before (900) stays as a guard, but it was not the cause.
+
+## 2026-10-28: babbling that sounds like the language heard, and a babbling stage
+
+- **Babbling is guided by the ear's statistics.** Each gesture is chosen by how speech-like it would sound after what has just come out, judged by the ear's own model of heard speech. Silence ends a babble where the ear expects a pause. With nothing heard yet, babble is random (`']:#znxbd'`). After hearing 10k utterances it reads like `' is this'`, `' a books'`, `'en you w'`. Sound-likeness to heard speech: 0.00 at first, then 0.26 (the old babble was 0.03).
+- **New first stage BB (babbling, 6-10 months),** before echo. The brain hears the speech around it and babbles back. It passes when its babble's sound-likeness to heard speech reaches 0.22. A fresh test brain passed BB at 1,000 moments (0.25) and echo at 2,000; its babble kept improving afterwards (0.37 at 3,000).
+- **`SpeakingBrain.babble_when_silent`:** off in training. A served level babbles when it has nothing to say.
+- Release candidate for a babbler level: `out/levels/babbler_BB.*`, waiting for the level numbering decision.

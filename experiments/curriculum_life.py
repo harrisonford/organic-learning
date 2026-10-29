@@ -22,7 +22,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from organic.curriculum import NAMES, PASS, RETAIN, STAGES, Curriculum, grade, tidy  # noqa: E402
+from organic.curriculum import NAMES, PASS, RETAIN, STAGES, Curriculum, grade, sound_sim, tidy  # noqa: E402
 from organic.loop2 import LoopBrain2  # noqa: E402
 from organic.peye import Parts  # noqa: E402
 
@@ -48,7 +48,7 @@ else:
         brain = SpeakingBrain(parts, seed=SEED, size=64, **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
-    brain.curriculum = {"stage": "B", "since": 0, "passed": {}, "promotions": []}
+    brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}
 if hasattr(brain, "mouth") and os.environ.get("MOTOR_UNITS"):  # the motor repertoire's size (each unit widens every cluster)
     brain.mouth.max_units = int(os.environ["MOTOR_UNITS"])
 if os.environ.get("EAR_HABITUATION") == "0":
@@ -65,9 +65,23 @@ log = open(out_path, "a")
 t0 = time.time()
 
 
+HEARD = [world.moment(st)["question"] for st in ("B", "W1", "P") for _ in range(70)]  # speech around the infant (for babble)
+
+
+def babble_score(n=60):
+    """How much its babble sounds like the speech it hears (sound likeness to the closest heard utterance)."""
+    bab = [brain.babble(explore=True) for _ in range(n)]
+    return float(np.mean([max(sound_sim(b, h) for h in HEARD) for b in bab])), bab
+
+
 def evaluate(stages):
     res = {}
     for s in stages:
+        if s == "BB":
+            if hasattr(brain, "babble"):
+                sc, bab = babble_score()
+                res[s] = {"score": sc, "exact": 0.0, "tick": 0.0, "n": len(bab), "by_source": {"babble": {"score": sc, "n": len(bab), "said": bab[:5]}}}
+            continue
         scores, ticks, exact, by = [], [], [], {}
         for m in tests[s]:
             said, tick, *_ = brain.live(m["image"], m["question"], learn=False, explore=False)
@@ -91,17 +105,27 @@ verdict = None
 rewards = []
 while brain.age < TOTAL:
     stage = state["stage"]
-    m = world.moment(stage)
-    if stage == "B" and hasattr(brain, "babble"):  # infancy: babbling between the words heard
+    if stage == "BB":  # infancy before words: hearing the speech around it, babbling back
+        m = world.moment("B" if brain.age % 3 == 0 else "W1" if brain.age % 3 == 1 else "P")
+        heard = brain.ear.units(m["question"])
+        brain.heard_recent = 0.9 * brain.heard_recent + 0.1 * brain.ear.question(heard)
         brain.babble(int(os.environ.get("BABBLE_PER", 3)))
-    _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"], grade=lambda said, m=m: grade(m["stage"], said, m["answers"]))
-    rewards.append(r)
-    if brain.age % EVERY:
-        continue
+        brain.age += 1
+        rewards.append(0.0)
+        if brain.age % EVERY:
+            continue
+    else:
+        m = world.moment(stage)
+        if stage == "B" and hasattr(brain, "babble"):  # infancy: babbling between the words heard
+            brain.babble(int(os.environ.get("BABBLE_PER", 3)))
+        _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"], grade=lambda said, m=m: grade(m["stage"], said, m["answers"]))
+        rewards.append(r)
+        if brain.age % EVERY:
+            continue
     k = STAGES.index(stage)
     res = evaluate(STAGES[: k + 2])
     cur = res[stage]["score"]
-    held = all(res[s]["score"] >= RETAIN * state["passed"][s] for s in STAGES[:k])
+    held = all(res[s]["score"] >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res)
     promoted = cur >= PASS[stage] and held
     rec = {"age": brain.age, "stage": stage, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
