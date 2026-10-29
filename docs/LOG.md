@@ -484,3 +484,9 @@ Babbling is now:
   - it picks up the melody of what it hears, such as question endings.
   This is a little below the earlier, partly designed version (0.26), which is the honest price. Mirroring costs 0.5 ms per utterance.
 - **No reward anywhere in babbling**, as decided.
+
+## 2026-10-29: L1 is the organic babbler
+
+The training loop's babbling stage was not calling covert imitation at first, so the babble stayed pure noise (0.01). Fixed. A fresh life then reached sound likeness 0.17-0.20 for 15k moments, just under the old pass mark (0.22, set with the earlier, partly designed babbler). The user accepted this as good enough: babbling pass mark 0.17. Released as **L1** (kid-a) at 15k moments, 0.196.
+
+Talking to it: "hello baby!" -> "s!he t", "look at the doggy" -> "his whifo s?", "who is that?" -> "s thes, s?". Some babbles run on with noise ("chony bers is tocuis&FpBOn sumong t...").

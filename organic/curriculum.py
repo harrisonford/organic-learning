@@ -25,7 +25,8 @@ from . import world as W
 STAGES = ["BB", "B", "W1", "W2", "P", "K", "G1", "G2", "G3", "G4"]
 NAMES = {"BB": "babbling", "B": "echo", "W1": "first words", "W2": "two words", "P": "preschool", "K": "kindergarten",
          "G1": "first grade", "G2": "second grade", "G3": "third grade", "G4": "fourth grade"}
-PASS = {"BB": 0.22, "B": 0.8, "W1": 0.5, "W2": 0.5, "P": 0.4, "K": 0.4, "G1": 0.4, "G2": 0.4, "G3": 0.4, "G4": 0.4}
+PASS = {"BB": 0.17,  # babbling: 0.17 accepted 2026-10-29 (the organic version plateaus at 0.17-0.20)
+         "B": 0.8, "W1": 0.5, "W2": 0.5, "P": 0.4, "K": 0.4, "G1": 0.4, "G2": 0.4, "G3": 0.4, "G4": 0.4}
 RETAIN = 0.8  # an earlier stage must stay at >= 80% of the score it had when passed
 
 # a toddler's first words (after the MacArthur-Bates CDI's most common early words)
