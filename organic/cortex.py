@@ -567,6 +567,14 @@ class Cortex:
         self.prune_log = (self.prune_log or []) + [("outputs", int(self.t), n, len(self.outputs))]
         return n
 
+    def shrink(self):
+        """For a frozen brain: keep storage only for the clusters that exist (no room to grow)."""
+        C = max(self.C, 1)
+        for arr in ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active"):
+            setattr(self, arr, np.ascontiguousarray(getattr(self, arr)[:C]).copy())
+        self.cap = C
+        self.max_clusters = None
+
     def fit_capacity(self):
         """Reallocate storage to the budget (memory is only returned this way)."""
         cap = self.max_clusters + 64 if self.max_clusters else max(self.cap, 64)
