@@ -101,6 +101,36 @@ def save():
     os.replace(pkl + ".tmp", pkl)
 
 
+CLUSTER_ARRAYS = ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active")
+
+
+def save_frozen(path):
+    """The release candidate, written from the brain already in memory (no second copy):
+    the cortex arrays are swapped for views of the living clusters only (pickling a view
+    stores just its rows), babbling when silent is switched on, then everything is put back.
+    Returns its size: parameters (as kid-a counts them) and the RAM it needs to run."""
+    o = brain.orch
+    keep = {a: getattr(o, a) for a in CLUSTER_ARRAYS}
+    old = (o.cap, o.max_clusters, getattr(brain, "babble_when_silent", False))
+    C = max(o.C, 1)
+    try:
+        for a in CLUSTER_ARRAYS:
+            setattr(o, a, keep[a][:C])
+        o.cap, o.max_clusters = C, None
+        if hasattr(brain, "babble"):
+            brain.babble_when_silent = True
+        with open(path + ".tmp", "wb") as f:
+            pickle.dump(brain, f)
+        os.replace(path + ".tmp", path)
+        reach = int(o.reach[: o.C].sum())
+        params = reach * (1 + o.n) + o.C * o.n * len(o.outputs) + 3 * o.C
+        return {"parameters": int(params), "memory_bytes": int(os.path.getsize(path))}  # its arrays are nearly all of the file
+    finally:
+        for a in CLUSTER_ARRAYS:
+            setattr(o, a, keep[a])
+        o.cap, o.max_clusters, brain.babble_when_silent = old
+
+
 verdict = None
 rewards = []
 while brain.age < TOTAL:
@@ -138,11 +168,9 @@ while brain.age < TOTAL:
         # a release candidate: the brain as it was when it passed this stage
         os.makedirs("out/levels", exist_ok=True)
         tag = os.path.basename(out_path).replace(".jsonl", "")
-        save()
-        os.replace(out_path.replace(".jsonl", ".pkl"), f"out/levels/{tag}_{stage}.pkl")
-        save()
+        sizes = save_frozen(f"out/levels/{tag}_{stage}.pkl")
         json.dump({"stage": stage, "name": NAMES[stage], "age": brain.age, "measure": res, "passed": dict(state["passed"]), "clusters": int(brain.orch.C),
-                   "brain": type(brain).__name__}, open(f"out/levels/{tag}_{stage}.json", "w"), indent=1)
+                   "brain": type(brain).__name__, "frozen": True, **sizes}, open(f"out/levels/{tag}_{stage}.json", "w"), indent=1)
         state["promotions"].append((stage, brain.age))
         if k + 1 == len(STAGES):
             verdict = "passed every stage"
