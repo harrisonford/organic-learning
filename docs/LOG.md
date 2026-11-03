@@ -490,3 +490,13 @@ Babbling is now:
 The training loop's babbling stage was not calling covert imitation at first, so the babble stayed pure noise (0.01). Fixed. A fresh life then reached sound likeness 0.17-0.20 for 15k moments, just under the old pass mark (0.22, set with the earlier, partly designed babbler). The user accepted this as good enough: babbling pass mark 0.17. Released as **L1** (kid-a) at 15k moments, 0.196.
 
 Talking to it: "hello baby!" -> "s!he t", "look at the doggy" -> "his whifo s?", "who is that?" -> "s thes, s?". Some babbles run on with noise ("chony bers is tocuis&FpBOn sumong t...").
+
+## 2026-11-03: kid_s3 stops at first words; why the text half fails
+
+**Verdict:** `kid_s3` (one lineage; L1 and L2 released from it) stops at W1 with 0.40 after 300k moments. Picture naming ends at 0.42, near the visual probe ceiling. Echo holds (0.92 first words, 0.67 wide vocabulary); babbling holds (0.23).
+
+**Diagnosis of the W1 text items** (103 held-out items, 0.34):
+- **It is not missing data.** 95% of the right answers were heard as answers in training, and 93% of what it says is a learned answer word. It answers in the right *kind* of word but the wrong one: "what sound does a lion make?" -> "oink", "make an owl sound" -> "grunt", "what's orange and yummy?" -> "cookie", "who's baba?" -> "mama".
+- **Items whose key word is the answer work:** "touch your knee" -> "knee", "show me your thumb" -> "thumb". Copying is 12%.
+- **The pattern:** questions that share a frame ("what sound does a ... make?") and differ in one word are confused. The question code is an echo plus a summary of all units, so the shared frame dominates and the one informative word ("lion") is drowned out.
+- The fixed habituation rule (off since 10-25) used to make frequent units quieter. Its downstream replacement, input adaptation, removes the *average* input, not the frame inside each question.
