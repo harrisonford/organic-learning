@@ -10,7 +10,7 @@ import copy, pickle, sys
 sys.path.insert(0, ".")
 import numpy as np
 from organic.curriculum import Curriculum
-ear0 = pickle.load(open("out/tmp/ear_kid_s3.pkl", "rb"))
+ear0 = pickle.load(open(sys.argv[1] if len(sys.argv) > 1 else "out/kid_s3.ear.pkl", "rb"))
 cur = Curriculum(seed=0)
 heard = [cur.moment(st)["question"] for _ in range(5000) for st in ("W1", "W2", "P", "K")]
 X = ["lion", "pig", "cow", "duck", "dog", "cat", "owl", "sheep", "horse", "frog", "bee", "snake", "mouse", "bird", "elephant", "monkey"]

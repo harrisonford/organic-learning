@@ -37,7 +37,7 @@ Goldwater, Griffiths & Johnson 2009):
 | fresh, 5,000 (the ear of L1) | 0.57 | 0.61 | 0.38 | 0.40 | 0.38 | 0.19 | 0.43 |
 | fresh, 20,000 | 0.64 | 0.65 | 0.42 | 0.43 | 0.42 | 0.19 | 0.38 |
 | fresh, 40,000 | 0.65 | 0.67 | 0.44 | 0.45 | 0.44 | 0.19 | 0.38 |
-| kid_s3 now (age 315k) | pending | | | | | | |
+| **kid_s3 now (325,000 heard, mostly first-words speech)** | 0.46 | 0.48 | **0.20** | 0.21 | 0.20 | 0.25 | 0.55 |
 
 The curve flattens at about 44% whole words. Two failures persist:
 
@@ -57,6 +57,38 @@ A correction: the prediction-error (C) probe earlier today used this same young 
 (from L1, at 5k heard), not kid_s3's current ear. It is rerun on the real ear once the
 life writes it (`out/kid_s3.ear.pkl`, saved at each checkpoint from 2026-11-04).
 
+### kid_s3's ear got worse with experience, and why
+
+The ear of the living brain, after 325k utterances, finds fewer whole words than a fresh
+ear after 5k. It has also learned *fewer* contexts (23.6k vs 30.6k): it spent 305k
+moments in one stage (first words), hearing the same frames again and again.
+
+| speech of stage | ear | whole words | fused words | pieces |
+|---|---|---|---|---|
+| B (echo) | fresh, 40k of all stages | 0.47 | 0.03 | 0.50 |
+| B | kid_s3 | 0.41 | 0.05 | 0.54 |
+| W1 (its own diet) | fresh | 0.56 | 0.11 | 0.33 |
+| W1 | kid_s3 | **0.32** | **0.33** | 0.34 |
+| P (preschool, rarely heard) | fresh | 0.33 | 0.25 | 0.42 |
+| P | kid_s3 | 0.17 | 0.24 | 0.59 |
+
+Entropy jump at a real word edge: median +1.76 bits in the fresh ear, +1.07 in kid_s3's
+(the cut needs > 1.2). Inside words: −0.39 vs −0.21. Its most fused units are "what is "
+(328 of 1,500 utterances), "how many ", "what does ", "what color is the ".
+
+**Reading:** this is transitional-probability learning working as it should. In
+kid_s3's world "what" is almost always followed by "is", so the edge between them stops
+being a dip. A narrow diet heard many times turns frames into formulas, as in toddlers
+with a few very frequent routines (Peters 1983). Relative dips (step 2) will not undo
+this, because the probability really is high there. What can undo it is knowing "is" from
+other places ("where is", "is there"): competing units (step 4) and taking frames apart
+(step 5). It also means the curriculum's long stay in one stage shapes the ear; when
+stages are later compared, compare ears too.
+
+The C probe on the real ear: frame dominance is stronger there (another word in the
+same frame 0.78 vs the same word in another frame 0.46; word wins 0.05). With
+prediction it moves to 0.02–0.09, residual 0.84–0.86: still negative.
+
 ## 3. What infants do (the biology to follow)
 
 | finding | source | what the ear has |
@@ -75,8 +107,7 @@ and here the ear has to learn their predictability like any other byte.
 
 ## 4. Plan: one step at a time, each measured by §2's scores and the frame-vs-word probe
 
-1. **Measure kid_s3's real ear** at age 315k+ (the row marked pending), and rerun the
-   C probe on it.
+1. ~~Measure kid_s3's real ear and rerun the C probe on it.~~ Done 2026-11-04: see above.
 2. **Relative dips instead of fixed thresholds.** Cut where the ear's predictability is
    at a local low compared with its neighbours, as in the original Saffran analysis.
    This removes both `rise` and `unknown`: a cut is relative to the ear's own

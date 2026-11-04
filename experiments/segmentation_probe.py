@@ -62,7 +62,7 @@ def show(label, r):
     print(f"{label:24} " + " ".join(f"{k} {r[k]:.2f}" for k in r if k != "fused"), flush=True)
 
 
-ear3 = pickle.load(open("out/tmp/ear_kid_s3.pkl", "rb"))
+ear3 = pickle.load(open(sys.argv[1] if len(sys.argv) > 1 else "out/kid_s3.ear.pkl", "rb"))
 r = score(ear3, held)
 show(f"kid_s3 ({ear3.utterances} heard)", r)
 print("   most fused:", [(u.decode(errors='replace'), n) for u, n in r["fused"]], flush=True)
