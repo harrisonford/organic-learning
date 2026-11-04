@@ -537,3 +537,8 @@ Saffran-style) fuses frame and content into one unit: "lion make", "where is you
 units cannot cancel the frame without cancelling the word glued to it, so only ~12% of
 the sound is predictable at unit level. If C is revisited it belongs below the units,
 in the byte-level surprise that makes the segmentation, not on top of it.
+
+**Correction (same day):** the C probe above used the ear of L1 (frozen at age 5k, 5,000
+utterances heard), not kid_s3's current ear. It will be rerun on the real ear
+(`out/kid_s3.ear.pkl`, now saved at every checkpoint). The segmentation diagnosis
+(frames fused, rare words fragmented) is measured properly in docs/EAR_SEGMENTATION.md.

@@ -99,6 +99,9 @@ def save():
     with open(pkl + ".tmp", "wb") as f:
         pickle.dump(brain, f)
     os.replace(pkl + ".tmp", pkl)
+    with open(pkl + ".ear.tmp", "wb") as f:  # the ear alone (small), for probes that cannot load the whole brain
+        pickle.dump(brain.ear, f)
+    os.replace(pkl + ".ear.tmp", pkl.replace(".pkl", ".ear.pkl"))
 
 
 CLUSTER_ARRAYS = ("Z", "Win", "Wout", "myelin", "stability", "usage", "born", "uid", "reach", "patience", "last_active")
