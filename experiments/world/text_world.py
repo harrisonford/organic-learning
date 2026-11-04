@@ -37,7 +37,7 @@ from organic.adults import PER_DAY, Adults, parse_json  # noqa: E402
 
 SHARE = 140  # text share of the 500/day; curriculum 100, photos 200, reserve 60
 # xing4.0 removed 2026-10-23: 0 usable batches in a day (upstream rate limits, malformed replies)
-MODELS = ["nvidia/nemotron-3.5-lightning:free", "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"]
+MODELS = ["nvidia/nemotron-3.5-lightning:free", "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free", "recursive/flint-v1.0:free"]  # flint added 2026-11-04 (scan: out/model_scan.log)
 
 DOMAINS = [
     # nature and science

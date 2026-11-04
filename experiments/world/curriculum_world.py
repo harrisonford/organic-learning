@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from organic.adults import PER_DAY, Adults, parse_json  # noqa: E402
 
 SHARE = 100  # curriculum share of the 500/day: text world 140, curriculum 100, photos 200, reserve 60
-MODELS = ["nvidia/nemotron-3.5-lightning:free", "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"]
+MODELS = ["nvidia/nemotron-3.5-lightning:free", "nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free", "recursive/flint-v1.0:free"]  # flint added 2026-11-04 (scan: out/model_scan.log)
 # stage keys: W1 first words, W2 two words, P preschool, K kindergarten, G1-G4 grades (docs/CURRICULUM.md)
 STAGES = {
     "W1": ("a toddler saying first words (12-18 months)", "one word", 3,

@@ -205,8 +205,12 @@ def build_items(seed=0):
     for ref, q, a, _ in W.commonsense_questions():
         items.append((ref, q, [a], "G4" if ref[1] == "wino" else "G3", ref[1]))
     cifar, imgs = W.cifar100_questions()
+    # the ways adults ask to name a picture (experiments/world/naming_frames.py); each picture keeps one
+    fpath = os.path.join(W.WORLD_DIR, "naming_frames.json")
+    frames = json.load(open(fpath))["frames"] if os.path.exists(fpath) else ["what is this?"]
     for ref, q, a, _ in cifar:
         if q == "what is this?":
+            q = frames[zlib.crc32(repr(ref).encode()) % len(frames)]
             items.append((ref, q, [a], "W1" if a in PICTURE_BOOK else "P" if a in TODDLER_NOUNS else "G1", "cifar:name"))
     return items, imgs
 

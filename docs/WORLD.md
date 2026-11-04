@@ -59,3 +59,22 @@ Jev capped at $1.50. Every reply is cached; nothing is asked twice.
 - Only short replies (DailyDialog) and short stories (bAbI) are kept: a child's
   span, and the brain's answer is one word-form.
 - Agreement between two adults stands in for "a person would say this".
+
+## 2026-11-04: free-model scan, naming frames
+
+Scan of OpenRouter's free models (`experiments/world/model_scan.py`, `out/model_scan.log`):
+
+| model | writing (10 toddler items) | looking (64px photo) | decision |
+|---|---|---|---|
+| recursive/flint-v1.0 | 10/10, right | text only | **added** as a writer for text and curriculum items (judged by the others) |
+| nvidia/nemotron-3-ultra-550b | 10/10, but "which fruit is yellow?" accepted apple/pear/mango | text only | not yet: wrong answers in writing |
+| google/gemma-4-31b / 26b | no reply (busy upstream) | – | retry another day |
+| stealth/crouton-alpha | 10/10, right | "red apple" for an apple | not yet: a stealth model (logs prompts, may vanish) |
+
+**Naming frames.** All 7,206 CIFAR picture items in W1 (90% of the first-words world) were
+asked as "what is this?". The ear fused that frame into one unit (docs/EAR_SEGMENTATION.md).
+`experiments/world/naming_frames.py` has two adults write the ways parents ask a toddler
+to name a picture, and a third judge them. `organic/curriculum.py` gives each picture one
+of the kept phrasings (fixed per picture). A life's test set is fixed when it starts, so
+kid_s3 keeps being tested on "what is this?" until it is restarted; its lived world gets
+the variety at its next world refresh.
