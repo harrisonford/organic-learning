@@ -154,8 +154,39 @@ class Ear:
             v += weight * decay**k * np.roll(voice(u), 11 * (k + 1))
         return v
 
-    def question(self, units, voice=None):
+    # synaptic fatigue (stimulus-specific adaptation), off for brains made before it
+    fatigue = False
+    fuel = None
+
+    def enable_fatigue(self, seed=None):
+        """Every auditory neuron gets its own fatigue: how much it tires when it fires
+        (some barely at all) and how fast it recovers. Neurons that fire often stay
+        tired, so sounds heard all the time come through weaker than rare ones. No
+        knowledge of words: a property of synapses, different in every neuron."""
+        rng = np.random.default_rng(self.seed + 13 if seed is None else seed)
+        self.drain = rng.uniform(0.0, 0.5, self.width).astype(np.float32)
+        self.recover = np.exp(rng.uniform(np.log(0.002), np.log(0.05), self.width)).astype(np.float32)
+        self.fuel = np.ones(self.width, np.float32)
+        self.fatigue = True
+
+    def _heard(self, units, adapt):
+        """Each unit as the auditory neurons actually respond to it, in order, and the
+        fatigue it leaves (only while living, not in a frozen brain)."""
+        fuel = self.fuel if adapt else self.fuel.copy()
+        out = {}
+        for u in units:
+            s = self.sound(u)
+            out[u] = s * fuel
+            a = np.abs(s)
+            fuel -= self.drain * a / (a.max() + 1e-8) * fuel
+            fuel += self.recover * (1.0 - fuel)
+        return out
+
+    def question(self, units, voice=None, adapt=True):
         """A fading, order-aware echo of what was asked, plus its gist."""
+        if voice is None and self.fatigue:
+            heard = self._heard(units, adapt)
+            voice = heard.__getitem__
         voice = voice or self.sound
         seq = self.echo(units, depth=8, decay=0.75, voice=voice, habituate=True)
         gist = sum((self.salience(u) * voice(u) for u in units), np.zeros(self.width, np.float32))

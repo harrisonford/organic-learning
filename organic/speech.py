@@ -329,7 +329,7 @@ class SpeakingBrain(LoopBrain2):
         heard = self.ear.units(question, learn)
         if learn:
             self.mirror(question)  # covert imitation of what was heard
-        q_code = self.ear.question(heard)
+        q_code = self.ear.question(heard, adapt=learn)
         self.heard_recent = 0.9 * self.heard_recent + 0.1 * q_code
         group = self._motor_group()
         T, D = self.eye.T, self.eye.D

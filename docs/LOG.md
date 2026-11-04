@@ -500,3 +500,16 @@ Talking to it: "hello baby!" -> "s!he t", "look at the doggy" -> "his whifo s?",
 - **Items whose key word is the answer work:** "touch your knee" -> "knee", "show me your thumb" -> "thumb". Copying is 12%.
 - **The pattern:** questions that share a frame ("what sound does a ... make?") and differ in one word are confused. The question code is an echo plus a summary of all units, so the shared frame dominates and the one informative word ("lion") is drowned out.
 - The fixed habituation rule (off since 10-25) used to make frequent units quieter. Its downstream replacement, input adaptation, removes the *average* input, not the frame inside each question.
+
+## 2026-11-04: synaptic fatigue (option B) tested offline: it does not help (negative result)
+
+- **Babbling is no longer a stage later levels must retain** (it is meant to fade as words come).
+- **Option B, synaptic fatigue in the ear:** every auditory neuron has its own drain (0-0.5) and recovery time (log-uniform 0.002-0.05). It is implemented as `Ear.enable_fatigue`, off by default, and tested on `kid_s3`'s ear after hearing 20k curriculum utterances (`experiments/fatigue_probe.py`).
+  - Finding the same word in another frame ("what noise does the X make?" vs "what sound does a X make?"): 0.81 without fatigue, 0.79 with it (chance 0.06). The content word does reach the ear's code.
+  - **The real problem is a competition:**
+    - same word, other frame: similarity 0.46;
+    - other word, same frame: 0.78.
+    - The word beats the frame in only **5%** of cases (2% with fatigue).
+    - The fixed per-unit habituation rule gets 18% (0.44 vs 0.71).
+- **Why fatigue fails:** frame and content words share auditory neurons (shared byte n-grams), and fatigue scales a neuron the same way in both questions. So same-frame questions stay alike.
+- Something that removes the *expected* part (option C, prediction-error coding) would be needed. Not built; the decision is the user's.

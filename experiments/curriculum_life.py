@@ -156,7 +156,8 @@ while brain.age < TOTAL:
     k = STAGES.index(stage)
     res = evaluate(STAGES[: k + 2])
     cur = res[stage]["score"]
-    held = all(res[s]["score"] >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res)
+    # earlier stages must be held, except babbling, which is meant to fade as words come
+    held = all(res[s]["score"] >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s != "BB")
     promoted = cur >= PASS[stage] and held
     rec = {"age": brain.age, "stage": stage, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
