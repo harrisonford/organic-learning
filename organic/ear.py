@@ -182,8 +182,38 @@ class Ear:
             fuel += self.recover * (1.0 - fuel)
         return out
 
+    # prediction-error hearing (predictive coding), off for brains made before it
+    predictive = False
+
+    def enable_prediction(self, rate=0.1, trace=0.0):
+        """The auditory cortex learns to expect: from what it has just heard (the last
+        unit, or a fading trace of the last few when trace > 0), it predicts the sound
+        of the next unit, and what it passes on is only the error, what was heard minus
+        what was expected. Each neuron adjusts its own prediction weights by its own
+        error (a local delta rule), scaled down when its input fired strongly (divisive
+        normalization, so learning neither stalls nor oscillates). Nothing says which
+        words matter: what is cancelled is whatever experience has made predictable."""
+        self.P = np.zeros((self.width, self.width), np.float32)
+        self.p_rate, self.p_trace = rate, trace
+        self.predictive = True
+
+    def _surprise_codes(self, units, learn):
+        out = {}
+        ctx = self.sound(SILENCE).copy()
+        for u in list(units) + [SILENCE]:  # the silence after the utterance is expected too
+            s = self.sound(u)
+            err = s - self.P @ ctx
+            if learn:
+                self.P += (self.p_rate / (float(ctx @ ctx) + 1e-6)) * np.outer(err, ctx)
+            if u != SILENCE:
+                out[u] = err
+            ctx = self.p_trace * ctx + (1 - self.p_trace) * s
+        return out
+
     def question(self, units, voice=None, adapt=True):
         """A fading, order-aware echo of what was asked, plus its gist."""
+        if voice is None and self.predictive:
+            voice = self._surprise_codes(units, adapt).__getitem__
         if voice is None and self.fatigue:
             heard = self._heard(units, adapt)
             voice = heard.__getitem__

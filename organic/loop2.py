@@ -83,7 +83,7 @@ class LoopBrain2:
     cortex_layers = (1, 2)  # which layers reach the orchestrator (layer i arrives at tick i + 2 - first)
 
     def __init__(self, parts, seed=0, goal_loop=True, reflex_loop=True, max_ticks=12, size=40, gains=8, noise=0.1, use_stay=True, use_gains=True, adapt=False, reflex="change", sleep_cleanup=False, cortex=None,
-                 cortex_grid=1, cortex_layers=(1, 2)):
+                 cortex_grid=1, cortex_layers=(1, 2), neurons_per_cluster=8):
         self.eye = NoisyEye(parts, size=size, noise=noise, gains=gains, seed=seed)
         self.use_stay, self.use_gains = use_stay, use_gains  # switches for one-at-a-time diagnosis
         self.adapt, self.mean_input, self.learning = adapt, None, True
@@ -97,7 +97,7 @@ class LoopBrain2:
         self.cortex_dims = [cortex.layers[i].kinds * cortex_grid ** 2 for i in self.cortex_layers] if cortex is not None else []
         self.commands = [f"eye:{t}" for t in range(T)] + ["eye:stay"] + [f"gain:{k}" for k in range(gains)] + ["gain:none"]
         self.dim = self.ear.width + 3 * D + T + len(self.commands) + sum(self.cortex_dims)
-        self.orch = Cortex(dim=self.dim, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
+        self.orch = Cortex(dim=self.dim, neurons_per_cluster=neurons_per_cluster, theta_familiar=0.95, associate=False, maturation=5.0, seed=seed)
         self.cmd = {c: self.orch.output_neuron(c) for c in self.commands}
         self.move_group = np.array([self.cmd[f"eye:{t}"] for t in range(T)] + [self.cmd["eye:stay"]])
         self.gain_group = np.array([self.cmd[f"gain:{k}"] for k in range(gains)] + [self.cmd["gain:none"]])

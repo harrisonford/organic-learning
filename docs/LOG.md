@@ -513,3 +513,27 @@ Talking to it: "hello baby!" -> "s!he t", "look at the doggy" -> "his whifo s?",
     - The fixed per-unit habituation rule gets 18% (0.44 vs 0.71).
 - **Why fatigue fails:** frame and content words share auditory neurons (shared byte n-grams), and fatigue scales a neuron the same way in both questions. So same-frame questions stay alike.
 - Something that removes the *expected* part (option C, prediction-error coding) would be needed. Not built; the decision is the user's.
+
+## 2026-11-04 — Option C, prediction-error hearing: built, negative as it stands
+
+The user accepted first-words confusions as age-appropriate (W1 pass mark 0.5 -> 0.4)
+and asked for C only if nothing in it is a fixed rule. Built in `organic/ear.py`
+(`enable_prediction`, off by default): the auditory cortex predicts the next unit's
+sound from what it just heard (last unit, or a fading trace) with a local delta rule,
+normalized by input strength, and passes on only the error. Nothing marks which words
+matter. Probe: `experiments/prediction_probe.py` (kid_s3's ear, 20k utterances of the
+curriculum, same frame-vs-word test as the fatigue probe).
+
+| hearing | cross-frame match | same word, other frame | other word, same frame | word wins | residual |
+|---|---|---|---|---|---|
+| now | 0.79 | 0.46 | 0.67 | 0.11 | 1 |
+| C, last unit, 20k heard | 0.83 | 0.40 | 0.61 | 0.14 | 0.86 |
+| C, fading trace 0.5, 20k heard | 0.83 | 0.41 | 0.64 | 0.11 | 0.88 |
+
+(First attempt without normalization: the delta rule oscillated, residual ~1.0, see the
+chat log; fixed.) Why it fails: the ear's own segmentation (already surprise-based,
+Saffran-style) fuses frame and content into one unit: "lion make", "where is you",
+"nee?". Frequent frames become chunks, as in toddlers ("whatsthat"). A predictor over
+units cannot cancel the frame without cancelling the word glued to it, so only ~12% of
+the sound is predictable at unit level. If C is revisited it belongs below the units,
+in the byte-level surprise that makes the segmentation, not on top of it.

@@ -2,7 +2,7 @@
 
     python experiments/curriculum_life.py out/cur_s0.jsonl
     SEED=0  CORTEX=path  EVERY=5000  STAGE_BUDGET=300000  TOTAL=2000000  RESUME=path.pkl
-    MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0
+    MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0  NEURONS=8 (per cluster)
 
 Every EVERY moments the brain is tested on held-out items of every stage up to
 the current one (and the next, to see what is coming). It is promoted when the
@@ -38,7 +38,7 @@ else:
     parts = Parts()
     parts.W = np.load(os.path.join(os.path.dirname(__file__), "..", "data", "parts.npy"))
     parts.frozen = True
-    cfg = {"reflex": "contrast", "adapt": True, "sleep_cleanup": True}
+    cfg = {"reflex": "contrast", "adapt": True, "sleep_cleanup": True, "neurons_per_cluster": int(os.environ.get("NEURONS", 8))}
     if os.environ.get("CORTEX"):
         cfg["cortex"] = pickle.load(open(os.environ["CORTEX"], "rb"))
         cfg["cortex_grid"] = int(os.environ.get("CORTEX_GRID", 1))
