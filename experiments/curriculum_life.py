@@ -3,6 +3,7 @@
     python experiments/curriculum_life.py out/cur_s0.jsonl
     SEED=0  CORTEX=path  EVERY=5000  STAGE_BUDGET=300000  TOTAL=2000000  RESUME=path.pkl
     MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0  NEURONS=8 (per cluster)
+    OVERHEARD=0 (overheard sentences per moment, heard by the ear only)
 
 Every EVERY moments the brain is tested on held-out items of every stage up to
 the current one (and the next, to see what is coming). It is promoted when the
@@ -134,10 +135,32 @@ def save_frozen(path):
         o.cap, o.max_clusters, brain.babble_when_silent = old
 
 
+# overheard speech (Simple English Wikipedia, experiments/world/simplewiki_speech.py): sentences heard by the ear
+# between moments, not addressed to the brain and not answered (docs/EAR_SEGMENTATION.md); OVERHEARD per moment
+OVERHEARD = float(os.environ.get("OVERHEARD", 0))
+if OVERHEARD:
+    from organic.world import DATA
+    overheard = open(os.path.join(DATA, "simplewiki", "sentences.txt"))
+    overheard.seek(int(1000003 * SEED + brain.age) % os.path.getsize(overheard.name))
+    overheard.readline()
+owed = 0.0
+
+
+def overhear():
+    global owed
+    owed += OVERHEARD
+    while owed >= 1:
+        line = overheard.readline() or (overheard.seek(0) or overheard.readline())
+        brain.ear.units(line.strip())
+        owed -= 1
+
+
 verdict = None
 rewards = []
 while brain.age < TOTAL:
     stage = state["stage"]
+    if OVERHEARD:
+        overhear()
     if stage == "BB":  # infancy before words: hearing the speech around it, babbling back
         m = world.moment("B" if brain.age % 3 == 0 else "W1" if brain.age % 3 == 1 else "P")
         heard = brain.ear.units(m["question"])

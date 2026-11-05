@@ -89,6 +89,26 @@ The C probe on the real ear: frame dominance is stronger there (another word in 
 same frame 0.78 vs the same word in another frame 0.46; word wins 0.05). With
 prediction it moves to 0.02–0.09, residual 0.84–0.86: still negative.
 
+### Overheard speech helps (2026-11-05)
+
+`experiments/overheard_probe.py`: two fresh ears hear the same 40k curriculum utterances;
+one also overhears sentences of Simple English Wikipedia between them (not addressed to
+it, never answered), as infants overhear adults talking. Scored on held-out curriculum
+speech:
+
+| ear | whole words | fused frames | pieces | boundary P/R | in first-words speech | in preschool speech |
+|---|---|---|---|---|---|---|
+| curriculum only | 0.36 | 0.21 | 0.42 | 0.60 / 0.64 | 0.40 | 0.26 |
+| + overheard 1:1 (40k sentences) | 0.49 | 0.11 | 0.40 | 0.69 / 0.81 | 0.51 | 0.40 |
+| + overheard 3:1 (120k sentences) | **0.52** | **0.09** | 0.39 | 0.71 / 0.85 | **0.60** | 0.42 |
+
+Broad listening halves the fused frames: "what is" is no longer always followed by
+"this", so the edge comes back. Most of the gain is there by 15k overheard sentences.
+Rare words still break into pieces (0.39), which overheard speech does not fix; that is
+for relative dips (step 2) and competing units (step 4). Next: two small controlled lives
+with and without overheard speech (`experiments/overheard_pipeline.sh`, OVERHEARD=3
+vs 0), to see whether better units give better first words, not only better segmentation.
+
 ## 3. What infants do (the biology to follow)
 
 | finding | source | what the ear has |
