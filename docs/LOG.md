@@ -542,3 +542,24 @@ in the byte-level surprise that makes the segmentation, not on top of it.
 utterances heard), not kid_s3's current ear. It will be rerun on the real ear
 (`out/kid_s3.ear.pkl`, now saved at every checkpoint). The segmentation diagnosis
 (frames fused, rare words fragmented) is measured properly in docs/EAR_SEGMENTATION.md.
+
+## 2026-11-05 — Cluster size (neurons per cluster): 4 / 8 / 16 at equal neurons
+
+`experiments/cluster_size_pipeline.sh`: the same seed, world, eye, ear and curriculum, a
+total of 16,000 neurons (clusters × size), MAX_GB 2.4, a 100k stage budget.
+
+| neurons/cluster | clusters | B (echo) | W1 passed at | W1 best | after W1 | verdict |
+|---|---|---|---|---|---|---|
+| 4 | 3,870 | 0.87 at 10k | 15k (5k there) | 0.42 | W1 fell to 0.21; W2 0.32 | stops at W2 |
+| 8 (as in every life so far) | 1,917 | 0.92 at 10k | 50k (40k there) | 0.42 | W1 fell to 0.18; W2 0.41 | stops at W2 |
+| 16 | 962 | 0.96 at 10k | never | 0.24 | – | stops at W1 |
+
+**Reading:** 16 is clearly worse (fewer, bigger clusters cannot tell pictures apart
+well enough). 8 vs 4 is not separable at this size: both passed W1 once with 0.42 and
+fell back to ~0.2 after moving on, and 4 "passed" after only 5k moments at the stage,
+which is gate noise (scores move about ±0.08 between checkpoints). Two things the test
+exposed, for the user to decide: (1) a pass on one checkpoint can be luck, so the gate
+could require it on two checkpoints in a row; (2) small brains forget the previous stage
+when they move on, despite the 30% review (kid_s3, ten times bigger, keeps W1 at
+0.35–0.42). Cluster size stays 8. Heterogeneous newborn sizes with selection by pruning
+remain an idea for later, once the world is richer.
