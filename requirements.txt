@@ -1,3 +1,4 @@
 numpy
 pillow
 scikit-image
+mwparserfromhell  # experiments/world/simplewiki_speech.py: wiki markup to plain text

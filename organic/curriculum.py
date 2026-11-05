@@ -178,9 +178,57 @@ def _captions():
     return [(files[i], "what is happening in the picture?", c, "G1", "captions") for i, c in caps.items()]
 
 
+# facts from Wikidata (experiments/world/wikidata_facts.py): the stage where schools teach them, a few wordings each
+FACTS = {
+    "animal_class": ("G1", ["what kind of animal is a {s}?", "is a {s} a mammal, a bird or a fish?", "a {s} is what kind of animal?"]),
+    "continent": ("G2", ["which continent is {s} in?", "{s} is on which continent?", "on what continent is {s}?"]),
+    "mountain_continent": ("G3", ["which continent is {s} on?", "where is {s}: on which continent?"]),
+    "river_continent": ("G3", ["which continent is the {s} in?"]),
+    "capital": ("G3", ["what is the capital of {s}?", "what city is the capital of {s}?", "name the capital of {s}."]),
+    "language": ("G3", ["what language do people speak in {s}?", "which language is spoken in {s}?"]),
+    "city_country": ("G3", ["which country is {s} in?", "{s} is a city in which country?", "in what country is {s}?"]),
+    "inventor": ("G3", ["who invented {s}?", "who came up with {s}?"]),
+    "painter": ("G3", ["who painted {s}?", "which artist painted {s}?"]),
+    "author": ("G4", ["who wrote {s}?", "who is the author of {s}?"]),
+}
+ANIMAL_CLASSES = ["mammal", "bird", "fish", "reptile", "amphibian", "insect", "spider"]
+
+
+def _wikidata():
+    out = []
+    path = os.path.join(W.WORLD_DIR, "wikidata_facts.jsonl")
+    for i, line in enumerate(open(path)) if os.path.exists(path) else []:
+        d = json.loads(line)
+        if d["rel"] not in FACTS or not d["answers"]:
+            continue
+        stage, says = FACTS[d["rel"]]
+        h = zlib.crc32(d["s"].encode())
+        s, answers = d["s"].lower(), [a.lower() for a in d["answers"]]
+        if d["rel"] == "animal_class":
+            answers = answers + [("an " if answers[0][0] in "aeiou" else "a ") + answers[0]]
+            other = [c for c in ANIMAL_CLASSES if c != answers[0]][h % (len(ANIMAL_CLASSES) - 1)]
+            ask = other if h % 2 else answers[0]  # true or false about categories (is a whale a fish?)
+            out.append((("dark", "wd", i, "yn"), f"is a {s} a {ask}?", ["yes" if ask == answers[0] else "no"], "G1", "wikidata"))
+        out.append((("dark", "wd", i), says[h % len(says)].format(s=s), answers, stage, "wikidata"))
+    return out
+
+
+def _commons(frames):
+    """Picture-book photos from Wikimedia Commons named through Wikidata (experiments/world/commons_pictures.py)."""
+    path = os.path.join(W.DATA, "commons", "pictures.jsonl")
+    rows = os.path.getsize(os.path.join(W.DATA, "commons", "pictures_64.u8")) // (W.SIZE * W.SIZE * 3) if os.path.exists(path) else 0
+    out = []
+    for line in open(path) if rows else []:
+        d = json.loads(line)
+        if d["row"] < rows and d["word"] in PICTURE_BOOK:
+            ref = ("commons", d["row"])
+            out.append((ref, frames[zlib.crc32(repr(ref).encode()) % len(frames)], [d["word"]], "W1", "commons:name"))
+    return out, rows
+
+
 def build_items(seed=0):
     rng = random.Random(seed)
-    items = _babble() + _text_world() + _curriculum_items() + _babi() + _captions()
+    items = _babble() + _text_world() + _curriculum_items() + _babi() + _captions() + _wikidata()
     # COCO annotation questions on val2017 photos
     for ref, q, a, kind in W.coco_annotation_questions(rng):
         if kind == "identity":
@@ -212,13 +260,18 @@ def build_items(seed=0):
         if q == "what is this?":
             q = frames[zlib.crc32(repr(ref).encode()) % len(frames)]
             items.append((ref, q, [a], "W1" if a in PICTURE_BOOK else "P" if a in TODDLER_NOUNS else "G1", "cifar:name"))
-    return items, imgs
+    commons, rows = _commons(frames)
+    items += commons
+    commons_imgs = np.memmap(os.path.join(W.DATA, "commons", "pictures_64.u8"), np.uint8, "r", shape=(rows, W.SIZE, W.SIZE, 3)) if rows else None
+    return items, (imgs, commons_imgs)
 
 
 class Curriculum:
     def __init__(self, seed=0, test_fraction=0.1, review=0.3):
-        items, self.cifar = build_items(seed)
-        in_test = lambda it: zlib.crc32((str(it[0]) + it[1]).encode()) % 1000 < test_fraction * 1000  # noqa: E731
+        items, (self.cifar, self.commons) = build_items(seed)
+        # a naming item is split by its picture (its wording varies: experiments/world/naming_frames.py), as when all were "what is this?"
+        key = lambda it: str(it[0]) + ("what is this?" if it[4] in ("cifar:name", "commons:name") else it[1])  # noqa: E731
+        in_test = lambda it: zlib.crc32(key(it).encode()) % 1000 < test_fraction * 1000  # noqa: E731
         self.train, self.test = {}, {}
         for it in items:
             side = self.test if in_test(it) else self.train
@@ -236,6 +289,8 @@ class Curriculum:
         if ref not in self._cache:
             if isinstance(ref, tuple) and ref[0] == "read":
                 self._cache[ref] = W.render_word(W.thumb(os.path.join(W.DATA, "val2017", ref[1])), ref[2], ref[3])
+            elif isinstance(ref, tuple) and ref[0] == "commons":  # memory-mapped
+                return np.asarray(self.commons[ref[1]], np.float32) / 255
             elif isinstance(ref, tuple) and ref[0] == "cifar":
                 im = Image.fromarray(self.cifar[ref[1]]).resize((W.SIZE, W.SIZE), Image.BILINEAR)
                 self._cache[ref] = np.asarray(im, np.float32) / 255

@@ -78,3 +78,40 @@ to name a picture, and a third judge them. `organic/curriculum.py` gives each pi
 of the kept phrasings (fixed per picture). A life's test set is fixed when it starts, so
 kid_s3 keeps being tested on "what is this?" until it is restarted; its lived world gets
 the variety at its next world refresh.
+
+## 2026-11-05: Wikipedia, Wikidata and Wikimedia Commons (user: "use wikipedia… wiki images also")
+
+Three sources, no model requests, all CC BY-SA / CC0 (Wikipedia, Wikidata and Commons
+contributors), used for research:
+
+1. **Wikidata facts** (`experiments/world/wikidata_facts.py` → `data/world/wikidata_facts.jsonl`):
+   facts with exact answers for the school stages, only about well-known subjects (many
+   Wikipedia editions link them). There are 1,856 facts: capitals, continents and official
+   languages of 196 countries, the country of 571 big cities, 565 inventions → inventor,
+   33 famous paintings → painter, 161 books → author, mountains and rivers → continent,
+   and 367 animal species → class. Answers keep the English name and only those aliases
+   that share a word with it (Wikidata's alias lists contain vandalism: "ghahere" for
+   Cairo). "Discoverer or inventor" is one property in Wikidata ("who invented
+   Australia?"), so inventions are kept only when their description names a made thing.
+   Animal classes come from QLever (the same Wikidata on a faster engine; the taxonomy
+   walk times out on query.wikidata.org). The class a child would say wins (birds sit
+   under reptiles cladistically), and only common names heard in Simple English
+   Wikipedia are kept. `organic/curriculum.py` turns them into questions of their stage
+   (FACTS: animal class G1 plus "is a whale a fish?" yes/no; continents G2; capitals,
+   languages, cities, inventors, painters G3; authors G4). All facts of a stage form one
+   source ("wikidata"), so they take one turn among that stage's sources.
+2. **Commons picture book** (`experiments/world/commons_pictures.py` → `~/datasets/commons/`):
+   for each picture-book word, the members of its kinds that Wikidata links to a photo
+   (P18): dog, cat, horse, cattle and rabbit breeds; car, bus, aircraft and locomotive
+   models; ship classes; bird, bear, elephant, turtle and mouse species; tiger and lion
+   subspecies; apple cultivars; kinds of chairs, beds, cups, clocks and bicycles. Up to
+   300 per word, as 64x64 center crops (like CIFAR), fetched at one per second with a
+   polite user agent, resumable, memory-mapped. In W1 as "commons:name", asked with the
+   adults' naming phrasings.
+3. **Simple English Wikipedia as overheard speech** (`experiments/world/simplewiki_speech.py`
+   → `~/datasets/simplewiki/sentences.txt`): 2.0M plain sentences of 4–25 words from
+   286k articles, lowercased. Not given to any life yet: it changes what the ear learns,
+   so it is tested first (`experiments/overheard_probe.py`, docs/EAR_SEGMENTATION.md).
+
+The test split of picture-naming items is decided by the picture, not the wording, so
+the CIFAR split is the same as when every item was "what is this?".
