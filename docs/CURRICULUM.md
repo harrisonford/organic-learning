@@ -69,3 +69,33 @@ The current brain would likely get stuck at **stage 0-1**. It cannot babble or r
 - `LoopBrain2.live(..., grade=fn)`: the environment can give partial reward; the adult's answer (to imitate) is unchanged.
 
 **Caveat on stage B with today's brain:** stage B passes in a few hundred moments, but this is not babbling. Echoing one of 58 known words is word recognition mapped to a learned word-form. True babbling needs the speech motor area (stage-0 proposal). Until then, stage B only checks that the brain can echo known words.
+
+## 2026-11-05: a wider program (user: "ask things about history, math, science too")
+
+The graded items covered language, number and a little nature. The subjects now follow
+the usual early-years and K-4 outlines, adapted to each age (`experiments/world/
+curriculum_world.py`, STAGES):
+
+- **toddlers (W1, W2):** vehicles, toys, clothes, the house and outside; day and night,
+  wet and dry, who helps us.
+- **preschool and K:** the senses, where animals live, plants, weather and seasons,
+  healthy habits, safety; living vs non-living, push and pull, long ago and today,
+  families and traditions, rules, land and water on a map, the sky.
+- **G1–G2:** sound and light, sun and moon patterns, holidays, grandparents' lives,
+  laws, food groups, instruments; habitats, solids and liquids, how the earth changes,
+  inventors, transport over time, compass directions, continents and oceans, needs and
+  wants, goods and services, fossils; graphs, skip counting, time.
+- **G3–G4:** forces and magnets, climate, inherited traits, ancient Egypt, Rome and
+  China, explorers, countries and capitals, landforms, local government, artists, the
+  body; the water cycle, rocks, the solar system, food chains, historical figures,
+  timelines, biomes, map scale, how a country is governed, migration; angles, factors,
+  units.
+
+There are 11–24 subjects per stage (it was 6–10). The daemon also followed the wrong
+life for its "half on the current stage" focus: it read kid_s1, because the service
+named none. Now it reads kid_s3 (`Environment=CURRICULUM_LIFE=kid_s3`) and skips note
+lines.
+
+This follows the user's point that the training program has to improve before the
+architecture is changed further: plateaus on a small, narrow world are expected, and the
+first-words world itself was too uniform (docs/WORLD.md, naming frames).
