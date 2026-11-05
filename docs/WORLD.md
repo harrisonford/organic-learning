@@ -87,7 +87,7 @@ contributors), used for research:
 1. **Wikidata facts** (`experiments/world/wikidata_facts.py` → `data/world/wikidata_facts.jsonl`):
    facts with exact answers for the school stages, only about well-known subjects (many
    Wikipedia editions link them). There are 1,856 facts: capitals, continents and official
-   languages of 196 countries, the country of 571 big cities, 565 inventions → inventor,
+   languages of 196 countries, the country of 571 big cities, 115 inventions → inventor,
    33 famous paintings → painter, 161 books → author, mountains and rivers → continent,
    and 367 animal species → class. Answers keep the English name and only those aliases
    that share a word with it (Wikidata's alias lists contain vandalism: "ghahere" for
