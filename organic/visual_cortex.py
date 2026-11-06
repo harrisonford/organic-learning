@@ -64,6 +64,28 @@ class Layer:
             self.W[c] = w / np.linalg.norm(w)
 
 
+    def live(self, x, rng, samples=8, base=0.05, memory=0.05):
+        """Learning while living (docs/PLASTICITY.md): the same competitive Hebbian step, but each kind
+        learns in proportion to its own recent mismatch (1 - how well it fits the windows it wins).
+        No clock: a kind whose inputs stay familiar stops changing; new kinds of input make it plastic again."""
+        if not hasattr(self, "mismatch"):
+            self.mismatch = np.full(self.kinds, np.nan, np.float32)  # unknown until the kind wins once
+        v, e = self.windows(x)
+        v, e = v.reshape(-1, v.shape[2]), e.ravel()
+        active = np.nonzero(e > 0.3 * e.max())[0] if e.max() > 1e-6 else []
+        if not len(active):
+            return
+        for i in rng.choice(active, min(samples, len(active)), replace=False):
+            s = self.W @ v[i] - 0.3 * (self.wins / (self.wins.mean() + 1e-8) - 1)
+            c = int(np.argmax(s))
+            self.wins[c] += 1
+            err = 1.0 - float(self.W[c] @ v[i])
+            m = self.mismatch[c]
+            self.mismatch[c] = err if np.isnan(m) else m + memory * (err - m)
+            w = self.W[c] + base * self.mismatch[c] * (v[i] - self.W[c])
+            self.W[c] = w / np.linalg.norm(w)
+
+
 class VisualCortex:
     def __init__(self, seed=0, kinds=(64, 128, 256)):
         k1, k2, k3 = kinds
@@ -91,6 +113,17 @@ class VisualCortex:
             p = m[: gh * grid, : gw * grid].reshape(grid, gh, grid, gw, c).max(axis=(1, 3)).ravel()
             codes.append(p / (np.linalg.norm(p) + 1e-8))
         return codes
+
+    def live(self, img, rng, samples=8):
+        """Every layer learns at once from what the eye sees (Layer.live): plasticity follows each kind's mismatch."""
+        x = np.asarray(img, np.float32)
+        for layer in self.layers:
+            layer.live(x, rng, samples=samples)
+            x = layer.respond(x)
+
+    def plasticity(self):
+        """Mean recent mismatch per layer (what drives learning now)."""
+        return [float(np.nanmean(layer.mismatch)) if hasattr(layer, "mismatch") else None for layer in self.layers]
 
     def develop(self, images, rng, per_layer=4000, log=None):
         """Layer-by-layer self-organization on unlabeled photos."""

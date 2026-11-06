@@ -68,3 +68,33 @@ principle is what we iterate on.
   kinds of questions, as seen before.
 - **Organ drift curves** (step 1): whether settling emerges.
 - Scores are kept and reported, but a drop is not a reason to roll back a richer world.
+
+## Result, step 2 offline (2026-11-06): settling emerges, to a floor; vision learning is no better than random for naming
+
+`experiments/plastic_vision_probe.py`: the same stream of life pictures to three
+cortices. Drift is measured on 100 fixed pictures over each block of ~2,100 pictures:
+
+| pictures seen | frozen (developed) | plastic (developed) | scratch (random, learning only in life) |
+|---|---|---|---|
+| 2k | drift 0, naming 0.417 | drift 0.017, naming 0.407 | **drift 0.400**, mismatch L3 0.48, naming 0.417 |
+| 4k | 0 | 0.017 | **0.052**, L3 0.35 |
+| 6k | 0 | 0.018 | **0.025**, L3 0.30 |
+| 8k | 0 | 0.016, naming 0.393 | **0.014**, L3 0.30, naming 0.403 |
+| 12.5k | 0 | 0.016, naming 0.397 | **0.015**, L3 0.285, naming 0.410 |
+
+1. **Settling emerges without a clock.** A random cortex learning only from what the eye
+   sees drops from drift 0.40 to 0.015 within ~8k pictures, as each kind's mismatch falls.
+   It then sits at the same floor as the developed cortex (~0.016 per 2k pictures) and
+   stays there: plasticity is proportional to each kind's mismatch, which never goes
+   below the natural spread of the windows it wins (~0.17 / 0.25 / 0.28 per layer). So
+   the organ never fully settles; it keeps drifting slowly in a world that does not change.
+   Next iteration on the principle: a kind learns in proportion to its *unexpected*
+   mismatch (above its own usual spread), so it is still in a familiar world and plastic
+   again when something new comes.
+2. **The vision rule learns nothing useful for naming beyond random filters.** A random
+   cortex gives the same 1-NN naming (0.42) as the developed one, before and after
+   learning. The competitive Hebbian rule finds local textures and edges, and the
+   naming code is carried by colour and layout, which random filters keep as well. Real
+   inferotemporal cortex learns invariance (the same object across views); the trace
+   rule (experiments/trace_it_probe.py) is the candidate principle for that.
+   This is where vision needs iteration, more than in freezing or not.
