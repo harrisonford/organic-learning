@@ -92,6 +92,43 @@ def wording_invariance(n=30):
     return {"same_answer": same / max(len(pics), 1), "right_every_time": right / max(len(pics), 1), "n": len(pics)}
 
 
+PROBE_PICS = [m["image"] for st in ("W1", "W2", "P") for m in tests[st][:14]][:40]
+PROBE_SAID = [m["question"] for st in ("B", "W1", "W2", "P", "K") for m in tests[st][:8]][:40]
+PROBE_FILE = out_path.replace(".jsonl", ".probe.npz")
+
+
+def organ_codes():
+    """What each organ makes of a fixed probe set (pictures, utterances): its code, to compare over the life."""
+    codes = {}
+    eye = brain.eye
+    if hasattr(eye, "parts"):
+        centre = len(eye.sensor.targets) // 2
+        codes["v1"] = np.array([eye.parts.encode(eye.sensor.views(im, centre)[0]) for im in PROBE_PICS])
+    if getattr(brain, "cortex", None) is not None:
+        codes["visual_cortex"] = np.array([np.concatenate(brain.cortex.code(im, grid=brain.cortex_grid)) for im in PROBE_PICS])
+    codes["ear"] = np.array([brain.ear.question(brain.ear.units(q, learn=False), adapt=False) for q in PROBE_SAID])
+    if hasattr(brain, "mouth"):
+        codes["mouth_sound_map"] = brain.mouth.amap[:97].copy()
+    return codes
+
+
+def drift():
+    """Organ drift since the previous checkpoint: 1 - mean cosine of each probe item's code then and now
+    (0 = the organ's code did not change; settling shows as drift falling over the life). docs/PLASTICITY.md"""
+    now = organ_codes()
+    out = {}
+    if os.path.exists(PROBE_FILE):
+        before = np.load(PROBE_FILE)
+        for k, a in now.items():
+            if k in before and before[k].shape == a.shape:
+                b = before[k]
+                cos = (a * b).sum(1) / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-8)
+                out[k] = round(float(1 - cos.mean()), 5)
+    np.savez(PROBE_FILE + ".tmp.npz", **now)
+    os.replace(PROBE_FILE + ".tmp.npz", PROBE_FILE)
+    return out
+
+
 def evaluate(stages):
     res = {}
     for s in stages:
@@ -205,7 +242,8 @@ while brain.age < TOTAL:
     promoted = cur >= PASS[stage] and held
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()
-    rec = {"age": brain.age, "stage": stage, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
+    rec_drift = drift()
+    rec = {"age": brain.age, "stage": stage, "drift": rec_drift, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
            "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
     print(f"age {brain.age:>8} stage {stage:<2} ({brain.age - state['since']:>7} there) | "
