@@ -75,6 +75,23 @@ def babble_score(n=60):
     return float(np.mean([max(sound_sim(b, h) for h in HEARD) for b in bab])), bab
 
 
+def wording_invariance(n=30):
+    """Generalization, not score: the same test picture asked three different ways. Does the brain give
+    the same answer each time (it understood the request, not the sound of one frame), and the right one?"""
+    import zlib
+    from organic.world import WORLD_DIR
+    path = os.path.join(WORLD_DIR, "naming_frames.json")
+    frames = json.load(open(path))["frames"] if os.path.exists(path) else ["what is this?"]
+    pics = [m for m in tests["W1"] if m["source"] in ("cifar:name", "commons:name")][:n]
+    same = right = 0
+    for k, m in enumerate(pics):
+        asks = [frames[(zlib.crc32(m["question"].encode()) + 17 * j) % len(frames)] for j in range(3)]
+        said = [tidy(brain.live(m["image"], q, learn=False, explore=False)[0]) for q in asks]
+        same += len(set(said)) == 1 and said[0] != ""
+        right += all(x in [tidy(a) for a in m["answers"]] for x in said)
+    return {"same_answer": same / max(len(pics), 1), "right_every_time": right / max(len(pics), 1), "n": len(pics)}
+
+
 def evaluate(stages):
     res = {}
     for s in stages:
@@ -89,9 +106,10 @@ def evaluate(stages):
             scores.append(grade(s, said, m["answers"]))
             exact.append(tidy(said) in [tidy(a) for a in m["answers"]])
             ticks.append(tick)
-            by.setdefault(m["source"], []).append((scores[-1], said))
+            by.setdefault(m["source"], []).append((scores[-1], said, tick))
         res[s] = {"score": float(np.mean(scores)), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
-                  "by_source": {src: {"score": float(np.mean([x for x, _ in v])), "n": len(v), "said": [y for _, y in v[:5]]} for src, v in by.items()}}
+                  "by_source": {src: {"score": float(np.mean([x for x, _, _ in v])), "tick": float(np.mean([t for _, _, t in v])), "n": len(v),
+                                      "said": [y for _, y, _ in v[:5]]} for src, v in by.items()}}
     return res
 
 
@@ -185,6 +203,8 @@ while brain.age < TOTAL:
     # earlier stages must be held, except babbling, which is meant to fade as words come
     held = all(res[s]["score"] >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s != "BB")
     promoted = cur >= PASS[stage] and held
+    if "W1" in res:
+        res["W1"]["wording"] = wording_invariance()
     rec = {"age": brain.age, "stage": stage, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
            "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
