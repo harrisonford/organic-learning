@@ -98,3 +98,38 @@ cortices. Drift is measured on 100 fixed pictures over each block of ~2,100 pict
    inferotemporal cortex learns invariance (the same object across views); the trace
    rule (experiments/trace_it_probe.py) is the candidate principle for that.
    This is where vision needs iteration, more than in freezing or not.
+
+## Trouble 3 offline: cross-situational links between organ cells (2026-11-06)
+
+`experiments/cross_situational_probe.py`, first-words world: 11,246 training moments; test
+pictures (CIFAR and Commons) each asked 3 different ways; 115 adult-written items.
+
+| | picture right | same answer, 3 wordings | right all 3 times | adult items (word in the question) |
+|---|---|---|---|---|
+| whole-situation memory (question sound + picture → word; roughly our clusters) | 0.18 | **0.06** | 0.03 | 0.36 |
+| vision only (nearest remembered picture) | 0.36 | – | 0.36 | – |
+| cross-situational links from every input (sound units, broad visual features) | 0.08 | 0.70 | 0.07 | 0.51 |
+| **cross-situational links from sound units and visual cells** | **0.39** | **0.90** | **0.38** | **0.51** |
+
+- The whole-situation memory reproduces kid_s3's frame-bound naming offline (same answer
+  across wordings 6%).
+- Cross-situational links (Smith & Yu 2008), where each active input keeps Hebbian links
+  to the words it co-occurs with, normalised by how often it is active, make frame words
+  favour nothing without anyone marking them: consistency 0.06 → 0.70, adult items
+  0.36 → 0.51.
+- But broad visual features (each co-occurs with every word) cast flat votes, so pictures
+  collapse. When vision first forms its own cells (vision-only memories, like clusters
+  grown from what is seen) and those cells link to words across situations, pictures are
+  named as well as vision allows (0.39), the same way 90% of the time, whatever the
+  wording; adult items stay at 0.51.
+
+**The principle this points to:** each organ grows its own cells (visual cells from what is
+seen, sound cells from what is heard), and words link to organ cells across situations,
+instead of one pool of clusters each storing a whole situation. This matches the brain:
+separate sensory cortices and an association hub (temporal lobe, hippocampus), where
+the word-thing link is cross-modal. It is also what lets the varied world (56 wordings,
+many breeds) help instead of hurt.
+
+Noise to iterate on: rarely heard units ("hmm?", "!") get sharp links by chance from a
+few co-occurrences; a link should become trusted only with experience, which has to
+come from the neuron rule, not a cutoff.

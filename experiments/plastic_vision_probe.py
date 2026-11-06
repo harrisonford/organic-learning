@@ -10,7 +10,7 @@ Every BLOCK pictures: drift of each cortex's code on a fixed probe set since the
 measure (settling = drift falling by itself), mean mismatch per layer, and how well the
 code tells first-words objects apart (1-NN naming on W1 pictures, CIFAR and Commons,
 with the 4x4 all-layer code kid_s3 uses).
-    python experiments/plastic_vision_probe.py [pictures, default 24000]
+    python experiments/plastic_vision_probe.py [pictures, default 24000]     ARMS=scratch BLOCK=10000 (one arm, longer)
 """
 import copy, os, pickle, random, sys, time
 import numpy as np
@@ -19,12 +19,13 @@ from organic.curriculum import Curriculum  # noqa: E402
 from organic.visual_cortex import VisualCortex  # noqa: E402
 
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 24000
-BLOCK = 4000
+BLOCK = int(os.environ.get("BLOCK", 4000))
 GRID = 4
 cur = Curriculum(seed=0)
 rng = random.Random(0)
 dev = pickle.load(open("data/visual_cortex.pkl", "rb"))
 arms = {"frozen": dev, "plastic": copy.deepcopy(dev), "scratch": VisualCortex(seed=3)}
+arms = {k: v for k, v in arms.items() if k in os.environ.get("ARMS", "frozen,plastic,scratch").split(",")}
 nrng = {k: np.random.default_rng(i) for i, k in enumerate(arms)}
 
 probe = [m["image"] for m in (cur.moment(s) for s in ("W1", "W2", "P", "K") for _ in range(60)) if m["image"].max() > 0][:100]  # real pictures only (text items are eyes closed)
@@ -53,7 +54,7 @@ while seen < N:
         m = cur.moment(rng.choice(["W1", "W2", "P", "K"]))
         if m["image"].max() == 0:  # eyes closed (text items)
             continue
-        for k in ("plastic", "scratch"):
+        for k in [a for a in ("plastic", "scratch") if a in arms]:
             arms[k].live(m["image"], nrng[k])
         seen += 1
     row = []
