@@ -563,3 +563,49 @@ could require it on two checkpoints in a row; (2) small brains forget the previo
 when they move on, despite the 30% review (kid_s3, ten times bigger, keeps W1 at
 0.35–0.42). Cluster size stays 8. Heterogeneous newborn sizes with selection by pruning
 remain an idea for later, once the world is richer.
+
+## 2026-11-06 — The wider world exposes frame-bound naming; overheard speech negative at life level
+
+**kid_s3 in the wider world** (restarted at 415k with naming phrasings, Commons photos and
+Wikidata facts; 24 checkpoints to age 535k, all at W2):
+
+| | before (300k–415k, every picture asked "what is this?") | after (420k–535k, 56 phrasings, plus Commons) |
+|---|---|---|
+| W1 overall | 0.35–0.42 | 0.16–0.28 (mean 0.23) |
+| W1 CIFAR naming | ~0.4 | 0.07–0.28 (mean 0.19) |
+| W1 Commons naming | – | 0.01–0.28 (mean 0.15) |
+| W1 adult items | – | 0.20–0.48 (mean 0.35) |
+| W2 | 0.29–0.39 | 0.24–0.45 (mean 0.33) |
+| B (echo) | 0.75–0.83 | 0.70–0.85 |
+
+The same CIFAR pictures, asked in other words, are named half as often. **Its first words
+were bound to one frame**: what it learned was "the sound 'what is this?' + this picture
+→ this word", not "a naming question → name what I see". This is the frame dominance
+measured in the ear (the same word in another frame codes less alike than another word in
+the same frame), now seen in behaviour. L3 "first words" (passed at 0.41 on the
+single-frame test) is weaker than its card says; noted on the card at the next release.
+kid_s3 cannot promote now: W1 must hold 80% of its pass score (0.33) and is at ~0.23.
+
+**Overheard speech, controlled** (`experiments/overheard_pipeline.sh`: 8 neurons, 2,000
+clusters, seed 0, the new world, BB → W1, 100k budget):
+
+| | W1 mean (20 checkpoints) | last 10 | CIFAR | Commons | adult items | B |
+|---|---|---|---|---|---|---|
+| OVERHEARD=0 | 0.14 | 0.15 | 0.07 | 0.10 | **0.26** | 0.90 |
+| OVERHEARD=3 | 0.11 | 0.10 | 0.07 | 0.13 | **0.13** | 0.89 |
+
+Both stop at W1 (the cluster-size run with the same brain passed the old single-frame
+W1 at 0.42). Overheard speech segments better (ear probe: whole words 0.36 → 0.52) but
+does not learn better here; on the adult items it learns worse. One seed each, so this is
+weak evidence, but it is not a win. A plausible reason: the ear's units keep shifting
+while the cortex is learning on top of them (the ear hears 4 sentences per moment), so
+the cortex keeps chasing a moving code. Not given to kid_s3.
+
+**Reading:** the richer world did its job: it showed that what looked like naming was
+partly frame memorisation. The question is now an architecture one, asked by the data:
+how does a naming request in any wording come to mean "name what you see"? Children solve
+it because the frames are many and the thing is what stays constant; the brain's question
+code is dominated by the frame. Candidates, all already in the ear plan or near it: frame
+analysis (step 5), competing units (step 4), and an ear that settles (a developmental
+critical period: its statistics consolidate in sleep and change less with age, so the
+cortex learns on a stable code).
