@@ -172,3 +172,24 @@ goes with "yes" can veto it. Tested offline first.
 
 kid_s3 ended on 2026-11-08 at age 745k: "stops at W2 (two words): 0.35 < 0.5 after 400,000
 moments". Its lineage released L1 babbler, L2 echo and L3 first words.
+
+### Multiplicative organ evidence: a partial step, not the principle (2026-11-08)
+
+`experiments/hub_conjunction_probe.py`: a hub trained on 9k W1 + 9k W2 moments (as a life at W2
+lives them).
+
+| | W1 naming right | same answer x3 | right x3 | W2 (colour, yes/no, counting) |
+|---|---|---|---|---|
+| additive (as built) | 0.19 | 0.95 | 0.18 | 0.27 |
+| multiplicative (log-evidence, each organ with one spontaneous co-occurrence as baseline) | 0.23 | 0.51 | 0.15 | 0.29 |
+
+It reproduces the interference offline (W1 naming 0.39 with W1 alone, 0.19 with W2 mixed in).
+Multiplying helps a little but halves consistency: rarely heard units with sharp chance
+links can now veto, so the answer moves with the wording again.
+
+**What children seem to have that the hub lacks: answer kinds.** Words that answer the same
+kinds of questions form categories from their distribution alone (colour words, numbers,
+names, yes/no; Mintz 2003 frequent frames, Redington et al. 1998). A question then selects a
+*kind* and the picture selects *within* it. Next: lexical neurons that group by the contexts
+they are heard in (cells over the lexicon, the same Cortex neurons), with the question's
+sound cells linking to those kinds rather than to single words. Tested offline first.
