@@ -144,3 +144,31 @@ learned route next to copy and own ("speak:recall", credited by outcome like the
 two; the hub's confidence enters that choice as its own drive, as the eye's salience
 enters its movement choice). The recalled word's sound primes the mouth through the
 same route copying uses. Old brains (kid_s3) have no hub and are unchanged.
+
+## The hub in a life: controlled pair (2026-11-08)
+
+`experiments/hub_pipeline.sh`: two small lives (8 neurons, 2,000 clusters, seed 0, the wider
+world, 1 overheard sentence per moment), with and without the hub.
+
+| at first words (W1) | W1 score | same answer, 3 wordings | right all 3 times | W1 passed |
+|---|---|---|---|---|
+| no hub (15k–80k) | 0.12–0.22 (mean ~0.15) | **0.00** at every checkpoint | 0.00 | no |
+| **hub** (15k–50k) | **0.27–0.41 (mean ~0.36)** | **0.77–0.97** | **0.13–0.33** | **yes, at 50k (0.41), after eight checkpoints at 0.33–0.41** |
+
+The hub more than doubles first words and turns wording consistency from never into
+almost always. It passes W1 on a sustained level, not a lucky checkpoint.
+
+**But after moving on to two words, its picture naming collapses** (CIFAR and Commons
+naming → ~0.0) while its answers stay consistent across wordings (0.6–0.97): it now says
+the same *wrong* thing for a picture whatever the wording. W2 asks about the same kinds of
+pictures with other answers ("yes", "two", "brown"), and cross-situational links from a
+picture's cells now favour those words. Additive votes cannot express a conjunction ("a
+naming question AND this picture → its name; a colour question AND this picture → its
+colour"): the picture's vote outweighs the question's. The whole-situation clusters did
+conjunctions but were over-specific; the hub generalises but cannot do conjunctions.
+Next iteration: organ evidence that combines multiplicatively (each organ's vote scales
+the others', like coincidence detection in dendrites), so a question kind that never
+goes with "yes" can veto it. Tested offline first.
+
+kid_s3 ended on 2026-11-08 at age 745k: "stops at W2 (two words): 0.35 < 0.5 after 400,000
+moments". Its lineage released L1 babbler, L2 echo and L3 first words.
