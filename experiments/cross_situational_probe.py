@@ -105,6 +105,29 @@ def cross_cells(q, v, k=5):
     return words[int(np.argmax(votes))]
 
 
+# the hub as it would live in the brain: the visual area is a Cortex (the orchestrator's own neurons: growth by
+# affinity, maturation, outstar links) that sees only the picture and links to lexical neurons
+from organic.cortex import Cortex  # noqa: E402
+area = Cortex(dim=dim_v, neurons_per_cluster=8, theta_familiar=0.95, associate=False, maturation=5.0, seed=0)
+lex = np.array([area.output_neuron("word:" + w) for w in words])
+for ref, q, ans, st, src in train:
+    if V[ref] is not None:
+        area.learn(V[ref], int(lex[W[ans[0]]]), lex)
+print(f"visual area: {area.C} cells grown", flush=True)
+
+
+def hub(q, v):
+    votes = np.zeros(len(words))
+    units = [u for u in set(heard(q)) if u in P_s]
+    if units:
+        votes += np.mean([P_s[u] for u in units], axis=0)
+    if v is not None:
+        r = area.forward(v, lex)
+        if r is not None and r["probs"] is not None:
+            votes += r["probs"]
+    return words[int(np.argmax(votes))]
+
+
 def whole(q, v):
     qc = ear.question(heard(q), adapt=False)
     sim = mem_q @ qc + (mem_v @ v if v is not None else 0)
@@ -122,7 +145,7 @@ def wordings(it):
     return [FRAMES[(zlib.crc32(repr(it[0]).encode()) + 17 * j + 5) % len(FRAMES)] for j in range(3)]
 
 
-for name, f in (("whole situation", whole), ("vision only", vision_only), ("cross-situational", cross), ("cross, visual cells", cross_cells)):
+for name, f in (("whole situation", whole), ("vision only", vision_only), ("cross-situational", cross), ("cross, visual cells", cross_cells), ("hub (cortex visual area)", hub)):
     acc, same, every = [], 0, 0
     for it in test_pics:
         said = [f(q, V[it[0]]) for q in wordings(it)]

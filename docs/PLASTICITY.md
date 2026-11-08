@@ -110,6 +110,7 @@ pictures (CIFAR and Commons) each asked 3 different ways; 115 adult-written item
 | vision only (nearest remembered picture) | 0.36 | – | 0.36 | – |
 | cross-situational links from every input (sound units, broad visual features) | 0.08 | 0.70 | 0.07 | 0.51 |
 | **cross-situational links from sound units and visual cells** | **0.39** | **0.90** | **0.38** | **0.51** |
+| **the hub as built (organic/hub.py): the visual area is a Cortex, the orchestrator's own neurons, seeing only the picture (5,662 cells grown)** | **0.39** | **0.99** | **0.38** | **0.51** |
 
 - The whole-situation memory reproduces kid_s3's frame-bound naming offline (same answer
   across wordings 6%).
@@ -133,3 +134,13 @@ many breeds) help instead of hurt.
 Noise to iterate on: rarely heard units ("hmm?", "!") get sharp links by chance from a
 few co-occurrences; a link should become trusted only with experience, which has to
 come from the neuron rule, not a cutoff.
+
+## The hub in the speaking brain (2026-11-07)
+
+`organic/hub.py`, `SpeakingBrain(hub=True)` (`HUB=1` in curriculum_life): a visual area
+(a Cortex fed only the whole view), sound cells (heard units), and lexical neurons (word forms
+the adults said), linked across situations. The hub proposes a word; speaking it is a third
+learned route next to copy and own ("speak:recall", credited by outcome like the other
+two; the hub's confidence enters that choice as its own drive, as the eye's salience
+enters its movement choice). The recalled word's sound primes the mouth through the
+same route copying uses. Old brains (kid_s3) have no hub and are unchanged.

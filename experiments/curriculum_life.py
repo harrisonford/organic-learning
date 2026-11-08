@@ -3,7 +3,7 @@
     python experiments/curriculum_life.py out/cur_s0.jsonl
     SEED=0  CORTEX=path  EVERY=5000  STAGE_BUDGET=300000  TOTAL=2000000  RESUME=path.pkl
     MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0  NEURONS=8 (per cluster)
-    OVERHEARD=0 (overheard sentences per moment, heard by the ear only)
+    OVERHEARD=0 (overheard sentences per moment, heard by the ear only)  HUB=1 HUB_CELLS=n (association hub)
 
 Every EVERY moments the brain is tested on held-out items of every stage up to
 the current one (and the next, to see what is coming). It is promoted when the
@@ -46,7 +46,8 @@ else:
         cfg["cortex_layers"] = tuple(int(x) for x in os.environ.get("CORTEX_LAYERS", "1,2").split(","))
     if os.environ.get("SPEECH"):  # the speaking brain (organic/speech.py)
         from organic.speech import SpeakingBrain
-        brain = SpeakingBrain(parts, seed=SEED, size=64, **cfg)
+        hub = os.environ.get("HUB") == "1"  # the association hub (organic/hub.py)
+        brain = SpeakingBrain(parts, seed=SEED, size=64, hub=hub, hub_cells=int(os.environ.get("HUB_CELLS", 0)) or None, **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}
@@ -122,8 +123,9 @@ def drift():
         for k, a in now.items():
             if k in before and before[k].shape == a.shape:
                 b = before[k]
-                cos = (a * b).sum(1) / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-8)
-                out[k] = round(float(1 - cos.mean()), 5)
+                live = (np.linalg.norm(a, axis=1) > 0) & (np.linalg.norm(b, axis=1) > 0)  # rows never used (zero) say nothing
+                cos = (a * b).sum(1)[live] / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-8)[live]
+                out[k] = round(float(1 - cos.mean()), 5) if live.any() else 0.0
     np.savez(PROBE_FILE + ".tmp.npz", **now)
     os.replace(PROBE_FILE + ".tmp.npz", PROBE_FILE)
     return out

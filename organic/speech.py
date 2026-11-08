@@ -144,7 +144,7 @@ class Mouth:
 class SpeakingBrain(LoopBrain2):
     max_utterance = 16
 
-    def __init__(self, parts, **kw):
+    def __init__(self, parts, hub=False, hub_cells=None, **kw):
         super().__init__(parts, **kw)
         self.mouth = Mouth(self.ear.width, seed=kw.get("seed", 0) + 5)
         # the situation also holds what I have said so far (efference copy + self-hearing)
@@ -155,9 +155,16 @@ class SpeakingBrain(LoopBrain2):
             setattr(self.orch, arr, np.zeros(a.shape[:-1] + (self.dim,), np.float32))
         self.say = {u: self.orch.output_neuron(self._name(u)) for u in self.mouth.units}
         # whether to let the copy route in is a choice, like the eye's gain neurons, credited by outcome
-        self.copy_group = np.array([self.orch.output_neuron("speak:copy"), self.orch.output_neuron("speak:own")])
+        routes = ["speak:copy", "speak:own"] + (["speak:recall"] if hub else [])
+        self.copy_group = np.array([self.orch.output_neuron(r) for r in routes])
         for c in self.copy_group:
             self.value[int(c)] = 0.0
+        # the association hub (organic/hub.py): word forms linked to organ cells across situations
+        self.hub = None
+        if hub and self.cortex is not None:
+            from .hub import Hub
+            dim = sum(layer.kinds for layer in self.cortex.layers) * self.cortex_grid ** 2
+            self.hub = Hub(dim, seed=kw.get("seed", 0) + 11, max_cells=hub_cells)
         self.heard_recent = np.zeros(self.ear.width, np.float32)
         self.babbles = 0
 
@@ -340,9 +347,16 @@ class SpeakingBrain(LoopBrain2):
         path, stays, gains_used, choices = [12], 0, [], []
         said, snapshot, tick, spoken = None, None, 0, []
         codes = None
+        vis, recalled, confidence = None, None, 0.0
         if self.cortex is not None:
             allc = self.cortex.code(img, grid=self.cortex_grid)
             codes = [allc[i] for i in self.cortex_layers]
+            if img.max() > 0:  # the eyes see something: the whole view, as the hub's visual area gets it
+                vis = np.concatenate(allc)
+                vis = vis / (np.linalg.norm(vis) + 1e-8)
+        hub = getattr(self, "hub", None)
+        if hub is not None:
+            recalled, confidence = hub.recall(heard, vis)
         while tick < self.max_ticks:
             level = min(phase, 2)
             code = self.eye.view(img, target, level, gain)
@@ -362,11 +376,15 @@ class SpeakingBrain(LoopBrain2):
                 if r["probs"].max() >= patience or tick == self.max_ticks:
                     snapshot = (s, r, base)
                     starts = list(np.cumsum([0] + [len(h) for h in heard[:-1]]))
-                    kc, rc = self._choose(s, self.copy_group, np.zeros(2), explore)
+                    drive = np.zeros(len(self.copy_group))
+                    if len(self.copy_group) > 2:  # the hub drives its own route with how sure it is
+                        drive[2] = confidence if recalled is not None else -1e9
+                    kc, rc = self._choose(s, self.copy_group, drive, explore)
                     if rc is not None and rc.get("a") is not None:
                         choices.append((tick, rc["active"], rc["g"], rc["a"], int(self.copy_group[kc])))
-                    self.copied = kc == 0
-                    spoken, said = self._speak(base, r, explore and learn, trace=question.encode("utf-8") if kc == 0 else b"", starts=starts)
+                    self.copied, self.recalled = kc == 0, recalled if kc == 2 else None
+                    trace = question.encode("utf-8") if kc == 0 else recalled.encode("utf-8") if kc == 2 else b""
+                    spoken, said = self._speak(base, r, explore and learn, trace=trace, starts=starts)
                     tick += len(spoken)  # speaking takes time
                     break
             if level < 2:
@@ -409,6 +427,8 @@ class SpeakingBrain(LoopBrain2):
             reward = value - time_cost * tick
             if learn:
                 self.age += 1
+                if hub is not None:  # the adult's word, linked to what was heard and seen
+                    hub.learn(heard, vis, answer)
                 base = snapshot[2] if snapshot else self._base(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 targets = self.mouth.decompose(answer)
                 for u in self.mouth.rehearse(targets):  # new motor chunks get their output neurons
