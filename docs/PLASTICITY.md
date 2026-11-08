@@ -193,3 +193,26 @@ names, yes/no; Mintz 2003 frequent frames, Redington et al. 1998). A question th
 *kind* and the picture selects *within* it. Next: lexical neurons that group by the contexts
 they are heard in (cells over the lexicon, the same Cortex neurons), with the question's
 sound cells linking to those kinds rather than to single words. Tested offline first.
+
+### Answer kinds emerge, and they do the conjunction (2026-11-08)
+
+Same probe, third method: each lexical neuron's context is the distribution of question
+units it was the answer to; kind cells grow over those contexts by familiarity (the
+clusters' own rule: a new cell when no cell is familiar enough; the threshold, 0.95⁴, is
+the orchestrator's per-neuron familiarity over four inputs, a value to iterate on). The
+question's units link to kinds across situations; the question selects a kind, the organs
+select the word within it.
+
+Kinds grown with no labels, from distribution alone: names (apple, bus, train, clock,
+chair, bicycle, rabbit, bed, cup, bear…), yes/no, numbers (zero–three), colours (white,
+blue, green, red, black, brown, yellow, gray, orange, purple), family words (mama, mom,
+dada), and singletons for social words (more, bye, hi).
+
+| | W1 naming right | same answer x3 | right x3 | W2 (colour, yes/no, counting) |
+|---|---|---|---|---|
+| additive | 0.19 | 0.95 | 0.18 | 0.27 |
+| multiplicative | 0.23 | 0.51 | 0.15 | 0.29 |
+| **answer kinds** | **0.32** | 0.75 | **0.31** | **0.43** |
+
+Next: kinds inside organic/hub.py, regrouped during sleep (as the orchestrator consolidates),
+and a controlled life against the additive hub.

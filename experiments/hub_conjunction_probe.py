@@ -68,6 +68,8 @@ def evidence(units, v):
 
 
 def answer(q, v, how):
+    if how == "kinds":
+        return answer_kinds(q, v)
     snd, see = evidence(ear.units(q, learn=False), v)
     K = len(hub.lexicon)
     organs = [e for e in (snd, see) if e is not None]
@@ -78,9 +80,53 @@ def answer(q, v, how):
     return hub.lexicon[int(np.argmax(votes))]
 
 
+# ---- answer kinds, emergent: each lexical neuron's context is the distribution of question units it answered;
+# kind cells grow over contexts by familiarity (the clusters' own rule: a new cell when none is familiar enough)
+K = len(hub.lexicon)
+units_all = sorted(hub.sound)
+U = {u: i for i, u in enumerate(units_all)}
+ctx = np.zeros((K, len(units_all)))
+for u, links in hub.sound.items():
+    for k, c in links.items():
+        ctx[k, U[u]] += c
+heard_k = ctx.sum(1)
+ctxn = ctx / (np.linalg.norm(ctx, axis=1, keepdims=True) + 1e-8)
+THETA = 0.95 ** 4  # the orchestrator's familiarity (0.95 per neuron) over a context: a design value to iterate
+cells, members = [], []
+for k in np.argsort(-heard_k):  # the most heard words found the kinds first
+    sims = [float(ctxn[k] @ c / (np.linalg.norm(c) + 1e-8)) for c in cells]
+    j = int(np.argmax(sims)) if sims else -1
+    if j < 0 or sims[j] < THETA:
+        cells.append(ctx[k].copy()); members.append([k])
+    else:
+        cells[j] += ctx[k]; members[j].append(k)
+kind_of = np.zeros(K, int)
+for j, m in enumerate(members):
+    kind_of[m] = j
+big = sorted(range(len(members)), key=lambda j: -heard_k[members[j]].sum())[:8]
+print(f"answer kinds grown: {len(members)}; the biggest:", flush=True)
+for j in big:
+    print("   ", [hub.lexicon[k] for k in sorted(members[j], key=lambda k: -heard_k[k])[:10]], flush=True)
+# question unit -> kind links (cross-situational, like unit -> word)
+kind_links = {u: np.bincount(kind_of[list(links)], weights=list(links.values()), minlength=len(members)) for u, links in hub.sound.items()}
+
+
+def answer_kinds(q, v):
+    units = [u for u in set(ear.units(q, learn=False)) if u in kind_links]
+    snd, see = evidence(ear.units(q, learn=False), v)
+    if units:
+        pk = np.mean([kind_links[u] / kind_links[u].sum() for u in units], axis=0)
+    else:
+        pk = np.ones(len(members)) / len(members)
+    kind = int(np.argmax(pk))  # the question selects a kind
+    within = (see if see is not None else 0) + (snd if snd is not None else 0)  # the organs select within it
+    within = np.where(kind_of == kind, within, -1)
+    return hub.lexicon[int(np.argmax(within))]
+
+
 test_pics = [it for src in ("cifar:name", "commons:name") for it in cur.test["W1"][src][:150]]
 test_w2 = [it for items in cur.test["W2"].values() for it in items[:60]]
-for how in ("additive", "multiplicative"):
+for how in ("additive", "multiplicative", "kinds"):
     acc, same, every = [], 0, 0
     for it in test_pics:
         v = cache.get(it[0]) if it[0] in cache else vis(it[0])
