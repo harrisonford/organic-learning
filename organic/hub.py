@@ -28,6 +28,8 @@ The hub only proposes: speaking it is a learned choice of the speaking brain (re
 to copy and own), credited by outcome.
 """
 
+import zlib
+
 import numpy as np
 
 from .cortex import Cortex
@@ -46,22 +48,38 @@ class Hub:
     familiar = 0.95 ** 4  # kind familiarity: the orchestrator's per-neuron familiarity over a context (to iterate on)
     sleep_every = 2000
 
+    context_width = 512  # a word's context as neural activity (sum of its heard units' fixed sparse patterns)
+
+    def _unit_code(self, u):
+        """A fixed random sparse pattern for a heard unit (like the ear's byte neurons)."""
+        if not hasattr(self, "_codes"):
+            self._codes = {}
+        if u not in self._codes:
+            rng = np.random.default_rng(zlib.crc32(u) ^ 1234)
+            v = np.zeros(self.context_width, np.float32)
+            v[rng.choice(self.context_width, 16, replace=False)] = rng.choice([-1.0, 1.0], 16)
+            self._codes[u] = v
+        return self._codes[u]
+
     def kinds_now(self):
         """Regroup lexical neurons into kinds by their contexts (sleep). The most heard words found kinds first."""
         K = len(self.lexicon)
-        units = list(self.sound)
-        col = {u: i for i, u in enumerate(units)}
-        ctx = np.zeros((K, len(units)))
+        ctx = np.zeros((K, self.context_width), np.float32)
         for u, links in self.sound.items():
+            code = self._unit_code(u)
             for k, c in links.items():
-                ctx[k, col[u]] += c
+                ctx[k] += c * code
+        heard = np.zeros(K)
+        for links in self.sound.values():
+            for k, c in links.items():
+                heard[k] += c
         norm = ctx / (np.linalg.norm(ctx, axis=1, keepdims=True) + 1e-8)
-        cells, kind = [], np.zeros(K, np.int64)
-        for k in np.argsort(-ctx.sum(1)):
-            sims = [float(norm[k] @ c / (np.linalg.norm(c) + 1e-8)) for c in cells]
-            j = int(np.argmax(sims)) if sims else -1
+        cells, kind = np.zeros((0, self.context_width), np.float32), np.zeros(K, np.int64)
+        for k in np.argsort(-heard):
+            sims = cells @ norm[k] / (np.linalg.norm(cells, axis=1) + 1e-8) if len(cells) else np.zeros(0)
+            j = int(np.argmax(sims)) if len(sims) else -1
             if j < 0 or sims[j] < self.familiar:
-                cells.append(ctx[k].copy())
+                cells = np.vstack([cells, ctx[k][None]])
                 j = len(cells) - 1
             else:
                 cells[j] += ctx[k]
@@ -100,6 +118,7 @@ class Hub:
         votes = self.votes(units, v)
         if not votes.size or votes.sum() <= 0:
             return None, 0.0
+        total = votes.sum()  # confidence is a share of all the votes, not of the chosen kind's (a kind of one is not certainty)
         kind = getattr(self, "kind", None)
         if kind is not None and len(kind) < len(votes):  # words learned since the last sleep: a kind of their own until then
             extra = len(votes) - len(kind)
@@ -116,7 +135,7 @@ class Hub:
                 if votes.sum() <= 0:
                     return None, 0.0
         k = int(np.argmax(votes))
-        return self.lexicon[k], float(votes[k] / votes.sum())
+        return self.lexicon[k], float(votes[k] / total)
 
     def learn(self, units, v, answer):
         k = self.word(answer)
@@ -128,5 +147,5 @@ class Hub:
             self.area.learn(v, self.out[k], np.array(self.out))
             self.area.maybe_prune()
         self.moments = getattr(self, "moments", 0) + 1
-        if self.moments % self.sleep_every == 0 or len(getattr(self, "kind", ())) < len(self.lexicon) and self.moments < self.sleep_every:
-            self.kinds_now()  # sleep: lexical neurons regroup into kinds (new words get a kind at once early on)
+        if self.moments % self.sleep_every == 0:
+            self.kinds_now()  # sleep: lexical neurons regroup into kinds (a word learned since has a kind of its own until then)
