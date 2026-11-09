@@ -58,3 +58,30 @@ per request, 12 requests).
   candidate for simple paraphrase jobs, always with a judge.
 - `parallel/decisions-fast:free`: a decisions model (typed judgments, not chat). The judge above,
   and a candidate to replace Jev (typesafe, paid, capped at $1.50) for fast decisions.
+
+## A local judge: open System One models on the GPU (2026-11-09)
+
+llama.cpp (prebuilt CUDA 13.5 build b12229 in `~/tools/llama.cpp/llama-b12229`, no system
+install) serves open-weight decision models with `llama serve -hf <repo>` at a local
+`/v1/systemone` endpoint, in the same typed-decisions format as the hosted API. On the RTX
+3070 (8 GB, unused by training), the same 240 answers were judged by each
+(`experiments/local_judge_compare.py`; flags `-ngl 99 -b 2048 -ub 2048 -c 8192 -np 4`):
+
+| local judge | per request | agrees with decisions-fast | + exact-match override | correlation | judgments/s |
+|---|---|---|---|---|---|
+| **lev 4B (Apache 2.0, ggml-org/lev-GGUF Q8_0)** | 20 | 0.92 | **0.93** | 0.86 | 12.6 |
+| lev 4B | 1 | 0.89 | 0.92 | 0.84 | 18.8 |
+| Liquid d1-3B (Liquid licence, sees images) | 20 | 0.83 | 0.91 | 0.88 | 20.6 |
+| Liquid d1-3B | 1 | 0.86 | 0.88 | 0.89 | 38.8 |
+| Laya 421M (Apache 2.0) | 1 | 0.84 | 0.86 | 0.83 | 82 |
+| Laya 421M | 20 | 0.42 | 0.44 | 0.70 | 11 (lost in a 20-item state) |
+| Kev-4B (Apache 2.0) | 1 / 20 | 0.78 / 0.83 | 0.82 / 0.88 | 0.83 / 0.88 | 19 / 6 |
+
+- The common local error is rejecting an answer that exactly matches the adult's ("how
+  many people?" → "zero" when it is zero); an exact match is accepted outright and the judge
+  decides the rest (the hosted judge accepts 97% of exact matches anyway).
+- **lev 4B with the exact-match override agrees with the hosted judge 93% of the time**, with
+  the hosted judge's own noise near 0.5 included, at 12.6 judgments/s, eight times a
+  life's pace, free and with no request limits.
+- Laya is the fast option (82/s) if speed ever matters more; it accepts echoes of the
+  question ("what's this one?" → "one?").
