@@ -13,6 +13,7 @@ Every response is cached by a hash of the request, so nothing is asked twice.
 """
 
 import base64
+import fcntl
 import hashlib
 import io
 import json
@@ -47,29 +48,45 @@ class Adults:
 
     def _state(self):
         today = time.strftime("%Y-%m-%d")
-        s = json.load(open(self.state_file)) if os.path.exists(self.state_file) else {}
+        try:
+            s = json.load(open(self.state_file)) if os.path.exists(self.state_file) else {}
+        except ValueError:  # a damaged file (two writers at once, before the lock): start the day's count again
+            s = {}
         if s.get("day") != today:
             s = {"day": today, "count": 0, "jev_baseline": s.get("jev_baseline"), "recent": []}
         return s
 
     def _save(self, s):
-        json.dump(s, open(self.state_file, "w"))
+        """Atomic: several daemons share this file."""
+        tmp = f"{self.state_file}.{os.getpid()}.tmp"
+        with open(tmp, "w") as f:
+            json.dump(s, f)
+        os.replace(tmp, self.state_file)
 
     def _wait_turn(self, purpose=None):
         while True:
-            s = self._state()
-            if s["count"] >= PER_DAY:
-                raise RuntimeError("daily request budget used up")
-            now = time.time()
-            s["recent"] = [t for t in s["recent"] if now - t < 60]
-            if len(s["recent"]) < PER_MINUTE:
-                s["recent"].append(now)
-                s["count"] += 1
-                if purpose:
-                    s[f"{purpose}_count"] = s.get(f"{purpose}_count", 0) + 1
-                self._save(s)
+            with open(self.state_file + ".lock", "w") as lock:  # one daemon at a time reads, counts and writes
+                fcntl.flock(lock, fcntl.LOCK_EX)
+                wait = self._take_turn(purpose)
+            if wait is None:
                 return
-            time.sleep(60 - (now - min(s["recent"])) + 0.5)
+            time.sleep(wait)
+
+    def _take_turn(self, purpose):
+        """Count a request if the minute's budget allows; else how long to wait (the caller holds the lock)."""
+        s = self._state()
+        if s["count"] >= PER_DAY:
+            raise RuntimeError("daily request budget used up")
+        now = time.time()
+        s["recent"] = [t for t in s["recent"] if now - t < 60]
+        if len(s["recent"]) >= PER_MINUTE:
+            return 60 - (now - min(s["recent"])) + 0.5
+        s["recent"].append(now)
+        s["count"] += 1
+        if purpose:
+            s[f"{purpose}_count"] = s.get(f"{purpose}_count", 0) + 1
+        self._save(s)
+        return None
 
     def key_usage(self):
         req = urllib.request.Request("https://openrouter.ai/api/v1/key", headers={"Authorization": f"Bearer {self.key}"})
