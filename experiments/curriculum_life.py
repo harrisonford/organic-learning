@@ -4,6 +4,7 @@
     SEED=0  CORTEX=path  EVERY=5000  STAGE_BUDGET=300000  TOTAL=2000000  RESUME=path.pkl
     MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0  NEURONS=8 (per cluster)
     OVERHEARD=0 (overheard sentences per moment, heard by the ear only)  HUB=1 HUB_CELLS=n (association hub)
+    JUDGE=1 (reward = probability an adult accepts the answer, organic/judge.py; accepted own forms stand)
 
 Every EVERY moments the brain is tested on held-out items of every stage up to
 the current one (and the next, to see what is coming). It is promoted when the
@@ -57,6 +58,14 @@ if os.environ.get("EAR_HABITUATION") == "0":
     brain.ear.habituation = False
 if os.environ.get("MAX_CLUSTERS") or os.environ.get("MAX_OUTPUTS"):
     brain.orch.set_budget(int(os.environ.get("MAX_CLUSTERS", 0)) or None, int(os.environ.get("MAX_OUTPUTS", 0)) or None)
+
+# the adults judge answers as people do (organic/judge.py, docs/JUDGING.md): JUDGE=1 makes the reward the
+# probability an adult accepts the answer, and lets an accepted answer's own form stand (no correction)
+judge = None
+if os.environ.get("JUDGE") == "1":
+    from organic.judge import Judge
+    judge = Judge()
+    brain.own_forms = True
 
 world = Curriculum(seed=0)
 world.rng.seed(1000003 * SEED + brain.age)  # a resumed life draws moments it has not drawn before
@@ -139,9 +148,10 @@ def evaluate(stages):
                 sc, bab = babble_score()
                 res[s] = {"score": sc, "exact": 0.0, "tick": 0.0, "n": len(bab), "by_source": {"babble": {"score": sc, "n": len(bab), "said": bab[:5]}}}
             continue
-        scores, ticks, exact, by = [], [], [], {}
+        scores, ticks, exact, by, saids = [], [], [], {}, []
         for m in tests[s]:
             said, tick, *_ = brain.live(m["image"], m["question"], learn=False, explore=False)
+            saids.append(said)
             scores.append(grade(s, said, m["answers"]))
             exact.append(tidy(said) in [tidy(a) for a in m["answers"]])
             ticks.append(tick)
@@ -149,6 +159,12 @@ def evaluate(stages):
         res[s] = {"score": float(np.mean(scores)), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
                   "by_source": {src: {"score": float(np.mean([x for x, _, _ in v])), "tick": float(np.mean([t for _, _, t in v])), "n": len(v),
                                       "said": [y for _, y, _ in v[:5]]} for src, v in by.items()}}
+        if judge is not None:  # side by side with the local grade (the gate stays on the local grade for now)
+            items = [(s, m["question"], m["answers"], said) for m, said in zip(tests[s], saids)]
+            judged = judge.accept(items, fallback=lambda i: scores[i])
+            res[s]["judged"] = float(np.mean(judged))
+            for src in res[s]["by_source"]:
+                res[s]["by_source"][src]["judged"] = float(np.mean([p for p, m in zip(judged, tests[s]) if m["source"] == src]))
     return res
 
 
@@ -232,7 +248,11 @@ while brain.age < TOTAL:
         m = world.moment(stage)
         if stage == "B" and hasattr(brain, "babble"):  # infancy: babbling between the words heard
             brain.babble(int(os.environ.get("BABBLE_PER", 3)))
-        _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"], grade=lambda said, m=m: grade(m["stage"], said, m["answers"]))
+        if judge is not None:
+            def judged(said, m=m):
+                return judge.accept([(m["stage"], m["question"], m["answers"], said)], fallback=lambda i: grade(m["stage"], said, m["answers"]))[0]
+        _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"],
+                                    grade=judged if judge is not None else (lambda said, m=m: grade(m["stage"], said, m["answers"])))
         rewards.append(r)
         if brain.age % EVERY:
             continue
@@ -247,9 +267,10 @@ while brain.age < TOTAL:
     rec_drift = drift()
     rec = {"age": brain.age, "stage": stage, "drift": rec_drift, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
+           "judge": {"calls": judge.calls, "cached": judge.hits, "fallbacks": judge.fallbacks} if judge is not None else None,
            "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
     print(f"age {brain.age:>8} stage {stage:<2} ({brain.age - state['since']:>7} there) | "
-          + " | ".join(f"{s} {v['score']:.2f}/{v['exact']:.2f}" for s, v in res.items()) + f" | clusters {brain.orch.C} | {'PROMOTED' if promoted else ''}", flush=True)
+          + " | ".join(f"{s} {v['score']:.2f}/{v['exact']:.2f}" + (f"/j{v['judged']:.2f}" if "judged" in v else "") for s, v in res.items()) + f" | clusters {brain.orch.C} | {'PROMOTED' if promoted else ''}", flush=True)
     if promoted:
         state["passed"][stage] = cur
         # a release candidate: the brain as it was when it passed this stage

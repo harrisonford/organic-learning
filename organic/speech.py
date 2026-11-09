@@ -422,6 +422,11 @@ class SpeakingBrain(LoopBrain2):
         if answer is not None:
             value = float(grade(said)) if grade is not None else (1.0 if said == answer else 0.0)
             correct = value >= 0.999
+            own = getattr(self, "own_forms", False)  # adults correct only what they do not accept (docs/JUDGING.md)
+            if own:
+                correct = value >= 0.5
+                if correct and said:
+                    answer = said  # accepted: the adult lets the child's own form stand (and echoes it)
             if deadline is not None and tick > deadline:
                 value *= 0.5 ** (tick - deadline)
             reward = value - time_cost * tick

@@ -85,3 +85,20 @@ install) serves open-weight decision models with `llama serve -hf <repo>` at a l
   life's pace, free and with no request limits.
 - Laya is the fast option (82/s) if speed ever matters more; it accepts echoes of the
   question ("what's this one?" → "one?").
+
+## Built (2026-11-09)
+
+- `organic-judge` (systemd user service, `experiments/systemd/organic-judge.service`): llama.cpp
+  serving lev 4B on the GPU at 127.0.0.1:8790/v1/systemone (local only).
+- `organic/judge.py`: the probability an adult accepts an answer. An exact match counts as accepted
+  (content words: "a dog" = "dog"); every judged answer is cached in data/judgments.jsonl; if the
+  judge is down, the local grade stands.
+- `JUDGE=1` in curriculum_life: the training reward is the judged acceptance; an accepted answer's
+  own form stands (`brain.own_forms`: the imitation target and the hub's link become what the
+  brain said, as an adult echoing "doggie!"; only rejected answers get the adult's wording);
+  every checkpoint records `judged` next to the local `score` per stage and per source, plus the
+  judge's calls, cache hits and fallbacks. **The promotion gate stays on the local score** until
+  the two have been compared over a life and the pass marks recalibrated.
+- Smoke test (small hub brain, 12k moments): no fallbacks; B 0.83 local / 0.73 judged (stricter
+  on echoes), W1 0.33 / 0.31; W2, not yet trained, 0.00 local / 0.31 judged, which needs a look
+  (toddler shorthand like "dog!" for "is there a dog?", or too lenient).
