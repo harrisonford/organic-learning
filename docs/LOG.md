@@ -653,3 +653,25 @@ brain without a hub never did, and kid_s3 (ten times the clusters) took 345,000 
 They are now at two words (0.34–0.39 after 5–10 thousand moments; pass mark 0.5), where first words
 slip to 0.35–0.41 and the same-answer rate to 0.25–0.41: what is said in a life goes through the
 orchestrator's motor routes, not the word cells alone.
+
+**Curiosity instead of gates, offline, preliminary** (`experiments/curiosity_probe.py`; one seed; the first
+runs were cut at 15,000 moments when memory ran out, 30,000-moment runs are in `out/curiosity_*_30k.log`).
+The world offers four moments of any kind (first words to kindergarten) and the word cells attend to the
+one with the most learning progress (two traces, fast and slow, predict the brain's own surprise from the
+echo of the utterance; where the fast one is lower, surprise is falling).
+
+| at 15,000 attended moments | first words | two words | preschool | kindergarten | attention (W1 / W2 / P / K) |
+|---|---|---|---|---|---|
+| curious | 0.23 | 0.47 | 0.09 | 0.12 | 0.17/0.47/0.19/0.18 → 0.23/0.40/0.19/0.17 → 0.24/0.34/0.23/0.20 |
+| uniform (no preference) | 0.20 | 0.47 | 0.09 | 0.11 | 0.25 each |
+| staged schedule (first words, then two words) | 0.46 | 0.08 → 0.49 at 20,000 | 0.01 | 0.01 | by schedule |
+
+So far: attention does go first to what is learnable fastest (yes/no and counting: 47% of attention in the
+first 5,000 moments, falling as they saturate, first words rising), but it is a tilt, not an order of stages,
+and it learns no better than attending at random. The staged schedule is far ahead on first words (0.46
+against 0.23): half of an unstaged world is preschool and kindergarten talk that the word cells cannot use
+yet and that fills them with units (2,500 cells against 280). Not a result to build on yet; the gates stay.
+
+**One life was killed for lack of memory** (seed 0, at 15:00, while four probes ran beside the three lives)
+and resumed from its checkpoint at 25,000. Seeds 1 and 2 were restarted at 30,000 to pick up the judge fix
+(docs/JUDGING.md). At 30,000: two words 0.41–0.42, first words back to 0.40–0.43.
