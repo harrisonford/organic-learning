@@ -7,6 +7,7 @@ A local open-weight decision model (lev 4B, served by llama.cpp on the GPU at
 it agrees with the hosted decisions-fast judge 93% of the time.
 
 - An answer that is exactly one of the adult's (same content words: "a dog" = "dog") is accepted outright.
+- A bare "yes" or "no" is accepted only when yes or no is among the adult's answers (the judge model is too kind to it).
 - Every judged (stage, question, answers, said) is cached on disk: a brain's habitual
   answers, which repeat a lot, are judged once (as a caregiver learns a child's idiolect).
 - If the judge is unreachable, the curriculum's local grade stands (a life never waits on it).
@@ -78,6 +79,11 @@ class Judge:
                 out[i] = 1.0
                 continue
             if not (said or "").strip():
+                out[i] = 0.0
+                continue
+            # the local judge accepts a bare "yes" to what/where/who questions (0.99 for "where is the dog?" -> "yes",
+            # found 2026-11-10); an adult does not, unless yes or no is among the answers
+            if _core(said) in ("yes", "no") and not any(w in ("yes", "no") for x in a for w in _core(x).split()):
                 out[i] = 0.0
                 continue
             k = self.key(st, q, a, said)
