@@ -1,4 +1,4 @@
-# Status (2026-10-21): where the project stands
+# Status (2026-10-21): where the project stood then. Newer: [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md)
 
 Start here when picking the project back up. Details: [DESIGN.md](DESIGN.md)
 (current brain and its experiments), [LOG.md](LOG.md) (scale-up phase),
