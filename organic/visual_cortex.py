@@ -86,6 +86,43 @@ class Layer:
             self.W[c] = w / np.linalg.norm(w)
 
 
+    def predictive(self, x, z_prev, rate=0.005, predict=1.0, hebb=1.0, decorrelate=1.0, memory=0.002, warmup=200):
+        """The two-part rule on a sequence of views of one thing (docs/VISION.md; Halvagar & Zenke 2023,
+        latent predictive learning). Each kind keeps its own slow statistics: its mean response, its variance,
+        and how it co-varies with the other kinds of its layer. Seeing view x after a view where the kinds
+        answered z_prev, each kind changes its synapses on the inputs that drive it now by
+            predict:      toward answering as it did a moment ago (what stays the same across views is the thing)
+            hebb:         away from its own mean, the more so the less it varies (so that it does not go silent
+                          or constant: prediction alone collapses)
+            decorrelate:  away from what the kinds it co-varies with are doing (lateral inhibition)
+        all in units of its own variability. Returns the kinds' responses to x (z, to pass as z_prev next)."""
+        v, e = self.windows(x)
+        P = v.shape[0] * v.shape[1]
+        v, e = v.reshape(P, -1), e.reshape(P)
+        r = np.maximum(v @ self.W.T, 0) * e[:, None]
+        z = r.mean(0)
+        if not hasattr(self, "mu"):
+            self.mu, self.var, self.R, self.views = z.copy(), (0.5 * z) ** 2 + 1e-8, np.zeros((self.kinds, self.kinds), np.float32), 0
+        dz = z - self.mu
+        sd = np.sqrt(self.var) + 1e-8
+        zs = dz / sd
+        self.mu += memory * dz
+        self.var += memory * (dz ** 2 - self.var)
+        self.R += memory * (np.outer(zs, zs) - self.R)
+        self.views += 1
+        if z_prev is not None and self.views > warmup:
+            delta = (predict * (z - z_prev) - hebb * dz) / sd ** 2
+            if decorrelate:
+                off = self.R - np.diag(np.diag(self.R))
+                delta += decorrelate * (off @ zs) / sd
+            G = ((r > 0) * e[:, None]).T @ v / P  # what drives each kind now
+            delta = np.clip(delta * np.linalg.norm(G, axis=1), -1.0, 1.0)  # a synapse changes by a bounded amount at a time
+            G = G / (np.linalg.norm(G, axis=1, keepdims=True) + 1e-8)
+            w = self.W - rate * delta[:, None] * G
+            self.W = (w / np.linalg.norm(w, axis=1, keepdims=True)).astype(np.float32)
+        return z
+
+
 class VisualCortex:
     def __init__(self, seed=0, kinds=(64, 128, 256)):
         k1, k2, k3 = kinds
@@ -120,6 +157,16 @@ class VisualCortex:
         for layer in self.layers:
             layer.live(x, rng, samples=samples)
             x = layer.respond(x)
+
+    def watch(self, views, **kw):
+        """Successive views of one thing (the eye's own fixations and zooms on a picture): every layer learns
+        at once with the two-part rule (Layer.predictive)."""
+        prev = [None] * len(self.layers)
+        for img in views:
+            x = np.asarray(img, np.float32)
+            for i, layer in enumerate(self.layers):
+                prev[i] = layer.predictive(x, prev[i], **kw)
+                x = layer.respond(x)
 
     def plasticity(self):
         """Mean recent mismatch per layer (what drives learning now)."""

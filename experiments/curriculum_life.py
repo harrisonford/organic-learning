@@ -5,6 +5,7 @@
     MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0  NEURONS=8 (per cluster)
     OVERHEARD=0 (overheard sentences per moment, heard by the ear only)  HUB=1 HUB_CELLS=n (association hub)
     JUDGE=1 (reward = probability an adult accepts the answer, organic/judge.py; accepted own forms stand)
+    TEST_N=300 (held-out items per stage: a sampling error of about 0.03; it was 60, about 0.06)  WORDING_N=100
 
 Every EVERY moments the brain is tested on held-out items of every stage up to
 the current one (and the next, to see what is coming). It is promoted when the
@@ -70,7 +71,8 @@ if os.environ.get("JUDGE") == "1":
 world = Curriculum(seed=0)
 world.rng.seed(1000003 * SEED + brain.age)  # a resumed life draws moments it has not drawn before
 print(world.summary(), flush=True)
-tests = {s: world.test_set(s) for s in STAGES}
+TEST_N = int(os.environ.get("TEST_N", 300))  # the ruler (docs/REVIEW_2026-11-10.md): 60 items gave +-0.06 per checkpoint
+tests = {s: world.test_set(s, n=TEST_N) for s in STAGES}
 state = brain.curriculum
 log = open(out_path, "a")
 t0 = time.time()
@@ -85,14 +87,15 @@ def babble_score(n=60):
     return float(np.mean([max(sound_sim(b, h) for h in HEARD) for b in bab])), bab
 
 
-def wording_invariance(n=30):
+def wording_invariance(n=int(os.environ.get("WORDING_N", 100))):
     """Generalization, not score: the same test picture asked three different ways. Does the brain give
     the same answer each time (it understood the request, not the sound of one frame), and the right one?"""
     import zlib
     from organic.world import WORLD_DIR
     path = os.path.join(WORLD_DIR, "naming_frames.json")
     frames = json.load(open(path))["frames"] if os.path.exists(path) else ["what is this?"]
-    pics = [m for m in tests["W1"] if m["source"] in ("cifar:name", "commons:name")][:n]
+    pics = [m for m in tests["W1"] if m["source"] in ("cifar:name", "commons:name")]
+    pics = pics[:: max(1, len(pics) // n)][:n]  # spread over both sources
     same = right = 0
     for k, m in enumerate(pics):
         asks = [frames[(zlib.crc32(m["question"].encode()) + 17 * j) % len(frames)] for j in range(3)]
@@ -156,7 +159,7 @@ def evaluate(stages):
             exact.append(tidy(said) in [tidy(a) for a in m["answers"]])
             ticks.append(tick)
             by.setdefault(m["source"], []).append((scores[-1], said, tick))
-        res[s] = {"score": float(np.mean(scores)), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
+        res[s] = {"score": float(np.mean(scores)), "se": float(np.std(scores) / np.sqrt(max(len(scores), 1))), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
                   "by_source": {src: {"score": float(np.mean([x for x, _, _ in v])), "tick": float(np.mean([t for _, _, t in v])), "n": len(v),
                                       "said": [y for _, y, _ in v[:5]]} for src, v in by.items()}}
         if judge is not None:  # side by side with the local grade (the gate stays on the local grade for now)

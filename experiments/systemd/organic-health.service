@@ -1,0 +1,8 @@
+[Unit]
+Description=organic-learning: health check (daemons, data growth, life, machine); fails when something is wrong
+[Service]
+Type=oneshot
+WorkingDirectory=/home/archkris/organic-learning
+ExecStart=/home/archkris/organic-learning/.venv/bin/python experiments/health.py
+StandardOutput=append:/home/archkris/organic-learning/out/monitor/health.log
+StandardError=append:/home/archkris/organic-learning/out/monitor/health.log

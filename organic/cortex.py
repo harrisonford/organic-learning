@@ -95,6 +95,10 @@ class Cortex:
         self.births = 0
         self.deaths = 0
 
+    # the least a mature synapse still changes per experience (with maturation): 0.01 keeps the last ~100 experiences;
+    # 0 lets a cell's expectations become its whole history (docs/AREAS.md)
+    min_rate = 0.01
+
     # memory budget (None = unbounded); see prune() and docs/PRUNING.md
     max_clusters = None
     max_outputs = None
@@ -329,7 +333,7 @@ class Cortex:
                 s_c = self._seen(s, self.reach[c])
                 lr = self.eta * p * (1.0 - self.stability[c]) * (0.2 + surprise)
                 if self.maturation:
-                    lr = max(lr / (1.0 + self.usage[c] / self.maturation), 0.01)
+                    lr = max(lr / (1.0 + self.usage[c] / self.maturation), self.min_rate)
                 z = self.Z[c] + lr * self.drift * (s_c - self.Z[c])
                 self.Z[c] = z / np.linalg.norm(z)
                 # instar: active neurons' input weights move toward the stimulus

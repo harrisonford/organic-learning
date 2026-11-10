@@ -279,6 +279,12 @@ class Curriculum:
         self.rng = random.Random(seed + 1)
         self.review = review
         self._cache = {}
+        # the ways adults name a thing unasked (experiments/world/observation_frames.py)
+        opath = os.path.join(W.WORLD_DIR, "observation_frames.json")
+        self.comments = json.load(open(opath))["frames"] if os.path.exists(opath) else ["look, a THING!"]
+        self.orng = random.Random(seed + 2)  # observation has its own dice: turning it on does not change the lessons drawn
+        fpath = os.path.join(W.WORLD_DIR, "naming_frames.json")
+        self.frames = json.load(open(fpath))["frames"] if os.path.exists(fpath) else ["what is this?"]
 
     def summary(self):
         return " | ".join(f"{s}: " + ", ".join(f"{src} {len(v)}" for src, v in sorted(self.train.get(s, {}).items())) for s in STAGES)
@@ -298,6 +304,14 @@ class Curriculum:
                 self._cache[ref] = W.thumb(os.path.join(W.DATA, "val2017", ref))
         return self._cache[ref]
 
+    def wording(self, item, rng=None):
+        """How a lived item is asked this time. A naming question is worded afresh at every moment (adults do not
+        ask about the same picture in the same words each time; with one fixed wording per picture, a wording's
+        own words became cues for "its" pictures' names: docs/AREAS.md). Test items keep their fixed wording."""
+        if item[4] in ("cifar:name", "commons:name"):
+            return (rng or self.rng).choice(self.frames)
+        return item[1]
+
     def _pick(self, pool):
         src = self.rng.choice(sorted(pool))  # sources of a stage take turns, so big datasets do not crowd out small ones
         return self.rng.choice(pool[src])
@@ -309,8 +323,25 @@ class Curriculum:
             back = min(k, 1 + int(self.rng.expovariate(0.7)))
             if STAGES[k - back] in self.train:  # babbling has no questions to review
                 stage = STAGES[k - back]
-        ref, q, answers, st, src = self._pick(self.train[stage])
+        item = self._pick(self.train[stage])
+        ref, q, answers, st, src = item
+        q = self.wording(item)
         return {"image": self.image(ref), "question": q, "answer": answers[0], "answers": answers, "stage": st, "source": src}
+
+    def observation(self, stage):
+        """An adult talks about a picture, unasked: no question, no answer expected (docs/REVIEW_2026-11-10.md 4.4).
+        Things are named ("look, a dog!") from the start, since infants are spoken to long before they speak; from
+        first grade also whole descriptions of photos. Only pictures of the lived (train) side, up to the current stage."""
+        k = max(STAGES.index(stage), STAGES.index("W1"))
+        pools = [(s, src) for s in STAGES[: k + 1] for src in ("cifar:name", "commons:name", "captions") if src in self.train.get(s, {})]
+        s, src = pools[self.orng.randrange(len(pools))]
+        ref, _, answers, st, _ = self.orng.choice(self.train[s][src])
+        if src == "captions":
+            says = self.orng.choice(answers)
+        else:
+            w = answers[0]
+            says = self.orng.choice(self.comments).replace("a THING", ("an " if w[0] in "aeiou" else "a ") + w).replace("THING", w)
+        return {"image": self.image(ref), "says": says, "stage": st, "source": "observe:" + src}
 
     def test_set(self, stage, n=60, seed=7):
         rng = random.Random(seed + STAGES.index(stage))
