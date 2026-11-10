@@ -126,11 +126,11 @@ utterance heard after silence while a picture is seen ("look, a dog!"; 66 ways w
 `data/world/observation_frames.json`). The first-words pictures were split: 10% asked about, 90% only
 commented on.
 
-| (seed 0; three seeds are running) | new pictures named right | same answer ×3 |
+| (mean ± spread over 3 seeds; 300 new pictures × 3 wordings) | new pictures named right | same answer ×3 |
 |---|---|---|
-| asked only (10% of the pictures) | 0.227 | 0.43 |
-| asked + observed (the other 90% only commented on) | 0.361 | 0.48 |
-| all asked | 0.412 | 0.77 |
+| asked only (10% of the pictures) | 0.215 ± 0.011 | 0.36 |
+| asked + observed (the other 90% only commented on) | 0.379 ± 0.013 | 0.50 |
+| all asked | 0.411 ± 0.008 | 0.78 |
 
 Names form from co-occurrence alone, and questions then show what was learned. In lives:
 `OBSERVE=1` (one unasked comment per moment; from first grade also whole descriptions of photos).
