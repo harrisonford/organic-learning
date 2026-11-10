@@ -102,3 +102,13 @@ install) serves open-weight decision models with `llama serve -hf <repo>` at a l
 - Smoke test (small hub brain, 12k moments): no fallbacks; B 0.83 local / 0.73 judged (stricter
   on echoes), W1 0.33 / 0.31; W2, not yet trained, 0.00 local / 0.31 judged, which needs a look
   (toddler shorthand like "dog!" for "is there a dog?", or too lenient).
+
+## 2026-11-10: the local judge is too kind to "yes"
+
+Found in the first lives with the judge on: "where is the dog?" → "yes" was accepted at 0.99 (also
+"where is the man?", "where is the cup?"; "no" was rejected). With accepted own forms standing, a
+life would have learned to answer where-questions with "yes". `organic/judge.py` now accepts a bare
+"yes" or "no" only when yes or no is among the adult's answers. A stricter instruction alone fixed
+two of three cases, not all. Other spot checks were right ("doggie" for dog 0.94, "cat" for dog 0.01,
+"white" for blue 0.01, "zero" for three 0.00). "there" to a where-question is accepted (0.9): left,
+a toddler pointing is an answer.
