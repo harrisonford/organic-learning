@@ -5,8 +5,8 @@ This check runs every hour (organic-health.timer) and before every status report
 
   services   each expected systemd user unit is active and is not restarting in a loop
   data       each daemon's data file grew in the last DATA_HOURS hours (a daemon can be "active" and make nothing)
-  life       if a life is running (organic-life, or any out/*.jsonl written in the last day by a live process),
-             its log moved in the last LIFE_HOURS hours
+  life       every life listed in out/monitor/lives.json ({"words_s0": "organic-words-s0", ...}): if its unit runs, its
+             log moved in the last LIFE_HOURS hours; if its unit stopped, its last record has a verdict (not killed)
   machine    memory and disk left
 
 Writes out/monitor/health.json (latest) and appends every alert to out/monitor/alerts.log.
@@ -48,18 +48,21 @@ for u, path in DATA.items():
     if hours > DATA_HOURS:
         alerts.append(f"{u} wrote nothing to {path} for {hours:.0f} hours")
 
-life = show("organic-life", "ActiveState").get("ActiveState")
-facts["organic-life"] = {"state": life}
-if life == "active":
-    logs = [os.path.join(ROOT, "out", f) for f in os.listdir(os.path.join(ROOT, "out")) if f.endswith(".jsonl")]
-    newest = max(logs, key=os.path.getmtime)
-    hours = (now - os.path.getmtime(newest)) / 3600
-    facts["organic-life"].update(log=os.path.basename(newest), hours_ago=round(hours, 1))
-    if hours > LIFE_HOURS:
-        alerts.append(f"the life is active but {os.path.basename(newest)} has not moved for {hours:.1f} hours")
-    last = open(newest).readlines()[-1:]
-    if last and json.loads(last[0]).get("verdict"):
-        facts["organic-life"]["verdict"] = json.loads(last[0])["verdict"]
+# lives: out/monitor/lives.json maps a life's log (out/<name>.jsonl) to the systemd unit that runs it
+lives_file = os.path.join(ROOT, "out", "monitor", "lives.json")
+lives = json.load(open(lives_file)) if os.path.exists(lives_file) else {}
+for name, unit in lives.items():
+    state = show(unit, "ActiveState").get("ActiveState")
+    log = os.path.join(ROOT, "out", name + ".jsonl")
+    last = open(log).readlines()[-1:] if os.path.exists(log) else []
+    rec = json.loads(last[0]) if last else {}
+    hours = (now - os.path.getmtime(log)) / 3600 if os.path.exists(log) else None
+    facts[name] = {"unit": unit, "state": state, "age": rec.get("age"), "stage": rec.get("stage"), "verdict": rec.get("verdict"),
+                   "hours_since_checkpoint": round(hours, 1) if hours is not None else None}
+    if state == "active" and hours is not None and hours > LIFE_HOURS:
+        alerts.append(f"life {name} is running but has not written a checkpoint for {hours:.1f} hours")
+    if state != "active" and not rec.get("verdict"):
+        alerts.append(f"life {name} stopped ({state}) without a verdict (killed? out of memory?)")
 
 mem = {k: int(v.split()[0]) for k, v in (line.split(":") for line in open("/proc/meminfo")) if k in ("MemAvailable", "SwapFree")}
 disk = shutil.disk_usage(ROOT)

@@ -144,7 +144,7 @@ class Mouth:
 class SpeakingBrain(LoopBrain2):
     max_utterance = 16
 
-    def __init__(self, parts, hub=False, hub_cells=None, **kw):
+    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, **kw):
         super().__init__(parts, **kw)
         self.mouth = Mouth(self.ear.width, seed=kw.get("seed", 0) + 5)
         # the situation also holds what I have said so far (efference copy + self-hearing)
@@ -155,7 +155,7 @@ class SpeakingBrain(LoopBrain2):
             setattr(self.orch, arr, np.zeros(a.shape[:-1] + (self.dim,), np.float32))
         self.say = {u: self.orch.output_neuron(self._name(u)) for u in self.mouth.units}
         # whether to let the copy route in is a choice, like the eye's gain neurons, credited by outcome
-        routes = ["speak:copy", "speak:own"] + (["speak:recall"] if hub else [])
+        routes = ["speak:copy", "speak:own"] + (["speak:recall"] if hub or words else [])
         self.copy_group = np.array([self.orch.output_neuron(r) for r in routes])
         for c in self.copy_group:
             self.value[int(c)] = 0.0
@@ -165,6 +165,13 @@ class SpeakingBrain(LoopBrain2):
             from .hub import Hub
             dim = sum(layer.kinds for layer in self.cortex.layers) * self.cortex_grid ** 2
             self.hub = Hub(dim, seed=kw.get("seed", 0) + 11, max_cells=hub_cells)
+        # words (organic/words.py): the ear's own units as cells that learn to predict when they will be heard
+        self.words = None
+        if words and self.cortex is not None:
+            from .words import Words
+            dim = sum(layer.kinds for layer in self.cortex.layers) * self.cortex_grid ** 2
+            self.words = Words(dim, self.ear, max_units=max_units, max_cues=max_cues)
+        self.observed = 0
         self.heard_recent = np.zeros(self.ear.width, np.float32)
         self.babbles = 0
 
@@ -286,7 +293,26 @@ class SpeakingBrain(LoopBrain2):
                 where[np.array(idx)[better]] = p
         return np.maximum(prime, 0) ** 2, where
 
-    def _speak(self, base, r0, explore, trace=b"", starts=()):
+    def _vis(self, img):
+        """The whole view, as the word cells' (or the hub's) visual synapses get it; None when the eyes see nothing."""
+        if self.cortex is None or img.max() <= 0:
+            return None
+        vis = np.concatenate(self.cortex.code(img, grid=self.cortex_grid))
+        return vis / (np.linalg.norm(vis) + 1e-8)
+
+    def observe(self, img, says):
+        """An adult talks about what is seen, unasked (docs/REVIEW_2026-11-10.md 4.4): the ear hears it, the mouth
+        imitates it covertly, and the word cells learn to predict its units from the picture. No question, no
+        answer, no reward."""
+        img = np.asarray(img, np.float32)
+        heard = self.ear.units(says)
+        self.mirror(says)
+        self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
+        if getattr(self, "words", None) is not None:
+            self.words.learn([], self._vis(img), heard)
+        self.observed = getattr(self, "observed", 0) + 1
+
+    def _speak(self, base, r0, explore, trace=b"", starts=(), whole=False):
         """Say one unit per tick from the first choice until silence. The orchestrator's
         vote is joined by the copy route's priming from the heard trace."""
         group = self._motor_group()
@@ -299,6 +325,8 @@ class SpeakingBrain(LoopBrain2):
         starts = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
         weights = [0.75 ** (len(starts) - 1 - j) for j in range(len(starts))]
         ends = sorted({i for i, b in enumerate(trace) if b == 32} | {len(trace)})
+        if whole:  # a reply heard inwardly (recalled) is said from its start to its end, not one word of it
+            starts, weights, ends = [0], [1.0], [len(trace)]
         for _ in range(self.max_utterance):
             if r is None or r["probs"] is None:
                 break
@@ -355,8 +383,11 @@ class SpeakingBrain(LoopBrain2):
                 vis = np.concatenate(allc)
                 vis = vis / (np.linalg.norm(vis) + 1e-8)
         hub = getattr(self, "hub", None)
+        words = getattr(self, "words", None)
         if hub is not None:
             recalled, confidence = hub.recall(heard, vis)
+        if words is not None:
+            recalled, confidence = words.recall(heard, vis)
         while tick < self.max_ticks:
             level = min(phase, 2)
             code = self.eye.view(img, target, level, gain)
@@ -384,7 +415,7 @@ class SpeakingBrain(LoopBrain2):
                         choices.append((tick, rc["active"], rc["g"], rc["a"], int(self.copy_group[kc])))
                     self.copied, self.recalled = kc == 0, recalled if kc == 2 else None
                     trace = question.encode("utf-8") if kc == 0 else recalled.encode("utf-8") if kc == 2 else b""
-                    spoken, said = self._speak(base, r, explore and learn, trace=trace, starts=starts)
+                    spoken, said = self._speak(base, r, explore and learn, trace=trace, starts=starts, whole=kc == 2 and words is not None)
                     tick += len(spoken)  # speaking takes time
                     break
             if level < 2:
@@ -434,6 +465,8 @@ class SpeakingBrain(LoopBrain2):
                 self.age += 1
                 if hub is not None:  # the adult's word, linked to what was heard and seen
                     hub.learn(heard, vis, answer)
+                if words is not None:  # the adult's reply is heard too: its units are what the word cells predict
+                    words.learn(heard, vis, self.ear.units(answer))
                 base = snapshot[2] if snapshot else self._base(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 targets = self.mouth.decompose(answer)
                 for u in self.mouth.rehearse(targets):  # new motor chunks get their output neurons

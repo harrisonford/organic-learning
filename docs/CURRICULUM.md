@@ -99,3 +99,12 @@ lines.
 This follows the user's point that the training program has to improve before the
 architecture is changed further: plateaus on a small, narrow world are expected, and the
 first-words world itself was too uniform (docs/WORLD.md, naming frames).
+
+## 2026-11-10: the ruler, fresh wordings, observation
+
+- Tests: 300 held-out items per stage (`TEST_N`; 60 gave ±0.06 per checkpoint, 300 gives ±0.03), the standard
+  error is stored with every score, and the wording test asks 100 pictures three ways.
+- A naming question is worded afresh at every lived moment (`Curriculum.wording`); test items keep one wording.
+- Observation moments (`Curriculum.observation`, `OBSERVE` per moment in a life): an adult names what is in a
+  picture, unasked ("look, a dog!"; 66 phrasings in `data/world/observation_frames.json`); from first grade also
+  whole descriptions of photos (COCO captions). Only pictures of the lived side. No answer, no reward.

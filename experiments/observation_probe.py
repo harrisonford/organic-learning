@@ -1,13 +1,13 @@
 """Observation before interrogation: do names form from hearing adults talk about pictures, unasked? (offline)
 
 docs/REVIEW_2026-11-10.md 4.4. Children mostly learn words by observation: speech about what they are
-looking at, with no question and no answer expected. In the tissue (organic/areas.py) an observation is
-nothing special: an utterance heard after silence while a picture is seen, so the visual cells learn to
-predict its units, as they do a reply's.
+looking at, with no question and no answer expected. For the word cells (organic/words.py) an observation is
+nothing special: an utterance heard after silence while a picture is seen, so each unit cell's dendrites
+learn to predict it from the picture, as they do a reply's.
 
 The first-words pictures are split: a part is ASKED about (question -> the adult's answer, as every
 moment so far), the rest are only OBSERVED ("look, a dog!", data/world/observation_frames.json: 66 ways,
-written by the adults). Three tissues:
+written by the adults). Three sets of word cells:
   asked only          lessons on the asked part; the rest of the pictures are never seen
   asked + observed    the same lessons, and the adult's unasked comments on the other pictures
   all asked           lessons on every picture (what full interrogation gives)
@@ -19,14 +19,13 @@ The ear first hears the comments for a while (as an infant would, before words),
 import copy, json, os, pickle, random, sys, time, zlib
 import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from organic.areas import Tissue  # noqa: E402
+from organic.words import Words  # noqa: E402
 from organic.curriculum import Curriculum, tidy  # noqa: E402
 from organic.judge import _core  # noqa: E402
 from organic.world import WORLD_DIR  # noqa: E402
 
 ASKED = float(os.environ.get("ASKED", 0.1))
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0,1,2").split(",")]
-CELLS = int(os.environ.get("CELLS", 3000))
 cur = Curriculum(seed=0)
 cortex = pickle.load(open("data/visual_cortex.pkl", "rb"))
 FRAMES = json.load(open(os.path.join(WORLD_DIR, "naming_frames.json")))["frames"]
@@ -66,12 +65,12 @@ for seed in SEEDS:
     for name, moments in arms.items():
         r2 = random.Random(seed + 1)
         r2.shuffle(moments)
-        t = Tissue(len(vis(pics[0][0])), ear, seed=seed, max_cells=CELLS)
+        t = Words(len(vis(pics[0][0])), ear)
         t0 = time.time()
         for kind, (ref, q, ans, st, src) in moments:
             v = vis(ref) if ref[0] != "dark" else None
             if kind == "ask":
-                t.learn(hear(q), v, hear(ans[0]))
+                t.learn(hear(cur.wording((ref, q, ans, st, src), r2)), v, hear(ans[0]))
             else:  # an utterance heard after silence, while looking
                 t.learn([], v, hear(comment(ans[0], r2)))
         right, same, every, said_all = [], 0, 0, []
@@ -85,7 +84,7 @@ for seed in SEEDS:
             said_all += said
         row = [float(np.mean(right)), same / len(test_pics), every / len(test_pics)]
         results.setdefault(name, []).append(row)
-        print(f"seed {seed} {name:17} {len(moments):>6} moments, cells {t.cells()}, {len(t.units)} unit cells, {time.time() - t0:.0f}s | "
+        print(f"seed {seed} {name:17} {len(moments):>6} moments, {t.cells()}, {time.time() - t0:.0f}s | "
               f"right {row[0]:.3f} | same x3 {row[1]:.3f} | right x3 {row[2]:.3f} | says e.g. {said_all[:8]}", flush=True)
 print(f"\nASKED={ASKED}: mean over seeds {SEEDS} (spread between seeds)")
 for name, rows in results.items():

@@ -609,3 +609,47 @@ code is dominated by the frame. Candidates, all already in the ear plan or near 
 analysis (step 5), competing units (step 4), and an ear that settles (a developmental
 critical period: its statistics consolidate in sleep and change less with age, so the
 cortex learns on a stable code).
+
+## 2026-11-10 — After the review: the ruler, word cells, observation, two vision negatives, three lives
+
+Kris approved every proposal of [REVIEW_2026-11-10.md](REVIEW_2026-11-10.md) ("i like them all, work long
+in all of them"). Details: [AREAS.md](AREAS.md) (words, observation), [VISION.md](VISION.md).
+
+**The ruler.** Stage tests have 300 held-out items (`TEST_N`, was 60: sampling error 0.03 instead of
+0.06), the standard error is recorded with each score, the wording test uses 100 pictures, offline
+probes report 3 seeds. `experiments/health.py` runs every hour (`organic-health.timer`) and before
+any status report: daemons active and not restart-looping, data files growing, every life listed in
+`out/monitor/lives.json` either running with a fresh checkpoint or stopped with a verdict, memory, disk.
+
+**The world.** Naming questions are worded afresh at every lived moment (one fixed wording per picture
+made a wording's own words cues for "its" pictures). Observation moments (`OBSERVE`, 66 phrasings
+written by the adults): an adult names what is in a picture, unasked.
+
+**Word cells replace the hub** (`organic/words.py`): the ear's own units as cells, a content
+dendrite (picture, heard cues, baseline) and a context dendrite (the echo of the exchange) each
+learning to predict the cell's firing, lateral company links, recall by coincidence of the two.
+Offline, 3 seeds: first-words pictures 0.39–0.44 against the hub's 0.29; mixed with two words 0.36–0.42
+against 0.11 (hub) and 0.23 (hub + kinds); two words 0.51 against 0.36–0.43. Found on the way: the
+"vision ceiling" of 0.4 was partly the exemplar readout (a slow local delta rule reads 0.55 from the
+same code).
+
+**Vision, two negatives.** The two-part rule (predict + own variance + decorrelate) on the eye's own
+views did not help naming, neither in the cortex's filters (0.41 → 0.33) nor as a layer above the
+cortex (0.39 → 0.41, readout unchanged).
+
+**Three lives from babbling** (`experiments/words_pipeline.sh`, as systemd units `organic-words-s{0,1,2}`:
+8 neurons, 2,000 clusters, word cells, 1 unasked comment and 1 overheard sentence per moment, the judge
+on, 300-item tests):
+
+| seed | babbling passed | echo passed | first words passed | at first words: pictures (CIFAR / Commons) | same answer ×3 |
+|---|---|---|---|---|---|
+| 0 | 5,000 (0.20) | 10,000 (0.95) | 15,000 (0.44 ± 0.03) | 0.48 / 0.50 | 0.50 |
+| 1 | 5,000 (0.23) | 10,000 (0.96) | 15,000 (0.45 ± 0.03) | 0.45 / 0.58 | 0.55 |
+| 2 | 5,000 (0.22) | 10,000 (0.96) | 15,000 (0.47 ± 0.03) | 0.45 / 0.59 | 0.67 |
+
+Every stage so far was passed at its first checkpoint, in all three seeds. For scale: the hub life
+passed first words after 50,000 moments at that stage (one seed, 60-item test, 0.36–0.40), the same
+brain without a hub never did, and kid_s3 (ten times the clusters) took 345,000 moments in all.
+They are now at two words (0.34–0.39 after 5–10 thousand moments; pass mark 0.5), where first words
+slip to 0.35–0.41 and the same-answer rate to 0.25–0.41: what is said in a life goes through the
+orchestrator's motor routes, not the word cells alone.

@@ -5,6 +5,8 @@
     MAX_CLUSTERS=24000  MAX_OUTPUTS=4096  MAX_GB=11  EAR_HABITUATION=0  NEURONS=8 (per cluster)
     OVERHEARD=0 (overheard sentences per moment, heard by the ear only)  HUB=1 HUB_CELLS=n (association hub)
     JUDGE=1 (reward = probability an adult accepts the answer, organic/judge.py; accepted own forms stand)
+    WORDS=1 MAX_UNITS=n MAX_CUES=n (word cells made of the ear's own units, organic/words.py; replaces HUB)
+    OBSERVE=0.5 (unasked comments on pictures per moment, organic/curriculum.py observation; needs SPEECH)
     TEST_N=300 (held-out items per stage: a sampling error of about 0.03; it was 60, about 0.06)  WORDING_N=100
 
 Every EVERY moments the brain is tested on held-out items of every stage up to
@@ -49,7 +51,9 @@ else:
     if os.environ.get("SPEECH"):  # the speaking brain (organic/speech.py)
         from organic.speech import SpeakingBrain
         hub = os.environ.get("HUB") == "1"  # the association hub (organic/hub.py)
-        brain = SpeakingBrain(parts, seed=SEED, size=64, hub=hub, hub_cells=int(os.environ.get("HUB_CELLS", 0)) or None, **cfg)
+        brain = SpeakingBrain(parts, seed=SEED, size=64, hub=hub, hub_cells=int(os.environ.get("HUB_CELLS", 0)) or None,
+                              words=os.environ.get("WORDS") == "1", max_units=int(os.environ.get("MAX_UNITS", 0)) or None,
+                              max_cues=int(os.environ.get("MAX_CUES", 0)) or None, **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}
@@ -231,12 +235,27 @@ def overhear():
         owed -= 1
 
 
+OBSERVE = float(os.environ.get("OBSERVE", 0))  # unasked comments on pictures per moment (observation before interrogation)
+owed_obs = 0.0
+
+
+def observe(stage):
+    global owed_obs
+    owed_obs += OBSERVE
+    while owed_obs >= 1:
+        o = world.observation(stage)
+        brain.observe(o["image"], o["says"])
+        owed_obs -= 1
+
+
 verdict = None
 rewards = []
 while brain.age < TOTAL:
     stage = state["stage"]
     if OVERHEARD:
         overhear()
+    if OBSERVE:
+        observe(stage)
     if stage == "BB":  # infancy before words: hearing the speech around it, babbling back
         m = world.moment("B" if brain.age % 3 == 0 else "W1" if brain.age % 3 == 1 else "P")
         heard = brain.ear.units(m["question"])
@@ -270,6 +289,7 @@ while brain.age < TOTAL:
     rec_drift = drift()
     rec = {"age": brain.age, "stage": stage, "drift": rec_drift, "at_stage": brain.age - state["since"], "measure": res, "lived_reward": float(np.mean(rewards[-EVERY:])),
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
+           "observed": getattr(brain, "observed", 0), "words": brain.words.cells() if getattr(brain, "words", None) is not None else None,
            "judge": {"calls": judge.calls, "cached": judge.hits, "fallbacks": judge.fallbacks} if judge is not None else None,
            "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
     print(f"age {brain.age:>8} stage {stage:<2} ({brain.age - state['since']:>7} there) | "
