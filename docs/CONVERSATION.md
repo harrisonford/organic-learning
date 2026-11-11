@@ -232,6 +232,10 @@ little (+0.04, +0.03, +0.00); after three passes (seed 0) only the consistency g
 0.750). On seed 0 "is there a …?" rose to 0.667; seeds 1 and 2 did not repeat it (0.620, 0.607). Not put in
 the lives.
 
+With sound, the feedback onto the visual neurons can come from the sound neurons instead of the unit cells
+(so "dog?" and "ooh a dog" share it). Seed 0, one pass: "is there a …?" 0.680 against 0.667 for sound alone,
+everything else equal. One seed, and sound alone did not repeat on the other two; stopped there.
+
 **How far the text pathway is from what the lessons hold.** Reference learners on the same held-out first-words
 text items, parrot-proof ones only: a count of which reply goes with which words (naive Bayes) 0.45; the nearest
 lesson by shared rare words 0.49; the word cells 0.19–0.29 (0.24 after three passes; 0.26 with the reference
