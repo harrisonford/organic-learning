@@ -260,6 +260,7 @@ class SpeakingBrain(LoopBrain2):
         return b"".join(out).decode("utf-8", "replace")
 
     copy_gain = 1.0  # strength of the hearing -> saying route (0: no copy route)
+    recency = 0.75  # HAND-SET: how much weaker each earlier heard word's trace is when copying starts (1: none; docs/CONVERSATION.md)
     babble_when_silent = False  # a served level babbles when it has nothing to say (off in training)
 
     def _segment_sound(self, seg):
@@ -323,7 +324,7 @@ class SpeakingBrain(LoopBrain2):
         # copying starts after a pause (a space, or the start of what was heard); the
         # more recent the word, the stronger its trace (recency: toddlers echo the last word)
         starts = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
-        weights = [0.75 ** (len(starts) - 1 - j) for j in range(len(starts))]
+        weights = [self.recency ** (len(starts) - 1 - j) for j in range(len(starts))]
         ends = sorted({i for i, b in enumerate(trace) if b == 32} | {len(trace)})
         if whole:  # a reply heard inwardly (recalled) is said from its start to its end, not one word of it
             starts, weights, ends = [0], [1.0], [len(trace)]

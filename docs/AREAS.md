@@ -100,17 +100,17 @@ First words only (9,000 moments; mean ± spread over 3 orders of moments; 300 pi
 | **word cells**, one pass | **0.389 ± 0.010** | 0.733 | 0.333 | 0.402 |
 | **word cells**, three passes | **0.444 ± 0.015** | 0.836 | **0.410** | 0.445 |
 
-First words and two words mixed, as a life at two words lives them (18,000 moments; 2 orders so far, the third is running):
+First words and two words mixed, as a life at two words lives them (18,000 moments; mean over 3 orders of moments):
 
 | | first-words pictures right | same answer ×3 | right ×3 | adult items | two words (colour, yes/no, counting, phrases) |
 |---|---|---|---|---|---|
-| hub | 0.105 | 0.956 | 0.102 | 0.266 | 0.356 |
-| hub + kinds | 0.228 | 0.835 | 0.215 | 0.124 | 0.426 |
-| **word cells**, one pass | **0.360** | 0.593 | 0.280 | 0.314 | **0.507** |
-| **word cells**, three passes | **0.416** | 0.734 | **0.362** | 0.357 | **0.514** |
+| hub | 0.101 | 0.960 | 0.097 | 0.261 | 0.343 |
+| hub + kinds | 0.239 | 0.829 | 0.227 | 0.126 | 0.430 |
+| **word cells**, one pass | **0.353** | 0.591 | 0.276 | 0.317 | **0.499** |
+| **word cells**, three passes | **0.410** | 0.740 | **0.358** | 0.357 | **0.514** |
 
-The hub's naming falls when two-words moments are mixed in (0.29 → 0.11; with kinds 0.23); the word
-cells' barely moves (0.39 → 0.36), and two words is at its pass mark offline. By kind of question
+The hub's naming falls when two-words moments are mixed in (0.29 → 0.10; with kinds 0.24); the word
+cells' barely moves (0.39 → 0.35), and two words is at its pass mark offline. By kind of question
 (seed 0): is-there 0.62–0.65, how-many 0.70, yes/no 0.58–0.65, phrases 0.41, colour 0.24. What the
 context dendrite expects after "how many people are there?" is one, two, three, zero; after "what
 color is the bus?" brown, black, yellow, white; nobody listed those.
@@ -146,3 +146,6 @@ Names form from co-occurrence alone, and questions then show what was learned. I
   the names' base rates, differently per wording. It rises with experience (more passes).
 - The orchestrator still chooses between copying, its own motor habits and recall by hand-wired
   routes. Recall as an inner echo that the copy route follows would remove one route.
+- With the eyes closed the word cells are no better than repeating the last word heard (first-words text
+  0.26 against 0.33, two-words text 0.44 against 0.43, after 115,000 moments of a life): a heard word means
+  only itself. Diagnosis and proposals in [CONVERSATION.md](CONVERSATION.md).

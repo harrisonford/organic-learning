@@ -675,3 +675,31 @@ yet and that fills them with units (2,500 cells against 280). Not a result to bu
 **One life was killed for lack of memory** (seed 0, at 15:00, while four probes ran beside the three lives)
 and resumed from its checkpoint at 25,000. Seeds 1 and 2 were restarted at 30,000 to pick up the judge fix
 (docs/JUDGING.md). At 30,000: two words 0.41–0.42, first words back to 0.40–0.43.
+
+## 2026-11-11: the lives stop at two words; why L3 answers text with the last word
+
+**Lives (word cells, 3 seeds).** All three stopped at two words after 100,000 moments there: 0.41, 0.41, 0.43
+against 0.5 (first words held at 0.41–0.43, echo fell to 0.68–0.91, preschool 0.02–0.06). Offline the word cells
+alone reach 0.50–0.51 on the same stage (third seed in, docs/AREAS.md); in a life, with the routes around them,
+0.41–0.43.
+
+**Kris tried L3 with text** and got the last word back every time. Diagnosis in docs/CONVERSATION.md
+(`experiments/echo_diagnosis.py`). In short: at L3 the copy route speaks in 73–97% of text utterances; the world
+had taught exactly that (echo: reply = last word, always; first-words text lessons: 35%); half of the habit is a
+recency weight of 0.75 per word that I hand-set in milestone 3 (now `SpeakingBrain.recency`, unchanged, to be
+replaced), which was worth +0.11 on first-words text items when the stage was passed; a parrot of the last word
+scores 0.33 / 0.43 on first- / two-words text tests. The same brain at 115,000 answers 76–86% from its word cells
+and says the last word as often as the lessons do. But with the eyes closed the word cells are no better than the
+parrot: text is the weak side of the design (a heard word means only itself; no message; three routes chosen by a
+confidence that does not tell right from wrong; no conversation before the two-words gate).
+
+**Proposals** (same file): A the world (parrot baseline beside every text score, lessons rebalanced, greetings and
+turn-taking from first words), B heard words bring back what was seen with them (word cells' visual synapses
+working downwards; coincidence in visual neurons for "is there a…"), C one stream instead of three routes and no
+hand-set recency, D inner states so that there is something to say. Nothing built yet: waiting for Kris.
+
+**Housekeeping.** The offline queue of 11-10 was killed at 15:59 by its memory cap (two probes in one 3.6 GB unit):
+curiosity ended at 20,000 moments (curious 0.23 / 0.45, uniform 0.23 / 0.47; conclusion unchanged), the third seed
+of the mixed table was rerun today. health.py watches lives, not probes: a probe's death went unreported.
+The preview (kid-a, port 8788) now also has L4 "two words (still learning)": the 115,000-moment brain, marked as
+not passed.
