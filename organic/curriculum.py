@@ -110,6 +110,36 @@ def grade(stage, said, answers):
 
 # ------------------------------------------------------------------ sources
 
+def _echo_games(frames):
+    """Echo games worded by the adults (experiments/world/echo_frames.py): the word to repeat can stand anywhere in what
+    is said ("ball! can you say it?"), not always last as in the four hand-written formats of _babble. One item per
+    word (four for a first word); a test item keeps one wording, a lived one is worded afresh (Curriculum.wording)."""
+    fixed = lambda key: frames[zlib.crc32(key.encode()) % len(frames)]  # noqa: E731
+    out = []
+    for w in FIRST_WORDS:
+        for k in range(4):
+            out.append((("dark", "echo", w, k), fixed(f"{w}{k}").replace("WORD", w), [w], "B", "echo"))
+    vocab = set()
+    path = os.path.join(W.WORLD_DIR, "text_qa.jsonl")
+    for line in open(path) if os.path.exists(path) else []:
+        vocab.update(w for w in words(json.loads(line)["q"]) if w.isalpha() and 3 <= len(w) <= 10)
+    for w in sorted(vocab - set(FIRST_WORDS)):
+        out.append((("dark", "echo", w, 0), fixed(w).replace("WORD", w), [w], "B", "echo:wide"))
+    return out
+
+
+def _social():
+    """Everyday social routines written by the adults (experiments/world/social_formats.py): greetings, thanks, how are
+    you, offers, turn-taking games. First words when a toddler's reply is one word, two words otherwise."""
+    out = []
+    path = os.path.join(W.WORLD_DIR, "social_formats.jsonl")
+    for i, line in enumerate(open(path)) if os.path.exists(path) else []:
+        d = json.loads(line)
+        one = [c for c in d["child"] if len(c.split()) == 1]
+        out.append((("dark", "social", i), d["parent"], one or d["child"], "W1" if one else "W2", "social"))
+    return out
+
+
 def _babble():
     """Echo games: first words, and the many other words a toddler hears adults say."""
     out = []
@@ -226,9 +256,11 @@ def _commons(frames):
     return out, rows
 
 
-def build_items(seed=0):
+def build_items(seed=0, world=1):
     rng = random.Random(seed)
-    items = _babble() + _text_world() + _curriculum_items() + _babi() + _captions() + _wikidata()
+    epath = os.path.join(W.WORLD_DIR, "echo_frames.json")
+    echo = _echo_games(json.load(open(epath))["frames"]) if world >= 2 and os.path.exists(epath) else _babble()
+    items = echo + (_social() if world >= 2 else []) + _text_world() + _curriculum_items() + _babi() + _captions() + _wikidata()
     # COCO annotation questions on val2017 photos
     for ref, q, a, kind in W.coco_annotation_questions(rng):
         if kind == "identity":
@@ -267,10 +299,14 @@ def build_items(seed=0):
 
 
 class Curriculum:
-    def __init__(self, seed=0, test_fraction=0.1, review=0.3):
-        items, (self.cifar, self.commons) = build_items(seed)
+    def __init__(self, seed=0, test_fraction=0.1, review=0.3, world=1):
+        """world=2 (2026-11-11, docs/CONVERSATION.md): echo games worded by the adults with the word anywhere, and
+        social routines in first words and two words. world=1 is the world every life before that lived in."""
+        items, (self.cifar, self.commons) = build_items(seed, world)
+        epath = os.path.join(W.WORLD_DIR, "echo_frames.json")
+        self.echo_frames = json.load(open(epath))["frames"] if world >= 2 and os.path.exists(epath) else None
         # a naming item is split by its picture (its wording varies: experiments/world/naming_frames.py), as when all were "what is this?"
-        key = lambda it: str(it[0]) + ("what is this?" if it[4] in ("cifar:name", "commons:name") else it[1])  # noqa: E731
+        key = lambda it: str(it[0]) + ("what is this?" if it[4] in ("cifar:name", "commons:name") else "" if it[0][:2] == ("dark", "echo") else it[1])  # noqa: E731
         in_test = lambda it: zlib.crc32(key(it).encode()) % 1000 < test_fraction * 1000  # noqa: E731
         self.train, self.test = {}, {}
         for it in items:
@@ -310,6 +346,8 @@ class Curriculum:
         own words became cues for "its" pictures' names: docs/AREAS.md). Test items keep their fixed wording."""
         if item[4] in ("cifar:name", "commons:name"):
             return (rng or self.rng).choice(self.frames)
+        if item[4] in ("echo", "echo:wide") and self.echo_frames:
+            return (rng or self.rng).choice(self.echo_frames).replace("WORD", item[2][0])
         return item[1]
 
     def _pick(self, pool):
@@ -326,7 +364,8 @@ class Curriculum:
         item = self._pick(self.train[stage])
         ref, q, answers, st, src = item
         q = self.wording(item)
-        return {"image": self.image(ref), "question": q, "answer": answers[0], "answers": answers, "stage": st, "source": src}
+        answer = self.rng.choice(answers) if src == "social" else answers[0]  # any of the replies a toddler gives to a routine
+        return {"image": self.image(ref), "question": q, "answer": answer, "answers": answers, "stage": st, "source": src}
 
     def observation(self, stage):
         """An adult talks about a picture, unasked: no question, no answer expected (docs/REVIEW_2026-11-10.md 4.4).

@@ -1,0 +1,98 @@
+{"parent": "all done playing", "child": ["more", "no"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "are you being so gentle with doggy", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you cold without your jacket", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you comfortable in your bed", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you excited for grandma visit", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you feeling better after nap", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you having a good morning today", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you having fun with blocks", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you hungry my darling", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you okay after the tummy hurt", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you proud of your drawing", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you ready for bath time now", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you ready for bedtime story", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you ready to go outside", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "are you tired now little one", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "bubbles in the water", "child": ["pop", "splash"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "can you tell me how you feel", "child": ["happy", "sad"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "clean up time now", "child": ["yes", "no"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "daddy is going out", "child": ["bye", "dada"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "do you feel the rain outside", "child": ["wet", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "do you need a hug mummy's here", "child": ["yes", "up"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "do you want to come cuddle now", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "do you want to hold my hand", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "do you want your blankie comfort", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "does your nose feel runny sweetie", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "does your owie still hurt", "child": ["no", "yes"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "door is open", "child": ["hi", "bye"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "fill the tub up", "child": ["water", "more"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "go go go", "child": ["wee", "fast"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "good morning my love", "child": ["hi", "mama"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "good morning sunshine", "child": ["hi", "mama"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "good night sleepy head", "child": ["night", "sleep"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "goodnight sweet dreams", "child": ["sleep", "night"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "grandpa is here", "child": ["hi", "bye"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "have fun at school", "child": ["play", "book"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hello big brother", "child": ["hi", "mama"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hello friend", "child": ["hi", "book"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hello grandpa", "child": ["hi", "bye"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hello neighbor", "child": ["hi", "bye"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hello teacher", "child": ["hi", "mama"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hi big brother", "child": ["hi", "mama"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "hi cute baby", "child": ["bye", "dada"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "how are you feeling today my love", "child": ["fine", "okay"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i am sorry i broke crayon", "child": ["oops", "no", "sorry"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "i am sorry i spilled juice", "child": ["oops", "no", "sorry"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "i am sorry i stepped on your foot", "child": ["sorry", "no", "oops"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "i am sorry i took your toy", "child": ["sorry", "no", "mine"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "i found you hiding", "child": ["there", "boo"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "i hear you crying it's okay", "child": ["mama", "dada"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i love seeing you smile", "child": ["more", "please"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i notice you're rubbing your eyes", "child": ["tired", "sleepy"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i see you seem a bit sad today", "child": ["maybe", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i see you want that toy please", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i'm giving you a big hug now", "child": ["mhm", "okay"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "i'm right here if you need me", "child": ["okay", "fine"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "is something bugging you today", "child": ["no", "yes"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "is your head feeling okay baby", "child": ["yes", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "it is your turn", "child": ["up", "down"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "let's have a turn", "child": ["up", "down"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "lets tidy up", "child": ["yes", "no"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "lights are off", "child": ["night", "sleep"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "lights out now", "child": ["sleep", "bed"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "mommy's turn now", "child": ["up", "down"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "mummy is coming home", "child": ["hi", "mama"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "night night time", "child": ["sleep", "bed"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "now your turn", "child": ["up", "down"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "one more round", "child": ["go", "wee"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "one two three go", "child": ["wee", "fast"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "peekaboo where are you", "child": ["boo", "ha"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "put the blocks away", "child": ["all", "done"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "ready for a turn", "child": ["up", "down"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "ready set go fast", "child": ["go", "wee"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "ready set go now", "child": ["go", "run"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "ready set go up", "child": ["go", "down"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "rub a dub dub", "child": ["wet", "soap"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "see you later", "child": ["bye", "hi"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "shhh it's bedtime", "child": ["sleep", "night"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "sorry i bumped into you", "child": ["oops", "no", "sorry"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "sorry i forgot your cup", "child": ["oops", "no", "sorry"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "sorry i knocked over your tower", "child": ["oops", "no", "sorry"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "splash splash fun", "child": ["wet", "bubbles"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "thank you for cleaning up", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for sharing crayons", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for the drawing", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for the hug", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for the smile", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for the snack", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for the song", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "thank you for the story", "child": ["yeah", "okay", "thanks"], "kind": "thanking, please, sorry, you're welcome, bless you"}
+{"parent": "time for night night", "child": ["sleep", "bed"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "time to sleep", "child": ["night", "bed"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "toys are all gone", "child": ["more", "no"], "kind": "greetings and goodbyes at different times of day and to different people"}
+{"parent": "wash your hands", "child": ["soap", "bubbles"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "where did you go", "child": ["there", "boo"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "where does it go", "child": ["here", "there"], "kind": "turn-taking games and routines (peekaboo, ready set go, your turn, night night, bath time, clean up)"}
+{"parent": "you did a good job cleaning up", "child": ["okay", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "you're being such a big helper", "child": ["okay", "no"], "kind": "asking how the child is or feels, and comforting"}
+{"parent": "you're playing so nicely together", "child": ["fun", "no"], "kind": "asking how the child is or feels, and comforting"}

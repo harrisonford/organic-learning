@@ -28,6 +28,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from organic.curriculum import NAMES, PASS, RETAIN, STAGES, Curriculum, grade, sound_sim, tidy  # noqa: E402
+from organic.curriculum import words as curriculum_words  # noqa: E402
 from organic.loop2 import LoopBrain2  # noqa: E402
 from organic.peye import Parts  # noqa: E402
 
@@ -53,7 +54,8 @@ else:
         hub = os.environ.get("HUB") == "1"  # the association hub (organic/hub.py)
         brain = SpeakingBrain(parts, seed=SEED, size=64, hub=hub, hub_cells=int(os.environ.get("HUB_CELLS", 0)) or None,
                               words=os.environ.get("WORDS") == "1", max_units=int(os.environ.get("MAX_UNITS", 0)) or None,
-                              max_cues=int(os.environ.get("MAX_CUES", 0)) or None, **cfg)
+                              max_cues=int(os.environ.get("MAX_CUES", 0)) or None, one_stream=os.environ.get("ONE_STREAM") == "1",
+                              novel_copy=os.environ.get("NOVEL_COPY") == "1", imagery=os.environ.get("IMAGERY") == "1", sound=os.environ.get("SOUND") == "1", **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}
@@ -72,7 +74,8 @@ if os.environ.get("JUDGE") == "1":
     judge = Judge()
     brain.own_forms = True
 
-world = Curriculum(seed=0)
+world = Curriculum(seed=0, world=int(os.environ.get("WORLD", 1)))  # WORLD=2: echo games worded by adults, social routines
+PARROT = os.environ.get("PARROT") == "1"  # gate on the items a parrot of the last word heard gets wrong (docs/CONVERSATION.md)
 world.rng.seed(1000003 * SEED + brain.age)  # a resumed life draws moments it has not drawn before
 print(world.summary(), flush=True)
 TEST_N = int(os.environ.get("TEST_N", 300))  # the ruler (docs/REVIEW_2026-11-10.md): 60 items gave +-0.06 per checkpoint
@@ -163,7 +166,12 @@ def evaluate(stages):
             exact.append(tidy(said) in [tidy(a) for a in m["answers"]])
             ticks.append(tick)
             by.setdefault(m["source"], []).append((scores[-1], said, tick))
-        res[s] = {"score": float(np.mean(scores)), "se": float(np.std(scores) / np.sqrt(max(len(scores), 1))), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
+        # what repeating the last word heard would score on the same items, and the brain's score where that fails
+        par = [grade(s, (curriculum_words(tidy(m["question"])) or [""])[-1], m["answers"]) for m in tests[s]]
+        last = [curriculum_words(tidy(said or "")) == curriculum_words(tidy(m["question"]))[-1:] for m, said in zip(tests[s], saids)]
+        beyond = [x for x, p in zip(scores, par) if p < 0.5]
+        res[s] = {"score": float(np.mean(scores)), "parrot": float(np.mean(par)), "beyond": float(np.mean(beyond)) if beyond else 0.0, "says_last": float(np.mean(last)),
+                  "se": float(np.std(scores) / np.sqrt(max(len(scores), 1))), "exact": float(np.mean(exact)), "tick": float(np.mean(ticks)), "n": len(scores),
                   "by_source": {src: {"score": float(np.mean([x for x, _, _ in v])), "tick": float(np.mean([t for _, _, t in v])), "n": len(v),
                                       "said": [y for _, y, _ in v[:5]]} for src, v in by.items()}}
         if judge is not None:  # side by side with the local grade (the gate stays on the local grade for now)
@@ -280,9 +288,11 @@ while brain.age < TOTAL:
             continue
     k = STAGES.index(stage)
     res = evaluate(STAGES[: k + 2])
-    cur = res[stage]["score"]
+    # with PARROT=1, from first words on a stage is passed (and held) on the items that repeating the last word does not answer
+    mark = lambda s: res[s]["beyond"] if PARROT and s not in ("BB", "B") and "beyond" in res[s] else res[s]["score"]  # noqa: E731
+    cur = mark(stage)
     # earlier stages must be held, except babbling, which is meant to fade as words come
-    held = all(res[s]["score"] >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s != "BB")
+    held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s != "BB")
     promoted = cur >= PASS[stage] and held
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()
@@ -293,7 +303,7 @@ while brain.age < TOTAL:
            "judge": {"calls": judge.calls, "cached": judge.hits, "fallbacks": judge.fallbacks} if judge is not None else None,
            "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
     print(f"age {brain.age:>8} stage {stage:<2} ({brain.age - state['since']:>7} there) | "
-          + " | ".join(f"{s} {v['score']:.2f}/{v['exact']:.2f}" + (f"/j{v['judged']:.2f}" if "judged" in v else "") for s, v in res.items()) + f" | clusters {brain.orch.C} | {'PROMOTED' if promoted else ''}", flush=True)
+          + " | ".join(f"{s} {v['score']:.2f}/{v['exact']:.2f}" + (f"/j{v['judged']:.2f}" if "judged" in v else "") + (f" (beyond parrot {v['beyond']:.2f}, parrot {v['parrot']:.2f}, says last {v['says_last']:.2f})" if "beyond" in v and s != "B" else "") for s, v in res.items()) + f" | clusters {brain.orch.C} | {'PROMOTED' if promoted else ''}", flush=True)
     if promoted:
         state["passed"][stage] = cur
         # a release candidate: the brain as it was when it passed this stage

@@ -136,3 +136,118 @@ amount, is the limit for text.
   stages and no gain), and the third seed of the mixed-stages table never ran. It was restarted on
   2026-11-11. The health check did not report this: it watches lives, not probes.
 - The 115,000-moment brain is on the preview as "L4 two words (still learning)", marked as not passed.
+
+## 6. What was built and measured after Kris's answer (2026-11-11, afternoon)
+
+Kris: the new models are better than kid_s3, replace the public hosting with them; the 0.75 recency "sounds
+like not emergent but forced"; onwards with all proposals.
+
+**Hosting.** The public kid-a now serves the word-cells lineage (words_s0: L1–L3 as passed, L4 "two words (still
+learning)" at 115,000 moments, marked as not passed). kid_s3's levels are kept in `kid-a/lineages/kid_s3/`.
+
+### C. The mouth without the hand-set recency, and without a route choice
+
+- `SpeakingBrain._novelty`: where copying starts is weighted by how much each heard word still stands out: the
+  ear's own count of each unit with the tissue's law of consolidation, 1 / (1 + times heard / 5). A new word is
+  repeated by its sound wherever it stands; words heard everywhere are not. `SpeakingBrain.recency` (0.75) remains
+  only for the brains made before (the served levels).
+- `one_stream`: no route is chosen. What was heard outside and the reply the word cells recalled (heard
+  inwardly) prime the mouth together with the orchestrator's vote; the mouth follows whichever resonates more.
+- Test-time check on the existing brains (not trained this way; seed 0):
+
+| | pictures named | echo, new words | first-words text | says the last word (text) |
+|---|---|---|---|---|
+| L3, routes + recency (as served) | 0.53 | 0.89 | 0.36 | 0.71 |
+| L3, one stream, inner voice at full strength | 0.53 | 0.68 | 0.28 | 0.24 |
+| L3, one stream, inner voice as loud as the word cells' activity | 0.11 | 0.85 | 0.23 | 0.41 |
+| 115,000, routes + recency | 0.50 | 0.72 | 0.31 | 0.29 |
+| 115,000, one stream, inner voice at full strength | 0.50 | 0.67 | 0.31 | 0.19 |
+
+  Making the inner voice as loud as the cells' activity failed: the two strengths (novelty of a heard word,
+  activity of a word cell) are not on one scale, and naming collapsed. Kept: a cell that won fired, and what is
+  heard inwardly is heard. What the one-stream mouth loses at test time is new-word echo (the cells always say
+  something, even to a word they have never heard, because their content drive is taken relative to the
+  strongest cell). Whether a brain raised this way learns to stay silent there is what the lives test.
+- Two lives from babbling, one seed each to choose the arm before spending three seeds: `stream_s0`
+  (one stream) and `routes_s0` (the route choice kept, novelty instead of recency), `experiments/conv_pipeline.sh`.
+
+### A. The world
+
+- **Echo games worded by the adults** (`experiments/world/echo_frames.py`, 84 written, 20 kept): "can you say
+  WORD for me", "please say WORD again", "say WORD if you can"… The word is last in 10, in the middle in 8, alone
+  in 2. The judging adult kept none with the word first ("WORD! can you say it?"). Worded afresh at every moment.
+- **Social routines** (`experiments/world/social_formats.py`, 98 kept: how are you / comfort 35, turn-taking 28,
+  greetings 20, thanks and sorry 15; the "offers" batch did not come back): first words, source "social".
+  Many are "are you hungry?" → "yes" or "no", both accepted: the world cannot know, and neither can a brain
+  with no inner states (proposal D).
+- **The parrot beside every score** (`curriculum_life.py`): what repeating the last word would score on the same
+  items, how often the brain says exactly the last word, and the score on the items the parrot gets wrong.
+  With `PARROT=1` a stage from first words on is passed and held on that last score.
+- `WORLD=2` turns the first two on; every earlier life and every offline table is `WORLD=1`.
+- Not removed: the last-word habit of the adults' text lessons. Speech to infants really does put the word that
+  matters last (Fernald & Mazzie 1991), so the bias belongs to the world; it must not be in the brain by hand, and
+  the yardstick must not pay for it.
+
+### B. Heard words bringing back what was seen: built, and mostly negative
+
+`Words(imagery=True)`: feedback synapses from the ear's unit cells onto the visual neurons learn, by the same
+delta rule, what each heard unit predicts will be seen. Eyes open, a visual neuron driven from below and above
+bursts, and the content dendrite reads the bursts through its own synapses; eyes closed, the feedback is passed
+on as a faint picture. `experiments/imagery_probe.py` (first and two words mixed, one unasked comment per moment).
+
+| seed 0, one pass | pictures named | first-words text beyond the parrot | "is there a …?" | says yes when it is there minus when it is not |
+|---|---|---|---|---|
+| word cells | 0.472 | 0.189 | 0.627 | 0.10 |
+| + feedback and bursts | 0.468 | 0.181 | 0.627 | 0.10 |
+
+Nothing moved. Two measurements say why:
+
+1. **The signal exists but is small with these eyes.** A name's visual pattern learned from picture-book pictures
+   does tell whether the thing is in a photograph it never named (AUC 0.69 over all questions; 0.63 within one
+   asked thing). But the best linear readout of it, fitted in a batch, lifts "is there a …?" from 0.637 (each
+   thing's base rate) to 0.67–0.68. At most +0.04 is there to be had, and an online rule gets less.
+2. **The ear's units block the transfer.** The feedback synapses learned strong pictures for units like
+   'that a turtle', 'ooh a cat again', 'ahh a boat' (whole comments cut as one unit). In "is there a dog?" the
+   unit heard is 'dog?': a different cell, which has only ever been heard in such questions.
+
+**The same finding from the other side: what the ear's cuts cost.** A reference ear that cuts at spaces and drops
+punctuation, everything else equal (seed 0, one pass):
+
+| | pictures named | same answer ×3 | first-words text | beyond the parrot | two-words text | colour |
+|---|---|---|---|---|---|---|
+| the ear's own units (662 unit cells, 4,245 cues) | 0.472 | 0.647 | 0.263 | 0.189 | 0.279 | 0.115 |
+| cut at the spaces (379 unit cells, 2,570 cues) | 0.509 | 0.753 | 0.358 | 0.255 | 0.362 | 0.204 |
+
+**Letting the content dendrite hear sound** (`Words(sound=True)`, `Ear.combinations`: the ear's
+combination-sensitive neurons answering to every 2- and 3-byte sequence wherever the units were cut, so that
+"dog", "dog?" and "ooh a dog" overlap; 3 seeds, one pass):
+
+| | pictures named | same answer ×3 | first-words text beyond the parrot | two words |
+|---|---|---|---|---|
+| word cells | 0.450 ± 0.016 | 0.645 ± 0.011 | 0.239 ± 0.043 | 0.433 ± 0.007 |
+| + sound | 0.453 ± 0.018 | 0.698 ± 0.007 | 0.264 ± 0.028 | 0.433 ± 0.009 |
+
+The same answer across wordings rises in every seed (+0.05); text beyond the parrot rises in every seed but by
+little (+0.04, +0.03, +0.00); after three passes (seed 0) only the consistency gain is left (0.797 against
+0.750). On seed 0 "is there a …?" rose to 0.667; seeds 1 and 2 did not repeat it (0.620, 0.607). Not put in
+the lives.
+
+**How far the text pathway is from what the lessons hold.** Reference learners on the same held-out first-words
+text items, parrot-proof ones only: a count of which reply goes with which words (naive Bayes) 0.45; the nearest
+lesson by shared rare words 0.49; the word cells 0.19–0.29 (0.24 after three passes; 0.26 with the reference
+ear). The content dendrite alone scores what the whole recall scores (0.196 against 0.189), so the context
+dendrite is not what loses it. For two-words text the references are no better than the parrot (0.41, 0.32
+against 0.43): there the lessons themselves do not hold the answers.
+
+### What this says about the next step
+
+The text pathway is short of what its own lessons hold by about a half, for two reasons that are now measured:
+the ear's cuts (phrases as single units, the same word in several cells), and the slowness of the cue
+synapses (each lesson is met once among forty others, and the delta rule shares each correction between all
+inputs). Imagery is right in principle and capped by the eyes. So the order of work is the ear's units first
+(docs/EAR_SEGMENTATION.md steps 2–5, open since October), not more machinery on top of them.
+
+### D. Something to say: not built
+
+No inner states were added. It needs a decision about what the brain's body is (what varies, what an adult can
+see of it) that should not be improvised; the social routines above are the first place where it would show.

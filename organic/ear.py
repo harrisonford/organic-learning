@@ -133,6 +133,21 @@ class Ear:
             self.codes[unit] = v / (np.linalg.norm(v) + 1e-8)
         return self.codes[unit]
 
+    def combinations(self, data):
+        """The combination-sensitive population's response to a stretch of speech, wherever the ear cut it into
+        units: every short byte sequence (2 or 3 bytes) excites its own neurons, summed and scaled to unit size.
+        "dog", "dog?" and "ooh a dog" share most of it (compare Wickelfeatures, Rumelhart & McClelland 1986)."""
+        v = np.zeros(self.width, np.float32)
+        for n in (2, 3):
+            for k in range(len(data) - n + 1):
+                key = b"ng" + data[k : k + n]
+                if key not in self.combo:
+                    self.combo[key] = self._neurons(key)
+                v += self.combo[key]
+        return v / (np.linalg.norm(v) + 1e-8)
+
+    combo = {}  # the n-gram neurons' fixed patterns (a cache shared by all ears with the same seed and width)
+
     # Off by default since 2026-10-25: a controlled pair (100k moments each) showed no difference with the
     # fixed rule on or off; the orchestrator's own input adaptation does the job (docs/LOG.md)
     habituation = False

@@ -144,8 +144,10 @@ class Mouth:
 class SpeakingBrain(LoopBrain2):
     max_utterance = 16
 
-    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, **kw):
+    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, one_stream=False, novel_copy=False, imagery=False, sound=False, **kw):
         super().__init__(parts, **kw)
+        self.one_stream = one_stream  # no route choice: outer and inner speech prime the mouth together
+        self.novel_copy = novel_copy or one_stream  # where copying starts: the ear's novelty, not the hand-set recency
         self.mouth = Mouth(self.ear.width, seed=kw.get("seed", 0) + 5)
         # the situation also holds what I have said so far (efference copy + self-hearing)
         self.dim += self.ear.width
@@ -170,7 +172,7 @@ class SpeakingBrain(LoopBrain2):
         if words and self.cortex is not None:
             from .words import Words
             dim = sum(layer.kinds for layer in self.cortex.layers) * self.cortex_grid ** 2
-            self.words = Words(dim, self.ear, max_units=max_units, max_cues=max_cues)
+            self.words = Words(dim, self.ear, max_units=max_units, max_cues=max_cues, imagery=imagery, sound=sound)
         self.observed = 0
         self.heard_recent = np.zeros(self.ear.width, np.float32)
         self.babbles = 0
@@ -313,29 +315,62 @@ class SpeakingBrain(LoopBrain2):
             self.words.learn([], self._vis(img), heard)
         self.observed = getattr(self, "observed", 0) + 1
 
-    def _speak(self, base, r0, explore, trace=b"", starts=(), whole=False):
-        """Say one unit per tick from the first choice until silence. The orchestrator's
-        vote is joined by the copy route's priming from the heard trace."""
+    one_stream = False  # brains made before 2026-11-11 choose a route (copy, own habits, recall); see docs/CONVERSATION.md
+
+    def _novelty(self, trace, heard):
+        """How much each heard word still stands out when it comes to repeating it. A sound heard many times
+        answers less (repetition suppression): each of the ear's units by the ear's own count of it, with the
+        tissue's law of consolidation, 1 / (1 + times heard / maturation). A word is as novel as the most novel
+        unit it was heard in. Replaces the hand-set recency of the copy route: a new word is repeated by its
+        sound wherever it stands in the utterance; words heard everywhere are not."""
+        spans, at = [], 0
+        for u in heard:
+            spans.append((at, at + len(u), 1.0 / (1.0 + self.ear.heard.get(u, 0) / self.orch.maturation)))
+            at += len(u)
+        starts = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
+        ends = [i for i, b in enumerate(trace) if b == 32] + [len(trace)]
+        return [max([n for a, b, n in spans if a < e and b > s] or [1.0]) for s, e in zip(starts, ends)]
+
+    def _speak(self, base, r0, explore, trace=b"", starts=(), whole=False, inner=b"", novelty=None, loud=1.0):
+        """Say one unit per tick from the first choice until silence. The orchestrator's vote is joined by the
+        priming of what is heard: outside (the utterance: the copy route) and, in a one-stream brain, inside
+        (the reply the word cells recalled, heard inwardly) at once; the mouth follows whichever resonates more."""
         group = self._motor_group()
         units, came = [], []
         r = r0
         sil = self.mouth.index[SILENCE]
-        pos, unit_end = None, None
-        # copying starts after a pause (a space, or the start of what was heard); the
-        # more recent the word, the stronger its trace (recency: toddlers echo the last word)
-        starts = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
-        weights = [self.recency ** (len(starts) - 1 - j) for j in range(len(starts))]
-        ends = sorted({i for i, b in enumerate(trace) if b == 32} | {len(trace)})
-        if whole:  # a reply heard inwardly (recalled) is said from its start to its end, not one word of it
-            starts, weights, ends = [0], [1.0], [len(trace)]
+        streams = []  # (name, trace, where copying may start, how strongly, where a word ends)
+        if trace and whole:  # a reply heard inwardly (recalled) is said from its start to its end, not one word of it
+            streams.append(("inner", trace, [0], [1.0], [len(trace)]))
+        elif trace:
+            # copying starts after a pause (a space, or the start of what was heard)
+            st = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
+            en = sorted({i for i, b in enumerate(trace) if b == 32} | {len(trace)})
+            # before 2026-11-11: the more recent the word, the stronger its trace (hand-set; docs/CONVERSATION.md)
+            # one stream: a word primes as far as it still stands out (strength x resonance; the root because _prime squares)
+            w = [float(np.sqrt(x)) for x in novelty] if novelty is not None else [self.recency ** (len(st) - 1 - j) for j in range(len(st))]
+            streams.append(("outer", trace, st, w, en))
+        if inner:  # a word cell that won fired: what is heard inwardly is heard (loud < 1 was tried: docs/CONVERSATION.md)
+            streams.append(("inner", inner, [0], [float(np.sqrt(max(loud, 0.0)))], [len(inner)]))
+        cur, self.spoke_from = None, None  # the stream being followed: (index, position in it, end of the word)
+        n = len(self.mouth.units)
         for _ in range(self.max_utterance):
             if r is None or r["probs"] is None:
                 break
             drive = r["probs"].copy()
-            if self.copy_gain and trace:
-                prime, where = self._prime(trace, starts, weights) if pos is None else self._prime(trace, [pos])
-                if pos is not None and pos >= unit_end:
-                    prime[sil] = 1.0  # a pause in what was heard: the word being repeated is over
+            where, src = np.full(n, -1, np.int64), np.full(n, -1, np.int64)
+            if self.copy_gain and streams:
+                if cur is None:
+                    prime = np.zeros(n, np.float32)
+                    for si, (_, t, st, w, _) in enumerate(streams):
+                        p, wh = self._prime(t, st, w)
+                        better = p > prime
+                        prime[better], where[better], src[better] = p[better], wh[better], si
+                else:
+                    prime, where = self._prime(streams[cur[0]][1], [cur[1]])
+                    src[:] = cur[0]
+                    if cur[1] >= cur[2]:
+                        prime[sil] = 1.0  # a pause in what was heard: the word being repeated is over
                 drive = drive + self.copy_gain * prime
             if explore:
                 p = np.exp(np.log(drive + 1e-9) / 0.5)
@@ -345,9 +380,11 @@ class SpeakingBrain(LoopBrain2):
             u = self.mouth.units[k]
             if u == SILENCE:
                 break
-            if self.copy_gain and trace and where[k] >= 0:  # follow the heard trace from where this matched
-                pos = int(where[k]) + len(u)
-                unit_end = next((e for e in ends if e > where[k]), len(trace))
+            if where[k] >= 0:  # follow the heard trace from where this matched
+                si = int(src[k])
+                cur = (si, int(where[k]) + len(u), next((e for e in streams[si][4] if e > where[k]), len(streams[si][1])))
+                if self.spoke_from is None:
+                    self.spoke_from = streams[si][0]
             out = self.mouth.articulate(u)
             self.mouth.hear_self(u, out, self.ear)
             units.append(u)
@@ -407,16 +444,21 @@ class SpeakingBrain(LoopBrain2):
                 patience = float((self.orch.patience[r["active"]] * r["g"]).sum() / total) if total else 1.0
                 if r["probs"].max() >= patience or tick == self.max_ticks:
                     snapshot = (s, r, base)
-                    starts = list(np.cumsum([0] + [len(h) for h in heard[:-1]]))
-                    drive = np.zeros(len(self.copy_group))
-                    if len(self.copy_group) > 2:  # the hub drives its own route with how sure it is
-                        drive[2] = confidence if recalled is not None else -1e9
-                    kc, rc = self._choose(s, self.copy_group, drive, explore)
-                    if rc is not None and rc.get("a") is not None:
-                        choices.append((tick, rc["active"], rc["g"], rc["a"], int(self.copy_group[kc])))
-                    self.copied, self.recalled = kc == 0, recalled if kc == 2 else None
-                    trace = question.encode("utf-8") if kc == 0 else recalled.encode("utf-8") if kc == 2 else b""
-                    spoken, said = self._speak(base, r, explore and learn, trace=trace, starts=starts, whole=kc == 2 and words is not None)
+                    if getattr(self, "one_stream", False):  # no route is chosen: outer and inner speech prime the mouth together
+                        spoken, said = self._speak(base, r, explore and learn, trace=question.encode("utf-8"), inner=(recalled or "").encode("utf-8"),
+                                                   novelty=self._novelty(question.encode("utf-8"), heard))
+                        self.copied, self.recalled = self.spoke_from == "outer", recalled if self.spoke_from == "inner" else None
+                    else:
+                        drive = np.zeros(len(self.copy_group))
+                        if len(self.copy_group) > 2:  # the hub drives its own route with how sure it is
+                            drive[2] = confidence if recalled is not None else -1e9
+                        kc, rc = self._choose(s, self.copy_group, drive, explore)
+                        if rc is not None and rc.get("a") is not None:
+                            choices.append((tick, rc["active"], rc["g"], rc["a"], int(self.copy_group[kc])))
+                        self.copied, self.recalled = kc == 0, recalled if kc == 2 else None
+                        trace = question.encode("utf-8") if kc == 0 else recalled.encode("utf-8") if kc == 2 else b""
+                        spoken, said = self._speak(base, r, explore and learn, trace=trace, whole=kc == 2 and words is not None,
+                                                   novelty=self._novelty(trace, heard) if kc == 0 and getattr(self, "novel_copy", False) else None)
                     tick += len(spoken)  # speaking takes time
                     break
             if level < 2:

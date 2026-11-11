@@ -1,0 +1,30 @@
+{
+ "frames": [
+  "WORD",
+  "WORD!",
+  "can you say WORD",
+  "can you say WORD for mama",
+  "can you say WORD for me",
+  "can you say WORD loud please",
+  "can you say WORD now",
+  "just say WORD",
+  "let's hear you say WORD",
+  "let's say WORD",
+  "now say WORD",
+  "please say WORD",
+  "please say WORD again",
+  "say WORD",
+  "say WORD for me",
+  "say WORD if you can",
+  "say WORD now",
+  "try saying WORD",
+  "try to say WORD",
+  "will you say WORD"
+ ],
+ "writers": [
+  "nvidia/nemotron-3.5-lightning:free",
+  "dots-studio/dots-3-note-preview:free"
+ ],
+ "judge": "nvidia/nemotron-3.5-super-vl:free",
+ "candidates": 84
+}

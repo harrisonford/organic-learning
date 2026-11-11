@@ -47,8 +47,25 @@ class Words:
     maturation = 5.0  # an input's synapses consolidate with its use (the orchestrator's value)
     memory = 0.05  # how fast a cell's sense of its own recent error follows its errors (0.02-0.1 give the same result)
 
-    def __init__(self, visual_dim, ear, max_units=None, max_cues=None):
+    imagery = False  # heard units bring back what was seen with them (docs/CONVERSATION.md, B); off in brains made before it
+
+    sound = False  # the content dendrite also hears the sound of what was said, not only which units it was cut into
+
+    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False):
         self.ear, self.visual_dim = ear, visual_dim
+        self.imagery, self.sound = imagery, sound
+        # content dendrite: synapses from the ear's combination-sensitive neurons (the sound of everything just heard)
+        self.Ws = np.zeros((64, ear.width), np.float32) if sound else None
+        self.use_s = np.zeros(ear.width, np.float32)
+        # with sound, the feedback onto the visual neurons comes from those neurons too (what a sound predicts will be seen)
+        self.Gs = np.zeros((ear.width, visual_dim), np.float32) if sound and imagery else None
+        self.use_gs = np.zeros(ear.width, np.float32)
+        # feedback synapses from the ear's unit cells onto the visual neurons: what each heard unit predicts will be seen
+        self.G = np.zeros((64, visual_dim), np.float32)
+        self.use_g = np.zeros(64, np.float32)
+        # content dendrite: synapses that read the visual neurons' bursts (driven from below and from above at once)
+        self.Wb = np.zeros((64, visual_dim), np.float32) if imagery else None
+        self.use_b = np.zeros(visual_dim, np.float32)
         self.max_units, self.max_cues = max_units, max_cues
         self.units, self.index = [SILENCE], {SILENCE: 0}
         self.cues, self.cue_index = [], {}
@@ -76,6 +93,10 @@ class Words:
             cap = max(n_units, 2 * len(self.base))
             pad = lambda a: np.concatenate([a, np.zeros((cap - a.shape[0],) + a.shape[1:], a.dtype)])  # noqa: E731
             self.Wv, self.Wc, self.Wa, self.base = pad(self.Wv), pad(self.Wc), pad(self.Wa), pad(self.base)
+            if getattr(self, "Wb", None) is not None:
+                self.Wb = pad(self.Wb)
+            if getattr(self, "Ws", None) is not None:
+                self.Ws = pad(self.Ws)
             self.L = np.concatenate([pad(self.L), np.zeros((cap, cap - self.L.shape[1]), np.float32)], axis=1)
             self.heard, self.last, self.born = pad(self.heard), pad(self.last), pad(self.born)
             for name in ("err_c", "err_a"):
@@ -86,6 +107,9 @@ class Words:
             self.Wc = np.concatenate([self.Wc, np.zeros((self.Wc.shape[0], cap - self.Wc.shape[1]), np.float32)], axis=1)
             self.cue_last = np.concatenate([self.cue_last, np.zeros(cap - len(self.cue_last), np.int64)])
             self.use_c = np.concatenate([self.use_c, np.zeros(cap - len(self.use_c), np.float32)])
+            if self.imagery and self.Gs is None:
+                self.G = np.concatenate([self.G, np.zeros((cap - self.G.shape[0], self.visual_dim), np.float32)])
+                self.use_g = np.concatenate([self.use_g, np.zeros(cap - len(self.use_g), np.float32)])
 
     def cell(self, u):
         if u not in self.index:
@@ -116,14 +140,38 @@ class Words:
         x = v - self.mean_v
         return x / (np.linalg.norm(x) + 1e-8)
 
+    def _heard_sound(self, units):
+        """What the ear's combination-sensitive neurons pass on about a stretch of speech (None: nothing heard)."""
+        if not self.sound or not len(units):
+            return None
+        return self.ear.combinations(b"".join(units))
+
+    def _sight(self, v, cues, learn=False, snd=None):
+        """(x, b): what the visual neurons pass on, and their bursts. The heard units reach the visual neurons from
+        above through their feedback synapses (what each has come to predict will be seen). Eyes open, a neuron
+        driven from below and from above at once bursts (coincidence of its two compartments, as in the word
+        cells): b says where what is seen is what the words were about. Eyes closed, the feedback alone is a faint
+        picture in the mind's eye, as strong as the words' predictions are: that is passed on instead of sight."""
+        x = self._visual(v, learn)
+        if not self.imagery or (snd is None and not len(cues)):
+            return x, None
+        above = snd @ self.Gs if getattr(self, "Gs", None) is not None else self.G[cues].sum(axis=0)
+        if x is None:
+            return (above if above.any() else None), None
+        return x, np.sqrt(len(x)) * np.maximum(x, 0) * np.maximum(above, 0)
+
     def _echo(self, heard, said):
         return self.ear.question(list(heard) + [SILENCE] + list(said), adapt=False)
 
-    def _content(self, x, cues):
+    def _content(self, x, cues, b=None, snd=None):
         n = len(self.units)
         o = np.zeros(n, np.float32)
+        if snd is not None:
+            o += self.Ws[:n] @ snd
         if x is not None:
             o += self.Wv[:n] @ x
+        if b is not None:
+            o += self.Wb[:n] @ b
         if len(cues):
             o += self.Wc[:n][:, cues].sum(axis=1)
         return o
@@ -134,7 +182,9 @@ class Words:
         """(activity, content drive above baseline, context expectation) of every unit cell, for the next unit."""
         n = len(self.units)
         cues = [c for c in (self._cue(u, False) for u in set(heard)) if c is not None]
-        drive = np.maximum(self._content(self._visual(v), cues), 0)
+        snd = self._heard_sound(heard)
+        x, b = self._sight(v, cues, snd=snd)
+        drive = np.maximum(self._content(x, cues, b, snd), 0)
         ctx = np.maximum(self.Wa[:n] @ self._echo(heard, said), 0)
         if self.lateral:
             ctx = self._spread(ctx)
@@ -186,20 +236,40 @@ class Words:
         self.heard[targets] += 1
         self.last[targets] = self.moments
         # content dendrite: will the unit be in the reply?
-        x = self._visual(v, learn=True)
+        snd = self._heard_sound(heard)
+        x, b = self._sight(v, cues, learn=True, snd=snd)
         fired = np.zeros(n, np.float32)
         fired[targets] = 1.0
-        e = fired - (self._content(x, cues) + self.base[:n])
+        e = fired - (self._content(x, cues, b, snd) + self.base[:n])
         e[0] = 0.0  # silence has no content dendrite
-        step = self.err_c[:n] * e / (1.0 + (x is not None) + len(cues))  # the inputs share the correction
+        step = self.err_c[:n] * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + len(cues))  # the inputs share the correction
+        if snd is not None:
+            self.Ws[:n] += step[:, None] * (snd / (1.0 + self.use_s / self.maturation))[None, :]
+            self.use_s += snd * snd
         self._own_error(self.err_c, fired, e)
         self.base[:n] += step / (1.0 + (self.moments - self.born[:n]) / self.maturation)  # the baseline: an input that is always on
         if x is not None:
             self.Wv[:n] += step[:, None] * (x / (1.0 + self.use_v / self.maturation))[None, :]
             self.use_v += x * x
+        if b is not None:
+            self.Wb[:n] += step[:, None] * (b / (1.0 + self.use_b / self.maturation))[None, :]
+            self.use_b += b * b
         if cues:
             self.Wc[:n][:, cues] += step[:, None] / (1.0 + self.use_c[cues] / self.maturation)[None, :]
             self.use_c[cues] += 1.0
+        if self.imagery and v is not None and self.Gs is not None:
+            # with sound: the sound of everything heard while something is seen (asked and answered) predicts the sight
+            both = self._heard_sound(list(heard) + list(reply_units))
+            self.Gs += np.outer(both / (1.0 + self.use_gs / self.maturation), x - both @ self.Gs)
+            self.use_gs += both * both
+        elif self.imagery and v is not None:
+            # feedback synapses: every unit heard while something is seen (asked, answered or said unasked) learns to
+            # predict the sight; the units share the error, and each consolidates with its own use (the same law)
+            told = cues + [self._cue(u, True) for u in set(reply_units) - set(heard)]
+            self.cue_last[told] = self.moments
+            miss = x - self.G[told].sum(axis=0)
+            self.G[told] += (miss[None, :] / len(told)) / (1.0 + self.use_g[told] / self.maturation)[:, None]
+            self.use_g[told] += 1.0
         # context dendrite: which unit comes next, step by step, and the silence after the last
         for i, t in enumerate(targets + [0]):
             echo = self._echo(heard, reply_units[:i])
@@ -234,7 +304,7 @@ class Words:
         value[0] = np.inf
         drop = set(np.argsort(value)[: max(1, int(fraction * n))].tolist())
         keep = [i for i in range(n) if i not in drop]
-        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L"):
+        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()):
             a = getattr(self, name)
             a[: len(keep)] = a[keep]
             a[len(keep) : n] = 1.0 if name.startswith("err") else 0
@@ -249,7 +319,7 @@ class Words:
         keep = [i for i in range(n) if i not in drop]
         self.Wc[:, : len(keep)] = self.Wc[:, keep]
         self.Wc[:, len(keep) : n] = 0
-        for a in (self.cue_last, self.use_c):
+        for a in (self.cue_last, self.use_c) + ((self.G, self.use_g) if self.imagery and getattr(self, "Gs", None) is None else ()):
             a[: len(keep)] = a[keep]
             a[len(keep) : n] = 0
         self.cues = [self.cues[i] for i in keep]
