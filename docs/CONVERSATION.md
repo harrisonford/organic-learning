@@ -282,3 +282,22 @@ Two causes, both measured on the brains at 25,000 moments:
 So: **one stream is a negative result for now** (it needs word cells that can stay silent), and the arm kept is
 the learned route choice with the normalised novelty in place of the recency. Three seeds from babbling:
 `conv_s0..2` (units organic-conv-s0..2, world 2, parrot gate). The trial lives were stopped.
+
+### The three seeds of the kept arm at 20,000 moments (`conv_s0..2`, 2026-11-11 19:20)
+
+| seed | echo passed (pass mark 0.8; the test now has the word mid-utterance) | first words on parrot-proof items (pass 0.4) | says the last word at first words (parrot would score 0.13) | new-word echo once first words began |
+|---|---|---|---|---|
+| 0 | 15,000 (0.83) | 0.37 after 5,000 moments | 0.10 | 0.81 → 0.61 |
+| 1 | 10,000 (0.82) | 0.43, 0.41 | 0.08, 0.09 | 0.82 → 0.49, 0.58 |
+| 2 | 10,000 (0.86) | 0.42, 0.42 | 0.06, 0.06 | 0.86 → 0.54, 0.53 |
+
+By source at first words: pictures 0.46–0.58, text lessons 0.21–0.27, social routines 0.17–0.33 (8 held-out
+items), familiar-word echo 0.92–0.97.
+
+Read: the last-word habit is gone (6–10% of replies, below what the lessons themselves would justify), echo
+with the word anywhere is learned in 10–15 thousand moments without the recency, and first words clear their
+mark on the parrot-proof items in two of three seeds. They are **not promoted**, because new-word echo falls
+below 80% of its passing score as soon as the word cells start to answer: the recall route speaks in about half
+of the echo utterances with a word never heard ("please say alcohol again" → "fish"). The same cause as in the
+one-stream life: a word cell always has something to say. That is the next thing to solve in the word cells
+(a content drive that can be "nothing"), not in the mouth. The lives keep running.
