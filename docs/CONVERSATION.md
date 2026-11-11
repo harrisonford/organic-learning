@@ -255,3 +255,30 @@ inputs). Imagery is right in principle and capped by the eyes. So the order of w
 
 No inner states were added. It needs a decision about what the brain's body is (what varies, what an adult can
 see of it) that should not be improvised; the social routines above are the first place where it would show.
+
+### The two trial lives, and the arm chosen (2026-11-11, evening)
+
+Both trial lives stuck at the echo stage, which every life of 2026-11-10 passed at its first checkpoint (0.95):
+
+| moments | 10,000 | 15,000 | 20,000 | 25,000 |
+|---|---|---|---|---|
+| one stream (`stream_s0`) | 0.64 | 0.63 | 0.63 | 0.65 |
+| routes + novelty (`routes_s0`) | 0.74 | 0.61 | 0.52 | 0.60 |
+
+Two causes, both measured on the brains at 25,000 moments:
+
+1. **The novelty was too faint.** The ear cuts a new word into pieces it knows ("ro|ck|et"), each heard often,
+   so the word's novelty was 0.05 where "tuli|p" got 1.0. The order was always right (the word to repeat was the
+   most novel word in 200 of 200 held-out echo utterances); its size was not. The ear's byte-level surprise was
+   tried as the measure instead and is worse (right word in 0.72: the first word of any utterance is surprising).
+   Fix: the heard words compete, the most novel one counts as 1 (divisive normalisation within the utterance).
+   With that, when the copy route speaks it repeats the right word in 0.95 of utterances wherever the word stands
+   ("can you say WORD for me" included).
+2. **The word cells always say something**, also about a word they have never heard ("method", "bottle", "k!"):
+   their content drive is taken relative to the strongest cell, so "nothing to say" does not exist. In the
+   one-stream brain that inner voice spoke in 55% of echo utterances and nothing can learn to keep it out.
+   In the routes brain the orchestrator's learned choice can.
+
+So: **one stream is a negative result for now** (it needs word cells that can stay silent), and the arm kept is
+the learned route choice with the normalised novelty in place of the recency. Three seeds from babbling:
+`conv_s0..2` (units organic-conv-s0..2, world 2, parrot gate). The trial lives were stopped.

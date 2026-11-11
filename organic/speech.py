@@ -329,7 +329,13 @@ class SpeakingBrain(LoopBrain2):
             at += len(u)
         starts = [0] + [i + 1 for i, b in enumerate(trace[:-1]) if b == 32]
         ends = [i for i, b in enumerate(trace) if b == 32] + [len(trace)]
-        return [max([n for a, b, n in spans if a < e and b > s] or [1.0]) for s, e in zip(starts, ends)]
+        nov = [max([n for a, b, n in spans if a < e and b > s] or [1.0]) for s, e in zip(starts, ends)]
+        if getattr(self, "one_stream", False):
+            return nov  # as the one-stream life of 2026-11-11 ran it (absolute; too faint when a new word is cut into known pieces)
+        # the heard words compete (divisive normalisation): the one that stands out most is the one whose trace is strongest.
+        # Absolute values failed in a life: the ear cuts a new word into pieces it knows ("ro|ck|et"), each heard often
+        top = max(nov)
+        return [n / top for n in nov] if top > 0 else nov
 
     def _speak(self, base, r0, explore, trace=b"", starts=(), whole=False, inner=b"", novelty=None, loud=1.0):
         """Say one unit per tick from the first choice until silence. The orchestrator's vote is joined by the
