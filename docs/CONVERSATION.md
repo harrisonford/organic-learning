@@ -301,3 +301,17 @@ below 80% of its passing score as soon as the word cells start to answer: the re
 of the echo utterances with a word never heard ("please say alcohol again" → "fish"). The same cause as in the
 one-stream life: a word cell always has something to say. That is the next thing to solve in the word cells
 (a content drive that can be "nothing"), not in the mouth. The lives keep running.
+
+### All three seeds passed first words (2026-11-12 01:20)
+
+| seed | passed first words at | parrot-proof score then | echo then (must hold 80% of its pass) | two words after 5–10 thousand moments (parrot-proof, pass 0.5) |
+|---|---|---|---|---|
+| 0 | 60,000 moments | 0.47 | 0.81 | 0.31, 0.34 |
+| 1 | 70,000 | 0.47 | 0.66 | 0.32 |
+| 2 | 60,000 | 0.48 | 0.71 | 0.31, 0.34 |
+
+First words sat above its mark from 20–30 thousand moments on (0.41–0.49); what took until 60–70 thousand was
+echo coming back (it wandered between 0.45 and 0.71 for 40,000 moments before the route choice learned to leave
+new words to the copy route). The lives of 2026-11-10 passed first words at 15,000 on 0.44 including the parrot's
+points and with echo that always ended in the word; these are not the same test. The brain says the last word in
+6–17% of replies throughout. conv_s0's first-words brain is L3 on the preview.
