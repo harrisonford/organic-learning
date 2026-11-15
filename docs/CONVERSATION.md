@@ -315,3 +315,10 @@ echo coming back (it wandered between 0.45 and 0.71 for 40,000 moments before th
 new words to the copy route). The lives of 2026-11-10 passed first words at 15,000 on 0.44 including the parrot's
 points and with echo that always ended in the word; these are not the same test. The brain says the last word in
 6–17% of replies throughout. conv_s0's first-words brain is L3 on the preview.
+
+### The three seeds stopped at two words (recorded 2026-11-15; they ended on 2026-11-12)
+
+All three: 0.38, 0.38, 0.39 on the parrot-proof items against 0.5 after 100,000 moments there (with the parrot's
+points 0.40; the lives of 2026-11-10 stopped at 0.41–0.43 counted that way). First words held at 0.43–0.45, echo
+ended at 0.56–0.76, the last word is said in 8–12% of replies. Six lives in two worlds and two mouths now stop at
+the same place: the wall at two words is not in the mouth or in the lessons' wording.
