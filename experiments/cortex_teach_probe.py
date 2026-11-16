@@ -106,12 +106,15 @@ elif ARM == "more":
     pickle.dump(fresh, open(f"out/tmp/cortex_more_{DEVELOP}.pkl", "wb"))
 else:
     layers = [len(cortex.layers) - 1] if ARM == "taught_top" else list(range(len(cortex.layers)))
+    if os.environ.get("LAYERS"):  # which layers listen to the word cells (0 is the first)
+        layers = [int(x) for x in os.environ["LAYERS"].split(",")]
     dims = [l.kinds * GRID * GRID for l in cortex.layers]
     offs = np.cumsum([0] + dims)
     Wout = np.zeros((len(names), offs[-1]), np.float32)
     use = np.zeros(offs[-1], np.float32)  # each visual neuron's own use: its synapses onto the word cells consolidate with it
     mean = np.zeros(offs[-1], np.float32)
     right = []
+    size = [0.0] * len(cortex.layers)
     for n, r in enumerate(train_rows[:TAUGHT], 1):
         x, keep = forward(cortex, img(r))
         mean += (x - mean) / min(n, 1000)
@@ -125,7 +128,10 @@ else:
             for li in layers:
                 layer = cortex.layers[li]
                 Vw, where, on, norm = keep[li]
-                tl = t[offs[li] : offs[li + 1]].reshape(GRID * GRID, layer.kinds) * on / norm
+                tl = t[offs[li] : offs[li + 1]].reshape(GRID * GRID, layer.kinds) * on
+                # each layer hears the feedback relative to its usual size (the first run, with the raw size, moved nothing)
+                size[li] += (np.abs(tl[on]).mean() - size[li]) / min(n - 500, 1000) if on.any() else 0.0
+                tl = tl / (size[li] + 1e-12)
                 cells, kinds = np.nonzero(tl)
                 if len(cells):
                     np.add.at(layer.W, kinds, RATE * tl[cells, kinds][:, None] * Vw[cells, where[cells, kinds]])
@@ -134,5 +140,18 @@ else:
         use += xc * xc
         if n % 2000 == 0:
             log(f"{n} named: the word cells were right on {np.mean(right[-2000:]):.3f} of the last 2000 (before hearing the name)")
-    measure(cortex, f"taught on {TAUGHT} ({'top layer' if ARM == 'taught_top' else 'all layers'}, rate {RATE})")
-    pickle.dump(cortex, open(f"out/tmp/cortex_{ARM}_{TAUGHT}.pkl", "wb"))
+    measure(cortex, f"taught on {TAUGHT} (layers {layers}, rate {RATE})")
+    if os.environ.get("REDEVELOP") == "1":  # the layers above then organise themselves afresh on what the taught layers now send
+        pool = [img(r) for r in train_rows[:8000]]
+        dev = np.random.default_rng(SEED + 1)
+        for li in range(max(layers) + 1, len(cortex.layers)):
+            layer = cortex.layers[li]
+            fresh = dev.normal(0, 1, layer.W.shape).astype(np.float32)
+            layer.W, layer.wins = fresh / np.linalg.norm(fresh, axis=1, keepdims=True), np.zeros(layer.kinds)
+            for n in range(DEVELOP):
+                x = pool[dev.integers(len(pool))]
+                for below in cortex.layers[:li]:
+                    x = below.respond(x)
+                layer.learn(x, dev, rate=0.05 * (1 - n / DEVELOP) + 0.005)
+        measure(cortex, f"taught layers {layers}, the layers above developed afresh on {DEVELOP}")
+    pickle.dump(cortex, open(f"out/tmp/cortex_{ARM}_{os.environ.get('LAYERS', 'x')}_{TAUGHT}_{RATE}_{os.environ.get('REDEVELOP', '0')}.pkl", "wb"))

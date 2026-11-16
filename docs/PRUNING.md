@@ -56,3 +56,35 @@ Candidates, in the order of their support:
 What will be measured first, offline: how many of a word cell's synapses can go, by rule 1 against plain smallest
 weight, before naming changes; whether naming of pictures never seen *improves* at moderate pruning; and whether
 learning afterwards is slower. Then the same for the orchestrator's clusters, which are most of a level's size.
+
+## First measurements (2026-11-16, `experiments/prune_probe.py`, seed 0; seeds 1 and 2 running)
+
+Word cells after a life's worth of first and two words (437 cells, 2,536 cues; every visual synapse nonzero, 78% of
+the cue synapses). Each cell keeps a fraction of the synapses on each dendrite:
+
+| kept | pictures named | same answer ×3 | first-words text | two words |
+|---|---|---|---|---|
+| all | 0.473 | 0.710 | 0.354 | 0.445 |
+| half, by weight × use | 0.473 | 0.703 | 0.354 | 0.447 |
+| a fifth | 0.408 | 0.737 | 0.345 | 0.453 |
+| a tenth | 0.362 | 0.653 | 0.345 | 0.460 |
+| a twentieth | 0.340 | 0.530 | 0.352 | 0.461 |
+| a fiftieth | 0.266 | 0.367 | 0.328 | 0.448 |
+| a fifth, chosen at random | 0.284 | 0.350 | 0.092 | 0.351 |
+
+Half of the synapses do nothing. What the cells know about words heard needs a twentieth of its synapses; what
+they know about pictures is spread over many (a dense code) and starts to go below a half. By weight alone the
+numbers are the same as by weight × use.
+
+And living on after the pruning (the same moments once more; a removed synapse stays removed):
+
+| | pictures named | first-words text | two words |
+|---|---|---|---|
+| all synapses, a second pass | 0.467 | 0.348 | 0.441 |
+| pruned to a fifth, then a second pass | 0.471 | 0.348 | 0.455 |
+| pruned to a twentieth, then a second pass | 0.420 | 0.354 | 0.463 |
+
+With a fifth of its synapses a cell relearns what the pruning cost and ends where the unpruned cell ends, a little
+better on two words. So sleep can take four synapses in five from the word cells and nothing is lost. For the size
+of a level this matters less than it sounds: the word cells are megabytes, the orchestrator's clusters are the
+gigabyte. The same measurement on the clusters is the next step.

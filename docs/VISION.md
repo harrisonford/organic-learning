@@ -130,3 +130,61 @@ code. Going further needs one of:
 3. far more to see (the cortex developed on a few tens of thousands of pictures).
 
 Not built today. Which of these to try is the next decision; (2) uses what exists and is the one I would start with.
+
+## 2026-11-16: the data question, looking, and the words teaching the cortex
+
+Kris: do options 1 (looking) and 2 (the cortex taught by the words); check every step against how living beings work
+and ask first whether it is a matter of more or better experience or of more layers.
+
+**How much is there to see, and does more help?** The whole database is 202,000 lessons with 58,000 different
+pictures and 1.97 million overheard sentences. First words had 10,300 pictures of 23 names (7,200 of them CIFAR's
+32×32). With these, naming by a reference readout rises steeply with the pictures seen: 0.33 after 500, 0.42 after
+2,000, 0.47 after 4,000, 0.55 after 8,000.
+
+So a bigger picture book was made (`experiments/world/coco_crops.py`): 95,249 things cut out of the COCO training
+photographs at their own resolution, 35 names (19 of the picture book's). On those (real things in real scenes,
+harder than CIFAR), with the cortex as it is, a linear readout names 0.21 after 1,000 pictures, 0.30 after 8,000,
+0.33 after 32,000 and 0.36 after 90,000: about +0.02 per doubling at the end. **More pictures help, and through
+this cortex they stop helping soon.** The cortex is what has to get better.
+
+**What the cortex is.** Three layers, developed once on 4,000 pictures per layer by competitive Hebbian learning,
+never changed since. A neuron of the top layer sees a patch of 17 of the picture's 64 pixels: no neuron sees a
+whole thing, and what tells names apart is the bag of local features in each sixteenth of the view.
+
+`experiments/cortex_teach_probe.py`; a reference readout is fitted afresh on each cortex's code (6,000 pictures),
+tested on 1,500 things from photographs never used and on the CIFAR and Commons test pictures:
+
+| the cortex | COCO things named (35 names) | layer 1 / 2 / 3 alone | CIFAR + Commons (22 names) |
+|---|---|---|---|
+| as every life has had it | 0.278 | 0.237 / 0.233 / 0.218 | 0.487 |
+| developed afresh, by its own rule, on 40,000 pictures per layer (ten times more) | 0.297 | 0.264 / 0.229 / 0.235 | 0.483 |
+| taught by the words, top layer only | 0.275 | 0.237 / 0.233 / 0.203 | 0.474 |
+| taught by the words, all layers | 0.296 | **0.277** / 0.077 / 0.038 | 0.470 |
+
+"Taught by the words": 30,000 pictures are named; every visual neuron that talks to a word cell hears back from
+it through its own feedback synapse. A neuron whose activity spoke for the word that was then heard moves its
+synapses toward the window it was responding to; one that spoke for another word moves away (feedback-gated
+plasticity: Roelfsema & van Ooyen 2005; Roelfsema & Holtmaat 2018). The error goes back one synapse, into every
+layer directly; nothing is passed from layer to layer. It is the nearest this project has come to learning by
+gradient: for those direct connections it is the gradient, carried by a feedback synapse instead of computed.
+
+What happened: a first run moved nothing (the feedback was too faint to matter; each layer now hears it relative
+to its usual size). Then: **the first layer gets better when taught (0.237 → 0.277 alone), the layers above are
+ruined** (their input changes under them while they change too), and the top layer taught alone gets a little
+worse. More to see by the cortex's own rule gives +0.02. Running now: only the first layer taught, then the layers
+above developing afresh on what it sends (the order in which cortex matures: Huttenlocher & Dabholkar 1997).
+
+**Looking.** A reference test with picture-book pages (four pictures, a quarter of the view each): the same naming
+readout, applied to the whole view or to four looks, each quarter filling the view:
+
+| | commonest answer | the whole view | four looks |
+|---|---|---|---|
+| is there a …? | 0.53 | 0.56 | 0.74 |
+| how many …? | 0.37 | 0.40 | 0.55 |
+
+A thing looked at is named 0.41 of the time (0.48 when it is the whole picture). Looking is worth building: the
+brain has an eye that fixates and zooms, and the word cells have only ever had the whole view. The design, not
+built yet: at each fixation the word cells get the cortex's code of what the eye is looking at; each cell keeps
+its strongest drive over the looks of a moment; and what a cell learns from is the look that drove it most when
+its word was heard (a word said over a page of several things is about one of them: cross-situational learning,
+Yu & Smith 2007).

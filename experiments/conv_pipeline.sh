@@ -14,7 +14,7 @@ TAG=${TAG:-$ARM}
 for S in ${SEEDS:-0 1 2}; do
   RES=(); [ -f "$ROOT/out/${TAG}_s$S.pkl" ] && RES=(-E RESUME=out/${TAG}_s$S.pkl)
   systemd-run --user --unit=organic-$TAG-s$S --collect -p WorkingDirectory="$ROOT" -p Nice=10 "${RES[@]}" "${SPEAK[@]}" $EXTRA \
-    -E WORLD=2 -E PARROT=1 \
+    -E WORLD=${WORLD:-2} -E PARROT=1 \
     -E OMP_NUM_THREADS=3 -E OPENBLAS_NUM_THREADS=3 -E SPEECH=1 -E WORDS=1 -E HUB=0 -E MAX_UNITS=2000 -E MAX_CUES=8192 -E OVERHEARD=1 -E OBSERVE=${OBSERVE:-1} -E JUDGE=${JUDGE:-1} \
     -E MOTOR_UNITS=300 -E MAX_OUTPUTS=1024 -E NEURONS=8 -E MAX_CLUSTERS=2000 -E MAX_GB=4 -E EVERY=5000 -E STAGE_BUDGET=${STAGE_BUDGET:-100000} -E TOTAL=${TOTAL:-400000} -E TEST_N=300 \
     -E CORTEX=data/visual_cortex.pkl -E CORTEX_GRID=4 -E CORTEX_LAYERS=0,1,2 -E SEED=$S \
