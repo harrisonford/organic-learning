@@ -144,8 +144,11 @@ class Mouth:
 class SpeakingBrain(LoopBrain2):
     max_utterance = 16
 
-    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, one_stream=False, novel_copy=False, imagery=False, sound=False, **kw):
+    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, one_stream=False, novel_copy=False, imagery=False, sound=False, ear=None, **kw):
         super().__init__(parts, **kw)
+        if ear == "edge":  # the ear that learns what word edges sound like (organic/ear_carving.py); a new ear is a new lineage
+            from .ear_carving import EdgeEar
+            self.ear = EdgeEar(seed=self.ear.seed)
         self.one_stream = one_stream  # no route choice: outer and inner speech prime the mouth together
         self.novel_copy = novel_copy or one_stream  # where copying starts: the ear's novelty, not the hand-set recency
         self.mouth = Mouth(self.ear.width, seed=kw.get("seed", 0) + 5)

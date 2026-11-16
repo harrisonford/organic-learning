@@ -55,7 +55,7 @@ else:
         brain = SpeakingBrain(parts, seed=SEED, size=64, hub=hub, hub_cells=int(os.environ.get("HUB_CELLS", 0)) or None,
                               words=os.environ.get("WORDS") == "1", max_units=int(os.environ.get("MAX_UNITS", 0)) or None,
                               max_cues=int(os.environ.get("MAX_CUES", 0)) or None, one_stream=os.environ.get("ONE_STREAM") == "1",
-                              novel_copy=os.environ.get("NOVEL_COPY") == "1", imagery=os.environ.get("IMAGERY") == "1", sound=os.environ.get("SOUND") == "1", **cfg)
+                              novel_copy=os.environ.get("NOVEL_COPY") == "1", imagery=os.environ.get("IMAGERY") == "1", sound=os.environ.get("SOUND") == "1", ear=os.environ.get("EAR_KIND"), **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}

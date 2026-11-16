@@ -26,6 +26,8 @@ PASSES = int(os.environ.get("PASSES", 3))
 ARMS = os.environ.get("ARMS", "plain,imagery").split(",")
 cur = Curriculum(seed=0)
 ear = pickle.load(open(os.environ.get("EAR", "out/kid_s3.ear.pkl"), "rb"))
+if os.environ.get("MARKS") is not None:  # the edge ear: marks attached to their word (1) or units of their own (0)
+    ear.marks_attach = os.environ["MARKS"] == "1"
 cortex = pickle.load(open("data/visual_cortex.pkl", "rb"))
 FRAMES = json.load(open(os.path.join(WORLD_DIR, "naming_frames.json")))["frames"]
 V = pickle.load(open("out/tmp/vis_cache.pkl", "rb")) if os.path.exists("out/tmp/vis_cache.pkl") else {}
@@ -44,6 +46,10 @@ def vis(ref):
 # HEAR=words: a reference ear that cuts at the spaces and drops punctuation (to see what the ear's own cuts cost)
 if os.environ.get("HEAR") == "words":
     hear = lambda q: [w.encode() + b" " for w in split(q)]  # noqa: E731
+elif os.environ.get("HEAR") == "spaces":  # diagnostic: cut at the spaces only, marks stay on their words ("spoon?")
+    hear = lambda q: [w.encode() + b" " for w in q.lower().split(" ") if w]  # noqa: E731
+elif os.environ.get("HEAR") == "nosep":  # diagnostic only: units with no letter or digit in them are not passed on
+    hear = lambda q: [u for u in ear.units(q, learn=False) if any(chr(b).isalnum() for b in u)]  # noqa: E731
 else:
     hear = lambda q: ear.units(q, learn=False)  # noqa: E731
 w1 = [it for items in cur.train["W1"].values() for it in items]
