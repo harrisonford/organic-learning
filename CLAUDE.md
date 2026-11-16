@@ -20,3 +20,10 @@ Three small lives take about 7 GB and grow. An offline probe that loads an ear a
 On 2026-11-10 four probes beside three lives made the kernel kill a life. Before starting anything, run `free -m`;
 start probes with `systemd-run --user -p MemoryMax=... -p OOMScoreAdjust=900` so a probe dies before a life does;
 keep at least 2 GB available.
+
+## Local model servers
+
+`organic-judge` (decision model, :8790) and `organic-parent` (chat model for leisure talk, :8791) are llama.cpp
+servers on the GPU. llama.cpp keeps a prompt cache in RAM of up to 8 GB by default: on 2026-11-16 the parent filled
+5.6 GB and the kernel killed the probes. The parent runs with `--cache-ram 0` and `MemoryMax`; check
+`systemctl --user show <unit> -p MemoryCurrent` when memory is short.
