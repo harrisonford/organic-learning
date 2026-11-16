@@ -256,6 +256,35 @@ def observe(stage):
         owed_obs -= 1
 
 
+# leisure talk (docs/LEISURE.md): CHAT per moment, a parent says something and expects nothing; the brain says what it
+# says, and the parent (a local chat model, organic/parent.py) answers that. No lesson, no grade, no reward.
+CHAT = float(os.environ.get("CHAT", 0))
+owed_chat = 0.0
+if CHAT:
+    import random as _random
+    from organic.parent import Parent
+    parent, chat_rng = Parent(), _random.Random(SEED + 77)
+    chat_log = open(out_path.replace(".jsonl", ".chat.jsonl"), "a")
+    social = [it[1] for s in ("W1", "W2") for it in world.train.get(s, {}).get("social", [])]
+    DARK = np.zeros((64, 64, 3), np.float32)
+
+
+def chat(stage):
+    global owed_chat
+    owed_chat += CHAT
+    while owed_chat >= 1:
+        owed_chat -= 1
+        says = None
+        if chat_rng.random() < 0.5 or not social:  # half of what the parent says is new, half are the adults' written routines
+            says = parent.open(stage, chat_rng, chat_rng.sample(social, 3) if len(social) >= 3 else ())
+        says = says or (chat_rng.choice(social) if social else None)
+        if not says:
+            continue
+        said, back = brain.chat(DARK, says, lambda a, b: parent.answer(stage, a, b), babble=stage == "BB")
+        chat_log.write(json.dumps({"age": brain.age, "stage": stage, "parent": says, "child": said, "back": back}) + "\n")
+        chat_log.flush()
+
+
 verdict = None
 rewards = []
 while brain.age < TOTAL:
@@ -264,6 +293,8 @@ while brain.age < TOTAL:
         overhear()
     if OBSERVE:
         observe(stage)
+    if CHAT and hasattr(brain, "chat"):
+        chat(stage)
     if stage == "BB":  # infancy before words: hearing the speech around it, babbling back
         m = world.moment("B" if brain.age % 3 == 0 else "W1" if brain.age % 3 == 1 else "P")
         heard = brain.ear.units(m["question"])

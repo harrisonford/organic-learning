@@ -49,10 +49,15 @@ class Words:
 
     imagery = False  # heard units bring back what was seen with them (docs/CONVERSATION.md, B); off in brains made before it
 
+    setpoint = False  # a cell stays silent below its own firing level (docs/CONVERSATION.md, proposal 2)
     sound = False  # the content dendrite also hears the sound of what was said, not only which units it was cut into
 
-    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False):
+    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False, setpoint=False):
         self.ear, self.visual_dim = ear, visual_dim
+        self.setpoint = setpoint
+        # each cell's own two levels of content drive: when its unit was then heard, and when it was the most driven
+        # cell but its unit was not heard. Between them lies the level below which it has nothing to say.
+        self.m_on, self.m_off = np.zeros(64, np.float32), np.zeros(64, np.float32)
         self.imagery, self.sound = imagery, sound
         # content dendrite: synapses from the ear's combination-sensitive neurons (the sound of everything just heard)
         self.Ws = np.zeros((64, ear.width), np.float32) if sound else None
@@ -99,6 +104,8 @@ class Words:
                 self.Ws = pad(self.Ws)
             self.L = np.concatenate([pad(self.L), np.zeros((cap, cap - self.L.shape[1]), np.float32)], axis=1)
             self.heard, self.last, self.born = pad(self.heard), pad(self.last), pad(self.born)
+            if getattr(self, "m_on", None) is not None:
+                self.m_on, self.m_off = pad(self.m_on), pad(self.m_off)
             for name in ("err_c", "err_a"):
                 a = getattr(self, name)
                 setattr(self, name, np.concatenate([a, np.ones(cap - len(a), np.float32)]))
@@ -217,6 +224,9 @@ class Words:
             k = int(np.argmax(act))
             if i == 0:
                 conf = float(min(drive[k], 1.0) * min(ctx[k], 1.0)) if k else 0.0
+                # nothing to say: the cell that would speak is driven less than halfway between its own two levels
+                if self.setpoint and k and drive[k] < 0.5 * (self.m_on[k] + self.m_off[k]):
+                    return None, 0.0
             if k == 0:
                 break
             said.append(self.units[k])
@@ -224,6 +234,15 @@ class Words:
         return (text or None), conf
 
     # ------------------------------------------------------------------ learning
+
+    def surprise(self, heard, v, reply_units):
+        """How far the content dendrites were from expecting the units that were then heard (0: fully expected, 1: not at all)."""
+        cues = [c for c in (self._cue(u, False) for u in set(heard)) if c is not None]
+        snd = self._heard_sound(heard)
+        x, b = self._sight(v, cues, snd=snd)
+        o = self._content(x, cues, b, snd) + self.base[: len(self.units)]
+        got = [float(np.clip(o[self.index[u]], 0, 1)) if u in self.index else 0.0 for u in reply_units]
+        return 1.0 - float(np.mean(got)) if got else 1.0
 
     def learn(self, heard, v, reply_units):
         """An utterance (reply_units) was heard after `heard` (a question, or nothing: an unasked comment), while
@@ -240,7 +259,17 @@ class Words:
         x, b = self._sight(v, cues, learn=True, snd=snd)
         fired = np.zeros(n, np.float32)
         fired[targets] = 1.0
-        e = fired - (self._content(x, cues, b, snd) + self.base[:n])
+        o = self._content(x, cues, b, snd)
+        if getattr(self, "m_on", None) is not None and n > 1:  # each cell's own levels (measured, before this moment changes it)
+            d = np.maximum(o, 0)
+            if targets:
+                self.m_on[targets] += self.memory * (d[targets] - self.m_on[targets])
+            d[targets] = -1.0
+            d[0] = -1.0
+            k = int(np.argmax(d))
+            if d[k] >= 0:
+                self.m_off[k] += self.memory * (d[k] - self.m_off[k])
+        e = fired - (o + self.base[:n])
         e[0] = 0.0  # silence has no content dendrite
         step = self.err_c[:n] * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + len(cues))  # the inputs share the correction
         if snd is not None:
@@ -304,7 +333,7 @@ class Words:
         value[0] = np.inf
         drop = set(np.argsort(value)[: max(1, int(fraction * n))].tolist())
         keep = [i for i in range(n) if i not in drop]
-        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()):
+        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("m_on", "m_off") if getattr(self, "m_on", None) is not None else ()) + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()):
             a = getattr(self, name)
             a[: len(keep)] = a[keep]
             a[len(keep) : n] = 1.0 if name.startswith("err") else 0

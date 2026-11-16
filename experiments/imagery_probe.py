@@ -96,7 +96,7 @@ def measure(words):
     return row
 
 
-for seed in SEEDS:
+for seed in (SEEDS if __name__ == "__main__" else []):
     rng = np.random.default_rng(seed)
     order = [w1[i] for i in rng.choice(len(w1), min(N, len(w1)), replace=False)] + [w2[i] for i in rng.choice(len(w2), min(N, len(w2)), replace=False)]
     order = [order[i] for i in rng.permutation(len(order))]
@@ -127,7 +127,10 @@ for seed in SEEDS:
                 print(f"    {q!r}: heard as {[u.decode() for u in hear(q)]}; size of what each unit predicts will be seen: "
                       + ", ".join(f"{words.cues[c].decode()!r} {np.linalg.norm(words.G[c]):.2f}" for c in cues), flush=True)
 
+if __name__ != "__main__":
+    results = {"-": [{"-": 0.0}]}
 print(f"\nmean over seeds {SEEDS} (spread):")
 for name, rows in results.items():
     print(f"  {name:12} " + " | ".join(f"{k} {np.nanmean([r[k] for r in rows]):.3f}±{np.nanstd([r[k] for r in rows]):.3f}" for k in rows[0]))
-json.dump(results, open(f"out/imagery_probe_{'_'.join(ARMS)}_{'_'.join(map(str, SEEDS))}.json", "w"))
+if __name__ == "__main__":
+    json.dump(results, open(f"out/imagery_probe_{'_'.join(ARMS)}_{'_'.join(map(str, SEEDS))}.json", "w"))

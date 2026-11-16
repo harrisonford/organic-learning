@@ -340,6 +340,29 @@ class SpeakingBrain(LoopBrain2):
         top = max(nov)
         return [n / top for n in nov] if top > 0 else nov
 
+    def chat(self, img, says, answer, babble=False):
+        """Leisure talk (docs/LEISURE.md): someone says something and expects nothing. The brain says whatever it says
+        (no answer is right, no reward), and then hears what the other says back to that: answer(says, said) -> text or
+        None. What it learns is what a listener learns: the ear hears the reply, the mouth imitates it covertly, and
+        the word cells learn that after what was just said (by the brain itself), this is what people say."""
+        img = np.asarray(img, np.float32)
+        if babble:  # before words: the baby hears, babbles, and is answered (proto-conversation)
+            self.ear.units(says)
+            self.mirror(says)
+            said = self.babble().strip()
+        else:
+            said = self.live(img, says, learn=True, explore=True)[0] or ""
+        back = answer(says, said)
+        if back:
+            before = self.ear.units(said, learn=False) if said else []
+            heard = self.ear.units(back)
+            self.mirror(back)
+            self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
+            if getattr(self, "words", None) is not None:
+                self.words.learn(before, self._vis(img), heard)
+        self.chats = getattr(self, "chats", 0) + 1
+        return said, back
+
     def _speak(self, base, r0, explore, trace=b"", starts=(), whole=False, inner=b"", novelty=None, loud=1.0):
         """Say one unit per tick from the first choice until silence. The orchestrator's vote is joined by the
         priming of what is heard: outside (the utterance: the copy route) and, in a one-stream brain, inside
