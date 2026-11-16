@@ -27,3 +27,6 @@ keep at least 2 GB available.
 servers on the GPU. llama.cpp keeps a prompt cache in RAM of up to 8 GB by default: on 2026-11-16 the parent filled
 5.6 GB and the kernel killed the probes. The parent runs with `--cache-ram 0` and `MemoryMax`; check
 `systemctl --user show <unit> -p MemoryCurrent` when memory is short.
+
+The session's scratchpad under /tmp is a tmpfs, so it is RAM: never write a brain pickle there (two smoke-test
+pickles took 1.6 GB of RAM on 2026-11-16). Smoke tests of lives write to `out/tmp/` on disk and are deleted after.
