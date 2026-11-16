@@ -98,6 +98,22 @@ def measure(c, tag):
 log(f"{len(pics)} pictures, {len(names)} names, {int(held.sum())} held out; commonest name {np.bincount(label).max() / len(label):.3f}")
 if ARM == "as_is":
     measure(cortex, "as it is")
+elif ARM == "deeper":
+    # more layers by the cortex's own rule: a neuron of layer 4 sees 25 of the picture's 64 pixels, of layer 5 33 (layer 3: 17)
+    from organic.visual_cortex import Layer
+    pool = [img(r) for r in train_rows[:8000]]
+    dev = np.random.default_rng(SEED + 3)
+    for kinds, pool_by in ((512, 1), (512, 2)):
+        layer = Layer(cortex.layers[-1].kinds, kinds, 3, pool_by, max(16, kinds // 16), SEED + 10 + len(cortex.layers))
+        for n in range(DEVELOP):
+            x = pool[dev.integers(len(pool))]
+            for below in cortex.layers:
+                x = below.respond(x)
+            layer.learn(x, dev, rate=0.05 * (1 - n / DEVELOP) + 0.005)
+        cortex.layers.append(layer)
+        log(f"layer {len(cortex.layers)} developed ({kinds} kinds; its map for a picture: {cortex.maps(pool[0])[-1].shape})")
+        measure(cortex, f"{len(cortex.layers)} layers")
+    pickle.dump(cortex, open("out/tmp/cortex_deeper.pkl", "wb"))
 elif ARM == "more":
     fresh = VisualCortex(seed=SEED, kinds=tuple(l.kinds for l in cortex.layers))
     pool = [img(r) for r in train_rows[:8000]]

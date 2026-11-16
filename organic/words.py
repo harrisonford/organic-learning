@@ -162,7 +162,17 @@ class Words:
             return None
         return self.ear.combinations(b"".join(units))
 
+    _looks = None  # the views of this moment besides the whole one: what the eye fixated, each filling the view
+
+    def _views(self, v, learn=False):
+        """Looking (docs/VISION.md): with the eye's fixations, what the visual neurons pass on is one pattern per view
+        (the whole view first). A word cell is driven by the view that drives it most, and learns from that view."""
+        views = ([] if v is None else [self._visual(v, learn)]) + [self._visual(x) for x in (self._looks or [])]
+        return np.stack(views) if views else None
+
     def _sight(self, v, cues, learn=False, snd=None):
+        if self._looks is not None:
+            return self._views(v, learn), None
         """(x, b): what the visual neurons pass on, and their bursts. The heard units reach the visual neurons from
         above through their feedback synapses (what each has come to predict will be seen). Eyes open, a neuron
         driven from below and from above at once bursts (coincidence of its two compartments, as in the word
@@ -184,7 +194,11 @@ class Words:
         o = np.zeros(n, np.float32)
         if snd is not None:
             o += self.Ws[:n] @ snd
-        if x is not None:
+        if x is not None and x.ndim == 2:  # several views: each cell takes the one that drives it most
+            d = self.Wv[:n] @ x.T
+            self._best = d.argmax(axis=1)
+            o += d.max(axis=1)
+        elif x is not None:
             o += self.Wv[:n] @ x
         if b is not None:
             o += self.Wb[:n] @ b
@@ -222,6 +236,11 @@ class Words:
         L = self.L[:n, :n]
         top = L.max(axis=1)
         return np.where(top > 0, (L @ ctx) / (top + 1e-8), ctx)
+
+    def look(self, looks):
+        """Set what the eye fixated in this moment (a list of view codes, or None): used by the next expect/recall/learn."""
+        self._looks = list(looks) if looks is not None else None
+        return self
 
     def recall(self, heard, v):
         """The reply the cells expect, as text, and how sure (the first unit: content drive x context expectation)."""
@@ -287,7 +306,16 @@ class Words:
             self.use_s += snd * snd
         self._own_error(self.err_c, fired, e)
         self.base[:n] += step / (1.0 + (self.moments - self.born[:n]) / self.maturation)  # the baseline: an input that is always on
-        if x is not None:
+        if x is not None and x.ndim == 2:
+            # each cell learns from the view it took the word to be about: the one that drove it most; a cell that fired
+            # with no view driving it yet (a new word) takes all the views together (it could be any of them)
+            chosen = x[self._best]
+            undriven = (fired > 0) & ((self.Wv[:n] @ x.T).max(axis=1) <= 0)
+            if undriven.any():
+                chosen[undriven] = x.mean(axis=0)
+            self.Wv[:n] += step[:, None] * chosen / (1.0 + self.use_v / self.maturation)[None, :]
+            self.use_v += (x * x).mean(axis=0)
+        elif x is not None:
             self.Wv[:n] += step[:, None] * (x / (1.0 + self.use_v / self.maturation))[None, :]
             self.use_v += x * x
         if b is not None:
