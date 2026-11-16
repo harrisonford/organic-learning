@@ -118,7 +118,14 @@ class Words:
                 self.G = np.concatenate([self.G, np.zeros((cap - self.G.shape[0], self.visual_dim), np.float32)])
                 self.use_g = np.concatenate([self.use_g, np.zeros(cap - len(self.use_g), np.float32)])
 
+    use_core = True  # a unit's identity is the word in it, as the ear tells it (EdgeEar.core); other ears: the unit itself
+
+    def _core(self, u):
+        core = getattr(self.ear, "core", None)
+        return core(u) if core is not None and self.use_core and u else u
+
     def cell(self, u):
+        u = self._core(u)
         if u not in self.index:
             self._grow(len(self.units) + 1, 0)
             self.index[u] = len(self.units)
@@ -127,6 +134,7 @@ class Words:
         return self.index[u]
 
     def _cue(self, u, grow):
+        u = self._core(u)
         if u not in self.cue_index:
             if not grow:
                 return None
@@ -200,7 +208,7 @@ class Words:
         rel[0] = 1.0  # the silence cell has only a context dendrite: silence needs no content
         act = rel * ctx
         for u in said:  # a cell that has just fired is refractory while the reply lasts
-            act[self.index[u]] = 0.0
+            act[self.index[self._core(u)]] = 0.0
         return act, drive, ctx
 
     lateral = True
@@ -230,7 +238,8 @@ class Words:
             if k == 0:
                 break
             said.append(self.units[k])
-        text = b"".join(said).decode("utf-8", "replace").strip()
+        pause = getattr(self.ear, "pause", b"") if self.use_core and hasattr(self.ear, "core") else b""  # between two words a speaker leaves a pause
+        text = pause.join(said).decode("utf-8", "replace").strip()
         return (text or None), conf
 
     # ------------------------------------------------------------------ learning
@@ -241,7 +250,7 @@ class Words:
         snd = self._heard_sound(heard)
         x, b = self._sight(v, cues, snd=snd)
         o = self._content(x, cues, b, snd) + self.base[: len(self.units)]
-        got = [float(np.clip(o[self.index[u]], 0, 1)) if u in self.index else 0.0 for u in reply_units]
+        got = [float(np.clip(o[self.index[self._core(u)]], 0, 1)) if self._core(u) in self.index else 0.0 for u in reply_units]
         return 1.0 - float(np.mean(got)) if got else 1.0
 
     def learn(self, heard, v, reply_units):

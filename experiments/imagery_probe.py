@@ -102,6 +102,7 @@ for seed in (SEEDS if __name__ == "__main__" else []):
     order = [order[i] for i in rng.permutation(len(order))]
     for arm in ARMS:
         words = Words(dim, ear, imagery="imagery" in arm, sound="sound" in arm)
+        words.use_core = os.environ.get("CORES", "1") == "1"
         wr, t0 = random.Random(seed), time.time()
         cur.orng = random.Random(seed + 2)
         for p in range(PASSES):

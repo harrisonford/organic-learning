@@ -140,6 +140,25 @@ class EdgeEar(CarvingEar):
 
     marks_attach = True
 
+    def _is_pause(self, b):
+        return self.edge[0, b] + self.edge[1, b] > self.inside[0, b] + self.inside[1, b]
+
+    def core(self, unit):
+        """The word in a unit: the unit without the pauses and marks around it (bytes the ear has heard more often at
+        the edge of known words than inside them). "dog", "dog " and "dog?" are the same word; a mark alone stays itself."""
+        a, b = 0, len(unit)
+        while a < b and self._is_pause(unit[a]):
+            a += 1
+        while b > a and self._is_pause(unit[b - 1]):
+            b -= 1
+        return unit[a:b] if b > a else unit
+
+    @property
+    def pause(self):
+        """The pause the ear has heard most often between words (what a speaker leaves between two words)."""
+        between = [(self.edge[0, b] + self.edge[1, b], b) for b in range(256) if self.edge[0, b] and self.edge[1, b] and self._is_pause(b)]
+        return bytes([max(between)[1]]) if between else b""
+
     def _pops(self, data, spans):
         taken = []
         for i, j in self._found(data, spans):
