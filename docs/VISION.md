@@ -74,3 +74,59 @@ nearest-picture matching (0.39 → 0.38 developed, 0.41 → 0.44 random filters)
   Not built yet.
 - The view sequences may matter for what they were not tested on here: recognising a thing from a
   part of it (a glance at a corner of the picture). Not measured.
+
+## 2026-11-15: where the eyes stand (proposal 3 of CONVERSATION.md)
+
+Kris asked to go ahead with "the word cells' error reaching back into the visual cortex". Before building it, what
+any readout could get from the visual code was measured with reference learners fitted in a batch (not brains).
+
+**Naming** (8,242 pictures seen, 300 held out, 23 names):
+
+| reading the whole-view code (7,168 neurons) | named right |
+|---|---|
+| nearest remembered picture | 0.33 |
+| 5–20 nearest, weighted | 0.36–0.37 |
+| linear readout (ridge) | 0.47–0.49 |
+| kernel readout (the best of several) | 0.55 |
+| the word cells, online, one pass | 0.46–0.51 |
+| layer 0 alone / layer 1 alone / layer 2 alone, linear | 0.42 / 0.40 / 0.37 |
+
+The word cells already read nearly all that a linear readout can, and the best nonlinear one adds 0.05. The deeper
+the layer of the developed cortex, the less it tells names apart: layer 2 (4,096 neurons) is the worst of the three.
+
+**The two-words photo questions** (the stage at which all six lives stopped; pass mark 0.5 on the stage's mean):
+
+| | always the commonest answer | the question's words only | + sight (best of added, kernel, conjunctions) | the word cells |
+|---|---|---|---|---|
+| is there a …? (COCO) | 0.62 | 0.67 | 0.68 | 0.63 |
+| how many …? (COCO) | 0.55 | 0.55 | 0.58 | 0.59 |
+| what colour …? (VQA) | 0.22 | 0.35 | 0.40 | 0.20 |
+| yes/no (VQA) | 0.52 | 0.52 | 0.53 | 0.47–0.55 |
+
+No readout gets more than a few points from the picture. The stage asks what a 64×64 whole view does not show
+(how many people, a small umbrella, the colour of the bus). The wall at two words is here: the mean of the best
+references over the stage is about 0.52, the pass mark 0.5.
+
+**Picture-book scenes instead** (`organic/scenes.py`, explored, not in the curriculum): a page with up to four of
+the first-words pictures, a quarter of the view each; "how many dogs are there?", "is there a dog?"; test pages
+made of pictures never seen.
+
+| | always the commonest answer | sight only | question × sight conjunctions |
+|---|---|---|---|
+| how many (one, two, three) | 0.37 | 0.46 | 0.50 |
+| is there (yes, no) | 0.53 | 0.66 | 0.67 |
+
+Better than photographs relative to the base rate (+0.13 and +0.15 against +0.03 and +0.06), still far from
+answerable: a thing at a quarter of the view is recognised worse than the 0.5 it gets when it fills the view.
+
+**Reading.** The limit is what the cortex computes from the pixels, not how it is read. A layer added on top and
+taught by the word cells' error can at most reach the kernel readout (0.55 for naming), because it sees the same
+code. Going further needs one of:
+
+1. the cortex's own filters taught by the words (a local rule into the convolutional layers; both attempts so
+   far were unsupervised and negative, a taught one has not been tried),
+2. looking: the brain already has an eye that fixates and zooms, but the word cells get only the whole view; a
+   thing looked at fills the view and is named at 0.5 instead of being a quarter of it,
+3. far more to see (the cortex developed on a few tens of thousands of pictures).
+
+Not built today. Which of these to try is the next decision; (2) uses what exists and is the one I would start with.
