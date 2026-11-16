@@ -322,3 +322,49 @@ All three: 0.38, 0.38, 0.39 on the parrot-proof items against 0.5 after 100,000 
 points 0.40; the lives of 2026-11-10 stopped at 0.41–0.43 counted that way). First words held at 0.43–0.45, echo
 ended at 0.56–0.76, the last word is said in 8–12% of replies. Six lives in two worlds and two mouths now stop at
 the same place: the wall at two words is not in the mouth or in the lessons' wording.
+
+## 7. After "let's do everything" (2026-11-15/16): results of proposals 1, 2 and 5
+
+The ear (proposal 1) is in [EAR_CARVING.md](EAR_CARVING.md), the eyes (3) in [VISION.md](VISION.md), leisure talk
+(4) in [LEISURE.md](LEISURE.md), pruning in [PRUNING.md](PRUNING.md), the method in [CRAFT.md](CRAFT.md).
+
+**The new ear in lives** (`edge_s0..2`: the edge ear, nothing else changed against `conv_s0..2`):
+
+| at 40,000 moments, all at first words | text lessons | CIFAR pictures | Commons pictures | same answer across wordings | new-word echo |
+|---|---|---|---|---|---|
+| first ear (conv) | 0.26, 0.28, 0.34 | 0.52, 0.54, 0.56 | 0.54, 0.56, 0.56 | 0.76, 0.68, 0.85 | 0.44, 0.38, 0.65 |
+| edge ear | 0.33, 0.37, 0.40 | 0.42, 0.47, 0.45 | 0.54, 0.52, 0.47 | 0.66, 0.66, 0.54 | 0.50, 0.51, 0.49 |
+
+Text is better in every seed, as offline; pictures and the same answer across wordings are worse, which the
+offline probe did not show. First words was passed at 80,000 and 55,000 moments and not at all in the third seed
+within 100,000 (the old ear: 60,000, 70,000, 60,000). On the same 200 held-out pictures the word cells alone name
+0.42 in an edge life against 0.47, with the same number of forms per name in both, so it is not "dog" against
+"dog!". Not understood yet; the suspicion is the thousands of whole-word cells that the echo stage leaves (with
+the first ear they were shared pieces), which is being tested. Two of the three lives were stopped at two words
+(the wall there is the eyes); the third runs to its verdict.
+
+**Word cells with their own firing level** (proposal 2; `Words(setpoint=True)`, `experiments/silence_probe.py`;
+echo games first, then first and two words; 3 seeds):
+
+| | new-word echo: the cells speak | pictures: speak / right / right when speaking | text: speak / right / right when speaking | two words: speak / right / right when speaking |
+|---|---|---|---|---|
+| always speaks | 0.76 | 1.00 / 0.35 / 0.35 | 0.96 / 0.31 / 0.33 | 1.00 / 0.47 / 0.47 |
+| own firing level | 0.47 | 0.63 / 0.31 / 0.48 | 0.73 / 0.29 / 0.40 | 0.67 / 0.38 / 0.56 |
+
+Each cell keeps two levels of its own content drive (when its unit was then heard; when it was the most driven
+cell but its unit was not heard) and stays silent below their midpoint. It works as designed: what the cells say
+is right more often, and they leave more new words to the copy route. But they still answer half of the words
+they have never heard, and what they no longer say was sometimes right (pictures 0.35 → 0.31 if silence counts as
+wrong). Whether the mouth's other routes make up for the silence can only be seen in a life.
+
+**Replaying the day in sleep** (proposal 5; `experiments/replay_probe.py`; every 2,000 moments the day's moments
+are lived again, all once or drawn by how surprising they were; 3 seeds):
+
+| | pictures | first-words text, parrot-proof | two words |
+|---|---|---|---|
+| awake only | 0.455 | 0.311 | 0.441 |
+| replay, every moment once | 0.471 | 0.318 | 0.444 |
+| replay, by surprise | 0.465 | 0.318 | 0.441 |
+
+Pictures +0.01 to +0.02 in every seed, nothing else, for twice the learning. Not adopted. It is "more training
+on the same experience", and the word cells are not short of repetitions; they are short of things to see.

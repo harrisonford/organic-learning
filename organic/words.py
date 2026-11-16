@@ -55,6 +55,7 @@ class Words:
     def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False, setpoint=False):
         self.ear, self.visual_dim = ear, visual_dim
         self.setpoint = setpoint
+        self.use_core = True  # a unit's identity is the word in it, as the ear tells it (EdgeEar.core); other ears: the unit itself
         # each cell's own two levels of content drive: when its unit was then heard, and when it was the most driven
         # cell but its unit was not heard. Between them lies the level below which it has nothing to say.
         self.m_on, self.m_off = np.zeros(64, np.float32), np.zeros(64, np.float32)
@@ -118,7 +119,7 @@ class Words:
                 self.G = np.concatenate([self.G, np.zeros((cap - self.G.shape[0], self.visual_dim), np.float32)])
                 self.use_g = np.concatenate([self.use_g, np.zeros(cap - len(self.use_g), np.float32)])
 
-    use_core = True  # a unit's identity is the word in it, as the ear tells it (EdgeEar.core); other ears: the unit itself
+    use_core = False  # brains made before 2026-11-16 key their cells by the whole unit ("dog?" and "dog" two cells)
 
     def _core(self, u):
         core = getattr(self.ear, "core", None)

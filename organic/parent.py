@@ -42,9 +42,9 @@ class Parent:
             self.failed += 1
             return None
 
-    def open(self, stage, rng, others=()):
-        """Something a parent says in passing (None if the parent is away)."""
-        return self._ask(OPEN.format(age=AGES.get(stage, "4 years old"), topic=rng.choice(TOPICS), others="; ".join(others) or "-"), "say it now", 1.0)
+    def open(self, stage, rng, others=(), topic=None):
+        """Something a parent says in passing (None if the parent is away); `topic`: what the two are looking at."""
+        return self._ask(OPEN.format(age=AGES.get(stage, "4 years old"), topic=topic or rng.choice(TOPICS), others="; ".join(others) or "-"), "say it now", 1.0)
 
     def answer(self, stage, parent_said, child_said):
         """What the parent says back to what the child said."""

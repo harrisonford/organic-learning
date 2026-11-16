@@ -256,6 +256,19 @@ def _commons(frames):
     return out, rows
 
 
+def _cococrops(frames):
+    """The bigger picture book: things cut out of the COCO training photographs (experiments/world/coco_crops.py).
+    A picture's ref carries its photograph, so that all the things of one photograph are lived or all held out."""
+    path = os.path.join(W.DATA, "cococrops", "pictures.jsonl")
+    out = []
+    for line in open(path) if os.path.exists(path) else []:
+        d = json.loads(line)
+        if d["word"] in PICTURE_BOOK or d["word"] in TODDLER_NOUNS:
+            ref = ("crops", d["row"], d["image"])
+            out.append((ref, frames[zlib.crc32(repr(ref).encode()) % len(frames)], [d["word"]], "W1" if d["word"] in PICTURE_BOOK else "P", "coco:name"))
+    return out
+
+
 def build_items(seed=0, world=1):
     rng = random.Random(seed)
     epath = os.path.join(W.WORLD_DIR, "echo_frames.json")
@@ -294,6 +307,8 @@ def build_items(seed=0, world=1):
             items.append((ref, q, [a], "W1" if a in PICTURE_BOOK else "P" if a in TODDLER_NOUNS else "G1", "cifar:name"))
     commons, rows = _commons(frames)
     items += commons
+    if world >= 3:
+        items += _cococrops(frames)
     commons_imgs = np.memmap(os.path.join(W.DATA, "commons", "pictures_64.u8"), np.uint8, "r", shape=(rows, W.SIZE, W.SIZE, 3)) if rows else None
     return items, (imgs, commons_imgs)
 
@@ -307,13 +322,23 @@ class Curriculum:
         self.echo_frames = json.load(open(epath))["frames"] if world >= 2 and os.path.exists(epath) else None
         # a naming item is split by its picture (its wording varies: experiments/world/naming_frames.py), as when all were "what is this?"
         key = lambda it: str(it[0]) + ("what is this?" if it[4] in ("cifar:name", "commons:name") else "" if it[0][:2] == ("dark", "echo") else it[1])  # noqa: E731
-        in_test = lambda it: zlib.crc32(key(it).encode()) % 1000 < test_fraction * 1000  # noqa: E731
+        in_test = lambda it: it[0][2] % 20 == 0 if it[4] == "coco:name" else zlib.crc32(key(it).encode()) % 1000 < test_fraction * 1000  # noqa: E731
         self.train, self.test = {}, {}
         for it in items:
             side = self.test if in_test(it) else self.train
             side.setdefault(it[3], {}).setdefault(it[4], []).append(it)
         self.rng = random.Random(seed + 1)
         self.review = review
+        self.world = world
+        cpath = os.path.join(W.DATA, "cococrops", "pictures_64.npy")
+        self.crops = np.load(cpath, mmap_mode="r") if world >= 3 and os.path.exists(cpath) else None
+        # world 3: the lived pictures of every named thing, to put the thing in view when it is talked about
+        self.by_name = {}
+        if world >= 3:
+            for src in ("cifar:name", "commons:name", "coco:name"):
+                for it in self.train.get("W1", {}).get(src, []):
+                    self.by_name.setdefault(it[2][0], []).append(it[0])
+        self.prng = random.Random(seed + 3)  # its own dice: putting things in view does not change the lessons drawn
         self._cache = {}
         # the ways adults name a thing unasked (experiments/world/observation_frames.py)
         opath = os.path.join(W.WORLD_DIR, "observation_frames.json")
@@ -331,6 +356,8 @@ class Curriculum:
         if ref not in self._cache:
             if isinstance(ref, tuple) and ref[0] == "read":
                 self._cache[ref] = W.render_word(W.thumb(os.path.join(W.DATA, "val2017", ref[1])), ref[2], ref[3])
+            elif isinstance(ref, tuple) and ref[0] == "crops":  # memory-mapped
+                return np.asarray(self.crops[ref[1]], np.float32) / 255
             elif isinstance(ref, tuple) and ref[0] == "commons":  # memory-mapped
                 return np.asarray(self.commons[ref[1]], np.float32) / 255
             elif isinstance(ref, tuple) and ref[0] == "cifar":
@@ -344,7 +371,7 @@ class Curriculum:
         """How a lived item is asked this time. A naming question is worded afresh at every moment (adults do not
         ask about the same picture in the same words each time; with one fixed wording per picture, a wording's
         own words became cues for "its" pictures' names: docs/AREAS.md). Test items keep their fixed wording."""
-        if item[4] in ("cifar:name", "commons:name"):
+        if item[4] in ("cifar:name", "commons:name", "coco:name"):
             return (rng or self.rng).choice(self.frames)
         if item[4] in ("echo", "echo:wide") and self.echo_frames:
             return (rng or self.rng).choice(self.echo_frames).replace("WORD", item[2][0])
@@ -365,14 +392,24 @@ class Curriculum:
         ref, q, answers, st, src = item
         q = self.wording(item)
         answer = self.rng.choice(answers) if src == "social" else answers[0]  # any of the replies a toddler gives to a routine
-        return {"image": self.image(ref), "question": q, "answer": answer, "answers": answers, "stage": st, "source": src}
+        return {"image": self.in_view(ref, q + " " + answer), "question": q, "answer": answer, "answers": answers, "stage": st, "source": src}
+
+    def in_view(self, ref, talk, often=0.8):
+        """What the eyes see at a lived moment. A living being sees while it hears: when what is said names one
+        thing the world has pictures of ("what does the cow say?", "say dog"), that thing is in view most of the
+        time (a picture of it from the lived side); otherwise the lesson's own picture, or nothing (world 3)."""
+        if self.by_name and isinstance(ref, tuple) and ref[0] == "dark":
+            named = [w for w in set(words(talk)) if w in self.by_name]
+            if len(named) == 1 and self.prng.random() < often:
+                return self.image(self.prng.choice(self.by_name[named[0]]))
+        return self.image(ref)
 
     def observation(self, stage):
         """An adult talks about a picture, unasked: no question, no answer expected (docs/REVIEW_2026-11-10.md 4.4).
         Things are named ("look, a dog!") from the start, since infants are spoken to long before they speak; from
         first grade also whole descriptions of photos. Only pictures of the lived (train) side, up to the current stage."""
         k = max(STAGES.index(stage), STAGES.index("W1"))
-        pools = [(s, src) for s in STAGES[: k + 1] for src in ("cifar:name", "commons:name", "captions") if src in self.train.get(s, {})]
+        pools = [(s, src) for s in STAGES[: k + 1] for src in ("cifar:name", "commons:name", "coco:name", "captions") if src in self.train.get(s, {})]
         s, src = pools[self.orng.randrange(len(pools))]
         ref, _, answers, st, _ = self.orng.choice(self.train[s][src])
         if src == "captions":

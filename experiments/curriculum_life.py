@@ -274,14 +274,18 @@ def chat(stage):
     owed_chat += CHAT
     while owed_chat >= 1:
         owed_chat -= 1
-        says = None
-        if chat_rng.random() < 0.5 or not social:  # half of what the parent says is new, half are the adults' written routines
+        says, seen, about = None, DARK, None
+        if world.by_name and chat_rng.random() < 0.5:  # half of the talk is about something the two are looking at
+            about = chat_rng.choice(sorted(world.by_name))
+            seen = world.image(chat_rng.choice(world.by_name[about]))
+            says = parent.open(stage, chat_rng, topic=f"the {about} you are both looking at (use the word {about})")
+        elif chat_rng.random() < 0.5 or not social:  # of the rest, half is new and half are the adults' written routines
             says = parent.open(stage, chat_rng, chat_rng.sample(social, 3) if len(social) >= 3 else ())
         says = says or (chat_rng.choice(social) if social else None)
         if not says:
             continue
-        said, back = brain.chat(DARK, says, lambda a, b: parent.answer(stage, a, b), babble=stage == "BB")
-        chat_log.write(json.dumps({"age": brain.age, "stage": stage, "parent": says, "child": said, "back": back}) + "\n")
+        said, back = brain.chat(seen, says, lambda a, b: parent.answer(stage, a, b), babble=stage == "BB")
+        chat_log.write(json.dumps({"age": brain.age, "stage": stage, "sees": about, "parent": says, "child": said, "back": back}) + "\n")
         chat_log.flush()
 
 
