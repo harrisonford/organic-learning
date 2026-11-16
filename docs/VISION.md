@@ -188,3 +188,23 @@ built yet: at each fixation the word cells get the cortex's code of what the eye
 its strongest drive over the looks of a moment; and what a cell learns from is the look that drove it most when
 its word was heard (a word said over a page of several things is about one of them: cross-situational learning,
 Yu & Smith 2007).
+
+### Only the first layer taught (2026-11-16, afternoon)
+
+| the cortex | COCO things named | layer 1 / 2 / 3 alone | CIFAR + Commons |
+|---|---|---|---|
+| as every life has had it | 0.278 | 0.237 / 0.233 / 0.218 | 0.487 |
+| first layer taught by the words (30,000 named pictures) | 0.300 | 0.285 / 0.272 / 0.219 | 0.506 |
+| the same, then layers 2 and 3 developed afresh on what it sends | 0.309 | 0.285 / 0.241 / 0.230 | 0.493 |
+| layers 1 and 2 taught (a quarter of the rate) | 0.230 | 0.299 / 0.115 / 0.115 | 0.366 |
+
+Teaching the first layer is a clean, small gain: that layer's own code names more (+0.05), the untaught layer
+above it does too (+0.04, it simply gets better input), and it carries over to pictures of another kind that it
+was never taught on (+0.02 on CIFAR and Commons). Letting the layers above start afresh adds nothing. Teaching the
+second layer ruins it, at either rate tried. Why the first layer can be taught and the second cannot is not
+understood; the second layer's neurons are sparse (the 12 strongest of 128 per position) and their windows are
+576 numbers wide, so a neuron is seldom the one that hears back, and what it hears is about a sixteenth of the view.
+
+One seed, one rate, 30,000 pictures. Still running: a slower rate with redevelopment, two more layers on top
+(neurons that see 25 and 33 of the 64 pixels), and the looking probe's second arm (its first: the whole view names
+a thing on a page 0.21 of the time, 0.09 with another thing beside it, against 0.40 for single pictures).
