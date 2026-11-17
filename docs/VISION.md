@@ -208,3 +208,33 @@ understood; the second layer's neurons are sparse (the 12 strongest of 128 per p
 One seed, one rate, 30,000 pictures. Still running: a slower rate with redevelopment, two more layers on top
 (neurons that see 25 and 33 of the 64 pixels), and the looking probe's second arm (its first: the whole view names
 a thing on a page 0.21 of the time, 0.09 with another thing beside it, against 0.40 for single pictures).
+
+## Results of 2026-11-17 (the probes killed on 11-16, run again)
+
+**Looking** (`experiments/look_probe.py`, seed 0; seeds 1 and 2 running). Pictures never seen:
+
+| the word cells get | single pictures named | a thing on a page | a thing on a page, another beside it |
+|---|---|---|---|
+| the whole view only (every life so far) | 0.403 | 0.213 | 0.093 |
+| the whole view and the four fixations | 0.337 | 0.360 | 0.280 |
+
+With fixations a thing among others is named three times as often, and a thing on a page nearly as often as a
+picture of it alone. Single pictures lose 0.07: a quarter of a single picture is a worse view of it than the whole,
+and the cell takes whichever view drives it most. The eye here fixates the four quarters by rule; in a brain the
+gaze has to find where to look.
+
+**The first layer taught more slowly** (`cortex_teach_probe.py`, layers [0], rate 0.005, 30,000 named pictures, seed 0):
+
+| cortex | COCO things named | layer 1 / 2 / 3 alone | CIFAR + Commons |
+|---|---|---|---|
+| as it is | 0.278 | 0.237 / 0.233 / 0.218 | 0.487 |
+| first layer taught, rate 0.02 (11-16) | 0.300 | 0.285 / 0.272 / 0.219 | 0.506 |
+| first layer taught, rate 0.005 | 0.321 | 0.311 / 0.261 / 0.219 | 0.498 |
+| the same, layers above developed afresh | 0.327 | 0.311 / 0.247 / 0.234 | 0.512 |
+
+Slower is better: the first layer alone goes from 0.237 to 0.311 and the whole code from 0.278 to 0.321. On pictures
+of another kind (never used in the teaching) the gain is small, +0.01 to +0.025. One seed.
+
+**Two more layers**: killed twice by memory in the measurement (a 15,360-dimension code's covariance takes 4 GB).
+The readout is now solved over the pictures when the code is wider than the pictures are many (the same answer);
+running again.

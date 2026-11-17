@@ -70,14 +70,25 @@ def forward(c, image):
     return v / (np.linalg.norm(v) + 1e-8), keep
 
 
+def ridge(A, Y, B, lam):
+    """A linear readout fitted with a ridge and applied to B. With more dimensions than pictures it is solved over the
+    pictures (the same answer; a 15,360-dimension code otherwise needs 4 GB for its own covariance)."""
+    if A.shape[1] > A.shape[0]:
+        K = A @ A.T
+        K[np.diag_indices_from(K)] += lam
+        return (B @ A.T) @ np.linalg.solve(K, Y)
+    G = A.T @ A
+    G[np.diag_indices_from(G)] += lam
+    return B @ np.linalg.solve(G, A.T @ Y)
+
+
 def measure(c, tag):
     t0 = time.time()
     fit = train_rows[-FIT:]  # pictures the taught arms did not learn from
     A = np.stack([code(c, img(r)) for r in fit]); B = np.stack([code(c, img(r)) for r in test_rows])
     mean = A.mean(0); A, B = A - mean, B - mean
     Y = np.eye(len(names), dtype=np.float32)[label[fit]]
-    G = A.T @ A
-    best = max(float(((B @ np.linalg.solve(G + lam * np.eye(G.shape[0], dtype=np.float32), A.T @ Y)).argmax(1) == label[test_rows]).mean()) for lam in (0.03, 0.1, 0.3))
+    best = max(float((ridge(A, Y, B, lam).argmax(1) == label[test_rows]).mean()) for lam in (0.03, 0.1, 0.3))
     cur = Curriculum(seed=0)
     tr = [it for src in ("cifar:name", "commons:name") for it in cur.train["W1"][src]][::3][:3000]
     te = [it for src in ("cifar:name", "commons:name") for it in cur.test["W1"][src]]
@@ -87,9 +98,8 @@ def measure(c, tag):
     m2 = A2.mean(0); A2, B2 = A2 - m2, B2 - m2
     Y2 = np.eye(len(old), dtype=np.float32)[[old.index(it[2][0]) for it in tr]]
     y2 = np.array([old.index(it[2][0]) if it[2][0] in old else -1 for it in te])
-    G2 = A2.T @ A2
-    best2 = max(float(((B2 @ np.linalg.solve(G2 + lam * np.eye(G2.shape[0], dtype=np.float32), A2.T @ Y2)).argmax(1) == y2).mean()) for lam in (0.03, 0.1, 0.3))
-    per = [float(((B[:, a:b] @ np.linalg.solve(A[:, a:b].T @ A[:, a:b] + 0.1 * np.eye(b - a, dtype=np.float32), A[:, a:b].T @ Y)).argmax(1) == label[test_rows]).mean())
+    best2 = max(float((ridge(A2, Y2, B2, lam).argmax(1) == y2).mean()) for lam in (0.03, 0.1, 0.3))
+    per = [float((ridge(A[:, a:b], Y, B[:, a:b], 0.1).argmax(1) == label[test_rows]).mean())
            for a, b in zip(np.cumsum([0] + [l.kinds * 16 for l in c.layers])[:-1], np.cumsum([l.kinds * 16 for l in c.layers]))]
     log(f"{tag}: held-out COCO pictures named {best:.3f} ({len(names)} names, {FIT} to fit) | layers alone {' / '.join(f'{p:.3f}' for p in per)} | CIFAR+Commons test pictures {best2:.3f} ({len(old)} names, {len(tr)} to fit) | {time.time() - t0:.0f}s")
     return best, best2
