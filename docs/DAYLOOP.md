@@ -161,3 +161,9 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   world 4 config; s1: world 4 config); it logs to out/tmp/relaunch_novel.log and ends by itself.
   Next: check out/tmp/relaunch_novel.log; then watch the echo score (B) of each life at the following checkpoints.
   If the echo does not come back within about 15,000 moments: look at the routes again (is copy tried? rewarded?).
+- 21:00 All three eyes2 lives restarted with NOVEL_DRIVE=1 (s0 20:30 at 30,000 in first words; s1 20:35 at 30,000 in
+  world 4 two words; s2 20:47 at 35,000 in first words). s1's first checkpoint in world 4 (5,000 moments there):
+  two words 0.44 (curriculum 0.39, a thing on a page named 0.30, "is there" 0.64), first words 0.46 with looking on.
+  Echo scores before the novelty drive: s0 0.41, s1 0.52, s2 0.53 (to hold: about 0.68, 0.58, 0.66).
+  Next: echo (B) at the next checkpoints; promotions (s0/s2 → move to world 4 with the config in the 19:20 entry plus
+  NOVEL_DRIVE=1); s1 two words ≥ 0.5 with first words and echo held = a new level.
