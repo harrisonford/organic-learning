@@ -47,12 +47,12 @@ def page(tiles, shade, size=30, cell=32):
 class Scenes:
     """Scenes made from named pictures: by_name = {name: [picture refs]}, image(ref) -> 64x64x3 array."""
 
-    def __init__(self, by_name, image, seed=0, size=30):
+    def __init__(self, by_name, image, seed=0, size=30, cell=32):
         self.by_name = {w: refs for w, refs in by_name.items() if len(refs) >= 3}
         self.names = sorted(self.by_name)
         self.image = image
         self.seed = seed
-        self.size = size  # the side of a picture on the page
+        self.size, self.cell = size, cell  # the side of a picture on the page, and of a quarter of the page
 
     def named(self, n):
         """Scene number n of the kind "name": a thing on a page, one time in three with another beside it, to be
@@ -87,4 +87,4 @@ class Scenes:
 
     def picture(self, kind, n):
         tiles, shade = (self.named(n) if kind == "name" else self.make(kind, n))[:2]
-        return page([self.image(t) if t is not None else None for t in tiles], shade, self.size)
+        return page([self.image(t) if t is not None else None for t in tiles], shade, self.size, getattr(self, "cell", 32))

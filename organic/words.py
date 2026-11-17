@@ -52,6 +52,7 @@ class Words:
     setpoint = False  # a cell stays silent below its own firing level (docs/CONVERSATION.md, proposal 2)
     sound = False  # the content dendrite also hears the sound of what was said, not only which units it was cut into
 
+    match_bursts = False  # the match neurons count all-or-none bursts instead of adding up graded drive (2026-11-17)
     match = False  # the heard word's own cell, when it is also driven by what is seen, tells the others (docs/VISION.md)
     match_cells = 16
 
@@ -124,6 +125,7 @@ class Words:
         self.m_mean, self.m_var, self.m_seen = np.zeros(2, np.float32), np.ones(2, np.float32), 0
         self.Wm = np.zeros((len(self.base), self.match_cells), np.float32)
         self.use_m = np.zeros(self.match_cells, np.float32)
+        self.v_on = np.zeros(len(self.base), np.float32)  # each cell's usual drive from what is seen when its word is heard
         self.match = True
 
     # ------------------------------------------------------------------ cells
@@ -139,6 +141,8 @@ class Words:
                 self.Ws = pad(self.Ws)
             if self.match:
                 self.Wm = pad(self.Wm)
+                if getattr(self, "v_on", None) is not None:
+                    self.v_on = pad(self.v_on)
             if self.branches > 1:
                 grown = cap - self.Wx.shape[1]
                 self.Wx = np.concatenate([self.Wx, np.zeros((self.branches - 1, grown, self.visual_dim), np.float32)], axis=1)
@@ -261,7 +265,13 @@ class Words:
         if h is None:
             pooled = np.zeros(2, np.float32)
         else:
-            per_view = h @ np.maximum(d[:, 1:] if d.shape[1] > 1 else d, 0)
+            looks = np.maximum(d[:, 1:] if d.shape[1] > 1 else d, 0)
+            if self.match_bursts:
+                # all or none: in a view a heard word's cell bursts when the view drives it at least half as much as
+                # what is seen usually drives it when its word is heard (its own level, v_on). Then the sum over the
+                # views is a count of the views that hold the thing, whatever its drive in each.
+                looks = (looks >= 0.5 * np.maximum(self.v_on[: d.shape[0], None], 1e-6)).astype(np.float32) * (self.v_on[: d.shape[0], None] > 0)
+            per_view = h @ looks
             pooled = np.array([per_view.max(), per_view.sum()], np.float32)
         if learn:
             self.m_seen += 1
@@ -288,6 +298,7 @@ class Words:
             d = self.Wv[:n] @ x.T
             self._best = d.argmax(axis=1)
             o += d.max(axis=1)
+            self._seen_drive = d.max(axis=1)
             if self.match and heard is not None:
                 self._m = self._matched(d, heard, learn)
                 o += self.Wm[:n] @ self._m
@@ -407,6 +418,8 @@ class Words:
             k = int(np.argmax(d))
             if d[k] >= 0:
                 self.m_off[k] += self.memory * (d[k] - self.m_off[k])
+        if self.match and targets and x is not None and x.ndim == 2 and getattr(self, "v_on", None) is not None:
+            self.v_on[targets] += self.memory * (np.maximum(self._seen_drive[targets], 0) - self.v_on[targets])
         e = fired - (o + self.base[:n])
         e[0] = 0.0  # silence has no content dendrite
         step = (self.err_c[:n] if self.plastic_by_error else 1.0) * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + (m is not None) + len(cues))  # the inputs share the correction
@@ -505,7 +518,7 @@ class Words:
         value[0] = np.inf
         drop = set(np.argsort(value)[: max(1, int(fraction * n))].tolist())
         keep = [i for i in range(n) if i not in drop]
-        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("m_on", "m_off") if getattr(self, "m_on", None) is not None else ()) + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()) + (("Wm",) if self.match else ()):
+        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("m_on", "m_off") if getattr(self, "m_on", None) is not None else ()) + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()) + (("Wm",) if self.match else ()) + (("v_on",) if self.match and getattr(self, "v_on", None) is not None else ()):
             a = getattr(self, name)
             a[: len(keep)] = a[keep]
             a[len(keep) : n] = 1.0 if name.startswith("err") else 0

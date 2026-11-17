@@ -227,3 +227,24 @@ word cells after 6,000 naming moments, seed 0 (seeds 1 and 2 running).
 - **A name heard inside a comment is not given back as an answer**, with or without the store: what was stored is
   the whole comment, and the question asks for one word of it. Not looked into yet.
 - Two numbers are set by hand in the store (how many moments, how steep the comparison). Not in a life yet.
+
+## The ear's echo decorrelated before the context dendrites: negative (2026-11-17, one seed, two strengths)
+
+If decorrelation lets the content dendrite use the cortex's summary, does it help the context dendrite with the
+ear's echo? Offline mixed life (`experiments/imagery_probe.py`, ECHO_RELAY), old cortex, full-size corrections, seed 0:
+
+| | first-words text beyond the parrot | two words |
+|---|---|---|
+| the echo as it is | 0.319 | 0.433 |
+| the echo decorrelated (0.01 / 0.001) | 0.242 / 0.241 | 0.411 / 0.392 |
+
+It costs all that full-size corrections gave. The two inputs are not alike: pictures of different things must be told
+apart, so their shared part is in the way; utterances that share words ("what does the cow say?", "what does the dog
+say?") should be answered alike, and the shared part of their echoes is what carries one to the other. Decorrelation
+is for the eye's summary, not for the echo. Stopped after one seed (the loss is as large as the gain that held in
+three).
+
+**Fast mapping, three seeds** (one lesson, full-size corrections; the same picture at once / after 20 moments):
+word cells alone 0.07 / 0.05, 0.13 / 0.09, 0.16 / 0.12; with the episodic store 0.92 / 0.89, 0.93 / 0.88, 0.88 / 0.83.
+Another picture of the kind: 0.00 in every arm and seed. First-words naming is the same with and without the store.
+The store can be given to a brain at birth (`SpeakingBrain(episodes=True)`, life env EPISODES=1) or to a resumed one.

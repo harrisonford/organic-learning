@@ -108,9 +108,10 @@ def a_scene(scenes, kind, n):
 
 
 def run(arm, seed):
-    where, match = arm.split("+")[0], arm.endswith("+match")
+    where, match = arm.split("+")[0], "+match" in arm
     rng, wr = random.Random(seed), random.Random(seed + 1)
     words = Words(DIM, ear, match=match)
+    words.match_bursts = "bursts" in arm
     words.plastic_by_error = not FULL
     singles = [(r, w) for w in names for r in lived[w]]
     lived_scenes, held_scenes = Scenes(lived, cur.image, seed), Scenes(held, cur.image, 99)
@@ -159,6 +160,12 @@ def run(arm, seed):
 
 for seed in SEEDS:
     CODES.clear()  # each seed sees its own pictures
+    kept = f"out/tmp/look2_{os.path.basename(os.environ.get('CORTEX', 'data/visual_cortex.pkl'))}_{CELL}_{TILE}_{APART}_{N}_s{seed}.pkl"
+    if os.path.exists(kept):  # the codes of this seed's pictures, kept so that further arms take seconds
+        CODES.update(pickle.load(open(kept, "rb")))
+    had = len(CODES)
     for arm in ARMS:
         run(arm, seed)
+    if len(CODES) > had:
+        pickle.dump(CODES, open(kept, "wb"))
 print("how many places the gaze fixated:", {k: v for k, v in sorted(LOOKED.items())}, flush=True)

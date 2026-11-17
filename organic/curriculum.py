@@ -352,7 +352,9 @@ class Curriculum:
             for src in ("cifar:name", "commons:name", "coco:name"):
                 for it in self.test.get("W1", {}).get(src, []):
                     held.setdefault(it[2][0], []).append(it[0])
-            self.scenes = {"lived": Scenes(self.by_name, self.image, seed, size=26), "held": Scenes(held, self.image, seed + 1, size=26)}
+            # a page is twice as large as the view (128 pixels; a thing on it 52): the eye sees it whole only coarsely,
+            # and in full detail what it fixates, which then looks as the thing looks alone (docs/VISION.md, 2026-11-17)
+            self.scenes = {"lived": Scenes(self.by_name, self.image, seed, size=52, cell=64), "held": Scenes(held, self.image, seed + 1, size=52, cell=64)}
             for side, store, many in (("lived", self.train, 20000), ("held", self.test, 400)):
                 sc = self.scenes[side]
                 store.setdefault("W2", {})["page:name"] = [(("page", side, "name", n), self.frames[n % len(self.frames)], sc.named(n)[2], "W2", "page:name") for n in range(many)]

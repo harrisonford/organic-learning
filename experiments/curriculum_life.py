@@ -46,6 +46,9 @@ if os.environ.get("RESUME"):
         brain.looking = True
     if os.environ.get("MATCH") == "1" and getattr(brain, "words", None) is not None and not brain.words.match:
         brain.words.enable_match()
+    if os.environ.get("EPISODES") == "1" and getattr(brain, "words", None) is not None and brain.words.episodes is None:
+        from organic.episodes import Episodes
+        brain.words.episodes = Episodes(brain.words.visual_dim, brain.ear.width)
     if float(os.environ.get("TEACH", 0)) and getattr(brain, "words", None) is not None:
         brain.teach = float(os.environ["TEACH"])
         brain.words.feedback_dims = brain.cortex.layers[0].kinds * brain.cortex_grid ** 2
@@ -65,7 +68,8 @@ else:
                               words=os.environ.get("WORDS") == "1", max_units=int(os.environ.get("MAX_UNITS", 0)) or None,
                               max_cues=int(os.environ.get("MAX_CUES", 0)) or None, one_stream=os.environ.get("ONE_STREAM") == "1",
                               novel_copy=os.environ.get("NOVEL_COPY") == "1", imagery=os.environ.get("IMAGERY") == "1", sound=os.environ.get("SOUND") == "1", ear=os.environ.get("EAR_KIND"),
-                              looking=os.environ.get("LOOKING") == "1", match=os.environ.get("MATCH") == "1", teach=float(os.environ.get("TEACH", 0)), **cfg)
+                              looking=os.environ.get("LOOKING") == "1", match=os.environ.get("MATCH") == "1", teach=float(os.environ.get("TEACH", 0)),
+                              episodes=os.environ.get("EPISODES") == "1", **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}

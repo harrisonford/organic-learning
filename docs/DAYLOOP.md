@@ -115,3 +115,19 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   view; world 4 pages at 128 px) and move eyes2 to world 4 when they pass first words. If the echo relay helps →
   into Words/SpeakingBrain and the next lives. Episodic store into a life: resume switch EPISODES=1 (not written yet);
   idea for kid-a: a per-conversation store so that it remembers what it was just told (frozen slow weights).
+- 18:20 Results: (1) echo relay: negative (RESEARCH_MEMORY.md). (2) Fast mapping with the store holds on 3 seeds;
+  a brain can be born with it or given it (EPISODES=1). (3) **Wide pages** (CELL=64 TILE=52: the page is twice the
+  view, seen whole coarsely, fixations in full detail) + gaze only to what stands apart (APART=0.5), new eyes, seed 0:
+  singles 0.54 → 0.52, a thing on a page 0.05 → 0.47, either of two 0.62, "is there" 0.61 → 0.75, counting 0.42 (base
+  0.35). Wired into the brain (`SpeakingBrain._coarse/_glimpse`, `apart`) and world 4 (pages 128 px); a smoke life with
+  WORLD=4 LOOKING=1 MATCH=1 EPISODES=1 FULL=1 and the new cortex ran clean (about 0.6 s a moment under load).
+  (4) mouth_diag on world3_s0: names said = recalled 90–95% (the mouth's blends cost 0.02–0.04); text: the word
+  cells' own recall runs on without stopping → the text-side fault to chase.
+  Running: `organic-look2x0`, `organic-look2x1` (wide pages, arms whole, gaze+match, gaze+match+bursts; codes kept in
+  out/tmp/look2_*.pkl so more arms take seconds) → out/look2_probe_wide_x{0,1}.log.
+  Next: (a) pick graded or burst match; third seed. (b) **When eyes2 pass first words: stop each at that checkpoint
+  and resume it with WORLD=4 LOOKING=1 MATCH=1 EPISODES=1** (same tag; the pipeline resumes from out/eyes2_s*.pkl;
+  EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1", WORLD=4, CORTEX and CORTEX_LAYERS as now).
+  Check first with fastmap_life.py and a look at checkpoints that looking does not cost first words in the life.
+  (c) Text: why the word cells' recall does not stop (silence cell; context dendrite) — read Words.recall on W2
+  curriculum items offline. (d) Counting.
