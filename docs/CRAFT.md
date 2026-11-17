@@ -124,3 +124,47 @@ it said the name of the thing in view in 12% of exchanges before 20,000 moments 
   from 2026-11-12 to 11-17 across nine lives because nothing in a checkpoint depended on the world.
 - I reported three probes as "still running" on 2026-11-16 at 16:10. The kernel had killed all three between 15:37
   and 15:58. A unit's state is checked, not assumed, before it is reported.
+
+### 2026-11-17, afternoon and evening: the day loop (docs/DAYLOOP.md, docs/SNAPSHOT_2026-11-17.md)
+
+Kris: implement the three vision steps, take a snapshot, then a day of research without input; memory may be a
+missing piece. What was tried, in the ledger's form:
+
+| what | organic basis | data, training or size? | result | where |
+|---|---|---|---|---|
+| a reflex gaze and match neurons (looking; "is there…?") | superior colliculus; match enhancement (Miller & Desimone 1994) | architecture, no size | mechanism works with ideal eyes (1.00 / 0.89); with the old eyes it did not carry | VISION.md |
+| the cortex's first layer taught by the words, slower | feedback-gated plasticity | training | +0.04; overtaken | VISION.md |
+| a second cortex: decorrelated windows, graded response, 256 kinds, averaged summary | retina's decorrelation; lateral inhibition; V1 overcompleteness | size (kinds) and training | linear reference 0.28 → 0.38 (COCO), 0.49 → 0.55; the old cortex's development was worse than random filters | VISION.md, RESEARCH_VISION.md |
+| a relay that decorrelates the summary before the word cells | lateral anti-Hebbian inhibition (Földiák 1990) | training (the learner's input) | word cells 0.40 → 0.51; **the word cells, not the eyes, were the limit** | VISION.md |
+| corrections at full size (plasticity not scaled by the cell's own error) | Rescorla-Wagner has one rate; the error already stops a cell that is right | training | pictures +0.03 (with the relay), text beyond the parrot +0.08 | VISION.md |
+| the relay as a circuit with local correlation synapses | the same, in its local form | – | 0.49 of the whitening's 0.53; not in lives yet | RESEARCH_MEMORY.md |
+| a second cortex layer with local fan-in | dendrites reach a neighbourhood | size | +0.01, three times the time; not adopted | VISION.md |
+| graded ("soft") competition; a centre-surround retina for the whitening; a fourth old layer | – | – | negative, negative, nothing | VISION.md |
+| dendritic branches in the word cells against forgetting | branch-specific plasticity (Cichon & Gan 2015) | size | negative: all branches fill with ordinary variation | RESEARCH_MEMORY.md |
+| the ear's echo decorrelated before the context dendrites | (by analogy with the relay) | training | negative: −0.08; shared words are what carries one question to another | RESEARCH_MEMORY.md |
+| an episodic store beside the word cells | hippocampus; complementary learning systems | architecture, small | fast mapping 0.1 → 0.9 on the same picture (three seeds); nothing for another of the kind | RESEARCH_MEMORY.md |
+| pages twice the view, coarse whole and detailed fixations; a gaze only to what stands apart | the fovea; object-based attention | training (the world) and the eye | a fixated thing named 0.47–0.53 (0.05 whole view); singles no longer pay | VISION.md |
+| counting out of the two-words stage | one-knowers at 24–47 months (Sarnecka 2014) | training program | done in world 4 | RESEARCH_TWO_WORDS.md |
+| an intake limit for leisure talk | toddlers keep the end of a long utterance (Echols & Newport 1992) | training | run-ons gone; a third of a small cost (0.018) back | LEISURE.md |
+| lives born with the new cortex, relay and full-size corrections (eyes2) | – | – | at 5,000 moments into first words 0.39–0.40 against 0.35; running | DAYLOOP.md |
+
+**What the day taught about the method.**
+
+- **Find out which organ is the limit before improving any.** For three weeks "the eyes are the wall" was read from
+  the word cells' naming. A linear readout fitted on the very moments the word cells had lived was the missing
+  measurement: it showed in an afternoon that the cells used two thirds of what the code held, and that a better
+  code did not reach them. The reference must sit at the same place in the chain as the learner it judges, with
+  the same data.
+- **A literature survey before building** paid three times in one day (the cortex's known failure; what two-year-olds
+  count; what they take in). Each survey named the experiment that would decide, and the experiments took minutes.
+- **Offline probes with kept codes** (minutes per arm) made a dozen negative results cheap. Recorded with their
+  numbers, they are worth as much as the positives: branches, soft competition, the echo relay, bursts, the second
+  layer.
+- **"More of the same" was the wrong answer every time it was tried**: more pictures (+0.02), more layers (nothing),
+  more passes (+0.03), larger steps (nothing, then divergence). What moved things was the shape of what a learner
+  is given (decorrelated), not its amount.
+- **Check the developmental fact before fighting a score.** Counting at the two-words stage was a wall a child does
+  not climb either.
+- **Memory and CPU are the machine's limits, and I hit both again**: probes killed by my own caps (four times),
+  lives slowed by a third by probes beside them. Estimate a probe's memory from its largest array before starting
+  it; keep the machine to the lives when they are the long pole.
