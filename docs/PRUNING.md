@@ -88,3 +88,40 @@ With a fifth of its synapses a cell relearns what the pruning cost and ends wher
 better on two words. So sleep can take four synapses in five from the word cells and nothing is lost. For the size
 of a level this matters less than it sounds: the word cells are megabytes, the orchestrator's clusters are the
 gigabyte. The same measurement on the clusters is the next step.
+
+## Three seeds (2026-11-17)
+
+Means over seeds 0, 1 and 2 (`out/prune_probe_s*.log`); pictures named per seed in brackets.
+
+| synapses kept in each dendrite | pictures named | same answer ×3 | first-words text | beyond the parrot | two words |
+|---|---|---|---|---|---|
+| all | 0.455 (0.473 0.448 0.443) | 0.746 | 0.363 | 0.286 | 0.432 |
+| half, by weight × use | 0.451 (0.473 0.442 0.437) | 0.748 | 0.364 | 0.286 | 0.433 |
+| a fifth | 0.407 (0.408 0.404 0.408) | 0.716 | 0.362 | 0.284 | 0.439 |
+| a tenth | 0.360 | 0.672 | 0.364 | 0.288 | 0.440 |
+| a twentieth | 0.315 | 0.557 | 0.368 | 0.292 | 0.438 |
+| a fiftieth | 0.242 | 0.391 | 0.352 | 0.267 | 0.429 |
+| a fifth, by weight alone | 0.423 (0.422 0.422 0.426) | 0.724 | 0.360 | 0.282 | 0.438 |
+| a fifth, chosen at random | 0.294 | 0.380 | 0.134 | 0.124 | 0.357 |
+
+| living on after the pruning | pictures named | same answer ×3 | first-words text | two words |
+|---|---|---|---|---|
+| all synapses, a second pass | 0.476 (0.467 0.490 0.472) | 0.808 | 0.368 | 0.432 |
+| pruned to a fifth, then a second pass | 0.464 (0.471 0.464 0.457) | 0.794 | 0.367 | 0.441 |
+| pruned to a twentieth, then a second pass | 0.411 | 0.750 | 0.372 | 0.441 |
+
+What holds in three seeds:
+
+- Half of the word cells' synapses do nothing: removing them changes no number.
+- What the cells know from words heard (text, two words) survives with a twentieth of the synapses. What they know
+  from pictures is a dense code: it loses 0.05 at a fifth and 0.14 at a twentieth.
+- Which synapses go matters: a fifth chosen at random destroys the text (0.36 → 0.13).
+- By weight alone is as good as by weight × use, a little better on pictures (0.423 against 0.407 at a fifth, all
+  three seeds). The simpler rule is the one to keep.
+- Living on after pruning to a fifth gives back most of the loss, not all of it: 0.464 against 0.476 for the cells
+  that kept everything (−0.012 in the mean; seed 0 said +0.004, seeds 1 and 2 say −0.026 and −0.015). Seed 0's
+  "nothing is lost" was too strong. The small gain on two words (+0.009) is inside the noise.
+
+So pruning does not raise a level, and it was not expected to: it makes the same knowledge smaller. Four synapses in
+five can go from the word cells for about a hundredth of picture naming. The word cells are megabytes; the level's
+size is the orchestrator's clusters, and that measurement is still to do.

@@ -291,6 +291,7 @@ def chat(stage):
 
 verdict = None
 rewards = []
+lived = {}  # what the life was given since the last checkpoint, by stage and source: the record shows the world it is in
 while brain.age < TOTAL:
     stage = state["stage"]
     if OVERHEARD:
@@ -311,6 +312,8 @@ while brain.age < TOTAL:
             continue
     else:
         m = world.moment(stage)
+        lived[m["stage"] + " " + m["source"]] = lived.get(m["stage"] + " " + m["source"], 0) + 1
+        lived["with a picture"] = lived.get("with a picture", 0) + int(m["image"].max() > 0)
         if stage == "B" and hasattr(brain, "babble"):  # infancy: babbling between the words heard
             brain.babble(int(os.environ.get("BABBLE_PER", 3)))
         if judge is not None:
@@ -357,9 +360,14 @@ while brain.age < TOTAL:
                   f"stops at {stage} ({NAMES[stage]}): passes it but cannot hold earlier stages"
     if (brain.age // EVERY) % int(os.environ.get("REFRESH_EVERY", 10)) == 0:  # new items written by the adults join in
         rng_state = world.rng.getstate()
-        world = Curriculum(seed=0)
+        # the same world it was born into: until 2026-11-17 this line rebuilt world 1, so every life of world 2 or 3
+        # (conv, edge, world3) lived in the old world from 50,000 moments on (docs/CRAFT.md)
+        dice = world.prng.getstate()
+        world = Curriculum(seed=0, world=int(os.environ.get("WORLD", 1)))
         world.rng.setstate(rng_state)
+        world.prng.setstate(dice)
     rec["verdict"] = verdict
+    rec["lived"], lived = lived, {}
     log.write(json.dumps(rec) + "\n")
     log.flush()
     save()

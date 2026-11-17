@@ -66,3 +66,61 @@ Only then: does it help, measured.
   reference on the same input.
 - A change that helps offline can lose in a life (the new ear and picture naming). The life is the only test that
   counts, and it is slow; so the offline probe must look like the life (the echo stage first, the same budgets).
+
+### 2026-11-17: a life must show the world it lives in
+
+**A bug of mine, found in the leisure talk.** `experiments/curriculum_life.py` reloads the world every 50,000 moments
+(so that new items written by the adults join in). The line rebuilt the world with its default, world 1. Every life
+born in world 2 or 3 therefore lived in world 1 from 50,000 moments on: no reworded echo games, no social routines,
+no picture book, no thing in view when talked about. The tests were not touched (they are built once).
+What caught it was not a score: the log of the leisure talk showed that talk about a picture stops at exactly
+50,000 moments in all three lives.
+
+What this changes in the record:
+
+| lives | what they really lived | what still stands |
+|---|---|---|
+| words_s0..2 (world 1) | world 1 throughout | everything |
+| conv_s0..2, edge_s0..2 (world 2) | world 2 to 50,000, then world 1 | passing first words at 60–85,000 was earned almost wholly in world 2. The comparison of the two ears stands (both had the same fault). "Stops at two words at 0.38–0.39" was measured in world 1's lessons |
+| world3_s0..2 | world 3 to 50,000, then world 1 with leisure talk without pictures | only the checkpoints up to 50,000. Stopped on 2026-11-17 at 125–135,000 |
+
+Fixed (the reloaded world is the world the life was born into, with its dice kept). Each checkpoint now also records
+`lived`: how many moments of each stage and source the life was given since the last one, and how many came with a
+picture. Three fresh lives, `world3b_s0..2`, started on 2026-11-17.
+
+**What the first 50,000 moments of world 3 say** (valid; means of three seeds, first-words test, against conv at the
+same age):
+
+| at 40,000 / 50,000 moments | conv (world 2) | world3 |
+|---|---|---|
+| CIFAR pictures named | 0.54 / 0.56 | 0.43 / 0.44 |
+| Commons pictures named | 0.55 / 0.56 | 0.60 / 0.64 |
+| COCO things named (new) | – | 0.34 / 0.30 |
+| first-words text | 0.29 / 0.32 | 0.34 / 0.36 |
+| same answer however worded | 0.76 / 0.79 | 0.66 / 0.64 |
+| says the last word | 0.08 / 0.06 | 0.04 / 0.04 |
+
+- The picture book did not raise the naming of the older pictures as a whole: Commons up 0.06, CIFAR down 0.11, in
+  every seed. I do not know yet which part of world 3 costs the CIFAR pictures (the COCO lessons sharing the same
+  names with a different look, the picture put in view during text lessons, or the parent's whole sentences heard
+  while looking at a picture). One life cannot tell these apart; an offline probe with each part alone can.
+- Text is a little better (+0.045) and the last-word habit lower. Seeing the thing while it is talked about is the
+  likely reason, not shown.
+- The answer changes more with the wording (0.78 → 0.65).
+- When the COCO lessons stopped at 50,000 the COCO naming fell from 0.30–0.34 to 0.19–0.25 within 10–35,000 moments.
+  That is forgetting, measured by accident.
+- Two words ended at 0.38–0.41, the same as conv. Both lived world 1's two-words lessons, so this says nothing new;
+  the reference learners already said the photo questions are not answerable with these eyes (VISION.md).
+
+**Leisure talk, read** (`out/world3_s1.chat.jsonl`, 26,000 exchanges). Nothing is graded, so this is only reading.
+The child is never silent. Its whole reply is found inside what the parent just said in 22% of exchanges early and
+35% late. Late in life it picks a word from the middle as often as the end ("you're safe in your cozy bed" → "cozy";
+"did you hear that big truck outside" → "trucraoutside"), answers some questions with yes or no ("do you feel the
+rain outside" → "no"), and blends ("you did a really funny dance there" → "yodadance"). While it was shown pictures,
+it said the name of the thing in view in 12% of exchanges before 20,000 moments and 39% between 20,000 and 50,000.
+
+**Method.**
+- A life is long and unattended, so its record must say what it was given, not only what it scored. The fault lived
+  from 2026-11-12 to 11-17 across nine lives because nothing in a checkpoint depended on the world.
+- I reported three probes as "still running" on 2026-11-16 at 16:10. The kernel had killed all three between 15:37
+  and 15:58. A unit's state is checked, not assumed, before it is reported.

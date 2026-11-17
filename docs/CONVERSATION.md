@@ -368,3 +368,10 @@ are lived again, all once or drawn by how surprising they were; 3 seeds):
 
 Pictures +0.01 to +0.02 in every seed, nothing else, for twice the learning. Not adopted. It is "more training
 on the same experience", and the word cells are not short of repetitions; they are short of things to see.
+
+## Correction (2026-11-17)
+
+The lives reported in §6 and §7 (conv, edge) and the first world 3 lives were born in world 2 or 3 but lived in
+world 1 from 50,000 moments on, through a fault in the line that reloads the world. Their passing of first words
+stands; their two-words stage was lived in world 1's lessons. What it changes and what does not: docs/CRAFT.md,
+"2026-11-17: a life must show the world it lives in".
