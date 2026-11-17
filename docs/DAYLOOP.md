@@ -146,3 +146,10 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   Open questions for the quiet hours (light on CPU, the lives come first): why CIFAR is lower in eyes2; pivot frames
   for two-word text; the relay learned online; pruning the orchestrator's clusters; the snapshot of eyes2 against
   the baseline at every checkpoint (table in VISION.md when 3 seeds have 3 checkpoints in first words).
+- 19:50 **eyes2_s1 PROMOTED out of first words at 20,000 moments** (baseline lives: 60–85,000). s0 and s2 are at
+  0.42 / 0.45 beyond the parrot at 20,000 and wait for the echo stage to be held (0.49, 0.45; need about 0.68).
+  s1 reached 0.40 on world 3's two words within 5,000 moments. **s1 moved to world 4 at 25,000** (stopped, resumed
+  with WORLD=4 LOOKING=1 MATCH=1 EPISODES=1 INTAKE=1 FULL=1; unit organic-eyes2-s1 as before). Table in VISION.md.
+  CIFAR's low first checkpoint was noise (0.47, 0.47 at the next; offline at 3,000 moments new 0.48 vs old 0.35).
+  Next: move s0 and s2 the same way when they are PROMOTED; watch s1's two-words score in world 4 (sources page:name,
+  page:there, curriculum; pass mark 0.5 beyond the parrot, first words and echo held).

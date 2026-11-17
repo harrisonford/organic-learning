@@ -407,3 +407,27 @@ relay, full-size corrections, 6,000 lived moments.
   **"how many?" leaves the two-words stage** and is asked in preschool, with the photo questions.
 - In the brain: `SpeakingBrain._glimpse` takes a scene larger than the view; world 4's pages are 128 pixels; the
   two-words stage of world 4 is now a thing on a page named, "is there a…?", and the two-words text lessons.
+
+## The new eyes in lives: first words in a third of the time (2026-11-17, evening; lives eyes2_s0..2)
+
+World 3, born with `data/visual_cortex2.pkl` (one layer + relay) and full-size corrections; otherwise as the six
+baseline lives (world3_s0..2, world3b_s0..2). First-words test, 300 held-out items; "beyond" is the score on the
+items a last-word parrot gets wrong (the pass mark is 0.4, with the echo stage held at 80% of its passing score).
+
+| moments in first words | baseline: beyond the parrot (six lives) | eyes2: beyond the parrot | eyes2 by source: CIFAR / COCO things / Commons / text |
+|---|---|---|---|
+| 5,000 | 0.30 0.34 0.36 0.31 0.32 0.38 (mean 0.34) | 0.38 0.41 0.40 | 0.34 0.55 0.35 / 0.33 0.30 0.39 / 0.73 0.62 0.67 / 0.20 0.17 0.20 |
+| 10,000 | 0.34 0.38 0.36 0.37 0.34 0.39 (mean 0.36) | 0.42 – 0.45 | 0.47 – 0.47 / 0.32 – 0.35 / 0.65 – 0.68 / 0.27 – 0.27 |
+
+Baseline by source at 5,000: CIFAR 0.41, COCO things 0.21, Commons 0.58, text 0.23.
+
+- **eyes2_s1 passed first words at 20,000 moments of life, 5,000 moments after entering the stage.** The baseline
+  lives passed at 60,000–85,000. The other two are above the mark (0.42, 0.45) at 20,000 and wait only for the echo
+  stage to recover (0.49 and 0.45 against the 0.68 they must hold), the dip every life has had.
+- The gain in the life is on photographs (COCO things +0.13, Commons +0.09) and the test as a whole (+0.06 at 5,000,
+  +0.07 at 10,000). CIFAR, low at the first checkpoint (60 pictures a life), is level or above at the next.
+- Offline the same change was worth +0.13 in naming. In the life the first-words test is also text and routines,
+  which the eyes do not touch; the picture sources alone are up by about 0.08.
+- eyes2_s1 then lived 5,000 moments of world 3's two words (the photo questions) and reached 0.40 there, where the
+  old lives ended after 100,000 moments. At 25,000 it was moved to world 4 with eyes that look, match neurons, the
+  episodic store and the intake limit (the same brain, resumed).
