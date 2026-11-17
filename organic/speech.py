@@ -408,6 +408,9 @@ class SpeakingBrain(LoopBrain2):
         top = max(nov)
         return [n / top for n in nov] if top > 0 else nov
 
+    intake = False  # of a reply in leisure talk only the last units are learned from (life env INTAKE=1)
+    mlu = 1.0  # the brain's own usual length of reply in leisure talk, in the ear's units
+
     def chat(self, img, says, answer, babble=False):
         """Leisure talk (docs/LEISURE.md): someone says something and expects nothing. The brain says whatever it says
         (no answer is right, no reward), and then hears what the other says back to that: answer(says, said) -> text or
@@ -427,7 +430,13 @@ class SpeakingBrain(LoopBrain2):
             self.mirror(back)
             self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
             if getattr(self, "words", None) is not None:
-                self.words.learn(before, self._vis(img), heard)
+                taken = heard
+                if self.intake:
+                    # a toddler takes in the end of a long utterance, about as much as it can say itself and one more
+                    # (docs/RESEARCH_TWO_WORDS.md 3; measured 2026-11-17: the length of the replies is what costs lessons)
+                    self.mlu += 0.02 * (len(before) - self.mlu)
+                    taken = heard[-(int(round(self.mlu)) + 1):]
+                self.words.learn(before, self._vis(img), taken)
                 self._taught()
         self.chats = getattr(self, "chats", 0) + 1
         return said, back

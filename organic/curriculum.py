@@ -358,9 +358,11 @@ class Curriculum:
             for side, store, many in (("lived", self.train, 20000), ("held", self.test, 400)):
                 sc = self.scenes[side]
                 store.setdefault("W2", {})["page:name"] = [(("page", side, "name", n), self.frames[n % len(self.frames)], sc.named(n)[2], "W2", "page:name") for n in range(many)]
-                for kind in ("there", "count"):
+                # "how many?" is asked in preschool: most children under two and a half do not know what "two" means
+                # (a one-knower at 24-47 months, Sarnecka 2014; docs/RESEARCH_TWO_WORDS.md)
+                for kind, st in (("there", "W2"), ("count", "P")):
                     made = [sc.make(kind, n) for n in range(many)]
-                    store["W2"]["page:" + kind] = [(("page", side, kind, n), q, [a], "W2", "page:" + kind) for n, (_, _, q, a) in enumerate(made)]
+                    store.setdefault(st, {})["page:" + kind] = [(("page", side, kind, n), q, [a], st, "page:" + kind) for n, (_, _, q, a) in enumerate(made)]
         self.prng = random.Random(seed + 3)  # its own dice: putting things in view does not change the lessons drawn
         self._cache = {}
         # the ways adults name a thing unasked (experiments/world/observation_frames.py)

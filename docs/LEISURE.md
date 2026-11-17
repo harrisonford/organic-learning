@@ -46,3 +46,22 @@ that the new ear is measured alone).
 - The parent does not see the picture (leisure talk is with the eyes closed for now).
 - The parent model sometimes praises babble as a word ("oh wow you said spoon!" to "spowon"). Parents do too.
 - Whether the brain should have states of its own to talk about is left open, as Kris preferred.
+
+## Does leisure talk cost the answers to lessons? (2026-11-17, `experiments/chat_cost_probe.py`, three seeds)
+
+In a life with leisure talk some text answers are run-on, parent-like strings ("you're looking you want to happy
+so"). Word cells alone on the text lessons of first words and two words (three passes, full-size corrections), with
+one logged leisure exchange after every fourth lesson (what the child said → what the parent said back):
+
+| | held-out text score | units in a reply | replies of four or more units |
+|---|---|---|---|
+| lessons only | 0.456 0.462 0.467 | 1.19 | 0.01 |
+| with leisure talk | 0.441 0.444 0.445 | 1.42 | 0.04 |
+| leisure talk, the parent's reply cut to its first unit | 0.463 0.461 0.462 | 1.19 | 0.01 |
+
+- Leisure talk costs a little, the same in every seed (−0.018), and it is the length of the parent's replies that
+  costs, not hearing them: the child learns that what follows an utterance is long.
+- It is not the main cause of the bad text answers in lives (text alone gives replies of the right length).
+- A toddler hears long sentences all day and answers in one or two words: what it takes in from a long utterance is
+  limited (a few units, the stressed and the last ones). The word cells take in every unit of the reply. Limiting
+  what is taken in from a reply that was not an answer to a lesson is the organic direction; not built.

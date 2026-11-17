@@ -384,3 +384,26 @@ view of the same thing (docs/RESEARCH_VISION.md, 6).
 **Lives.** `eyes2_s0..2` started 2026-11-17 16:42: world 3, born with `data/visual_cortex2.pkl` (one layer + relay),
 full-size corrections, otherwise as `world3_s*` / `world3b_s*`, whose checkpoints up to 45–50,000 moments are the
 baseline.
+
+## Wide pages and a gaze that goes to what stands apart (2026-11-17, `experiments/look2_probe.py`, new eyes, seeds 0 and 1)
+
+A truer fovea. The page is twice as large as the view (128 pixels, a thing on it 52). The eye sees it whole only
+coarsely (the view's 64 pixels) and in full detail what it fixates: a window of half the page, which then looks as
+the thing looks alone. And the reflex gaze goes only to what stands apart, its surround at most half as busy as
+itself (`organic/gaze.py`, `apart`): on a single picture it then fixates nothing 87% of the time. New cortex with
+relay, full-size corrections, 6,000 lived moments.
+
+| the word cells get | single pictures | a thing on a page | with another beside it | either of the two | is there (base 0.52) | how many (base 0.35) |
+|---|---|---|---|---|---|---|
+| the whole view, seed 0 / 1 | 0.540 / 0.587 | 0.053 / 0.077 | 0.060 / 0.073 | 0.150 / 0.153 | 0.607 / 0.653 | 0.423 / 0.443 |
+| + what the gaze fixates, match neurons | 0.520 / 0.587 | 0.467 / 0.530 | 0.347 / 0.307 | 0.620 / 0.637 | 0.747 / 0.727 | 0.420 / 0.477 |
+| … the match neurons counting all-or-none bursts | 0.520 / 0.583 | 0.470 / 0.527 | 0.357 / 0.310 | 0.633 / 0.643 | 0.733 / 0.743 | 0.413 / 0.467 |
+
+- A fixated thing on a page is named nearly as well as a thing alone (0.47–0.53 against 0.54–0.59), and looking no
+  longer costs single pictures. With the earlier small pages and a gaze that fixated parts of single things the
+  same eyes gave 0.32 and cost single pictures 0.14.
+- "Is there a…?" 0.73–0.75. Counting stays near the base rate, with graded or all-or-none matching alike: an exact
+  count needs every fixation's match to be right. And a two-year-old does not count (docs/RESEARCH_TWO_WORDS.md):
+  **"how many?" leaves the two-words stage** and is asked in preschool, with the photo questions.
+- In the brain: `SpeakingBrain._glimpse` takes a scene larger than the view; world 4's pages are 128 pixels; the
+  two-words stage of world 4 is now a thing on a page named, "is there a…?", and the two-words text lessons.

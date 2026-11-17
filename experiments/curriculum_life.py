@@ -88,6 +88,8 @@ if os.environ.get("JUDGE") == "1":
     judge = Judge()
     brain.own_forms = True
 
+if os.environ.get("INTAKE") == "1":
+    brain.intake = True  # leisure talk: only the end of the parent's reply is learned from (docs/LEISURE.md, 2026-11-17)
 if os.environ.get("FULL") == "1" and getattr(brain, "words", None) is not None:
     brain.words.plastic_by_error = False  # every correction of the content dendrite at full size (docs/VISION.md, 2026-11-17)
 world = Curriculum(seed=0, world=int(os.environ.get("WORLD", 1)))  # WORLD=2: echo games worded by adults, social routines
