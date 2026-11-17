@@ -16,6 +16,9 @@ A variant is a list of words in VARIANT (comma-separated variants, each "+"-join
   avg            the grid summary is the average over the region instead of the strongest
   g2 / g6        a 2x2 or 6x6 grid instead of 4x4
   p2             the response squared before pooling (a steeper nonlinearity)
+  dog            no whitening matrix: the picture first passes a retina of centre-surround cells (each point minus the
+                 average of its surround, per colour channel), which is what whitening natural scenes amounts to
+  noe            the response is not scaled by the window's contrast
 
     VARIANT=old,tri,random+tri,white+tri,white+tri+k256 python experiments/cortex2_probe.py
 """
@@ -65,12 +68,21 @@ def ridge(A, Y, B, lam):
     return B @ np.linalg.solve(G, A.T @ Y)
 
 
+def blur(x, n=2):
+    """The average of each point's surround (a box of side 2n+1, edges repeated), per channel."""
+    p = np.pad(x, ((n, n), (n, n), (0, 0)), mode="edge")
+    c = np.pad(p.cumsum(0).cumsum(1), ((1, 0), (1, 0), (0, 0)))
+    k = 2 * n + 1
+    return (c[k:, k:] - c[:-k, k:] - c[k:, :-k] + c[:-k, :-k]) / (k * k)
+
+
 def build(variant):
     """The layer of a variant: (whitening matrix or None, filters, how to respond)."""
     opts = set(variant.split("+"))
     kinds = 1024 if "k1024" in opts else 256 if "k256" in opts else 64
     dev = np.random.default_rng(SEED + 5)
-    pool = [img(r) for r in train_rows[-DEVELOP:]]
+    retina = (lambda x: x - blur(x)) if "dog" in opts else (lambda x: x)
+    pool = [retina(img(r)) for r in train_rows[-DEVELOP:]]
     Z = None
     if "white" in opts:
         # the windows' own correlations, removed: what a retina's centre-surround cells do to natural scenes
@@ -79,7 +91,7 @@ def build(variant):
         d, E = np.linalg.eigh(C)
         Z = (E / np.sqrt(d + 1e-3 * d.max())) @ E.T
         Z = Z.astype(np.float32)
-    if "old" in opts or ("tri" in opts and not opts & {"white", "random", "k256", "k1024", "soft"}):
+    if "old" in opts or ("tri" in opts and not opts & {"white", "random", "k256", "k1024", "soft", "dog"}):
         W = old.W.copy()
     else:
         W = dev.normal(0, 1, (kinds, WIN * WIN * 3)).astype(np.float32)
@@ -116,7 +128,9 @@ def build(variant):
     grid = 2 if "g2" in opts else 6 if "g6" in opts else 4
 
     def code(x):
-        v, e = windows(x)
+        v, e = windows(retina(x))
+        if "noe" in opts:
+            e = np.ones_like(e)
         if Z is not None:
             v = v @ Z
             v = v / (np.linalg.norm(v, axis=2, keepdims=True) + 1e-8)

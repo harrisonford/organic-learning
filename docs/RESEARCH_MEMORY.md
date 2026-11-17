@@ -143,3 +143,18 @@ Rovee-Collier (review) https://pmc.ncbi.nlm.nih.gov/articles/PMC5716629
 
 Cited from memory only: Bittner 2017, Milstein 2021, Frey & Morris 1997, Kanerva 1988, Krotov & Hopfield 2016,
 Lengyel & Dayan 2007, Fusi et al. 2005, Kirkpatrick 2017, Zenke 2017, Carey & Bartlett 1978.
+
+## The check, done (2026-11-17, `experiments/forget_diag.py`, seed 0, exact names on 80 held-out pictures a source)
+
+| brain | source | the brain names it | the word cells alone | spoke by recall |
+|---|---|---|---|---|
+| world3_s0 at 60,000 (COCO lessons stopped at 50,000) | COCO things | 0.12 | 0.12 | 0.96 |
+| | CIFAR | 0.50 | 0.50 | 0.97 |
+| | Commons | 0.59 | 0.59 | 1.00 |
+| world3_s0 at 125,000 | COCO things | 0.16 | 0.17 | 0.97 |
+| | CIFAR | 0.45 | 0.49 | 0.95 |
+| | Commons | 0.54 | 0.57 | 0.94 |
+
+The brain speaks by recall on 95% of pictures and says what the word cells say. So the loss is not a failure to
+retrieve and not the choice of route: **what was lost was lost in the word cells' synapses**, within 10,000 moments of
+the lessons stopping. The additions against forgetting (3 to 5 in the table above) are the ones this points to.

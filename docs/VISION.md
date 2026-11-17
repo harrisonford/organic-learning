@@ -238,3 +238,35 @@ of another kind (never used in the teaching) the gain is small, +0.01 to +0.025.
 **Two more layers**: killed twice by memory in the measurement (a 15,360-dimension code's covariance takes 4 GB).
 The readout is now solved over the pictures when the code is wider than the pictures are many (the same answer);
 running again.
+
+**A fourth layer of the same kind** (512 kinds, 2026-11-17): held-out COCO things 0.273 with four layers against
+0.278 with three; the layers alone 0.239 / 0.239 / 0.228 / 0.193; CIFAR + Commons 0.463 against 0.487. More layers of
+this kind add nothing, each a little worse than the one below. Stopped before the fifth. This is what the
+literature reports for stacks of hard winner-take-all layers (docs/RESEARCH_VISION.md): the answer to "more layers?"
+is not with this rule.
+
+## Looking with the real word cells, the reflex gaze and match neurons (2026-11-17, `experiments/look2_probe.py`, seed 0)
+
+6,000 lived moments (half single pictures, the rest pages: a thing named, "is there a…?", "how many…?"), pages with
+3-pixel margins, pictures never seen at test. `organic/gaze.py` is the reflex gaze (centre-surround against the
+scene's commonest colour); match neurons are in `organic/words.py`.
+
+| the word cells get | single pictures | a thing on a page | with another beside it | either of the two | is there (base 0.52) | how many (base 0.35) |
+|---|---|---|---|---|---|---|
+| the whole view | 0.400 | 0.083 | 0.053 | 0.120 | 0.630 | 0.367 |
+| the whole view, match neurons | 0.397 | 0.090 | 0.063 | 0.120 | 0.640 | 0.383 |
+| + the four quarters (by rule) | 0.297 | 0.163 | 0.110 | 0.240 | 0.607 | 0.320 |
+| + the four quarters, match neurons | 0.297 | 0.180 | 0.143 | 0.283 | 0.683 | 0.380 |
+| + what the reflex gaze fixates | 0.327 | 0.250 | 0.160 | 0.347 | 0.590 | 0.350 |
+| + the reflex gaze, match neurons | 0.320 | 0.243 | 0.160 | 0.347 | 0.660 | 0.370 |
+
+- Looking triples the naming of a thing on a page (0.08 → 0.25) and costs single pictures 0.07–0.10, as in the
+  first probe. The reflex gaze is better than the four quarters by rule (it does not look at empty quarters).
+- The match neurons add 0.05–0.07 to "is there" and nothing to counting. With ideal eyes (a toy world where every
+  thing is recognised) the same mechanism gives 1.00 and 0.89: **the mechanism works and the eyes do not carry it.**
+  A thing on a page is recognised a quarter of the time, so "is the asked thing among what I fixated" is mostly noise.
+- Put together as a two-words stage (name 0.25, is there 0.66, how many 0.37, text about 0.33) this is about 0.40
+  against a pass mark of 0.5, while first words would lose 0.08. **A life with these eyes would not pass; I did not
+  start one.** The code stays (`SpeakingBrain(looking, match)`, world 4) for when the cortex is better.
+- What limits everything here is the cortex's code, and the same afternoon showed that the cortex's own
+  development is the fault (next section).

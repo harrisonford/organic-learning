@@ -55,3 +55,16 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   Plan for lives: when world3b reach their next checkpoint after the look2 result, stop them and resume the same
   brains as `world4_s0..2` (WORLD=4 LOOKING=1 MATCH=1; TEACH only after an offline check with the word cells in the
   loop). Diagnostic owed: is the COCO forgetting erasure or retrieval (word cells alone on out/world3_s0.pkl)?
+- 15:00 Results: (1) look2 probe seed 0: looking triples page naming (0.08 → 0.25) but costs singles 0.08; match
+  neurons +0.05 on "is there", nothing on counting; with ideal eyes the mechanism gives 1.00 / 0.89 → the cortex's
+  code is the limit; **no world 4 lives started** (docs/VISION.md). (2) A fourth old-style layer adds nothing; probe
+  stopped. (3) cortex2_probe (first layer): old 0.250 / 0.441; random filters + graded code 0.276 / 0.484; whitened +
+  graded 0.287 / 0.486; + 256 kinds 0.320 / 0.537; + averaged summary 0.365 / 0.534 (COCO / CIFAR+Commons).
+  (4) forget_diag: the COCO loss is in the word cells' synapses, not retrieval (docs/RESEARCH_MEMORY.md).
+  **Plan changed: the cortex first.** New organ `organic/cortex2.py` (decorrelation, graded code, local fan-in,
+  averaged summary; same interface). Running: `organic-cx2a` (last variant), `organic-cx2b` (retina instead of
+  whitening matrix, grids, k1024 → out/cortex2_probe_b.log), `organic-cx3a` (the organ, 256+256 kinds, layer by
+  layer → out/cortex3_probe_a.log, saved to out/tmp/cortex2_a.pkl).
+  Next: pick the design; check it with the real word cells (naming, as imagery_probe/prune_probe do: 0.46 with the
+  old cortex); then stop world3b and start three lives born with the new cortex (CORTEX=out/tmp/...pkl → move to
+  data/visual_cortex2.pkl), world 3 first (clean comparison with world3b), looking and world 4 after.
