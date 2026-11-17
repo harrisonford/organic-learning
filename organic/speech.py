@@ -408,6 +408,7 @@ class SpeakingBrain(LoopBrain2):
         top = max(nov)
         return [n / top for n in nov] if top > 0 else nov
 
+    novel_drive = False  # the copy route is driven by the ear's novelty (life env NOVEL_DRIVE=1)
     intake = False  # of a reply in leisure talk only the last units are learned from (life env INTAKE=1)
     mlu = 1.0  # the brain's own usual length of reply in leisure talk, in the ear's units
 
@@ -558,6 +559,10 @@ class SpeakingBrain(LoopBrain2):
                         self.copied, self.recalled = self.spoke_from == "outer", recalled if self.spoke_from == "inner" else None
                     else:
                         drive = np.zeros(len(self.copy_group))
+                        if self.novel_drive and heard:
+                            # the ear drives the copy route with how new what it heard is, as the word cells drive recall
+                            # with how sure they are: a sound never heard is echoed (docs/CONVERSATION.md, 2026-11-17)
+                            drive[0] = max(1.0 / (1.0 + self.ear.heard.get(u, 0) / self.orch.maturation) for u in heard)
                         if len(self.copy_group) > 2:  # the hub drives its own route with how sure it is
                             drive[2] = confidence if recalled is not None else -1e9
                         kc, rc = self._choose(s, self.copy_group, drive, explore)

@@ -153,3 +153,11 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   CIFAR's low first checkpoint was noise (0.47, 0.47 at the next; offline at 3,000 moments new 0.48 vs old 0.35).
   Next: move s0 and s2 the same way when they are PROMOTED; watch s1's two-words score in world 4 (sources page:name,
   page:there, curriculum; pass mark 0.5 beyond the parrot, first words and echo held).
+- 20:30 **The echo dip is what holds lives in first words** (CONVERSATION.md, last section): s0/s2 at 0.48/0.49 beyond
+  the parrot, echo 0.5 (need about 0.68); on new-word echoes the brain speaks by recall 81% of the time; the old
+  lives' passage at 60–85k probably came from the reload fault (world 1's easy echo games). Fix tried: the ear's
+  novelty drives the copy route (`novel_drive`, NOVEL_DRIVE=1). **`organic-relaunch-novel` (out/tmp/relaunch_novel.sh)
+  restarts each eyes2 life right after its next checkpoint with NOVEL_DRIVE=1** (s0, s2: world 3 unless promoted, then
+  world 4 config; s1: world 4 config); it logs to out/tmp/relaunch_novel.log and ends by itself.
+  Next: check out/tmp/relaunch_novel.log; then watch the echo score (B) of each life at the following checkpoints.
+  If the echo does not come back within about 15,000 moments: look at the routes again (is copy tried? rewarded?).

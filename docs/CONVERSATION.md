@@ -375,3 +375,39 @@ The lives reported in §6 and §7 (conv, edge) and the first world 3 lives were 
 world 1 from 50,000 moments on, through a fault in the line that reloads the world. Their passing of first words
 stands; their two-words stage was lived in world 1's lessons. What it changes and what does not: docs/CRAFT.md,
 "2026-11-17: a life must show the world it lives in".
+
+## What really holds a life in first words: the echo, and who drives the copy route (2026-11-17, evening)
+
+Two of the three lives with the new eyes were above the first-words mark at 20,000 moments (0.42, 0.45 on the
+parrot-proof items; 0.48, 0.49 at 25–30,000) and were not promoted: the echo stage must be held at 80% of its passing
+score, and it had fallen from 0.85 to 0.5. Every life has shown this dip. Looking back with that in mind:
+
+- The baseline lives reached the first-words mark at about 40,000 moments and were promoted at 60–85,000, when the
+  echo came back. In conv_s0 it came back between 55,000 and 60,000 (0.47 → 0.81), **just after the world was
+  reloaded as world 1 by the fault of 11-12 to 11-17** (docs/CRAFT.md), whose echo games are the easy ones ("say
+  ball", the word last or alone). It is likely that the fault is what let those lives pass first words. No life in
+  a world without the fault has been run long enough to say whether the echo comes back by itself.
+- What goes wrong (`experiments/mouth_diag.py`, `silent_route_diag.py` on a copy of eyes2_s2 at 30,000): asked to say
+  a word it has never heard ("say datum now"), the brain speaks by recall four times in five. The word cells know
+  nothing about the word and say a known one or a run-on; their sureness there is 0.04, on pictures 0.09–0.16. The
+  ear's novelty (how seldom the most novel unit heard has been heard) is 0.63 on those echo prompts and 0.01–0.03 on
+  naming questions.
+- Why it does not mend itself: the route is drawn from the orchestrator's vote plus each route's own drive, steeply.
+  Recall has the cells' sureness as its drive; copy has none. Once recall's vote is high everywhere (it is right in
+  most first-words moments), copy is tried on an echo prompt about once in 250 moments and cannot be found again.
+
+| on a copy of eyes2_s2 at 30,000, held-out | echo, first words | echo, any word | CIFAR / COCO / Commons named | first-words text |
+|---|---|---|---|---|
+| as it is | 0.80 | 0.46 | 0.47 / 0.44 / 0.70 | 0.34 |
+| the word cells silent below their own firing level | 0.84 | 0.63 | 0.33 / 0.23 / 0.58 | 0.37 |
+| the word cells never speaking (copy or own habits only) | 0.67 | 0.71 | 0.02 / 0.06 / 0.08 | 0.18 |
+| the copy route driven by the ear's novelty (votes as they are) | 0.82 | 0.50 | 0.47 / 0.44 / 0.71 | 0.38 |
+
+- The cells' own firing level (tried on 11-16) mends the echo and costs a third of the naming: not that.
+- **The copy route gets a drive of its own: the ear's novelty** (`SpeakingBrain.novel_drive`, life env NOVEL_DRIVE=1).
+  The word cells drive recall with how sure they are; the ear now drives copying with how new what it heard is. A
+  sound never heard is echoed: that is what the copy route is for (the dorsal stream handles new forms). No
+  threshold. With the orchestrator's votes frozen it moves little (0.46 → 0.50); its use is that copy is tried again
+  on echo prompts (about one time in five instead of one in 250), so the orchestrator can learn where it pays.
+- The three eyes2 lives are restarted with it after their next checkpoints (s0 and s2 still in first words; s1 in
+  world 4). Whether the echo then comes back, and how fast, is the measurement.

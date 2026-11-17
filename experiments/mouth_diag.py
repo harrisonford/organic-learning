@@ -16,7 +16,7 @@ for path in sys.argv[1:]:
     brain = pickle.load(open(path, "rb"))
     brain.learning = False
     print(f"{path} (age {brain.age})")
-    for stage in ("W1", "W2"):
+    for stage in os.environ.get("STAGES", "W1,W2").split(","):
         rows, shown = collections.defaultdict(lambda: collections.defaultdict(list)), collections.Counter()
         for m in cur.test_set(stage, n=300):
             img = np.asarray(m["image"], np.float32)
