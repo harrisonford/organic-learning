@@ -352,3 +352,35 @@ corrections: 0.002 → 0.510, 0.0005 → 0.533, 0.0001 → 0.523, 0.00002 → 0.
   number of moments.** Offline; a life is the test.
 
 `data/visual_cortex2.pkl` is that cortex with its relay (`experiments/make_cortex2.py`).
+
+**Full-size corrections and text** (`experiments/imagery_probe.py` with FULL=1; the offline mixed life of first words
+and two words, old cortex, first ear, one pass, three seeds; means):
+
+| | pictures named | same answer ×3 | first-words text | text beyond the parrot | two words |
+|---|---|---|---|---|---|
+| plasticity by the cell's own error (as it was) | 0.471 | 0.719 | 0.280 | 0.248 | 0.430 |
+| every correction at full size | 0.476 | 0.794 | 0.368 | 0.330 | 0.432 |
+
+Text beyond the parrot rises by 0.08 in each of the three seeds (0.246 → 0.319, 0.225 → 0.328, 0.272 → 0.343), as much
+as the new ear gave; pictures on the old code and two words do not move. So the change that was found for pictures is
+at least as much a change for words heard: the cells were learning three times too slowly from every moment.
+
+**The finished cortex through the brain's own path** (`data/visual_cortex2.pkl`, relay inside, three seeds): held-out
+naming 0.527 0.508 0.508 with full-size corrections, 0.492 0.498 0.503 without.
+
+**A second layer** (`experiments/cortex3_probe.py`; 256 kinds in 16 groups, each listening to 32 of the first layer's
+kinds; linear reference, COCO things / CIFAR + Commons):
+
+| | layer 1 | layer 2 alone | both | time to code a picture |
+|---|---|---|---|---|
+| response scaled by contrast | 0.361 / 0.540 | 0.333 / 0.523 | 0.365 / 0.546 | 96 ms |
+| not scaled | 0.383 / 0.545 | 0.373 / 0.540 | 0.392 / 0.543 | 93 ms (one layer: 26 ms) |
+
+With local fan-in and a graded response the second layer no longer loses what the first had (the old second layer
+did), but it adds 0.01 at most and costs three times the time. One layer goes into the lives. Depth that adds
+something needs a reason to differ from the layer below; the literature's candidate is learning to predict the next
+view of the same thing (docs/RESEARCH_VISION.md, 6).
+
+**Lives.** `eyes2_s0..2` started 2026-11-17 16:42: world 3, born with `data/visual_cortex2.pkl` (one layer + relay),
+full-size corrections, otherwise as `world3_s*` / `world3b_s*`, whose checkpoints up to 45–50,000 moments are the
+baseline.
