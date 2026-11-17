@@ -131,3 +131,18 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   Check first with fastmap_life.py and a look at checkpoints that looking does not cost first words in the life.
   (c) Text: why the word cells' recall does not stop (silence cell; context dendrite) — read Words.recall on W2
   curriculum items offline. (d) Counting.
+- 19:20 Results: wide pages hold on seed 1 (page naming 0.53, "is there" 0.73–0.74; bursts no better than graded:
+  keep graded). Survey docs/RESEARCH_TWO_WORDS.md → **counting moved out of two words** (world 4: page:count is
+  preschool); intake limit for leisure talk (`SpeakingBrain.intake`, INTAKE=1; last two units: run-ons gone, a third
+  of the −0.018 cost back). Leisure talk cost recorded (LEISURE.md). **eyes2 at 5,000 moments into first words: 0.39,
+  0.40 beyond the parrot (six baseline lives: mean 0.35); COCO things 0.33/0.39 against 0.21, Commons 0.73/0.67
+  against 0.58, CIFAR 0.34/0.35 against 0.41 (lower; unexplained).** s1 entered first words at 20,000 already at 0.41.
+  Dry run of the resume into world 4 (old-cortex brain, LOOKING MATCH EPISODES INTAKE FULL, warnings as errors): clean,
+  first words not hurt by looking (0.35 → 0.43 over 800 moments).
+  **When an eyes2 life is PROMOTED out of W1** (line in out/eyes2_sN.log; its level is frozen to out/levels/):
+  `systemctl --user stop organic-eyes2-sN.service`, then
+  `TAG=eyes2 SEEDS="N" ARM=routes WORLD=4 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1" experiments/conv_pipeline.sh`
+  (it resumes from out/eyes2_sN.pkl). Then note it here and in VISION.md.
+  Open questions for the quiet hours (light on CPU, the lives come first): why CIFAR is lower in eyes2; pivot frames
+  for two-word text; the relay learned online; pruning the orchestrator's clusters; the snapshot of eyes2 against
+  the baseline at every checkpoint (table in VISION.md when 3 seeds have 3 checkpoints in first words).

@@ -65,3 +65,8 @@ one logged leisure exchange after every fourth lesson (what the child said → w
 - A toddler hears long sentences all day and answers in one or two words: what it takes in from a long utterance is
   limited (a few units, the stressed and the last ones). The word cells take in every unit of the reply. Limiting
   what is taken in from a reply that was not an answer to a lesson is the organic direction; not built.
+
+**An intake limit** (same probe, three seeds): only the last two units of the parent's reply learned from (what a
+one-word speaker takes in: its own usual length plus one, `SpeakingBrain.intake`, life env INTAKE=1): held-out text
+0.454 0.456 0.441 (lessons only 0.462, whole replies 0.443), replies of four or more units 0.01. The run-ons go; a
+third of the small cost comes back. It goes into the next lives.
