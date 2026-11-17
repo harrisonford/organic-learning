@@ -76,3 +76,16 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   `-n` (256+256 not scaled), `-n8` (256+256, 8 groups of 64) → out/cortex3_probe_<tag>.log, out/tmp/cortex2_<tag>.pkl;
   `organic-cx2b` (k1024 last). Next: words_on_cortex.py on each saved cortex (CORTEX=out/tmp/cortex2_<tag>.pkl,
   SEEDS=0,1,2); pick; copy to data/visual_cortex2.pkl; smoke-test a life; start three lives (world 3, new cortex).
+- 16:15 **Central finding of the day** (docs/VISION.md, last section): the word cells could not use a better code. A
+  ridge on the very pictures they lived names 0.56, they 0.40. A decorrelating relay between cortex and word cells
+  (`cortex2.Relay`, shrink 0.0005) + full-size corrections (`Words.plastic_by_error=False`, life env FULL=1) give
+  0.516 held-out naming on three seeds against 0.387 (old cortex, old word cells). `data/visual_cortex2.pkl` = one
+  layer of 256 kinds + relay; checked through the brain's path (0.527 seed 0); a smoke life with it ran clean.
+  Negatives recorded: dendritic branches (RESEARCH_MEMORY.md), soft competition, centre-surround retina, looking with
+  the old eyes. Running: text check of FULL (`out/text_full0.log`, `out/text_full1.log`: offline mixed life, old
+  cortex), two-layer measurements (`out/cortex3_measure_a.log`, `_n.log`), `organic-cx3-n8`.
+  Next: if FULL does not hurt text → start three lives `eyes2_s0..2`: conv_pipeline with WORLD=3, CHAT=0.2,
+  EXTRA="-E CHAT=0.2 -E FULL=1", CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 (the pipeline has the old cortex
+  path hard-coded: add CORTEX/CORTEX_LAYERS variables). Baseline: world3 + world3b checkpoints up to 45-50k.
+  Then: snapshot doc; then research loop (relay learned by a local rule; second layer; memory: context across
+  moments; looking again with the new eyes; the old cortex + relay for the released lineage?).

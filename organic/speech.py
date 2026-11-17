@@ -323,7 +323,8 @@ class SpeakingBrain(LoopBrain2):
                     return codes
                 return self.cortex.code(view, grid=self.cortex_grid)
 
-            unit = lambda codes: (lambda v: v / (np.linalg.norm(v) + 1e-8))(np.concatenate(codes))  # noqa: E731
+            relay = getattr(self.cortex, "relay", None)  # a cortex whose summary is decorrelated on its way to the word cells
+            unit = lambda codes: (lambda v: relay(v) if relay is not None else v)((lambda v: v / (np.linalg.norm(v) + 1e-8))(np.concatenate(codes)))  # noqa: E731
             self._allc = code(img)
             if img.max() > 0:
                 vis = unit(self._allc)

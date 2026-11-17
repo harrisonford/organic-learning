@@ -55,8 +55,23 @@ class Words:
     match = False  # the heard word's own cell, when it is also driven by what is seen, tells the others (docs/VISION.md)
     match_cells = 16
 
-    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False, setpoint=False, match=False):
+    # the content dendrite's plasticity follows the cell's own recent error (False: every correction at full size; the
+    # error itself already makes a cell that is right stop changing; tried 2026-11-17, experiments/words_on_cortex.py)
+    plastic_by_error = True
+    gain = 1.0  # a probe's knob on the size of every correction (experiments/words_on_cortex.py); 1 in every brain
+
+    branches = 1  # dendritic branches for what is seen (docs/RESEARCH_MEMORY.md, 2026-11-17); 1 in brains made before
+
+    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False, setpoint=False, match=False, branches=1):
         self.ear, self.visual_dim = ear, visual_dim
+        # A cell's visual synapses sit on several dendritic branches. The cell is driven by the branch that what is
+        # seen drives most, and only that branch learns; a look of its word that drives no branch as the cell is
+        # usually driven when its word is heard takes a branch not yet used. So a new look of a known word (a bus in a
+        # photograph after buses in drawings) need not overwrite the old one (branch-specific plasticity, Cichon &
+        # Gan 2015; dendritic subunits, Poirazi & Mel 2001).
+        self.branches = branches
+        self.Wx = np.zeros((branches - 1, 64, visual_dim), np.float32) if branches > 1 else None
+        self.branch_used = np.zeros((branches, 64), np.int32)
         self.setpoint = setpoint
         self.match = False
         # each cell's own two levels of content drive: when its unit was then heard, and when it was the most driven
@@ -123,6 +138,10 @@ class Words:
                 self.Ws = pad(self.Ws)
             if self.match:
                 self.Wm = pad(self.Wm)
+            if self.branches > 1:
+                grown = cap - self.Wx.shape[1]
+                self.Wx = np.concatenate([self.Wx, np.zeros((self.branches - 1, grown, self.visual_dim), np.float32)], axis=1)
+                self.branch_used = np.concatenate([self.branch_used, np.zeros((self.branches, grown), np.int32)], axis=1)
             self.L = np.concatenate([pad(self.L), np.zeros((cap, cap - self.L.shape[1]), np.float32)], axis=1)
             self.heard, self.last, self.born = pad(self.heard), pad(self.last), pad(self.born)
             if getattr(self, "m_on", None) is not None:
@@ -268,6 +287,10 @@ class Words:
             if self.match and heard is not None:
                 self._m = self._matched(d, heard, learn)
                 o += self.Wm[:n] @ self._m
+        elif x is not None and self.branches > 1:  # the branch that this look drives most
+            d = np.concatenate([(self.Wv[:n] @ x)[None], self.Wx[:, :n] @ x])
+            self._branch = d.argmax(axis=0)
+            o += d.max(axis=0)
         elif x is not None:
             o += self.Wv[:n] @ x
         if b is not None:
@@ -372,7 +395,9 @@ class Words:
                 self.m_off[k] += self.memory * (d[k] - self.m_off[k])
         e = fired - (o + self.base[:n])
         e[0] = 0.0  # silence has no content dendrite
-        step = self.err_c[:n] * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + (m is not None) + len(cues))  # the inputs share the correction
+        step = (self.err_c[:n] if self.plastic_by_error else 1.0) * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + (m is not None) + len(cues))  # the inputs share the correction
+        if self.gain != 1.0:
+            step = step * self.gain
         if m is not None:
             self.Wm[:n] += step[:, None] * (m / (1.0 + self.use_m / self.maturation))[None, :]
             self.use_m += m * m
@@ -395,6 +420,21 @@ class Words:
                 chosen[undriven] = x.mean(axis=0)
             self.Wv[:n] += step[:, None] * chosen / (1.0 + self.use_v / self.maturation)[None, :]
             self.use_v += (x * x).mean(axis=0)
+        elif x is not None and self.branches > 1:
+            took = self._branch.copy()
+            for t in targets:  # its word was heard: is this a look the cell knows?
+                if t and o[t] < 0.5 * self.m_on[t]:
+                    free = np.nonzero(self.branch_used[:, t] == 0)[0]
+                    if len(free) and self.branch_used[:, t].any():
+                        took[t] = free[0]
+            xs = x / (1.0 + self.use_v / self.maturation)
+            for k in range(self.branches):
+                mine = np.nonzero(took == k)[0]
+                if len(mine):
+                    W = self.Wv if k == 0 else self.Wx[k - 1]
+                    W[mine] += step[mine, None] * xs[None, :]
+            self.branch_used[took[targets], targets] += 1
+            self.use_v += x * x
         elif x is not None:
             self.Wv[:n] += step[:, None] * (x / (1.0 + self.use_v / self.maturation))[None, :]
             self.use_v += x * x
@@ -457,6 +497,10 @@ class Words:
             a[len(keep) : n] = 1.0 if name.startswith("err") else 0
         self.L[:, : len(keep)] = self.L[:, keep]
         self.L[:, len(keep) : n] = 0
+        if self.branches > 1:
+            for a in (self.Wx, self.branch_used):
+                a[:, : len(keep)] = a[:, keep]
+                a[:, len(keep) : n] = 0
         self.units = [self.units[i] for i in keep]
         self.index = {u: i for i, u in enumerate(self.units)}
         self._cs = None

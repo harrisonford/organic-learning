@@ -103,6 +103,7 @@ for seed in (SEEDS if __name__ == "__main__" else []):
     for arm in ARMS:
         words = Words(dim, ear, imagery="imagery" in arm, sound="sound" in arm)
         words.use_core = os.environ.get("CORES", "1") == "1"
+        words.plastic_by_error = os.environ.get("FULL") != "1"  # FULL=1: every correction at full size (docs/VISION.md, 2026-11-17)
         wr, t0 = random.Random(seed), time.time()
         cur.orng = random.Random(seed + 2)
         for p in range(PASSES):

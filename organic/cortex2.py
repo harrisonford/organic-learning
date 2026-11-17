@@ -111,7 +111,46 @@ class Layer2:
                 W[c] = w / np.linalg.norm(w)
 
 
+class Relay:
+    """Between the cortex and the word cells: the summary's own correlations removed.
+
+    Measured on 2026-11-17 (docs/VISION.md): a linear readout names 0.56 of held-out pictures from the very moments
+    from which the word cells, learning online by their delta rule, name 0.40. A delta rule that sees each moment
+    once learns along the few strongest directions of a correlated input and hardly at all along the fine ones
+    that tell things apart. With the summary decorrelated the same word cells name 0.48-0.51. Lateral inhibition
+    between the neurons that carry the summary does this in a brain (anti-Hebbian learning, Földiák 1990); here it
+    is computed at once from the summaries of the pictures the cortex developed on. `shrink` is how much of the
+    largest variance is added to every direction first (smaller: stronger decorrelation)."""
+
+    def __init__(self, shrink=0.002):
+        self.shrink, self.mu, self.Z = shrink, None, None
+
+    def settle(self, summaries):
+        S = np.asarray(summaries, np.float32)
+        self.mu = S.mean(axis=0)
+        d, E = np.linalg.eigh(np.cov((S - self.mu).T))
+        self.Z = ((E / np.sqrt(np.maximum(d, 0) + self.shrink * d.max())) @ E.T).astype(np.float32)
+        return self
+
+    def __call__(self, v):
+        w = (v - self.mu) @ self.Z
+        return w / (np.linalg.norm(w) + 1e-8)
+
+
 class VisualCortex2:
+    relay = None  # set by settle_relay: the summary decorrelated on its way to the word cells
+
+    def whole(self, img, grid=2):
+        """The whole view as the word cells get it: every layer's summary, together, at unit length, through the relay."""
+        v = np.concatenate(self.code(img, grid=grid))
+        v = v / (np.linalg.norm(v) + 1e-8)
+        return self.relay(v) if self.relay is not None else v
+
+    def settle_relay(self, images, grid, shrink=0.002):
+        self.relay = None
+        self.relay = Relay(shrink).settle([self.whole(im, grid) for im in images])
+        return self
+
     def __init__(self, seed=0, kinds=(256, 256), groups=16, fan_in=32, pool_kind="avg", scaled=True):
         self.layers = [Layer2(3, kinds[0], 5, 2, seed=seed, pool_kind=pool_kind, scaled=scaled)]
         for i, k in enumerate(kinds[1:], 1):

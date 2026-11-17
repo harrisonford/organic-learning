@@ -84,6 +84,8 @@ if os.environ.get("JUDGE") == "1":
     judge = Judge()
     brain.own_forms = True
 
+if os.environ.get("FULL") == "1" and getattr(brain, "words", None) is not None:
+    brain.words.plastic_by_error = False  # every correction of the content dendrite at full size (docs/VISION.md, 2026-11-17)
 world = Curriculum(seed=0, world=int(os.environ.get("WORLD", 1)))  # WORLD=2: echo games worded by adults, social routines
 PARROT = os.environ.get("PARROT") == "1"  # gate on the items a parrot of the last word heard gets wrong (docs/CONVERSATION.md)
 world.rng.seed(1000003 * SEED + brain.age)  # a resumed life draws moments it has not drawn before

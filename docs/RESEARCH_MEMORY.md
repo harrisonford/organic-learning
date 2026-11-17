@@ -158,3 +158,24 @@ Lengyel & Dayan 2007, Fusi et al. 2005, Kirkpatrick 2017, Zenke 2017, Carey & Ba
 The brain speaks by recall on 95% of pictures and says what the word cells say. So the loss is not a failure to
 retrieve and not the choice of route: **what was lost was lost in the word cells' synapses**, within 10,000 moments of
 the lessons stopping. The additions against forgetting (3 to 5 in the table above) are the ones this points to.
+
+## Dendritic branches in the word cells: negative (2026-11-17, `experiments/branch_probe.py`, three seeds)
+
+Idea: a cell's visual synapses on several branches, the cell driven by its best branch, only that branch learning,
+and a look of its word that drives it less than half its usual level taking an unused branch (branch-specific
+plasticity, Cichon & Gan 2015). So that a new look of a known word need not overwrite the old one.
+
+Word cells alone on the old cortex: 6,000 naming moments on three sources, then 6,000 without COCO things.
+
+| held-out naming, after phase 1 → after phase 2 | CIFAR | Commons | COCO things | COCO things whose names go on being taught |
+|---|---|---|---|---|
+| one branch, seed 0 / 1 / 2 | 0.395 → 0.520 / 0.370 → 0.470 / 0.380 → 0.440 | 0.450 → 0.520 / 0.525 → 0.565 / 0.440 → 0.470 | 0.315 → 0.275 / 0.225 → 0.220 / 0.295 → 0.250 | 0.348 → 0.304 / 0.249 → 0.243 / 0.320 → 0.276 |
+| four branches | 0.405 → 0.495 / 0.340 → 0.480 / 0.375 → 0.455 | 0.430 → 0.520 / 0.505 → 0.580 / 0.455 → 0.475 | 0.290 → 0.275 / 0.235 → 0.245 / 0.290 → 0.255 | 0.320 → 0.304 / 0.260 → 0.271 / 0.320 → 0.282 |
+
+- Forgetting with the word cells alone is small: COCO things lose 0.03 on average over 6,000 moments (the lives lost
+  0.10 in 10,000). So most of the life's loss is not this overwriting, or needs the rest of the life to show.
+- Four branches change nothing that three seeds can see (after phase 2: 0.258 against 0.248 on COCO things). Every
+  cell uses all four within the first phase: "less than half its usual drive" is true of too many pictures with
+  these eyes, so the branches fill with ordinary variation and not with a new kind of look.
+- Kept in the code (`Words(branches=…)`, off). Worth trying again only when a picture of a word is recognised
+  reliably enough for "a new look" to mean something.

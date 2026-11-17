@@ -314,3 +314,41 @@ What it says:
 
 **The word cells on the living cortex** (the baseline for that; 8,000 naming moments of world 3's first words, each
 picture once, three seeds): held-out naming 0.385, 0.392, 0.383; by source CIFAR 0.38, Commons 0.49, COCO things 0.29.
+
+## The word cells could not use a better code; a relay that decorrelates it lets them (2026-11-17)
+
+`experiments/words_on_cortex.py`: the real word cells live 8,000 naming moments of world 3's first words (CIFAR,
+Commons, COCO things; each picture once) and name held-out pictures; mean of the three sources. The new cortex is
+`organic/cortex2.py` with one layer (256 kinds, decorrelated windows, graded response, averaged summary, not scaled
+by contrast; a linear reference on it: 0.383 COCO things, 0.545 CIFAR + Commons).
+
+| | old cortex | new cortex (one layer) |
+|---|---|---|
+| a linear readout (ridge) fitted on the very pictures the word cells lived, seed 0 | 0.495 | 0.560 |
+| the word cells as they are (three seeds) | 0.385 0.392 0.383 | 0.398 0.402 0.408 |
+| … the code decorrelated on its way to them, seed 0 | 0.425 | 0.505 |
+| … and every correction at full size (three seeds for the new cortex) | 0.463 | 0.533 0.508 0.508 |
+
+Other arms on the new cortex, seed 0: three passes over the same moments 0.428; corrections twice as large 0.393,
+four times diverges; the correction not shared with the cues 0.420; full-size corrections without decorrelation
+0.388. Decorrelation strength (how much of the largest variance is added to every direction first), with full-size
+corrections: 0.002 → 0.510, 0.0005 → 0.533, 0.0001 → 0.523, 0.00002 → 0.513.
+
+- **With the word cells as they were, a better cortex was worth +0.016.** The linear reference had risen by 0.07–0.10
+  and the word cells did not follow: they, and not the eyes, were the limit. All the vision work of the last weeks
+  was read through this.
+- **Why.** A delta rule that sees each moment once learns along the few strongest directions of a correlated input
+  and hardly along the fine ones that tell a cat from a dog. It is not the number of looks (three passes: +0.03) and
+  not the size of the step (larger: nothing, then divergence). It is the shape of the input.
+- **The remedy is a decorrelating stage between the cortex and the word cells** (`cortex2.Relay`): +0.11 with the new
+  cortex. In a brain this is lateral inhibition between the neurons that carry the summary (anti-Hebbian learning,
+  Földiák 1990); here it is computed at once from the summaries of 6,000 lived pictures, when the cortex is made.
+  That is a debt: it should be learned by a local rule, and during life.
+- **Full-size corrections** (+0.03, only with the decorrelated code): the content dendrite's plasticity was "the
+  cell's own recent error" times the error of the moment, which counts the error twice; the error of the moment
+  already makes a cell that is right stop changing. `Words.plastic_by_error = False`. Checked on text lessons
+  before any life (below).
+- Together: **0.387 → 0.516 held-out naming (three seeds), with one cortex layer, the same pictures, the same
+  number of moments.** Offline; a life is the test.
+
+`data/visual_cortex2.pkl` is that cortex with its relay (`experiments/make_cortex2.py`).
