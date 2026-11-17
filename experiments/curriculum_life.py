@@ -40,6 +40,15 @@ TOTAL = int(os.environ.get("TOTAL", 2000000))
 
 if os.environ.get("RESUME"):
     brain = pickle.load(open(os.environ["RESUME"], "rb"))
+    # a resumed brain can be given what it was born without (docs/VISION.md, 2026-11-17): eyes that fixate, match
+    # neurons in the word cells, a first cortex layer that listens to the word cells
+    if os.environ.get("LOOKING") == "1":
+        brain.looking = True
+    if os.environ.get("MATCH") == "1" and getattr(brain, "words", None) is not None and not brain.words.match:
+        brain.words.enable_match()
+    if float(os.environ.get("TEACH", 0)) and getattr(brain, "words", None) is not None:
+        brain.teach = float(os.environ["TEACH"])
+        brain.words.feedback_dims = brain.cortex.layers[0].kinds * brain.cortex_grid ** 2
 else:
     parts = Parts()
     parts.W = np.load(os.path.join(os.path.dirname(__file__), "..", "data", "parts.npy"))
@@ -55,7 +64,8 @@ else:
         brain = SpeakingBrain(parts, seed=SEED, size=64, hub=hub, hub_cells=int(os.environ.get("HUB_CELLS", 0)) or None,
                               words=os.environ.get("WORDS") == "1", max_units=int(os.environ.get("MAX_UNITS", 0)) or None,
                               max_cues=int(os.environ.get("MAX_CUES", 0)) or None, one_stream=os.environ.get("ONE_STREAM") == "1",
-                              novel_copy=os.environ.get("NOVEL_COPY") == "1", imagery=os.environ.get("IMAGERY") == "1", sound=os.environ.get("SOUND") == "1", ear=os.environ.get("EAR_KIND"), **cfg)
+                              novel_copy=os.environ.get("NOVEL_COPY") == "1", imagery=os.environ.get("IMAGERY") == "1", sound=os.environ.get("SOUND") == "1", ear=os.environ.get("EAR_KIND"),
+                              looking=os.environ.get("LOOKING") == "1", match=os.environ.get("MATCH") == "1", teach=float(os.environ.get("TEACH", 0)), **cfg)
     else:
         brain = LoopBrain2(parts, seed=SEED, size=64, **cfg)
     brain.curriculum = {"stage": os.environ.get("FIRST_STAGE", "BB"), "since": 0, "passed": {}, "promotions": []}

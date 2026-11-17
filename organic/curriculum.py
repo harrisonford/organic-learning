@@ -274,21 +274,23 @@ def build_items(seed=0, world=1):
     epath = os.path.join(W.WORLD_DIR, "echo_frames.json")
     echo = _echo_games(json.load(open(epath))["frames"]) if world >= 2 and os.path.exists(epath) else _babble()
     items = echo + (_social() if world >= 2 else []) + _text_world() + _curriculum_items() + _babi() + _captions() + _wikidata()
-    # COCO annotation questions on val2017 photos
+    # COCO annotation questions on val2017 photos. In world 4 the questions about whole photographs (is there, how many,
+    # what colour, yes/no) are asked in preschool: at two words a child is asked about a picture-book page (Curriculum)
+    photo = "P" if world >= 4 else "W2"
     for ref, q, a, kind in W.coco_annotation_questions(rng):
         if kind == "identity":
             items.append((ref, q, [a], "K", "coco:biggest"))
         elif kind == "presence":
-            items.append((ref, q, [a], "W2", "coco:presence"))
+            items.append((ref, q, [a], photo, "coco:presence"))
         elif kind == "count" and a in ("zero", "one", "two", "three"):
-            items.append((ref, q, [a], "W2", "coco:count"))
+            items.append((ref, q, [a], photo, "coco:count"))
         elif kind == "where":
             items.append((ref, q, [a, a.split()[-1]], "P", "coco:where"))
     for ref, q, a, kind in W.vqa_questions():
         if kind == "color" and len(a.split()) == 1:
-            items.append((ref, q, [a], "W2", "vqa:color"))
+            items.append((ref, q, [a], photo, "vqa:color"))
         elif kind in ("yesno", "presence"):
-            items.append((ref, q, [a], "W2", "vqa:yesno"))
+            items.append((ref, q, [a], photo, "vqa:yesno"))
         elif kind == "count":
             items.append((ref, q, [a], "P", "vqa:count"))
     for ref, q, a, _ in W.reading_questions():
@@ -338,14 +340,31 @@ class Curriculum:
             for src in ("cifar:name", "commons:name", "coco:name"):
                 for it in self.train.get("W1", {}).get(src, []):
                     self.by_name.setdefault(it[2][0], []).append(it[0])
+        fpath = os.path.join(W.WORLD_DIR, "naming_frames.json")
+        self.frames = json.load(open(fpath))["frames"] if os.path.exists(fpath) else ["what is this?"]
+        # world 4: two words is about picture-book pages (organic/scenes.py) made of the first-words pictures: a thing
+        # on a page named, "is there a dog?", "how many dogs are there?". Lived pages are made of lived pictures,
+        # test pages of held-out ones. The adults should word these; for now the few wordings of scenes.py.
+        self.scenes = {}
+        if world >= 4:
+            from .scenes import Scenes
+            held = {}
+            for src in ("cifar:name", "commons:name", "coco:name"):
+                for it in self.test.get("W1", {}).get(src, []):
+                    held.setdefault(it[2][0], []).append(it[0])
+            self.scenes = {"lived": Scenes(self.by_name, self.image, seed, size=26), "held": Scenes(held, self.image, seed + 1, size=26)}
+            for side, store, many in (("lived", self.train, 20000), ("held", self.test, 400)):
+                sc = self.scenes[side]
+                store.setdefault("W2", {})["page:name"] = [(("page", side, "name", n), self.frames[n % len(self.frames)], sc.named(n)[2], "W2", "page:name") for n in range(many)]
+                for kind in ("there", "count"):
+                    made = [sc.make(kind, n) for n in range(many)]
+                    store["W2"]["page:" + kind] = [(("page", side, kind, n), q, [a], "W2", "page:" + kind) for n, (_, _, q, a) in enumerate(made)]
         self.prng = random.Random(seed + 3)  # its own dice: putting things in view does not change the lessons drawn
         self._cache = {}
         # the ways adults name a thing unasked (experiments/world/observation_frames.py)
         opath = os.path.join(W.WORLD_DIR, "observation_frames.json")
         self.comments = json.load(open(opath))["frames"] if os.path.exists(opath) else ["look, a THING!"]
         self.orng = random.Random(seed + 2)  # observation has its own dice: turning it on does not change the lessons drawn
-        fpath = os.path.join(W.WORLD_DIR, "naming_frames.json")
-        self.frames = json.load(open(fpath))["frames"] if os.path.exists(fpath) else ["what is this?"]
 
     def summary(self):
         return " | ".join(f"{s}: " + ", ".join(f"{src} {len(v)}" for src, v in sorted(self.train.get(s, {}).items())) for s in STAGES)
@@ -353,6 +372,8 @@ class Curriculum:
     def image(self, ref):
         if isinstance(ref, tuple) and ref[0] == "dark":
             return W.World.DARK
+        if isinstance(ref, tuple) and ref[0] == "page":  # made when looked at
+            return self.scenes[ref[1]].picture(ref[2], ref[3])
         if ref not in self._cache:
             if isinstance(ref, tuple) and ref[0] == "read":
                 self._cache[ref] = W.render_word(W.thumb(os.path.join(W.DATA, "val2017", ref[1])), ref[2], ref[3])
@@ -371,7 +392,7 @@ class Curriculum:
         """How a lived item is asked this time. A naming question is worded afresh at every moment (adults do not
         ask about the same picture in the same words each time; with one fixed wording per picture, a wording's
         own words became cues for "its" pictures' names: docs/AREAS.md). Test items keep their fixed wording."""
-        if item[4] in ("cifar:name", "commons:name", "coco:name"):
+        if item[4] in ("cifar:name", "commons:name", "coco:name", "page:name"):
             return (rng or self.rng).choice(self.frames)
         if item[4] in ("echo", "echo:wide") and self.echo_frames:
             return (rng or self.rng).choice(self.echo_frames).replace("WORD", item[2][0])

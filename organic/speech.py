@@ -144,7 +144,7 @@ class Mouth:
 class SpeakingBrain(LoopBrain2):
     max_utterance = 16
 
-    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, one_stream=False, novel_copy=False, imagery=False, sound=False, ear=None, **kw):
+    def __init__(self, parts, hub=False, hub_cells=None, words=False, max_units=None, max_cues=None, one_stream=False, novel_copy=False, imagery=False, sound=False, ear=None, looking=False, match=False, teach=0.0, **kw):
         super().__init__(parts, **kw)
         if ear == "edge":  # the ear that learns what word edges sound like (organic/ear_carving.py); a new ear is a new lineage
             from .ear_carving import EdgeEar
@@ -175,7 +175,10 @@ class SpeakingBrain(LoopBrain2):
         if words and self.cortex is not None:
             from .words import Words
             dim = sum(layer.kinds for layer in self.cortex.layers) * self.cortex_grid ** 2
-            self.words = Words(dim, self.ear, max_units=max_units, max_cues=max_cues, imagery=imagery, sound=sound)
+            self.words = Words(dim, self.ear, max_units=max_units, max_cues=max_cues, imagery=imagery, sound=sound, match=match)
+            if teach:  # the cortex's first layer hears back from the word cells
+                self.words.feedback_dims = self.cortex.layers[0].kinds * self.cortex_grid ** 2
+        self.looking, self.teach = looking, teach
         self.observed = 0
         self.heard_recent = np.zeros(self.ear.width, np.float32)
         self.babbles = 0
@@ -299,12 +302,61 @@ class SpeakingBrain(LoopBrain2):
                 where[np.array(idx)[better]] = p
         return np.maximum(prime, 0) ** 2, where
 
+    looking = False  # the eye fixates what stands out and the word cells get those views too (docs/VISION.md, 2026-11-17)
+    teach = 0.0  # the rate at which the cortex's first layer learns from the word cells' feedback (0: a fixed cortex)
+    _glimpsed = None
+
+    def _glimpse(self, img):
+        """One look at the scene: the cortex's code of the whole view (None when the eyes see nothing), and, in a
+        brain that looks, of what the eye then fixates (organic/gaze.py), each fixation filling the view. The word
+        cells are told the fixations. Kept for the moment: the layers' codes (self._allc, for the orchestrator) and
+        what the first layer needs to be taught (self._kept)."""
+        if self._glimpsed is not None and self._glimpsed[0] is img:
+            _, self._allc, self._kept, vis, looks = self._glimpsed
+        else:
+            self._kept, looks, vis = [], None, None
+
+            def code(view):
+                if self.teach:
+                    codes, kept = self.cortex.code_kept(view, grid=self.cortex_grid)
+                    self._kept.append(kept)
+                    return codes
+                return self.cortex.code(view, grid=self.cortex_grid)
+
+            unit = lambda codes: (lambda v: v / (np.linalg.norm(v) + 1e-8))(np.concatenate(codes))  # noqa: E731
+            self._allc = code(img)
+            if img.max() > 0:
+                vis = unit(self._allc)
+                if self.looking:
+                    from PIL import Image
+                    from .gaze import fixations
+                    side = img.shape[0] // 2
+                    looks = [unit(code(np.asarray(Image.fromarray((np.clip(img[r : r + side, c : c + side], 0, 1) * 255).astype(np.uint8))
+                                                  .resize(img.shape[1::-1], Image.BILINEAR), np.float32) / 255)) for r, c in fixations(img, most=4)]
+            else:
+                self._kept = []
+            self._glimpsed = (img, self._allc, self._kept, vis, looks)
+        if getattr(self, "words", None) is not None:
+            self.words.look(looks)
+        return vis
+
     def _vis(self, img):
         """The whole view, as the word cells' (or the hub's) visual synapses get it; None when the eyes see nothing."""
-        if self.cortex is None or img.max() <= 0:
+        if self.cortex is None:
             return None
-        vis = np.concatenate(self.cortex.code(img, grid=self.cortex_grid))
-        return vis / (np.linalg.norm(vis) + 1e-8)
+        return self._glimpse(img)
+
+    def _taught(self):
+        """After the word cells have learned from a moment: the cortex's first layer hears their feedback, for each view."""
+        fb = getattr(self.words, "fb", None)
+        if self.teach and fb is not None and self._kept:
+            for kept, t in zip(self._kept, fb):
+                self.cortex.teach(kept, t, self.teach)
+        self.words.fb = None
+        self._glimpsed = None  # the cortex has changed: the next look is a new look
+
+    def __getstate__(self):
+        return {k: v for k, v in self.__dict__.items() if k not in ("_glimpsed", "_kept", "_allc")}
 
     def observe(self, img, says):
         """An adult talks about what is seen, unasked (docs/REVIEW_2026-11-10.md 4.4): the ear hears it, the mouth
@@ -316,6 +368,7 @@ class SpeakingBrain(LoopBrain2):
         self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
         if getattr(self, "words", None) is not None:
             self.words.learn([], self._vis(img), heard)
+            self._taught()
         self.observed = getattr(self, "observed", 0) + 1
 
     one_stream = False  # brains made before 2026-11-11 choose a route (copy, own habits, recall); see docs/CONVERSATION.md
@@ -360,6 +413,7 @@ class SpeakingBrain(LoopBrain2):
             self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
             if getattr(self, "words", None) is not None:
                 self.words.learn(before, self._vis(img), heard)
+                self._taught()
         self.chats = getattr(self, "chats", 0) + 1
         return said, back
 
@@ -447,11 +501,8 @@ class SpeakingBrain(LoopBrain2):
         codes = None
         vis, recalled, confidence = None, None, 0.0
         if self.cortex is not None:
-            allc = self.cortex.code(img, grid=self.cortex_grid)
-            codes = [allc[i] for i in self.cortex_layers]
-            if img.max() > 0:  # the eyes see something: the whole view, as the hub's visual area gets it
-                vis = np.concatenate(allc)
-                vis = vis / (np.linalg.norm(vis) + 1e-8)
+            vis = self._glimpse(img)  # the whole view as the word cells (or the hub) get it, and what the eye fixated
+            codes = [self._allc[i] for i in self.cortex_layers]
         hub = getattr(self, "hub", None)
         words = getattr(self, "words", None)
         if hub is not None:
@@ -541,7 +592,10 @@ class SpeakingBrain(LoopBrain2):
                 if hub is not None:  # the adult's word, linked to what was heard and seen
                     hub.learn(heard, vis, answer)
                 if words is not None:  # the adult's reply is heard too: its units are what the word cells predict
+                    if self.cortex is not None:
+                        self._glimpse(img)  # the same look (the word cells may have been shown something else since)
                     words.learn(heard, vis, self.ear.units(answer))
+                    self._taught()
                 base = snapshot[2] if snapshot else self._base(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 targets = self.mouth.decompose(answer)
                 for u in self.mouth.rehearse(targets):  # new motor chunks get their output neurons

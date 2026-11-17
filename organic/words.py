@@ -52,10 +52,13 @@ class Words:
     setpoint = False  # a cell stays silent below its own firing level (docs/CONVERSATION.md, proposal 2)
     sound = False  # the content dendrite also hears the sound of what was said, not only which units it was cut into
 
-    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False, setpoint=False):
+    match = False  # the heard word's own cell, when it is also driven by what is seen, tells the others (docs/VISION.md)
+    match_cells = 16
+
+    def __init__(self, visual_dim, ear, max_units=None, max_cues=None, imagery=False, sound=False, setpoint=False, match=False):
         self.ear, self.visual_dim = ear, visual_dim
         self.setpoint = setpoint
-        self.use_core = True  # a unit's identity is the word in it, as the ear tells it (EdgeEar.core); other ears: the unit itself
+        self.match = False
         # each cell's own two levels of content drive: when its unit was then heard, and when it was the most driven
         # cell but its unit was not heard. Between them lies the level below which it has nothing to say.
         self.m_on, self.m_off = np.zeros(64, np.float32), np.zeros(64, np.float32)
@@ -91,6 +94,21 @@ class Words:
         self.use_a = np.zeros(ear.width, np.float32)
         self.born = np.zeros(64, np.int64)
         self.moments = 0
+        if match:
+            self.enable_match()
+
+    def enable_match(self):
+        """Match neurons: a small population that hears how strongly, and in how many of the eye's views, the cells of
+        the words just heard are driven by what is seen. Every neuron mixes the two (the strongest view, all views
+        together) in its own way and has its own threshold; what their firing means is learned by the word cells'
+        content dendrites like any other input. Can be given to a brain that has lived without them."""
+        rng = np.random.default_rng(getattr(self.ear, "seed", 0) + 31)
+        self.m_mix = rng.normal(0, 1, (self.match_cells, 2)).astype(np.float32)
+        self.m_thr = rng.uniform(-1, 1, self.match_cells).astype(np.float32)
+        self.m_mean, self.m_var, self.m_seen = np.zeros(2, np.float32), np.ones(2, np.float32), 0
+        self.Wm = np.zeros((len(self.base), self.match_cells), np.float32)
+        self.use_m = np.zeros(self.match_cells, np.float32)
+        self.match = True
 
     # ------------------------------------------------------------------ cells
 
@@ -103,6 +121,8 @@ class Words:
                 self.Wb = pad(self.Wb)
             if getattr(self, "Ws", None) is not None:
                 self.Ws = pad(self.Ws)
+            if self.match:
+                self.Wm = pad(self.Wm)
             self.L = np.concatenate([pad(self.L), np.zeros((cap, cap - self.L.shape[1]), np.float32)], axis=1)
             self.heard, self.last, self.born = pad(self.heard), pad(self.last), pad(self.born)
             if getattr(self, "m_on", None) is not None:
@@ -162,6 +182,8 @@ class Words:
             return None
         return self.ear.combinations(b"".join(units))
 
+    feedback_dims, fb = 0, None  # set by the brain when its cortex listens to the word cells
+
     _looks = None  # the views of this moment besides the whole one: what the eye fixated, each filling the view
 
     def _views(self, v, learn=False):
@@ -189,15 +211,63 @@ class Words:
     def _echo(self, heard, said):
         return self.ear.question(list(heard) + [SILENCE] + list(said), adapt=False)
 
-    def _content(self, x, cues, b=None, snd=None):
+    def _hearing(self, heard, n):
+        """How far each cell's own unit is being heard: a cell fires when its unit is heard, and partly when a unit
+        that sounds like it is ("dogs" for "dog"; the ear's sound of a unit, squared so that faint likeness is nothing)."""
+        said = [u for u in {self._core(u) for u in heard} if u]
+        if not said or n < 2:
+            return None
+        cs = getattr(self, "_cs", None)
+        if cs is None or self._cs_units is not self.units or len(cs) < n:
+            cs = np.zeros((max(n, 2 * (0 if cs is None else len(cs))), self.ear.width), np.float32)
+            for i, u in enumerate(self.units[1:n], 1):
+                cs[i] = self.ear.sound(u)
+            self._cs, self._cs_units, self._cs_n = cs, self.units, n
+        elif self._cs_n < n:
+            for i in range(self._cs_n, n):
+                cs[i] = self.ear.sound(self.units[i])
+            self._cs_n = n
+        return np.maximum(cs[:n] @ np.stack([self.ear.sound(u) for u in said]).T, 0).max(axis=1) ** 2
+
+    def _matched(self, d, heard, learn):
+        """The match neurons' firing. In every view, the cells of the words being heard burst as far as that view
+        drives them too (heard and seen at once, in the same cell); the bursts of all cells are pooled per view.
+        The neurons get the strongest view and the sum over the views (the eye's fixations when it made any), each
+        relative to its own running average and spread."""
+        h = self._hearing(heard, d.shape[0])
+        if h is None:
+            pooled = np.zeros(2, np.float32)
+        else:
+            per_view = h @ np.maximum(d[:, 1:] if d.shape[1] > 1 else d, 0)
+            pooled = np.array([per_view.max(), per_view.sum()], np.float32)
+        if learn:
+            self.m_seen += 1
+            rate = 1.0 / min(self.m_seen, 1000)
+            self.m_mean += rate * (pooled - self.m_mean)
+            self.m_var += rate * ((pooled - self.m_mean) ** 2 - self.m_var)
+        z = np.clip((pooled - self.m_mean) / (np.sqrt(self.m_var) + 1e-6), -3, 3)
+        # each neuron's firing saturates, and the population is scaled so that it is an input of at most unit size like
+        # the others (unscaled, the first corrections overshot and the weights ran away: a smoke test on 2026-11-17)
+        return np.tanh(np.maximum(self.m_mix @ z - self.m_thr, 0)) / np.sqrt(self.match_cells)
+
+    def __getstate__(self):
+        return {k: v for k, v in self.__dict__.items() if k not in ("_cs", "_cs_units", "_cs_n")}  # a cache
+
+    _m = None
+
+    def _content(self, x, cues, b=None, snd=None, heard=None, learn=False):
         n = len(self.units)
         o = np.zeros(n, np.float32)
+        self._m = None
         if snd is not None:
             o += self.Ws[:n] @ snd
         if x is not None and x.ndim == 2:  # several views: each cell takes the one that drives it most
             d = self.Wv[:n] @ x.T
             self._best = d.argmax(axis=1)
             o += d.max(axis=1)
+            if self.match and heard is not None:
+                self._m = self._matched(d, heard, learn)
+                o += self.Wm[:n] @ self._m
         elif x is not None:
             o += self.Wv[:n] @ x
         if b is not None:
@@ -214,7 +284,7 @@ class Words:
         cues = [c for c in (self._cue(u, False) for u in set(heard)) if c is not None]
         snd = self._heard_sound(heard)
         x, b = self._sight(v, cues, snd=snd)
-        drive = np.maximum(self._content(x, cues, b, snd), 0)
+        drive = np.maximum(self._content(x, cues, b, snd, heard), 0)
         ctx = np.maximum(self.Wa[:n] @ self._echo(heard, said), 0)
         if self.lateral:
             ctx = self._spread(ctx)
@@ -269,7 +339,7 @@ class Words:
         cues = [c for c in (self._cue(u, False) for u in set(heard)) if c is not None]
         snd = self._heard_sound(heard)
         x, b = self._sight(v, cues, snd=snd)
-        o = self._content(x, cues, b, snd) + self.base[: len(self.units)]
+        o = self._content(x, cues, b, snd, heard) + self.base[: len(self.units)]
         got = [float(np.clip(o[self.index[self._core(u)]], 0, 1)) if self._core(u) in self.index else 0.0 for u in reply_units]
         return 1.0 - float(np.mean(got)) if got else 1.0
 
@@ -277,6 +347,7 @@ class Words:
         """An utterance (reply_units) was heard after `heard` (a question, or nothing: an unasked comment), while
         seeing v (or nothing). Every cell's dendrites compare what they expected with whether the cell fired."""
         self.moments += 1
+        self.fb = None
         targets = [self.cell(u) for u in reply_units]
         cues = [self._cue(u, True) for u in set(heard)]
         n = len(self.units)
@@ -288,7 +359,8 @@ class Words:
         x, b = self._sight(v, cues, learn=True, snd=snd)
         fired = np.zeros(n, np.float32)
         fired[targets] = 1.0
-        o = self._content(x, cues, b, snd)
+        o = self._content(x, cues, b, snd, heard, learn=True)
+        m = self._m
         if getattr(self, "m_on", None) is not None and n > 1:  # each cell's own levels (measured, before this moment changes it)
             d = np.maximum(o, 0)
             if targets:
@@ -300,11 +372,19 @@ class Words:
                 self.m_off[k] += self.memory * (d[k] - self.m_off[k])
         e = fired - (o + self.base[:n])
         e[0] = 0.0  # silence has no content dendrite
-        step = self.err_c[:n] * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + len(cues))  # the inputs share the correction
+        step = self.err_c[:n] * e / (1.0 + (x is not None) + (b is not None) + (snd is not None) + (m is not None) + len(cues))  # the inputs share the correction
+        if m is not None:
+            self.Wm[:n] += step[:, None] * (m / (1.0 + self.use_m / self.maturation))[None, :]
+            self.use_m += m * m
         if snd is not None:
             self.Ws[:n] += step[:, None] * (snd / (1.0 + self.use_s / self.maturation))[None, :]
             self.use_s += snd * snd
         self._own_error(self.err_c, fired, e)
+        if self.feedback_dims and x is not None:
+            # what the visual neurons hear back (the first feedback_dims of them: the cortex's first layer): each cell's
+            # error returns along its own synapses, to the view that drove it (docs/VISION.md, the cortex taught by the words)
+            W = self.Wv[:n, : self.feedback_dims]
+            self.fb = [W[self._best == k].T @ e[self._best == k] for k in range(len(x))] if x.ndim == 2 else [W.T @ e]
         self.base[:n] += step / (1.0 + (self.moments - self.born[:n]) / self.maturation)  # the baseline: an input that is always on
         if x is not None and x.ndim == 2:
             # each cell learns from the view it took the word to be about: the one that drove it most; a cell that fired
@@ -371,7 +451,7 @@ class Words:
         value[0] = np.inf
         drop = set(np.argsort(value)[: max(1, int(fraction * n))].tolist())
         keep = [i for i in range(n) if i not in drop]
-        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("m_on", "m_off") if getattr(self, "m_on", None) is not None else ()) + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()):
+        for name in ("Wv", "Wc", "Wa", "base", "err_c", "err_a", "heard", "last", "born", "L") + (("m_on", "m_off") if getattr(self, "m_on", None) is not None else ()) + (("Wb",) if getattr(self, "Wb", None) is not None else ()) + (("Ws",) if getattr(self, "Ws", None) is not None else ()) + (("Wm",) if self.match else ()):
             a = getattr(self, name)
             a[: len(keep)] = a[keep]
             a[len(keep) : n] = 1.0 if name.startswith("err") else 0
@@ -379,6 +459,7 @@ class Words:
         self.L[:, len(keep) : n] = 0
         self.units = [self.units[i] for i in keep]
         self.index = {u: i for i, u in enumerate(self.units)}
+        self._cs = None
 
     def _forget_cues(self, fraction=0.1):
         n = len(self.cues)

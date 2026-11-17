@@ -29,25 +29,38 @@ def plural(w):
     return PLURAL.get(w, w + ("es" if w.endswith(("s", "sh", "ch", "x")) else "s"))
 
 
-def page(tiles, shade):
-    """Up to four 64x64 pictures (or None), each in a quarter of a 64x64 page of one light shade."""
+def page(tiles, shade, size=30):
+    """Up to four 64x64 pictures (or None), each in a quarter of a 64x64 page of one light shade; `size` is the side
+    of a picture on the page (30: a margin of one pixel; 26: of three, as the pages of world 4 have)."""
     out = np.full((64, 64, 3), shade, np.float32)
+    m = (32 - size) // 2
     for k, t in enumerate(tiles):
         if t is not None:
-            small = np.asarray(Image.fromarray((np.clip(t, 0, 1) * 255).astype(np.uint8)).resize((30, 30), Image.BILINEAR), np.float32) / 255
+            small = np.asarray(Image.fromarray((np.clip(t, 0, 1) * 255).astype(np.uint8)).resize((size, size), Image.BILINEAR), np.float32) / 255
             r, c = divmod(k, 2)
-            out[r * 32 + 1 : r * 32 + 31, c * 32 + 1 : c * 32 + 31] = small
+            out[r * 32 + m : r * 32 + m + size, c * 32 + m : c * 32 + m + size] = small
     return out
 
 
 class Scenes:
     """Scenes made from named pictures: by_name = {name: [picture refs]}, image(ref) -> 64x64x3 array."""
 
-    def __init__(self, by_name, image, seed=0):
+    def __init__(self, by_name, image, seed=0, size=30):
         self.by_name = {w: refs for w, refs in by_name.items() if len(refs) >= 3}
         self.names = sorted(self.by_name)
         self.image = image
         self.seed = seed
+        self.size = size  # the side of a picture on the page
+
+    def named(self, n):
+        """Scene number n of the kind "name": a thing on a page, one time in three with another beside it, to be
+        named when asked. (tile refs, shade, the names on the page: the thing first)."""
+        rng = random.Random(zlib.crc32(f"{self.seed}:name:{n}".encode()))
+        w = rng.choice(self.names)
+        on = [w] + ([rng.choice([x for x in self.names if x != w])] if rng.random() < 1 / 3 else [])
+        tiles = [rng.choice(self.by_name[x]) for x in on] + [None] * (4 - len(on))
+        rng.shuffle(tiles)
+        return tiles, rng.uniform(0.75, 0.95), on
 
     def make(self, kind, n):
         """Scene number n of a kind ("count" or "there"), always the same: (tile refs, shade, question, answer)."""
@@ -71,5 +84,5 @@ class Scenes:
         return tiles, rng.uniform(0.75, 0.95), q, a
 
     def picture(self, kind, n):
-        tiles, shade, _, _ = self.make(kind, n)
-        return page([self.image(t) if t is not None else None for t in tiles], shade)
+        tiles, shade = (self.named(n) if kind == "name" else self.make(kind, n))[:2]
+        return page([self.image(t) if t is not None else None for t in tiles], shade, self.size)

@@ -151,6 +151,52 @@ class VisualCortex:
             codes.append(p / (np.linalg.norm(p) + 1e-8))
         return codes
 
+    # ---------------------------------------------------- taught by the words (docs/VISION.md, 2026-11-16/17)
+
+    def code_kept(self, img, grid=2):
+        """As code(), and what the first layer needs to be taught afterwards: for every (grid region, kind) the
+        window of the picture that the kind responded to most there, and whether it responded at all."""
+        x = np.asarray(img, np.float32)
+        codes, kept = [], None
+        for li, layer in enumerate(self.layers):
+            v, e = layer.windows(x)
+            r = np.maximum(v @ layer.W.T, 0) * e[..., None]
+            if layer.active < layer.kinds:
+                kth = np.partition(r, -layer.active, axis=2)[..., -layer.active][..., None]
+                r = np.where(r >= kth, r, 0)
+            p = layer.pool
+            h, w = (r.shape[0] // p) * p, (r.shape[1] // p) * p
+            x = r[:h, :w].reshape(h // p, p, w // p, p, -1).max(axis=(1, 3)).astype(np.float32)
+            gh, gw = (h // p) // grid * p, (w // p) // grid * p  # a grid region, in positions before pooling
+            R = r[: gh * grid, : gw * grid].reshape(grid, gh, grid, gw, -1).transpose(0, 2, 1, 3, 4).reshape(grid * grid, gh * gw, -1)
+            where = R.argmax(axis=1)  # (regions, kinds)
+            top = np.take_along_axis(R, where[:, None, :], axis=1)[:, 0, :]
+            codes.append((top / (np.linalg.norm(top) + 1e-8)).ravel())
+            if li == 0:
+                V = v[: gh * grid, : gw * grid].reshape(grid, gh, grid, gw, -1).transpose(0, 2, 1, 3, 4).reshape(grid * grid, gh * gw, -1)
+                kept = (V, where, top > 0)
+        return codes, kept
+
+    fb_size, fb_seen = 0.0, 0
+
+    def teach(self, kept, feedback, rate=0.005):
+        """The first layer hears back from the word cells: for each of its neurons (a kind, in a region of the view)
+        whether it spoke for the word that was then heard (+) or for another (-). A kind that responded moves
+        towards (or away from) the window it responded to: feedback-gated Hebbian learning (Roelfsema & van Ooyen
+        2005). The feedback is heard relative to its own usual size. Only the first layer: the second is ruined by
+        the same rule (measured 2026-11-16), and why is not known."""
+        V, where, on = kept
+        layer = self.layers[0]
+        t = np.asarray(feedback, np.float32).reshape(on.shape) * on
+        if not on.any() or not np.abs(t).sum():
+            return
+        self.fb_seen += 1
+        self.fb_size += (float(np.abs(t[on]).mean()) - self.fb_size) / min(self.fb_seen, 1000)
+        t = t / (self.fb_size + 1e-12)
+        regions, kinds = np.nonzero(t)
+        np.add.at(layer.W, kinds, rate * t[regions, kinds][:, None] * V[regions, where[regions, kinds]])
+        layer.W /= np.linalg.norm(layer.W, axis=1, keepdims=True) + 1e-8
+
     def live(self, img, rng, samples=8):
         """Every layer learns at once from what the eye sees (Layer.live): plasticity follows each kind's mismatch."""
         x = np.asarray(img, np.float32)
