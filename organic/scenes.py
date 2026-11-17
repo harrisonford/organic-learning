@@ -29,16 +29,18 @@ def plural(w):
     return PLURAL.get(w, w + ("es" if w.endswith(("s", "sh", "ch", "x")) else "s"))
 
 
-def page(tiles, shade, size=30):
-    """Up to four 64x64 pictures (or None), each in a quarter of a 64x64 page of one light shade; `size` is the side
-    of a picture on the page (30: a margin of one pixel; 26: of three, as the pages of world 4 have)."""
-    out = np.full((64, 64, 3), shade, np.float32)
-    m = (32 - size) // 2
+def page(tiles, shade, size=30, cell=32):
+    """Up to four 64x64 pictures (or None), each in a quarter of a page of one light shade. `cell` is the side of a
+    quarter and `size` the side of a picture in it: (30, 32) a 64x64 page with a margin of one pixel; (26, 32) of
+    three, as the pages of world 4 had at first; (52, 64) a page twice as large as the view, which the eye sees whole
+    only coarsely and in full detail where it fixates."""
+    out = np.full((2 * cell, 2 * cell, 3), shade, np.float32)
+    m = (cell - size) // 2
     for k, t in enumerate(tiles):
         if t is not None:
-            small = np.asarray(Image.fromarray((np.clip(t, 0, 1) * 255).astype(np.uint8)).resize((size, size), Image.BILINEAR), np.float32) / 255
+            small = t if size == t.shape[0] else np.asarray(Image.fromarray((np.clip(t, 0, 1) * 255).astype(np.uint8)).resize((size, size), Image.BILINEAR), np.float32) / 255
             r, c = divmod(k, 2)
-            out[r * 32 + m : r * 32 + m + size, c * 32 + m : c * 32 + m + size] = small
+            out[r * cell + m : r * cell + m + size, c * cell + m : c * cell + m + size] = small
     return out
 
 

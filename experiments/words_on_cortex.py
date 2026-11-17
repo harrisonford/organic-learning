@@ -52,17 +52,23 @@ for path in PATHS:
     import re
     num = lambda arm, key, default: next((float(m.group(1) or default) for part in arm.split("+") for m in [re.fullmatch(key + r"([0-9.]*)", part)] if m), None)  # noqa: E731
     ZS = {}
-    if any("white" in a for a in ARMS):
+    if any("white" in a or "lateral" in a for a in ARMS):
         r0 = random.Random(123)
         S = np.stack([code(r0.choice(lived[r0.choice(SRC)])[0]) for _ in range(3000)])
         mu = S.mean(0)
         d, E = np.linalg.eigh(np.cov((S - mu).T))
         for shrink in {num(a, "white", 0.05) for a in ARMS if "white" in a}:
             ZS[shrink] = ((E / np.sqrt(np.maximum(d, 0) + shrink * d.max())) @ E.T).astype(np.float32)
+        # lateral inhibition: every neuron of the summary is inhibited by the others through synapses that hold their
+        # correlation (Hebbian, local); settled, the circuit passes on (1 + C / level)^-1 of its input
+        for level in {num(a, "lateral", 0.01) for a in ARMS if "lateral" in a}:
+            ZS[("lateral", level)] = ((E * (level * d.max() / (np.maximum(d, 0) + level * d.max()))) @ E.T).astype(np.float32)
     wcache = {}
 
     def seen(ref, arm):
         shrink = num(arm, "white", 0.05)
+        if shrink is None and num(arm, "lateral", 0.01) is not None:
+            shrink = ("lateral", num(arm, "lateral", 0.01))
         if shrink is None:
             return code(ref)
         if (ref, shrink) not in wcache:

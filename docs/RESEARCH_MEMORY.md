@@ -179,3 +179,51 @@ Word cells alone on the old cortex: 6,000 naming moments on three sources, then 
   these eyes, so the branches fill with ordinary variation and not with a new kind of look.
 - Kept in the code (`Words(branches=…)`, off). Worth trying again only when a picture of a word is recognised
   reliably enough for "a new look" to mean something.
+
+## The relay as a lateral-inhibition circuit (2026-11-17, `experiments/words_on_cortex.py`, arms lateral…)
+
+Can the decorrelation be what a circuit with local synapses computes? Every neuron of the summary inhibited by the
+others through synapses that hold their correlation (a Hebbian, local quantity); settled, the circuit passes on
+level·(C + level)⁻¹ of its input. New one-layer cortex, full-size corrections, seed 0, held-out naming:
+
+| relay | held-out naming |
+|---|---|
+| none | 0.388 |
+| lateral inhibition, level 0.1 / 0.03 / 0.01 / 0.003 / 0.001 / 0.0001 of the largest variance | 0.447 / 0.473 / 0.490 / 0.487 / 0.452 / 0.362 |
+| whitening computed from the statistics (in the lives now) | 0.533 |
+
+The local form gives three quarters of the gain (0.39 → 0.49 of 0.53). So the relay need not be a batch computation:
+correlation synapses can be learned online, in development and in life, and the settled circuit recomputed in sleep.
+Not built yet; the lives run with the whitening.
+
+## Fast mapping: absent, and an episodic store gives it (2026-11-17, `experiments/fastmap_probe.py`, `fastmap_life.py`)
+
+The memory question in the form it has at this age: a name heard once with a kind of thing never named before (75
+CIFAR kinds of later stages), asked at once and again after 20 ordinary naming moments. New cortex with relay,
+word cells after 6,000 naming moments, seed 0 (seeds 1 and 2 running).
+
+| | the same picture, at once | another of the kind, at once | the same, after 20 moments | another, after 20 |
+|---|---|---|---|---|
+| word cells, one lesson ("what is this?" – "fox") | 0.07–0.12 | 0.00 | 0.05–0.11 | 0.00 |
+| word cells, three lessons on three pictures | 0.13–0.20 | 0.00 | 0.05–0.13 | 0.00 |
+| word cells, named in an unasked comment ("look, a fox!"), once or three times | 0.00 | 0.00 | 0.00 | 0.00 |
+| **a whole living brain** (world3b_s0 at 45,000 moments), one lesson, 40 kinds | 0.00 | 0.00 | 0.00 | 0.00 |
+| word cells **with an episodic store**, one lesson | 0.91–0.92 | 0.00 | 0.88–0.89 | 0.00 |
+| word cells with the store, named in an unasked comment | 0.00 | 0.00 | 0.00 | 0.00 |
+
+(Ranges: corrections by the cell's own error and at full size; they do not differ here.)
+
+- **The brain has no memory of a single moment.** What a two-year-old does after one hearing, it does not do after
+  three, on the very picture it was shown. The living brain answers through the word cells (160 of 160 answers by
+  recall), so the orchestrator's clusters do not hold a moment either. This is a missing piece, as Kris suspected.
+- **An episodic store beside the word cells gives it** (`organic/episodes.py`): a moment the slow synapses did not
+  expect is written whole at once, under what was seen (eyes closed: under what was heard); when the same situation
+  returns its reply's units are driven; the oldest moment goes when the store is full (2,000 moments). The slow
+  synapses learn exactly as before; first-words naming is not touched by it (0.430 → 0.463 with and without).
+- **It is a memory of a moment, not of a kind**: another picture of the same kind brings nothing back. With one
+  stored picture of each of 75 kinds, another picture of a kind is nearest to its own kind's 7% of the time (chance
+  1.3%): these eyes do not make two foxes look alike enough. A child generalises a new name by shape at once; that
+  waits for better eyes.
+- **A name heard inside a comment is not given back as an answer**, with or without the store: what was stored is
+  the whole comment, and the question asks for one word of it. Not looked into yet.
+- Two numbers are set by hand in the store (how many moments, how steep the comparison). Not in a life yet.

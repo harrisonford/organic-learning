@@ -89,3 +89,29 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   path hard-coded: add CORTEX/CORTEX_LAYERS variables). Baseline: world3 + world3b checkpoints up to 45-50k.
   Then: snapshot doc; then research loop (relay learned by a local rule; second layer; memory: context across
   moments; looking again with the new eyes; the old cortex + relay for the released lineage?).
+- 16:45 Text check: FULL lifts text beyond the parrot 0.248 → 0.330 (3 seeds). Second layer adds 0.01 → one layer.
+  **Lives `eyes2_s0..2` started 16:40** (world 3, data/visual_cortex2.pkl, CORTEX_LAYERS=0, FULL=1, CHAT=0.2).
+  Snapshot written and tagged (docs/SNAPSHOT_2026-11-17.md, tag snapshot-2026-11-17).
+  Running (Nice=15 so the lives keep their speed): `organic-look2n` (look2 probe with the new cortex + FULL →
+  out/look2_probe_new_s0.log), `organic-woc-lat` (relay as lateral inhibition: Z = level(C + level)^-1 →
+  out/words_on_cortex_lat.log).
+  Next: (a) if looking works with the new eyes → when eyes2 pass first words, resume them with WORLD=4 LOOKING=1
+  MATCH=1 (the resume switches exist in curriculum_life.py); else leave them in world 3. (b) if the lateral form
+  works → make it the relay's form and learn its correlation synapses online (development + life, recomputed in
+  sleep). (c) memory: context not reset between moments (RESEARCH_MEMORY.md, 2). (d) the first-words sources take
+  turns: 90 social routines get a fifth of the moments. (e) compare eyes2 with world3/world3b at every checkpoint.
+- 17:35 Results since 16:45: (1) relay as lateral inhibition (local Hebbian correlation synapses): 0.49 against 0.53
+  for whitening, 0.39 without (RESEARCH_MEMORY.md); lives keep the whitening. (2) **Fast mapping is absent** in the
+  word cells and in a whole living brain (0.00–0.12 on the very picture after one lesson); **an episodic store**
+  (`organic/episodes.py`, `Words.episodes`) gives 0.92 at once, 0.89 after 20 moments, first words untouched; another
+  picture of the kind 0.00 (the eyes: one-picture nearest-kind 0.07). Seeds 1, 2 running (`organic-fastmap2`).
+  (3) Looking with the new eyes (seed 0): singles 0.54 whole → 0.40 with gaze (cost 0.14); page naming 0.05 → 0.32;
+  "is there" 0.60 → 0.72 with match; counting 0.42 → 0.43. Still short of a two-words pass and costly for first words.
+  Running: `organic-look2w` (pages twice the view: whole seen coarsely, fixations in full detail (CELL=64 TILE=52), and
+  the gaze only to what stands apart (APART=0.5) → out/look2_probe_wide_s0.log); `organic-echo-0.01/0.001` (the ear's
+  echo decorrelated before the context dendrites, offline mixed life, FULL=1 → out/text_echo_*.log; compare with
+  out/text_full1.log: text beyond parrot 0.330, W2 0.432). Lives eyes2 at 5–10k (about 6,000 moments an hour).
+  Next: read those; if wide pages + apart work → implement in the brain (the glimpse takes a scene larger than the
+  view; world 4 pages at 128 px) and move eyes2 to world 4 when they pass first words. If the echo relay helps →
+  into Words/SpeakingBrain and the next lives. Episodic store into a life: resume switch EPISODES=1 (not written yet);
+  idea for kid-a: a per-conversation store so that it remembers what it was just told (frozen slow weights).

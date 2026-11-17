@@ -16,7 +16,7 @@ later choose among these places; this only says which places there are.
 import numpy as np
 
 
-def fixations(img, side=None, ring=None, most=6):
+def fixations(img, side=None, ring=None, most=6, apart=0.0):
     """Top-left corners (row, column) of the windows the eye fixates in a picture, the strongest first."""
     img = np.asarray(img, np.float32)
     H, W = img.shape[:2]
@@ -38,7 +38,11 @@ def fixations(img, side=None, ring=None, most=6):
             # the ring's area inside the picture only: beyond the picture's edge there is nothing to compare with
             r0, c0, r1, c1 = max(r - ring, 0), max(c - ring, 0), min(r + side + ring, H), min(c + side + ring, W)
             ring_area = (r1 - r0) * (c1 - c0) - side * side
-            found.append((inside / (side * side) - outside / max(ring_area, 1), r, c))
+            inner, outer = inside / (side * side), outside / max(ring_area, 1)
+            # `apart`: the eye is drawn only to what stands apart, its surround at most this fraction as busy as itself
+            # (0: anything busier than its surround; tried 2026-11-17 because fixating parts of a single thing costs its naming)
+            if not apart or outer <= apart * inner:
+                found.append((inner - outer, r, c))
     found.sort(reverse=True)
     out = []
     for s, r, c in found:

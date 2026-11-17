@@ -33,6 +33,8 @@ SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 ARMS = os.environ.get("ARMS", "whole,whole+match,quarters,quarters+match,gaze,gaze+match").split(",")
 N = int(os.environ.get("N", 8000))
 TILE = int(os.environ.get("TILE", 26))  # the side of a picture on a page (30: the pages of the first probe)
+CELL = int(os.environ.get("CELL", 32))  # the side of a quarter of the page (64: a page twice the view; the eye sees it whole only coarsely)
+APART = float(os.environ.get("APART", 0))  # the gaze only goes to what stands apart (organic/gaze.py)
 cur = Curriculum(seed=0, world=2)
 ear = pickle.load(open(os.environ.get("EAR", "out/tmp/ear_first.pkl"), "rb"))
 cortex = pickle.load(open(os.environ.get("CORTEX", "data/visual_cortex.pkl"), "rb"))
@@ -40,23 +42,39 @@ hear = lambda q: ear.units(q, learn=False)  # noqa: E731
 CODES, LOOKED = {}, collections.Counter()
 
 
+DIM = sum(l.kinds for l in cortex.layers) * 16
+FULL = os.environ.get("FULL") == "1"  # every correction of the word cells at full size (docs/VISION.md, 2026-11-17)
+
+
 def code(img):
+    if getattr(cortex, "relay", None) is not None:  # the second cortex: its summary through its relay
+        return cortex.whole(img, 4).astype(np.float32)
     v = np.concatenate(cortex.code(img, grid=4))
     return (v / (np.linalg.norm(v) + 1e-8)).astype(np.float32)
 
 
-def zoom(img, r, c, side=32):
-    return np.asarray(Image.fromarray((np.clip(img[r : r + side, c : c + side], 0, 1) * 255).astype(np.uint8)).resize((64, 64), Image.BILINEAR), np.float32) / 255
+def coarse(img):
+    """The whole view as the eye has it: a scene larger than the view is seen whole only coarsely."""
+    f = img.shape[0] // 64
+    return img if f == 1 else img.reshape(64, f, 64, f, 3).mean(axis=(1, 3))
+
+
+def zoom(img, r, c, side=None):
+    """What the eye fixates fills the view: a window of half the scene, in the scene's full detail."""
+    side = side or img.shape[0] // 2
+    w = img[r : r + side, c : c + side]
+    return w if side == 64 else np.asarray(Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).resize((64, 64), Image.BILINEAR), np.float32) / 255
 
 
 def views(key, make):
     """(whole view, the four quarters, what the gaze fixated) of a picture or page, coded once."""
     if key not in CODES:
         img = make()
-        fix = fixations(img)
+        fix = fixations(img, apart=APART)
+        h = img.shape[0] // 2
         LOOKED[(key[0], len(fix))] += 1
         half = lambda v: v.astype(np.float16)  # noqa: E731  (the codes of one seed's pictures: 0.8 GB at half precision)
-        CODES[key] = (half(code(img)), [half(code(zoom(img, r, c))) for r in (0, 32) for c in (0, 32)], [half(code(zoom(img, r, c))) for r, c in fix])
+        CODES[key] = (half(code(coarse(img))), [half(code(zoom(img, r, c))) for r in (0, h) for c in (0, h)], [half(code(zoom(img, r, c))) for r, c in fix])
     whole, quarters, fix = CODES[key]
     return whole.astype(np.float32), [q.astype(np.float32) for q in quarters], [f.astype(np.float32) for f in fix]
 
@@ -81,18 +99,19 @@ def a_page(pool, rng, others):
     tiles = [rng.choice(pool[x]) for x in on] + [None] * (4 - len(on))
     rng.shuffle(tiles)
     shade = rng.uniform(0.75, 0.95)
-    return ("page", tuple(tiles), round(shade, 3)), (lambda: page([cur.image(t) if t is not None else None for t in tiles], shade, TILE)), w, on
+    return ("page", tuple(tiles), round(shade, 3)), (lambda: page([cur.image(t) if t is not None else None for t in tiles], shade, TILE, CELL)), w, on
 
 
 def a_scene(scenes, kind, n):
     tiles, shade, q, a = scenes.make(kind, n)
-    return ("page", tuple(tiles), round(shade, 3)), (lambda: page([cur.image(t) if t is not None else None for t in tiles], shade, TILE)), q, a
+    return ("page", tuple(tiles), round(shade, 3)), (lambda: page([cur.image(t) if t is not None else None for t in tiles], shade, TILE, CELL)), q, a
 
 
 def run(arm, seed):
     where, match = arm.split("+")[0], arm.endswith("+match")
     rng, wr = random.Random(seed), random.Random(seed + 1)
-    words = Words(7168, ear, match=match)
+    words = Words(DIM, ear, match=match)
+    words.plastic_by_error = not FULL
     singles = [(r, w) for w in names for r in lived[w]]
     lived_scenes, held_scenes = Scenes(lived, cur.image, seed), Scenes(held, cur.image, 99)
     t0 = time.time()

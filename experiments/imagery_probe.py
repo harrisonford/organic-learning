@@ -104,6 +104,14 @@ for seed in (SEEDS if __name__ == "__main__" else []):
         words = Words(dim, ear, imagery="imagery" in arm, sound="sound" in arm)
         words.use_core = os.environ.get("CORES", "1") == "1"
         words.plastic_by_error = os.environ.get("FULL") != "1"  # FULL=1: every correction at full size (docs/VISION.md, 2026-11-17)
+        if os.environ.get("ECHO_RELAY"):  # the ear's echo decorrelated on its way to the context dendrites, from the echoes of 3,000 lived lessons
+            from organic.cortex2 import Relay
+            er = random.Random(11)
+            echoes = []
+            for it in er.sample(order, 3000):
+                q, a = hear(cur.wording(it, er)), hear(it[2][0])
+                echoes += [words._echo(q, a[:i]) for i in range(len(a) + 1)]
+            words.echo_relay = Relay(float(os.environ["ECHO_RELAY"])).settle(echoes)
         wr, t0 = random.Random(seed), time.time()
         cur.orng = random.Random(seed + 2)
         for p in range(PASSES):

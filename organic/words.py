@@ -58,6 +58,7 @@ class Words:
     # the content dendrite's plasticity follows the cell's own recent error (False: every correction at full size; the
     # error itself already makes a cell that is right stop changing; tried 2026-11-17, experiments/words_on_cortex.py)
     plastic_by_error = True
+    episodes = None  # a fast store of single moments beside the slow synapses (organic/episodes.py); None: the cells alone
     gain = 1.0  # a probe's knob on the size of every correction (experiments/words_on_cortex.py); 1 in every brain
 
     branches = 1  # dendritic branches for what is seen (docs/RESEARCH_MEMORY.md, 2026-11-17); 1 in brains made before
@@ -227,8 +228,11 @@ class Words:
             return (above if above.any() else None), None
         return x, np.sqrt(len(x)) * np.maximum(x, 0) * np.maximum(above, 0)
 
+    echo_relay = None  # the ear's echo decorrelated on its way to the context dendrites (as the cortex's summary is; 2026-11-17)
+
     def _echo(self, heard, said):
-        return self.ear.question(list(heard) + [SILENCE] + list(said), adapt=False)
+        v = self.ear.question(list(heard) + [SILENCE] + list(said), adapt=False)
+        return self.echo_relay(v) if self.echo_relay is not None else v
 
     def _hearing(self, heard, n):
         """How far each cell's own unit is being heard: a cell fires when its unit is heard, and partly when a unit
@@ -308,6 +312,12 @@ class Words:
         snd = self._heard_sound(heard)
         x, b = self._sight(v, cues, snd=snd)
         drive = np.maximum(self._content(x, cues, b, snd, heard), 0)
+        if self.episodes is not None:  # moments like this one, stored whole: their replies' units are driven too
+            seen_now = None if x is None else x[0] if x.ndim == 2 else x
+            for u, d in self.episodes.read(seen_now, self._echo(heard, ()) if len(heard) else None).items():
+                i = self.index.get(u)
+                if i:
+                    drive[i] += d
         ctx = np.maximum(self.Wa[:n] @ self._echo(heard, said), 0)
         if self.lateral:
             ctx = self._spread(ctx)
@@ -384,6 +394,10 @@ class Words:
         fired[targets] = 1.0
         o = self._content(x, cues, b, snd, heard, learn=True)
         m = self._m
+        if self.episodes is not None and targets:  # the moment is written whole, as far as the slow synapses did not expect its reply
+            unexpected = 1.0 - float(np.mean(np.clip(o[targets] + self.base[targets], 0, 1)))
+            seen_now = None if x is None else x[0] if x.ndim == 2 else x
+            self.episodes.write(seen_now, self._echo(heard, ()) if len(heard) else None, [self.units[t] for t in targets], unexpected)
         if getattr(self, "m_on", None) is not None and n > 1:  # each cell's own levels (measured, before this moment changes it)
             d = np.maximum(o, 0)
             if targets:
