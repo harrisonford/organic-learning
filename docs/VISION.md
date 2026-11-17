@@ -270,3 +270,47 @@ scene's commonest colour); match neurons are in `organic/words.py`.
   start one.** The code stays (`SpeakingBrain(looking, match)`, world 4) for when the cortex is better.
 - What limits everything here is the cortex's code, and the same afternoon showed that the cortex's own
   development is the fault (next section).
+
+## The cortex's own development is the fault (2026-11-17, `experiments/cortex2_probe.py`, first layer, seed 0)
+
+After the survey (docs/RESEARCH_VISION.md). The same linear reference as always; every row is one layer of 5×5
+windows read as a 4×4 grid summary. COCO things are 35 names, held-out photographs; CIFAR + Commons 22 names.
+
+| first layer | code | COCO things | CIFAR + Commons |
+|---|---|---|---|
+| as it is in the living cortex (64 kinds, raw drive × contrast, strongest 8 kept, strongest in each region) | 1,024 | 0.250 | 0.441 |
+| the same filters, graded response (drive above the average of all kinds at that place) | 1,024 | 0.250 | 0.434 |
+| … and the region's average instead of its strongest | 1,024 | 0.283 | 0.432 |
+| **filters never developed** (random), graded response | 1,024 | 0.276 | 0.484 |
+| windows decorrelated (whitened), developed, graded | 1,024 | 0.287 | 0.486 |
+| … region's average | 1,024 | 0.325 | 0.507 |
+| 256 kinds, graded, no decorrelation | 4,096 | 0.290 | 0.497 |
+| decorrelated, 256 kinds, graded | 4,096 | 0.320 | 0.537 |
+| … region's average | 4,096 | 0.365 | 0.534 |
+| … region's average, **filters never developed** | 4,096 | 0.351 | 0.534 |
+| … region's average, response not scaled by the window's contrast | 4,096 | 0.395 | 0.532 |
+| … region's average, response squared | 4,096 | 0.308 | 0.477 |
+| … region's average over a 6×6 grid | 9,216 | 0.331 | 0.513 |
+| a centre-surround retina (each point minus its surround) in place of the whitening, 256 kinds, average | 4,096 | 0.292 | 0.469 |
+| decorrelated, 256 kinds, developed with graded competition (my version of SoftHebb) | 4,096 | 0.245 | 0.358 |
+
+For comparison, the whole living cortex (three layers, 7,168 numbers): 0.278 and 0.487.
+
+What it says:
+
+- **The developed filters of the living cortex are worse than filters that were never developed** (0.250 / 0.441
+  against 0.276 / 0.484). Hard winner-take-all on raw windows makes the first layer worse than chance wiring. The
+  literature reports exactly this (Journé et al. 2023).
+- What helps, each by itself and together: decorrelating the windows (+0.03 / +0.04), more kinds (+0.04 / +0.05),
+  the region's average instead of its strongest (+0.04 on COCO things), not scaling by contrast (+0.03 on COCO
+  things). Together: 0.250 → 0.395 and 0.441 → 0.532, with one layer.
+- With decorrelated windows, development adds little over random filters (+0.014 / 0). Most of what a first layer
+  gives is in the decorrelation, the graded response and the number of kinds; what its filters are matters little.
+  This is also known (Coates et al. 2011; Saxe et al. 2011 on random filters).
+- A simple centre-surround retina is not enough to stand in for the whitening; my version of graded competition is
+  worse than the cortex's own rule; a finer grid and a steeper response are worse.
+- One seed. Whether the word cells (not a linear reference) gain as much, and whether a second layer adds anything
+  now, are the next two measurements (`experiments/words_on_cortex.py`, `experiments/cortex3_probe.py`).
+
+**The word cells on the living cortex** (the baseline for that; 8,000 naming moments of world 3's first words, each
+picture once, three seeds): held-out naming 0.385, 0.392, 0.383; by source CIFAR 0.38, Commons 0.49, COCO things 0.29.

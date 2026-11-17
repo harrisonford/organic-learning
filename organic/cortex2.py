@@ -38,8 +38,11 @@ def _contrast(v):
 
 
 class Layer2:
-    def __init__(self, in_ch, kinds, window, pool, groups=1, fan_in=None, seed=0, pool_kind="avg"):
+    scaled = True  # the response is scaled by the contrast of the window (False: a faint thing answers like a bold one)
+
+    def __init__(self, in_ch, kinds, window, pool, groups=1, fan_in=None, seed=0, pool_kind="avg", scaled=True):
         self.in_ch, self.kinds, self.window, self.pool, self.pool_kind = in_ch, kinds, window, pool, pool_kind
+        self.scaled = scaled
         rng = np.random.default_rng(seed)
         self.groups = groups
         per = kinds // groups
@@ -66,7 +69,9 @@ class Layer2:
         """The layer's activity map: each kind's drive above the average of all kinds at that place, scaled by the
         contrast of what is there; pooled for the layer above."""
         u, e, _ = self._drive(x)
-        r = np.maximum(u - u.mean(axis=2, keepdims=True), 0) * e[..., None]
+        r = np.maximum(u - u.mean(axis=2, keepdims=True), 0)
+        if self.scaled:
+            r = r * e[..., None]
         if not pooled or self.pool == 1:
             return r.astype(np.float32)
         p = self.pool
@@ -74,17 +79,18 @@ class Layer2:
         r = r[:h, :w].reshape(h // p, p, w // p, p, -1)
         return (r.mean(axis=(1, 3)) if self.pool_kind == "avg" else r.max(axis=(1, 3))).astype(np.float32)
 
-    def settle(self, pictures, rng, per_picture=40):
-        """Decorrelation: from windows of pictures (already passed through the layers below), each group learns to
-        remove its own windows' correlations. Computed here from the statistics at once; a retina does it with
-        centre-surround cells, cortex with lateral anti-Hebbian inhibition (Földiák 1990)."""
-        for g, reach in enumerate(self.reach):
-            rows = []
-            for x in pictures:
+    def settle(self, pictures, rng, per_picture=12):
+        """Decorrelation: from windows of pictures (already passed through the layers below; any iterable, looked at
+        one at a time), each group learns to remove its own windows' correlations. Computed here from the statistics
+        at once; a retina does it with centre-surround cells, cortex with lateral anti-Hebbian inhibition (Földiák 1990)."""
+        rows = [[] for _ in self.reach]
+        for x in pictures:
+            for g, reach in enumerate(self.reach):
                 v, e = _contrast(_windows(x[..., reach] if len(reach) < x.shape[2] else x, self.window))
                 v = v.reshape(-1, v.shape[2])
-                rows.append(v[rng.choice(len(v), min(per_picture, len(v)), replace=False)])
-            C = np.cov(np.concatenate(rows).T)
+                rows[g].append(v[rng.choice(len(v), min(per_picture, len(v)), replace=False)])
+        for g in range(self.groups):
+            C = np.cov(np.concatenate(rows[g]).T)
             d, E = np.linalg.eigh(C)
             self.Z[g] = ((E / np.sqrt(np.maximum(d, 0) + 1e-3 * d.max())) @ E.T).astype(np.float32)
 
@@ -106,10 +112,10 @@ class Layer2:
 
 
 class VisualCortex2:
-    def __init__(self, seed=0, kinds=(256, 256), groups=16, fan_in=32, pool_kind="avg"):
-        self.layers = [Layer2(3, kinds[0], 5, 2, seed=seed, pool_kind=pool_kind)]
+    def __init__(self, seed=0, kinds=(256, 256), groups=16, fan_in=32, pool_kind="avg", scaled=True):
+        self.layers = [Layer2(3, kinds[0], 5, 2, seed=seed, pool_kind=pool_kind, scaled=scaled)]
         for i, k in enumerate(kinds[1:], 1):
-            self.layers.append(Layer2(kinds[i - 1], k, 3, 2 if i + 1 < len(kinds) else 1, groups=groups, fan_in=fan_in, seed=seed + i, pool_kind=pool_kind))
+            self.layers.append(Layer2(kinds[i - 1], k, 3, 2 if i + 1 < len(kinds) else 1, groups=groups, fan_in=fan_in, seed=seed + i, pool_kind=pool_kind, scaled=scaled))
 
     def maps(self, img):
         """Every layer's activity map (before its pooling) for a picture (H, W, 3) in [0, 1]."""
@@ -144,7 +150,7 @@ class VisualCortex2:
                 for b in self.layers[:li]:
                     x = b.respond(x)
                 return x
-            layer.settle([below(images[i]) for i in rng.choice(len(images), min(1500, len(images)), replace=False)], rng)
+            layer.settle((below(images[i]) for i in rng.choice(len(images), min(800, len(images)), replace=False)), rng)
             for n in range(per_layer):
                 layer.learn(below(images[rng.integers(len(images))]), rng, rate=0.05 * (1 - n / per_layer) + 0.005)
             if log:

@@ -51,7 +51,7 @@ path = os.environ.get("CORTEX")
 if path:
     cortex = pickle.load(open(path, "rb"))
 else:
-    cortex = VisualCortex2(seed=SEED, kinds=KINDS, groups=GROUPS, fan_in=FAN_IN, pool_kind=os.environ.get("POOL", "avg"))
+    cortex = VisualCortex2(seed=SEED, kinds=KINDS, groups=GROUPS, fan_in=FAN_IN, pool_kind=os.environ.get("POOL", "avg"), scaled=os.environ.get("SCALED", "1") == "1")
     # developed on pictures of both kinds the brain will see (COCO things and the first-words pictures), none of them test pictures
     pool = [img(r) for r in train_rows[-3000:]] + [cur.image(it[0]) for it in tr2[:1500]]
     cortex.develop(pool, np.random.default_rng(SEED + 5), per_layer=PER_LAYER, log=log)

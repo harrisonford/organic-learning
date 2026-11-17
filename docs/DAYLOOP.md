@@ -68,3 +68,11 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   Next: pick the design; check it with the real word cells (naming, as imagery_probe/prune_probe do: 0.46 with the
   old cortex); then stop world3b and start three lives born with the new cortex (CORTEX=out/tmp/...pkl → move to
   data/visual_cortex2.pkl), world 3 first (clean comparison with world3b), looking and world 4 after.
+- 15:30 world3b lives stopped at 45,000 / 40,000 / 45,000 moments (they reproduce the first world 3 lives; their
+  pickles stay; the machine was at load 17 and lives had slowed to 5,000 moments an hour). First-layer table written
+  (docs/VISION.md): old 0.250/0.441 → 0.395/0.532 (whitened, graded, 256 kinds, average, not scaled by contrast);
+  random filters nearly as good once whitened. Word cells on the old cortex: 0.387 held-out naming (3 seeds).
+  Running: `organic-cx3b` (organ a: 256+256, scaled), `organic-cx3-l1` (256, scaled), `-l1n` (256, not scaled),
+  `-n` (256+256 not scaled), `-n8` (256+256, 8 groups of 64) → out/cortex3_probe_<tag>.log, out/tmp/cortex2_<tag>.pkl;
+  `organic-cx2b` (k1024 last). Next: words_on_cortex.py on each saved cortex (CORTEX=out/tmp/cortex2_<tag>.pkl,
+  SEEDS=0,1,2); pick; copy to data/visual_cortex2.pkl; smoke-test a life; start three lives (world 3, new cortex).
