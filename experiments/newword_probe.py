@@ -89,6 +89,7 @@ for seed in SEEDS:
     lived = {w: lived_all[w] for w in names}
     words = Words(cortex.relay.Z.shape[0], ear, match=True)
     words.plastic_by_error = False
+    words.unclaimed = os.environ.get("UNCLAIMED") == "1"  # a new word learns from the views no cell claims yet
     singles = [(r, w) for w in names for r in lived[w]]
     scenes = Scenes(lived, cur.image, seed, TILE, CELL)
 
@@ -146,6 +147,6 @@ for seed in SEEDS:
                 r_["the named thing keeps its name"].append(float(says(pk[0]) == k))
                 before = tidy(grown.recall(ask, see(("one", pk[0]), lambda r=pk[0]: cur.image(r), grown))[0] or "")
                 r_["(it had its name before)"].append(float(before == k))
-    print(f"seed {seed} ({time.time() - t0:.0f}s; {len(names)} kinds named, never shown: {', '.join(unknown)}; held-out naming of the known kinds {known:.3f}; {TRIALS} trials, the word said {LESSONS}x)", flush=True)
+    print(f"seed {seed}{' unclaimed' if words.unclaimed else ''} ({time.time() - t0:.0f}s; {len(names)} kinds named, never shown: {', '.join(unknown)}; held-out naming of the known kinds {known:.3f}; {TRIALS} trials, the word said {LESSONS}x)", flush=True)
     for cond, r_ in rows.items():
         print(f"  {cond:16} " + " | ".join(f"{k_} {np.mean(v):.3f}" for k_, v in r_.items()), flush=True)

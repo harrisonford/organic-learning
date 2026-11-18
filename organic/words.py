@@ -59,6 +59,7 @@ class Words:
     # the content dendrite's plasticity follows the cell's own recent error (False: every correction at full size; the
     # error itself already makes a cell that is right stop changing; tried 2026-11-17, experiments/words_on_cortex.py)
     plastic_by_error = True
+    unclaimed = False  # a new word learns from the views no cell claims yet (docs/VISION.md, 2026-11-18; a probe's switch)
     episodes = None  # a fast store of single moments beside the slow synapses (organic/episodes.py); None: the cells alone
     gain = 1.0  # a probe's knob on the size of every correction (experiments/words_on_cortex.py); 1 in every brain
 
@@ -462,7 +463,10 @@ class Words:
             chosen = x[self._best]
             undriven = (fired > 0) & ((self.Wv[:n] @ x.T).max(axis=1) <= 0)
             if undriven.any():
-                chosen[undriven] = x.mean(axis=0)
+                free = 1.0 - np.clip((self.Wv[:n] @ x.T).max(axis=0), 0, 1) if self.unclaimed else None
+                # (unclaimed, 2026-11-18: a new word takes each view as far as no cell is driven by it yet: what
+                # already has a name leaves less for the new one)
+                chosen[undriven] = (free / free.sum()) @ x if free is not None and free.sum() > 0 else x.mean(axis=0)
             self.Wv[:n] += step[:, None] * chosen / (1.0 + self.use_v / self.maturation)[None, :]
             self.use_v += (x * x).mean(axis=0)
         elif x is not None and self.branches > 1:

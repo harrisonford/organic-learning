@@ -473,3 +473,39 @@ Overnight (the loop was silent; the lives ran alone):
   per-source scores are in every record.
 - The 300-item first-words test holds 248 items (60 for each of four sources, 8 social routines): a per-source
   score has a standard error of about 0.06, the stage score about 0.03.
+
+## 2026-11-18: a new word, a named thing and an unnamed thing (the new-word bias: absent; a candidate gives a weak one)
+
+Children from about 17 months take a new word for the thing that has no name yet (mutual exclusivity). The survey
+of 2026-11-18 rates it the most telling behaviour test for a grounded associative learner: text-only models trained
+by gradient show the opposite. Nothing in this brain was built for it. `experiments/newword_probe.py`: the word
+cells as in the world 4 lives (new cortex and relay, wide pages, gaze, match neurons, full-size corrections; no fast
+store) live 6,000 moments with 19 kinds named and 4 kinds never shown; then 60 trials from the same grown cells: a
+page with a thing of a known kind and a thing of an unseen kind, a made-up word said of it once as a name is. Read:
+is the new word's cell then driven more by the unnamed thing than by the named one, each seen alone (chance 0.5)?
+
+| | seed 0 | seed 1 | seed 2 | mean |
+|---|---|---|---|---|
+| the brain as it is: drawn to the unnamed thing | 0.50 | 0.55 | 0.48 | 0.51 |
+| ... control, two unnamed things | 0.58 | 0.57 | 0.48 | 0.54 |
+| candidate ("unclaimed"): drawn to the unnamed thing | 0.68 | 0.65 | 0.63 | **0.66** |
+| ... control, two unnamed things | 0.55 | 0.55 | 0.50 | 0.53 |
+| ... candidate, other pictures of the two kinds | 0.50 | 0.60 | 0.52 | 0.54 |
+| says the new word of the unnamed thing afterwards | 0.00 | 0.00 | 0.00 | 0.00 |
+
+- **As it is, the brain has no new-word bias** (0.51; my prediction before the run). The reason is in one line of
+  the word cells: a cell that fires with no view driving it yet learns from the average of the views. Nothing sends
+  the new word to the view the other cells do not claim.
+- **The candidate**: such a cell takes each view as far as no cell is driven by it yet (`Words.unclaimed`, a probe's
+  switch). Then the bias is there, weakly: 0.66 over 180 trials (standard error 0.035) against 0.53 for two unnamed
+  things. It does not reach other pictures of the kind (0.54), and held-out naming of the known kinds is unchanged
+  (0.577, 0.573, 0.626 in both).
+- **Not adopted.** It was written to produce this behaviour, which is what the project's first rule warns against,
+  and the effect is small. It stays as a switch. What it shows is where the bias would have to come from: from
+  competition between word cells for a view, which the delta rule alone does not have.
+- **The larger fact under both this and fast mapping** (2026-11-17): one hearing moves the slow synapses very
+  little (the new cell's drive after it: 0.03, where a known name's is 0.5–1), and the new word is never said. The
+  fast store answers only when the same whole view returns. A fast store keyed by the fixated thing, not the whole
+  view, is the open design: it would give fast mapping of a thing on a page, and a place for the bias to act.
+- Honest limits: 4 unseen kinds a seed; made-up words pass through an ear that never heard them; the measure is
+  the cell's drive, the brain's stand-in for where an infant looks.
