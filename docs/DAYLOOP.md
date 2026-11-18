@@ -189,3 +189,13 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   Next: (a) their checkpoints (out/eyes2w_s*.log). (b) What grows in a life's memory (s1: 2.7 → 4.05 GB over 55,000
   moments of world 4): look into out/eyes2_s1.pkl offline. (c) Why page naming and first words sink in preschool
   (the stage's mix changes: erasure again?). (d) pivot frames for two-word text (text is the weakest source: 0.46).
+- 12:35 Kris asked whether better hardware would help and whether to publish (arXiv). Survey run (four searches +
+  report): `reports/Backprop free developmental learning survey.md`, notes in `research_notes/`. What it changes in
+  the plan: (1) **replay from the episodic store across a stage change** is the theory-motivated remedy for the
+  forgetting seen in s1's preschool (complementary learning systems; alternating recent / remote replay; untested in
+  a fully local system with a plastic cortex) → next mechanism to probe offline. (2) **A mutual-exclusivity test**
+  (novel word + one known and one novel thing on a page: which does it look at / name?) is the most valuable
+  behavioural test: text-only gradient models show the opposite. (3) For a paper: number of candidate names and
+  chance beside every naming score, a shuffled-stage control, an ablation per organ, 5–10 seeds, a size-matched
+  backprop reference, a forgetting measure. Already in hand: random-filter baseline, ridge upper bound, decorrelation
+  on/off on three seeds, parrot baseline. Hardware answer given: RAM first (parallel seeds), profile before a CPU.
