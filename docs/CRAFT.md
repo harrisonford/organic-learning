@@ -168,3 +168,21 @@ missing piece. What was tried, in the ledger's form:
 - **Memory and CPU are the machine's limits, and I hit both again**: probes killed by my own caps (four times),
   lives slowed by a third by probes beside them. Estimate a probe's memory from its largest array before starting
   it; keep the machine to the lives when they are the long pole.
+
+## 2026-11-18: what grows in a life's memory, and a guard that read the wrong number
+
+Two lives stopped overnight on their memory guard (4 GB) with nobody there. `experiments/mem_diag.py` on three ages
+of eyes2_s1 (20,000 / 55,000 / 85,000 moments): the brain itself is 0.86 → 0.95 → 1.05 GB, and what grows in it is
+the ear's dictionaries (counts 75,000 → 121,000 entries, codes 24,000 → 52,000). The other 3 GB of the process is
+not the brain:
+
+- the world kept every picture it had ever decoded (CIFAR and COCO thumbnails as float32, 49 KB each: up to 1 GB
+  over a life). Now it keeps the 3,000 looked at last (`Curriculum.image`).
+- the guard read the peak (`ru_maxrss`), which never falls: a transient (the world rebuilt every 50,000 moments
+  while the old one is still held; the pickling of a checkpoint) counted forever. The record now holds both
+  (`memory_gb` = held now, which the guard reads; `memory_peak_gb`).
+
+Both take effect when a life is next started. The first version of the diagnostic counted no arrays at all
+(an unpickled array has a `base`); the totals did not match the file size, which is how it showed.
+
+Lesson: the loop must not be the only thing that restarts a stopped life. And a guard should measure what it guards.

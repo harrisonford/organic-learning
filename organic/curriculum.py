@@ -390,7 +390,10 @@ class Curriculum:
                 self._cache[ref] = np.asarray(im, np.float32) / 255
             else:
                 self._cache[ref] = W.thumb(os.path.join(W.DATA, "val2017", ref))
-        return self._cache[ref]
+        got = self._cache[ref]
+        while len(self._cache) > 3000:  # only the pictures looked at lately are kept decoded: a life's memory grew by 1 GB of them (docs/CRAFT.md, 2026-11-18)
+            del self._cache[next(iter(self._cache))]
+        return got
 
     def wording(self, item, rng=None):
         """How a lived item is asked this time. A naming question is worded afresh at every moment (adults do not

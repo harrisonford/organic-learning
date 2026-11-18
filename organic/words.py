@@ -387,9 +387,21 @@ class Words:
         got = [float(np.clip(o[self.index[self._core(u)]], 0, 1)) if self._core(u) in self.index else 0.0 for u in reply_units]
         return 1.0 - float(np.mean(got)) if got else 1.0
 
-    def learn(self, heard, v, reply_units):
+    def rest(self, count, rng):
+        """At rest, moments of the fast store come back and the cells live them again (organic/episodes.py, replay)."""
+        ep = self.episodes
+        if ep is None:
+            return 0
+        back = ep.come_back(rng, count)
+        for k in back:
+            self.look(None)
+            self.learn(list(ep.asked[k]), ep.seen[k].astype(np.float32) if ep.eyes[k] else None, list(ep.reply[k]), again=k)
+        return len(back)
+
+    def learn(self, heard, v, reply_units, again=None):
         """An utterance (reply_units) was heard after `heard` (a question, or nothing: an unasked comment), while
-        seeing v (or nothing). Every cell's dendrites compare what they expected with whether the cell fired."""
+        seeing v (or nothing). Every cell's dendrites compare what they expected with whether the cell fired.
+        `again`: the moment is one of the fast store's, come back at rest (it is not written a second time)."""
         self.moments += 1
         self.fb = None
         targets = [self.cell(u) for u in reply_units]
@@ -408,7 +420,10 @@ class Words:
         if self.episodes is not None and targets:  # the moment is written whole, as far as the slow synapses did not expect its reply
             unexpected = 1.0 - float(np.mean(np.clip(o[targets] + self.base[targets], 0, 1)))
             seen_now = None if x is None else x[0] if x.ndim == 2 else x
-            self.episodes.write(seen_now, self._echo(heard, ()) if len(heard) else None, [self.units[t] for t in targets], unexpected)
+            if again is not None:
+                self.episodes.lived_again(again, unexpected)
+            else:
+                self.episodes.write(seen_now, self._echo(heard, ()) if len(heard) else None, [self.units[t] for t in targets], unexpected, heard)
         if getattr(self, "m_on", None) is not None and n > 1:  # each cell's own levels (measured, before this moment changes it)
             d = np.maximum(o, 0)
             if targets:

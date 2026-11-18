@@ -365,7 +365,8 @@ while brain.age < TOTAL:
            "clusters": int(brain.orch.C), "outputs": len(brain.orch.outputs), "promoted": promoted, "held_earlier": held,
            "observed": getattr(brain, "observed", 0), "words": brain.words.cells() if getattr(brain, "words", None) is not None else None,
            "judge": {"calls": judge.calls, "cached": judge.hits, "fallbacks": judge.fallbacks} if judge is not None else None,
-           "memory_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
+           "memory_gb": round(int(open("/proc/self/statm").read().split()[1]) * os.sysconf("SC_PAGE_SIZE") / 1e9, 2),  # held now (the guard below); until 2026-11-18 the peak, which never falls
+           "memory_peak_gb": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6, 2), "seconds": round(time.time() - t0)}
     print(f"age {brain.age:>8} stage {stage:<2} ({brain.age - state['since']:>7} there) | "
           + " | ".join(f"{s} {v['score']:.2f}/{v['exact']:.2f}" + (f"/j{v['judged']:.2f}" if "judged" in v else "") + (f" (beyond parrot {v['beyond']:.2f}, parrot {v['parrot']:.2f}, says last {v['says_last']:.2f})" if "beyond" in v and s != "B" else "") for s, v in res.items()) + f" | clusters {brain.orch.C} | {'PROMOTED' if promoted else ''}", flush=True)
     if promoted:
