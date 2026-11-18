@@ -452,3 +452,24 @@ Overnight (the loop was silent; the lives ran alone):
   for the COCO names on 2026-11-17).
 - Seeds 0 and 2 were started into the rebuilt stage from their frozen first-words levels on 2026-11-18 11:56
   (`eyes2w_s0`, `eyes2w_s2`): the three-seed answer.
+
+### What chance is beside each score (2026-11-18; the survey's first missing control)
+
+| test | different answers | uniform chance | always the commonest lived answer | the brain (eyes2 lives) |
+|---|---|---|---|---|
+| first words: CIFAR names | 16 | 0.06 | 0.05 | about 0.47 |
+| first words: Commons names | 16 | 0.06 | 0.07 | about 0.7 |
+| first words: COCO names | 20 | 0.05 | 0.09 | 0.33–0.39 |
+| two words: a thing on a page named | 25 | 0.04 | 0.05 | 0.41 (seed 1 at its pass) |
+| two words: "is there a …?" | 2 | 0.50 | 0.52 | 0.70 (seed 1 at its pass) |
+| preschool: "how many …?" | 3 | 0.33 | 0.36 | 0.3–0.35 |
+
+- Naming is 5 to 10 times chance. "Is there a …?" is 0.70 against a floor of 0.52: above chance, not by much.
+- **A caveat on the two-words pass.** The stage's score is the mean of three sources, and one of them is a yes/no
+  question whose floor is 0.52. A learner at chance on it, with seed 1's other two scores (0.46, 0.41), would score
+  0.46; seed 1 scored 0.52. So about a third of the distance to the pass mark that the rebuilt stage removed is the
+  yes/no floor, not learning. The pass mark was set (0.5) when the stage had no such source. To be decided with
+  Kris: score "is there" above its floor ((score − 0.5) / 0.5), or leave it and say so. Left as it is for now; the
+  per-source scores are in every record.
+- The 300-item first-words test holds 248 items (60 for each of four sources, 8 social routines): a per-source
+  score has a standard error of about 0.06, the stage score about 0.03.
