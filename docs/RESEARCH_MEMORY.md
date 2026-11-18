@@ -291,3 +291,35 @@ every stored moment from now on, and replay switches on when it enters preschool
 experimenter's switch, so that its two-words pass stays comparable with seed 1's). The comparison is seed 1's
 preschool without replay (last night). Each checkpoint records whose moments the store holds and which came back,
 and how surprising they still were.
+
+### Replay in a life: it did not protect (2026-11-18, evening)
+
+`eyes2w_s2` passed two words at 80,000 moments and replay switched on (the store grew to 6,000; 600 moments come
+back at each sleep). Beside it, seed 1's preschool of the night before, without replay:
+
+| moments into preschool | first words, s1 no replay / s2 replay | two words | a thing on a page named |
+|---|---|---|---|
+| at the pass | 0.46 / 0.52 | 0.50 / 0.56 | 0.41 / 0.45 |
+| +5,000 | 0.39 / 0.39 | 0.38 / 0.41 | 0.27 / 0.29 |
+| +10,000 | 0.45 / 0.35 | 0.41 / 0.44 | 0.28 / 0.25 |
+| +15,000 | 0.33 / 0.40 | 0.37 / 0.43 | 0.24 / 0.26 |
+| +20,000 | 0.38 / 0.35 | 0.36 / 0.38 | 0.18 / 0.24 |
+
+(first words and two words beyond the parrot, from the lives' records.) **No protection**: the same loss within the
+noise of a checkpoint (±0.03 a stage, ±0.05 a source), most of it within the first 5,000 moments. The store's own record says why:
+
+- **The store fills with talk.** Of 6,000 stored moments 3,350 are leisure talk and comments, 2,000 preschool
+  lessons, 350 two-words lessons, 190 first-words lessons. Talk is never expected, so it is always written.
+- **Surprise does not tell the forgotten from the known.** The moments that came back were as surprising as each
+  other whatever their stage: 0.83–0.87. The measure (how far the reply's cells were from firing) stays high for
+  everything, so strength selects nothing and "held as far as it still surprises" keeps everything alike.
+- **Old stages get about 3% of the learning.** Of some 1,500 returns per 5,000 lived moments, 50–110 were two-words
+  moments and 40–60 first-words moments.
+
+What follows, in the project's order (training before architecture): (1) the surprise measure must separate known
+from unknown before any rule built on it can work: measure it on lived items the cells answer right and wrong.
+(2) The loss is immediate, so it is probably not slow erasure but the new stage's questions about the same pictures
+taking over the same synapses and cues at once: look at which answers replace the old ones in the first 5,000
+moments (forget_diag.py on the level and the +5,000 checkpoint). (3) The parents of a real child do not stop
+naming things when preschool begins: the stage mix itself (how much of the earlier stages a later stage still
+holds) is a training-program question and comes first.

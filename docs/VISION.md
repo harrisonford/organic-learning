@@ -509,3 +509,48 @@ is the new word's cell then driven more by the unnamed thing than by the named o
   view, is the open design: it would give fast mapping of a thing on a page, and a place for the bias to act.
 - Honest limits: 4 unseen kinds a seed; made-up words pass through an ear that never heard them; the measure is
   the cell's drive, the brain's stand-in for where an infant looks.
+
+## 2026-11-18 (evening): the rebuilt two-words stage on three seeds
+
+Each brain entered the picture-book stage (world 4: looking, match neurons, episodic store) after passing first
+words. Seed 1 lived 5,000 moments of the old stage first; seeds 0 and 2 were continued from their frozen
+first-words levels (`eyes2w_s0`, `eyes2w_s2`).
+
+| seed | two words, beyond the parrot (pass 0.5) | text | a thing on a page named | "is there a …?" | first words held | echo held | outcome |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.50 at 35,000 moments in the stage | 0.46 | 0.41 | 0.70 | yes | yes | **PROMOTED** (2026-11-18 00:14) |
+| 2 | 0.56 at 40,000 | 0.48 | 0.45 | 0.79 | yes | yes | **PROMOTED** (2026-11-18 17:29) |
+| 0 | 0.50–0.51 at 55,000–60,000 | 0.41 | 0.35–0.37 | 0.72–0.76 | yes (0.50) | no (0.42–0.62; needs 0.67) | at the mark, held back by the echo; 40,000 moments of its budget left |
+
+- **All three seeds reach the pass mark of the rebuilt stage; two are promoted.** The old stage held every brain,
+  old or new, at 0.38–0.43.
+- The caveat of the chance table stands: "is there a …?" has a floor of 0.52. With that source at its floor the
+  three would score about 0.46, 0.48 and 0.43. Page naming (chance 0.04) and text carry the rest.
+- Seed 0 shows the echo dip once more: its echo wanders between 0.42 and 0.69 while everything else holds. The
+  novelty drive did not settle it. This is now the most frequent reason a brain waits at a stage it has passed.
+- Seed 2 crossed slowly: 0.49 at 5,000 moments, 0.46–0.49 for 25,000 more, then 0.56, 0.52, 0.56.
+
+## 2026-11-18 (evening): a backprop reference of the same shape
+
+`experiments/backprop_reference.py` (numpy; gradients checked against finite differences): the same decorrelated
+windows in, 256 filters, the same response and regional average, a linear readout to the names, trained end to end
+by backprop (softmax, Adam 0.001, batches of 8) on the very 8,000 naming moments a seed's word cells lived in
+`words_on_cortex.py`. Held-out naming, mean of CIFAR, Commons and COCO things, three seeds:
+
+| | after 1 pass (the brain's exposure) | 2 passes | 5 passes |
+|---|---|---|---|
+| backprop, filters and readout | 0.390 (0.368, 0.368, 0.433) | 0.448 | 0.504 |
+| the cortex's own filters kept, readout by gradient | 0.390 | 0.421 | 0.470 |
+| random filters kept, readout by gradient | 0.269 | 0.350 | 0.389 |
+| **the brain: cortex, relay, word cells, each moment once** | **0.516** (0.533, 0.508, 0.508) | – | – |
+| ridge on the brain's code, the same moments (batch) | 0.56 | | |
+
+- **At the same exposure the brain names more than backprop of the same shape (0.52 against 0.39); backprop needs
+  five passes over the same moments to come level (0.50).** This is the niche the survey said local learners have:
+  learning from each moment once.
+- The cortex's developed filters are worth as much as backprop's after one pass (0.390 both) and clearly more than
+  random filters (0.269): with the new cortex, development is no longer worse than no development.
+- Honest limits. One learning rate and one optimiser were tried for the reference, so it is lightly tuned. The
+  brain had seen unlabelled pictures before (its cortex developed on them, its relay settled on 6,000 of them); the
+  reference starts from random filters but shares the decorrelated windows. A deeper backprop network with
+  augmentation would do better than this one; the comparison is of the same shape, not of the best that backprop can do.

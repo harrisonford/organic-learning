@@ -252,3 +252,23 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   5 passes. The brain's number to set beside it: 0.516 held-out naming after one pass (3 seeds), ridge 0.56.
   About 50 min. Next: read it → a section in VISION.md (the survey's "size-matched backprop reference").
   Then: lives' checkpoints; when s2 enters preschool, the store's record at each checkpoint.
+- 2026-11-18 20:15 **The loop was silent again from 13:55 to 20:10** (the 14:24 wakeup never fired; the session's
+  wakeups fire only while the session is alive). The loop's day ended at 18:00: this is its last entry.
+  What came in meanwhile (all recorded: VISION.md and RESEARCH_MEMORY.md, last sections):
+  - **eyes2w_s2 PROMOTED out of two words at 80,000 (17:29): 0.56 beyond the parrot**, first words 0.52, echo 0.70.
+    Level: out/levels/eyes2w_s2_W2.pkl. Second seed through the rebuilt stage.
+  - **eyes2w_s0 at 0.50–0.51 on two words** (160,000–170,000), first words held, echo not (0.42–0.62; needs 0.67):
+    at the mark, waiting on the echo; 40,000 moments of budget left (it stops by itself about 03:00).
+  - **Replay in preschool did not protect** (s2 with replay loses what s1 lost without): the store fills with talk
+    (55%), surprise is 0.84 for everything, old stages get 3% of the learning.
+  - **Backprop reference**: same shape, same moments: 0.39 after one pass, 0.50 after five; the brain 0.516 after one.
+  Still running, need no attention: `organic-eyes2w-s0` (two words), `organic-eyes2w-s2` (preschool, replay on;
+  memory 3.5 GB, guard 5). No probes running. Everything committed and pushed.
+  **Where to pick up** (in order): (1) the echo dip: why does the echo wander 0.42–0.70 in a brain that holds
+  everything else (routes on new-word echoes at s0's last checkpoints: silent_route_diag / mouth_diag with STAGES=B).
+  (2) The immediate loss at a stage change: forget_diag-style comparison of a W2 level with its +5,000 checkpoint
+  (which answers replace the old ones); how much of the earlier stages a later stage's mix holds (training program
+  first). (3) The surprise measure of the fast store (it does not separate known from unknown). (4) For a paper:
+  an ablation per organ in lives, the same lessons in shuffled order, 5–10 seeds, a published local rule on the
+  same task. (5) Decisions for Kris: score "is there" above its floor? release eyes2w_s2's two-words level to kid-a
+  (its lineage is one brain: eyes2_s2 BB, B, W1 → eyes2w_s2 W2)? hardware (RAM first)?
