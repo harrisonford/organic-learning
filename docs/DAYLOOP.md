@@ -199,3 +199,19 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   chance beside every naming score, a shuffled-stage control, an ablation per organ, 5–10 seeds, a size-matched
   backprop reference, a forgetting measure. Already in hand: random-filter baseline, ridge upper bound, decorrelation
   on/off on three seeds, parrot baseline. Hardware answer given: RAM first (parallel seeds), profile before a CPU.
+- 12:30 (1) Memory: the brain is 1 GB and grows slowly (the ear's dictionaries); the 3 GB beside it were the world's
+  picture cache (unbounded: now the last 3,000) and a guard that read the peak (now what is held) → docs/CRAFT.md.
+  Takes effect when a life is next started (the two running lives have MAX_GB=5 and the old code).
+  (2) **Replay built** (`Episodes.fade / come_back / lived_again`, `Words.rest`; off unless `fade` is set, so the
+  running lives' stores are unchanged): at rest stored moments come back, strong ones more often; a moment that came
+  back is held as far as the word cells were surprised by it again; the weakest goes, not the oldest.
+  **Running: `organic-replayshift-s0`, `-s1`** (`experiments/replay_shift_probe.py` → out/replay_shift_s{0,1}.log):
+  stage A = CIFAR + Commons + COCO names, stage B = COCO no longer taught; arms none, store, fifo30, replay10,
+  replay30, rehearse30 (perfect memory), joint (upper reference). About 30–40 min a seed.
+  Mistake: the new probe was first written over `experiments/replay_probe.py` (the 2026-11-16 sleep-replay probe:
+  replaying the same day's moments gave +0.01–0.02 on pictures, not adopted); restored from git, its logs untouched.
+  Next: read the probe; seed 2. If replay keeps COCO at little cost → `SpeakingBrain.replay` (at sleep, every 2,000
+  moments, `words.rest`) and a life: eyes2_s1 from its two-words level (out/levels/eyes2_s1_W2.pkl, FROM_LEVEL=1)
+  into preschool with replay: does it hold page naming and first words where s1 lost them? Then: profile a life
+  (promised to Kris; needs 3 GB free: after the probes); the new-word bias test (design: a page with a known and an
+  unknown thing, a new name heard; which of the two alone is then called by it?).
