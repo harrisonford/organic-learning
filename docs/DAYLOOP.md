@@ -272,3 +272,9 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   an ablation per organ in lives, the same lessons in shuffled order, 5–10 seeds, a published local rule on the
   same task. (5) Decisions for Kris: score "is there" above its floor? release eyes2w_s2's two-words level to kid-a
   (its lineage is one brain: eyes2_s2 BB, B, W1 → eyes2w_s2 W2)? hardware (RAM first)?
+- 2026-11-18 20:20 (after the loop) **Kris: the echo is an insight, not a target** → docs/CRAFT.md. The promotion
+  rule no longer holds the echo (`OBSERVED = ("BB", "B")`); every life recounted without the gate (first words
+  passed 20,000–90,000 moments before promotion); `eyes2w_s0` relaunched under the new rule (it met two words at
+  155,000). **The pick-up list above changes: item (1), the echo dip, is struck.** First now: the immediate loss at
+  a stage change and how much of the earlier stages a later stage's mix holds. Debt: NOVEL_DRIVE was built for the
+  echo target; decide whether new lives are born with it. Open: the echo stage's entry mark (0.8); the yes/no floor.

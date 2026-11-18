@@ -29,6 +29,11 @@ PASS = {"BB": 0.17,  # babbling: 0.17 accepted 2026-10-29 (the organic version p
          "B": 0.8, "W1": 0.4,  # first words 0.4: accepted 2026-11-04 (confusing similar words is age-appropriate)
          "W2": 0.5, "P": 0.4, "K": 0.4, "G1": 0.4, "G2": 0.4, "G3": 0.4, "G4": 0.4}
 RETAIN = 0.8  # an earlier stage must stay at >= 80% of the score it had when passed
+# Babbling and echo are measured at every checkpoint and never held: they are what a brain does on its way to words,
+# not what it is asked to keep. Until 2026-11-18 the echo had to stay at 80% of its passing score, and lives that had
+# passed first words or two words waited tens of thousands of moments on it (Kris, 2026-11-18: "echoes is just an
+# insight of what the model does, it shouldn't be a target"; docs/CRAFT.md).
+OBSERVED = ("BB", "B")
 
 # a toddler's first words (after the MacArthur-Bates CDI's most common early words)
 FIRST_WORDS = ["mama", "dada", "ball", "dog", "cat", "hi", "bye", "milk", "no", "yes", "more", "up", "down", "baby", "car", "book", "shoe",

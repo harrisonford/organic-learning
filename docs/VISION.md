@@ -529,6 +529,10 @@ first-words levels (`eyes2w_s0`, `eyes2w_s2`).
 - Seed 0 shows the echo dip once more: its echo wanders between 0.42 and 0.69 while everything else holds. The
   novelty drive did not settle it. This is now the most frequent reason a brain waits at a stage it has passed.
 - Seed 2 crossed slowly: 0.49 at 5,000 moments, 0.46–0.49 for 25,000 more, then 0.56, 0.52, 0.56.
+- **Read again with the echo observed, not held (Kris's correction, 2026-11-18, docs/CRAFT.md): all three seeds
+  pass the rebuilt stage.** Seed 1 at 35,000 moments in the stage (0.50), seed 2 at 30,000 (0.56), seed 0 at 45,000
+  (0.52, first words 0.52). Seed 0 was relaunched under the new rule at 20:19 and is promoted at the next
+  checkpoint at which it is at the mark again.
 
 ## 2026-11-18 (evening): a backprop reference of the same shape
 

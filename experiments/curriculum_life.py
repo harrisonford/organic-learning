@@ -27,7 +27,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from organic.curriculum import NAMES, PASS, RETAIN, STAGES, Curriculum, grade, sound_sim, tidy  # noqa: E402
+from organic.curriculum import NAMES, OBSERVED, PASS, RETAIN, STAGES, Curriculum, grade, sound_sim, tidy  # noqa: E402
 from organic.curriculum import words as curriculum_words  # noqa: E402
 from organic.loop2 import LoopBrain2  # noqa: E402
 from organic.peye import Parts  # noqa: E402
@@ -380,8 +380,8 @@ while brain.age < TOTAL:
     # with PARROT=1, from first words on a stage is passed (and held) on the items that repeating the last word does not answer
     mark = lambda s: res[s]["beyond"] if PARROT and s not in ("BB", "B") and "beyond" in res[s] else res[s]["score"]  # noqa: E731
     cur = mark(stage)
-    # earlier stages must be held, except babbling, which is meant to fade as words come
-    held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s != "BB")
+    # earlier stages must be held, except babbling and echo: those are observed, not asked for (organic/curriculum.py, OBSERVED)
+    held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s not in OBSERVED)
     promoted = cur >= PASS[stage] and held
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()

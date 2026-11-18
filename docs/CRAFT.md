@@ -212,3 +212,40 @@ and was not done.
 What this says about hardware: the lives are limited by memory bandwidth and by Python overhead more than by
 cores. More memory lets more lives run, but each then runs slower unless the memory is also faster (more channels,
 DDR5, a large cache). The GPU matters only through the 14% spent waiting for the adult models.
+
+## 2026-11-18: the echo is an observation, not a target (Kris)
+
+Kris, 2026-11-18: "it feels like we're going super hard at this echo thing, like if it was imperative the model
+echoes, but that's not necessarily correct, we should reformulate what we're measuring: echoes is just an insight
+of what the model does, it shouldn't be a target."
+
+**What had happened.** A stage was passed only if every earlier stage stayed at 80% of its passing score, babbling
+excepted ("meant to fade as words come"). The echo was not excepted. Every brain echoes less once it has words
+(0.85 → 0.4–0.6), so every brain that had passed a stage then waited on the echo. I treated that as a fault of the
+brain and built against it: a diagnosis of the routes, a novelty drive on the copy route (NOVEL_DRIVE), a place at
+the top of the list of problems. The measure had become the goal.
+
+**What it cost** (every life's records read again without the echo gate; a counterfactual for the first promotion):
+
+| lives | passed first words by its own score at | was promoted at |
+|---|---|---|
+| conv (3 seeds) | 15,000–30,000 | 60,000–70,000 |
+| edge (3) | 20,000–30,000 | 55,000, 80,000, never |
+| world3 (3) | 35,000–40,000 | 60,000–85,000 |
+| eyes2 seed 0 | 20,000 | 110,000 |
+| eyes2 seed 2 | 20,000 | 40,000 |
+
+And two words (rebuilt stage): seed 2 at 70,000 instead of 80,000; **seed 0 at 155,000 (0.52, first words 0.52),
+where it has been waiting since**. One life (edge_s2) was stopped with the verdict "passes first words but cannot
+hold earlier stages": the earlier stage was the echo.
+
+**The rule now** (`organic/curriculum.py`, `OBSERVED = ("BB", "B")`): babbling and echo are measured at every
+checkpoint and recorded, and are never held. What must be held are the stages that ask for meaning: first words
+onward. The echo stage is still passed once on the way in (every life has passed it at its first checkpoint,
+0.81–0.85); whether that entry mark should go too is open.
+
+**What I take from it for the method.** A measure is a target only if it is what we want the brain to be able to
+do. What the brain does on the way (babbling, echoing, which route it speaks by, how often it says the last word,
+what its store holds) is recorded to understand it, never gated on. Before working on a number, ask which of the
+two it is. The novelty drive stays in the running lives (changing a living brain's routes mid-life would be another
+intervention) and is listed as a debt: it was built for a target that was not one.
