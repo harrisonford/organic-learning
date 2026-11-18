@@ -235,3 +235,10 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   (page naming 0.41 → 0.27, 0.28, 0.24, 0.18, 0.22, 0.27; first words beyond the parrot 0.46 → 0.35 at +30,000).
   Idle time: the new-word bias test (design in the 12:35 entry); a table of chance levels and the number of
   candidate names beside every naming score (the survey's first missing control).
+- 13:20 Chance levels beside every naming score → docs/VISION.md (naming 5–10x chance; **caveat: a third of the
+  two-words score is a yes/no question with a floor of 0.52**: open decision for Kris). **Running: the new-word test**
+  `organic-newword-s0/1/2` (`experiments/newword_probe.py` → out/newword_s*.log): 4 kinds never shown; a page with a
+  named and an unnamed thing, a made-up word said once; is the word's cell then driven more by the unnamed thing
+  (chance 0.5)? Control: two unnamed things. My expectation, written before the result: about chance (a new cell
+  learns from the average of the fixated views; nothing sends it to the view the other cells do not claim).
+  Next: read it; record in VISION.md; lives' checkpoints about 13:50.
