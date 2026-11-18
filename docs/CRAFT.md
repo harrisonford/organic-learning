@@ -186,3 +186,29 @@ Both take effect when a life is next started. The first version of the diagnosti
 (an unpickled array has a `base`); the totals did not match the file size, which is how it showed.
 
 Lesson: the loop must not be the only thing that restarts a stopped life. And a guard should measure what it guards.
+
+## 2026-11-18: where a life's time goes (profile)
+
+500 moments of a world 4 life (looking, match neurons, episodic store, leisure talk, the local judge), profiled
+beside two running lives: 0.52 s a moment.
+
+| share | what |
+|---|---|
+| 27% | the word cells' learning step (`Words.learn`, 69 ms a call, 2.2 calls a moment: a lesson, a comment, some talk) |
+| 14% | waiting for the two local adult models (judge 8%, parent 6%) |
+| 13% | the orchestrator comparing the moment with its clusters (`Cortex._affinity`, 5.6 ms a call, 14 calls a moment) |
+| 10% | the ear turning speech into units, called 360 times a moment through `mirror` (Python overhead) |
+| 9% | the visual cortex and its relay (5 views a moment) |
+| 8% | the word cells recalling |
+| the rest | the world, the mouth, bookkeeping |
+
+The largest item is one line: the visual synapses of every word cell are corrected at every lesson (2,000 cells x
+4,096 synapses = 32 MB read and written several times). Measured alone it takes 65 ms and does not get faster when
+the temporaries are removed: it is bound by how fast memory moves, not by arithmetic, and two lives beside it share
+the same memory channels. A single fused pass would need compiled code (numba is not available for this Python).
+An exact speed-up was not found in an hour; skipping cells whose correction is negligible would change the lives
+and was not done.
+
+What this says about hardware: the lives are limited by memory bandwidth and by Python overhead more than by
+cores. More memory lets more lives run, but each then runs slower unless the memory is also faster (more channels,
+DDR5, a large cache). The GPU matters only through the 14% spent waiting for the adult models.

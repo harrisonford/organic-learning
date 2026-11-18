@@ -394,8 +394,10 @@ class Words:
             return 0
         back = ep.come_back(rng, count)
         for k in back:
-            self.look(None)
+            views = ep.views[k] if ep.views is not None else None
+            self.look(None if views is None else list(views.astype(np.float32)))
             self.learn(list(ep.asked[k]), ep.seen[k].astype(np.float32) if ep.eyes[k] else None, list(ep.reply[k]), again=k)
+        self.look(None)
         return len(back)
 
     def learn(self, heard, v, reply_units, again=None):
@@ -423,7 +425,8 @@ class Words:
             if again is not None:
                 self.episodes.lived_again(again, unexpected)
             else:
-                self.episodes.write(seen_now, self._echo(heard, ()) if len(heard) else None, [self.units[t] for t in targets], unexpected, heard)
+                self.episodes.write(seen_now, self._echo(heard, ()) if len(heard) else None, [self.units[t] for t in targets], unexpected, heard,
+                                    x[1:] if x is not None and x.ndim == 2 else None)
         if getattr(self, "m_on", None) is not None and n > 1:  # each cell's own levels (measured, before this moment changes it)
             d = np.maximum(o, 0)
             if targets:

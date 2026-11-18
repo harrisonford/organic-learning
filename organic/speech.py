@@ -408,6 +408,7 @@ class SpeakingBrain(LoopBrain2):
         top = max(nov)
         return [n / top for n in nov] if top > 0 else nov
 
+    replay = 0.0  # in sleep, this many moments of the fast store come back for every moment of the day (0: none)
     novel_drive = False  # the copy route is driven by the ear's novelty (life env NOVEL_DRIVE=1)
     intake = False  # of a reply in leisure talk only the last units are learned from (life env INTAKE=1)
     mlu = 1.0  # the brain's own usual length of reply in leisure talk, in the ear's units
@@ -640,6 +641,10 @@ class SpeakingBrain(LoopBrain2):
                 if self.sleep_cleanup and self.age % 2000 == 0:
                     merged, retired = self.orch.consolidate()
                     self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]
+                    if self.replay and getattr(self, "words", None) is not None and self.words.episodes is not None:
+                        # in sleep, moments of the fast store come back and the word cells live them again
+                        # (organic/episodes.py, replay; docs/RESEARCH_MEMORY.md, 2026-11-18)
+                        self.words.rest(int(self.replay * 2000), self.rng)
                 self.orch.maybe_prune()
         if not learn and not said and self.babble_when_silent:  # nothing to say: it babbles (served levels)
             said = self.babble(explore=False).strip()

@@ -248,3 +248,46 @@ three).
 word cells alone 0.07 / 0.05, 0.13 / 0.09, 0.16 / 0.12; with the episodic store 0.92 / 0.89, 0.93 / 0.88, 0.88 / 0.83.
 Another picture of the kind: 0.00 in every arm and seed. First-words naming is the same with and without the store.
 The store can be given to a brain at birth (`SpeakingBrain(episodes=True)`, life env EPISODES=1) or to a resumed one.
+
+## 2026-11-18: replay from the fast store (built; the offline probe was a null by design; into a life)
+
+The survey of 2026-11-18 (`reports/Backprop free developmental learning survey.md`) names what theory offers against
+the loss of a stage when the next begins (eyes2_s1 after passing two words: a thing on a page named 0.41 → 0.2 and
+first words 0.46 → 0.35 within 30,000 moments of preschool): the fast store replays old moments to the slow
+learner (McClelland et al. 1995); replay of the recent only overwrites the old, alternating recent and remote
+protects it (Singh, Norman & Schapiro 2022); weight protection alone fails (Tadros et al. 2022). An earlier probe
+(2026-11-16, `experiments/replay_probe.py`) had replayed the same day's moments within one mix: +0.01–0.02 on
+pictures, not adopted. This is a different question: replay against a change of mix.
+
+**What was built** (`organic/episodes.py`, `Words.rest`, `SpeakingBrain.replay`; off unless switched on):
+- A stored moment now keeps what was asked and what the eye fixated, so that it can be lived again.
+- In sleep (every 2,000 moments, where the orchestrator already consolidates) stored moments come back, the more
+  strongly held the more often, and the word cells learn from them as from a lived moment.
+- A moment that came back is then held as far as the word cells were surprised by it this time. What the slow
+  synapses hold by now fades from the store; what they have lost again stays, however old.
+- Between returns a moment's strength fades; when the store is full the weakest goes, not the oldest.
+- Set by hand (debts): the store's size (6,000 with replay), how long an unvisited moment lasts (6,000 moments),
+  how many come back (0.3 for every moment of the day).
+
+**Offline probe** (`experiments/replay_shift_probe.py`, 2 seeds; word cells alone; stage A: CIFAR, Commons and COCO
+names for 6,000 moments; stage B: COCO no longer taught, 6,000 moments; held-out COCO naming after A → after B):
+
+| arm | seed 0 | seed 1 |
+|---|---|---|
+| word cells alone | 0.345 → 0.325 | 0.330 → 0.330 |
+| replay of the recent (old store), 30 per 100 | 0.360 → 0.315 | 0.345 → 0.330 |
+| replay as built, 30 per 100 | 0.375 → 0.285 | 0.265 → 0.330 |
+| perfect memory of A, 30 per 100 | 0.370 → 0.340 | 0.325 → 0.315 |
+| COCO still taught (upper reference) | 0.345 → 0.430 | 0.330 → 0.370 |
+
+**A null by design: nothing was forgotten in the control arm**, so there was nothing to protect; the arms differ by
+the noise of 200 test pictures (±0.03). Dropping one source of names for 6,000 moments does not erase it. In the
+lives the loss came over tens of thousands of moments and with new kinds of question about the same pictures. One
+thing the probe did show: with a store of 2,000 and new moments always more surprising than old ones, no moment of
+stage A is left in the store at the end. A store that is to hold the remote must span several days: 6,000 in the life.
+
+**In a life** (started 2026-11-18 13:03): `eyes2w_s2` (two words, 0.49 at 5,000 moments) records what was asked in
+every stored moment from now on, and replay switches on when it enters preschool (REPLAY=0.3, REPLAY_FROM=P: the
+experimenter's switch, so that its two-words pass stays comparable with seed 1's). The comparison is seed 1's
+preschool without replay (last night). Each checkpoint records whose moments the store holds and which came back,
+and how surprising they still were.

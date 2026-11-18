@@ -215,3 +215,23 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   into preschool with replay: does it hold page naming and first words where s1 lost them? Then: profile a life
   (promised to Kris; needs 3 GB free: after the probes); the new-word bias test (design: a page with a known and an
   unknown thing, a new name heard; which of the two alone is then called by it?).
+- 13:10 **eyes2w at 5,000 moments of world 4 two words: s2 0.49 beyond the parrot (pass 0.5), s0 0.34**; first words
+  0.46 / 0.46, echo 0.67 / 0.74. Replay-shift probe: a null by design (nothing was forgotten in the control arm;
+  RESEARCH_MEMORY.md, last section) → the test moved into a life. Built: stored moments keep what was asked and the
+  fixated views; `SpeakingBrain.replay` (in sleep, every 2,000 moments); life env REPLAY, REPLAY_FROM, EPISODES_CAP,
+  EPISODES_FADE; each checkpoint records the store (`episodes`: whose moments it holds, which came back, how
+  surprising still). Smoke life clean (warnings as errors); a fault found by the smoke (moments stored before today
+  came back without their question) fixed and unit-tested.
+  **Both lives relaunched 13:03 from their 5,000-moment checkpoint with the new code** (about 1,300 lived moments
+  each given up): s0 as before (the control, and the clean third seed of the two-words test); **s2 with REPLAY=0.3
+  REPLAY_FROM=P** (replay switches on when it enters preschool; the store then grows from 2,000 to 6,000). MAX_GB=5,
+  and the memory fixes are in. Commands: `TAG=eyes2w SEEDS="2" ARM=routes WORLD=4 MAX_GB=5 CORTEX=data/visual_cortex2.pkl
+  CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E NOVEL_DRIVE=1 -E REPLAY=0.3 -E REPLAY_FROM=P" experiments/conv_pipeline.sh`
+  (s0: the same without the two REPLAY switches).
+  Profile of a life → docs/CRAFT.md (27% the word cells' learning step, bound by memory speed; 14% waiting for the
+  adult models; 13% the orchestrator; 10% the ear). No exact speed-up found.
+  Next: checkpoints (about every 50 min); when s2 is PROMOTED into preschool: read `episodes` in out/eyes2w_s2.jsonl
+  at each checkpoint and compare first words, two words and page naming with seed 1's preschool of last night
+  (page naming 0.41 → 0.27, 0.28, 0.24, 0.18, 0.22, 0.27; first words beyond the parrot 0.46 → 0.35 at +30,000).
+  Idle time: the new-word bias test (design in the 12:35 entry); a table of chance levels and the number of
+  candidate names beside every naming score (the survey's first missing control).

@@ -107,6 +107,26 @@ if os.environ.get("FROM_LEVEL") == "1" and state["stage"] in state["passed"]:
     state["promotions"].append((state["stage"], brain.age))
     state["stage"], state["since"] = STAGES[STAGES.index(state["stage"]) + 1], brain.age
     brain.babble_when_silent = False
+
+# In sleep, moments of the fast store come back and the word cells live them again (organic/episodes.py, replay;
+# docs/RESEARCH_MEMORY.md, 2026-11-18). REPLAY: how many come back for every moment of the day. REPLAY_FROM=P: only
+# from that stage on (the experimenter's switch, to compare with a life that had none; a brain has no such switch).
+REPLAY = float(os.environ.get("REPLAY", 0))
+
+
+def replay_on():
+    ep = getattr(getattr(brain, "words", None), "episodes", None)
+    if ep is None or not REPLAY or brain.replay:
+        return
+    ep.grow(int(os.environ.get("EPISODES_CAP", 6000)))
+    ep.fade = float(os.environ.get("EPISODES_FADE", 6000))
+    ep.returns = {}
+    brain.replay = REPLAY
+    print(f"replay on at {brain.age}: the store holds {ep.n} moments of {ep.capacity}", flush=True)
+
+
+if STAGES.index(state["stage"]) >= STAGES.index(os.environ.get("REPLAY_FROM", "BB")):
+    replay_on()
 log = open(out_path, "a")
 t0 = time.time()
 
@@ -320,6 +340,9 @@ rewards = []
 lived = {}  # what the life was given since the last checkpoint, by stage and source: the record shows the world it is in
 while brain.age < TOTAL:
     stage = state["stage"]
+    store = getattr(getattr(brain, "words", None), "episodes", None)
+    if store is not None:
+        store.mark_now = -1  # (a label for the record only: which stage's lesson a stored moment is from; -1: talk, comments)
     if OVERHEARD:
         overhear()
     if OBSERVE:
@@ -345,6 +368,8 @@ while brain.age < TOTAL:
         if judge is not None:
             def judged(said, m=m):
                 return judge.accept([(m["stage"], m["question"], m["answers"], said)], fallback=lambda i: grade(m["stage"], said, m["answers"]))[0]
+        if store is not None:
+            store.mark_now = STAGES.index(m["stage"])
         _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"],
                                     grade=judged if judge is not None else (lambda said, m=m: grade(m["stage"], said, m["answers"])))
         rewards.append(r)
@@ -382,6 +407,8 @@ while brain.age < TOTAL:
             verdict = "passed every stage"
         else:
             state["stage"], state["since"] = STAGES[k + 1], brain.age
+            if state["stage"] == os.environ.get("REPLAY_FROM"):
+                replay_on()
     elif brain.age - state["since"] >= STAGE_BUDGET:
         verdict = f"stops at {stage} ({NAMES[stage]}): score {cur:.2f} < {PASS[stage]} after {STAGE_BUDGET:,} moments" if cur < PASS[stage] else \
                   f"stops at {stage} ({NAMES[stage]}): passes it but cannot hold earlier stages"
@@ -394,6 +421,13 @@ while brain.age < TOTAL:
         world.rng.setstate(rng_state)
         world.prng.setstate(dice)
     rec["verdict"] = verdict
+    ep = getattr(getattr(brain, "words", None), "episodes", None)
+    if ep is not None and ep.mark is not None:  # the fast store: whose moments it holds, and which came back in sleep (how many, how surprising still)
+        label = lambda k: STAGES[k] if k >= 0 else "talk"  # noqa: E731
+        rec["episodes"] = {"held": int(ep.n), "from": {label(int(k)): int(c) for k, c in zip(*np.unique(ep.mark[: ep.n], return_counts=True))},
+                           "came_back": {label(k): [c, round(t / c, 3)] for k, (c, t) in (ep.returns or {}).items()}}
+        if ep.returns is not None:
+            ep.returns = {}
     rec["lived"], lived = lived, {}
     log.write(json.dumps(rec) + "\n")
     log.flush()
