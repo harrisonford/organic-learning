@@ -242,3 +242,13 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   (chance 0.5)? Control: two unnamed things. My expectation, written before the result: about chance (a new cell
   learns from the average of the fixated views; nothing sends it to the view the other cells do not claim).
   Next: read it; record in VISION.md; lives' checkpoints about 13:50.
+- 14:00 **New-word test: absent** (0.51, chance 0.5; a candidate rule gives 0.66 against 0.53 control, written to
+  produce it, not adopted; `Words.unclaimed` stays a probe's switch) → docs/VISION.md. s2 at 10,000 moments of two
+  words: 0.49 again, echo 0.61 (needs 0.665): not promoted. s0's next checkpoint pending.
+  **Running: `organic-bp-s0/1/2`** (`experiments/backprop_reference.py` → out/backprop_reference_s*.log): the same
+  shape (decorrelated windows → 256 filters → regional average → readout) trained end to end by backprop in numpy
+  (gradients checked against finite differences), on the very 8,000 moments a seed's word cells lived in
+  words_on_cortex.py; arms backprop / readout only (the cortex's filters kept) / random filters; scores after 1, 2,
+  5 passes. The brain's number to set beside it: 0.516 held-out naming after one pass (3 seeds), ridge 0.56.
+  About 50 min. Next: read it → a section in VISION.md (the survey's "size-matched backprop reference").
+  Then: lives' checkpoints; when s2 enters preschool, the store's record at each checkpoint.
