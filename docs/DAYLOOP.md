@@ -167,3 +167,25 @@ Then three lives of the new world, and a snapshot (docs/SNAPSHOT_2026-11-18.md).
   Echo scores before the novelty drive: s0 0.41, s1 0.52, s2 0.53 (to hold: about 0.68, 0.58, 0.66).
   Next: echo (B) at the next checkpoints; promotions (s0/s2 → move to world 4 with the config in the 19:20 entry plus
   NOVEL_DRIVE=1); s1 two words ≥ 0.5 with first words and echo held = a new level.
+- 2026-11-18 11:55 **The loop was silent from about 22:00 to 11:50** (no wakeup fired; nothing was researched or
+  recorded for 14 hours; the lives ran unattended). What they did meanwhile:
+  - **eyes2_s1 PROMOTED out of two words at 55,000 moments** (35,000 in the stage, 30,000 of them in world 4): the
+    first life ever to pass two words. At the mark, not above it: beyond the parrot 0.50 (pass 0.5; one checkpoint,
+    300 items, ±0.03), by source text 0.46, a thing on a page named 0.41, "is there" 0.70; first words 0.46, echo 0.71.
+    Level frozen: out/levels/eyes2_s1_W2.pkl. In preschool it then lost ground (two words 0.36–0.40, page naming
+    0.41 → 0.2, first words 0.35) and **stopped on the memory guard (4.05 GB) at 85,000, 05:20**. Parked.
+  - eyes2_s2 PROMOTED out of first words at 40,000 (one checkpoint after the novelty drive: echo 0.53 → 0.68); nobody
+    moved it to world 4, so it lived the old two-words stage (world 3) and **stopped at 0.43 after 100,000** (06:53).
+  - eyes2_s0: echo 0.41 → 0.52–0.67 with the novelty drive, crossed the mark (0.72) only at 110,000 = PROMOTED on the
+    last checkpoint of its budget; then the old two-words stage, 0.40 at 95,000 there, stopped for memory 10:40.
+  - So: the novelty drive lifts the echo (0.41–0.53 → about 0.6) but not reliably over the mark; the old two-words
+    stage holds the new brains at 0.40–0.43 exactly as it held the old ones (0.38–0.43); the rebuilt stage was
+    passed once.
+  **Started 11:56: `eyes2w_s0`, `eyes2w_s2`** (units organic-eyes2w-s0/-s2): seeds 0 and 2 continued from their frozen
+  first-words levels (out/levels/eyes2_s{0,2}_W1.pkl, ages 110,000 and 40,000) straight into world 4 two words, same
+  switches as s1 (LOOKING MATCH EPISODES INTAKE FULL NOVEL_DRIVE CHAT=0.2), MAX_GB=5. New switch FROM_LEVEL=1 in
+  curriculum_life.py (a frozen level enters its next stage; conv_pipeline takes MAX_GB). This is the three-seed test
+  of the rebuilt stage. s1 passed after 30,000 moments of world 4: expect an answer around 17:00–18:00.
+  Next: (a) their checkpoints (out/eyes2w_s*.log). (b) What grows in a life's memory (s1: 2.7 → 4.05 GB over 55,000
+  moments of world 4): look into out/eyes2_s1.pkl offline. (c) Why page naming and first words sink in preschool
+  (the stage's mix changes: erasure again?). (d) pivot frames for two-word text (text is the weakest source: 0.46).

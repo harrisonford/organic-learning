@@ -431,3 +431,24 @@ Baseline by source at 5,000: CIFAR 0.41, COCO things 0.21, Commons 0.58, text 0.
 - eyes2_s1 then lived 5,000 moments of world 3's two words (the photo questions) and reached 0.40 there, where the
   old lives ended after 100,000 moments. At 25,000 it was moved to world 4 with eyes that look, match neurons, the
   episodic store and the intake limit (the same brain, resumed).
+
+## 2026-11-18: the rebuilt two-words stage is passed once; the old one holds the new brains too
+
+Overnight (the loop was silent; the lives ran alone):
+
+| life | first words passed at | two words lived | two words (beyond the parrot; pass 0.5) |
+|---|---|---|---|
+| eyes2_s1 | 20,000 | world 4 (picture-book pages; looking, match neurons, episodic store) | **0.50 at 55,000: PROMOTED** (35,000 in the stage) |
+| eyes2_s2 | 40,000 | world 3 (old stage: photo questions, counting) | 0.43 after 100,000: stops |
+| eyes2_s0 | 110,000 | world 3 | 0.40 after 95,000 (stopped for memory) |
+
+- s1 by source at its pass: text 0.46, a thing on a page named 0.41, "is there a …?" 0.70. First words 0.46 and
+  echo 0.71 held. It is the first two-words pass of any life, and it is at the mark, on one checkpoint, one seed.
+- It is not a like-for-like win over the old lives: the stage itself was rebuilt (counting and the photo questions
+  moved to preschool). What it shows is that the program as rebuilt can be lived through by this brain.
+- The new eyes and word cells alone do not pass the old stage: 0.40–0.43, where the old brains had 0.38–0.43.
+- After promotion s1 lost what it had passed: in preschool page naming fell 0.41 → 0.2 and first words to 0.35
+  within 30,000 moments. The stage's mix changed and the word cells' weights went with it (erasure, as measured
+  for the COCO names on 2026-11-17).
+- Seeds 0 and 2 were started into the rebuilt stage from their frozen first-words levels on 2026-11-18 11:56
+  (`eyes2w_s0`, `eyes2w_s2`): the three-seed answer.

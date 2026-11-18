@@ -101,6 +101,12 @@ print(world.summary(), flush=True)
 TEST_N = int(os.environ.get("TEST_N", 300))  # the ruler (docs/REVIEW_2026-11-10.md): 60 items gave +-0.06 per checkpoint
 tests = {s: world.test_set(s, n=TEST_N) for s in STAGES}
 state = brain.curriculum
+if os.environ.get("FROM_LEVEL") == "1" and state["stage"] in state["passed"]:
+    # a life continued from a frozen level (out/levels/): the level is the brain at the checkpoint it passed a
+    # stage, written before it entered the next one; it enters it now, and babbles only as a living brain does
+    state["promotions"].append((state["stage"], brain.age))
+    state["stage"], state["since"] = STAGES[STAGES.index(state["stage"]) + 1], brain.age
+    brain.babble_when_silent = False
 log = open(out_path, "a")
 t0 = time.time()
 
