@@ -34,6 +34,10 @@ RETAIN = 0.8  # an earlier stage must stay at >= 80% of the score it had when pa
 # passed first words or two words waited tens of thousands of moments on it (Kris, 2026-11-18: "echoes is just an
 # insight of what the model does, it shouldn't be a target"; docs/CRAFT.md).
 OBSERVED = ("BB", "B")
+# The echo stage is a period, not a mark (Kris, 2026-11-19: "yes same with echo"): a brain lives it for one
+# checkpoint's span and goes on to first words whatever it echoes; the score is recorded. Until then it had to echo
+# at 0.8 (every life did, at its first checkpoint: 0.81-0.85).
+PERIODS = ("B",)
 
 # a toddler's first words (after the MacArthur-Bates CDI's most common early words)
 FIRST_WORDS = ["mama", "dada", "ball", "dog", "cat", "hi", "bye", "milk", "no", "yes", "more", "up", "down", "baby", "car", "book", "shoe",

@@ -249,3 +249,26 @@ do. What the brain does on the way (babbling, echoing, which route it speaks by,
 what its store holds) is recorded to understand it, never gated on. Before working on a number, ask which of the
 two it is. The novelty drive stays in the running lives (changing a living brain's routes mid-life would be another
 intervention) and is listed as a debt: it was built for a target that was not one.
+
+## 2026-11-19: the echo stage becomes a period; the novelty drive is retired; the judge audited
+
+- **Echo** (Kris: "yes same with echo"): the echo stage is lived for one checkpoint's span and left, whatever the
+  brain echoes (`PERIODS = ("B",)`, organic/curriculum.py). Its score is recorded. Every life so far would have
+  moved on at the same moment (all echoed 0.81–0.85 at their first checkpoint).
+- **The novelty drive** (Kris: "I hope it's not artificial behaviour"). It was. `SpeakingBrain.novel_drive`
+  (2026-11-17) adds to the copy route's drive, when the brain chooses how to speak, the novelty of the newest sound
+  it just heard (the ear's own count of it: 1 / (1 + times heard / maturation)). The quantity is the ear's own; the
+  wire from it to the copy route was put there by me so that new words would be echoed, to raise a score that was
+  not a target. It lifted the echo from 0.41–0.53 to about 0.6 and did nothing else that was measured. **Retired:**
+  no life is born with it (the switch stays in the code, off; the launch commands in docs/DAYLOOP.md that carry
+  NOVEL_DRIVE=1 are history, not instructions). The three two-words passes were made with it on; whether it
+  mattered for them is not known and is a debt on those results.
+  Its older relative `novel_copy` (2026-11-11) stays: it does not push the brain to copy, it only says which heard
+  word is repeated when the brain copies (the newest-sounding one, in place of a hand-set "the last one").
+- **The judge** → docs/JUDGING.md, last section. The method lesson: a judge that gives the reward and decides what
+  is corrected is part of the training program. It ran for ten days without being compared with the grade answer
+  by answer, and it was teaching the brain some of its own mistakes.
+- **How the lives ended (2026-11-19, early morning).** eyes2w_s0 was promoted out of two words at 180,000, its
+  first checkpoint under the rule that the echo is not held. So all three seeds were promoted through the rebuilt
+  two-words stage. Both eyes2w lives then stopped in preschool after 100,000 moments at 0.19 and 0.20 (pass 0.4);
+  first words fell to 0.33–0.40 and two words to 0.41–0.43 meanwhile. No life is running.

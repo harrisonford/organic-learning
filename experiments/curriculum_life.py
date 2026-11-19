@@ -27,7 +27,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from organic.curriculum import NAMES, OBSERVED, PASS, RETAIN, STAGES, Curriculum, grade, sound_sim, tidy  # noqa: E402
+from organic.curriculum import NAMES, OBSERVED, PASS, PERIODS, RETAIN, STAGES, Curriculum, grade, sound_sim, tidy  # noqa: E402
 from organic.curriculum import words as curriculum_words  # noqa: E402
 from organic.loop2 import LoopBrain2  # noqa: E402
 from organic.peye import Parts  # noqa: E402
@@ -382,7 +382,7 @@ while brain.age < TOTAL:
     cur = mark(stage)
     # earlier stages must be held, except babbling and echo: those are observed, not asked for (organic/curriculum.py, OBSERVED)
     held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s not in OBSERVED)
-    promoted = cur >= PASS[stage] and held
+    promoted = (cur >= PASS[stage] or stage in PERIODS) and held  # (a period is lived through, not passed on a mark)
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()
     rec_drift = drift()

@@ -112,3 +112,69 @@ life would have learned to answer where-questions with "yes". `organic/judge.py`
 two of three cases, not all. Other spot checks were right ("doggie" for dog 0.94, "cat" for dog 0.01,
 "white" for blue 0.01, "zero" for three 0.00). "there" to a where-question is accepted (0.9): left,
 a toddler pointing is an answer.
+
+## 2026-11-19: the judge audited answer by answer; a design for "acceptable, not absolute"
+
+Kris, 2026-11-19: yes/no questions "should not be like that, so rigid, we should be more lenient with what the
+question is; it has to feel acceptable instead of asking for absolutes; we can use Jev or a similar model, but we
+need to be able to allow lenient scoring somehow, or maybe not always, but we need to design that properly."
+
+### Where things stood
+Since 2026-11-09 the local judge (lev 4B) gives the reward in every life, and an answer it accepts is not
+corrected: the word cells are taught what the child said. Stages are still passed on the rigid grade. The two had
+never been compared answer by answer. `experiments/judge_audit.py` does it on the three brains as they passed two
+words (out/judge_audit_*.jsonl: 548 held-out answers each).
+
+### What the audit found
+1. **On names and yes/no the two agree on the score** (first-words names 0.44–0.71 rigid, 0.42–0.74 judged; a thing
+   on a page 0.41–0.45 both). The judge is kinder on text (first-words text 0.30–0.46 rigid, 0.48–0.62 judged).
+2. **The judge is kind in the wrong places.** It cannot see the picture, and it is not told that the adult's
+   answer is the truth. Accepted at 0.93–0.99: "bear" for a dog, "baby" for a bear, "train" for a bus, "lion" for a
+   tiger; **"yes" to "can you see a bed?" when there is none** (every such answer); the question said back
+   ("who is holding you?" → "holding you?", "what is under your pants?" → "pants?"). Of 333 answers to closed
+   questions that were wrong in meaning, it accepted 41.
+3. **It is also right where the rigid grade is wrong.** It rejects blends the grade half-accepts ("elephantbear"
+   0.03 against 0.58) and overlaps of words that do not answer ("do you see the big car?" → "big": grade 0.80,
+   judge 0.03); it accepts a child's form of the right word ("caair", "yog", "here" for "there").
+4. **So the lives were taught some of their own mistakes.** 6–8% of all answers are accepted by the judge and
+   wrong by the grade; for those the word cells were taught the child's word on the adult's picture. The wrong name
+   said most often by these brains is "bear" (27 of the wrong names in two audits; next "cup" 18), and "bear" is
+   what the judge accepts for dogs and cats. Not proven to be cause and effect; it is what such a loop would do.
+5. **What a child who neither looks nor listens gets:**
+
+   | source | best blind answer | rigid | judged |
+   |---|---|---|---|
+   | names (first words, pages) | the commonest name | 0.11–0.22 | 0.09–0.20 |
+   | "is there a …?" | always "yes" | 0.53 | **0.64** |
+   | two-words text | the question's last word | 0.49 | 0.52 |
+
+   Leniency raises the floor of the yes/no source from 0.53 to 0.64: the present judge makes that problem worse.
+   The two-words text source as a whole is at the level of saying the last word back (0.44–0.46 against 0.49); the
+   gate already counts only the items a parrot gets wrong, where the brains score 0.50–0.56.
+6. **Two words above the blind floor** (each source's score less its best blind answer, as a share of what is left;
+   rigid grade): seed 1 0.22, seed 0 0.27, seed 2 0.32. Page naming 0.34–0.38 and "is there" 0.32–0.57 carry it;
+   text carries nothing in this reading.
+7. **A judge that is lenient on form and strict on meaning is within reach of the same local model.** Told that
+   the adult's answer is the truth and that another way of saying the same word counts while a different thing,
+   the opposite of yes or no, a different number or the question repeated does not, it accepts 2–7 of 257 distinct
+   wrong answers and 218–230 of 231 right ones. What it still lets through are run-ons that contain the right word.
+
+### Design (proposed; nothing below is built)
+1. **One question for the adult: "did the child mean what I meant?"** Lenient about form, strict about meaning.
+   "Doggie", "a dog!", "caair" are right; "bear" for a dog is not, however gently it is said.
+2. **Closed and open questions.** Where the world settles the answer (the name of a thing in view, yes/no about
+   what is on the page, how many, what colour), the adult's answer is the truth and the judge only decides whether
+   the child's words mean it. Where it does not (talk, routines, stories, "what do you want?"), many answers are
+   acceptable and the judge decides as it does now. Each source says which it is; that belongs to the adults, not
+   to the brain. This is the "maybe not always".
+3. **Teaching.** The adult lets the child's own form stand only when it means the same; otherwise the adult says
+   theirs. A wrong meaning is never confirmed. (Children's own forms are kept; their mistakes are not.)
+4. **Measuring.** Every stage score stands beside what a blind child gets from the same judge (always yes, the
+   commonest answer, the last word), and a stage is passed on the part above that. This generalises "beyond the
+   parrot", takes the yes/no floor out, and makes a lenient judge safe to gate on.
+5. **An audit set that stays.** Some 500 real answers (those of this audit), labelled once by a stronger judge
+   (Jev, a few cents of its $1.50) or by Kris; the local judge's agreement with it is measured again whenever the
+   judge or its instruction changes, and written here. The gate moves from the rigid grade to the judge only when
+   that agreement is known.
+6. **Pass marks are set again, in the open**, after the existing levels have been scored the new way. They are
+   not to move silently in either direction.
