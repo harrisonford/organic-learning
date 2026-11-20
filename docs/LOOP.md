@@ -68,3 +68,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   floors and `above` in every record; GATE=above; echo a period; novelty drive retired; three literature searches
   (research_notes/Relatives and publishability 2/); docs/PUBLISH.md; three clean lives started; benchmark codes
   running; `bench_stream.py` written, not yet run.
+- 2026-11-19 23:00 Clean lives at 5,000: babbling passed by seeds 0 and 2 (0.20, 0.19), seed 1 at 0.17. Benchmark
+  codes for the developed cortex done (seed 0); the never-developed one is being coded. **Running:
+  `organic-bench-dev0`** (`bench_stream.py`, developed, seed 0, 50,000 pictures → out/bench/stream_developed_s0.log;
+  about 4 hours beside the lives; smoke at 1,000 pictures: word cells + relay 0.49, nearest class mean + relay 0.49,
+  streaming LDA 0.50, ridge 0.49–0.51). **Queued behind it: `organic-bench-bptune`** (out/bench/tune_backprop.sh:
+  `bench_backprop.py`, random filters, rate x batch on the first 10,000 pictures → out/bench/backprop_tune_s0.log).
+  Next: read both; run the best backprop setting on the full stream, with replay 1 and 4, and with the developed
+  filters as start and frozen; `bench_stream.py` with VARIANT=random when its codes exist. When memory allows
+  (3 GB): queue item 6 with `judge_audit.py` on out/eyes2w_s2.pkl and out/eyes2w_s0.pkl (the brains after 100,000
+  moments of preschool) against their two-words levels, answer by answer.
