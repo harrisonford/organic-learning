@@ -323,3 +323,32 @@ taking over the same synapses and cues at once: look at which answers replace th
 moments (forget_diag.py on the level and the +5,000 checkpoint). (3) The parents of a real child do not stop
 naming things when preschool begins: the stage mix itself (how much of the earlier stages a later stage still
 holds) is a training-program question and comes first.
+
+### What replaces the answers a brain loses in preschool (2026-11-19; queue item 6)
+
+`experiments/judge_audit.py` on eyes2w_s2 as it passed two words (80,000) and after 100,000 moments of preschool
+(180,000), the same 548 held-out questions, judged by the strict judge. Above the blind floor: first words
+0.40 → 0.21, two words 0.32 → 0.14. Answer by answer:
+
+| source | stayed right | lost | gained | what the lost answers became |
+|---|---|---|---|---|
+| CIFAR names | 0.25 | 0.28 | 0.03 | other things' names: couch (for bed, baby), motorcycle, house; run-ons (bottlebed, girlbaby) |
+| COCO names | 0.25 | 0.28 | 0.02 | couch (for chair), orange (for apple), bowl, cake; run-ons (pizzacake, giraffemotorcycle) |
+| Commons names | 0.48 | 0.15 | 0.10 | cow, car, bowl; run-ons |
+| a thing on a page | 0.24 | 0.19 | 0.10 | cup, boat, "three"; run-ons |
+| "is there a …?" | 0.54 | 0.26 | 0.05 | the other of yes/no (11), words of the question ("do", "nou see", "bear?": 13) |
+| text (both stages) | 0.24 | 0.19 | 0.08 | the end of the question said back ("cold?", "bee say?", "does a bear make?") |
+
+Two things, neither of them simple erasure:
+1. **The names it lost went to names it learned in preschool.** Preschool names 80 kinds of thing in photographs
+   where first words named 20; "couch" for a bed, "orange" for an apple, "bowl", "cake", "pizza", "tv", "giraffe"
+   are preschool's words. The test still counts the picture-book's 16–25 names. Part of the "forgetting" is a larger
+   vocabulary competing for the same pictures, which is what happens to a child's early words too; part is real
+   (a clock called "motorcycle"). A fixed early test cannot tell the two apart; a near-miss reading could
+   ("couch" for a bed is not "motorcycle" for a clock).
+2. **It says the question back far more than before**, on text and on yes/no questions. Preschool is mostly talk
+   and text, and until 2026-11-19 the judge rewarded the question said back (accepted at 0.9 and more). The lives
+   were paid to parrot there. The clean lives have a judge that does not; their `says_last` in preschool is the test.
+
+So before any mechanism against forgetting: (a) see what the clean lives do in preschool without the parrot's
+reward; (b) read the early tests with near misses told apart from wild misses; (c) only then the stage mix.

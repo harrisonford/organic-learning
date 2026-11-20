@@ -78,3 +78,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   filters as start and frozen; `bench_stream.py` with VARIANT=random when its codes exist. When memory allows
   (3 GB): queue item 6 with `judge_audit.py` on out/eyes2w_s2.pkl and out/eyes2w_s0.pkl (the brains after 100,000
   moments of preschool) against their two-words levels, answer by answer.
+- 2026-11-19 23:30 **Queue item 6 answered in part** (RESEARCH_MEMORY.md, last section): the answers a brain loses
+  in preschool went (1) to preschool's own larger set of names for the same pictures (couch for bed, orange for
+  apple) and (2) to the question said back, which the old judge rewarded. Not simple erasure. Next on it: the clean
+  lives' `says_last` in preschool; a near-miss reading of the early tests.
+  **Benchmark, first numbers (seed 0, developed cortex, CIFAR-10, one pass):** word cells + relay 0.395 / 0.491 /
+  0.543 / 0.599 / 0.623 / 0.662 / **0.686** after 500 / 1,000 / 2,000 / 5,000 / 10,000 / 20,000 / 50,000 pictures;
+  without the relay 0.581 at the end. The other arms are still running. The "seen once, 20 later" reading (0.84)
+  is not the fast-mapping test (the classes are known by then): to be redone with a class held back from the stream.
+  Clean lives: all three out of babbling (5,000, 10,000, 5,000). Random-filter codes done.
+  Next: read `stream_developed_s0.log` and `backprop_tune_s0.log`; then `VARIANT=random`; then the full backprop runs.
