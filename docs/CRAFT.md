@@ -272,3 +272,15 @@ intervention) and is listed as a debt: it was built for a target that was not on
   first checkpoint under the rule that the echo is not held. So all three seeds were promoted through the rebuilt
   two-words stage. Both eyes2w lives then stopped in preschool after 100,000 moments at 0.19 and 0.20 (pass 0.4);
   first words fell to 0.33–0.40 and two words to 0.41–0.43 meanwhile. No life is running.
+
+## 2026-11-19 (evening): the scoring rebuilt, three clean lives, the paper question
+
+- Built after the audit (docs/JUDGING.md, "Built"): a judge strict on meaning and lenient on form; the adult always
+  says their own word (recast); every score beside its blind floor; a gate on the score above the floor (0.25,
+  provisional). The literature search supports the recast and the floors and adds what is not built (a person's
+  labels; corrected scores).
+- Three lives from birth with nothing artificial in them (`clean_s0..2`), to find out which of the last days'
+  results stand without the novelty drive, the echo gate and the judge's mistakes.
+- docs/PUBLISH.md: there is a paper, not yet; its core should be one controlled experiment on a public benchmark,
+  started the same evening (experiments/bench_codes.py, bench_stream.py).
+- docs/LOOP.md is the new loop's state. Lesson kept from the last loop: nothing a life needs may depend on it.

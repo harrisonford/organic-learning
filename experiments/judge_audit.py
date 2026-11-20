@@ -22,7 +22,8 @@ for path in sys.argv[1:]:
     brain = pickle.load(open(path, "rb"))
     brain.learning = False
     tag = os.path.basename(path)[:-4]
-    out = open(f"out/judge_audit_{tag}.jsonl", "w")
+    out = open(f"out/judge_audit_{tag}{'' if os.environ.get('JUDGE_AS', 'meant') == 'kind' else '_meant'}.jsonl", "w")
+    stage_above = {}
     print(f"{path} (age {brain.age})", flush=True)
     for stage in os.environ.get("STAGES", "W1,W2").split(","):
         items = cur.test_set(stage, n=300)
@@ -34,7 +35,9 @@ for path in sys.argv[1:]:
                          "grade": grade(stage, said, m["answers"]), "answers": m["answers"]})
         blind = {"always yes": lambda r: "yes", "always no": lambda r: "no", "the commonest answer": lambda r: common[r["source"]],
                  "the question's last word": lambda r: tidy(r["question"]).replace("?", "").split()[-1]}
-        ask = lambda say: judge.accept([(stage, r["question"], r["answers"], say(r)) for r in rows], fallback=lambda i: grade(stage, say(rows[i]), rows[i]["answers"]))  # noqa: E731
+        strict = os.environ.get("JUDGE_AS", "meant") == "meant"  # "meant": the judge of 2026-11-19 (strict on meaning); "kind": as before
+        ask = lambda say: judge.accept([(stage, r["question"], r["answers"], say(r)) for r in rows], fallback=lambda i: grade(stage, say(rows[i]), rows[i]["answers"]),  # noqa: E731
+                                       sources=[r["source"] for r in rows] if strict else None)
         for r, p in zip(rows, ask(lambda r: r["said"])):
             r["judged"] = p
         for name, say in blind.items():
@@ -50,6 +53,9 @@ for path in sys.argv[1:]:
             print(f"  {stage} {src:13} n {len(rs):>3} | rigid grade {g.mean():.2f} | judged {j.mean():.2f} | right by the grade {np.mean(g >= 0.5):.2f}, by the judge {np.mean(j >= 0.5):.2f}"
                   f" | only the judge accepts {np.mean((j >= 0.5) & (g < 0.5)):.2f}, only the grade {np.mean((g >= 0.5) & (j < 0.5)):.2f}"
                   + " | blind, judged: " + ", ".join(f"{n} {np.mean([r['blind ' + n][1] for r in rs]):.2f}" for n in blind), flush=True)
+            floor = max(np.mean([r["blind " + n][1] for r in rs]) for n in blind)
+            if len(rs) >= 20:
+                stage_above.setdefault(stage, []).append((src, max(0.0, (j.mean() - floor) / (1 - floor))))
             seen = set()
             for label, pick in (("the judge accepts, the grade does not", lambda r: r["judged"] >= 0.5 and r["grade"] < 0.5), ("the grade accepts, the judge does not", lambda r: r["grade"] >= 0.5 and r["judged"] < 0.5)):
                 ex = [r for r in rs if pick(r) and (r["question"], r["said"]) not in seen][:5]
@@ -57,5 +63,7 @@ for path in sys.argv[1:]:
                     seen.add((r["question"], r["said"]))
                     print(f"      {label}: {r['question']!r} wanted {r['wanted']!r}, said {r['said']!r} (grade {r['grade']:.2f}, judged {r['judged']:.2f})")
     out.close()
+    for stage, v in stage_above.items():
+        print(f"  {stage} above the blind floor: " + ", ".join(f"{src} {a:.2f}" for src, a in v) + f" | stage {np.mean([a for _, a in v]):.2f}", flush=True)
     print(f"  the judge: {judge.calls} calls, {judge.hits} from its memory, {judge.fallbacks} fallbacks", flush=True)
     del brain

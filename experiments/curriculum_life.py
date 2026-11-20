@@ -17,6 +17,7 @@ STAGE_BUDGET moments, the life ends with a verdict: this structure, with this
 much experience, stops at that stage.
 """
 
+import collections
 import json
 import os
 import pickle
@@ -87,6 +88,9 @@ if os.environ.get("JUDGE") == "1":
     from organic.judge import Judge
     judge = Judge()
     brain.own_forms = True
+    # the adult always says their own word after the child's (RECAST=0: an accepted answer's own form is taught, as
+    # in every life before 2026-11-19; docs/JUDGING.md)
+    brain.recast = os.environ.get("RECAST", "1") == "1"
 
 if os.environ.get("NOVEL_DRIVE") == "1":
     brain.novel_drive = True  # the ear's novelty drives the copy route (docs/CONVERSATION.md, 2026-11-17)
@@ -112,6 +116,8 @@ if os.environ.get("FROM_LEVEL") == "1" and state["stage"] in state["passed"]:
 # docs/RESEARCH_MEMORY.md, 2026-11-18). REPLAY: how many come back for every moment of the day. REPLAY_FROM=P: only
 # from that stage on (the experimenter's switch, to compare with a life that had none; a brain has no such switch).
 REPLAY = float(os.environ.get("REPLAY", 0))
+GATE = os.environ.get("GATE", "beyond")  # what a stage is passed on: "beyond" (the rigid grade beyond the parrot) or "above" (see the promotion below)
+PASS_ABOVE = float(os.environ.get("PASS_ABOVE", 0.25))  # provisional (docs/JUDGING.md): to be set with Kris
 
 
 def replay_on():
@@ -196,6 +202,28 @@ def drift():
     return out
 
 
+def blind_floors(stage_):
+    """What a child who neither looks nor listens gets from the judge on each stage's test, by source: the best of
+    always "yes", always "no", always the source's commonest answer, and the last word of the question
+    (docs/JUDGING.md, 2026-11-19). A score means something only above this."""
+    out = {}
+    for s, items in tests.items():
+        if s != stage_ or not items:
+            continue
+        srcs = [m["source"] for m in items]
+        common = {src: collections.Counter(m["answers"][0] for m in items if m["source"] == src).most_common(1)[0][0] for src in set(srcs)}
+        says = [lambda m: "yes", lambda m: "no", lambda m: common[m["source"]], lambda m: (curriculum_words(tidy(m["question"])) or [""])[-1]]
+        got = []
+        for say in says:
+            ps = judge.accept([(s, m["question"], m["answers"], say(m)) for m in items], fallback=lambda i, say=say: grade(s, say(items[i]), items[i]["answers"]), sources=srcs)
+            got.append({src: float(np.mean([p for p, x in zip(ps, srcs) if x == src])) for src in set(srcs)})
+        out = {src: max(g[src] for g in got) for src in set(srcs)}
+    return out
+
+
+FLOOR = {}  # by stage, worked out when the stage is first tested (the judge remembers its judgements)
+
+
 def evaluate(stages):
     res = {}
     for s in stages:
@@ -222,10 +250,27 @@ def evaluate(stages):
                                       "said": [y for _, y, _ in v[:5]]} for src, v in by.items()}}
         if judge is not None:  # side by side with the local grade (the gate stays on the local grade for now)
             items = [(s, m["question"], m["answers"], said) for m, said in zip(tests[s], saids)]
-            judged = judge.accept(items, fallback=lambda i: scores[i])
+            srcs = [m["source"] for m in tests[s]]
+            if s not in FLOOR:
+                FLOOR[s] = blind_floors(s)
+            judged = judge.accept(items, fallback=lambda i: scores[i], sources=srcs)
             res[s]["judged"] = float(np.mean(judged))
+            above = []
             for src in res[s]["by_source"]:
-                res[s]["by_source"][src]["judged"] = float(np.mean([p for p, m in zip(judged, tests[s]) if m["source"] == src]))
+                mine = [p for p, x in zip(judged, srcs) if x == src]
+                floor = FLOOR[s][src]
+                # how far the brain is from the blind child towards an adult, on this source (0: no better than not looking or listening)
+                res[s]["by_source"][src].update(judged=float(np.mean(mine)), floor=floor, above=max(0.0, (float(np.mean(mine)) - floor) / max(1.0 - floor, 1e-6)))
+                if len(mine) >= 20:  # (a handful of items is no source of its own: the eight social routines)
+                    above.append(res[s]["by_source"][src]["above"])
+            res[s]["above"] = float(np.mean(above)) if above else 0.0
+            # observed, not asked for: on yes/no questions, how much more often it says yes than yes is right
+            # (two-year-olds say yes: +0.24 to +0.34 on this scale, Okanda & Itakura 2008)
+            for src in res[s]["by_source"]:
+                mine = [(tidy(said or "").split() or [""])[0] == "yes" for said, m in zip(saids, tests[s]) if m["source"] == src]
+                want = [tidy(m["answers"][0]) for m in tests[s] if m["source"] == src]
+                if want and set(want) <= {"yes", "no"} and len(set(want)) == 2:
+                    res[s]["by_source"][src]["yes_bias"] = float(np.mean(mine) - np.mean([w == "yes" for w in want]))
     return res
 
 
@@ -367,7 +412,7 @@ while brain.age < TOTAL:
             brain.babble(int(os.environ.get("BABBLE_PER", 3)))
         if judge is not None:
             def judged(said, m=m):
-                return judge.accept([(m["stage"], m["question"], m["answers"], said)], fallback=lambda i: grade(m["stage"], said, m["answers"]))[0]
+                return judge.accept([(m["stage"], m["question"], m["answers"], said)], fallback=lambda i: grade(m["stage"], said, m["answers"]), sources=[m["source"]])[0]
         if store is not None:
             store.mark_now = STAGES.index(m["stage"])
         _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"],
@@ -378,11 +423,15 @@ while brain.age < TOTAL:
     k = STAGES.index(stage)
     res = evaluate(STAGES[: k + 2])
     # with PARROT=1, from first words on a stage is passed (and held) on the items that repeating the last word does not answer
-    mark = lambda s: res[s]["beyond"] if PARROT and s not in ("BB", "B") and "beyond" in res[s] else res[s]["score"]  # noqa: E731
+    # GATE=above (2026-11-19, docs/JUDGING.md): from first words on, the adult judge's score above what a child who
+    # neither looks nor listens gets, and one pass mark for every stage: PASS_ABOVE of the way from that child to an adult
+    asked = lambda s: GATE == "above" and s not in OBSERVED and "above" in res[s]  # noqa: E731
+    mark = lambda s: res[s]["above"] if asked(s) else res[s]["beyond"] if PARROT and s not in ("BB", "B") and "beyond" in res[s] else res[s]["score"]  # noqa: E731
+    need = PASS_ABOVE if asked(stage) else PASS[stage]
     cur = mark(stage)
     # earlier stages must be held, except babbling and echo: those are observed, not asked for (organic/curriculum.py, OBSERVED)
     held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s not in OBSERVED)
-    promoted = (cur >= PASS[stage] or stage in PERIODS) and held  # (a period is lived through, not passed on a mark)
+    promoted = (cur >= need or stage in PERIODS) and held  # (a period is lived through, not passed on a mark)
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()
     rec_drift = drift()
@@ -410,7 +459,7 @@ while brain.age < TOTAL:
             if state["stage"] == os.environ.get("REPLAY_FROM"):
                 replay_on()
     elif brain.age - state["since"] >= STAGE_BUDGET:
-        verdict = f"stops at {stage} ({NAMES[stage]}): score {cur:.2f} < {PASS[stage]} after {STAGE_BUDGET:,} moments" if cur < PASS[stage] else \
+        verdict = f"stops at {stage} ({NAMES[stage]}): score {cur:.2f} < {need} after {STAGE_BUDGET:,} moments" if cur < need else \
                   f"stops at {stage} ({NAMES[stage]}): passes it but cannot hold earlier stages"
     if (brain.age // EVERY) % int(os.environ.get("REFRESH_EVERY", 10)) == 0:  # new items written by the adults join in
         rng_state = world.rng.getstate()

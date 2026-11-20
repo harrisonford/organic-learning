@@ -408,6 +408,10 @@ class SpeakingBrain(LoopBrain2):
         top = max(nov)
         return [n / top for n in nov] if top > 0 else nov
 
+    # An accepted answer is answered with the adult's own word all the same ("doggie!" - "yes, a dog!"): the child is
+    # rewarded for its own form and hears the adult's. Until 2026-11-19 an accepted answer's own form was what the
+    # word cells were taught, and a judge that accepted "bear" for a dog taught the brain its mistakes (docs/JUDGING.md).
+    recast = False
     replay = 0.0  # in sleep, this many moments of the fast store come back for every moment of the day (0: none)
     novel_drive = False  # the copy route is driven by the ear's novelty (life env NOVEL_DRIVE=1)
     intake = False  # of a reply in leisure talk only the last units are learned from (life env INTAKE=1)
@@ -613,7 +617,7 @@ class SpeakingBrain(LoopBrain2):
             own = getattr(self, "own_forms", False)  # adults correct only what they do not accept (docs/JUDGING.md)
             if own:
                 correct = value >= 0.5
-                if correct and said:
+                if correct and said and not self.recast:
                     answer = said  # accepted: the adult lets the child's own form stand (and echoes it)
             if deadline is not None and tick > deadline:
                 value *= 0.5 ** (tick - deadline)

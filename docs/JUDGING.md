@@ -178,3 +178,41 @@ words (out/judge_audit_*.jsonl: 548 held-out answers each).
    that agreement is known.
 6. **Pass marks are set again, in the open**, after the existing levels have been scored the new way. They are
    not to move silently in either direction.
+
+### Built (2026-11-19, evening; Kris: "fix and improve")
+- **The judge** (`organic/judge.py`): closed questions are asked "did the child mean the same as the adult?", with
+  the adult's answer given as the truth; open sources (talk, routines, stories, echo games) as before; words of the
+  question said back that are in no accepted answer are not an answer. On the audited answers: of 367 distinct
+  wrong answers to closed questions it accepts 2 (twenty at a time) to 16 (one at a time), 14 of the 16 being the
+  right word run together with another; no right answer is refused. It now agrees with the rigid grade on names
+  and yes/no within 0.03 and is stricter on text (0.37–0.43 against 0.44–0.46).
+- **Teaching** (`SpeakingBrain.recast`, on in every life from now; RECAST=0 for the old way): the adult says
+  their own word after every answer; acceptance decides the reward, not what is taught. The literature search of
+  the same evening supports exactly this (research_notes/Relatives and publishability 2/judging_answers_literature.md):
+  parents confirm meaning and model the form in one turn, recast accepted utterances too, and children's own
+  uncorrected errors breed more errors.
+- **Measuring**: every checkpoint records, by source, the judged score, the blind floor (the best of always yes,
+  always no, the commonest answer, the question's last word, under the same judge) and the score above it, and a
+  stage score `above` (the mean over sources with 20 items or more). Also, as an observation, the yes bias on
+  yes/no sources (two-year-olds: +0.24 to +0.34, Okanda & Itakura 2008; eyes2w_s2 at its pass: +0.10).
+- **The gate** (`GATE=above`, used by the lives started tonight): from first words on, a stage is passed when the
+  score above the floor reaches PASS_ABOVE, and earlier stages (not babbling or echo) are held at 80% of theirs.
+  **PASS_ABOVE = 0.25 is provisional**: a quarter of the way from the blind child to an adult, one number for every
+  stage. Where the existing brains stand on it:
+
+  | brain as it passed | first words above the floor | two words above the floor |
+  |---|---|---|
+  | seed 1: first words (20,000) / two words (55,000) | 0.28 | 0.22 |
+  | seed 2: first words (40,000) / two words (80,000) | 0.40 | 0.32 |
+  | seed 0: first words (110,000) / two words (180,000) | 0.34 | 0.27 |
+
+  So at 0.25 all three pass first words and two of three pass two words (seed 1 misses by 0.03). **To be set with
+  Kris**; every score is in the records, so any mark can be applied afterwards.
+- **What the new reading shows.** Text carries nothing above the floor at either stage (first-words text 0.00–0.12,
+  two-words text 0.00): the brain's text answers are, as a whole, no better than saying the question's last word.
+  What it has learned above a blind child is in the pictures. And preschool's test is mostly answerable blind
+  (a blind child gets 0.75 on "how many" photo questions, 0.5 on presence and where): that stage needs rebuilding
+  before any brain is asked to pass it.
+- **Not built, from the literature's list:** a person labels the audit set (about 200 answers, loaded with wrong
+  ones) and reported scores are corrected by the judge's measured error rates; a picture-blanked brain as one more
+  blind baseline; a near-miss policy (is "lion" for a tiger half right?); silence counted as its own outcome.
