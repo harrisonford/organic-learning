@@ -88,3 +88,16 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   is not the fast-mapping test (the classes are known by then): to be redone with a class held back from the stream.
   Clean lives: all three out of babbling (5,000, 10,000, 5,000). Random-filter codes done.
   Next: read `stream_developed_s0.log` and `backprop_tune_s0.log`; then `VARIANT=random`; then the full backprop runs.
+- 2026-11-20 00:05 Clean lives: the echo period lived (0.94, 0.91, 0.84 at its one checkpoint), all three in first
+  words from 10,000–15,000; naming above the floor already 0.03–0.07 from comments alone.
+  **Benchmark, seed 0, developed cortex, after 50,000 pictures (5,000 in brackets):** streaming LDA + relay 0.741
+  (0.619), streaming LDA 0.722 (0.623), ridge 0.709 (0.607), **word cells + relay 0.686 (0.599)**, word cells 0.581
+  (0.486), nearest class mean + relay 0.567 (0.549), nearest class mean 0.312. So the word cells are 2–5 points
+  under the best gradient-free linear readouts on the same code (which keep and invert a 4,096 x 4,096 matrix, and
+  whose shrinkage was picked on the test pictures); the relay is worth 10 points to them. ridge+relay still running.
+  Written: `experiments/bench_newclass.py` (a class held back, then shown 1 / 5 / 20 times: the benchmark's version
+  of fast mapping; replaces the "seen once, 20 later" reading). **Queued, each waiting for the one before:**
+  `organic-bench-bptune` (after dev0) → out/bench/backprop_tune_s0.log; `organic-bench-rand0` (after dev0) →
+  out/bench/stream_random_s0.log; `organic-bench-newclass` (after rand0) → out/bench/newclass_s0.log.
+  Next: read them; a benchmark section in VISION.md and the efficiency claim in PUBLISH.md rewritten on these
+  numbers; full backprop runs at the tuned setting (replay 0, 1, 4; developed start; frozen).
