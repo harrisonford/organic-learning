@@ -203,22 +203,17 @@ def drift():
 
 
 def blind_floors(stage_):
-    """What a child who neither looks nor listens gets from the judge on each stage's test, by source: the best of
-    always "yes", always "no", always the source's commonest answer, and the last word of the question
-    (docs/JUDGING.md, 2026-11-19). A score means something only above this."""
-    out = {}
-    for s, items in tests.items():
-        if s != stage_ or not items:
-            continue
-        srcs = [m["source"] for m in items]
-        common = {src: collections.Counter(m["answers"][0] for m in items if m["source"] == src).most_common(1)[0][0] for src in set(srcs)}
-        says = [lambda m: "yes", lambda m: "no", lambda m: common[m["source"]], lambda m: (curriculum_words(tidy(m["question"])) or [""])[-1]]
-        got = []
-        for say in says:
-            ps = judge.accept([(s, m["question"], m["answers"], say(m)) for m in items], fallback=lambda i, say=say: grade(s, say(items[i]), items[i]["answers"]), sources=srcs)
-            got.append({src: float(np.mean([p for p, x in zip(ps, srcs) if x == src])) for src in set(srcs)})
-        out = {src: max(g[src] for g in got) for src in set(srcs)}
-    return out
+    """What children who neither look nor listen get from the judge on a stage's test, item by item: always "yes",
+    always "no", always the source's commonest answer, and the last word of the question said back
+    (docs/JUDGING.md, 2026-11-19). A score means something only above these."""
+    items = tests[stage_]
+    srcs = [m["source"] for m in items]
+    common = {src: collections.Counter(m["answers"][0] for m in items if m["source"] == src).most_common(1)[0][0] for src in set(srcs)}
+    says = {"yes": lambda m: "yes", "no": lambda m: "no", "common": lambda m: common[m["source"]],
+            "last": lambda m: (curriculum_words(tidy(m["question"])) or [""])[-1]}
+    return {name: np.array(judge.accept([(stage_, m["question"], m["answers"], say(m)) for m in items],
+                                        fallback=lambda i, say=say: grade(stage_, say(items[i]), items[i]["answers"]), sources=srcs))
+            for name, say in says.items()}
 
 
 FLOOR = {}  # by stage, worked out when the stage is first tested (the judge remembers its judgements)
@@ -257,12 +252,19 @@ def evaluate(stages):
             res[s]["judged"] = float(np.mean(judged))
             above = []
             for src in res[s]["by_source"]:
-                mine = [p for p, x in zip(judged, srcs) if x == src]
-                floor = FLOOR[s][src]
-                # how far the brain is from the blind child towards an adult, on this source (0: no better than not looking or listening)
-                res[s]["by_source"][src].update(judged=float(np.mean(mine)), floor=floor, above=max(0.0, (float(np.mean(mine)) - floor) / max(1.0 - floor, 1e-6)))
-                if len(mine) >= 20:  # (a handful of items is no source of its own: the eight social routines)
-                    above.append(res[s]["by_source"][src]["above"])
+                idx = np.array([i for i, x in enumerate(srcs) if x == src])
+                mine = np.array(judged)[idx]
+                # a question that saying its last word back answers shows nothing: the score is read on the others,
+                # beside the best that always-yes, always-no or the commonest answer gets on those (the floor);
+                # `above`: how far from that blind child towards an adult (docs/JUDGING.md, 2026-11-20)
+                keep = idx[FLOOR[s]["last"][idx] < 0.5]
+                entry = {"judged": float(np.mean(mine)), "asked": int(len(keep))}
+                if len(keep) >= 10 and len(idx) >= 20:  # (a handful of items is no source of its own: the eight social routines)
+                    floor = float(max(FLOOR[s][b][keep].mean() for b in ("yes", "no", "common")))
+                    got = float(np.array(judged)[keep].mean())
+                    entry.update(floor=floor, known=got, above=max(0.0, (got - floor) / max(1.0 - floor, 1e-6)))
+                    above.append(entry["above"])
+                res[s]["by_source"][src].update(entry)
             res[s]["above"] = float(np.mean(above)) if above else 0.0
             # observed, not asked for: on yes/no questions, how much more often it says yes than yes is right
             # (two-year-olds say yes: +0.24 to +0.34 on this scale, Okanda & Itakura 2008)

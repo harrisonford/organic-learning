@@ -101,3 +101,16 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   out/bench/stream_random_s0.log; `organic-bench-newclass` (after rand0) → out/bench/newclass_s0.log.
   Next: read them; a benchmark section in VISION.md and the efficiency claim in PUBLISH.md rewritten on these
   numbers; full backprop runs at the tuned setting (replay 0, 1, 4; developed start; frozen).
+- 2026-11-20 01:00 **Clean lives: seeds 0 and 2 PROMOTED out of first words at 15,000 moments** (5,000 in the stage;
+  above the floor 0.27 and 0.29; beyond the parrot 0.44 and 0.46, so the old mark too). Seed 1 entered first words
+  at 15,000. On entering two words both say "no" to every "is there" question (yes bias −0.53).
+  **The measure refined** (JUDGING.md, last section): `above` is read on the questions a parrot cannot answer,
+  beside the best of always-yes, always-no and the commonest answer. Correction: the brains do know some text
+  (0.11–0.33 of such questions). Existing levels: first words 0.29 / 0.46 / 0.43, two words 0.23 / 0.35 / 0.32.
+  Smoke life clean. **`organic-relaunch-clean`** (out/tmp/relaunch_clean.sh, one-shot) restarts each clean life one
+  minute after its next checkpoint so that it runs the refined measure; log out/tmp/relaunch_clean.log.
+  **Benchmark table, seed 0** → VISION.md (last section): word cells + relay 0.686; streaming LDA + relay 0.741;
+  random filters as good as developed ones (0.691); backprop tuning 3 of 9 settings done (0.40–0.48 at 10,000).
+  Still running: `organic-bench-bptune`, `organic-bench-rand0`; `organic-bench-newclass` waits for rand0.
+  Next: finish reading those; full backprop runs at the best setting; PUBLISH.md's claims rewritten on the table
+  (what is ours is no longer "beats other gradient-free readouts", and "development" is not a selling point).

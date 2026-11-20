@@ -558,3 +558,42 @@ by backprop (softmax, Adam 0.001, batches of 8) on the very 8,000 naming moments
   brain had seen unlabelled pictures before (its cortex developed on them, its relay settled on 6,000 of them); the
   reference starts from random filters but shares the decorrelated windows. A deeper backprop network with
   augmentation would do better than this one; the comparison is of the same shape, not of the best that backprop can do.
+
+## 2026-11-20: a public benchmark as a one-pass stream (first seed)
+
+The paper's controlled core (docs/PUBLISH.md). A cortex develops without labels on CIFAR-100's pictures; then every
+labelled CIFAR-10 training picture is seen once, in a random order; 2,000 held-out test pictures are named at
+points of the stream (`experiments/bench_codes.py`, `bench_stream.py`, `bench_backprop.py`). Seed 0; more seeds and
+the tuned backprop runs are to come, so this is a first reading, not a result.
+
+| learner on the cortex's code | after 1,000 | 5,000 | 10,000 | 50,000 pictures |
+|---|---|---|---|---|
+| streaming LDA + relay | 0.424 | 0.619 | 0.670 | **0.741** |
+| ridge on all seen so far + relay | 0.469 | 0.622 | 0.659 | 0.736 |
+| streaming LDA | 0.486 | 0.623 | 0.664 | 0.722 |
+| ridge on all seen so far | 0.484 | 0.607 | 0.650 | 0.709 |
+| **word cells + relay (the brain's path)** | 0.491 | 0.599 | 0.623 | **0.686** |
+| word cells, no relay | 0.337 | 0.486 | 0.500 | 0.581 |
+| nearest class mean + relay | 0.485 | 0.549 | 0.559 | 0.567 |
+| nearest class mean | 0.306 | 0.317 | 0.312 | 0.312 |
+| the same on a never-developed cortex (random filters): word cells + relay | 0.502 | 0.606 | 0.636 | **0.691** |
+| ... streaming LDA | 0.471 | 0.635 | 0.660 | 0.720 |
+| ... nearest class mean + relay | 0.498 | 0.573 | 0.582 | 0.598 |
+| backprop of the same shape, random start, rate 0.0003, one picture a step (tuning, first 10,000 only) | 0.263 | 0.427 | 0.479 | – |
+| ... 8 a step / 32 a step | 0.296 / 0.242 | 0.395 / 0.348 | 0.446 / 0.397 | – |
+
+What it says so far:
+- **The word cells are not the best learner without gradients on this code.** Streaming LDA and ridge, which keep
+  the pictures' second moments and invert a 4,096 x 4,096 matrix, are 2 to 5 points above them from 5,000 pictures
+  on (their shrinkage was picked on the test pictures: generous to them). In the first 1,000 pictures the word
+  cells are level with the best.
+- **The relay is worth 10 points to the word cells** (0.581 → 0.686) and 25 to nearest class mean. The decorrelation
+  finding of 2026-11-17 holds on a public set.
+- **The cortex's development buys nothing here.** Random filters on the same decorrelated windows do as well
+  (0.691 against 0.686). On the lives' own pictures a gradient readout preferred the developed filters (0.39
+  against 0.27 after one pass, 2026-11-18, without the relay); through the relay, on CIFAR-10, the difference is
+  gone. This is the literature's warning (random whitened patches are hard to beat) arriving on our own table.
+- **Backprop of the same shape is well behind at equal exposure in the first three settings tried** (0.40–0.48
+  after 10,000 pictures against 0.62). Six more settings are running; the claim waits for them and for replay.
+- The "seen once, twenty pictures later" column of the first run is not reported: with the classes long known it
+  is not fast mapping. `experiments/bench_newclass.py` (a class held back, then shown 1, 5, 20 times) replaces it.

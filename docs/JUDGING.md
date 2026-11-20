@@ -216,3 +216,33 @@ words (out/judge_audit_*.jsonl: 548 held-out answers each).
 - **Not built, from the literature's list:** a person labels the audit set (about 200 answers, loaded with wrong
   ones) and reported scores are corrected by the judge's measured error rates; a picture-blanked brain as one more
   blind baseline; a near-miss policy (is "lion" for a tiger half right?); silence counted as its own outcome.
+
+### 2026-11-20: the floor is read on the questions a parrot cannot answer
+The first version of `above` compared a whole source with its best blind child, the parrot among them. On the
+adults' text lessons that read as "nothing above the floor", and I wrote so. Looking at the answers item by item
+(three brains at their two-words pass) it was wrong in an instructive way:
+
+| text lessons | share of items | the brains are right |
+|---|---|---|
+| first words: the wanted answer is in the question ("touch your knee" → "knee") | 38% | 0.71 |
+| first words: the answer is not in the question ("what does a frog say?" → "croak") | 62% | 0.22 (40% of the answers are question words said back) |
+| two words: the answer is in the question | 37% | 0.52 |
+| two words: the answer is not, or only partly, in the question | 63% | 0.32–0.33 |
+
+A question whose answer is one of its own words shows nothing: a parrot gets it, and a brain that gets it may be a
+parrot. So such questions are left out (those the last word said back answers), and on the rest the brain's judged
+score is read beside the best of always-yes, always-no and the commonest answer. `above` is how far that takes it
+from the blind child to an adult. This joins the old "beyond the parrot" and the blind floor in one number.
+
+| brain as it passed | first words above | by source: CIFAR, COCO, Commons names, text | two words above | text, a thing on a page, "is there" |
+|---|---|---|---|---|
+| seed 1 | 0.29 | 0.44, 0.15, 0.52, 0.05 | 0.23 | 0.11, 0.33, 0.24 |
+| seed 2 | 0.46 | 0.44, 0.42, 0.74, 0.23 | 0.35 | 0.21, 0.38, 0.47 |
+| seed 0 | 0.43 | 0.42, 0.29, 0.64, 0.37 | 0.32 | 0.25, 0.33, 0.38 |
+| seed 2 after 100,000 moments of preschool | 0.23 | 0.19, 0.16, 0.50, 0.06 | 0.14 | 0.00, 0.28, 0.13 |
+
+**Correction of what I told Kris on 2026-11-19**: the brains do know some of what the text lessons teach (0.11 to
+0.33 of the questions a parrot cannot answer, against a floor of 0.06–0.11); "no better than a parrot" was true of
+the source as a whole and false of the knowledge in it. In `curriculum_life.py` from 2026-11-20 (the lives started
+on 2026-11-19 were relaunched with it after a checkpoint); each source's record holds `asked` (how many questions
+count), `known` (the judged score on them), `floor` and `above`.
