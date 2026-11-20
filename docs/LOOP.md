@@ -114,3 +114,23 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Still running: `organic-bench-bptune`, `organic-bench-rand0`; `organic-bench-newclass` waits for rand0.
   Next: finish reading those; full backprop runs at the best setting; PUBLISH.md's claims rewritten on the table
   (what is ours is no longer "beats other gradient-free readouts", and "development" is not a selling point).
+- 2026-11-20 07:15 **The loop was silent from 01:00 to 06:55** (third time: the wakeups stop when the session drops;
+  it does not run inside tmux). What ran by itself meanwhile:
+  - **All three clean lives passed first words (15,000 / 20,000 / 15,000) and two words (25,000 / 35,000 / 25,000)**
+    at the provisional mark: two words above the floor 0.26, 0.28, 0.27 (text 0.19–0.27, a thing on a page 0.26–0.34,
+    "is there" 0.24–0.27), 10,000–15,000 moments in the stage. Levels: out/levels/clean_s*_W2.pkl. Then preschool,
+    where nothing rose (above 0.00–0.03) and first words and two words slid (0.42 → 0.26; 0.27 → 0.19) as before,
+    with no parrot's reward this time (`says_last` 0.02–0.10 throughout). **The mark of 0.25 let them leave two words
+    when they had only begun it**: the earlier brains stood at 0.23–0.35 after 30,000–45,000 moments.
+  - Benchmark seed 0 finished (VISION.md): backprop grid 0.40–0.53 at 10,000 (best at the grid's edge); random
+    filters as good as developed; the new-class test (word cells 0.00, with the store 1.00; nobody reaches the kind).
+  **Done now:** the three lives stopped in preschool at 45,000–50,000 (pickles kept: out/clean_s*.pkl; the stage's
+  test is mostly answerable blind and was to be rebuilt anyway). **Started: `cleanw_s0..2`** (units
+  organic-cleanw-s0/1/2) from the clean lives' first-words levels, held in two words (PASS_ABOVE=0.99) for the
+  stage's 100,000 moments: how far does two words go, and where should its mark be? **Started:
+  `organic-bench-queue2`** (out/bench/queue2.sh, about eleven hours, needs nobody; progress in out/bench/queue2.log):
+  wider backprop grid → the best setting on the whole stream (replay 0, 1, 4; developed start; frozen) → seeds 1
+  and 2 of codes, streams, backprop and the new-class test (→ backprop_tune_s0.log, backprop_full.log,
+  stream_seeds.log, newclass_seeds.log).
+  Next: read queue2 as it goes and build the three-seed table; the cleanw curves at each checkpoint; then queue
+  items 8 (rebuild preschool's sources) and 9 (the relay learned online).

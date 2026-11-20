@@ -597,3 +597,28 @@ What it says so far:
   after 10,000 pictures against 0.62). Six more settings are running; the claim waits for them and for replay.
 - The "seen once, twenty pictures later" column of the first run is not reported: with the classes long known it
   is not fast mapping. `experiments/bench_newclass.py` (a class held back, then shown 1, 5, 20 times) replaces it.
+
+### The benchmark's first seed, finished (2026-11-20, morning)
+
+- **Backprop of the same shape, nine settings, first 10,000 pictures:** 0.397 to 0.527; best at the edge of the grid
+  (rate 0.003, 32 pictures a step), so the grid was widened (running). At the same point: word cells + relay 0.623,
+  streaming LDA 0.664. Not yet the tuned number.
+- **Random filters, all learners after 50,000 pictures:** word cells + relay 0.691, streaming LDA 0.720 (with the
+  relay 0.719), ridge + relay 0.719, nearest class mean + relay 0.598. Developed filters: 0.686, 0.722 (0.741),
+  0.736, 0.567. Development is worth at most two points to the readouts that invert a matrix, nothing to the word
+  cells.
+- **A new class shown once, five times, twenty times** (`bench_newclass.py`; five classes held back in turn; 5,000
+  pictures of the other nine first; 20 other pictures after each showing):
+
+  | learner | the pictures shown are named with the new name (1x / 5x / 20x) | 200 other pictures of the new class | old classes still right |
+  |---|---|---|---|
+  | word cells | 0.00 / 0.00 / 0.08 | 0.00 / 0.00 / 0.00 | 0.61–0.62 |
+  | word cells + episodic store | 1.00 / 1.00 / 1.00 | 0.00 / 0.00 / 0.00 | 0.62–0.63 |
+  | nearest class mean | 1.00 / 1.00 / 0.97 | 0.00 / 0.01 / 0.08 | 0.56 |
+  | linear discriminant analysis from the sums | 1.00 / 1.00 / 1.00 | 0.00 / 0.00 / 0.00 | 0.59 |
+
+  The fast/slow finding of the lives holds on the public set: the word cells alone do not have a picture they saw
+  once (0.00), with the store they have it (1.00), and the old classes are untouched. Two honest additions: the
+  other learners have the shown picture too, by construction (they add it to sums at full weight; it is the word
+  cells that are slow, by design); and **nobody reaches the kind**: twenty pictures of a new class give 0.08 at
+  best. One-shot learning here is memory of a picture, not of a category, for every learner tried.
