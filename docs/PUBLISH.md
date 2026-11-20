@@ -86,3 +86,24 @@ Do the controlled core first (it is cheap and it decides whether the efficiency 
 keep the clean lives running beside it, and decide about venue when the table exists. If the tuned one-pass
 backprop baseline catches the brain, the paper becomes the fast/slow dissociation plus the staged life and the
 negatives, which is still a workshop paper and an honest preprint, not a journal paper.
+
+## Update, 2026-11-20: what the first benchmark seed does to the claims
+
+(CIFAR-10 as a one-pass stream, seed 0: docs/VISION.md, last section. One seed; the tuned backprop runs are not in.)
+
+- **Gone as a claim: "our learner is the best without gradients".** On the same code streaming LDA and ridge are 2
+  to 5 points above the word cells (0.74 against 0.69 after 50,000 pictures). The word cells are an online, local
+  approximation of what those compute with a matrix inverse; that is the honest sentence.
+- **Gone as a selling point: the cortex's development.** Random filters on the same decorrelated windows do as
+  well (0.691 against 0.686). What matters in the visual path is the decorrelation (windows, and the relay: +10
+  points for the word cells), not the Hebbian development of the kinds. The paper must say so and carry the
+  random-filter row everywhere.
+- **Standing, for now: single-pass efficiency against backprop of the same shape** (0.62 against 0.40–0.48 after
+  10,000 pictures in the first three settings). It waits for the rest of the tuning grid and for replay.
+- **Standing: the decorrelating relay** as the one architectural finding that transfers to a public set.
+- **To be measured on the benchmark:** fast and slow memory with a class held back (`bench_newclass.py`).
+
+So the paper's centre of gravity moves: from "a brain that learns without backprop" to **"what a single-pass
+local learner needs: decorrelation at two places and a fast store beside slow weights; what it does not need:
+developed filters; and what it still cannot do"**, with the staged life as the second half. It is a smaller claim
+and a more defensible one.
