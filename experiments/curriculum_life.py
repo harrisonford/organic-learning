@@ -118,6 +118,7 @@ if os.environ.get("FROM_LEVEL") == "1" and state["stage"] in state["passed"]:
 REPLAY = float(os.environ.get("REPLAY", 0))
 GATE = os.environ.get("GATE", "beyond")  # what a stage is passed on: "beyond" (the rigid grade beyond the parrot) or "above" (see the promotion below)
 PASS_ABOVE = float(os.environ.get("PASS_ABOVE", 0.25))  # provisional (docs/JUDGING.md): to be set with Kris
+LAST_STAGE = os.environ.get("LAST_STAGE")  # a life that stays in this stage however it does there (the ablation lives, 2026-11-20)
 
 
 def replay_on():
@@ -433,7 +434,7 @@ while brain.age < TOTAL:
     cur = mark(stage)
     # earlier stages must be held, except babbling and echo: those are observed, not asked for (organic/curriculum.py, OBSERVED)
     held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s not in OBSERVED)
-    promoted = (cur >= need or stage in PERIODS) and held  # (a period is lived through, not passed on a mark)
+    promoted = (cur >= need or stage in PERIODS) and held and stage != LAST_STAGE  # (a period is lived through, not passed on a mark)
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()
     rec_drift = drift()
