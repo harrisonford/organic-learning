@@ -61,7 +61,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 **C. Ideas proposed (each needs the organic check written down before it is built)**
 9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
    what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
-   selective but about 330 pairs are near copies). Measured first by copies and selectivity, not by accuracy.
+   selective but 658 pairs are near copies). Measured first by copies and selectivity, not by accuracy.
 10. A fast store keyed by the fixated thing, not the whole view: fast mapping of a thing on a page, and a place for
     a new-word bias to arise.
 11. The store's surprise measure: it reads 0.84 for everything; without it no replay rule can choose.
@@ -162,7 +162,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
     LDA + relay 0.739; word cells without relay 0.591. The lead over backprop is the relay's. New class: as seed 0.
   - **Two-words curves** (VISION.md): flatten at 0.41 / 0.31–0.36 / 0.36–0.41 after 20,000–30,000 moments in the
     stage; first words keeps rising meanwhile (0.28–0.40 → 0.40–0.45).
-  - **What development did** (`cortex_dev_probe.py`, VISION.md): kinds moved far, became selective, and about 330
+  - **What development did** (`cortex_dev_probe.py`, VISION.md): kinds moved far, became selective, and 658
     pairs became near copies; nothing keeps kinds apart. Proposal with its organic check: lateral anti-Hebbian
     learning among the kinds (also the relay's local form). Not built.
   **Done:** docs/paper/DRAFT.md (first draft of the preprint, pending controls marked); `bench_readout.py` (control:

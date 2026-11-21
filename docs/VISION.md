@@ -712,8 +712,8 @@ seeds, on windows of 200 unlabelled pictures and the summaries of 5,000 benchmar
 
 - **Development is real**: every kind moved far from its start, the kinds answer more rarely and more strongly
   (they have found features in the decorrelated windows), and all are used evenly (the conscience works).
-- **And it made copies.** About 330 pairs of kinds are near copies of each other (cosine 0.89), where no two random
-  kinds are alike beyond 0.29. Winner-take-all with a conscience sends the kinds to where the windows are dense, and
+- **And it made copies.** 658 pairs of kinds are alike above a cosine of 0.8 (the most alike 1%, about 330 pairs,
+  above 0.89), where no pair of random kinds is (their most alike 1%: 0.29). Winner-take-all with a conscience sends the kinds to where the windows are dense, and
   nothing keeps two kinds from settling on the same feature. 256 kinds in a 75-dimensional window space: random
   kinds cover it evenly; developed kinds gain selectivity and lose coverage. The summary ends up no richer (the same
   eleven or so strong directions).
