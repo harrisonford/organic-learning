@@ -622,3 +622,75 @@ What it says so far:
   other learners have the shown picture too, by construction (they add it to sums at full weight; it is the word
   cells that are slow, by design); and **nobody reaches the kind**: twenty pictures of a new class give 0.08 at
   best. One-shot learning here is memory of a picture, not of a category, for every learner tried.
+
+## 2026-11-20 (night): the benchmark on three seeds (cortex, stream order and learners all reseeded)
+
+`out/bench/queue2.sh` ran unattended from 07:00 to 21:00 (logs: `out/bench/backprop_tune_s0.log`,
+`backprop_full.log`, `stream_seeds.log`, `newclass_seeds.log`). CIFAR-10, every training picture once; 2,000 held-out
+pictures named. Mean of three seeds ± their spread, where three were run; one seed otherwise (marked 1).
+
+| learner (developed cortex unless said) | after 500 | 5,000 | 50,000 pictures |
+|---|---|---|---|
+| streaming LDA + relay | 0.375 ± 0.021 | 0.620 ± 0.002 | **0.739 ± 0.001** |
+| ridge on everything seen + relay | 0.395 ± 0.010 | 0.620 ± 0.003 | 0.735 ± 0.001 |
+| streaming LDA + relay, random filters | 0.397 | 0.599 | 0.719 ± 0.004 |
+| **word cells + relay, random filters** | 0.388 ± 0.034 | 0.602 ± 0.003 | **0.693 ± 0.002** |
+| **word cells + relay** | 0.398 ± 0.027 | 0.595 ± 0.005 | **0.687 ± 0.005** |
+| backprop, same shape, 4 earlier pictures lived again per new one (1) | 0.355 | 0.550 | 0.688 |
+| backprop, same shape, 1 lived again per new one | 0.277 ± 0.012 | 0.490 ± 0.020 | 0.661 ± 0.011 |
+| backprop, same shape, start from the developed filters (1) | 0.297 | 0.481 | 0.629 |
+| **backprop, same shape, one pass** | 0.242 ± 0.005 | 0.466 ± 0.008 | **0.616 ± 0.023** |
+| word cells, no relay | 0.312 ± 0.014 | 0.486 ± 0.014 | 0.591 ± 0.007 |
+| nearest class mean + relay | 0.426 ± 0.005 | 0.548 ± 0.004 | 0.569 ± 0.002 |
+| backprop readout on the developed filters, kept (1) | 0.296 | 0.476 | 0.550 |
+
+Backprop: softmax, Adam, 0.003 at 32 pictures a step, the best of 14 settings on the first 10,000 pictures of seed 0
+(0.40–0.53 there; the wider grid found nothing better than the first grid's edge). It learns its 256 filters from
+random ones and has no relay.
+
+What three seeds say:
+- **The word cells through the relay are 7 points above one-pass backprop of the same shape at the end, 13 at 5,000
+  pictures, 16 at 500.** The spread between seeds is small (0.005 against 0.023), so this is not noise.
+- **Backprop needs each picture about five times to draw level** (0.688 with four lived again per new one, one seed).
+- **Without the relay the word cells are not ahead** (0.591 against 0.616: within backprop's spread). The lead is the
+  relay's: a fixed, decorrelated code read by a local delta rule, against filters learned by gradient in one pass.
+  Whether a *gradient* readout on the same relayed code does as well as the word cells is the control now running
+  (`experiments/bench_readout.py`); if it does, the sentence is "decorrelated fixed features are what makes one pass
+  enough", and the word cells are one way to read them, not a better one.
+- **Development buys nothing, on three seeds** (random filters 0.693 ± 0.002, developed 0.687 ± 0.005; for streaming
+  LDA development is worth two points). Backprop started from the developed filters ends where it ends from random
+  ones (0.629, 0.627).
+- **The readouts that keep the second moments stay 5 points above the word cells** (0.739, 0.735).
+- **A new class** (`newclass_seeds.log`, seeds 1 and 2 as seed 0): word cells name the shown pictures 0.00 / 0.00 /
+  0.05–0.08 after 1 / 5 / 20 showings; with the episodic store 1.00 / 0.96–1.00 / 0.99–1.00; other pictures of the
+  new class 0.00 for both; nearest class mean reaches 0.08 of the kind after 20 showings, LDA 0.00. Old classes
+  untouched everywhere. The fast/slow dissociation holds on three seeds; nobody reaches the kind.
+
+## 2026-11-20 (night): how far two words goes with nothing artificial (lives cleanw_s0..2)
+
+From the clean lives' first-words levels, held in two words (PASS_ABOVE=0.99) for the stage's budget. No novelty
+drive, no replay, the strict judge, the adult always recasts. `above` = judged answers on the questions a parrot
+cannot answer, above the best blind strategy, at each 300-item test.
+
+| age (moments) | seed 0: first words / two words | seed 1 | seed 2 |
+|---|---|---|---|
+| 20,000–25,000 (entering) | 0.28 / 0.19 | 0.36 / 0.15 | 0.40 / 0.23 |
+| 35,000 | 0.34 / 0.31 | 0.38 / 0.22 | 0.37 / 0.40 |
+| 50,000 | 0.38 / 0.37 | 0.44 / 0.36 | 0.43 / 0.36 |
+| 65,000 | 0.39 / 0.35 | 0.43 / 0.36 | 0.44 / 0.38 |
+| 80,000 | 0.43 / 0.41 | 0.47 / 0.32 | 0.47 / 0.38 |
+| 95,000 | 0.40 / 0.41 | 0.44 / 0.33 | 0.45 / 0.41 |
+
+- **Two words rises for 20,000–30,000 moments in the stage and then flattens**: seed 2 from 35,000 (0.36–0.41),
+  seed 1 from 50,000 (0.30–0.36), seed 0 creeps up to the end (0.37 at 45,000, 0.41 at 80,000). By source at the
+  end: a thing on a page 0.33–0.39, the adults' two-word lessons 0.30–0.35, "is there a …?" 0.27–0.58 (the widest
+  spread between seeds; seed 1's sits at 0.27–0.42).
+- **First words keeps rising while two words is lived** (0.28 → 0.43, 0.36 → 0.44, 0.40 → 0.45): with 30% of the
+  moments going back to earlier stages, nothing is lost and something is gained. The loss seen in preschool is not
+  what a stage change must cost.
+- Observed, not asked: the yes bias stays slightly negative (−0.04, −0.17, −0.10: "no" a little more often than
+  right); the question's last word is said back in 0.07–0.10 of answers throughout; the store holds 55% talk.
+- **For the mark (Kris's to set):** at 0.25 the lives left after 10,000–15,000 moments, when the stage had only
+  begun. At 0.35 all three seeds would pass after 20,000–30,000 moments in the stage, near where each flattens
+  (0.31–0.41). A different rule in the spirit of "observed, not targets": leave a stage when its curve has stopped
+  rising, wherever that is. Both are proposals; nothing is changed.
