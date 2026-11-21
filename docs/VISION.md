@@ -694,3 +694,41 @@ cannot answer, above the best blind strategy, at each 300-item test.
   begun. At 0.35 all three seeds would pass after 20,000–30,000 moments in the stage, near where each flattens
   (0.31–0.41). A different rule in the spirit of "observed, not targets": leave a stage when its curve has stopped
   rising, wherever that is. Both are proposals; nothing is changed.
+
+## 2026-11-20 (night): what the cortex's development did to its kinds (`experiments/cortex_dev_probe.py`)
+
+The benchmark's question, taken as a question about the mechanism and not about the number: winner-take-all Hebbian
+development buys nothing over never developing. Before any why, what did it do? The benchmark's cortices, three
+seeds, on windows of 200 unlabelled pictures and the summaries of 5,000 benchmark pictures (nothing changed):
+
+| | developed (seeds 0 / 1 / 2) | never developed |
+|---|---|---|
+| a kind's likeness to where it was born (cosine) | 0.24 / 0.23 / 0.24 | 1 |
+| how heavy-tailed a kind's drive is (excess kurtosis) | 0.91 / 0.95 / 0.94 | −0.21 / −0.20 / −0.19 |
+| how evenly the kinds share being strongest (1 = even) | 0.994 | 0.91 |
+| likeness between two kinds: mean of \|cosine\| | 0.21 | 0.09 |
+| … the most alike 1% of pairs | **0.89** | 0.29 |
+| directions that carry the summary's variance (of 4,096) | 10.7 / 10.6 / 11.2 | 10.9 / 12.0 / 12.7 |
+
+- **Development is real**: every kind moved far from its start, the kinds answer more rarely and more strongly
+  (they have found features in the decorrelated windows), and all are used evenly (the conscience works).
+- **And it made copies.** About 330 pairs of kinds are near copies of each other (cosine 0.89), where no two random
+  kinds are alike beyond 0.29. Winner-take-all with a conscience sends the kinds to where the windows are dense, and
+  nothing keeps two kinds from settling on the same feature. 256 kinds in a 75-dimensional window space: random
+  kinds cover it evenly; developed kinds gain selectivity and lose coverage. The summary ends up no richer (the same
+  eleven or so strong directions).
+- **What is missing is known in cortex**: neurons with like tuning inhibit each other, and that inhibition is
+  itself learned (anti-Hebbian lateral connections: Földiák 1990). Hebbian feedforward learning with anti-Hebbian
+  lateral learning gives kinds that are selective *and* different. Our layer has the first half and a conscience.
+- **It is the same missing mechanism as the relay's.** The relay removes the summary's correlations and is computed
+  in batch before the life (the paper's stated debt; queue item 9). Lateral anti-Hebbian learning among the kinds
+  would be one local rule for both: no copies during development, and a decorrelated code afterwards.
+
+**Proposal (not built; the organic check written first).** (1) Organic? Yes: learned lateral inhibition between
+neurons of like tuning is among the best-established circuits in sensory cortex, it is local (two neurons that fire
+together come to inhibit each other), and it sets no behaviour. (2) Is it data, training or size? None: it is a
+missing local rule, and it would *remove* a hand-computed part. (3) The motive is not a number: the benchmark may
+not move at all (random kinds already cover the space, and the batch relay already decorrelates). What it would
+give is a cortex whose every step is learned online by local rules, and an answer to whether development has a role
+once the kinds are kept apart. To be tried as a probe on the benchmark's codes first, measured by the table above
+(copies gone? selectivity kept?) before any accuracy is read.

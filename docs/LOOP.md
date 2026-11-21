@@ -26,15 +26,20 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    only when a measured need points to it. (I had proposed 1,024 filter kinds for the benchmark: withdrawn.)
 
 ## Running
-- **Lives `clean_s0..2`** (units organic-clean-s0/1/2, started 2026-11-19 22:20, from birth): world 4, new cortex and
-  relay, looking, match neurons, episodic store, intake limit, full-size corrections, leisure talk 0.2; **no novelty
-  drive, no replay; echo a period; the strict judge; the adult always recasts; GATE=above (0.25)**. Budget 100,000
-  moments a stage, memory guard 5 GB. Launch line:
+- **Lives `cleanw_s0..2`** (organic-cleanw-s0/1/2): the clean lives' first-words levels held in two words
+  (PASS_ABOVE=0.99) to the stage's budget; they end by themselves at about 115,000–120,000 moments with a "stops at
+  two words" verdict (expected: they were held on purpose). Curves in VISION.md (2026-11-20, night).
+- **`organic-ablation-queue`** (out/tmp/ablation_queue.sh; log out/tmp/ablation_queue.log; about 40 hours; needs
+  nobody): waits for the cleanw lives, then five arms one after the other, three seeds each from birth, the clean
+  lives' launch line with one part taken away, kept in two words (`LAST_STAGE=W2`) to 50,000 moments:
+  `ablrand` (never-developed cortex, data/visual_cortex2_random.pkl), `ablnorelay` (data/visual_cortex2_norelay.pkl),
+  `ablnostore`, `ablnolook`, `ablnomatch`. Control: clean_s* (to first words) + cleanw_s* (two words). It adds its
+  lives to out/monitor/lives.json. What to read: `above` for first words and two words at 50,000 beside the
+  control's (0.38–0.44 / 0.36–0.37).
+- **`organic-bench-readout`** → out/bench/readout_developed.log, readout_random.log (a gradient softmax readout on
+  the very codes the word cells get, with and without the relay; three seeds; about three hours).
+- Launch line for a clean life:
   `TAG=clean SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=above" experiments/conv_pipeline.sh`
-  (it resumes from out/clean_sN.pkl). They need nothing from the loop; they stop by themselves on a verdict.
-  What to read at each checkpoint: `above` by stage and source, `yes_bias`, the store.
-- **`organic-bench-codes`** → out/bench/ (codes of CIFAR-10 by a cortex developed on unlabelled CIFAR-100 pictures,
-  and by a never-developed one; seed 0). Then `experiments/bench_stream.py`.
 
 ## Queue (in order; the paper's needs are in docs/PUBLISH.md)
 **A. The controlled core on a public benchmark** (offline; decides whether the efficiency claim survives)
@@ -54,7 +59,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 8. Preschool's test is mostly answerable blind (floors 0.5–0.75): rebuild the stage's sources before any brain is
    asked to pass it.
 **C. Ideas proposed (each needs the organic check written down before it is built)**
-9. The relay learned online by a local anti-Hebbian rule (it is computed in batch today: a debt on every result).
+9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
+   what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
+   selective but about 330 pairs are near copies). Measured first by copies and selectivity, not by accuracy.
 10. A fast store keyed by the fixated thing, not the whole view: fast mapping of a thing on a page, and a place for
     a new-word bias to arise.
 11. The store's surprise measure: it reads 0.84 for everything; without it no replay rule can choose.
@@ -64,7 +71,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 15. Pivot frames for two-word text (docs/RESEARCH_TWO_WORDS.md), only after 7 says what is missing.
 
 ## Decisions waiting for Kris
-- PASS_ABOVE (0.25 provisional): at it, seeds' two-words levels read 0.22, 0.27, 0.32.
+- PASS_ABOVE (0.25 provisional): the two-words curves flatten at 0.31–0.41; 0.35 would be passed by all three seeds
+  after 20,000–30,000 moments in the stage; or leave a stage when its curve stops rising (VISION.md, 2026-11-20).
+- The preprint's first draft is docs/paper/DRAFT.md: read it; the AI-use statement is yours to word.
 - Releasing a two-words level to kid-a: wait for the clean lives.
 - Hardware: memory first; the lives are bound by memory speed (docs/CRAFT.md).
 - Labelling about 200 answers by hand for the judge's audit set.
@@ -146,3 +155,19 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   flattening near 0.5 at 10,000 pictures. The organic question the benchmark does raise: **why does the cortex's
   Hebbian development buy nothing over random filters?** (queue, before any thought of size).
   Plan for the preprint: when queue2's three-seed tables and the two-words curves are in, a first draft for Kris.
+- 2026-11-20 23:40 **The loop was silent from 07:20 to 23:15** (fourth time; the queue and the lives ran alone, as
+  planned). Collected:
+  - **Benchmark, three seeds** (VISION.md): word cells + relay 0.687 ± 0.005 (random filters 0.693 ± 0.002); one-pass
+    backprop of the same shape 0.616 ± 0.023, with one replayed picture per new one 0.661, with four 0.688; streaming
+    LDA + relay 0.739; word cells without relay 0.591. The lead over backprop is the relay's. New class: as seed 0.
+  - **Two-words curves** (VISION.md): flatten at 0.41 / 0.31–0.36 / 0.36–0.41 after 20,000–30,000 moments in the
+    stage; first words keeps rising meanwhile (0.28–0.40 → 0.40–0.45).
+  - **What development did** (`cortex_dev_probe.py`, VISION.md): kinds moved far, became selective, and about 330
+    pairs became near copies; nothing keeps kinds apart. Proposal with its organic check: lateral anti-Hebbian
+    learning among the kinds (also the relay's local form). Not built.
+  **Done:** docs/paper/DRAFT.md (first draft of the preprint, pending controls marked); `bench_readout.py` (control:
+  is the lead the code's or the word cells'?) running; `LAST_STAGE` in the life script; two cortex twins built
+  (never developed with its own relay; no relay); the ablation queue written and smoke-tested, started.
+  Next: read `readout_*.log` and put the row in VISION.md and the draft; the anti-Hebbian probe on the benchmark's
+  codes (copies and selectivity first); then queue item 8 (rebuild preschool's sources); read each ablation arm as
+  it ends (out/tmp/ablation_queue.log).
