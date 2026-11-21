@@ -124,12 +124,12 @@ again for each new one; started from the developed filters; with the developed f
   draws level.
 - Without the relay they are not ahead. The lead belongs to a fixed, decorrelated code read by a local rule.
   A softmax readout learned by gradient on the very same relayed code (17 settings side by side, the one best
-  after 10,000 pictures) reaches 0.696 and 0.702 where the word cells reach 0.686 and 0.693 (two seeds; **[pending:
-  the third]**). So the finding is about the code: fixed, decorrelated features read by one layer of local synapses.
+  after 10,000 pictures) reaches 0.696 and 0.702 where the word cells reach 0.686 and 0.693 (three seeds: 0.694 against 0.687). So the finding is about the code: fixed, decorrelated features read by one layer of local synapses.
   A delta rule on one layer is gradient descent on that layer; what the learner does without is sending errors back
   through layers. The word cells are one local reader of the code, level with the gradient reader.
 - Development of the filters buys nothing (0.687 developed, 0.693 random), as random whitened patches have long
-  been known to be hard to beat [check: Coates & Ng 2011; Saxe et al. 2011]. **[pending: the same in a life.]**
+  been known to be hard to beat [check: Coates & Ng 2011; Saxe et al. 2011]. In the life it is otherwise (Section 4): single pictures are named as
+  well with a never-developed cortex, a thing on a page is not.
 - The word cells are five points under readouts that keep the pictures' second moments. They are an online, local
   approximation of what those compute with a matrix inverse.
 
@@ -181,8 +181,12 @@ Babbling and echo are measured at every test and never held for promotion; the e
   another picture of the kind 0.0.
 - Observed, not asked for: echo fades by itself once words work (the question's last word is said back in
   0.07–0.10 of answers); a slight bias to "no" (−0.04 to −0.17), where two-year-olds have a bias to "yes" [check].
-- **[pending: ablation lives, three seeds each: never-developed cortex, no relay, no store, no looking, no match
-  neurons; the same lessons in shuffled order.]**
+- **A never-developed cortex** (three seeds, at 45,000 moments): first words is passed as early and scores the same
+  (0.38–0.41 against 0.38–0.45); naming a thing on a page falls to 0.00–0.10 from 0.25–0.37 and "is there a …?" to
+  0.00–0.15 from 0.30–0.48. Development buys nothing for one thing filling the view and is needed when the brain
+  must look at one thing among several. **[pending: which step fails, the gaze or the fixated thing's code.]**
+- **[pending: ablation lives, three seeds each: no relay, no store, no looking, no match neurons; the same lessons
+  in shuffled order.]**
 
 ## 5. What did not work
 

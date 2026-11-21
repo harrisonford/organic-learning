@@ -188,3 +188,14 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Next: read its table (copies? selectivity?); only if the kinds are both selective and apart, CODES=1 and
   `bench_stream.py` with VARIANT=lateral, with and without the batch relay; the readout control's last rows into
   VISION.md and the draft; the cleanw verdicts (about 02:00) and the first ablation arm's start.
+- 2026-11-21 09:15 **The loop was silent from 00:30 to 09:05** (fifth time; everything queued ran alone). Collected
+  (VISION.md, 2026-11-21 morning): the readout control on three seeds and on random filters (the lead is the code's:
+  gradient readout 0.694, word cells 0.687); the published Hebbian/anti-Hebbian network is stable and keeps the
+  kinds' *activities* apart (0.40) but not their filters (1,204 pairs alike): the code to measure is the settled
+  activity, not made yet; the cleanw lives ended as planned (two words 0.40 / 0.36 / 0.38 at the end, first words
+  0.43 / 0.44 / 0.47); **ablation arm 1: with a never-developed cortex first words is the same, a thing on a page
+  is not named (0.00–0.10 against 0.25–0.37, three seeds)**: development matters where the brain must look at one
+  thing among several. Arm 1 ends at 50,000 (about 10:00); arm 2 (no relay) starts by itself.
+  Next: `look2_probe.py` on the developed and the never-developed cortex (where does the gaze go; what does the
+  fixated thing look like); the draft's "development buys nothing" reworded with this; the settled-activity code of
+  the lateral network on a subset; then queue item 8.

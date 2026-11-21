@@ -782,3 +782,48 @@ reported: the setting best after 10,000 pictures. Seeds 0 and 1 (seed 2 and the 
 - **What stands as the finding:** fixed features with decorrelation at two places, read by one layer of local
   synapses, learn faster from a single pass than the same shape trained end to end; backprop needs about five
   times the exposure to draw level. And the relay is worth 10–13 points to any online reader, gradient or not.
+
+## 2026-11-21 (morning): three things that ran overnight
+
+**1. The readout control, all three seeds, and on random filters** (`out/bench/readout_*.log`). Gradient softmax
+readout through the relay, the setting best after 10,000 pictures: plain steps 0.696 / 0.702 / 0.685 (mean 0.694),
+Adam 0.689 / 0.704 / 0.683; word cells 0.686 / 0.693 / 0.682 (0.687). On random filters: 0.703 / 0.702 / 0.702
+against the word cells' 0.693. Without the relay the gradient readout is at 0.56–0.58 on developed filters and
+unsteady on random ones (0.46–0.59), the word cells at 0.58–0.60. The reading of 2026-11-21 stands on three seeds:
+the lead over end-to-end backprop is the code's.
+
+**2. Lateral inhibition on the published rules, full run** (`out/bench/lateral_s0.log`, 16,000 pictures, seed 0):
+
+| | born | winner-take-all + conscience | Hebbian/anti-Hebbian network |
+|---|---|---|---|
+| selectivity (kurtosis of the drive) | −0.21 | 0.91 | 0.31 |
+| pairs of kinds alike above 0.8 | 0 | 658 | 1,204 |
+| the layer's usual responses alike, top 1% | 0.41 | 0.86 | 0.87 |
+| activities settled under the learned inhibition alike, top 1% | – | – | **0.40** |
+
+The network is stable (inhibition mean 0.08, largest 1.3, every kind active 14% of the time, none silent), and it
+does what it is derived to do: the *activities* are kept apart. It does not move the *filters* apart; they are more
+alike than winner-take-all's, and it is the inhibition that separates what they say. So my question was put wrongly:
+"copies" among filters are not a fault if the circuit that reads them has learned inhibition. The thing to measure
+is the code made of the settled activities, which this probe has not made (heavier: every window settles). Not
+done yet; no accuracy read.
+
+**3. A life with a never-developed cortex** (ablation arm 1: `ablrand_s0..2`, three seeds from birth, at 45,000
+moments of 50,000; control: the clean lives then `cleanw_s0..2` at the same age). Score above the blind floor:
+
+| at 45,000 moments | never-developed cortex (seeds 0 / 1 / 2) | control |
+|---|---|---|
+| first words passed at | 15,000 / 15,000 / 15,000 | 15,000 / 20,000 / 15,000 |
+| first words | 0.38 / 0.39 / 0.41 | 0.38 / 0.42 / 0.45 |
+| two words, all | 0.12 / 0.10 / 0.10 | 0.37 / 0.31 / 0.38 |
+| … naming a thing on a page | 0.02 / 0.00 / 0.10 | 0.37 / 0.25 / 0.37 |
+| … "is there a …?" | 0.15 / 0.09 / 0.00 | 0.45 / 0.30 / 0.48 |
+| … the adults' two-word lessons (text) | 0.20 / 0.19 / 0.21 | 0.28 / 0.37 / 0.29 |
+
+- **Single pictures are named as well without development** (as on the benchmark), and first words is passed as
+  early.
+- **A thing on a page is not named without it** (0.00–0.10 against 0.25–0.37), on all three seeds. So development
+  does buy something, and the benchmark could not show it: a benchmark picture is one thing filling the view; a
+  page is several things, and the brain must look at one of them. Which step fails without developed kinds (where
+  the gaze goes, or what a small fixated thing looks like to the word cells) is not known yet: `look2_probe.py` on
+  the two cortices will say. The lives end at 50,000; then the next arm (no relay) starts by itself.
