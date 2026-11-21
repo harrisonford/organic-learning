@@ -23,7 +23,7 @@ from PIL import Image
 from . import world as W
 
 STAGES = ["BB", "B", "W1", "W2", "P", "K", "G1", "G2", "G3", "G4"]
-NAMES = {"BB": "babbling", "B": "echo", "W1": "first words", "W2": "two words", "P": "preschool", "K": "kindergarten",
+NAMES = {"BB": "babbling", "B": "echo", "W1": "first words", "W2": "pages", "P": "preschool", "K": "kindergarten",
          "G1": "first grade", "G2": "second grade", "G3": "third grade", "G4": "fourth grade"}
 PASS = {"BB": 0.17,  # babbling: 0.17 accepted 2026-10-29 (the organic version plateaus at 0.17-0.20)
          "B": 0.8, "W1": 0.4,  # first words 0.4: accepted 2026-11-04 (confusing similar words is age-appropriate)

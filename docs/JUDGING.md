@@ -246,3 +246,28 @@ from the blind child to an adult. This joins the old "beyond the parrot" and the
 the source as a whole and false of the knowledge in it. In `curriculum_life.py` from 2026-11-20 (the lives started
 on 2026-11-19 were relaunched with it after a checkpoint); each source's record holds `asked` (how many questions
 count), `known` (the judged score on them), `floor` and `above`.
+
+## 2026-11-21: no pass mark (GATE=plateau), and the stage is called "pages"
+
+Kris asked what the "two words pass mark" meant ("we're forcing the model to say a certain amount of words?"). No:
+"two words" was only the stage's name, and the mark was the score at which the world moved on. But the mark was a
+number of ours (0.25, then 0.35 proposed), and the name misled. Kris agreed to both changes:
+
+- **The stage W2 is called "pages"** (`organic/curriculum.py`, NAMES; the key stays W2 so that logs and levels still
+  read). It is about picture-book pages: a thing on a page named, "is there a …?", and the adults' short lessons.
+  Older docs say "two words" for the same stage. kid-a's `release.py` still says "two words" (no such level is
+  released; to be reworded when one is).
+- **No mark: the world moves on when the stage's own curve has stopped rising** (`GATE=plateau` in
+  `experiments/curriculum_life.py`). At every test the stage's score above the blind floor joins its curve. When the
+  mean of the last three tests is no higher than the mean of the three before by more than their own chance error,
+  the stage is left. The level it leaves with (the mean of the last three) is recorded, never asked for; earlier
+  stages are still to be held at 0.8 of the level they were left with. Babbling is unchanged (its own old mark,
+  0.17, observed and never held), echo stays a period.
+- Set by hand, and said so: three tests on each side (`PLATEAU_SPAN`), and "more than the chance error" (one
+  standard error of the difference, from the tests' own items; about 0.04).
+- **What it would have done** (replayed on the lives held in the stage, `cleanw_s0..2`): leave after 45,000 / 45,000
+  / 40,000 moments in the stage at 0.34 / 0.33 / 0.38, with first words at 0.36 / 0.43 / 0.44. The mark of 0.25 let
+  them leave after 10,000–15,000.
+- A consequence to know: a stage in which nothing is learned is also left, after six tests, with a level near zero
+  on record. The record says what was learned; the world does not wait. Whether a stage that slides while the next
+  is lived should hold the brain back (the 0.8 rule) is the next thing of this kind to look at.

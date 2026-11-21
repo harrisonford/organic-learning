@@ -116,7 +116,8 @@ if os.environ.get("FROM_LEVEL") == "1" and state["stage"] in state["passed"]:
 # docs/RESEARCH_MEMORY.md, 2026-11-18). REPLAY: how many come back for every moment of the day. REPLAY_FROM=P: only
 # from that stage on (the experimenter's switch, to compare with a life that had none; a brain has no such switch).
 REPLAY = float(os.environ.get("REPLAY", 0))
-GATE = os.environ.get("GATE", "beyond")  # what a stage is passed on: "beyond" (the rigid grade beyond the parrot) or "above" (see the promotion below)
+GATE = os.environ.get("GATE", "beyond")  # when the world moves on: "beyond" (the rigid grade beyond the parrot), "above" (a mark), "plateau" (no mark; see the promotion below)
+SPAN = int(os.environ.get("PLATEAU_SPAN", 3))  # GATE=plateau: how many tests are averaged on each side when asking whether the curve still rises
 PASS_ABOVE = float(os.environ.get("PASS_ABOVE", 0.25))  # provisional (docs/JUDGING.md): to be set with Kris
 LAST_STAGE = os.environ.get("LAST_STAGE")  # a life that stays in this stage however it does there (the ablation lives, 2026-11-20)
 
@@ -251,7 +252,7 @@ def evaluate(stages):
                 FLOOR[s] = blind_floors(s)
             judged = judge.accept(items, fallback=lambda i: scores[i], sources=srcs)
             res[s]["judged"] = float(np.mean(judged))
-            above = []
+            above, noise = [], []
             for src in res[s]["by_source"]:
                 idx = np.array([i for i, x in enumerate(srcs) if x == src])
                 mine = np.array(judged)[idx]
@@ -265,8 +266,10 @@ def evaluate(stages):
                     got = float(np.array(judged)[keep].mean())
                     entry.update(floor=floor, known=got, above=max(0.0, (got - floor) / max(1.0 - floor, 1e-6)))
                     above.append(entry["above"])
+                    noise.append(float(np.array(judged)[keep].std() / np.sqrt(len(keep)) / max(1.0 - floor, 1e-6)))
                 res[s]["by_source"][src].update(entry)
             res[s]["above"] = float(np.mean(above)) if above else 0.0
+            res[s]["above_se"] = float(np.sqrt(np.sum(np.square(noise))) / len(noise)) if noise else 0.0  # how far this test's `above` may be off by chance
             # observed, not asked for: on yes/no questions, how much more often it says yes than yes is right
             # (two-year-olds say yes: +0.24 to +0.34 on this scale, Okanda & Itakura 2008)
             for src in res[s]["by_source"]:
@@ -428,13 +431,28 @@ while brain.age < TOTAL:
     # with PARROT=1, from first words on a stage is passed (and held) on the items that repeating the last word does not answer
     # GATE=above (2026-11-19, docs/JUDGING.md): from first words on, the adult judge's score above what a child who
     # neither looks nor listens gets, and one pass mark for every stage: PASS_ABOVE of the way from that child to an adult
-    asked = lambda s: GATE == "above" and s not in OBSERVED and "above" in res[s]  # noqa: E731
+    # GATE=plateau (2026-11-21; Kris: a pass mark is a number of ours, not something the brain does): no mark at all.
+    # The world moves on when the stage's own curve has stopped rising: the mean of its last SPAN tests is no higher
+    # than the mean of the SPAN before them by more than the tests' own chance error. What the brain could do when
+    # it left is recorded (the mean of the last SPAN tests), never asked for; earlier stages are held against that.
+    asked = lambda s: GATE in ("above", "plateau") and s not in OBSERVED and "above" in res[s]  # noqa: E731
     mark = lambda s: res[s]["above"] if asked(s) else res[s]["beyond"] if PARROT and s not in ("BB", "B") and "beyond" in res[s] else res[s]["score"]  # noqa: E731
     need = PASS_ABOVE if asked(stage) else PASS[stage]
     cur = mark(stage)
+    flat = False
+    if GATE == "plateau" and asked(stage):
+        curve = state.setdefault("curve", {}).setdefault(stage, [])
+        curve.append((brain.age, cur, res[stage].get("above_se", 0.0)))
+        if len(curve) >= 2 * SPAN:
+            now, before = [c[1] for c in curve[-SPAN:]], [c[1] for c in curve[-2 * SPAN:-SPAN]]
+            chance = float(np.sqrt(sum(c[2] ** 2 for c in curve[-2 * SPAN:])) / SPAN)  # the chance error of the difference of the two means
+            flat = float(np.mean(now) - np.mean(before)) <= chance
+            if flat:
+                cur = float(np.mean(now))  # the level it leaves with
     # earlier stages must be held, except babbling and echo: those are observed, not asked for (organic/curriculum.py, OBSERVED)
     held = all(mark(s) >= RETAIN * state["passed"][s] for s in STAGES[:k] if s in state["passed"] and s in res and s not in OBSERVED)
-    promoted = (cur >= need or stage in PERIODS) and held and stage != LAST_STAGE  # (a period is lived through, not passed on a mark)
+    reached = flat if GATE == "plateau" and asked(stage) else cur >= need
+    promoted = (reached or stage in PERIODS) and held and stage != LAST_STAGE  # (a period is lived through, not passed on a mark)
     if "W1" in res:
         res["W1"]["wording"] = wording_invariance()
     rec_drift = drift()
@@ -462,7 +480,8 @@ while brain.age < TOTAL:
             if state["stage"] == os.environ.get("REPLAY_FROM"):
                 replay_on()
     elif brain.age - state["since"] >= STAGE_BUDGET:
-        verdict = f"stops at {stage} ({NAMES[stage]}): score {cur:.2f} < {need} after {STAGE_BUDGET:,} moments" if cur < need else \
+        verdict = f"stops at {stage} ({NAMES[stage]}): still rising at {cur:.2f} after {STAGE_BUDGET:,} moments" if GATE == "plateau" and asked(stage) and not flat else \
+                  f"stops at {stage} ({NAMES[stage]}): score {cur:.2f} < {need} after {STAGE_BUDGET:,} moments" if cur < need and not flat else \
                   f"stops at {stage} ({NAMES[stage]}): passes it but cannot hold earlier stages"
     if (brain.age // EVERY) % int(os.environ.get("REFRESH_EVERY", 10)) == 0:  # new items written by the adults join in
         rng_state = world.rng.getstate()

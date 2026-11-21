@@ -13,7 +13,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 2. What the brain does on the way (babbling, echo, routes, yes bias, the store's contents) is observed, never a
    target or a gate (docs/CRAFT.md, 2026-11-18).
 3. Answers are judged for whether they are acceptable, lenient on form and strict on meaning; scores count above
-   what a blind child gets (docs/JUDGING.md, 2026-11-19). PASS_ABOVE = 0.25 is provisional, Kris's to set.
+   what a blind child gets (docs/JUDGING.md, 2026-11-19). **No pass mark** (Kris, 2026-11-21): new lives run
+   `GATE=plateau`: the world moves on when a stage's curve stops rising. Stage W2 is called "pages".
 4. Claims need 3 seeds and the 300-item tests; negatives are recorded as carefully as positives.
 5. Every decision into the docs and memoize; commit and push; health check before any status.
 6. Machine: keep 2 GB free; probes in capped units at Nice=15, at most one or two beside three lives; never kill by
@@ -71,9 +72,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 15. Pivot frames for two-word text (docs/RESEARCH_TWO_WORDS.md), only after 7 says what is missing.
 
 ## Decisions waiting for Kris
-- PASS_ABOVE (0.25 provisional): the two-words curves flatten at 0.31–0.41; 0.35 would be passed by all three seeds
-  after 20,000–30,000 moments in the stage; or leave a stage when its curve stops rising (VISION.md, 2026-11-20).
-- The preprint's first draft is docs/paper/DRAFT.md: read it; the AI-use statement is yours to word.
+- The preprint's first draft is docs/paper/DRAFT.md: read it; the AI-use statement is yours to word. Kris has an
+  arXiv account (2026-11-21). Before sending: the ablation arms (running, about 30 hours), related work with every
+  reference opened by hand, the name and affiliation as they should appear, and whether arXiv asks for an
+  endorsement in cs.NE when the submission is started.
 - Releasing a two-words level to kid-a: wait for the clean lives.
 - Hardware: memory first; the lives are bound by memory speed (docs/CRAFT.md).
 - Labelling about 200 answers by hand for the judge's audit set.
@@ -213,3 +215,11 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   compare at 10,000 pictures: developed word cells 0.500 without relay, 0.623 with; streaming LDA 0.664.
   (`settle` was 60 times slower than needed under threaded BLAS: row layout and one thread.)
   Next: read both; the first ablation arm's last checkpoint and the no-relay arm's start.
+- 2026-11-21 10:00 **Kris agreed: no pass mark, and the stage renamed.** Built: `GATE=plateau` (JUDGING.md, last
+  section), W2 named "pages"; replayed on the held lives it leaves the stage after 40,000–45,000 moments at
+  0.33–0.38; smoke life `organic-smoke-plat` started. Kris has an arXiv account. **Ablation arm 1 ended** (50,000
+  moments): never-developed cortex, first words 0.41 / 0.41 / 0.41, pages 0.20 / 0.19 / 0.16 (control at 50,000:
+  0.38–0.44 / 0.36–0.37). Arm 2 (no relay) started 09:33. Still running: `organic-look-rand`,
+  `organic-lateral-queue`.
+  Next: read the smoke, the gaze probe and the lateral queue; when the ablation arms are done, three lives from birth
+  with `GATE=plateau` (the paper's staged-life numbers should come from the rule we keep).

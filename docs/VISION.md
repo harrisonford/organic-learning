@@ -827,3 +827,5 @@ moments of 50,000; control: the clean lives then `cleanw_s0..2` at the same age)
   page is several things, and the brain must look at one of them. Which step fails without developed kinds (where
   the gaze goes, or what a small fixated thing looks like to the word cells) is not known yet: `look2_probe.py` on
   the two cortices will say. The lives end at 50,000; then the next arm (no relay) starts by itself.
+- At the end (50,000 moments): first words 0.41 / 0.41 / 0.41, pages 0.20 / 0.19 / 0.16; the control at 50,000:
+  0.38 / 0.44 / 0.43 and 0.37 / 0.36 / 0.36.
