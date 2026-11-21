@@ -19,6 +19,12 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 6. Machine: keep 2 GB free; probes in capped units at Nice=15, at most one or two beside three lives; never kill by
    pattern. External requests carry no personal or project names. The OpenRouter key is never printed; Jev <= $1.50.
 
+7. **No performance hacks; slow organic wins** (Kris, 2026-11-20: "NEVER FORGET we dont want to hack performance
+   for the sake of it we want to build slow organic wins"). Nothing is proposed or built because it raises a number:
+   not more filter kinds, not tuning to a benchmark, not a trick from the literature. The public benchmark is a
+   ruler for checking what we claim; nothing in the brain is changed to move it. Size is the last question, asked
+   only when a measured need points to it. (I had proposed 1,024 filter kinds for the benchmark: withdrawn.)
+
 ## Running
 - **Lives `clean_s0..2`** (units organic-clean-s0/1/2, started 2026-11-19 22:20, from birth): world 4, new cortex and
   relay, looking, match neurons, episodic store, intake limit, full-size corrections, leisure talk 0.2; **no novelty
@@ -134,3 +140,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   stream_seeds.log, newclass_seeds.log).
   Next: read queue2 as it goes and build the three-seed table; the cleanw curves at each checkpoint; then queue
   items 8 (rebuild preschool's sources) and 9 (the relay learned online).
+- 2026-11-20 07:20 Kris: an arXiv preprint alone may be the goal ("it could be just an arxiv publication right?");
+  and a correction: no performance hacks (standing rule 7; the 1,024-kinds run is withdrawn, never queued). The
+  wider backprop grid's first point (rate 0.003, 64 a step): 0.484, under the best so far (0.527): the grid is
+  flattening near 0.5 at 10,000 pictures. The organic question the benchmark does raise: **why does the cortex's
+  Hebbian development buy nothing over random filters?** (queue, before any thought of size).
+  Plan for the preprint: when queue2's three-seed tables and the two-words curves are in, a first draft for Kris.

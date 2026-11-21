@@ -107,3 +107,17 @@ So the paper's centre of gravity moves: from "a brain that learns without backpr
 local learner needs: decorrelation at two places and a fast store beside slow weights; what it does not need:
 developed filters; and what it still cannot do"**, with the staged life as the second half. It is a smaller claim
 and a more defensible one.
+
+## Update, 2026-11-20 (later): the aim is an arXiv preprint; and what the benchmark is for
+
+Kris: "it could be just an arxiv publication right?" Yes. A preprint needs no reviewer; it needs (1) a personal
+endorsement from an established arXiv author in the category (the one real gate for an unaffiliated first
+submission), (2) to read as a finished research article (moderators decline drafts; versions are permanent),
+(3) the AI-use statement, (4) every reference opened by hand. For it to be worth an endorser's name it should carry
+three seeds on its headline numbers, the same-shape backprop reference with replay, the random-filter rows and the
+negatives. That is what the running queue and the two-words lives produce; no further scale is needed.
+
+Kris, the same day: "NEVER FORGET we dont want to hack performance for the sake of it we want to build slow organic
+wins." For the paper this settles what the benchmark is: a ruler. Its numbers are reported as they fall; nothing
+in the brain is changed to move them (no more filter kinds, no tuning to CIFAR). What the paper offers is how an
+organic learner behaves and what each part does, measured honestly, not a score.
