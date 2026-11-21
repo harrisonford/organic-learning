@@ -121,3 +121,16 @@ Kris, the same day: "NEVER FORGET we dont want to hack performance for the sake 
 wins." For the paper this settles what the benchmark is: a ruler. Its numbers are reported as they fall; nothing
 in the brain is changed to move them (no more filter kinds, no tuning to CIFAR). What the paper offers is how an
 organic learner behaves and what each part does, measured honestly, not a score.
+
+## Update, 2026-11-21: three seeds, and the control that moves the claim once more
+
+- Three seeds hold (VISION.md): word cells through the relay 0.687 ± 0.005; one-pass backprop of the same shape
+  0.616 ± 0.023 (0.688 with four replayed pictures per new one); random filters 0.693; streaming LDA 0.739.
+- **A gradient softmax readout on the same relayed code does as well as the word cells** (0.70 against 0.69, two
+  seeds so far). So the efficiency claim is not "a local rule beats backprop": it is **"fixed, decorrelated features
+  read by one layer of local synapses learn more from one pass than the same shape trained end to end"**, and a
+  delta rule on one layer is gradient descent on that layer. Written into the draft's abstract and first claim.
+  This is a known direction (random features with a linear readout); what is ours is the measurement inside a
+  developmental learner, the two places of decorrelation, the fast store beside it, and the staged life.
+- The draft is docs/paper/DRAFT.md. Pending in it: the readout control's third seed, the ablation lives, the
+  related-work section with every reference opened by hand.

@@ -15,7 +15,8 @@ that learn by a delta rule on two dendrites, a small episodic store, and a mouth
 ask what each part buys, in two settings. On CIFAR-10 presented as a single-pass stream, the word cells reading the
 relayed code name 0.687 ± 0.005 of held-out pictures (three seeds), against 0.616 ± 0.023 for backpropagation
 through a network of the same shape tuned for one pass; backpropagation needs each picture about five times to draw
-level. The lead is the relay's: without decorrelation between cortex and word cells the same cells reach 0.591.
+level. The lead is the relay's: without decorrelation between cortex and word cells the same cells reach 0.591. A
+gradient readout on the same relayed code does as well (0.70): the finding is about the code, not the reader.
 Hebbian development of the cortical filters buys nothing over random filters (0.693 ± 0.002), and readouts that keep
 second moments and invert a matrix stay five points ahead (0.739). A class shown once is not held by the slow word
 cells (0.00) and is held with the episodic store (1.00), with the old classes untouched; no learner tried
@@ -40,9 +41,11 @@ puts the same parts on a public benchmark beside references a reader will ask fo
 
 What we claim:
 
-1. **Decorrelation between the visual code and the associative cells is what makes one pass enough** (+10 points
-   for the word cells on CIFAR-10, +13 on the life's own photographs), and with it a local delta rule is ahead of
-   same-shape backpropagation at equal exposure, most of all early (0.40 against 0.24 after 500 pictures).
+1. **Fixed features, decorrelated at two places and read by one layer of local synapses, learn more from a single
+   pass than the same shape trained end to end** (0.69 against 0.62 on CIFAR-10; 0.40 against 0.24 after 500
+   pictures). The decorrelation between cortex and word cells is worth 10 points on CIFAR-10 and 13 on the life's
+   own photographs. A gradient readout on the same code does as well as the word cells: the claim is about the
+   code and about not sending errors through layers, not about a better last-layer rule.
 2. **A fast store beside slow weights gives one-shot memory of an instance without disturbing what is known**, and
    gives no memory of a kind. This is the complementary-learning-systems prediction, measured on a public set with
    other learners beside it.
@@ -120,8 +123,11 @@ again for each new one; started from the developed filters; with the developed f
   pictures and 7 at the end. Backpropagation with four pictures lived again per new one (five times the updates)
   draws level.
 - Without the relay they are not ahead. The lead belongs to a fixed, decorrelated code read by a local rule.
-  **[pending: `bench_readout.py`: a softmax readout learned by gradient on the very same relayed code. If it matches
-  the word cells, the finding is about the code, and the word cells are one local way of reading it.]**
+  A softmax readout learned by gradient on the very same relayed code (17 settings side by side, the one best
+  after 10,000 pictures) reaches 0.696 and 0.702 where the word cells reach 0.686 and 0.693 (two seeds; **[pending:
+  the third]**). So the finding is about the code: fixed, decorrelated features read by one layer of local synapses.
+  A delta rule on one layer is gradient descent on that layer; what the learner does without is sending errors back
+  through layers. The word cells are one local reader of the code, level with the gradient reader.
 - Development of the filters buys nothing (0.687 developed, 0.693 random), as random whitened patches have long
   been known to be hard to beat [check: Coates & Ng 2011; Saxe et al. 2011]. **[pending: the same in a life.]**
 - The word cells are five points under readouts that keep the pictures' second moments. They are an online, local

@@ -755,3 +755,30 @@ mechanism: the published networks of this kind have a decay in both sets of syna
 settles (Földiák 1990; Zylberberg et al. 2011; the similarity-matching networks of Pehlevan & Chklovskii). **Next:
 read those rules in the papers themselves and build the probe on one of them, unchanged.** No codes were made and no
 accuracy was read.
+
+## 2026-11-21: is the lead the word cells' or the code's? A gradient readout on the same code (`bench_readout.py`)
+
+The control a reader will ask for after the three-seed table. The code is kept exactly as the word cells get it; only
+a readout to the ten classes is learned by the gradient of a softmax, each picture once, in the stream's order.
+Seventeen settings learn side by side (plain steps at five rates; Adam at four rates and 1, 8 or 32 pictures a step);
+reported: the setting best after 10,000 pictures. Seeds 0 and 1 (seed 2 and the random filters still running).
+
+| after 50,000 pictures (5,000 in brackets) | seed 0 | seed 1 |
+|---|---|---|
+| word cells through the relay | 0.686 (0.599) | 0.693 (0.588) |
+| gradient readout through the relay, plain steps | 0.696 (0.594) | 0.702 (0.591) |
+| gradient readout through the relay, Adam | 0.689 (0.610) | 0.704 (0.594) |
+| word cells, no relay | 0.581 (0.486) | 0.598 (0.468) |
+| gradient readout, no relay, plain steps | 0.558 (0.448) | 0.568 (0.418) |
+| gradient readout, no relay, Adam | 0.567 (0.406) | 0.582 (0.446) |
+
+- **The lead is the code's.** A gradient readout on the relayed code does as well as the word cells, a point better
+  at the end. So what puts both 7 to 8 points above end-to-end backprop in one pass is not the word cells' rule: it
+  is that the features are fixed and decorrelated, and only a single layer of synapses has to learn.
+- **This is as it should be, and the paper must say it plainly.** A delta rule on one layer of synapses is gradient
+  descent on that layer; "no backpropagation" means no error is sent back through layers, not that the last layer
+  learns by some other principle. The word cells are a local, online reader of the code, level with the gradient
+  reader, a point or two ahead of it without the relay, and they do more than classify (order, cues, replies).
+- **What stands as the finding:** fixed features with decorrelation at two places, read by one layer of local
+  synapses, learn faster from a single pass than the same shape trained end to end; backprop needs about five
+  times the exposure to draw level. And the relay is worth 10–13 points to any online reader, gradient or not.
