@@ -171,3 +171,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Next: read `readout_*.log` and put the row in VISION.md and the draft; the anti-Hebbian probe on the benchmark's
   codes (copies and selectivity first); then queue item 8 (rebuild preschool's sources); read each ablation arm as
   it ends (out/tmp/ablation_queue.log).
+- 2026-11-20 23:55 **Learned lateral inhibition, first form: negative** (`lateral_probe.py`, VISION.md): my own
+  three rules made more copies than winner-take-all (1,377–2,453 pairs against 658) because the inhibition never
+  settles (it grows without end). A fault of the formulation. Next: read the published rules (Földiák 1990;
+  Zylberberg, Murphy & DeWeese 2011; Pehlevan & Chklovskii's similarity matching) in the papers and build the probe
+  on one of them unchanged; table of copies and selectivity first. **Started: `organic-ablation-queue`** (waits for
+  the cleanw lives, which end at about 02:00; smoke lives on both new cortices ran clean).

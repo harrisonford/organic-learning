@@ -732,3 +732,26 @@ not move at all (random kinds already cover the space, and the batch relay alrea
 give is a cortex whose every step is learned online by local rules, and an answer to whether development has a role
 once the kinds are kept apart. To be tried as a probe on the benchmark's codes first, measured by the table above
 (copies gone? selectivity kept?) before any accuracy is read.
+
+### First try of learned lateral inhibition: it does not work in this form (`experiments/lateral_probe.py`, seed 0)
+
+Three local rules on the benchmark cortex's decorrelated windows, kinds born random: an active kind moves towards the
+window in proportion to its activity; two kinds active together more than by chance come to inhibit each other; a
+kind active too often raises its threshold (to be active for a tenth of the windows). Read by the table above, not
+by accuracy:
+
+| | born | winner-take-all + conscience | lateral, inhibition as fast as the pull (2,000 pictures) | lateral, inhibition 20x faster (16,000) |
+|---|---|---|---|---|
+| selectivity (kurtosis of the drive) | −0.21 | 0.91 | 0.47 | 0.41 |
+| pairs of kinds alike above 0.8 | 0 | 658 | 2,453 | 1,377 |
+| responses alike, top 1% of pairs | 0.41 | 0.86 | 0.96 | 0.90 |
+
+**Worse on both counts**, and the reason is visible in the run: the inhibition never settles (mean 0.8 → 1.7 → 3.1 →
+5.0 over the run, largest 180), thresholds climb to half the largest possible drive, and the kinds' settled
+activities stay alike (0.90). My rule lets inhibition grow for as long as two kinds are ever active together, with
+nothing that brings it back, and the activity under such inhibition does not settle (it swings). So the kinds all
+learn from the same windows before they are kept apart. This is a fault of my formulation, not evidence against the
+mechanism: the published networks of this kind have a decay in both sets of synapses and activity that provably
+settles (Földiák 1990; Zylberberg et al. 2011; the similarity-matching networks of Pehlevan & Chklovskii). **Next:
+read those rules in the papers themselves and build the probe on one of them, unchanged.** No codes were made and no
+accuracy was read.
