@@ -177,3 +177,14 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Zylberberg, Murphy & DeWeese 2011; Pehlevan & Chklovskii's similarity matching) in the papers and build the probe
   on one of them unchanged; table of copies and selectivity first. **Started: `organic-ablation-queue`** (waits for
   the cleanw lives, which end at about 02:00; smoke lives on both new cortices ran clean).
+- 2026-11-21 00:30 **Readout control, seeds 0 and 1** (VISION.md, PUBLISH.md, the draft): a gradient softmax readout
+  on the same relayed code does as well as the word cells (0.696 / 0.702 against 0.686 / 0.693). The lead over
+  end-to-end backprop is the code's; the draft's abstract and first claim are reworded. Seed 2 and the random
+  filters still running (`organic-bench-readout`).
+  **Lateral inhibition on the published rules** (`lateral_probe.py` rewritten on Pehlevan & Chklovskii's
+  Hebbian/anti-Hebbian network, equations read in the paper, arXiv:1503.00680): in a 600-picture smoke the
+  inhibition stays bounded (mean 0.08, max 1.4) and the settled activities are decorrelated (top 1% of pairs 0.41),
+  where my own rule ran away. **Running: `organic-lateral`** (16,000 pictures, seed 0 → out/bench/lateral_s0.log).
+  Next: read its table (copies? selectivity?); only if the kinds are both selective and apart, CODES=1 and
+  `bench_stream.py` with VARIANT=lateral, with and without the batch relay; the readout control's last rows into
+  VISION.md and the draft; the cleanw verdicts (about 02:00) and the first ablation arm's start.
