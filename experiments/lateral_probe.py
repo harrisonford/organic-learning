@@ -17,8 +17,9 @@ one under a regulariser); the windows of one picture settle together before thei
 Y starts at Y0 (the paper starts its own image run at 1,000 for inputs of another size).
 
 Read first, before any accuracy: are the copies gone, is the selectivity kept (the table of cortex_dev_probe.py)?
-Then, with CODES=1, the kinds are put in the benchmark cortex (seen with the layer's usual response) and CIFAR-10 is
-coded as out/bench/cifar10_lateral_s<seed>_*.npy for experiments/bench_stream.py (VARIANT=lateral).
+The developed network is kept (out/bench/lateral_s<seed>.npz). Then, with CODES=1, the code made of the *settled
+activities* is kept for a short stream as out/bench/cifar10_settled_s<seed>_*.npy (experiments/bench_stream.py with
+VARIANT=settled N=10000).
     SEEDS=0 STEPS=16000 Y0=10 CODES=0 python experiments/lateral_probe.py
 """
 import os, pickle, sys, time
@@ -45,17 +46,17 @@ held, _ = load(f"{DATA}/cifar-100-python/test", b"fine_labels")
 def settle(W, M, V, sweeps=30):
     """The kinds' activity for these windows: each kind in turn, its drive less what the others' activity takes
     from it, until nothing changes (the paper's coordinate descent)."""
-    d = V @ W.T
+    d = np.ascontiguousarray((V @ W.T).T)  # (kinds, windows)
     y = np.maximum(d, 0)
     for _ in range(sweeps):
         moved = 0.0
         for i in range(len(W)):
-            new = np.maximum(d[:, i] - y @ M[i], 0)
-            moved = max(moved, float(np.abs(new - y[:, i]).max()))
-            y[:, i] = new
-        if moved < 1e-4:
+            new = np.maximum(d[i] - M[i] @ y, 0)
+            moved = max(moved, float(np.abs(new - y[i]).max()))
+            y[i] = new
+        if moved < 1e-3:
             break
-    return y
+    return np.ascontiguousarray(y.T)
 
 
 def windows(layer, img, rng, n):
@@ -94,34 +95,56 @@ for seed in SEEDS:
     layer = cortex.layers[0]
     table("born", layer, layer.W[0], seed)
     table("developed", layer, pickle.load(open(f"out/bench/cortex_developed_s{seed}.pkl", "rb")).layers[0].W[0], seed)
-    W = layer.W[0].astype(np.float64).copy()
+    kept = f"out/bench/lateral_s{seed}.npz"
+    if os.path.exists(kept) and os.environ.get("AGAIN") != "1":  # the network as it developed last time
+        W, M = (np.load(kept)[k] for k in ("W", "M"))
+    else:
+        W = layer.W[0].astype(np.float64).copy()
+        K = len(W)
+        M, Y = np.zeros((K, K)), np.full(K, Y0)
+        for n in range(STEPS):
+            V = windows(layer, big(unlabelled[rng.integers(len(unlabelled))]), rng, 32).astype(np.float64)
+            ys = settle(W, M, V)
+            for x, y in zip(V, ys):
+                Y += y * y
+                g = y / Y
+                W += g[:, None] * (x[None, :] - W * y[:, None])
+                M += g[:, None] * (y[None, :] - M * y[:, None])
+                np.fill_diagonal(M, 0)
+            if (n + 1) % 2000 == 0:
+                print(f"   seed {seed} after {n + 1} pictures ({time.time() - t0:.0f}s): active {np.mean(ys > 0):.3f}, inhibition mean {M.mean():.3f} max {M.max():.2f}, synapses' length {np.linalg.norm(W, axis=1).mean():.2f}, Y {Y.min():.0f}..{Y.max():.0f}", flush=True)
+        np.savez(kept, W=W, M=M)
     K = len(W)
-    M, Y = np.zeros((K, K)), np.full(K, Y0)
-    for n in range(STEPS):
-        V = windows(layer, big(unlabelled[rng.integers(len(unlabelled))]), rng, 32).astype(np.float64)
-        ys = settle(W, M, V)
-        for x, y in zip(V, ys):
-            Y += y * y
-            g = y / Y
-            W += g[:, None] * (x[None, :] - W * y[:, None])
-            M += g[:, None] * (y[None, :] - M * y[:, None])
-            np.fill_diagonal(M, 0)
-        if (n + 1) % 2000 == 0:
-            print(f"   seed {seed} after {n + 1} pictures ({time.time() - t0:.0f}s): active {np.mean(ys > 0):.3f}, inhibition mean {M.mean():.3f} max {M.max():.2f}, synapses' length {np.linalg.norm(W, axis=1).mean():.2f}, Y {Y.min():.0f}..{Y.max():.0f}", flush=True)
     table("lateral", layer, W, seed, M)
     if CODES:
-        layer.W[0] = (W / np.linalg.norm(W, axis=1, keepdims=True)).astype(np.float32)  # (at unit length, as the layer's kinds are)
-        layer.lateral = M.astype(np.float32)  # kept for a later look; the layer's response does not use it
-        pics = [big(unlabelled[i]) for i in rng.choice(len(unlabelled), 6000, replace=False)]
-        cortex.relay = None
-        cortex.settle_relay(pics, GRID, SHRINK)
-        relay, cortex.relay = cortex.relay, None
+        # The code made of the settled activities: what the circuit says, not what its filters would say alone.
+        # Every window of the view settles under the learned inhibition; then, as the cortex does, the average
+        # activity of each kind in each of 16 regions, at unit length. Only the pictures a short stream needs:
+        # the first N_CODE of the seed's stream (experiments/bench_stream.py) and its 2,000 test pictures; a relay
+        # settled on RELAY_N unlabelled pictures is kept beside it, to see what is left for a relay to do.
+        W32, M32 = W.astype(np.float32), M.astype(np.float32)
+
+        def summary(img):
+            v = layer._drive(img)[2][0][0]
+            h, w = v.shape[:2]
+            m = settle(W32, M32, v.reshape(-1, v.shape[2]), sweeps=12).reshape(h, w, K)
+            gh, gw = h // GRID, w // GRID
+            q = m[: gh * GRID, : gw * GRID].reshape(GRID, gh, GRID, gw, K).mean(axis=(1, 3)).ravel()
+            return (q / (np.linalg.norm(q) + 1e-8)).astype(np.float32)
+
+        from organic.cortex2 import Relay
+        n_code, relay_n = int(os.environ.get("N_CODE", 10000)), int(os.environ.get("RELAY_N", 3000))
+        relay = Relay(SHRINK).settle([summary(big(unlabelled[i])) for i in rng.choice(len(unlabelled), relay_n, replace=False)])
+        print(f"   seed {seed}: relay settled on {relay_n} pictures ({time.time() - t0:.0f}s)", flush=True)
         train = [load(f"{DATA}/cifar-10-batches-py/data_batch_{i}") for i in range(1, 6)]
-        for name, X in (("train", np.concatenate([a for a, _ in train])), ("test", load(f"{DATA}/cifar-10-batches-py/test_batch")[0])):
+        Xtr, Xte = np.concatenate([a for a, _ in train]), load(f"{DATA}/cifar-10-batches-py/test_batch")[0]
+        for name, X, which in (("train", Xtr, np.random.default_rng(seed).permutation(len(Xtr))[:n_code]), ("test", Xte, np.random.default_rng(99).permutation(len(Xte))[:2000])):
             out = np.zeros((len(X), 16 * K), np.float16)
-            for i, x in enumerate(X):
-                out[i] = cortex.whole(big(x), GRID)
-            np.save(f"out/bench/cifar10_lateral_s{seed}_{name}.npy", out)
+            for k, i in enumerate(which):
+                out[i] = summary(big(X[i]))
+                if (k + 1) % 2000 == 0:
+                    print(f"   seed {seed}: {name} {k + 1} coded ({time.time() - t0:.0f}s)", flush=True)
+            np.save(f"out/bench/cifar10_settled_s{seed}_{name}.npy", out)
         cortex.relay = relay
-        pickle.dump(cortex, open(f"out/bench/cortex_lateral_s{seed}.pkl", "wb"))
-        print(f"seed {seed} lateral: cortex and codes kept ({time.time() - t0:.0f}s)", flush=True)
+        pickle.dump(cortex, open(f"out/bench/cortex_settled_s{seed}.pkl", "wb"))
+        print(f"seed {seed} settled: codes of the first {n_code} stream pictures and the test pictures kept ({time.time() - t0:.0f}s)", flush=True)

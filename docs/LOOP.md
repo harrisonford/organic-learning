@@ -199,3 +199,17 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Next: `look2_probe.py` on the developed and the never-developed cortex (where does the gaze go; what does the
   fixated thing look like); the draft's "development buys nothing" reworded with this; the settled-activity code of
   the lateral network on a subset; then queue item 8.
+- 2026-11-21 09:35 Kris asked what the "two words pass mark" means ("we're forcing the model to say a certain amount
+  of words?"). Answered: no; it is a stage's name and the score at which the world moves on. **My recommendation,
+  waiting for Kris's yes: no mark at all (the world moves on when the stage's curve stops rising), and the stage
+  renamed "pages".** Not built.
+  **Running: `organic-look-rand`** (`look2_probe.py` on the never-developed cortex, wide pages, seeds 0 and 1 →
+  out/tmp/look2_random.log; then quarters+match on the developed one → out/tmp/look2_developed_quarters.log): the
+  gaze itself is colour centre-surround and does not use the kinds, so the probe asks whether a fixated thing is
+  named from never-developed kinds (developed: 0.47–0.53 on a page, 0.54–0.59 alone, 2026-11-17).
+  **Queued behind it: `organic-lateral-queue`** (out/bench/lateral_queue.sh): the Hebbian/anti-Hebbian network
+  developed again and kept (out/bench/lateral_s0.npz), the code made of its settled activities for a 10,000-picture
+  stream, then `bench_stream.py` VARIANT=settled with and without a relay → out/bench/stream_settled_s0.log. To
+  compare at 10,000 pictures: developed word cells 0.500 without relay, 0.623 with; streaming LDA 0.664.
+  (`settle` was 60 times slower than needed under threaded BLAS: row layout and one thread.)
+  Next: read both; the first ablation arm's last checkpoint and the no-relay arm's start.
