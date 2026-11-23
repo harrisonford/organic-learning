@@ -181,12 +181,24 @@ Babbling and echo are measured at every test and never held for promotion; the e
   another picture of the kind 0.0.
 - Observed, not asked for: echo fades by itself once words work (the question's last word is said back in
   0.07–0.10 of answers); a slight bias to "no" (−0.04 to −0.17), where two-year-olds have a bias to "yes" [check].
-- **A never-developed cortex** (three seeds, at 45,000 moments): first words is passed as early and scores the same
-  (0.38–0.41 against 0.38–0.45); naming a thing on a page falls to 0.00–0.10 from 0.25–0.37 and "is there a …?" to
-  0.00–0.15 from 0.30–0.48. Development buys nothing for one thing filling the view and is needed when the brain
-  must look at one thing among several. **[pending: which step fails, the gaze or the fixated thing's code.]**
-- **[pending: ablation lives, three seeds each: no relay, no store, no looking, no match neurons; the same lessons
-  in shuffled order.]**
+- **What each part buys** (one part taken away, three seeds each from birth, at 50,000 moments; mean above the
+  blind floor):
+
+| | first words | naming a thing on a page | "is there a …?" |
+|---|---|---|---|
+| all parts | 0.42 | 0.36 | 0.44 |
+| never-developed cortex | 0.41 | 0.04 | 0.27 |
+| no relay | 0.35 | 0.19 | 0.40 |
+| no looking | 0.42 | 0.02 | 0.36 |
+| no match neurons | 0.42 | 0.33 | 0.29 |
+| no episodic store | 0.44 | 0.45 | 0.44 |
+
+  The relay is the only part whose absence costs first words. Looking is what naming on a page is made of.
+  Development of the kinds buys nothing for one thing filling the view and is needed for a thing on a page (the
+  level of a brain that does not look); a probe that isolates the fixated thing does not reproduce this, so the
+  cause is open. Match neurons matter for "is there" on two seeds of three. The store buys nothing these tests ask
+  for, and naming on a page is higher without it on all three seeds.
+- **[pending: three lives under the no-mark rule (running); the same lessons in shuffled order.]**
 
 ## 5. What did not work
 
@@ -217,7 +229,9 @@ Also: a world that silently reverted to an older version after 50,000 moments of
 ## 7. Limits
 
 - One small benchmark; one machine; 4,096-dimensional codes; nothing here says the results hold at scale.
-- The relay is computed in batch before the life. Learning it online by a local anti-Hebbian rule is next.
+- The relay is computed in batch before the life. A first measurement of a local, learned form (a Hebbian/anti-Hebbian
+  network among the kinds, Pehlevan & Chklovskii's rules): the word cells gain 9.5 points on its code without any relay,
+  where the batch relay gives 12 (one seed, 10,000 pictures).
 - The backpropagation reference is one shape, plain Adam, no augmentation, tuned on a grid of 14.
 - The stages, their order and the pass marks are ours. The judge is a model; a person's labels on 200 of its
   judgements are still to be made.

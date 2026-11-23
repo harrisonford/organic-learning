@@ -829,3 +829,66 @@ moments of 50,000; control: the clean lives then `cleanw_s0..2` at the same age)
   the two cortices will say. The lives end at 50,000; then the next arm (no relay) starts by itself.
 - At the end (50,000 moments): first words 0.41 / 0.41 / 0.41, pages 0.20 / 0.19 / 0.16; the control at 50,000:
   0.38 / 0.44 / 0.43 and 0.37 / 0.36 / 0.36.
+
+## 2026-11-23: what each part buys in a life (five ablation arms, three seeds each, 50,000 moments)
+
+`out/tmp/ablation_queue.sh`, finished 2026-11-22 10:28. Each arm: the clean lives' launch line with one part taken
+away, from birth, kept in the pages stage (W2, until now called "two words") to 50,000 moments. Control: the clean
+lives, then `cleanw`, at the same age. Score above the blind floor, seeds 0 / 1 / 2 (mean).
+
+| | first words | pages, all | naming a thing on a page | "is there a …?" | the adults' short lessons |
+|---|---|---|---|---|---|
+| **control** | 0.38 / 0.44 / 0.43 (0.42) | 0.37 / 0.36 / 0.36 (0.36) | 0.31 / 0.39 / 0.37 (0.36) | 0.52 / 0.36 / 0.45 (0.44) | 0.30 / 0.32 / 0.26 (0.29) |
+| never-developed cortex | 0.41 / 0.41 / 0.41 (0.41) | 0.20 / 0.19 / 0.16 (0.18) | 0.07 / 0.02 / 0.03 (0.04) | 0.30 / 0.27 / 0.24 (0.27) | 0.24 / 0.27 / 0.20 (0.24) |
+| no relay | 0.35 / 0.36 / 0.34 (0.35) | 0.23 / 0.26 / 0.32 (0.27) | 0.21 / 0.19 / 0.19 (0.19) | 0.27 / 0.36 / 0.58 (0.40) | 0.21 / 0.24 / 0.21 (0.22) |
+| no episodic store | 0.41 / 0.44 / 0.47 (0.44) | 0.37 / 0.34 / 0.41 (0.37) | 0.50 / 0.40 / 0.45 (0.45) | 0.39 / 0.39 / 0.55 (0.44) | 0.21 / 0.24 / 0.24 (0.23) |
+| no looking | 0.45 / 0.42 / 0.41 (0.42) | 0.19 / 0.23 / 0.20 (0.21) | 0.03 / 0.01 / 0.02 (0.02) | 0.27 / 0.42 / 0.39 (0.36) | 0.26 / 0.25 / 0.19 (0.23) |
+| no match neurons | 0.41 / 0.42 / 0.43 (0.42) | 0.26 / 0.37 / 0.25 (0.30) | 0.36 / 0.31 / 0.32 (0.33) | 0.15 / 0.49 / 0.24 (0.29) | 0.28 / 0.31 / 0.20 (0.26) |
+
+First words was passed (old mark, 0.25) at 15,000 moments by every arm, except two seeds without the relay (20,000),
+like one control seed.
+
+- **The relay** is the only part whose absence costs first words (0.35 against 0.42, all three seeds), and it halves
+  naming on a page (0.19 against 0.36). As on the benchmark.
+- **Looking** is what naming a thing on a page is made of (0.02 without it) and costs single pictures nothing.
+- **The cortex's development**: nothing for single pictures, everything for a thing on a page (0.04, the level of a
+  brain that does not look), and "is there a …?" falls to 0.27. See below.
+- **Match neurons**: "is there a …?" falls on two of three seeds (0.15, 0.24 against 0.49 on the third); naming is
+  untouched. A weak result: the spread between seeds is as large as the effect.
+- **The episodic store buys nothing that these tests ask for**, and naming a thing on a page is *higher* without it
+  on all three seeds (0.45 against 0.36). Its job, a name heard once, is not in any stage's test (it is measured
+  apart: 0.9 against 0.1). A store that holds 55% leisure talk and answers by likeness of whole views may be
+  getting in the way on pages. To be looked at before anything is claimed.
+
+### Why is a thing on a page not named with never-developed kinds? Not answered yet
+
+- The gaze is not the reason: it works from colour (`organic/gaze.py`) and does not use the kinds.
+- In the probe (`look2_probe.py`, wide pages, 6,000 moments lived half single pictures and half pages, seeds 0 / 1)
+  never-developed kinds do nearly as well: single pictures 0.530 / 0.563 (developed 0.520 / 0.587), a fixated thing
+  on a page **0.370 / 0.450** (developed 0.467 / 0.530), "is there" 0.733 / 0.737 (0.747 / 0.727).
+- In the life the same cortex gives 0.04 where developed kinds give 0.36, and its answers look like those of a brain
+  that does not look: wrong names and run-together ones ("elephantbirdbanana"). So the probe does not reproduce the
+  life. What differs: in the life the pages come after first words, the pages are the world's, and the store, the
+  chooser and the mouth are there. **Next: on the saved brains (out/ablrand_s0.pkl, out/cleanw_s0.pkl), view by
+  view on the test pages: what does the word cells' drive say for the whole page, and for each fixation?**
+
+## 2026-11-23: the lateral network's settled activities as the code (seed 0, 10,000 pictures)
+
+`out/bench/stream_settled_s0.log`. The Hebbian/anti-Hebbian network (Pehlevan & Chklovskii's rules) developed on
+unlabelled pictures; the summary is made of its settled activities.
+
+| after 10,000 pictures (5,000) | settled activities | winner-take-all kinds, usual response |
+|---|---|---|
+| word cells, no relay | **0.595** (0.578) | 0.500 (0.486) |
+| word cells + batch relay | **0.670** (0.629) | 0.623 (0.599) |
+| nearest class mean, no relay / + relay | 0.364 / 0.593 | 0.312 / 0.559 |
+| streaming LDA, no relay / + relay | 0.668 / 0.662 | 0.664 / 0.670 |
+
+- **Learned lateral inhibition does part of the relay's work, by a local rule, online**: without any relay the word
+  cells gain 9.5 points on its code (0.500 → 0.595); the batch relay is worth 12 on the old code. A relay on top
+  still adds 7.5 (0.670, above every word-cell number at 10,000 pictures so far).
+- Streaming LDA is unmoved (0.66–0.67 either way): the code holds no more than before; it is better conditioned for
+  a learner that sees each picture once. That is the same thing the relay does.
+- One seed, a short stream, read once. Not a claim yet; and by rule 7 the number is not the point: the point is that
+  the one part computed in batch has a local, learned form that goes most of the way. Next: three seeds on the whole
+  stream; lateral inhibition among the 4,096 summary neurons (what the relay itself is) by the same rule.

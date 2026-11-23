@@ -30,7 +30,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 - **Lives `cleanw_s0..2`** (organic-cleanw-s0/1/2): the clean lives' first-words levels held in two words
   (PASS_ABOVE=0.99) to the stage's budget; they end by themselves at about 115,000–120,000 moments with a "stops at
   two words" verdict (expected: they were held on purpose). Curves in VISION.md (2026-11-20, night).
-- **`organic-ablation-queue`** (out/tmp/ablation_queue.sh; log out/tmp/ablation_queue.log; about 40 hours; needs
+- **Lives `plat_s0..2`**: from birth, GATE=plateau, TOTAL=120000 (started 2026-11-23 12:00; see the log). The ablation queue, the cleanw lives and the benchmark probes are all finished.
   nobody): waits for the cleanw lives, then five arms one after the other, three seeds each from birth, the clean
   lives' launch line with one part taken away, kept in two words (`LAST_STAGE=W2`) to 50,000 moments:
   `ablrand` (never-developed cortex, data/visual_cortex2_random.pkl), `ablnorelay` (data/visual_cortex2_norelay.pkl),
@@ -223,3 +223,17 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   `organic-lateral-queue`.
   Next: read the smoke, the gaze probe and the lateral queue; when the ablation arms are done, three lives from birth
   with `GATE=plateau` (the paper's staged-life numbers should come from the rule we keep).
+- 2026-11-23 12:15 **Silent from 2026-11-21 10:00 to 2026-11-23 11:50** (Kris's own computer went off; the server did
+  not: every queue ran to its end). Collected (VISION.md, 2026-11-23): **the ablation table, five arms x three
+  seeds** (relay: the only part that costs first words; looking and the cortex's development: naming a thing on a
+  page falls to 0.02 and 0.04; match neurons: "is there" on two seeds; the store: nothing these tests ask for, and
+  page naming higher without it); the gaze probe does not reproduce the never-developed cortex's failure (0.37–0.45
+  in the probe, 0.04 in the life): open; **the lateral network's settled activities give the word cells 9.5 points
+  without any relay** (seed 0, 10,000 pictures). The draft has the ablation table.
+  **Started: lives `plat_s0..2`** (organic-plat-s0/1/2) from birth with `GATE=plateau`, TOTAL=120000: the staged-life
+  numbers under the rule we keep. Launch line:
+  `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
+  Kris is starting the arXiv submission form (endorsement check); the paper itself is not ready to upload.
+  Next: (1) view-by-view diagnostic on out/ablrand_s0.pkl against out/cleanw_s0.pkl (why no page naming without
+  development); (2) the store on pages (why higher without it); (3) related work, references opened one by one;
+  (4) the lateral network on three seeds and the whole stream; (5) queue item 8.
