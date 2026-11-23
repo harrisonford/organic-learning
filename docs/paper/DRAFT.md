@@ -49,8 +49,8 @@ What we claim:
 2. **A fast store beside slow weights gives one-shot memory of an instance without disturbing what is known**, and
    gives no memory of a kind. This is the complementary-learning-systems prediction, measured on a public set with
    other learners beside it.
-3. **Developed filters are not needed**: random filters on decorrelated windows do as well. We had expected the
-   opposite.
+3. **Developed filters buy little**: nothing on the benchmark, 0.05–0.10 on a fixated thing in the life. We had
+   expected more.
 4. **A staged life can be passed without hand-wired drives**, if what the learner does on the way (babbling, echo,
    a bias to "no") is observed and never made a target.
 
@@ -128,8 +128,7 @@ again for each new one; started from the developed filters; with the developed f
   A delta rule on one layer is gradient descent on that layer; what the learner does without is sending errors back
   through layers. The word cells are one local reader of the code, level with the gradient reader.
 - Development of the filters buys nothing (0.687 developed, 0.693 random), as random whitened patches have long
-  been known to be hard to beat [check: Coates & Ng 2011; Saxe et al. 2011]. In the life it is otherwise (Section 4): single pictures are named as
-  well with a never-developed cortex, a thing on a page is not.
+  been known to be hard to beat [check: Coates & Ng 2011; Saxe et al. 2011].
 - The word cells are five points under readouts that keep the pictures' second moments. They are an online, local
   approximation of what those compute with a matrix inverse.
 
@@ -193,11 +192,13 @@ Babbling and echo are measured at every test and never held for promotion; the e
 | no match neurons | 0.42 | 0.33 | 0.29 |
 | no episodic store | 0.44 | 0.45 | 0.44 |
 
-  The relay is the only part whose absence costs first words. Looking is what naming on a page is made of.
-  Development of the kinds buys nothing for one thing filling the view and is needed for a thing on a page (the
-  level of a brain that does not look); a probe that isolates the fixated thing does not reproduce this, so the
-  cause is open. Match neurons matter for "is there" on two seeds of three. The store buys nothing these tests ask
-  for, and naming on a page is higher without it on all three seeds.
+  The relay is the only part whose absence costs first words. Looking is what naming on a page is made of. Match
+  neurons matter for "is there" on two seeds of three. Two rows needed a second look, and it changed their reading.
+  Asked view by view, every brain names the fixated thing alone about as well (developed kinds 0.48–0.54 of pages,
+  never-developed 0.39–0.46); but the store is written and read under the whole view, a page seen whole is coarse,
+  and coarse pages look alike, so the store gives back another page's name. With the store silenced for the asking
+  the full brain names 0.48–0.50 of pages (0.36–0.45 with it) and the never-developed one 0.33–0.44 (0.07–0.15).
+  So development is worth 0.05–0.10 on a fixated thing, and the store as keyed costs naming on a page.
 - **[pending: three lives under the no-mark rule (running); the same lessons in shuffled order.]**
 
 ## 5. What did not work

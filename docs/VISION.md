@@ -892,3 +892,43 @@ unlabelled pictures; the summary is made of its settled activities.
 - One seed, a short stream, read once. Not a claim yet; and by rule 7 the number is not the point: the point is that
   the one part computed in batch has a local, learned form that goes most of the way. Next: three seeds on the whole
   stream; lateral inhibition among the 4,096 summary neurons (what the relay itself is) by the same rule.
+
+## 2026-11-23 (afternoon): it is the store's key that fails on pages (`experiments/page_views_probe.py`)
+
+Two things in the ablation table had no explanation: a never-developed cortex names single pictures and not a thing
+on a page; and naming on a page is higher without the episodic store. Saved brains, 100 held-out pages each, nothing
+learning. Share of pages named right:
+
+| brain (seed) | the brain as it lives | the same, its store silent | some fixation alone | the coarse whole page alone |
+|---|---|---|---|---|
+| control (0 / 1 / 2; age 115,000–120,000) | 0.36 / 0.45 / 0.41 | **0.48 / 0.49 / 0.50** | 0.54 / 0.52 / 0.48 | 0.08 / 0.11 / 0.10 |
+| never-developed cortex (0 / 1 / 2; 50,000) | 0.15 / 0.07 / 0.12 | **0.43 / 0.33 / 0.44** | 0.46 / 0.39 / 0.44 | 0.02 / 0.05 / 0.03 |
+| no relay (0) | 0.27 | 0.38 | 0.39 | 0.10 |
+| no match neurons (0) | 0.38 | 0.45 | 0.53 | 0.08 |
+| no store (0) | 0.52 | – | 0.51 | 0.08 |
+
+- **Every brain names the fixated thing alone about as well as it can name at all** (developed 0.48–0.54,
+  never-developed 0.39–0.46). The never-developed cortex is not blind to a thing on a page.
+- **With the store silent every brain with a store names more pages**: the control +0.04 to +0.12, the
+  never-developed cortex +0.26 to +0.32. Its "failure" on pages was the store's.
+- **Why:** the store is written and read under the whole view only (`organic/words.py`: `x[0]`). A page is seen
+  whole only coarsely, and coarse pages look alike: 6–8% of pairs of test pages are alike enough for the store to
+  answer (likeness in the top 5% of pairs: 0.84; with never-developed kinds up to 0.999), where no two single
+  pictures are (top 5%: 0.05–0.07). So on a page the store gives back the name heard on another page, at full
+  strength, against the fixation's right one. When the brain is wrong although a fixation alone is right, what it
+  says is most often the whole page's answer.
+- So, corrected: **development of the kinds is worth 0.05–0.10 on a fixated thing, not everything**; and **the
+  store, as keyed, costs naming on a page in every brain that has it.** The ablation table stands as measured; its
+  reading changes.
+
+**Proposal: the store keeps a moment under what the eye was on** (queue item 10, now with a measured reason).
+Organic check, written before building: (1) Organic? In primates the hippocampus is tied to where the eyes are:
+cells that answer to the place looked at rather than the place stood in, and more fixations at study go with more
+hippocampal activity and better memory [check: Rolls's spatial view cells; Liu, Shen, Olsen & Ryan 2017]. A moment
+kept under the fixated window is closer to that than a moment kept under a blurred whole scene. It wires no
+behaviour: the store still only says "a moment like this one came with these words". (2) Data, training or size?
+None; a key. (3) The motive is not a score: the store's own job (a name heard once) cannot work on a page as it is,
+and it harms what the slow cells know. Rule: a moment is kept under the windows the eye fixated, or under the whole
+view when it fixated nothing; it is compared with what the eye is on now, likewise. To be tried first on the saved
+brains (their stores hold each moment's fixations since 2026-11-18), nothing learning: pages as above, single
+pictures, and the name-heard-once test.
