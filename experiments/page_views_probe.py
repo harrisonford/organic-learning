@@ -47,17 +47,26 @@ for path in sys.argv[1:]:
             said_instead["the whole page's answer" if full == whole else "another fixation's answer" if full in each else "a run of several views' answers" if any(n and n != full and n in full for n in names) else "something else"] += 1
         blends += int(any(n and n != full and n in full for n in names))
     brain.looking, store = looking, brain.words.episodes
+    one = lambda: np.mean([grade("W1", say(m["image"], m["question"]), m["answers"]) >= 0.5 for m in singles])  # noqa: E731
+    lives_one = one()
     brain.words.episodes = None  # the same brain, its episodic store silent
     silent = np.mean([right(say(np.asarray(m["image"], np.float32), m["question"]), m) for m in pages])
+    silent_one = one()
     brain.words.episodes = store
+    looked = looked_one = float("nan")
+    if store is not None:
+        store.key = "looked"  # the same store, a moment kept under what the eye was on
+        looked = np.mean([right(say(np.asarray(m["image"], np.float32), m["question"]), m) for m in pages])
+        looked_one = one()
+        store.key = "whole"
     brain.looking = False
-    alone = np.mean([grade("W1", say(m["image"], m["question"]), m["answers"]) >= 0.5 for m in singles])
+    alone = one()
     brain.looking = looking
     full, whole = np.mean([r[0] for r in rows]), np.mean([r[1] for r in rows])
     anyfix = np.mean([any(r[2]) for r in rows])
     perfix = np.mean([x for r in rows for x in r[2]]) if any(r[3] for r in rows) else float("nan")
     print(f"{path} (age {brain.age}; looking {looking}; {len(pages)} pages, {len(singles)} single pictures)\n"
-          f"   single pictures, not looking {alone:.2f} | a thing on a page: as it lives {full:.2f} | as it lives, the store silent {silent:.2f} | the whole page alone {whole:.2f} | some fixation alone {anyfix:.2f} | a fixation alone, on average {perfix:.2f}\n"
+          f"   single pictures, not looking {alone:.2f} | (as it lives {lives_one:.2f}, store silent {silent_one:.2f}, store keyed by what the eye is on {looked_one:.2f}) | a thing on a page: as it lives {full:.2f} | as it lives, the store silent {silent:.2f} | the store keyed by what the eye is on {looked:.2f} | the whole page alone {whole:.2f} | some fixation alone {anyfix:.2f} | a fixation alone, on average {perfix:.2f}\n"
           f"   fixations a page: {dict(sorted(collections.Counter(r[3] for r in rows).items()))} | answers that run several views' answers together {blends / len(rows):.2f}\n"
           f"   wrong as it lives although a fixation alone is right: {sum(said_instead.values())} pages; it said: {dict(said_instead)}", flush=True)
     del brain

@@ -248,3 +248,15 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   only makes coarse pages less alike. Waiting for the never-developed brains' store-silent numbers before writing
   it into VISION.md. Then queue item 10 (the store keyed by what is fixated) gets its organic check and a probe.
   Lives `plat_s0..2` out of babbling at 5,000.
+- 2026-11-23 13:30 **The store's key is what fails on pages: confirmed on three seeds** (VISION.md, 2026-11-23
+  afternoon): with the store silent the control names 0.48–0.50 of test pages (0.36–0.45 with it) and the
+  never-developed cortex 0.33–0.44 (0.07–0.15). The draft's reading of the ablation table is corrected (development
+  is worth 0.05–0.10 on a fixated thing; the store as keyed costs page naming).
+  **Built (off by default): `Episodes.key = "looked"`** (`organic/episodes.py`, `organic/words.py`): a moment is kept
+  under the windows the eye fixated (the whole view when it fixated nothing) and compared with what the eye is on
+  now. Organic check in VISION.md. Unit-tested. **Running: `organic-pageviews`** → out/tmp/page_views3.log: the three
+  control brains and one never-developed, pages and single pictures, store as it is / silent / keyed by what the eye
+  is on (their stores hold each moment's fixations, so nothing has to be lived again).
+  Next: read it. If the keyed store does no harm on pages and none on single pictures: a probe of its own job on a
+  page (a name heard once for a thing on a page, asked on another page with the same thing), then lives. Then
+  related work for the draft.

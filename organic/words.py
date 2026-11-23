@@ -326,7 +326,7 @@ class Words:
         drive = np.maximum(self._content(x, cues, b, snd, heard), 0)
         if self.episodes is not None:  # moments like this one, stored whole: their replies' units are driven too
             seen_now = None if x is None else x[0] if x.ndim == 2 else x
-            for u, d in self.episodes.read(seen_now, self._echo(heard, ()) if len(heard) else None).items():
+            for u, d in self.episodes.read(seen_now, self._echo(heard, ()) if len(heard) else None, x[1:] if x is not None and x.ndim == 2 else None).items():
                 i = self.index.get(u)
                 if i:
                     drive[i] += d

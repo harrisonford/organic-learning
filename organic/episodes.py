@@ -119,11 +119,41 @@ class Episodes:
             r = self.returns.setdefault(int(self.mark[k]), [0, 0.0])
             r[0], r[1] = r[0] + 1, r[1] + unexpected
 
-    def read(self, seen, heard):
-        """{unit: drive} from the stored moments like this one (seen now, or heard now with the eyes closed)."""
+    key = "whole"  # what a moment is kept under: "whole" (the whole view) or "looked" (what the eye was on; 2026-11-23)
+
+    def __getstate__(self):
+        d = dict(self.__dict__)
+        d.pop("_kc", None)  # (the keys laid side by side: made again when needed)
+        return d
+
+    def _looked(self):
+        """Every stored moment's keys, side by side, and whose each is: the windows the eye fixated in that moment,
+        or the whole view when it fixated nothing."""
+        stamp = (self.n, self.writes)
+        if getattr(self, "_kc", None) is None or self._kc[0] != stamp:
+            keys, owner = [], []
+            for k in range(self.n):
+                if not self.eyes[k]:
+                    continue
+                v = self.views[k] if self.views is not None and self.views[k] is not None else self.seen[k][None]
+                keys.append(np.asarray(v, np.float32))
+                owner += [k] * len(v)
+            self._kc = (stamp, np.concatenate(keys) if keys else np.zeros((0, self.seen.shape[1]), np.float32), np.array(owner, int))
+        return self._kc[1], self._kc[2]
+
+    def read(self, seen, heard, looks=None):
+        """{unit: drive} from the stored moments like this one (seen now, or heard now with the eyes closed).
+        `looks`: what the eye fixates now. With key "looked" a moment is like this one as far as one of the windows
+        the eye was on then is like one it is on now (the whole view standing in where nothing was fixated)."""
         if not self.n:
             return {}
-        if seen is not None:
+        if seen is not None and self.key == "looked":
+            now = np.asarray(looks, np.float32) if looks is not None and len(looks) else np.asarray(seen, np.float32)[None]
+            keys, owner = self._looked()
+            like = np.full(self.n, -1.0, np.float32)
+            if len(keys):
+                np.maximum.at(like, owner, (keys @ now.T).max(axis=1))
+        elif seen is not None:
             like = np.where(self.eyes[: self.n], np.asarray(self.seen[: self.n], np.float32) @ seen, -1.0)
         elif heard is not None:
             like = np.where(self.eyes[: self.n], -1.0, self.heard[: self.n] @ heard)
