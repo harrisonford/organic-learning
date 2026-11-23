@@ -381,3 +381,12 @@ Still Kris's own:
   40,000, still in first words (0.43 / 0.46 / 0.49).
   Next: read the tuning (six runs of 10,000 pictures), then the three seeds; the lives' 45,000 and 50,000 tests;
   the showcase probe on seeds 1 and 2 when memory allows.
+- 2026-11-23 19:25 **How often a thing comes again in a life** (queue D 19, first half; VISION.md 19:20): photographs
+  0.1–1.9 times in 35,000 moments of first words, the adults' spoken lessons 5.6 times, social routines 66 times;
+  the paper says so. **Backprop with the relay, tuning so far**: 0.597 at 10,000 pictures (0.52 without; word
+  cells with the relay 0.623): the lead shrinks to a few points, as the referee expected; four tuning runs and six
+  full runs to come. An explainer page for Kris (published as a private artifact; source docs/paper/explainer.html).
+  PUBLISH.md brought up to date. Lives `plat_s0..2` at 45,000, still in first words (0.44 / 0.40 / 0.47; seed 1
+  dipped). Memory: 3.5 GB free with the backprop queue beside the lives.
+  Next: the tuning's end and the full runs; the lives' first stage change; the showcase probe on seeds 1 and 2
+  when the backprop queue is done (memory).

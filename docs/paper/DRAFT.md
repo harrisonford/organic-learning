@@ -311,10 +311,12 @@ picture-book pages on which several things appear. The world has stages: babblin
 and then pages. Within a stage 70% of moments belong to that stage and 30% return to earlier ones. Every 5,000
 moments we ask 300 held-out questions per stage.
 
-Two things must be said plainly. First, the learner does not see each picture once here. The world's pool of
-pictures is finite and is sampled with replacement, so pictures recur over a life of 100,000 moments, as the
-things in a child's home recur. Nothing is stored and replayed, but "seen once" is strictly true only of
-Experiment 1. **[pending: how often a picture recurs.]** Second, the judge is a model. A local 4-billion-parameter
+Two things must be said plainly. First, "seen once" is strictly true only of Experiment 1. The world draws its
+lessons from finite pools with replacement, so things recur, as the things in a child's home recur. For
+photographs the life is still close to a single pass: over the 35,000 moments one learner spent in first words, a
+CIFAR photograph was met 0.8 times on average, a COCO cut-out 0.1 times and a Commons photograph 1.9 times. The
+spoken lessons are another matter. There are about a thousand of them and each was met five or six times, and the
+ninety social routines some sixty times each. Nothing is stored and replayed; the repetition is the world's. Second, the judge is a model. A local 4-billion-parameter
 language model decides whether the learner's answer means what the adult's answer meant, lenient about form and
 strict about meaning. It agrees with a larger model on 93% of answers and wrongly accepts between 2 and 16 of 367
 wrong answers, depending on how they are batched. No person has labelled its judgements yet.

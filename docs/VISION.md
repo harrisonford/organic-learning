@@ -1107,3 +1107,27 @@ Kris, on the second PDF's way: a part that *shows* what was built (babbling, a t
 pictures with its answers) and how long it takes to answer quick and slow questions. Probe:
 `experiments/showcase_probe.py` (a saved learner asked item by item; ticks of looking before it speaks, ticks of
 speaking, eye moves; its size organ by organ).
+
+## 2026-11-23 (19:20): how often a thing comes again in a life; the like-for-like reference, first reading
+
+**Recurrence** (the lives' own counts of lessons lived by source, beside the number of different items the world
+holds; `plat_s0` to 45,000 moments, 35,000 of them in first words):
+
+| first words source | lessons lived | different items | each met on average |
+|---|---|---|---|
+| CIFAR names | 6,043 | 7,206 | 0.84 times |
+| COCO cut-outs | 5,915 | 50,655 | 0.12 |
+| Commons photographs | 5,887 | 3,102 | 1.9 |
+| the adults' spoken lessons | 6,026 | 1,076 | 5.6 |
+| social routines | 5,896 | 90 | 66 |
+
+In the pages stage held for 95,000 moments (`cleanw_s0`): a page 1.1 times, a spoken lesson 10 times. So for
+photographs a life is close to one pass, and for the spoken lessons it is not: the sources take turns whatever
+their size, and the small ones come round. The paper says so now. It also bears on text being the weak part
+(0.11–0.33 above the floor): that is after five to ten meetings, not one.
+
+**Backprop with the relay step, tuning so far** (seed 0, the first 10,000 pictures, 1,000 test pictures;
+`out/bench/backprop_relay_tune_s0.log`): relay fixed, rate 0.001: **0.597**; rate 0.003: 0.572. The reference
+without a relay had 0.40–0.53 in its tuning and 0.523 at 10,000 in its full run; the word cells with the relay have
+0.623 there. If this holds on three seeds and the whole stream, most of the lead over end-to-end backprop was the
+relay it had not been given, as the referee said. Four tuning runs and the six full runs are still to come.

@@ -134,3 +134,24 @@ organic learner behaves and what each part does, measured honestly, not a score.
   developmental learner, the two places of decorrelation, the fast store beside it, and the staged life.
 - The draft is docs/paper/DRAFT.md. Pending in it: the readout control's third seed, the ablation lives, the
   related-work section with every reference opened by hand.
+
+## Update, 2026-11-23: where publishing stands
+
+- **The paper**: docs/paper/DRAFT.md, second draft, rewritten for readers after three independent readings; title
+  "Organic Learning: Small-Scale Architecture Experiments Without Backpropagation" (Kris's; the term defined in the
+  introduction; the phrase is the title of US patent 10,846,592, to be cited). Built to PDF by docs/paper/build.py
+  (12 pages, four figures). An explainer page for Kris: docs/paper/explainer.html.
+- **What a hostile referee found and the logs confirmed** (VISION.md, 2026-11-23 18:00): both whitening steps are
+  batch; like for like (no relay) backprop wins 0.616 to 0.591; streaming LDA needs no relay; the life repeats its
+  lessons; one number was tuned. The draft says each. **The claim is now: a decorrelated code, and not the local
+  rule or the developed filters, carries the single-pass advantage; shown with the controls that could have
+  refuted it.**
+- **Owed before sending** (docs/LOOP.md, queue D): backprop with the relay step (running); the local lateral
+  network on the whole stream; all 10,000 test pictures; a life with no going back; three seeds of the answering
+  times; a person's labels on 200 judgements; picture licences for the examples figure; every reference opened by
+  hand (docs/paper/REFERENCES.md); the author line and the AI-use statement in Kris's words.
+- **arXiv**: Kris's account needs an endorsement for cs.NE (docs/paper/ENDORSEMENT.md; the code is kept out of this
+  public repository). A former coauthor with computer science papers on arXiv is the likeliest endorser. Licence:
+  CC BY 4.0.
+- **Zenodo**: Kris's account is linked to ORCID; a DOI is to be reserved in a draft record, nothing published until
+  the paper is ready; then two linked records (the PDF; the code and logs from a GitHub release).
