@@ -240,13 +240,44 @@ Also: a world that silently reverted to an older version after 50,000 moments of
 
 ## 8. Related work
 
-**[to be written from research_notes/, every reference opened by hand.]** In outline: Hebbian language models on
-made-up input (the assembly-calculus language organ, arXiv 2306.15364 and 2507.11788); deep Hebbian vision trained
-for many epochs (SoftHebb, arXiv 2209.11883); single-pass child's-view contrastive learning with backpropagation
-(BabyCL, arXiv 2606.05115), where one pass without large replay buffers is near chance; fast and slow memory in
-agents trained by gradient (Hill et al., arXiv 2009.01719); sparse distributed memory as a continual learner (arXiv
-2303.11934); random features and whitening (Coates, Lee & Ng 2011; Saxe et al. 2011); streaming LDA (Hayes & Kanan
-2020); complementary learning systems (McClelland et al. 1995).
+**[Kris: every reference here is still to be opened by hand. "[V]" marks what the assistant read in the paper's own
+text (research_notes/Relatives and publishability 2/); the rest is from abstracts or memory and may be wrong.]**
+
+*Local rules reading fixed features.* What Experiment 1 finds is in a known family: features that are not trained
+by the task, read by one trained layer. Random whitened filters with a pooled, rectified response were shown long
+ago to be hard to beat among single-layer feature learners (Coates, Lee & Ng 2011; Saxe et al. 2011). Streaming
+linear discriminant analysis (Hayes & Kanan 2020) and the fruit-fly associative learner (Shen, Dasgupta & Navlakha,
+arXiv 2107.07617) learn in one pass without forgetting, but on features from a network pretrained with labels by
+backpropagation [V]; a sparse-distributed-memory learner (Bricken et al., ICLR 2023, arXiv 2303.11934) likewise, and
+it is itself trained by backpropagation [V]. Closest in mechanism is a delta rule on a linear readout over fixed
+random sparse codes for continual learning of text domains (arXiv 2607.26523) [V]. Ours differs in that no part was
+ever trained by backpropagation or with labels, the input is photographs, and the comparison is the same shape
+trained end to end at equal exposure.
+
+*Hebbian vision.* Deep Hebbian networks reach high accuracy on CIFAR-10 with many epochs of local learning and a
+gradient-trained supervised head (SoftHebb: Journé et al., ICLR 2023, arXiv 2209.11883 [V]); its single-layer
+precursor reports a one-epoch advantage over backpropagation (Moraitis et al. 2022, arXiv 2107.05747). We add the
+single-pass, label-stream setting, the random-filter row, and the finding that it is decorrelation at two places
+that carries the result.
+
+*Hebbian models of word learning.* The assembly-calculus language models (Mitropolsky & Papadimitriou, arXiv
+2306.15364 and 2507.11788) and the brain-constrained spiking models of the Berlin group (Tomasello et al. 2018;
+Constant, Pulvermüller & Tomasello 2023, fast mapping after a babbling-like stage) learn words with Hebbian rules
+only, from made-up input: toy sentences and pre-formed patterns standing for vision [V]. Ours learns from
+photographs and adult-written speech, and is far less principled as a model of any brain area.
+
+*One pass with backpropagation.* A child's-view contrastive model trained in one chronological pass falls to near
+chance without replay buffers holding most of the stream (BabyCL, arXiv 2606.05115) [V]; this is the setting in
+which our end-to-end reference also trails.
+
+*Fast and slow memory.* Complementary learning systems (McClelland, McNaughton & O'Reilly 1995) predict the
+dissociation of Section 3; agents trained by gradient with an external episodic memory show one-shot word learning
+(Hill et al., arXiv 2009.01719). The store here is a dense associative memory read steeply (Krotov & Hopfield
+2016). Our contribution is the measurement beside other learners, and the finding that such a store must be keyed
+by what the eye is on (Section 4), not by the whole view.
+
+*Learned lateral inhibition.* Hebbian feedforward with anti-Hebbian lateral learning (Földiák 1990; Zylberberg,
+Murphy & DeWeese 2011; Pehlevan & Chklovskii, arXiv 1503.00680 [V, equations 7 and 8 used unchanged]).
 
 ## 9. Statement on the use of AI
 
