@@ -1,293 +1,441 @@
-# What a learner that sees each moment once needs: decorrelation and a fast store
+# It Was the Code, Not the Rule: Taking Apart a Brain-Inspired Learner That Never Backpropagates
 
-**First draft for Kris, 2026-11-20. Not for circulation.** Written by the assistant from the project's records
-(docs/VISION.md, docs/JUDGING.md, docs/RESEARCH_MEMORY.md, docs/CRAFT.md). Every number is from a log in `out/`.
-Marked **[pending]**: runs that are queued or running tonight. Marked **[check]**: a reference not yet opened by
-hand for this draft. Nothing here was tuned to raise a number; the benchmark is a ruler (docs/LOOP.md, rule 7).
+**Second draft, 2026-11-23, rewritten after three independent readings (a style survey of well-known papers, a
+hostile referee, a cold reader). Not for circulation.** This note is not part of the paper (the build leaves it
+out). Every number is from a log in `out/`. **[pending]** marks a run that is not finished. References are tracked
+in REFERENCES.md and each must be opened by hand before anything is sent. Other titles to choose from:
+"Raising a Learner Without Backpropagation: What Helped, What Did Nothing, What We Got Wrong";
+"We Built a Brain-Like Learner Without Backprop. The Whitening Did the Work.";
+"The Relay Did It"; "Most of the Brain We Built Did Nothing".
 
 ---
 
 ## Abstract
 
-We describe a small learner built only from local learning rules, with no backpropagation anywhere, that sees each
-moment of its experience once: an ear, a visual cortex developed without labels, a decorrelating relay, word cells
-that learn by a delta rule on two dendrites, a small episodic store, and a mouth that babbles before it speaks. We
-ask what each part buys, in two settings. On CIFAR-10 presented as a single-pass stream, the word cells reading the
-relayed code name 0.687 ± 0.005 of held-out pictures (three seeds), against 0.616 ± 0.023 for backpropagation
-through a network of the same shape tuned for one pass; backpropagation needs each picture about five times to draw
-level. The lead is the relay's: without decorrelation between cortex and word cells the same cells reach 0.591. A
-gradient readout on the same relayed code does as well (0.70): the finding is about the code, not the reader.
-Hebbian development of the cortical filters buys nothing over random filters (0.693 ± 0.002), and readouts that keep
-second moments and invert a matrix stay five points ahead (0.739). A class shown once is not held by the slow word
-cells (0.00) and is held with the episodic store (1.00), with the old classes untouched; no learner tried
-generalises from a few pictures to the kind. In a staged life with real photographs and adult-written speech, three
-seeds pass from babbling through first words to two-word exchanges with no hand-wired drive, scored above what a
-blind child would get; earlier stages improve while a later one is lived. We report what failed as carefully: replay
-from the store did not protect earlier stages, a second cortical layer added nothing, no new-word bias arose, and
-the stage after two words was not passed. We also report three errors of method that inflated earlier results.
+We set out to show that a learner made only of local learning rules, with no backpropagation, can learn from a
+single pass through its experience. It can. On CIFAR-10 shown once, one picture at a time, it names 69% of
+held-out pictures; a network of the same shape trained end to end by backpropagation names 62%. Then we took the
+learner apart to see which part had earned the win, and the credit went somewhere we had not expected. It belongs
+to the code and not to the rule. Two fixed decorrelation steps, one before the feature layer and one after it, do
+the work: a gradient-trained readout on the same code does exactly as well as our local one, random filters do as
+well as the Hebbian filters we had carefully developed, and without the second decorrelation backpropagation wins.
+Both steps are computed in batch before learning starts, which is the one place where "local rules only" is not
+yet true; a local Hebbian and anti-Hebbian network recovers about four fifths of the effect in a first test. A
+small episodic store gives the learner one-shot memory of a picture but not of a category. We also raised the
+learner through a staged childhood of photographs and adult speech, and we report what each part did there, what
+did nothing, and four mistakes of method that had made earlier versions look better than they were.
 
-## 1. Introduction
+## Introduction
 
-Learning in animals is local, online and single-pass: a synapse changes by what its two ends do, and no moment is
-lived twice. Backpropagation is none of these. A large literature asks whether local rules can replace it at scale;
-the present evidence says not yet [check: SoftHebb; scaling studies]. We ask a smaller question that the evidence
-does not answer: **in a learner that sees each moment once and uses only local rules, which parts carry the
-learning, and which do nothing?**
+Brains learn under constraints that deep learning does not accept. A synapse changes according to what its own two
+ends are doing, nothing sends an error signal backwards through the layers, and no moment of a life comes round a
+second time to be studied again. For three years the question of whether local learning rules can stand in for
+backpropagation has mostly been asked at scale, and at scale the answer so far is "not yet".
 
-The learner was built slowly, part by part, each part admitted only if it is something a brain is known to do and if
-it left the behaviour to emerge (no rule that wires a signal to a behaviour). It was raised in a staged world:
-babbling, echo, first words, two-word exchanges. That history is the second half of this paper. The first half
-puts the same parts on a public benchmark beside references a reader will ask for.
+We asked something smaller, and we asked it the slow way. We built a learner as one might assemble a small
+animal: an ear, a visual cortex, a layer of cells that learn words, a memory for single episodes, a mouth that
+babbles before it speaks. A part was admitted only if brains are known to do something like it, and only if it
+left behaviour free to emerge; we allowed ourselves no rule that wires a signal directly to a behaviour. The
+learner was then raised in a staged world, from babbling through echoing to first words, on real photographs and
+on speech written for it.
 
-What we claim:
+It worked better than we had expected, and for a while we thought we knew why. Our account was the obvious one:
+local rules, patiently assembled, are simply good at learning from one pass. This paper is about what happened
+when we tested that account. We put the same parts on a public benchmark, lined up the baselines a sceptical
+reader would ask for, and removed the parts one at a time.
 
-1. **Fixed features, decorrelated at two places and read by one layer of local synapses, learn more from a single
-   pass than the same shape trained end to end** (0.69 against 0.62 on CIFAR-10; 0.40 against 0.24 after 500
-   pictures). The decorrelation between cortex and word cells is worth 10 points on CIFAR-10 and 13 on the life's
-   own photographs. A gradient readout on the same code does as well as the word cells: the claim is about the
-   code and about not sending errors through layers, not about a better last-layer rule.
-2. **A fast store beside slow weights gives one-shot memory of an instance without disturbing what is known**, and
-   gives no memory of a kind. This is the complementary-learning-systems prediction, measured on a public set with
-   other learners beside it.
-3. **Developed filters buy little**: nothing on the benchmark, 0.05–0.10 on a fixated thing in the life. We had
-   expected more.
-4. **A staged life can be passed without hand-wired drives**, if what the learner does on the way (babbling, echo,
-   a bias to "no") is observed and never made a target.
+Before looking at the results, it is worth saying what would have vindicated us. If the local learning rule
+deserved the credit, three things should hold. The local readout should beat a gradient-trained readout given the
+same features. The Hebbian filters we developed should beat filters that were never trained. And the learner's
+lead over backpropagation should survive the removal of any one preprocessing step. None of the three holds.
 
-What we do not claim: an alternative to backpropagation at scale; a model of the child (the input is not a child's);
-the best gradient-free learner on these features (it is not).
+What does hold is narrower and, we think, more useful. Fixed features that are decorrelated twice, and read by a
+single layer of plastic synapses, learn more from one pass than the same architecture trained end to end. The
+reader can be local or gradient-based; it does not matter. A fast episodic store beside the slow weights adds
+one-shot memory of an instance, disturbs nothing already learned, and does not generalise to the category. Most
+of the rest of what we built, including the parts we were proudest of, did little or nothing.
 
-## 2. The learner
+We show these things on one small benchmark and in one small world. We conjecture, but do not show, that the same
+division of credit would be found in other local learners that report a single-pass advantage. We do not claim an
+alternative to backpropagation at scale, a model of a child, or even the best gradient-free learner on these
+features; a streaming linear discriminant beats ours by five points, and we say so in the first table.
 
-Everything learns online, one moment at a time. No part is frozen during a life.
+## The learner
 
-- **Ear.** Bytes of text are chunked into the ear's own units by use (what is heard together often becomes one
-  unit). An order-aware echo of the exchange so far is its output to the word cells.
-- **Visual cortex.** One layer of 256 kinds of 5 × 5 colour windows. The windows arrive decorrelated (as the retina's
-  centre-surround cells decorrelate natural scenes, Atick & Redlich 1992 [check]). A kind's response is its drive
-  above the average drive of all kinds at that place (lateral inhibition; the "triangle" of Coates, Lee & Ng 2011
-  [check]). The kinds develop by winner-take-all Hebbian learning with a conscience, without labels. The cortex
-  sends on the average activity of each kind in each of 16 regions of the view: 4,096 numbers.
-- **Relay.** The summary's own correlations are removed on the way to the word cells (lateral anti-Hebbian
-  inhibition does this in a brain, Földiák 1990 [check]). **Here it is computed in batch** from the summaries of
-  6,000 pictures, before the life. This is the one part that is not yet learned online by a local rule (Section 7).
-- **Word cells.** Every unit of the ear that is heard in a reply has a cell. Each cell has two dendrites that learn
-  to predict its firing by one local rule, change = plasticity × (fired − expected by this dendrite) × input
-  (dendritic prediction of somatic firing, Urbanczik & Senn 2014 [check]; the Rescorla–Wagner rule for cues). The
-  content dendrite listens to the relayed visual code and the units heard; the context dendrite listens to the ear's
-  echo and predicts what comes next. A cell is active when both agree. A reply is a sequence of cells.
-- **Episodic store.** 2,000 single moments, written whole when the word cells did not expect the reply, read by
-  likeness to what is seen now (steeply: a moment, not a kind; Krotov & Hopfield 2016 [check]), the oldest
-  forgotten when full (McClelland, McNaughton & O'Reilly 1995 [check]).
-- **Looking.** On a page with several things the gaze goes to what stands apart; match neurons compare what is
-  fixated with what was named.
-- **Mouth and chooser.** Motor units are chunked by babbling; an auditory-motor map learns what each sounds like. A
-  chooser learns from reward whether to say back what was heard, to speak from the word cells, or from the store.
+Everything in the learner updates online, one example at a time, and nothing is frozen while it learns. We use a
+few home-made names and introduce them here once. An *example* in the staged world is a **moment**: one picture,
+one thing said to the learner, one reply expected. A whole training run from random initialisation is a **life**.
 
-Set by hand, and reported as such: sizes (256 kinds, 2,000 cells, 2,000 moments), the shrinkage of the two
-decorrelations, the steepness of the store's comparison, the stage order, and the pass marks.
+**Ear.** Text arrives as bytes. The ear groups bytes that often occur together into units of its own, much as a
+sub-word tokeniser would, but online and by use. It hands the rest of the learner two things: the units just
+heard, and a decaying, order-preserving trace of the exchange so far.
 
-## 3. Experiment 1: a public benchmark as a single-pass stream
+**Visual cortex.** One convolutional layer of 256 filters over 5 × 5 colour patches. Each patch is first
+contrast-normalised and whitened, the textbook stand-in for what centre-surround cells in the retina do to natural
+scenes (Atick & Redlich 1992). A filter's response is its drive above the average drive of all filters at that
+location, $r_k = \max(0,\, u_k - \bar{u})$, a soft form of lateral inhibition that Coates, Lee & Ng (2011) called
+the triangle activation. The filters are trained without labels by winner-take-all Hebbian learning with a
+frequency penalty that keeps every filter in use. The cortex passes on the average response of each filter in each
+cell of a 4 × 4 grid: a code of 4,096 numbers.
 
-**Setup.** The cortex develops on CIFAR-100's training pictures without their labels, and its relay is settled on
-6,000 of them. Every CIFAR-10 training picture is then seen once, in a random order, asked "what is this?" and told the class
-name. 2,000 held-out test pictures are named at fixed points of the stream. Three seeds; a seed changes the cortex,
-the order of the stream and every learner's initial state.
+**Relay.** Between the cortex and the word cells, the code is whitened again: $z = (C + \epsilon\lambda_{\max} I)^{-1/2}(s - \mu)$,
+with $C$ and $\mu$ estimated from 6,000 unlabelled pictures and $\epsilon = 0.0005$. In a brain, learned lateral
+inhibition among the neurons that carry the code would do this (Földiák 1990). **In our learner both whitening
+steps, this one and the one on the patches, are eigendecompositions computed in batch before learning begins.**
+They are the two places where "local and online" is not yet true of what we built, and since the relay turns out
+to be the hero of the paper, the reader should keep that in mind from here on. A later section reports a first
+attempt to replace it with a local rule.
 
-**Learners on the same code.** The word cells (with and without the relay, with and without the store); nearest
-class mean; streaming linear discriminant analysis from the exact running sums (Hayes & Kanan 2020 [check]); a ridge
-regression on everything seen so far (not a stream learner: the reference for a linear readout). The last two pick
-their shrinkage on the test pictures, which is generous to them.
+**Word cells.** The output layer. Every unit of the ear that has been heard in a reply gets a cell, so in
+standard terms the word cells are the output units of a linear readout over sub-word units. Each cell has two
+sets of input weights, which we call dendrites. The content dendrite listens to the relayed visual code and to
+what was just heard; the context dendrite listens to the ear's trace and predicts which unit comes next. Each
+dendrite learns by the delta rule to predict the cell's own firing, $\Delta w = \eta\,(y - \hat{y})\,x$, where $\hat{y}$ is
+that dendrite's prediction (in the spirit of Urbanczik & Senn 2014, and identical to the Rescorla–Wagner rule). A
+cell fires when its two dendrites agree, and a reply is a sequence of cells. We want to be plain about one thing:
+a delta rule on a single layer *is* gradient descent on that layer. What the learner never does is send an error
+back through a layer to change the features beneath it.
 
-**Backpropagation of the same shape.** The same decorrelated windows in, 256 filters learned from random ones, the
-same response and regional average, a linear readout; softmax, Adam. Learning rate and pictures per step were tuned
-on the first 10,000 pictures of seed 0 (14 settings; 0.40–0.53 there). Also: with one or four earlier pictures lived
-again for each new one; started from the developed filters; with the developed filters kept.
+**Episodic store.** A buffer of 2,000 single moments, written whole whenever the word cells failed to predict the
+reply, read by similarity to what is in view now, and overwritten oldest first. The similarity is passed through a
+steep nonlinearity so that the store returns a moment and not an average of moments (Krotov & Hopfield 2016). This
+is the fast half of a complementary-learning-systems pair (McClelland, McNaughton & O'Reilly 1995).
 
-**Results** (mean ± spread of three seeds; (1) = one seed; Figure 1, `fig_benchmark.pdf`, shows the curves):
+**Looking.** When a picture contains several things, a gaze driven by colour contrast fixates the regions that
+stand out, and the fixated region is then seen at full resolution, as the thing would look alone. A small set of
+match units compares what is fixated with a name that was just heard.
+
+**Mouth.** Motor units are formed by babbling, and an auditory-motor map learns what each sounds like. A gating
+policy learns from reward whether to echo what was heard, to speak from the word cells, or to speak from the store.
+
+We set the following by hand: the sizes (256 filters, 2,000 word cells, 2,000 stored moments), the two whitening
+regularisers, the steepness of the store's similarity, and the order of the stages. One of these was tuned, and we
+come back to it under mistakes.
+
+## Experiment 1: CIFAR-10, seen once
+
+### Setup
+
+The cortex develops its filters on the CIFAR-100 training pictures, without their labels, and the relay is fitted
+on 6,000 of them. Then every CIFAR-10 training picture is shown exactly once, in random order. The learner is
+asked "what is this?" and is told the class name. At fixed points along the stream we test on 2,000 held-out
+pictures. There are three seeds; a seed changes the filters, the order of the stream, and every learner's initial
+state. With 2,000 test pictures the sampling error of an accuracy is about 0.010, so we do not interpret
+differences smaller than 0.02. A ± is the standard deviation over the three seeds.
+
+Beside the word cells we run, on exactly the same code: a softmax readout trained by gradient descent (17
+learning-rate settings run side by side, the best after 10,000 pictures reported); a nearest-class-mean
+classifier; streaming linear discriminant analysis computed from exact running sums (Hayes & Kanan 2020); and a
+ridge regression refitted on everything seen so far, which is not a stream learner but is the natural ceiling for
+a linear readout. The last two choose their regulariser on the test pictures, which is generous to them.
+
+The backpropagation baseline has the same shape as the learner minus the relay: the same whitened patches go in,
+256 filters are learned from a random start, the same response and pooling follow, and a linear layer reads the
+result with a softmax, trained with Adam. We tuned its learning rate and batch size on the first 10,000 pictures
+of seed 0 (14 settings, which ranged from 0.40 to 0.53 there). We also ran it with replay, one or four earlier
+pictures revisited for each new one; starting from our developed filters; and with those filters frozen.
+
+### The local learner beats one-pass backpropagation
+
+Figure 1, `fig_benchmark.pdf`, shows the curves, and the table gives three points along them.
 
 | learner | 500 | 5,000 | 50,000 pictures |
 |---|---|---|---|
 | streaming LDA + relay | 0.375 ± 0.021 | 0.620 ± 0.002 | 0.739 ± 0.001 |
 | ridge + relay | 0.395 ± 0.010 | 0.620 ± 0.003 | 0.735 ± 0.001 |
+| streaming LDA, no relay (one seed) | 0.397 | 0.623 | 0.722 |
+| streaming LDA + relay, random filters | 0.397 ± 0.001 | 0.599 ± 0.001 | 0.719 ± 0.005 |
+| gradient softmax readout + relay | | | 0.694 ± 0.007 |
 | word cells + relay, random filters | 0.388 ± 0.034 | 0.602 ± 0.003 | 0.693 ± 0.002 |
-| **word cells + relay** | 0.398 ± 0.027 | 0.595 ± 0.005 | **0.687 ± 0.005** |
-| backprop, 4 lived again per new picture (1) | 0.355 | 0.550 | 0.688 |
-| backprop, 1 lived again per new picture | 0.277 ± 0.012 | 0.490 ± 0.020 | 0.661 ± 0.011 |
+| **word cells + relay (the learner)** | 0.398 ± 0.027 | 0.595 ± 0.005 | **0.687 ± 0.005** |
+| backprop, 4 replays per new picture (one seed) | 0.355 | 0.550 | 0.688 |
+| backprop, 1 replay per new picture | 0.277 ± 0.012 | 0.490 ± 0.020 | 0.661 ± 0.011 |
 | **backprop, one pass** | 0.242 ± 0.005 | 0.466 ± 0.008 | **0.616 ± 0.023** |
 | word cells, no relay | 0.312 ± 0.014 | 0.486 ± 0.014 | 0.591 ± 0.007 |
 | nearest class mean + relay | 0.426 ± 0.005 | 0.548 ± 0.004 | 0.569 ± 0.002 |
-| backprop readout on kept developed filters (1) | 0.296 | 0.476 | 0.550 |
+| backprop readout on frozen developed filters (one seed) | 0.296 | 0.476 | 0.550 |
 
-- The word cells through the relay are ahead of one-pass backpropagation throughout, by 16 points after 500
-  pictures and 7 at the end. Backpropagation with four pictures lived again per new one (five times the updates)
-  draws level.
-- Without the relay they are not ahead. The lead belongs to a fixed, decorrelated code read by a local rule.
-  A softmax readout learned by gradient on the very same relayed code (17 settings side by side, the one best
-  after 10,000 pictures) reaches 0.696 and 0.702 where the word cells reach 0.686 and 0.693 (three seeds: 0.694 against 0.687). So the finding is about the code: fixed, decorrelated features read by one layer of local synapses.
-  A delta rule on one layer is gradient descent on that layer; what the learner does without is sending errors back
-  through layers. The word cells are one local reader of the code, level with the gradient reader.
-- Development of the filters buys nothing (0.687 developed, 0.693 random), as random whitened patches have long
-  been known to be hard to beat [check: Coates & Ng 2011; Saxe et al. 2011].
-- The word cells are five points under readouts that keep the pictures' second moments. They are an online, local
-  approximation of what those compute with a matrix inverse.
+The learner is ahead of one-pass backpropagation at every point of the stream: by 16 points after 500 pictures and
+by 7 at the end. Backpropagation catches up when it is allowed to revisit four old pictures for every new one,
+which is five times the number of updates; we ran that on one seed only. So far, so pleasing.
 
-**A new class.** Five classes are held back in turn; after 5,000 pictures of the other nine, the held-back class is
-shown 1, 5 and 20 times with 20 other pictures after each showing (three seeds).
+### But the credit belongs to the code
 
-| learner | shown pictures named with the new name (1 / 5 / 20 showings) | 200 other pictures of the new class | old classes still right |
+Take the relay away and the order flips. Without it the word cells reach 0.591, and one-pass backpropagation, at
+0.616, is ahead of them. Like for like, backpropagation wins. Everything the learner gains over it, and three
+points more, comes from one whitening step that the backpropagation baseline was not given. That is the fair way
+to read our headline number, and it is why the headline is not in the title. **[pending: the end-to-end baseline
+with a whitening layer in front of its readout, which is the comparison this paragraph calls for.]**
+
+Is the local rule at least a good reader of the code? It is exactly as good as gradient descent and no better. A
+softmax readout trained by gradient on the same relayed code reaches 0.694, against 0.687 for the word cells,
+inside the noise. Without the relay the gradient readout falls to 0.56–0.58, just as the word cells do.
+
+Why should whitening matter so much to a one-pass learner? We first met the effect in the learner's own world,
+where the relay was worth eleven points, and we checked the dull explanations there. It is not a matter of
+exposure: three passes over the same examples without the relay gained three points. It is not step size: larger
+steps gained nothing and then diverged. A delta rule that sees each example once learns quickly along the few
+strong directions of a correlated input and hardly at all along the weak ones, and the weak ones are where a cat
+differs from a dog. Whitening makes all directions equally easy. This is textbook optimisation, and we claim no
+novelty for it. What we had not appreciated is how completely it accounts for the single-pass advantage.
+
+The streaming discriminant shows the same thing from the other side. It keeps the second moments of its input and
+inverts them itself, so it should not care whether somebody whitened the code beforehand, and it does not: 0.722
+without the relay and 0.741 with it on the seed where we ran both. The relay adds no information. It conditions
+the code for a reader too simple to condition it for itself.
+
+### Hebbian development did nothing for the learner
+
+We spent weeks on the visual cortex. With random filters, never trained at all, the learner scores 0.693; with
+the developed ones, 0.687. Random whitened patches have been known to be hard to beat for a long time (Coates, Lee
+& Ng 2011; Saxe et al. 2011), and we rediscovered it the expensive way. The developed filters are not worthless:
+the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in
+them is better. Our reader cannot use it. When we looked inside, the developed filters were more selective than
+random ones but 658 pairs among them were near copies of each other; random filters had none.
+
+### Second-order readers stay ahead
+
+The streaming discriminant and the ridge regression finish five points above the learner. They keep a covariance
+matrix and invert it; the word cells are an online, first-order approximation of what those methods compute. We
+are not the best gradient-free learner on our own features, and a reader who only wants accuracy from a single
+pass should use a streaming discriminant.
+
+### The relay, learned locally: a first attempt
+
+Because the relay earns the result, its batch computation is the most uncomfortable fact in the paper. As a first
+step towards a local form we trained the Hebbian and anti-Hebbian network of Pehlevan & Chklovskii (2014), using
+their update rules unchanged, as lateral inhibition among the 256 filters, and used its settled activities as the
+code. Over the first 10,000 pictures and with no relay at all, the word cells rise from 0.500 to 0.595 on one
+seed and from 0.532 to 0.619 on a second; the batch relay takes them to 0.623 and 0.632. A local, online rule
+therefore recovers roughly four fifths of what the batch step gives. The streaming discriminant is again unmoved
+(0.66–0.67 either way), which is what one expects if the network conditions the code without adding to it. This
+is two seeds and a fifth of the stream, the patch whitening is still computed in batch, and our own first
+formulation of lateral inhibition ran away and had to be thrown out. **[pending: the third seed, and the full
+stream.]**
+
+### A fast store remembers a picture, not a category
+
+We held out one class at a time, trained on 5,000 pictures of the other nine, and then showed the held-out class
+1, 5 and 20 times, with 20 other pictures after each showing.
+
+| learner | shown pictures given the new name (1 / 5 / 20 showings) | 200 other pictures of the new class | old classes still right |
 |---|---|---|---|
 | word cells | 0.00 / 0.00 / 0.05–0.08 | 0.00 | 0.60–0.62 |
 | word cells + episodic store | 1.00 / 0.96–1.00 / 0.99–1.00 | 0.00 | 0.60–0.63 |
 | nearest class mean | 1.00 / 1.00 / 0.95–0.98 | 0.00 / 0.01 / 0.08 | 0.55–0.57 |
 | linear discriminant analysis | 1.00 / 1.00 / 1.00 | 0.00 | 0.59–0.62 |
 
-The slow cells do not hold a picture seen once; with the store they do, and nothing known is disturbed. The other
-learners hold it by construction. No learner reaches the kind from twenty pictures: one-shot learning here is memory
-of an instance.
+The slow word cells do not remember a picture they have seen once. With the store they do, and nothing they
+already knew is disturbed. That is the complementary-learning-systems prediction, and it should not impress
+anyone much: a buffer that returns an input it stored twenty steps ago is correct by construction. The more
+interesting column is the third. Nobody, the store included, extends the new name to other pictures of the class.
+We suspect this says as much about the test as about the learners, since a class mean estimated from 20 pictures
+in 4,096 dimensions is far noisier than its rivals estimated from 550, and we draw only the modest conclusion:
+one-shot learning in this learner is memory of an instance, and we have not shown it to be more.
 
-## 4. Experiment 2: a staged life
+## Experiment 2: raising it
 
-**World.** Real photographs (CIFAR, COCO, Wikimedia Commons) and speech written by language models acting only as
-adults: comments on pictures, echo games, naming, picture-book pages with several things, two-word lessons, leisure
-talk. Stages: babbling, echo, first words, two words. In a stage 70% of moments are the stage's own and 30% go back
-to earlier ones. Every 5,000 moments, 300 held-out items per stage are asked.
+The benchmark is where the parts are measured against other people's methods. The learner was not built there. It
+was built in a small world of its own, and this section reports what the parts do in that world. The evidence
+here is weaker than in Experiment 1, for reasons we give as we go, and we have tried to claim correspondingly less.
 
-**Judging.** A local 4B model judges whether the child's answer means what the adult's did: lenient on form, strict
-on meaning. The adult always answers with their own word (a recast); acceptance decides reward only. A score counts
-only **above a blind floor**: on the questions that cannot be answered by saying the question's last word back, the
-judged score beside the best of always-yes, always-no and the commonest answer, (score − floor) / (1 − floor).
-Babbling and echo are measured at every test and never held for promotion; the echo stage is a period, not a mark.
+### The world, and how answers are scored
 
-**Results** (three seeds, from birth, no hand-wired drive, no replay):
+The pictures are real photographs from CIFAR, COCO and Wikimedia Commons. The speech is written by language
+models playing adults, and only adults: they comment on pictures, play echo games, ask for names, and ask about
+picture-book pages on which several things appear. The world has stages: babbling, an echo period, first words,
+and then pages. Within a stage 70% of moments belong to that stage and 30% return to earlier ones. Every 5,000
+moments we ask 300 held-out questions per stage.
 
-- Babbling is left after 5,000–10,000 moments; the echo period is lived (0.84–0.94 at its one test).
-- First words is passed at 15,000 / 20,000 / 15,000 moments (above the floor 0.27–0.29 at the provisional mark of
-  0.25).
-- Held in two words, the score above the floor rises for 20,000–30,000 moments and flattens:
+Two things must be said plainly. First, the learner does not see each picture once here. The world's pool of
+pictures is finite and is sampled with replacement, so pictures recur over a life of 100,000 moments, as the
+things in a child's home recur. Nothing is stored and replayed, but "seen once" is strictly true only of
+Experiment 1. **[pending: how often a picture recurs.]** Second, the judge is a model. A local 4-billion-parameter
+language model decides whether the learner's answer means what the adult's answer meant, lenient about form and
+strict about meaning. It agrees with a larger model on 93% of answers and wrongly accepts between 2 and 16 of 367
+wrong answers, depending on how they are batched. No person has labelled its judgements yet.
 
-| age | seed 0: first words / two words | seed 1 | seed 2 |
+A raw score would flatter the learner, because many questions can be answered without looking. We therefore
+report every score **above a blind baseline**. We drop the questions that can be answered by repeating the
+question's last word, and on the rest we compare the learner with the best of three blind strategies: always
+"yes", always "no", and always the commonest answer. The score is the fraction of the distance from that baseline
+to a perfect answer, (score − baseline) / (1 − baseline). On a scale where a learner that ignores the picture
+scores zero and an adult scores one, ours reach about 0.4.
+
+### What three lives look like
+
+Three lives were run from random initialisation, with no engineered exploration bonus and no replay. All three
+stop babbling within 5,000 to 10,000 moments and pass through the echo period. In first words the score above the
+blind baseline climbs to 0.28–0.40, and it goes on climbing after the world has moved on to pages:
+
+| age | seed 0: first words / pages | seed 1 | seed 2 |
 |---|---|---|---|
-| entering two words | 0.28 / 0.19 | 0.36 / 0.15 | 0.40 / 0.23 |
-| 50,000 | 0.38 / 0.37 | 0.44 / 0.36 | 0.43 / 0.36 |
-| 95,000 | 0.40 / 0.41 | 0.44 / 0.33 | 0.45 / 0.41 |
+| on entering the pages stage | 0.28 / 0.19 | 0.36 / 0.15 | 0.40 / 0.23 |
+| 50,000 moments | 0.38 / 0.37 | 0.44 / 0.36 | 0.43 / 0.36 |
+| 95,000 moments | 0.40 / 0.41 | 0.44 / 0.33 | 0.45 / 0.41 |
 
-- **First words improves while two words is lived** (0.28–0.40 → 0.40–0.45).
-- On the life's own photographs, each naming moment seen once, the word cells name 0.52 of held-out pictures among
-  16–25 names (three seeds; chance 0.05–0.09); the same shape by backpropagation on the same moments 0.39 after one
-  pass and 0.50 after five.
-- A name heard once with a new kind of thing: said for the same picture 0.9 with the store and 0.1 without; for
-  another picture of the kind 0.0.
-- Observed, not asked for: echo fades by itself once words work (the question's last word is said back in
-  0.07–0.10 of answers); a slight bias to "no" (−0.04 to −0.17), where two-year-olds have a bias to "yes" [check].
-- **What each part buys** (one part taken away, three seeds each from birth, at 50,000 moments; mean above the
-  blind floor; Figure 3, `fig_ablation.pdf`, shows the seeds):
+The pages score rises for 20,000 to 30,000 moments and then flattens at about 0.4. First words improves while the
+learner is in the pages stage, which sounds like transfer but need not be: three moments in ten are still
+first-words lessons, so this is at least partly continued training. **[pending: a life with no return to earlier
+stages.]**
 
-| | first words | naming a thing on a page | "is there a …?" |
+These lives moved from stage to stage when a score crossed a pass mark that we had chosen with earlier scores in
+front of us. We no longer think a mark of ours should decide when a learner is ready, and the lives now running
+move on when the curve of the current stage stops rising. Under that rule the three seeds stay in first words
+more than twice as long and are still improving at 0.43–0.46. **[pending: those lives; the same lessons in
+shuffled order.]**
+
+Some things we observed without asking for them. Echoing fades by itself once words start to work; by the pages
+stage the learner repeats the question's last word in under a tenth of its answers. It has a slight bias towards
+"no", where two-year-old children are reported to have a bias towards "yes". And on the life's own photographs,
+with each naming moment taken once, the word cells name 0.52 of held-out pictures among 16 to 25 names, where the
+same architecture trained by backpropagation on the same moments names 0.39 after one pass and 0.50 after five.
+That backpropagation run had a single learning rate and optimiser and was not tuned as the CIFAR-10 baseline was.
+
+### Removing one part at a time
+
+We ran each ablation as three lives from random initialisation and read the scores at 50,000 moments.
+Figure 2, `fig_ablation.pdf`, shows the seeds; the table gives the means.
+
+| | naming a single picture | naming a thing on a page | "is there a …?" on a page |
 |---|---|---|---|
-| all parts | 0.42 | 0.36 | 0.44 |
-| never-developed cortex | 0.41 | 0.04 | 0.27 |
+| the whole learner | 0.42 | 0.36 | 0.44 |
+| filters never developed | 0.41 | 0.04 | 0.27 |
 | no relay | 0.35 | 0.19 | 0.40 |
 | no looking | 0.42 | 0.02 | 0.36 |
-| no match neurons | 0.42 | 0.33 | 0.29 |
+| no match units | 0.42 | 0.33 | 0.29 |
 | no episodic store | 0.44 | 0.45 | 0.44 |
 
-  The relay is the only part whose absence costs first words. Looking is what naming on a page is made of. Match
-  neurons matter for "is there" on two seeds of three. Two rows needed a second look, and it changed their reading.
-  Asked view by view, every brain names the fixated thing alone about as well (developed kinds 0.48–0.54 of pages,
-  never-developed 0.39–0.46); but the store is written and read under the whole view, a page seen whole is coarse,
-  and coarse pages look alike, so the store gives back another page's name. With the store silenced for the asking
-  the full brain names 0.48–0.50 of pages (0.36–0.45 with it) and the never-developed one 0.33–0.44 (0.07–0.15).
-  So development is worth 0.05–0.10 on a fixated thing, and the store as keyed costs naming on a page.
-- **[pending: three lives under the no-mark rule (running); the same lessons in shuffled order.]**
+The relay is the only part whose removal costs anything on single pictures, in all three seeds, just as on the
+benchmark. Looking is what page naming depends on: without it, 0.36 falls to 0.02. The match units may matter for
+"is there a …?", but the evidence is two seeds out of three, and the seeds of the whole learner themselves range
+from 0.36 to 0.52 on that question, so we would not lean on it.
 
-## 5. What did not work
+Two rows of this table made no sense to us, and chasing them was the most instructive week of the project. Why
+would undeveloped filters, which name single pictures perfectly well, be unable to name a thing on a page? And why
+would removing the episodic store make page naming *better*?
 
-- **Replay from the store did not protect earlier stages.** The store filled with leisure talk (55%), its surprise
-  measure read 0.84 for everything, and old stages were 3% of what came back.
-- **The stage after two words was not passed** by any brain, and earlier stages slid while it was lived. Its test
-  turned out to be mostly answerable blind (floors 0.5–0.75); the lost answers went to the stage's larger set of
-  names for the same pictures (couch for bed), not to simple erasure. The stage is being rebuilt.
-- **No new-word bias** (a new word given to an unnamed thing rather than a named one: 0.51, chance 0.50).
-- **A second cortical layer** added 0.01; dendritic branches on the word cells added nothing.
-- **The first cortex's Hebbian development was worse than never developing it**; the second cortex's is no better
-  than random filters.
-- **Text alone**: 38% of text questions contain their own answer; on the rest the brains score 0.11–0.33 against a
-  floor of 0.06–0.11.
+The two puzzles had one answer. We asked saved learners about test pages one view at a time. Shown only the
+fixated region, every learner named the thing about as well, whether its filters were developed (right on
+0.48–0.54 of pages) or not (0.39–0.46). The trouble was the store. It filed each moment under the whole view, and
+a page seen whole is seen coarsely; coarse pages look alike; so the store kept answering with the name from some
+other page. Silencing the store at test time raised the whole learner from 0.36–0.45 to 0.48–0.50 and the
+undeveloped one from 0.07–0.15 to 0.33–0.44. Development, it turns out, is worth 0.05 to 0.10 on a fixated thing.
+The dramatic first row was the store's doing.
 
-## 6. Three errors of method
+The repair is one that the biology had been suggesting all along: file a moment under what the eye was on, not
+under the whole scene. With that change the harm on pages disappears, single pictures are unaffected, and the
+store can at last do its own job on a page. When a new thing on a page is named once, the store brings the name
+back for the same picture on a different page 85–92% of the time (11–15% with the whole-view key, 0% for the word
+cells alone). For a different picture of the same kind of thing it brings back nothing: an instance again, not a
+category. We tested this on saved learners and in a probe; no full life has been run with the new key yet.
 
-1. **A behaviour made a target.** Echo was a gate that had to be held at 80% of its pass mark. Brains that had
-   learned first words were kept back 20,000–90,000 moments for echoing less, which is what a child does.
-2. **A drive wired to a behaviour.** A "novelty drive" raised the chance of saying back an unknown word. It passed
-   stages. It was a rule of ours, not something the brain did; it was retired and the lives rerun.
-3. **A judge that taught mistakes.** The first judge accepted "yes" for "no", "bear" for a dog and the question said
-   back, and when it accepted an answer the adult repeated the child's word: about 7% of lessons taught the child
-   its own error. With a strict-on-meaning instruction it accepts 2–16 of 367 wrong answers and refuses no right one.
+## What did nothing, and what we got wrong
 
-Also: a world that silently reverted to an older version after 50,000 moments of every life, found by reading logs.
+A fair amount of what we built contributed nothing we could measure. Replay from the episodic store did not
+protect earlier stages: the store had filled with small talk (55% of its contents), its surprise signal read 0.84
+for everything and so could choose nothing, and old stages made up 3% of what came back. A second cortical layer
+added 0.01. Dendritic branches on the word cells added nothing. We looked for the bias children show towards
+giving a new word to a thing that has no name yet, and found 0.51 where chance is 0.50. Our first visual cortex
+did worse after Hebbian development than before it; the second, as reported above, does no better than random
+filters. And no learner got through the stage after pages. Earlier stages slid while it tried, and when we looked,
+the lost answers had not been erased so much as displaced by that stage's larger vocabulary for the same pictures
+("couch" for a bed). The stage's test also turned out to be answerable blind more than half the time, and we have
+since rebuilt it.
 
-## 7. Limits
+Then there are the things we did wrong. We made four mistakes of method, and each of them made the learner look
+better, or at least busier, than it was.
 
-- One small benchmark; one machine; 4,096-dimensional codes; nothing here says the results hold at scale.
-- The relay is computed in batch before the life. A first measurement of a local, learned form (a Hebbian/anti-Hebbian
-  network among the kinds, Pehlevan & Chklovskii's rules): the word cells gain 9.5 points on its code without any relay,
-  where the batch relay gives 12 (one seed, 10,000 pictures).
-- The backpropagation reference is one shape, plain Adam, no augmentation, tuned on a grid of 14.
-- The stages, their order and the pass marks are ours. The judge is a model; a person's labels on 200 of its
-  judgements are still to be made.
-- Three seeds, not five.
+*We turned a behaviour into a target.* Echoing was a gate: a learner had to keep 80% of its echo score to move
+on. Learners that had begun to use words echoed less, as children do, and we held them back for 20,000 to 90,000
+moments for it.
 
-## 8. Related work
+*We wired a drive to a behaviour.* A "novelty drive" raised the probability of repeating an unknown word. It got
+learners through stages. It was also a rule of ours and not something the learner did, which is exactly what we
+had promised ourselves not to build. We removed it and reran every life.
 
-**[Kris: every reference here is still to be opened by hand. "[V]" marks what the assistant read in the paper's own
-text (research_notes/Relatives and publishability 2/); the rest is from abstracts or memory and may be wrong.]**
+*Our judge taught the learner its own mistakes.* The first judge accepted "yes" for "no", "bear" for a dog, and
+the question repeated back. Worse, when it accepted an answer the adult repeated the learner's word, so about 7%
+of lessons taught the learner its own error. The stricter judge described above replaced it.
 
-*Local rules reading fixed features.* What Experiment 1 finds is in a known family: features that are not trained
-by the task, read by one trained layer. Random whitened filters with a pooled, rectified response were shown long
-ago to be hard to beat among single-layer feature learners (Coates, Lee & Ng 2011; Saxe et al. 2011). Streaming
-linear discriminant analysis (Hayes & Kanan 2020) and the fruit-fly associative learner (Shen, Dasgupta & Navlakha,
-arXiv 2107.07617) learn in one pass without forgetting, but on features from a network pretrained with labels by
-backpropagation [V]; a sparse-distributed-memory learner (Bricken et al., ICLR 2023, arXiv 2303.11934) likewise, and
-it is itself trained by backpropagation [V]. Closest in mechanism is a delta rule on a linear readout over fixed
-random sparse codes for continual learning of text domains (arXiv 2607.26523) [V]. Ours differs in that no part was
-ever trained by backpropagation or with labels, the input is photographs, and the comparison is the same shape
-trained end to end at equal exposure.
+*The world quietly went back in time.* After 50,000 moments of every life the world reverted to an older version
+of itself, through a bug that no score revealed. We found it by reading logs.
+
+Two smaller confessions belong here. The relay's regulariser was chosen from four values by looking at held-out
+naming in the learner's world, so one number in this paper was tuned. And the pass marks that moved the first
+lives along were set with scores in view; we dropped them for that reason.
+
+## Limits
+
+We only tried one small benchmark, on one machine, with codes of 4,096 numbers. Nothing here says the division of
+credit holds at scale. We only compared against one backpropagation architecture, trained with plain Adam and no
+augmentation, tuned on a grid of 14 settings, and never given the whitening step that turns out to matter. Both
+whitening steps are computed in batch, and the local replacement has been tried on two seeds and part of the
+stream. We tested on 2,000 pictures, with three seeds where five would be better. In the staged world the stages
+and their order are ours, the adults and the judge are language models, pictures recur, and no human has yet
+labelled the judge's decisions. The staged world supports the benchmark's findings; it could not carry them alone.
+
+## Related work
+
+*Fixed features and one trained layer.* What Experiment 1 finds belongs to a known family: features that the task
+does not train, read by a single trained layer. Random whitened filters with a pooled, rectified response were
+shown long ago to be hard to beat among single-layer feature learners (Coates, Lee & Ng 2011; Saxe et al. 2011).
+Streaming linear discriminant analysis (Hayes & Kanan 2020) and the fruit-fly associative learner of Shen,
+Dasgupta & Navlakha (2021) learn in one pass without forgetting, but on features from a network pretrained with
+labels by backpropagation; the sparse-distributed-memory learner of Bricken et al. (2023) likewise, and it is
+itself trained by backpropagation. Closest in mechanism is a delta rule on a linear readout over fixed random
+sparse codes, used for continual learning of text domains (arXiv 2607.26523). In our case no part was ever
+trained by backpropagation or with labels, the input is photographs, and the comparison is the same architecture
+trained end to end.
 
 *Hebbian vision.* Deep Hebbian networks reach high accuracy on CIFAR-10 with many epochs of local learning and a
-gradient-trained supervised head (SoftHebb: Journé et al., ICLR 2023, arXiv 2209.11883 [V]); its single-layer
-precursor reports a one-epoch advantage over backpropagation (Moraitis et al. 2022, arXiv 2107.05747). We add the
-single-pass, label-stream setting, the random-filter row, and the finding that it is decorrelation at two places
-that carries the result.
+gradient-trained supervised head (Journé et al. 2023), and their single-layer precursor reports a one-epoch
+advantage over backpropagation (Moraitis et al. 2022). We add the single-pass setting with a label stream, the
+random-filter control, the gradient-readout control, and the finding that decorrelation accounts for the
+advantage.
 
-*Hebbian models of word learning.* The assembly-calculus language models (Mitropolsky & Papadimitriou, arXiv
-2306.15364 and 2507.11788) and the brain-constrained spiking models of the Berlin group (Tomasello et al. 2018;
-Constant, Pulvermüller & Tomasello 2023, fast mapping after a babbling-like stage) learn words with Hebbian rules
-only, from made-up input: toy sentences and pre-formed patterns standing for vision [V]. Ours learns from
-photographs and adult-written speech, and is far less principled as a model of any brain area.
+*Hebbian models of word learning.* The assembly-calculus models of language (Mitropolsky & Papadimitriou 2023,
+2025) and the brain-constrained spiking models of Tomasello et al. (2018) and Constant, Pulvermüller & Tomasello
+(2023) learn words with Hebbian rules alone, from constructed input: toy sentences, and pre-formed patterns that
+stand in for vision. Ours learns from photographs and from free adult speech, and is far less principled as a
+model of any brain area.
 
-*One pass with backpropagation.* A child's-view contrastive model trained in one chronological pass falls to near
-chance without replay buffers holding most of the stream (BabyCL, arXiv 2606.05115) [V]; this is the setting in
-which our end-to-end reference also trails.
+*One pass with backpropagation.* A contrastive model of a child's view, trained in one chronological pass, falls
+to near chance without replay buffers that hold most of the stream (BabyCL; arXiv 2606.05115). This is the
+setting in which our end-to-end baseline also trails.
 
 *Fast and slow memory.* Complementary learning systems (McClelland, McNaughton & O'Reilly 1995) predict the
-dissociation of Section 3; agents trained by gradient with an external episodic memory show one-shot word learning
-(Hill et al., arXiv 2009.01719). The store here is a dense associative memory read steeply (Krotov & Hopfield
-2016). Our contribution is the measurement beside other learners, and the finding that such a store must be keyed
-by what the eye is on (Section 4), not by the whole view.
+dissociation we measure. Agents trained by gradient with an external episodic memory show one-shot word learning
+(Hill et al. 2021). Our store is a dense associative memory with a steep read-out (Krotov & Hopfield 2016). What
+we add is the measurement beside other learners, and the observation that such a store has to be keyed by what
+the eye is on and not by the whole view, which fits reports that hippocampal activity follows gaze (Rolls 1999;
+Liu et al. 2017).
 
-*Learned lateral inhibition.* Hebbian feedforward with anti-Hebbian lateral learning (Földiák 1990; Zylberberg,
-Murphy & DeWeese 2011; Pehlevan & Chklovskii, arXiv 1503.00680 [V, equations 7 and 8 used unchanged]).
+*Learned lateral inhibition.* Hebbian feedforward learning with anti-Hebbian lateral learning goes back to
+Földiák (1990), accounts for the shapes of V1 receptive fields (Zylberberg, Murphy & DeWeese 2011), and has a
+derivation from a similarity-matching objective (Pehlevan & Chklovskii 2014), whose update rules we used.
 
-## 9. Statement on the use of AI
+## What is still unexplained
+
+We end with what we cannot yet account for. The developed filters contain something a second-order reader can
+use and a first-order reader cannot, and we do not know what it is. A local network recovers most of the relay's
+effect when it acts among the filters, and we do not know whether the same rule acting on the pooled code, where
+the relay itself sits, would recover the rest. Nothing we built generalises from one instance to its category,
+and children do it routinely. And the learner we took apart was assembled under a rule, that only what brains do
+may go in, which did not prevent us from building several parts that do nothing. We find that the most
+interesting result of all. Biological plausibility told us what was allowed. It did not tell us what mattered,
+and only taking the thing apart did.
+
+## Statement on the use of AI
 
 The code was written and the experiments were run by an AI assistant (Claude) under the author's direction. The
 author set the principles (biological plausibility, no hand-wired behaviour, observations are not targets, no
-changes made to raise a score), took the decisions recorded in the project's log, and corrected the assistant where
-it departed from them, including the three errors in Section 6. The adults in the life's world and the judge are
-language models. **[Kris: to be reworded as yours; every reference to be opened by hand before submission.]**
+change made in order to raise a score), took the decisions recorded in the project's log, and corrected the
+assistant where it departed from them, including the mistakes described above. The adults in the staged world and
+the judge are language models. **[Kris: to be reworded as yours.]**
 
-## 10. Code and data
+## Code and data
 
-Repository, logs of every run cited here, and the scripts that produce each table (`experiments/bench_*.py`,
-`experiments/curriculum_life.py`). **[A snapshot with a DOI before submission.]**
+The repository holds the logs of every run cited here and the scripts that produce each table and figure
+(`experiments/bench_*.py`, `experiments/curriculum_life.py`, `experiments/paper_figures.py`). **[A snapshot with a
+DOI before submission.]**

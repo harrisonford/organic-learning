@@ -19,7 +19,7 @@ FIGURES = [  # (the sentence that first points to it, the file, the caption)
     ("Figure 1, `fig_benchmark.pdf`, shows the curves", "fig_benchmark.pdf",
      "CIFAR-10 seen once: held-out accuracy against labelled pictures seen. Lines: mean of three seeds; bands: their range. "
      "Backpropagation with four pictures lived again per new one is one seed."),
-    ("Figure 3, `fig_ablation.pdf`, shows the seeds", "fig_ablation.pdf",
+    ("Figure 2, `fig_ablation.pdf`, shows the seeds", "fig_ablation.pdf",
      "A life with one part taken away, at 50,000 moments: score above what a blind answer gets. Bars: mean of three seeds; "
      "dots: the seeds; dashed line: the whole brain's mean."),
 ]
