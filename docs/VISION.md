@@ -948,3 +948,29 @@ Keyed by what the eye is on, the store no longer harms pages (it reads exactly a
 pictures were never seen, so no stored moment is like a fixated one, which is right) and single pictures are as
 before. Whether it then does its own job on a page (a name heard once) is `experiments/fastmap_page_probe.py`,
 running on three seeds.
+
+### A name heard once for a thing on a page (`experiments/fastmap_page_probe.py`, three seeds)
+
+The word cells live 6,000 naming moments (single pictures and pages, looking as the brain does). Then 75 kinds of
+things never named: a picture of the kind is on a page and its name is heard once. Said again when asked (at once;
+after 20 ordinary moments in brackets), seeds 0 / 1 / 2:
+
+| | the very page | the picture on another page, another place | the picture alone, filling the view | another picture of the kind |
+|---|---|---|---|---|
+| word cells alone | 0.00 / 0.01 / 0.00 | 0.00 / 0.00 / 0.01 | 0.00 | 0.00 |
+| + store keyed by the whole view | 0.81 / 0.88 / 0.88 (0.79 / 0.85 / 0.83) | 0.13 / 0.11 / 0.15 (0.12 / 0.11 / 0.15) | 0.00 | 0.00 |
+| + store keyed by what the eye is on | 0.77 / 0.84 / 0.92 (0.76 / 0.81 / 0.85) | **0.85 / 0.92 / 0.91** (0.85 / 0.89 / 0.87) | 0.00 / 0.01 / 0.00 | 0.00 |
+
+Held-out first words before and after the 75 new names: single pictures unchanged for all (0.62 → 0.61, 0.54 →
+0.54, 0.61 → 0.62); on a page the keyed store reads as the cells alone (0.60 → 0.59, 0.54 → 0.59, 0.59 → 0.55), the
+whole-view store a little lower before (0.53, 0.55, 0.57).
+
+- **Keyed by what the eye is on, the name goes with the thing**: the same picture on another page, in another place,
+  is named 0.85–0.92 of the time; keyed by the whole view, 0.11–0.15 (the store remembered the page, not the thing).
+- **It still does not reach the picture filling the view (0.00), nor the kind (0.00).** The fixated window is the
+  thing with the page's margin around it, at another size than the picture alone; the store compares steeply and
+  finds no likeness. It is a memory of what was fixated, as it was fixated. Stated as a limit, not hidden.
+- Nothing is lost on the names already known.
+
+So the proposal holds on both counts measured: it takes the store's harm away on pages (saved brains, above) and it
+lets the store do its own job there. **Not adopted in lives yet: it changes the brain, and that is Kris's word.**

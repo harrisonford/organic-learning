@@ -72,6 +72,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 15. Pivot frames for two-word text (docs/RESEARCH_TWO_WORDS.md), only after 7 says what is missing.
 
 ## Decisions waiting for Kris
+- **The store keyed by what the eye is on** (`Episodes.key = "looked"`; VISION.md 2026-11-23): adopt in new lives?
+- **LaTeX on the server** (none installed): install to compile the paper?
 - The preprint's first draft is docs/paper/DRAFT.md: read it; the AI-use statement is yours to word. Kris has an
   arXiv account (2026-11-21). Before sending: the ablation arms (running, about 30 hours), related work with every
   reference opened by hand, the name and affiliation as they should appear, and whether arXiv asks for an
@@ -270,3 +272,12 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   0.33 / 0.32 / 0.41); no stage left on a plateau yet (needs six tests in the stage).
   Next: read the probe. If the keyed store keeps a page's name and costs nothing: Kris's word, then lives with it
   (KEY=looked in the life script). Meanwhile: related work for the draft.
+- 2026-11-23 15:10 **A name heard once on a page, three seeds** (VISION.md): keyed by what the eye is on, the store
+  names the same picture on another page 0.85–0.92 (whole-view key 0.11–0.15; word cells alone 0.00); the picture
+  alone and another of the kind stay at 0.00; old names untouched. Written: docs/paper/REFERENCES.md (28 references
+  with links and how each is known, for Kris to open one by one). Kris asked what to do on arXiv: told (start the
+  form in cs.NE to see whether an endorsement is asked; author line, licence, AI-use statement; nothing uploaded).
+  Lives `plat_s0..2` at 20,000 in first words (0.35 / 0.33 / 0.41).
+  **Waiting for Kris:** the keyed store in new lives (yes/no); installing LaTeX on the server (to compile the paper).
+  Next: the plateau lives' first stage changes (this evening); figures for the paper from the logs; the lateral
+  network on three seeds; queue item 8 (preschool's sources).
