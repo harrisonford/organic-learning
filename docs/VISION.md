@@ -932,3 +932,19 @@ and it harms what the slow cells know. Rule: a moment is kept under the windows 
 view when it fixated nothing; it is compared with what the eye is on now, likewise. To be tried first on the saved
 brains (their stores hold each moment's fixations since 2026-11-18), nothing learning: pages as above, single
 pictures, and the name-heard-once test.
+
+### The store keyed by what the eye is on, on the saved brains (`out/tmp/page_views3.log`)
+
+Same brains, same 100 pages and 180 single pictures, nothing learning; only how the store compares moments.
+
+| share named right | pages: store as it is | store silent | store keyed by what the eye is on | single pictures: as it is / silent / keyed |
+|---|---|---|---|---|
+| control, seed 0 | 0.36 | 0.49 | 0.49 | 0.56 / 0.55 / 0.56 |
+| control, seed 1 | 0.45 | 0.49 | 0.49 | 0.55 / 0.55 / 0.55 |
+| control, seed 2 | 0.41 | 0.50 | 0.50 | 0.59 / 0.58 / 0.59 |
+| never-developed cortex, seed 0 | 0.15 | 0.43 | 0.43 | 0.53 / 0.52 / 0.53 |
+
+Keyed by what the eye is on, the store no longer harms pages (it reads exactly as a silent store there: the test
+pictures were never seen, so no stored moment is like a fixated one, which is right) and single pictures are as
+before. Whether it then does its own job on a page (a name heard once) is `experiments/fastmap_page_probe.py`,
+running on three seeds.

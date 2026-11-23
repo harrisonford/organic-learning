@@ -260,3 +260,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Next: read it. If the keyed store does no harm on pages and none on single pictures: a probe of its own job on a
   page (a name heard once for a thing on a page, asked on another page with the same thing), then lives. Then
   related work for the draft.
+- 2026-11-23 14:15 **The store keyed by what the eye is on does no harm** (VISION.md): on the saved brains pages are
+  named as with a silent store (0.49 / 0.49 / 0.50; never-developed cortex 0.43), single pictures unchanged.
+  Written: `experiments/fastmap_page_probe.py` (a name heard once for a thing on a page: asked on the very page, the
+  picture on another page, the picture alone, another of the kind; word cells alone, store keyed by the whole view,
+  store keyed by what the eye is on). Smoke (300 moments, keyed store): the very page 0.88, the picture on another
+  page 0.88, the picture alone 0.16, another of the kind 0.00. **Running: `organic-fastmap-page`** (three seeds, 6,000
+  moments → out/tmp/fastmap_page.log, about 1.5 hours). Lives `plat_s0..2` in first words at 15,000 (above the floor
+  0.33 / 0.32 / 0.41); no stage left on a plateau yet (needs six tests in the stage).
+  Next: read the probe. If the keyed store keeps a page's name and costs nothing: Kris's word, then lives with it
+  (KEY=looked in the life script). Meanwhile: related work for the draft.
