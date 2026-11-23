@@ -31,6 +31,11 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   2026-11-23 12:00). The first lives with no pass mark; they may go on into preschool as it is.
 - **`organic-lateral-queue2`** (out/bench/lateral_queue2.sh): the published lateral network on seeds 1 and 2 →
   out/bench/lateral_settled_s$S.log, stream_settled_s$S.log, stream_developed10k_s$S.log. Seed 1 done.
+- **`organic-bench-bprelay`** (out/bench/backprop_relay_queue.sh): end-to-end backprop of the same shape *with* the
+  relay step before its readout (queue D 16): tuned on the first 10,000 pictures of seed 0 (relay fixed or settled
+  again every 5,000 pictures; three rates) → out/bench/backprop_relay_tune_s0.log; then the best rate of each on
+  three seeds, 50,000 pictures → out/bench/backprop_relay_full.log.
+- **`organic-reward-queue`**: waits for the plateau lives, then lives `kind_s0..2` and `ramp_s0..2` (JUDGING.md).
 - Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
 - Launch line for a life with no pass mark:
   `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
@@ -368,3 +373,11 @@ Still Kris's own:
   plateau lives (`organic-reward-queue`), tests always strict. **Kris: answering speed, by training, organically**:
   the reward is what sets it (the gating policy's patience), so the reward arms are the first experiment on it.
   Next: read the plateau lives; queue D 16.
+- 2026-11-23 18:30 **The like-for-like reference started** (queue D 16): `experiments/bench_backprop.py` has `RELAY=fixed`
+  (the relay step settled on 6,000 unlabelled pictures seen through the filters as born, kept, errors going back
+  through it) and `RELAY=tracked` (settled again every 5,000 pictures). The gradient was checked numerically in
+  double precision, with and without the relay (largest relative difference 4e-4 on the filters, 1e-8 on the
+  readout): the first reference's gradient is right too. Running: `organic-bench-bprelay`. Lives `plat_s0..2` at
+  40,000, still in first words (0.43 / 0.46 / 0.49).
+  Next: read the tuning (six runs of 10,000 pictures), then the three seeds; the lives' 45,000 and 50,000 tests;
+  the showcase probe on seeds 1 and 2 when memory allows.
