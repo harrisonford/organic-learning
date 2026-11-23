@@ -112,6 +112,60 @@ We set the following by hand: the sizes (256 filters, 2,000 word cells, 2,000 st
 regularisers, the steepness of the store's similarity, and the order of the stages. One of these was tuned, and we
 come back to it under mistakes.
 
+## What it looks like
+
+Before the measurements, here is the thing itself, because a list of parts does not show what was built.
+
+**A life.** Figure 1, `fig_life.pdf`, follows one learner from its first moment to its 115,000th. For the first
+5,000 moments it only babbles. Nothing is asked of it; the mouth tries out sounds and the ear listens to the
+result, and what comes out is "an?" and "ather cathay". The world then plays echo games with it, and after 10,000
+moments begins to show it pictures and ask for names. Within a few thousand moments it is naming some of them.
+From 15,000 moments on the world shows it picture-book pages, where several things appear and it has to look at
+one. Both curves climb for some 30,000 moments and then level off at about 0.4 on our scale, on which a learner
+that ignores the picture scores 0 and an adult scores 1. The babbling is worth following along the bottom of the
+figure. Nobody rewards or tests it, yet it drifts towards the world's words: "reend" and "w a chice!" at 30,000
+moments, "chairbathe ase?" at 65,000, "can you bus" at 110,000.
+
+**What it says.** Figure 2, `fig_examples.pdf`, shows the learner at the end of that life answering held-out
+questions. We did not choose these; they are the first six test items of each kind. It names four of the six
+single pictures (over the whole test, about half) and two of the six pages (over the whole test, about a third).
+The mistakes are worth reading. A mouse photographed close up is a "lion". A bus is a "train". A page with a horse
+and a cow gets "cowbanana", two names run together, which is this learner's characteristic error on pages. On
+spoken lessons with no picture to go on, its answers have the same flavour. Asked "what is on your hands when
+it's cold?", it says "mittens" where the adult's answer was "gloves", which is why answers are judged for meaning
+and not letter by letter. Asked "what's orange and yummy?", it says "carrot". Asked "what does a frog say?", it
+says "flies", and asked to make an owl sound it says "mice": wrong, and not random.
+
+**How big it is, and how fast.** After that life the learner holds about 257 million numbers. It runs on a CPU at
+about two moments a second, so a life of 115,000 moments takes some sixteen hours, three lives side by side on a
+desktop machine.
+
+| part | numbers it holds |
+|---|---|
+| gating policy (when to answer, and from where) | 128 million |
+| word cells (1,897 of them) and the episodic store (2,000 moments) | 61 million |
+| ear | 51 million |
+| visual cortex and relay (nearly all of it the relay's 4,096 × 4,096 matrix) | 17 million |
+| mouth | 0.2 million |
+
+**How long it takes to answer.** The learner decides for itself when to speak. At each tick it looks, and it
+answers when its confidence passes a level of patience that it has learned for that kind of situation; waiting
+costs it a little reward. Speaking then takes one tick per sound unit.
+
+| kind of question | ticks before it starts to answer | when right / when wrong |
+|---|---|---|
+| "is there a …?" on a page | 1.0 | 1.0 / 1.1 |
+| naming a single picture | 1.3–1.6 | 1.5 / 1.4 |
+| naming a thing on a page | 1.5 | 1.6 / 1.4 |
+| spoken lessons, no picture to go on | 3.1–4.1 | 3.5 / 3.5 |
+
+So the learner has two speeds. A question about a picture is answered at a glance, and a question in words
+alone is answered after a wait three times as long. We would like to call the second one thinking, and we cannot.
+Right and wrong answers take the same time, the learner hardly moves its eye (less than one move per question),
+and we have not tested whether the wait helps. What emerged is a habit of pausing where the answer is not in
+view. Whether anything useful happens in the pause is an open question. These timings are from one learner;
+**[pending: three seeds.]**
+
 ## Experiment 1: CIFAR-10, seen once
 
 ### Setup
@@ -137,7 +191,7 @@ pictures revisited for each new one; starting from our developed filters; and wi
 
 ### The local learner beats one-pass backpropagation
 
-Figure 1, `fig_benchmark.pdf`, shows the curves, and the table gives three points along them.
+Figure 3, `fig_benchmark.pdf`, shows the curves, and the table gives three points along them.
 
 | learner | 500 | 5,000 | 50,000 pictures |
 |---|---|---|---|
@@ -294,7 +348,7 @@ That backpropagation run had a single learning rate and optimiser and was not tu
 ### Removing one part at a time
 
 We ran each ablation as three lives from random initialisation and read the scores at 50,000 moments.
-Figure 2, `fig_ablation.pdf`, shows the seeds; the table gives the means.
+Figure 4, `fig_ablation.pdf`, shows the seeds; the table gives the means.
 
 | | naming a single picture | naming a thing on a page | "is there a …?" on a page |
 |---|---|---|---|

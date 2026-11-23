@@ -14,22 +14,30 @@ title = re.match(r"# (.*)\n", src).group(1)
 body = src[src.index("## Abstract"):]
 abstract, body = body[len("## Abstract"):body.index("\n## ")].strip(), body[body.index("\n## "):]
 body = re.sub(r"^(#+) \d+\. ", r"\1 ", body, flags=re.M)  # "## 3. Experiment 1" -> "## Experiment 1"
-body = re.sub(r"^## ", "# ", body, flags=re.M)
-FIGURES = [  # (the sentence that first points to it, the file, the caption)
-    ("Figure 1, `fig_benchmark.pdf`, shows the curves", "fig_benchmark.pdf",
+body = re.sub(r"^#(#+) ", r"\1 ", body, flags=re.M)  # one level up: the draft's sections are "##"
+FIGURES = [  # (the words that first point to it, the file, its width, the caption); numbered in this order
+    ("Figure 1, `fig_life.pdf`,", "fig_life.pdf", 92,
+     "One life (seed 0). Lines: score above blind answering on held-out questions, every 5,000 moments. The band on top shows "
+     "the stage the world was in. Below: what the learner babbled with nothing said to it, and what it answered when asked "
+     "to name a picture, at four ages (the first short samples in the log, not chosen)."),
+    ("Figure 2, `fig_examples.pdf`,", "fig_examples.pdf", 100,
+     "What a learner says after 115,000 moments. Top: single pictures; bottom: picture-book pages, where it must look at one "
+     "thing. These are the first six held-out items of each kind, in order, not chosen. Above each picture, the question; "
+     "below, the answer."),
+    ("Figure 3, `fig_benchmark.pdf`,", "fig_benchmark.pdf", 92,
      "CIFAR-10 seen once: held-out accuracy against labelled pictures seen. Lines: mean of three seeds; bands: their range. "
-     "Backpropagation with four pictures lived again per new one is one seed."),
-    ("Figure 2, `fig_ablation.pdf`, shows the seeds", "fig_ablation.pdf",
-     "A life with one part taken away, at 50,000 moments: score above what a blind answer gets. Bars: mean of three seeds; "
-     "dots: the seeds; dashed line: the whole brain's mean."),
+     "Backpropagation with four replays per new picture is one seed."),
+    ("Figure 4, `fig_ablation.pdf`,", "fig_ablation.pdf", 100,
+     "A life with one part removed, at 50,000 moments: score above blind answering. Bars: mean of three seeds; "
+     "dots: the seeds; dashed line: the whole learner's mean."),
 ]
-for n, (mark, file, caption) in enumerate(FIGURES, 1):
+for mark, file, width, caption in FIGURES:
     assert body.count(mark) == 1, mark
-    at = body.index(mark)
-    end = body.index("\n\n", body.index("\n|", at))  # after the table that follows the pointer
-    end = body.index("\n\n", end + 2) if body[end + 2:end + 3] == "|" else end
-    body = body[:end] + f"\n\n![{caption}]({file}){{width=92%}}\n" + body[end:]
-    body = body.replace(mark, re.sub(r", `[^`]*`,", "", mark).replace(f"Figure {FIGURES.index((mark, file, caption)) + 1}", f"Figure {n}"))
+    end = body.index("\n\n", body.index(mark))  # the end of the paragraph that points to it
+    if body[end + 2] == "|":  # a table follows: the figure goes after the table
+        end = body.index("\n\n", end + 2)
+    body = body[:end] + f"\n\n![{caption}]({file}){{width={width}%}}\n" + body[end:]
+    body = body.replace(mark, mark.split(",")[0])
 head = r"""
 \usepackage{microtype}
 \DeclareUnicodeCharacter{2212}{\ensuremath{-}}

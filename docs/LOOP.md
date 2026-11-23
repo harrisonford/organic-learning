@@ -346,3 +346,14 @@ Still Kris's own:
   out/tmp/showcase.log, showcase_cleanw_s0.json/.npz) for the section Kris asked for: what the learner does,
   with pictures, a timeline, its size and its answering times.
   Next: read the probe; the showcase figures and section; then queue D in order (16 first).
+- 2026-11-23 19:00 **The showcase section** ("What it looks like", Kris's request): `experiments/showcase_probe.py`
+  on out/cleanw_s0.pkl (300 + 300 held-out items, nothing learns) and two new figures from
+  `experiments/paper_figures.py`: `fig_life` (one life: the two curves, the stages, what it babbled and named at
+  four ages) and `fig_examples` (the first six test pictures and pages with its answers, not chosen). Measured:
+  **the learner holds 257 million numbers** (gating policy 128 M, word cells and store 61 M, ear 51 M, cortex and
+  relay 17 M, mouth 0.2 M); **answering time**: a question about a picture is answered after 1.0–1.6 ticks of
+  looking, a spoken lesson with no picture after 3.1–4.1; right and wrong answers take the same time; under one
+  eye move a question. So there are two speeds, and no evidence yet that the longer wait is thinking (one learner;
+  three seeds owed). Paper now 12 pages; sent to Kris.
+  Picture licences to check before anything is public: the pages in fig_examples may hold COCO or Commons pictures.
+  Next: three seeds of the showcase probe; queue D (16: the end-to-end reference with a whitening layer).
