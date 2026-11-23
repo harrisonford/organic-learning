@@ -311,3 +311,7 @@ Still Kris's own:
   store is adopted for new lives (`KEY=looked`, added to `experiments/curriculum_life.py`; running lives untouched);
   LaTeX installed with pacman (pdflatex); licence CC BY 4.0 recommended to Kris, who is at that step of the arXiv
   form. Next for the paper: DRAFT.md into LaTeX (docs/paper/paper.tex), compiled here.
+- 2026-11-23 17:35 **arXiv asks for an endorsement in cs.NE.** Kris has the endorsement code (kept out of this
+  public repository; in the assistant's private notes). Plan and a draft note in docs/paper/ENDORSEMENT.md: ask
+  authors the paper cites, one or two at a time, only once the PDF exists and Kris has read it; Kris sends the
+  notes. This puts the LaTeX version at the head of the paper's queue.
