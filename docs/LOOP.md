@@ -336,7 +336,7 @@ Still Kris's own:
   coded; its stream runs.
   Next: the draft brought up to date (no pass mark, "pages", the keyed store, the lateral network's three seeds,
   world 5), the [check] marks worked off against REFERENCES.md, figure 2 when a life has left a stage.
-- 2026-11-23 18:20 **The paper rewritten for readers** (Kris: dull title, cold clipped writing). Three independent
+- 2026-11-23 18:02 **The paper rewritten for readers** (Kris: dull title, cold clipped writing). Three independent
   readers (style survey, hostile referee, cold reader); the referee's nine points checked against the logs, all
   held, and the draft now says them (VISION.md 18:15; queue D above). Working title "It Was the Code, Not the Rule";
   10 pages; both PDFs sent to Kris by mail at Kris's request. **Lateral network, three seeds**: +9.2 points without
@@ -346,7 +346,7 @@ Still Kris's own:
   out/tmp/showcase.log, showcase_cleanw_s0.json/.npz) for the section Kris asked for: what the learner does,
   with pictures, a timeline, its size and its answering times.
   Next: read the probe; the showcase figures and section; then queue D in order (16 first).
-- 2026-11-23 19:00 **The showcase section** ("What it looks like", Kris's request): `experiments/showcase_probe.py`
+- 2026-11-23 18:08 **The showcase section** ("What it looks like", Kris's request): `experiments/showcase_probe.py`
   on out/cleanw_s0.pkl (300 + 300 held-out items, nothing learns) and two new figures from
   `experiments/paper_figures.py`: `fig_life` (one life: the two curves, the stages, what it babbled and named at
   four ages) and `fig_examples` (the first six test pictures and pages with its answers, not chosen). Measured:

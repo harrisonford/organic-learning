@@ -1055,7 +1055,7 @@ Check against the rules: nothing here touches the brain or is chosen to move a n
 lessons (training program before architecture). The plateau lives will enter world 4's preschool as it is, which is
 an observation worth having beside the rebuilt one. **New lives: `WORLD=5`.**
 
-## 2026-11-23 (18:15): the lateral network's code, three seeds
+## 2026-11-23 (18:00): the lateral network's code, three seeds
 
 `out/bench/stream_settled_s{0,1,2}.log`, `stream_developed10k_s{1,2}.log`, 10,000 pictures.
 
@@ -1074,7 +1074,7 @@ an observation worth having beside the rebuilt one. **New lives: `WORLD=5`.**
 - Still a fifth of the stream; the windows' own whitening is still computed in batch. Next: the whole stream
   (about six hours a seed to code), and the same rule among the 4,096 numbers of the summary, where the relay sits.
 
-## 2026-11-23 (18:15): the paper rewritten; what a referee found
+## 2026-11-23 (18:00): the paper rewritten; what a referee found
 
 Kris on the first PDF: the title is dull, the writing cold and clipped ("slop, AI-ish"), it must be fun to read.
 Three independent readers were brought in (a survey of how well-known papers in the field are written; a hostile
