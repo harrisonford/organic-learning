@@ -3,7 +3,7 @@ test is mostly answerable blind"). No brain, no judge: the held-out items of sta
 them by the letter-level grade (always "yes", always "no", the source's commonest answer, the question's last word
 said back). For each source: how many items to live and to be tested on; how many different answers; the share of
 the three commonest; the share of answers that are one of the question's own words; the best blind child.
-    python experiments/preschool_sources.py [stage]
+    WORLD=5 python experiments/preschool_sources.py [stage]
 """
 import collections, os, sys
 import numpy as np
@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from organic.curriculum import Curriculum, grade, tidy  # noqa: E402
 
 stage = sys.argv[1] if len(sys.argv) > 1 else "P"
-cur = Curriculum(seed=0, world=4)
+cur = Curriculum(seed=0, world=int(os.environ.get("WORLD", 4)))
 print(f"stage {stage}: sources to live {sorted(cur.train.get(stage, {}))}")
 for src in sorted(cur.test.get(stage, {})):
     items = cur.test[stage][src]

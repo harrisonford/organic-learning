@@ -23,6 +23,7 @@ from PIL import Image
 from . import world as W
 
 STAGES = ["BB", "B", "W1", "W2", "P", "K", "G1", "G2", "G3", "G4"]
+TALK = ("dailydialog", "text:chat", "text:dialogue")  # conversation: lived, and from world 5 not tested (no answer key fits a reply)
 NAMES = {"BB": "babbling", "B": "echo", "W1": "first words", "W2": "pages", "P": "preschool", "K": "kindergarten",
          "G1": "first grade", "G2": "second grade", "G3": "third grade", "G4": "fourth grade"}
 PASS = {"BB": 0.17,  # babbling: 0.17 accepted 2026-10-29 (the organic version plateaus at 0.17-0.20)
@@ -372,6 +373,31 @@ class Curriculum:
                 for kind, st in (("there", "W2"), ("count", "P")):
                     made = [sc.make(kind, n) for n in range(many)]
                     store.setdefault(st, {})["page:" + kind] = [(("page", side, kind, n), q, [a], st, "page:" + kind) for n, (_, _, q, a) in enumerate(made)]
+        # world 5: preschool rebuilt (docs/VISION.md, 2026-11-23 evening; experiments/preschool_sources.py). Nothing
+        # of worlds 1-4 changes. (1) A number is said as a word in every source ("2" was the answer in one, "two" in
+        # two others). (2) The three sources we make from annotations are drawn evenly over their answers, on the lived
+        # side and the held-out side alike: as made, "how many people are there?" was "zero" 0.57 of the time, "is
+        # there a ...?" "no" 0.60, "where is the person?" "in the middle" 0.56. (3) A reply in a conversation has no
+        # answer to judge against: conversation is lived, and its held-out items are kept apart (self.talk), not tested.
+        self.talk = {}
+        if world >= 5:
+            said = {str(n): w for n, w in enumerate("zero one two three four five six seven eight nine ten".split())}
+            order = lambda it: zlib.crc32(repr(it).encode())  # noqa: E731
+            for store in (self.train, self.test):
+                p = store.get("P", {})
+                if "vqa:count" in p:
+                    p["vqa:count"] = [(ref, q, [said[a[0]]], st, src) for ref, q, a, st, src in p["vqa:count"] if a[0] in said]
+                for src in ("coco:count", "coco:presence", "coco:where"):
+                    by = {}
+                    for it in p.get(src, []):
+                        by.setdefault(it[2][0], []).append(it)
+                    if by:
+                        few = min(len(v) for v in by.values())
+                        keep = {id(it) for v in by.values() for it in sorted(v, key=order)[:few]}
+                        p[src] = [it for it in p[src] if id(it) in keep]
+            for src in TALK:
+                if src in self.test.get("P", {}):
+                    self.talk.setdefault("P", {})[src] = self.test["P"].pop(src)
         self.prng = random.Random(seed + 3)  # its own dice: putting things in view does not change the lessons drawn
         self._cache = {}
         # the ways adults name a thing unasked (experiments/world/observation_frames.py)

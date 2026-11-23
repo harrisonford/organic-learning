@@ -53,8 +53,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 8. Preschool's test is mostly answerable blind (floors 0.5–0.75): rebuild the stage's sources before any brain is
    asked to pass it.
    **Surveyed 2026-11-23** (VISION.md, evening; `experiments/preschool_sources.py`): five faults, a proposal for
-   world 5 (numbers as words, built sources drawn evenly, conversation lived and not tested, more test items a
-   source). To build as a branch on `world >= 5`; world 4 is not touched while lives are in it.
+   world 5 (numbers as words, built sources drawn evenly, conversation lived and not tested). **Built the same
+   evening: `WORLD=5`** (world 4 unchanged item for item: `experiments/world_hash.py`). Open: a life in it.
 **C. Ideas proposed (each needs the organic check written down before it is built)**
 9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
    what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
@@ -294,3 +294,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   yet). "Running" above rewritten (it still listed finished work).
   Next: build world 5's preschool (branch on `world >= 5`, a test that world 4 is unchanged item for item); figure 2
   when a life has left a stage; seed 2 of the lateral network and the three-seed table.
+- 2026-11-23 18:05 **World 5 built: preschool rebuilt** (`organic/curriculum.py`, `world >= 5` only; VISION.md):
+  numbers as words in every source, the three annotation-made sources even over their answers (blind child 0.25 /
+  0.50 / 0.33 instead of 0.57 / 0.60 / 0.56), conversation lived but kept out of the test (`Curriculum.talk`).
+  World 4's fingerprint is the same before and after (`experiments/world_hash.py 4 5`); the three lives are not
+  touched. No life in world 5 yet: the machine is full with the three plateau lives.
+  Next: figure 2 when a life has left a stage (earliest 19:00–20:00); seed 2 of the lateral network; then, when the
+  plateau lives end, lives in world 5 (and the shuffled-order control).

@@ -1035,9 +1035,22 @@ Faults, all of them in the world and none in the brain:
 4. **Twenty items a source** is too few to read a source by.
 5. Kindergarten has one of the same kind: "what is the biggest thing?" is "person" a third of the time.
 
-**Proposal (world 5; world 4 stays exactly as it is, three lives are in it):** numbers said as words in every
-source; the three built sources drawn evenly over their answers (and "how many" asked where there is something to
-count); conversation lived and observed, not tested; the test's 300 items shared among the sources that have an
-answer. Check against the rules: nothing here touches the brain or is chosen to move a number; it is the ruler and
-the lessons (training program before architecture). The plateau lives will enter world 4's preschool as it is, which
-is an observation worth having beside the rebuilt one. To build next, as a branch on `world >= 5` only.
+**Built the same evening as world 5** (`organic/curriculum.py`, a block on `world >= 5`; world 4 stays exactly as it
+is, three lives are in it: `experiments/world_hash.py 4` gives the same fingerprint of lived items, held-out items
+and preschool's test before and after):
+
+- a number is said as a word in every source ("how many giraffes are there?" → "two"; the few answers above ten
+  are left out);
+- the three sources made from annotations are drawn evenly over their answers, on the lived and the held-out side
+  alike (the commoner answers thinned, always the same items): "how many people" 0.25 each of zero to three (804
+  to live), "is there a …?" 0.50 (8,858), "where is the person?" 0.33 (798);
+- conversation (`TALK`: dailydialog, text:chat, text:dialogue) is lived as before, and its held-out items are kept
+  apart (`Curriculum.talk`), not in the test. What a brain says back in a conversation is to be read, not marked;
+- so the test asks 12 sources, 25 items each at 300. Still few for one source: a life can ask more (`TEST_N`).
+
+Left as the photographs are: "what colour" (white 0.21), the VQA counts (two 0.30), kindergarten's "biggest thing"
+("person" 0.34). These are how the pictures are, not how we asked.
+
+Check against the rules: nothing here touches the brain or is chosen to move a number; it is the ruler and the
+lessons (training program before architecture). The plateau lives will enter world 4's preschool as it is, which is
+an observation worth having beside the rebuilt one. **New lives: `WORLD=5`.**
