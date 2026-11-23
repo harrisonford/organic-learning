@@ -1,0 +1,372 @@
+<title>Organic Learning Explained</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of sections; each section is a claim, a figure, then short points. */
+:root {
+  --bg: #f4f6f8; --surface: #ffffff; --ink: #16202b; --muted: #57636f; --line: #d6dce3;
+  --accent: #0d7684; --accent-soft: #dbeff2;
+  --ok: #1a7a49; --ok-soft: #dff2e7; --nil: #646f7b; --nil-soft: #e8ebef; --bad: #a8501a; --bad-soft: #f7e6d8;
+  --open: #5a4fb0; --open-soft: #e7e5f7;
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f141a; --surface: #171e26; --ink: #e5eaef; --muted: #9ba7b3; --line: #2b3541;
+  --accent: #55c4d2; --accent-soft: #123239;
+  --ok: #62cf95; --ok-soft: #14301f; --nil: #9ba7b3; --nil-soft: #222b35; --bad: #f0a56e; --bad-soft: #3a2415;
+  --open: #a79df0; --open-soft: #25213f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f141a; --surface: #171e26; --ink: #e5eaef; --muted: #9ba7b3; --line: #2b3541;
+  --accent: #55c4d2; --accent-soft: #123239;
+  --ok: #62cf95; --ok-soft: #14301f; --nil: #9ba7b3; --nil-soft: #222b35; --bad: #f0a56e; --bad-soft: #3a2415;
+  --open: #a79df0; --open-soft: #25213f; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 880px; margin: 0 auto; padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 56px; }
+header p.kicker { font-family: var(--mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(30px, 5vw, 44px); line-height: 1.1; margin: 0 0 14px; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.2; margin: 0 0 6px; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 16px; margin: 0 0 8px; }
+p { margin: 0; max-width: 66ch; }
+.lede { font-size: 18px; color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.claim { color: var(--muted); }
+ol.story { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: s; }
+ol.story li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
+ol.story li::before { content: counter(s); font-family: var(--mono); font-size: 13px; color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 28px; height: 28px; display: grid; place-items: center; }
+ul.points { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 68ch; }
+b.n { font-family: var(--mono); font-weight: 500; font-size: .94em; white-space: nowrap; }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+.scroll { overflow-x: auto; }
+figure svg { display: block; width: 100%; height: auto; }
+figure svg.wide { min-width: 760px; }
+figcaption { font-size: 14px; color: var(--muted); margin-top: 12px; max-width: 72ch; }
+svg text { font-family: var(--body); fill: currentColor; }
+svg .box { fill: var(--surface); stroke: currentColor; stroke-width: 1.2; }
+svg .hot { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.8; }
+svg .dim { fill: var(--nil-soft); stroke: var(--nil); stroke-width: 1.2; stroke-dasharray: 4 3; }
+svg .t { font-size: 12.5px; font-weight: 600; }
+svg .s { font-size: 11px; }
+svg .note { font-size: 11px; fill: var(--muted); }
+svg .hotnote { font-size: 11px; fill: var(--accent); font-weight: 600; }
+svg .flow { stroke: currentColor; stroke-width: 1.3; fill: none; }
+svg .lab { font-size: 10.5px; fill: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13.5px; color: var(--muted); margin-top: 12px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 18px; height: 12px; border-radius: 3px; border: 1.5px solid var(--ink); background: var(--surface); display: inline-block; }
+.sw.hot { background: var(--accent-soft); border-color: var(--accent); }
+.sw.dim { background: var(--nil-soft); border: 1.5px dashed var(--nil); }
+/* bars */
+.bars { display: grid; gap: 10px; }
+.bar { display: grid; grid-template-columns: minmax(150px, 250px) 1fr 54px; gap: 12px; align-items: center; font-size: 14.5px; }
+.bar .track { background: var(--nil-soft); border-radius: 4px; height: 14px; position: relative; }
+.bar .fill { background: var(--nil); height: 100%; border-radius: 4px; }
+.bar.ours .fill { background: var(--accent); }
+.bar.ours .name { font-weight: 600; }
+.bar .v { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.bar small { display: block; color: var(--muted); font-size: 12.5px; line-height: 1.35; }
+.axis { display: grid; grid-template-columns: minmax(150px, 250px) 1fr 54px; gap: 12px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+.axis div { display: flex; justify-content: space-between; }
+@media (max-width: 560px) { .bar, .axis { grid-template-columns: 1fr 48px; } .bar .name { grid-column: 1 / -1; } .axis span:first-child { display: none; } }
+/* scoreboard */
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.col { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; margin-bottom: 12px; }
+.tag.ok { color: var(--ok); background: var(--ok-soft); } .tag.nil { color: var(--nil); background: var(--nil-soft); }
+.tag.bad { color: var(--bad); background: var(--bad-soft); } .tag.open { color: var(--open); background: var(--open-soft); }
+.col ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; font-size: 14.5px; line-height: 1.45; }
+.col li strong { display: block; }
+.col li span { color: var(--muted); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; }
+.card p { font-size: 15px; }
+.card p + p { margin-top: 8px; }
+footer { font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="kicker">Organic learning · the full picture</p>
+  <h1>What we built, the one idea that carries it, and what did nothing</h1>
+  <p class="lede">A map of the project for reading before the paper. Every number comes from the project's own logs as of 23 November 2026.</p>
+</header>
+
+<section>
+  <h2>The story in four steps</h2>
+  <ol class="story">
+    <li><p>We built a small learner out of brain-like parts. It has an ear, a visual cortex, cells that learn words, a memory for single episodes and a mouth. It never uses backpropagation.</p></li>
+    <li><p>Shown the CIFAR-10 pictures once each, it names <b class="n">69%</b> of pictures it has never seen. A network of the same shape trained by backpropagation names <b class="n">62%</b>.</p></li>
+    <li><p>We then removed the parts one at a time. The win did not come from our learning rule or from the filters we raised by hand. It came from one preprocessing idea, decorrelation, applied twice.</p></li>
+    <li><p>Given the same decorrelated code, an ordinary gradient-trained reader does just as well as ours. So the claim the paper can make is about the code, and it cannot be about the rule.</p></li>
+  </ol>
+</section>
+
+<section>
+  <h2>The learner, end to end</h2>
+  <p class="claim">Pictures and speech travel on separate paths and meet at the word cells. The two highlighted boxes are the decorrelation steps. The dashed box is the part where Hebbian and random filters were compared.</p>
+  <figure>
+    <div class="scroll">
+    <svg class="wide" viewBox="0 0 980 420" role="img" aria-label="Pictures pass through decorrelation, 256 filters, pooling and a second decorrelation called the relay before reaching the word cells. Speech passes through the ear to the same word cells. A gate chooses between the word cells, the episodic store and an echo, and the mouth speaks.">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
+      <!-- gaze -->
+      <rect class="box" x="10" y="6" width="170" height="32" rx="6"/>
+      <text class="s" x="95" y="26" text-anchor="middle">Gaze: picks where to look</text>
+      <path class="flow" d="M60 38 V60" marker-end="url(#ah)"/>
+      <!-- picture lane -->
+      <rect class="box" x="10" y="62" width="100" height="70" rx="6"/>
+      <text class="t" x="60" y="92" text-anchor="middle">Picture</text>
+      <text class="s" x="60" y="110" text-anchor="middle">64 × 64 pixels</text>
+
+      <rect class="hot" x="140" y="62" width="140" height="70" rx="6"/>
+      <text class="t" x="210" y="86" text-anchor="middle">Decorrelation 1</text>
+      <text class="s" x="210" y="103" text-anchor="middle">on every 5 × 5 patch</text>
+      <text class="s" x="210" y="119" text-anchor="middle">(what a retina does)</text>
+
+      <rect class="dim" x="310" y="62" width="140" height="70" rx="6"/>
+      <text class="t" x="380" y="86" text-anchor="middle">256 filters</text>
+      <text class="s" x="380" y="103" text-anchor="middle">small pattern detectors</text>
+      <text class="s" x="380" y="119" text-anchor="middle">Hebbian or random</text>
+
+      <rect class="box" x="480" y="62" width="130" height="70" rx="6"/>
+      <text class="t" x="545" y="86" text-anchor="middle">Pooled code</text>
+      <text class="s" x="545" y="103" text-anchor="middle">average per region</text>
+      <text class="s" x="545" y="119" text-anchor="middle">4,096 numbers</text>
+
+      <rect class="hot" x="640" y="62" width="140" height="70" rx="6"/>
+      <text class="t" x="710" y="86" text-anchor="middle">Decorrelation 2</text>
+      <text class="s" x="710" y="103" text-anchor="middle">the relay</text>
+      <text class="s" x="710" y="119" text-anchor="middle">on the whole code</text>
+
+      <path class="flow" d="M110 97 H138" marker-end="url(#ah)"/>
+      <path class="flow" d="M280 97 H308" marker-end="url(#ah)"/>
+      <path class="flow" d="M450 97 H478" marker-end="url(#ah)"/>
+      <path class="flow" d="M610 97 H638" marker-end="url(#ah)"/>
+      <path class="flow" d="M780 97 H818" marker-end="url(#ah)"/>
+
+      <text class="hotnote" x="210" y="150" text-anchor="middle">computed in batch today</text>
+      <text class="note" x="380" y="150" text-anchor="middle">same score either way</text>
+      <text class="hotnote" x="710" y="150" text-anchor="middle">worth 10 points · batch today</text>
+
+      <!-- word cells -->
+      <rect class="box" x="820" y="62" width="150" height="190" rx="6"/>
+      <text class="t" x="895" y="120" text-anchor="middle">Word cells</text>
+      <text class="s" x="895" y="138" text-anchor="middle">one layer of synapses</text>
+      <text class="s" x="895" y="154" text-anchor="middle">local delta rule</text>
+      <text class="s" x="895" y="170" text-anchor="middle">corrected by the</text>
+      <text class="s" x="895" y="186" text-anchor="middle">adult's answer</text>
+
+      <!-- speech lane -->
+      <rect class="box" x="10" y="182" width="100" height="70" rx="6"/>
+      <text class="t" x="60" y="212" text-anchor="middle">Speech</text>
+      <text class="s" x="60" y="230" text-anchor="middle">text, as bytes</text>
+      <rect class="box" x="140" y="182" width="140" height="70" rx="6"/>
+      <text class="t" x="210" y="206" text-anchor="middle">Ear</text>
+      <text class="s" x="210" y="223" text-anchor="middle">groups bytes into units</text>
+      <text class="s" x="210" y="239" text-anchor="middle">no filters here</text>
+      <path class="flow" d="M110 217 H138" marker-end="url(#ah)"/>
+      <path class="flow" d="M280 217 H818" marker-end="url(#ah)"/>
+      <text class="lab" x="550" y="209" text-anchor="middle">units just heard, and a trace of the exchange so far</text>
+
+      <!-- bottom row -->
+      <rect class="box" x="440" y="322" width="170" height="70" rx="6"/>
+      <text class="t" x="525" y="346" text-anchor="middle">Episodic store</text>
+      <text class="s" x="525" y="363" text-anchor="middle">2,000 single moments</text>
+      <text class="s" x="525" y="379" text-anchor="middle">remembers after one look</text>
+
+      <rect class="box" x="640" y="322" width="140" height="70" rx="6"/>
+      <text class="t" x="710" y="346" text-anchor="middle">Gate</text>
+      <text class="s" x="710" y="363" text-anchor="middle">when to speak,</text>
+      <text class="s" x="710" y="379" text-anchor="middle">and from which source</text>
+
+      <rect class="box" x="820" y="322" width="150" height="70" rx="6"/>
+      <text class="t" x="895" y="346" text-anchor="middle">Mouth</text>
+      <text class="s" x="895" y="363" text-anchor="middle">learned by babbling</text>
+      <text class="s" x="895" y="379" text-anchor="middle">says the reply</text>
+
+      <path class="flow" d="M850 252 V290 H730 V320" marker-end="url(#ah)"/>
+      <text class="lab" x="792" y="284" text-anchor="middle">its answer, how sure</text>
+      <path class="flow" d="M610 357 H638" marker-end="url(#ah)"/>
+      <path class="flow" d="M780 357 H818" marker-end="url(#ah)"/>
+      <path class="flow" d="M210 252 V300 H690 V320" marker-end="url(#ah)"/>
+      <text class="lab" x="330" y="294" text-anchor="middle">what was heard (to echo)</text>
+      <text class="lab" x="895" y="410" text-anchor="middle">reward returns to the gate only</text>
+    </svg>
+    </div>
+    <div class="legend">
+      <span><i class="sw hot"></i>decorrelation, the idea that carries the result</span>
+      <span><i class="sw dim"></i>where Hebbian and random filters were compared</span>
+      <span><i class="sw"></i>other parts</span>
+    </div>
+    <figcaption>Only pictures go through filters. Speech goes through the ear and never meets them. The word cells are the only layer the labels teach, and no error is ever sent back to the filters.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>What decorrelation means</h2>
+  <p class="claim">It does not add information. It reshapes the code so that a simple learner seeing each example once can use what is already there.</p>
+  <figure>
+    <svg viewBox="0 0 660 270" role="img" aria-label="Left: the code as it arrives is a long thin cloud; two classes differ only across its narrow direction. Right: after decorrelation the cloud is round and the two classes sit clearly apart.">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
+      <text class="t" x="165" y="22" text-anchor="middle">As the code arrives</text>
+      <text class="t" x="495" y="22" text-anchor="middle">After decorrelation</text>
+      <g transform="translate(165,140) rotate(-18)">
+        <ellipse class="box" cx="0" cy="0" rx="132" ry="34"/>
+        <g fill="currentColor"><circle cx="-104" cy="-9" r="4"/><circle cx="-78" cy="-14" r="4"/><circle cx="-50" cy="-8" r="4"/><circle cx="-22" cy="-15" r="4"/><circle cx="6" cy="-9" r="4"/><circle cx="34" cy="-14" r="4"/><circle cx="62" cy="-8" r="4"/><circle cx="90" cy="-13" r="4"/><circle cx="112" cy="-7" r="4"/></g>
+        <g fill="var(--surface)" stroke="var(--accent)" stroke-width="2"><circle cx="-110" cy="8" r="4"/><circle cx="-84" cy="13" r="4"/><circle cx="-56" cy="8" r="4"/><circle cx="-28" cy="14" r="4"/><circle cx="0" cy="9" r="4"/><circle cx="28" cy="14" r="4"/><circle cx="56" cy="8" r="4"/><circle cx="84" cy="13" r="4"/><circle cx="106" cy="8" r="4"/></g>
+        <path class="flow" d="M-128 56 H128" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+        <path class="flow" d="M150 -30 V30" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+      </g>
+      <text class="lab" x="150" y="226" text-anchor="middle">strong direction: what all pictures share</text>
+      <text class="lab" x="150" y="241" text-anchor="middle">a one-pass learner spends itself here</text>
+      <text class="lab" x="238" y="62" text-anchor="middle">weak direction:</text>
+      <text class="lab" x="238" y="76" text-anchor="middle">cat versus dog</text>
+      <path class="flow" d="M318 140 H372" marker-end="url(#ah2)" stroke="var(--accent)"/>
+      <g transform="translate(495,140)">
+        <circle class="box" cx="0" cy="0" r="82"/>
+        <g fill="currentColor"><circle cx="-38" cy="-40" r="4"/><circle cx="-16" cy="-52" r="4"/><circle cx="-48" cy="-16" r="4"/><circle cx="-22" cy="-26" r="4"/><circle cx="2" cy="-36" r="4"/><circle cx="-34" cy="2" r="4"/><circle cx="-8" cy="-10" r="4"/><circle cx="18" cy="-56" r="4"/><circle cx="-56" cy="-34" r="4"/></g>
+        <g fill="var(--surface)" stroke="var(--accent)" stroke-width="2"><circle cx="38" cy="40" r="4"/><circle cx="16" cy="52" r="4"/><circle cx="48" cy="16" r="4"/><circle cx="22" cy="26" r="4"/><circle cx="-2" cy="36" r="4"/><circle cx="34" cy="-2" r="4"/><circle cx="8" cy="12" r="4"/><circle cx="-18" cy="56" r="4"/><circle cx="56" cy="34" r="4"/></g>
+      </g>
+      <text class="lab" x="495" y="248" text-anchor="middle">every direction equally strong: the difference is easy to learn</text>
+    </svg>
+    <figcaption>A schematic, drawn by hand to show the idea. Filled and hollow dots are two kinds of picture. On the left they differ only across the thin direction of the cloud, which a quick learner hardly reaches. Decorrelation stretches the cloud into a ball, and the same two groups are now easy to tell apart.</figcaption>
+  </figure>
+  <ul class="points">
+    <li><strong>Why the code is lopsided.</strong> Neighbouring pixels look alike, and most filters respond to the same big things: brightness, contrast, large shapes. So a few directions in the code are very strong and the rest are faint.</li>
+    <li><strong>Why that hurts a one-pass learner.</strong> A simple rule that sees each example once learns fast along the strong directions and barely along the faint ones. The faint ones are where a cat differs from a dog. More passes helped little (+3 points for three passes) and bigger steps made it diverge.</li>
+    <li><strong>Why "double".</strong> We decorrelate in two places. Step 1 works on the raw 5 × 5 patches before the filters. Step 2, the relay, works on the 4,096-number code after the filters. The relay alone is worth about <b class="n">10 points</b> (0.591 → 0.687).</li>
+    <li><strong>How we know it adds nothing new.</strong> A statistical method that decorrelates internally (streaming LDA) scores about the same with or without our relay (<b class="n">0.722</b> and <b class="n">0.741</b>, one seed).</li>
+    <li><strong>The weak spot.</strong> Both steps are computed in one batch calculation before learning starts. A brain would have to learn them with local rules. Our first local version, a published lateral-inhibition network, recovers about four fifths of the relay's gain (0.513 → 0.605 against 0.627, three seeds, first 10,000 pictures).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>The evidence in six bars</h2>
+  <p class="claim">CIFAR-10, every training picture seen once, share of 2,000 new pictures named correctly. Chance is 0.10. Mean of three seeds unless noted.</p>
+  <figure>
+    <div class="bars">
+      <div class="axis"><span></span><div><span>0</span><span>0.2</span><span>0.4</span><span>0.6</span><span>0.8</span></div><span></span></div>
+      <div class="bar"><div class="name">Streaming LDA + relay<small>keeps a covariance matrix and inverts it</small></div><div class="track"><div class="fill" style="width:92.4%"></div></div><div class="v">0.739</div></div>
+      <div class="bar"><div class="name">Gradient-trained reader + relay<small>ordinary gradient descent on our code</small></div><div class="track"><div class="fill" style="width:86.8%"></div></div><div class="v">0.694</div></div>
+      <div class="bar ours"><div class="name">Ours, with random filters<small>filters never trained at all</small></div><div class="track"><div class="fill" style="width:86.6%"></div></div><div class="v">0.693</div></div>
+      <div class="bar ours"><div class="name">Ours, with Hebbian filters<small>the learner as built</small></div><div class="track"><div class="fill" style="width:85.9%"></div></div><div class="v">0.687</div></div>
+      <div class="bar"><div class="name">Backprop, one pass, same shape<small>it was not given the relay</small></div><div class="track"><div class="fill" style="width:77%"></div></div><div class="v">0.616</div></div>
+      <div class="bar ours"><div class="name">Ours, relay removed<small>everything else unchanged</small></div><div class="track"><div class="fill" style="width:73.9%"></div></div><div class="v">0.591</div></div>
+    </div>
+    <figcaption>Three things to read off. Our learner beats one-pass backprop (0.687 against 0.616). Remove the relay and it loses to backprop (0.591). A gradient reader and random filters match it (0.694 and 0.693), so neither our rule nor our filters earn the win. Differences under 0.02 are within test noise.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Hebbian or random filters: where they sit</h2>
+  <p class="claim">Only in vision. Text never passes through filters.</p>
+  <div class="two">
+    <div class="card">
+      <h3>What a filter is</h3>
+      <p>A filter is a small 5 × 5 pattern detector. The visual cortex has 256 of them and slides each one over the picture. A filter answers strongly where the picture matches its pattern.</p>
+      <p>Speech takes the other path: the ear groups bytes of text into units. There is nothing Hebbian-versus-random about that path.</p>
+    </div>
+    <div class="card">
+      <h3>The two ways to get filters</h3>
+      <p><strong>Random.</strong> The 256 patterns are drawn by chance and never change.</p>
+      <p><strong>Hebbian.</strong> They start random. Then the cortex looks at unlabelled pictures, and for each patch the filter that answers most moves a little towards it. No labels and no error signal are involved.</p>
+    </div>
+    <div class="card">
+      <h3>What we found</h3>
+      <p>For our learner it made no difference: <b class="n">0.687</b> with Hebbian filters, <b class="n">0.693</b> with random ones.</p>
+      <p>The Hebbian filters are not empty. Streaming LDA gains two points from them (0.739 against 0.719). Our simpler reader cannot use whatever that is.</p>
+    </div>
+    <div class="card">
+      <h3>Why, as far as we know</h3>
+      <p>Hebbian filters come out more selective, but many are near copies of each other: 658 pairs, against none among random filters. Copies add no new directions to the code.</p>
+      <p>That random patches are hard to beat has been known since 2011. We found it again the slow way.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>The scoreboard</h2>
+  <p class="claim">Everything we built or tried, sorted by what the measurements say.</p>
+  <div class="board">
+    <div class="col">
+      <span class="tag ok">✓ Works</span>
+      <ul>
+        <li><strong>The relay (decorrelation 2)</strong><span>+10 points on CIFAR-10. The only part whose removal hurts single-picture naming in the staged world (0.42 → 0.35).</span></li>
+        <li><strong>Looking</strong><span>Naming one thing on a page of several needs the gaze: 0.36 with it, 0.02 without.</span></li>
+        <li><strong>Episodic store</strong><span>Remembers a picture after one showing (1.00 against 0.00 without it) and disturbs nothing already learned.</span></li>
+        <li><strong>Store filed by what the eye was on</strong><span>A name heard once on a page comes back on another page 85–92% of the time. Filed by the whole view: 11–15%.</span></li>
+        <li><strong>Local lateral inhibition</strong><span>A local rule that recovers four fifths of the relay's gain.</span></li>
+        <li><strong>Self-timed answers</strong><span>The learner chooses when to speak: about 1 tick for a picture question, 3–4 for a spoken one.</span></li>
+        <li><strong>Babbling</strong><span>Nobody rewards it, yet it drifts from "ather cathay" to "can you bus".</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <span class="tag nil">○ Did nothing</span>
+      <ul>
+        <li><strong>Hebbian development of filters</strong><span>Same score as random filters for our learner.</span></li>
+        <li><strong>A second cortical layer</strong><span>+0.01.</span></li>
+        <li><strong>Dendritic branches on word cells</strong><span>No gain.</span></li>
+        <li><strong>Replay from the store</strong><span>Did not protect earlier stages. The store had filled with small talk.</span></li>
+        <li><strong>A bias towards new words</strong><span>Children show one. Ours: 0.51 where chance is 0.50.</span></li>
+        <li><strong>Match units</strong><span>Helped on two seeds of three. Too weak to claim.</span></li>
+        <li><strong>The longer wait before spoken answers</strong><span>Right and wrong answers take the same time, so we cannot call it thinking.</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <span class="tag bad">✗ We got wrong</span>
+      <ul>
+        <li><strong>Echo as a gate</strong><span>We held learners back for echoing less, which is what a child does.</span></li>
+        <li><strong>A wired "novelty drive"</strong><span>A rule of ours that passed stages. Removed, every life rerun.</span></li>
+        <li><strong>A judge that taught mistakes</strong><span>About 7% of lessons repeated the learner's own error back to it.</span></li>
+        <li><strong>A world that reverted</strong><span>A bug sent every life back to an old version of the world after 50,000 moments.</span></li>
+        <li><strong>Pass marks chosen by us</strong><span>Dropped. The world now moves on when the curve stops rising.</span></li>
+        <li><strong>The store's filing key</strong><span>Filed by the whole view, it gave back names from other pages and cost 9 points on pages.</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <span class="tag open">? Still open</span>
+      <ul>
+        <li><strong>Both decorrelations are batch</strong><span>The hero of the paper is the part not yet learned by a local rule.</span></li>
+        <li><strong>Like for like, backprop wins</strong><span>Without the relay: 0.616 against our 0.591. The fair test, backprop with the relay, is running now.</span></li>
+        <li><strong>Streaming LDA beats us</strong><span>By five points, on our own code.</span></li>
+        <li><strong>One-shot is an instance, never a category</strong><span>The store brings back that picture. It does not learn "dog" from one dog.</span></li>
+        <li><strong>The staged world is weaker evidence</strong><span>Pictures recur, the judge is a model, and no person has checked its verdicts yet.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What the paper can claim</h2>
+  <div class="two">
+    <div class="card">
+      <h3>It can say</h3>
+      <p>A learner with no backpropagation can learn from a single pass, and here is how well.</p>
+      <p>The single-pass advantage of this kind of learner comes from a decorrelated code. We show it with the controls that would have proved us wrong: a gradient reader, random filters, and the relay removed.</p>
+      <p>A fast store beside slow weights gives one-shot memory of an instance, and it has to be filed by what the eye was on.</p>
+      <p>Most of what we built did nothing, and we report which parts and how we know.</p>
+    </div>
+    <div class="card">
+      <h3>It cannot say</h3>
+      <p>That local learning rules beat backpropagation. Ours tie with a gradient reader on the same code.</p>
+      <p>That the learner is fully local. Two steps are batch calculations.</p>
+      <p>That Hebbian filters matter. For this learner they do not.</p>
+      <p>That it is a model of a child, or that any of this holds at scale.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Running now</h2>
+  <ul class="points">
+    <li><strong>The fair fight.</strong> Backprop given the same relay step, tuned the same way, on three seeds. It decides how much of the 7-point lead survives.</li>
+    <li><strong>Lives with no pass mark.</strong> Three learners that leave a stage only when their curve flattens. At 40,000 moments they are still in first words and still rising (0.43, 0.46, 0.49).</li>
+    <li><strong>Kinder or stricter adults.</strong> Queued next: lives where a good try ("woof" for a dog) earns reward all life long, and lives where it counts early and less with age, against the strict lives. The tests stay strict in every arm.</li>
+    <li><strong>The local relay on the whole stream.</strong> So far it has been run on the first fifth.</li>
+  </ul>
+</section>
+
+<footer>Sources: the project's benchmark logs, the lives' test records and the lab notebook (docs/VISION.md, docs/JUDGING.md, docs/paper/DRAFT.md). The decorrelation drawing is a schematic; every other number is measured.</footer>
+
+</div>
