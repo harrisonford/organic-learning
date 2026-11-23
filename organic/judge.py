@@ -43,7 +43,16 @@ MEANT = ("For item{i}: the adult's own answer is the truth about what is there. 
          "Another way of saying the same word counts (baby talk, a mispronunciation, an extra word). A different thing, "
          "the opposite of yes or no, a different number, or only repeating the adult's question does not count. "
          "Several different words run together into one (the right word stuck to the names of other things) do not count either.")
+# a kinder adult (2026-11-23, docs/JUDGING.md: how strict the reward is, as a matter of upbringing): the truth is still
+# the adult's answer, but a good try counts. Used only for the reward of lived moments (REWARD=lenient or ramp in the
+# life script); the tests are always judged by MEANT.
+NEAR = ("For item{i}: the adult's own answer is the truth about what is there. Would a caring adult count what the child said "
+        "as a good try for a child of that age? The same word in any form counts (baby talk, a mispronunciation, an extra word). "
+        "Something closely tied to the right answer counts too: the sound the animal or the thing makes, a very similar thing, "
+        "a part of it. An unrelated thing, the opposite of yes or no, a different number, or only repeating the adult's "
+        "question does not count.")
 OPEN = ("social", "text:chat", "text:dialogue", "dailydialog", "text:story", "text:mind", "echo", "echo:wide")  # sources where many replies are fine
+EXACT = {"yes", "no", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"} | {str(n) for n in range(100)}
 VERSION = "2"  # of the questions above: an answer judged under another version is judged again
 
 
@@ -75,7 +84,7 @@ class Judge:
 
     @staticmethod
     def key(stage, question, answers, said, closed=None):
-        raw = json.dumps([stage, question, sorted(_tidy(a) for a in answers), _tidy(said)] + ([] if closed is None else [VERSION, bool(closed)]))
+        raw = json.dumps([stage, question, sorted(_tidy(a) for a in answers), _tidy(said)] + ([] if closed is None else [VERSION, bool(closed)]) + (["near"] if closed == "near" else []))
         return hashlib.sha1(raw.encode()).hexdigest()
 
     def _ask(self, items, closed=False):
@@ -83,18 +92,21 @@ class Judge:
         state = {f"item{i}": {"child": AGE.get(st, "a young child"), "adult asked": q, own: a[0],
                               "other answers the adult would accept": list(a[1:]), "the child answered": said or "(nothing)"}
                  for i, (st, q, a, said) in enumerate(items)}
-        questions = {f"item{i}": {"type": "noul", "instructions": (MEANT if closed else ASK).format(i=i)} for i in range(len(items))}
+        questions = {f"item{i}": {"type": "noul", "instructions": (NEAR if closed == "near" else MEANT if closed else ASK).format(i=i)} for i in range(len(items))}
         req = urllib.request.Request(URL, data=json.dumps({"state": state, "questions": questions}).encode(),
                                      headers={"Content-Type": "application/json"})
         d = json.load(urllib.request.urlopen(req, timeout=120))
         return [float(d["answers"][f"item{i}"]["noul"]) for i in range(len(items))]
 
-    def accept(self, items, fallback, sources=None):
+    def accept(self, items, fallback, sources=None, near=False):
         """items: [(stage, question, answers, said)]; fallback(i) -> local grade if the judge is down; sources: where
         each item is from (None: as before 2026-11-19, every question open). Returns the probability an adult
-        accepts each answer."""
+        accepts each answer. near: where the world settles the answer, a good try counts (NEAR), not only the same
+        meaning (MEANT)."""
         out, todo = [None] * len(items), []
-        closed = [sources is not None and sources[i] not in OPEN for i in range(len(items))]
+        # yes or no and a number have no near miss (the judge model is too kind there: "yes" for "no" 0.86, tried 2026-11-23)
+        exact = [any(w in EXACT for x in a for w in _core(x).split()) for _, _, a, _ in items]
+        closed = [("near" if near and not exact[i] else True) if sources is not None and sources[i] not in OPEN else False for i in range(len(items))]
         for i, (st, q, a, said) in enumerate(items):
             if said and (_tidy(said) in [_tidy(x) for x in a] or (_core(said) and _core(said) in [_core(x) for x in a])):
                 out[i] = 1.0
@@ -120,8 +132,8 @@ class Judge:
             else:
                 todo.append((i, k))
         chunks = []  # batches of 20 (agreement 0.93 with the hosted judge at this size); the open and the closed questions apart
-        for kind in (False, True):
-            part = [t for t in todo if closed[t[0]] == kind]
+        for kind in (False, True, "near"):
+            part = [t for t in todo if closed[t[0]] is kind or (kind == "near" and closed[t[0]] == "near")]
             chunks += [part[j : j + 20] for j in range(0, len(part), 20)]
         for chunk in chunks:
             probs = None

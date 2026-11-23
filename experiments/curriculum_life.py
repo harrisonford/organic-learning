@@ -120,6 +120,12 @@ if os.environ.get("FROM_LEVEL") == "1" and state["stage"] in state["passed"]:
 # docs/RESEARCH_MEMORY.md, 2026-11-18). REPLAY: how many come back for every moment of the day. REPLAY_FROM=P: only
 # from that stage on (the experimenter's switch, to compare with a life that had none; a brain has no such switch).
 REPLAY = float(os.environ.get("REPLAY", 0))
+# How strict the adults are with the reward of a lived answer (docs/JUDGING.md, 2026-11-23; the tests are always strict):
+# "strict": the answer must mean what the adult's did. "lenient": a good try counts in full ("woof" for a dog; the
+# judge's NEAR). "ramp": kind while the child is small and stricter as it grows: a good try counts in full up to first
+# words, half in the pages stage, not at all after. The adult's own answer is always what the learner is told.
+REWARD = os.environ.get("REWARD", "strict")
+KIND = {"BB": 1.0, "B": 1.0, "W1": 1.0, "W2": 0.5}
 GATE = os.environ.get("GATE", "beyond")  # when the world moves on: "beyond" (the rigid grade beyond the parrot), "above" (a mark), "plateau" (no mark; see the promotion below)
 SPAN = int(os.environ.get("PLATEAU_SPAN", 3))  # GATE=plateau: how many tests are averaged on each side when asking whether the curve still rises
 PASS_ABOVE = float(os.environ.get("PASS_ABOVE", 0.25))  # provisional (docs/JUDGING.md): to be set with Kris
@@ -421,8 +427,10 @@ while brain.age < TOTAL:
         if stage == "B" and hasattr(brain, "babble"):  # infancy: babbling between the words heard
             brain.babble(int(os.environ.get("BABBLE_PER", 3)))
         if judge is not None:
-            def judged(said, m=m):
-                return judge.accept([(m["stage"], m["question"], m["answers"], said)], fallback=lambda i: grade(m["stage"], said, m["answers"]), sources=[m["source"]])[0]
+            def judged(said, m=m, kind=KIND.get(stage, 0.0) if REWARD == "ramp" else float(REWARD == "lenient")):
+                ask = lambda near: judge.accept([(m["stage"], m["question"], m["answers"], said)], fallback=lambda i: grade(m["stage"], said, m["answers"]), sources=[m["source"]], near=near)[0]  # noqa: E731
+                strict = ask(False)
+                return strict + kind * max(0.0, ask(True) - strict) if kind and strict < 1.0 else strict
         if store is not None:
             store.mark_now = STAGES.index(m["stage"])
         _, tick, r, *_ = brain.live(m["image"], m["question"], m["answer"],
