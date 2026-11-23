@@ -283,7 +283,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   per series). matplotlib added to the project's environment for it.
   Next: figure 2 (the stage curves) when the plateau lives have them; figure 3 (the ablation table as bars); read
   the lateral queue; the lives' first stage change (earliest at 45,000, about 19:00).
-- 2026-11-23 17:25 **Lateral network, seed 1: reproduced** (VISION.md, evening): without any relay the word cells
+- 2026-11-23 16:45 **Lateral network, seed 1: reproduced** (VISION.md, evening): without any relay the word cells
   gain 9 points on its settled code (0.532 → 0.619; seed 0: 0.500 → 0.595); with the batch relay on top +1.9 (seed
   0: +4.7); streaming LDA unmoved. Seed 2 is being coded. **Paper figure 3** (`docs/paper/fig_ablation.pdf`): the
   ablation arms as bars with the seeds as dots, read back from the lives' logs (same numbers as the table); the
@@ -294,10 +294,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   yet). "Running" above rewritten (it still listed finished work).
   Next: build world 5's preschool (branch on `world >= 5`, a test that world 4 is unchanged item for item); figure 2
   when a life has left a stage; seed 2 of the lateral network and the three-seed table.
-- 2026-11-23 18:05 **World 5 built: preschool rebuilt** (`organic/curriculum.py`, `world >= 5` only; VISION.md):
+- 2026-11-23 16:50 **World 5 built: preschool rebuilt** (`organic/curriculum.py`, `world >= 5` only; VISION.md):
   numbers as words in every source, the three annotation-made sources even over their answers (blind child 0.25 /
   0.50 / 0.33 instead of 0.57 / 0.60 / 0.56), conversation lived but kept out of the test (`Curriculum.talk`).
   World 4's fingerprint is the same before and after (`experiments/world_hash.py 4 5`); the three lives are not
   touched. No life in world 5 yet: the machine is full with the three plateau lives.
-  Next: figure 2 when a life has left a stage (earliest 19:00–20:00); seed 2 of the lateral network; then, when the
+  Next: figure 2 when a life has left a stage (earliest about 18:30); seed 2 of the lateral network (about 18:00); then, when the
   plateau lives end, lives in world 5 (and the shuffled-order control).
