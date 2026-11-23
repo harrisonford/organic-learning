@@ -68,15 +68,21 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 15. Pivot frames for two-word text (docs/RESEARCH_TWO_WORDS.md), only after 7 says what is missing.
 
 ## Decisions waiting for Kris
-- **The store keyed by what the eye is on** (`Episodes.key = "looked"`; VISION.md 2026-11-23): adopt in new lives?
-- **LaTeX on the server** (none installed): install to compile the paper?
-- The preprint's first draft is docs/paper/DRAFT.md: read it; the AI-use statement is yours to word. Kris has an
-  arXiv account (2026-11-21). Before sending: the ablation arms (running, about 30 hours), related work with every
-  reference opened by hand, the name and affiliation as they should appear, and whether arXiv asks for an
-  endorsement in cs.NE when the submission is started.
-- Releasing a two-words level to kid-a: wait for the clean lives.
-- Hardware: memory first; the lives are bound by memory speed (docs/CRAFT.md).
-- Labelling about 200 answers by hand for the judge's audit set.
+Kris, 2026-11-23 17:10: "on your questions i follow your decision you can decide for me". Decided by the loop:
+- **The store keyed by what the eye is on: adopted for new lives** (`-E KEY=looked` in the life script; running
+  lives stay as they are). Reason: three seeds, takes the store's harm on pages away and lets it keep a name heard
+  once on a page; a limit stated (a memory of what was fixated, as it was fixated).
+- **LaTeX installed** (pacman: texlive-basic, -latex, -latexrecommended, -fontsrecommended; pdflatex, as arXiv
+  compiles). Next: the draft into LaTeX.
+- **Licence for the preprint: CC BY 4.0** (told to Kris; Kris is at the licence step of the arXiv form).
+Still Kris's own:
+- The arXiv form: after the licence and policy steps, choose cs.NE as primary; that page says whether an
+  endorsement is needed. Nothing is uploaded until the paper is ready and every reference has been opened by hand
+  (docs/paper/REFERENCES.md).
+- The author line (name, affiliation or none, public contact address) and the AI-use statement in Kris's words.
+- Releasing a level to kid-a; hardware (memory first); labelling about 200 answers for the judge's audit set.
+- **Launch line for new lives** (when the plateau lives end):
+  `TAG=... SEEDS="0 1 2" ARM=routes WORLD=5 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau -E KEY=looked" experiments/conv_pipeline.sh`
 
 ## Log
 - 2026-11-19 22:30 Loop opened. Done this evening: judge audit and the strict judge; recast in teaching; blind
@@ -301,3 +307,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   touched. No life in world 5 yet: the machine is full with the three plateau lives.
   Next: figure 2 when a life has left a stage (earliest about 18:30); seed 2 of the lateral network (about 18:00); then, when the
   plateau lives end, lives in world 5 (and the shuffled-order control).
+- 2026-11-23 17:20 **Kris leaves the open questions to the loop** ("you can decide for me"). Decided: the keyed
+  store is adopted for new lives (`KEY=looked`, added to `experiments/curriculum_life.py`; running lives untouched);
+  LaTeX installed with pacman (pdflatex); licence CC BY 4.0 recommended to Kris, who is at that step of the arXiv
+  form. Next for the paper: DRAFT.md into LaTeX (docs/paper/paper.tex), compiled here.
