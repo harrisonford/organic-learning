@@ -4,3 +4,5 @@ out/
 data/adults/
 data/world_ctl/
 .memoize-token
+docs/paper/paper.pdf
+docs/paper/paper.tex

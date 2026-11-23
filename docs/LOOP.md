@@ -315,3 +315,15 @@ Still Kris's own:
   public repository; in the assistant's private notes). Plan and a draft note in docs/paper/ENDORSEMENT.md: ask
   authors the paper cites, one or two at a time, only once the PDF exists and Kris has read it; Kris sends the
   notes. This puts the LaTeX version at the head of the paper's queue.
+- 2026-11-23 18:00 **The paper compiles**: `docs/paper/build.py` turns DRAFT.md into paper.tex and paper.pdf (pandoc,
+  pdflatex; both installed with pacman, with poppler to look at pages): 7 pages, figures 1 and 3 placed where the
+  text points to them. DRAFT.md stays the text that is edited. The two built files and the author's name are kept
+  out of the public repository for now (`AUTHOR="..." python docs/paper/build.py`). Kris confirmed the ORCID
+  (found by a public search at Kris's request) and two earlier papers; one former coauthor has enough computer
+  science papers on arXiv to endorse, for Kris to check with arXiv's own link and to ask (names kept out of this
+  repository). Kris is linking ORCID and Zenodo and will reserve a DOI without publishing.
+  Lives `plat_s0..2` at 40,000 / 40,000 / 35,000, all still in first words and rising (0.43 / 0.46 / 0.44 above the
+  floor; under the old mark they would have left at 15,000–20,000 with 0.27–0.29). The lateral network's seed 2 is
+  coded; its stream runs.
+  Next: the draft brought up to date (no pass mark, "pages", the keyed store, the lateral network's three seeds,
+  world 5), the [check] marks worked off against REFERENCES.md, figure 2 when a life has left a stage.
