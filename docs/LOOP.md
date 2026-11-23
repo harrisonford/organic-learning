@@ -237,3 +237,14 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   Next: (1) view-by-view diagnostic on out/ablrand_s0.pkl against out/cleanw_s0.pkl (why no page naming without
   development); (2) the store on pages (why higher without it); (3) related work, references opened one by one;
   (4) the lateral network on three seeds and the whole stream; (5) queue item 8.
+- 2026-11-23 12:50 **View by view on saved brains** (`experiments/page_views_probe.py`, 100 test pages each;
+  out/tmp/page_views.log, page_views2.log still running on eight brains): every brain names a fixated thing alone
+  about as well (control 0.54, never-developed cortex 0.46, no store 0.51 of pages have a fixation that alone gives
+  the right name), but as it lives the control names 0.36, the never-developed 0.15, the brain without a store 0.52.
+  What it says instead is mostly the coarse whole page's answer. With the store silenced for the asking the control
+  rises (seed 0: 0.36 → 0.48; seed 1: 0.45 → 0.49). In the code the store is written and read under the whole
+  (coarse) view only (`organic/words.py`, `x[0]`): pages look alike coarsely, so it gives back another page's
+  name. **Reading so far: it is the store's key, not the cortex's development, that fails on pages**; development
+  only makes coarse pages less alike. Waiting for the never-developed brains' store-silent numbers before writing
+  it into VISION.md. Then queue item 10 (the store keyed by what is fixated) gets its organic check and a probe.
+  Lives `plat_s0..2` out of babbling at 5,000.
