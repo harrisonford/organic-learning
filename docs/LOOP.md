@@ -55,6 +55,15 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    **Surveyed 2026-11-23** (VISION.md, evening; `experiments/preschool_sources.py`): five faults, a proposal for
    world 5 (numbers as words, built sources drawn evenly, conversation lived and not tested). **Built the same
    evening: `WORLD=5`** (world 4 unchanged item for item: `experiments/world_hash.py`). Open: a life in it.
+**D. Owed to the paper (the referee's list, 2026-11-23; controls on the references and the ruler, nothing in the brain)**
+16. An end-to-end backprop reference with a whitening layer before its readout (the like-for-like comparison).
+17. The lateral network on the whole stream, three seeds; the same rule among the summary's 4,096 numbers.
+18. The benchmark tested on all 10,000 test pictures; streaming LDA without the relay on seeds 1 and 2.
+19. How often a picture comes again in a life; a life with no going back to earlier stages; the shuffled order.
+20. A picture-blanked learner as one more blind baseline; a person's labels on 200 judgements (Kris).
+21. The new-class test with even counts, altered views of the shown picture, and beyond the store's capacity.
+22. For the reader: a drawing of the learner, a table of settings, compute, a life's curves, examples (the
+    showcase section Kris asked for), the judge's instruction.
 **C. Ideas proposed (each needs the organic check written down before it is built)**
 9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
    what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
@@ -327,3 +336,13 @@ Still Kris's own:
   coded; its stream runs.
   Next: the draft brought up to date (no pass mark, "pages", the keyed store, the lateral network's three seeds,
   world 5), the [check] marks worked off against REFERENCES.md, figure 2 when a life has left a stage.
+- 2026-11-23 18:20 **The paper rewritten for readers** (Kris: dull title, cold clipped writing). Three independent
+  readers (style survey, hostile referee, cold reader); the referee's nine points checked against the logs, all
+  held, and the draft now says them (VISION.md 18:15; queue D above). Working title "It Was the Code, Not the Rule";
+  10 pages; both PDFs sent to Kris by mail at Kris's request. **Lateral network, three seeds**: +9.2 points without
+  any relay, four fifths of the batch relay's 11.4. arXiv needs an endorsement in cs.NE (code in private notes;
+  docs/paper/ENDORSEMENT.md); Kris's ORCID confirmed and linked to Zenodo; a former coauthor is the likeliest
+  endorser. **Running: `organic-showcase`** (`experiments/showcase_probe.py` on out/cleanw_s0.pkl →
+  out/tmp/showcase.log, showcase_cleanw_s0.json/.npz) for the section Kris asked for: what the learner does,
+  with pictures, a timeline, its size and its answering times.
+  Next: read the probe; the showcase figures and section; then queue D in order (16 first).

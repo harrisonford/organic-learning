@@ -1054,3 +1054,56 @@ Left as the photographs are: "what colour" (white 0.21), the VQA counts (two 0.3
 Check against the rules: nothing here touches the brain or is chosen to move a number; it is the ruler and the
 lessons (training program before architecture). The plateau lives will enter world 4's preschool as it is, which is
 an observation worth having beside the rebuilt one. **New lives: `WORLD=5`.**
+
+## 2026-11-23 (18:15): the lateral network's code, three seeds
+
+`out/bench/stream_settled_s{0,1,2}.log`, `stream_developed10k_s{1,2}.log`, 10,000 pictures.
+
+| word cells after 10,000 pictures | seed 0 | seed 1 | seed 2 | mean |
+|---|---|---|---|---|
+| usual code, no relay | 0.500 | 0.532 | 0.508 | 0.513 |
+| **settled activities of the lateral network, no relay** | 0.595 | 0.619 | 0.602 | **0.605** |
+| usual code + batch relay | 0.623 | 0.632 | 0.627 | 0.627 |
+| settled activities + batch relay | 0.670 | 0.651 | 0.648 | 0.656 |
+
+- **Three seeds: the published Hebbian/anti-Hebbian network, by local rules and online, gives the word cells 9.2
+  points without any relay (+9.5, +8.7, +9.4), four fifths of the 11.4 the batch relay gives.** The batch relay on
+  top adds another 5.
+- Streaming LDA: 0.664–0.668 on the settled code without a relay (0.664 on the usual code, seed 0), and *lower*
+  with the relay on the settled code (0.635–0.662). The code holds no more than before; it is better conditioned.
+- Still a fifth of the stream; the windows' own whitening is still computed in batch. Next: the whole stream
+  (about six hours a seed to code), and the same rule among the 4,096 numbers of the summary, where the relay sits.
+
+## 2026-11-23 (18:15): the paper rewritten; what a referee found
+
+Kris on the first PDF: the title is dull, the writing cold and clipped ("slop, AI-ish"), it must be fun to read.
+Three independent readers were brought in (a survey of how well-known papers in the field are written; a hostile
+referee with access to the notebook and the logs; a cold reader marking sentences). The draft was rewritten whole
+(docs/paper/DRAFT.md; working title "It Was the Code, Not the Rule").
+
+The referee's points, each checked against the logs before it was accepted. **All held:**
+
+1. **Two parts are computed in batch, not one**: the windows' whitening as well as the relay (`organic/cortex2.py`,
+   both `eigh`). "Local rules only" was false as written. A centre-surround retina in place of the windows'
+   whitening had cost 0.065 of the linear reference (2026-11-17 table).
+2. **Like for like, backpropagation wins**: without the relay the word cells reach 0.591 and one-pass
+   backpropagation 0.616. The lead is a whitening step the reference was not given. **Owed: an end-to-end reference
+   with a whitening layer before its readout.**
+3. **Streaming LDA does not need the relay** (0.722 without, 0.741 with, seed 0), and **development is worth two
+   points to it** (0.739 against 0.719 with never-developed filters, three seeds): "development buys nothing" was
+   true of our reader only.
+4. **The store's 1.00 on a picture shown once is true by construction**, and "nobody reaches the kind" may be an
+   artefact of 20 pictures against 550 in 4,096 dimensions. Claimed more modestly now.
+5. **The life is not "each moment once"**: the world draws from finite pools with replacement. Owed: how often a
+   picture comes again.
+6. **"First words improves while pages is lived"** is at least partly continued training (30% of moments go back).
+   Owed: a life with no going back.
+7. **One number was tuned** (the relay's shrinkage, four values on held-out naming), beside "nothing was tuned".
+8. The test uses 2,000 of the 10,000 test pictures (chance error 0.010): differences under 0.02 are not read.
+9. Missing for a reader: a drawing of the learner, the rules as equations, a table of settings, compute, curves of
+   a life, the judge's instruction, examples.
+
+Kris, on the second PDF's way: a part that *shows* what was built (babbling, a timeline of a life, its size,
+pictures with its answers) and how long it takes to answer quick and slow questions. Probe:
+`experiments/showcase_probe.py` (a saved learner asked item by item; ticks of looking before it speaks, ticks of
+speaking, eye moves; its size organ by organ).

@@ -205,13 +205,12 @@ pass should use a streaming discriminant.
 Because the relay earns the result, its batch computation is the most uncomfortable fact in the paper. As a first
 step towards a local form we trained the Hebbian and anti-Hebbian network of Pehlevan & Chklovskii (2014), using
 their update rules unchanged, as lateral inhibition among the 256 filters, and used its settled activities as the
-code. Over the first 10,000 pictures and with no relay at all, the word cells rise from 0.500 to 0.595 on one
-seed and from 0.532 to 0.619 on a second; the batch relay takes them to 0.623 and 0.632. A local, online rule
-therefore recovers roughly four fifths of what the batch step gives. The streaming discriminant is again unmoved
+code. Over the first 10,000 pictures and with no relay at all, the word cells rise from 0.513 to 0.605 on
+average over three seeds (0.500 to 0.595, 0.532 to 0.619, 0.508 to 0.602); the batch relay takes them to 0.627. A
+local, online rule therefore recovers roughly four fifths of what the batch step gives. The streaming discriminant is again unmoved
 (0.66–0.67 either way), which is what one expects if the network conditions the code without adding to it. This
-is two seeds and a fifth of the stream, the patch whitening is still computed in batch, and our own first
-formulation of lateral inhibition ran away and had to be thrown out. **[pending: the third seed, and the full
-stream.]**
+is a fifth of the stream, the patch whitening is still computed in batch, and our own first formulation of
+lateral inhibition ran away and had to be thrown out. **[pending: the full stream.]**
 
 ### A fast store remembers a picture, not a category
 
@@ -370,7 +369,7 @@ lives along were set with scores in view; we dropped them for that reason.
 We only tried one small benchmark, on one machine, with codes of 4,096 numbers. Nothing here says the division of
 credit holds at scale. We only compared against one backpropagation architecture, trained with plain Adam and no
 augmentation, tuned on a grid of 14 settings, and never given the whitening step that turns out to matter. Both
-whitening steps are computed in batch, and the local replacement has been tried on two seeds and part of the
+whitening steps are computed in batch, and the local replacement has been tried on a fifth of the
 stream. We tested on 2,000 pictures, with three seeds where five would be better. In the staged world the stages
 and their order are ours, the adults and the judge are language models, pictures recur, and no human has yet
 labelled the judge's decisions. The staged world supports the benchmark's findings; it could not carry them alone.
