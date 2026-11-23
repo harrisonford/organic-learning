@@ -359,7 +359,7 @@ Still Kris's own:
   three seeds owed). Paper now 12 pages; sent to Kris.
   Picture licences to check before anything is public: the pages in fig_examples may hold COCO or Commons pictures.
   Next: three seeds of the showcase probe; queue D (16: the end-to-end reference with a whitening layer).
-- 2026-11-23 18:35 **Kris: the term "organic learning" and the title** "Organic Learning: Small-Scale Architecture
+- 2026-11-23 18:19 **Kris: the term "organic learning" and the title** "Organic Learning: Small-Scale Architecture
   Experiments Without Backpropagation" (set; the term defined in the introduction as five commitments; the phrase
   is the title of a US patent on network architectures, 10,846,592, to be cited). **Kris: is the judging lenient
   early and stricter later, and is there a sweet spot?** Answered and built (JUDGING.md, 2026-11-23): form is
