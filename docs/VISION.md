@@ -1131,3 +1131,40 @@ their size, and the small ones come round. The paper says so now. It also bears 
 without a relay had 0.40–0.53 in its tuning and 0.523 at 10,000 in its full run; the word cells with the relay have
 0.623 there. If this holds on three seeds and the whole stream, most of the lead over end-to-end backprop was the
 relay it had not been given, as the referee said. Four tuning runs and the six full runs are still to come.
+
+### 2026-11-23 20:20: no pass mark, 45,000 moments of first words and still rising; backprop's tuning grid widened
+
+**Lives `plat_s0..2`** (`GATE=plateau`): first words, above the blind floor, test by test from 15,000 lived:
+
+| seed | 15k | 20k | 25k | 30k | 35k | 40k | 45k | 50k | 55k |
+|---|---|---|---|---|---|---|---|---|---|
+| 0 | 0.33 | 0.35 | 0.36 | 0.41 | 0.41 | 0.43 | 0.44 | 0.47 | 0.49 |
+| 1 | 0.32 | 0.33 | 0.38 | 0.39 | 0.44 | 0.46 | 0.40 | 0.46 | |
+| 2 | 0.41 | 0.41 | 0.43 | 0.43 | 0.44 | 0.49 | 0.47 | 0.50 | |
+
+The rule asks whether the mean of the last three tests is above the mean of the three before by more than the
+chance error of that difference (0.030 here). It still is, by 0.049 / 0.038 / 0.052, so none has left the stage.
+The earlier lives left it at 0.27–0.29 after 5,000–10,000 moments, on our mark. What this says so far: the stage
+had nearly twice as much to give as the mark took; and the rise is slow (about one point per 5,000 moments), close
+to the rule's own resolution, so a life may leave on a chance dip (seed 1's 0.40 at 45,000 nearly did it one test
+later: margin 0.038 against 0.030). Not changed: the rule is what Kris asked for and it is running; the margin is
+recorded with each test for the reading.
+
+**Backprop with the relay, tuning** (seed 0, first 10,000 pictures, 1,000 test pictures, so ±0.015):
+
+| relay | rate 0.001 | 0.003 | 0.01 |
+|---|---|---|---|
+| fixed | 0.597 | 0.572 | 0.527 |
+| settled again every 5,000 | 0.602 | 0.564 | (running) |
+
+Fixed and tracked do not differ. The best rate is the lowest on the grid, and the first reference had been tuned
+over batch size as well. A reference whose best setting sits on the edge of its grid is not yet tuned, so
+`out/bench/backprop_relay_queue2.sh` adds rates 0.0003 and 0.0001 and batch 8 after the first queue, and runs a
+winner on three seeds. The paper keeps its pending mark and says the search is being widened.
+
+**The drawing of the learner** (referee: the paper had no picture of what was built): `fig_architecture` in
+`experiments/paper_figures.py`. One box a part, filled by how the part comes to be what it is: learned online by a
+local rule (visual cortex, ear, word cells, store, mouth), computed in batch before learning (the two whitening
+steps), learned from reward (the gating policy), a fixed reflex (where the eye goes). The two batch boxes are the
+ones the paper's result rests on, and the drawing shows that at a glance.
+

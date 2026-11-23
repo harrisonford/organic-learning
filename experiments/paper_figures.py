@@ -185,3 +185,64 @@ fig.tight_layout(h_pad=1.4, w_pad=0.6)
 fig.savefig("docs/paper/fig_examples.pdf", facecolor=SURFACE)
 fig.savefig("docs/paper/fig_examples.png", dpi=170, facecolor=SURFACE)
 print("docs/paper/fig_examples.pdf, .png")
+
+# The learner's parts and how each is set (docs/LOOP.md queue D 22): a box per part, filled by how it comes to be what
+# it is (the same thing is written in the legend's words, so nothing is told by colour alone).
+from matplotlib.patches import FancyBboxPatch  # noqa: E402
+KINDS = {"local": ("#2a78d6", "learns online, by a local rule"), "batch": ("#eb6834", "computed in batch before learning"),
+         "reward": ("#1baf7a", "learns from reward"), "fixed": ("#8a8984", "not learned")}
+W_, H_ = 16.0, 12.0
+BOXES = {  # name: (x, y, kind, the lines under the name)
+    "Looking": (9, 34, "fixed", ["a reflex: the eye", "goes to what", "stands out"]),
+    "Whitening": (27.5, 34, "batch", ["of each 5×5 patch,", "after contrast", "normalisation"]),
+    "Visual cortex": (46, 34, "local", ["256 filters;", "Hebbian, no labels", "→ 4,096 numbers"]),
+    "Relay": (64.5, 34, "batch", ["whitens the 4,096", "numbers again"]),
+    "Word cells": (85.5, 34, "local", ["a cell per unit", "heard in a reply;", "delta rule"]),
+    "Episodic store": (85.5, 17, "local", ["2,000 single", "moments, written", "on surprise"]),
+    "Ear": (27.5, 4, "local", ["bytes grouped into", "units by use;", "a trace of the talk"]),
+    "Gating policy": (105, 25.5, "reward", ["echo, word cells", "or store? and", "when to speak"]),
+    "Mouth": (105, 6, "local", ["motor units", "formed by babbling"]),
+}
+fig, ax = plt.subplots(figsize=(7.4, 3.45), facecolor=SURFACE)
+ax.set_xlim(-3, 124), ax.set_ylim(0, 57), ax.axis("off")
+for name, (x, y, kind, lines) in BOXES.items():
+    ax.add_patch(FancyBboxPatch((x, y), W_, H_, boxstyle="round,pad=0,rounding_size=1.2", facecolor=KINDS[kind][0] + "2e", edgecolor=KINDS[kind][0], linewidth=1.1))
+    ax.text(x + W_ / 2, y + H_ - 2.6, name, ha="center", va="center", fontsize=7.6, fontweight="bold", color=INK)
+    for i, line in enumerate(lines):
+        ax.text(x + W_ / 2, y + H_ - 5.6 - 2.5 * i, line, ha="center", va="center", fontsize=6.6, color=MUTED)
+
+
+def arrow(points, label=None, at=None, **kw):
+    """A line through the points with a head at the last one."""
+    xs, ys = zip(*points)
+    ax.plot(xs[:-1], ys[:-1], color=INK, linewidth=0.9, solid_capstyle="round")
+    ax.annotate("", xy=points[-1], xytext=points[-2], arrowprops=dict(arrowstyle="-|>", color=INK, linewidth=0.9, shrinkA=0, shrinkB=0, mutation_scale=8))
+    if label:
+        ax.text(*at, label, color=MUTED, **{"ha": "center", "va": "center", "fontsize": 6.4, **kw})
+
+
+mid = 34 + H_ / 2
+ax.text(4, mid + 1.2, "a picture", ha="center", fontsize=7, color=INK), ax.text(4, mid - 2.2, "or a page", ha="center", fontsize=6.4, color=MUTED)
+arrow([(0.5, mid - 4), (9, mid - 4)])
+for a, b in (("Looking", "Whitening"), ("Whitening", "Visual cortex"), ("Visual cortex", "Relay")):
+    arrow([(BOXES[a][0] + W_, mid), (BOXES[b][0], mid)])
+arrow([(80.5, mid + 2.5), (85.5, mid + 2.5)])  # the relay to the word cells
+arrow([(72.5, 34), (72.5, 23), (85.5, 23)], "what is in view", (78.5, 24.6), fontsize=6.0)  # the relay to the store
+ax.text(4, 11.2, "what is said", ha="center", fontsize=7, color=INK), ax.text(4, 7.8, "(bytes)", ha="center", fontsize=6.4, color=MUTED)
+arrow([(0.5, 6), (20, 6), (20, 10), (27.5, 10)])
+arrow([(43.5, 10), (83, 10), (83, mid - 3), (85.5, mid - 3)], "the units heard and their trace", (63, 11.8))  # the ear to the word cells
+arrow([(101.5, mid), (103.2, mid), (103.2, 33.5), (105, 33.5)])  # the word cells to the gating policy
+arrow([(101.5, 23), (103.2, 23), (103.2, 29.5), (105, 29.5)])  # the store to the gating policy
+arrow([(113, 25.5), (113, 18)])
+arrow([(113, 6), (113, 1.2)])
+ax.text(115, 2.6, "the reply", ha="left", va="center", fontsize=7, color=INK)
+arrow([(113, 46), (113, 37.5)])
+ax.text(113, 49.6, "reward", ha="center", fontsize=7, color=INK), ax.text(113, 47.1, "an adult's judgement", ha="center", fontsize=6.2, color=MUTED)
+for i, (colour, words) in enumerate(KINDS.values()):  # the legend, along the top
+    x = 9 + [0, 31, 66, 90][i]
+    ax.add_patch(FancyBboxPatch((x, 52.6), 3.2, 2.6, boxstyle="round,pad=0,rounding_size=0.6", facecolor=colour + "2e", edgecolor=colour, linewidth=1.0))
+    ax.text(x + 4.4, 53.9, words, ha="left", va="center", fontsize=6.8, color=INK)
+fig.subplots_adjust(left=0.005, right=0.995, top=0.995, bottom=0.005)
+fig.savefig("docs/paper/fig_architecture.pdf", facecolor=SURFACE)
+fig.savefig("docs/paper/fig_architecture.png", dpi=170, facecolor=SURFACE)
+print("docs/paper/fig_architecture.pdf")

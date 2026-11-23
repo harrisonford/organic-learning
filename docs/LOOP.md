@@ -35,6 +35,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   relay step before its readout (queue D 16): tuned on the first 10,000 pictures of seed 0 (relay fixed or settled
   again every 5,000 pictures; three rates) → out/bench/backprop_relay_tune_s0.log; then the best rate of each on
   three seeds, 50,000 pictures → out/bench/backprop_relay_full.log.
+- **`organic-bench-bprelay2`** (out/bench/backprop_relay_queue2.sh): waits for the queue above, then widens the
+  tuning downwards and over batch size (rates 0.0003 and 0.0001, batches 8 and 32), because the first grid's best
+  rate was its lowest; a setting that wins is run on three seeds too (same two logs).
 - **`organic-reward-queue`**: waits for the plateau lives, then lives `kind_s0..2` and `ramp_s0..2` (JUDGING.md).
 - Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
 - Launch line for a life with no pass mark:
@@ -67,8 +70,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 19. How often a picture comes again in a life; a life with no going back to earlier stages; the shuffled order.
 20. A picture-blanked learner as one more blind baseline; a person's labels on 200 judgements (Kris).
 21. The new-class test with even counts, altered views of the shown picture, and beyond the store's capacity.
-22. For the reader: a drawing of the learner, a table of settings, compute, a life's curves, examples (the
-    showcase section Kris asked for), the judge's instruction.
+22. For the reader: a drawing of the learner (done 2026-11-23: `fig_architecture`, figure 1), a life's curves and
+    examples (done: the showcase section); still owed: a table of settings, compute, the judge's instruction.
 **C. Ideas proposed (each needs the organic check written down before it is built)**
 9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
    what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
@@ -390,3 +393,17 @@ Still Kris's own:
   dipped). Memory: 3.5 GB free with the backprop queue beside the lives.
   Next: the tuning's end and the full runs; the lives' first stage change; the showcase probe on seeds 1 and 2
   when the backprop queue is done (memory).
+- 2026-11-23 20:20 **The lives with no pass mark are still rising in first words** after 40,000–45,000 moments
+  there: above the floor 0.49 (seed 0, 55,000 lived) / 0.46 / 0.50 (50,000 lived); the last three tests are above
+  the three before by 0.04–0.05, the chance error of that difference is 0.03, so no stage has been left yet. The
+  earlier lives were sent on after 5,000–10,000 moments at 0.27–0.29. At this pace a life of 120,000 moments ends
+  about 06:00, and it may end still in first words: then the finding is the curve itself, and the pages stage needs
+  longer lives. **Backprop with the relay, tuning**: fixed 0.597 / 0.572 / 0.527 at rates 0.001 / 0.003 / 0.01;
+  tracked 0.602 / 0.564 (0.01 running). The best rate is the lowest tried, so a second queue
+  (`organic-bench-bprelay2`) widens the grid after the first: a reference tuned at the edge of its grid would not
+  be a fair one. **A drawing of the learner** for the paper (queue D 22): `fig_architecture`, each part filled by
+  how it comes to be (local rule online / batch before learning / reward / fixed reflex); the paper has 13 pages.
+  Memory 2.5 GB free: nothing heavier was started.
+  Next: the backprop full runs (about 100 minutes each, six of them, then the wider grid); the lives' stage
+  change or end; settings table, compute and the judge's instruction for the paper; the showcase probe on seeds 1
+  and 2 and queue D 18 when memory allows.

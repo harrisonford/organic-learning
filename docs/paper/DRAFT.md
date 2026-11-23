@@ -76,6 +76,7 @@ features; a streaming linear discriminant beats ours by five points, and we say 
 Everything in the learner updates online, one example at a time, and nothing is frozen while it learns. We use a
 few home-made names and introduce them here once. An *example* in the staged world is a **moment**: one picture,
 one thing said to the learner, one reply expected. A whole training run from random initialisation is a **life**.
+Figure 1, `fig_architecture.pdf`, shows the parts and how each one comes to be what it is.
 
 **Ear.** Text arrives as bytes. The ear groups bytes that often occur together into units of its own, much as a
 sub-word tokeniser would, but online and by use. It hands the rest of the learner two things: the units just
@@ -127,7 +128,7 @@ come back to it under mistakes.
 
 Before the measurements, here is the thing itself, because a list of parts does not show what was built.
 
-**A life.** Figure 1, `fig_life.pdf`, follows one learner from its first moment to its 115,000th. For the first
+**A life.** Figure 2, `fig_life.pdf`, follows one learner from its first moment to its 115,000th. For the first
 5,000 moments it only babbles. Nothing is asked of it; the mouth tries out sounds and the ear listens to the
 result, and what comes out is "an?" and "ather cathay". The world then plays echo games with it, and after 10,000
 moments begins to show it pictures and ask for names. Within a few thousand moments it is naming some of them.
@@ -137,7 +138,7 @@ that ignores the picture scores 0 and an adult scores 1. The babbling is worth f
 figure. Nobody rewards or tests it, yet it drifts towards the world's words: "reend" and "w a chice!" at 30,000
 moments, "chairbathe ase?" at 65,000, "can you bus" at 110,000.
 
-**What it says.** Figure 2, `fig_examples.pdf`, shows the learner at the end of that life answering held-out
+**What it says.** Figure 3, `fig_examples.pdf`, shows the learner at the end of that life answering held-out
 questions. We did not choose these; they are the first six test items of each kind. It names four of the six
 single pictures (over the whole test, about half) and two of the six pages (over the whole test, about a third).
 The mistakes are worth reading. A mouse photographed close up is a "lion". A bus is a "train". A page with a horse
@@ -202,7 +203,7 @@ pictures revisited for each new one; starting from our developed filters; and wi
 
 ### The local learner beats one-pass backpropagation
 
-Figure 3, `fig_benchmark.pdf`, shows the curves, and the table gives three points along them.
+Figure 4, `fig_benchmark.pdf`, shows the curves, and the table gives three points along them.
 
 | learner | 500 | 5,000 | 50,000 pictures |
 |---|---|---|---|
@@ -230,7 +231,10 @@ Take the relay away and the order flips. Without it the word cells reach 0.591, 
 0.616, is ahead of them. Like for like, backpropagation wins. Everything the learner gains over it, and three
 points more, comes from one whitening step that the backpropagation baseline was not given. That is the fair way
 to read our headline number, and it is why the headline is not in the title. **[pending: the end-to-end baseline
-with a whitening layer in front of its readout, which is the comparison this paragraph calls for.]**
+with a whitening layer in front of its readout, which is the comparison this paragraph calls for. A first
+reading on one seed and the first 10,000 pictures: with the relay in front of its readout, backpropagation reaches
+0.60, against 0.52 without it and 0.62 for the word cells. Its best learning rate was the lowest we had tried, so
+the search is being widened before the three-seed runs are read.]**
 
 Is the local rule at least a good reader of the code? It is exactly as good as gradient descent and no better. A
 softmax readout trained by gradient on the same relayed code reaches 0.694, against 0.687 for the word cells,
@@ -357,9 +361,11 @@ stages.]**
 
 These lives moved from stage to stage when a score crossed a pass mark that we had chosen with earlier scores in
 front of us. We no longer think a mark of ours should decide when a learner is ready, and the lives now running
-move on when the curve of the current stage stops rising. Under that rule the three seeds stay in first words
-more than twice as long and are still improving at 0.43–0.46. **[pending: those lives; the same lessons in
-shuffled order.]**
+move on when the curve of the current stage stops rising. Under that rule the three seeds have now spent 40,000
+moments in first words, where the old mark let the earlier lives go after 5,000 to 10,000 at 0.27–0.29, and
+they are still improving at 0.46–0.50. Our mark had been sending the learner on with little more than half of
+what it could get from the stage.
+**[pending: those lives; the same lessons in shuffled order.]**
 
 Some things we observed without asking for them. Echoing fades by itself once words start to work; by the pages
 stage the learner repeats the question's last word in under a tenth of its answers. It has a slight bias towards
@@ -371,7 +377,7 @@ That backpropagation run had a single learning rate and optimiser and was not tu
 ### Removing one part at a time
 
 We ran each ablation as three lives from random initialisation and read the scores at 50,000 moments.
-Figure 4, `fig_ablation.pdf`, shows the seeds; the table gives the means.
+Figure 5, `fig_ablation.pdf`, shows the seeds; the table gives the means.
 
 | | naming a single picture | naming a thing on a page | "is there a …?" on a page |
 |---|---|---|---|
