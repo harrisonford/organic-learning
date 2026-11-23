@@ -974,3 +974,70 @@ whole-view store a little lower before (0.53, 0.55, 0.57).
 
 So the proposal holds on both counts measured: it takes the store's harm away on pages (saved brains, above) and it
 lets the store do its own job there. **Not adopted in lives yet: it changes the brain, and that is Kris's word.**
+
+## 2026-11-23 (evening): the lateral network's code on a second seed
+
+`out/bench/lateral_settled_s1.log`, `stream_settled_s1.log`, `stream_developed10k_s1.log` (seed 2 is being coded).
+The network itself comes out the same on seeds 1 and 2 as on seed 0: stable (inhibition mean 0.08–0.09, max 1.1–1.2),
+no kind silent, filters more alike than the winner-take-all ones (962–1,108 pairs above 0.8; 649 for seed 2's
+winner-take-all kinds) and settled activities apart (top 1% alike 0.40).
+
+| after 10,000 pictures | seed 0: settled / usual | seed 1: settled / usual |
+|---|---|---|
+| word cells, no relay | 0.595 / 0.500 | 0.619 / 0.532 |
+| word cells + batch relay | 0.670 / 0.623 | 0.651 / 0.632 |
+| nearest class mean, no relay / + relay | 0.364, 0.593 / 0.312, 0.559 | 0.372, 0.595 / not run |
+| streaming LDA, no relay / + relay | 0.668, 0.662 / 0.664, 0.670 | 0.666, 0.655 / not run |
+
+- **Reproduced on seed 1: without any relay the word cells gain 9 points on the settled code** (0.532 → 0.619;
+  seed 0: 0.500 → 0.595). The local, learned inhibition closes most of the gap the batch relay closes (to 0.632).
+- With the batch relay on top the gain is smaller and less even (+4.7 on seed 0, +1.9 on seed 1): once the summary
+  is decorrelated in batch, there is less left for the inhibition among kinds to do.
+- Streaming LDA again unmoved (0.66–0.67): the code holds no more; it is better conditioned for a learner that sees
+  each picture once.
+- Still 10,000 pictures. Seed 2, then the reading on three seeds. The paper's figure of the ablation arms
+  (`docs/paper/fig_ablation.pdf`) was drawn from the lives' logs today; it shows the seeds, and with them how weak
+  the match-neuron row is (0.15 / 0.24 / 0.49) beside the rows for looking and the relay.
+
+## 2026-11-23 (evening): what preschool is made of (`experiments/preschool_sources.py`; queue item 8)
+
+No brain and no judge: the stage's held-out items, and what blind children get by the letter-level grade
+(out/tmp/preschool_sources.log; kindergarten in kinder_sources.log). Preschool has **15 sources that take turns**, so
+each gets one moment in fifteen whatever its size, and the 300-item test asks **20 of each**.
+
+| source | to live | different answers (test) | commonest answer | best blind child |
+|---|---|---|---|---|
+| coco:count ("how many people are there?") | 4,204 | 4 | "zero" 0.57 | 0.57 |
+| coco:presence ("is there a giraffe?") | 11,468 | 2 | "no" 0.60 | 0.60 |
+| coco:where ("where is the person?") | 1,049 | 3 | "in the middle" 0.56 | 0.56 |
+| vqa:yesno | 8,944 | 2 | even | 0.50 |
+| page:count | 20,000 | 3 | "one" 0.35 | 0.35 |
+| vqa:count | 2,483 | 35 | "2" 0.27 | 0.27 |
+| vqa:color | 1,897 | 14 | "white" 0.21 | 0.21 |
+| coco:name, cifar:name (new names) | 39,870, 8,069 | 15, 18 | 0.11, 0.07 | 0.11, 0.07 |
+| text:mind, text:story, the adults' lessons | 863, 878, 1,519 | 90, 96, 145 | 0.02–0.06 | 0.06, 0.02, 0.14 (last word) |
+| text:dialogue | 812 | 86 | 0.03 | 0.50 (the last word said back) |
+| text:chat | 2,816 | 228 | "yes please" 0.03 | 0.25 |
+| dailydialog | 11,464 | 1,028 of 1,255 | "thank you" 0.01 | 0.04 |
+
+Faults, all of them in the world and none in the brain:
+
+1. **One question, two ways of answering.** "how many giraffes are there?" is answered "2" in one source and "how
+   many bears are there?" "one" in two others. An adult says a number; digits belong to reading.
+2. **Three sources we build are lopsided by how we build them**, not by how the world is: "how many people are
+   there?" is asked mostly of photographs with nobody in them ("zero" 0.57; and who asks that of an empty room?),
+   "is there a …?" is "no" six times in ten, "where is the …?" is "in the middle" more than half the time. A blind
+   child gets 0.56–0.60. The score above the floor already takes the floor away, but its chance error is divided by
+   what is left above the floor, so these sources say little with 20 items.
+3. **Three sources have no answer to judge against.** A reply in a conversation ("right, congratulations." → "thank
+   you"; 1,028 different replies among 1,255) is not right or wrong by an answer key; the judge, strict on meaning,
+   can only refuse nearly everything. This is talk: to be lived and listened to, like leisure talk, not tested.
+4. **Twenty items a source** is too few to read a source by.
+5. Kindergarten has one of the same kind: "what is the biggest thing?" is "person" a third of the time.
+
+**Proposal (world 5; world 4 stays exactly as it is, three lives are in it):** numbers said as words in every
+source; the three built sources drawn evenly over their answers (and "how many" asked where there is something to
+count); conversation lived and observed, not tested; the test's 300 items shared among the sources that have an
+answer. Check against the rules: nothing here touches the brain or is chosen to move a number; it is the ruler and
+the lessons (training program before architecture). The plateau lives will enter world 4's preschool as it is, which
+is an observation worth having beside the rebuilt one. To build next, as a branch on `world >= 5` only.

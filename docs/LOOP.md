@@ -27,20 +27,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    only when a measured need points to it. (I had proposed 1,024 filter kinds for the benchmark: withdrawn.)
 
 ## Running
-- **Lives `cleanw_s0..2`** (organic-cleanw-s0/1/2): the clean lives' first-words levels held in two words
-  (PASS_ABOVE=0.99) to the stage's budget; they end by themselves at about 115,000–120,000 moments with a "stops at
-  two words" verdict (expected: they were held on purpose). Curves in VISION.md (2026-11-20, night).
-- **Lives `plat_s0..2`**: from birth, GATE=plateau, TOTAL=120000 (started 2026-11-23 12:00; see the log). The ablation queue, the cleanw lives and the benchmark probes are all finished.
-  nobody): waits for the cleanw lives, then five arms one after the other, three seeds each from birth, the clean
-  lives' launch line with one part taken away, kept in two words (`LAST_STAGE=W2`) to 50,000 moments:
-  `ablrand` (never-developed cortex, data/visual_cortex2_random.pkl), `ablnorelay` (data/visual_cortex2_norelay.pkl),
-  `ablnostore`, `ablnolook`, `ablnomatch`. Control: clean_s* (to first words) + cleanw_s* (two words). It adds its
-  lives to out/monitor/lives.json. What to read: `above` for first words and two words at 50,000 beside the
-  control's (0.38–0.44 / 0.36–0.37).
-- **`organic-bench-readout`** → out/bench/readout_developed.log, readout_random.log (a gradient softmax readout on
-  the very codes the word cells get, with and without the relay; three seeds; about three hours).
-- Launch line for a clean life:
-  `TAG=clean SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=above" experiments/conv_pipeline.sh`
+- **Lives `plat_s0..2`** (organic-plat-s0/1/2): from birth, `GATE=plateau`, TOTAL=120000, world 4 (started
+  2026-11-23 12:00). The first lives with no pass mark; they may go on into preschool as it is.
+- **`organic-lateral-queue2`** (out/bench/lateral_queue2.sh): the published lateral network on seeds 1 and 2 →
+  out/bench/lateral_settled_s$S.log, stream_settled_s$S.log, stream_developed10k_s$S.log. Seed 1 done.
+- Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
+- Launch line for a life with no pass mark:
+  `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
 
 ## Queue (in order; the paper's needs are in docs/PUBLISH.md)
 **A. The controlled core on a public benchmark** (offline; decides whether the efficiency claim survives)
@@ -59,6 +52,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    from a text lesson, item by item, before proposing anything.
 8. Preschool's test is mostly answerable blind (floors 0.5–0.75): rebuild the stage's sources before any brain is
    asked to pass it.
+   **Surveyed 2026-11-23** (VISION.md, evening; `experiments/preschool_sources.py`): five faults, a proposal for
+   world 5 (numbers as words, built sources drawn evenly, conversation lived and not tested, more test items a
+   source). To build as a branch on `world >= 5`; world 4 is not touched while lives are in it.
 **C. Ideas proposed (each needs the organic check written down before it is built)**
 9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
    what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
@@ -287,3 +283,14 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   per series). matplotlib added to the project's environment for it.
   Next: figure 2 (the stage curves) when the plateau lives have them; figure 3 (the ablation table as bars); read
   the lateral queue; the lives' first stage change (earliest at 45,000, about 19:00).
+- 2026-11-23 17:25 **Lateral network, seed 1: reproduced** (VISION.md, evening): without any relay the word cells
+  gain 9 points on its settled code (0.532 → 0.619; seed 0: 0.500 → 0.595); with the batch relay on top +1.9 (seed
+  0: +4.7); streaming LDA unmoved. Seed 2 is being coded. **Paper figure 3** (`docs/paper/fig_ablation.pdf`): the
+  ablation arms as bars with the seeds as dots, read back from the lives' logs (same numbers as the table); the
+  draft points to figures 1 and 3. **Queue item 8 surveyed** (`experiments/preschool_sources.py`): preschool is 15
+  sources taking turns, 20 test items each; numbers answered as digits in one source and words in two; three built
+  sources lopsided (blind child 0.56–0.60); three conversation sources that no answer key can judge. Proposal for
+  world 5 in VISION.md. Lives `plat_s0..2` at 30,000 in first words (0.41 / 0.39 / 0.43, still rising; no plateau
+  yet). "Running" above rewritten (it still listed finished work).
+  Next: build world 5's preschool (branch on `world >= 5`, a test that world 4 is unchanged item for item); figure 2
+  when a life has left a stage; seed 2 of the lateral network and the three-seed table.

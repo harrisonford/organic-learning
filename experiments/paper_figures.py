@@ -3,8 +3,12 @@
 Figure 1 (fig_benchmark): CIFAR-10 seen once: held-out accuracy against pictures seen; mean of the seeds, their
 range as a band. Colours: the dataviz skill's validated categorical order (light surface), with a marker per series
 so that nothing is told by colour alone.
+Figure 2 (fig_stages): the lives with no pass mark (plat_s*): the score above the blind floor of first words and of
+pages against moments lived, a line per seed; a tick where the world moved on.
+Figure 3 (fig_ablation): a life with one part taken away, at 50,000 moments: mean of three seeds as a bar, the seeds
+as dots, the whole brain's mean as a line down each panel.
 """
-import collections, os, re
+import collections, json, os, re
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -62,3 +66,43 @@ os.makedirs("docs/paper", exist_ok=True)
 fig.savefig("docs/paper/fig_benchmark.pdf", facecolor=SURFACE)
 fig.savefig("docs/paper/fig_benchmark.png", dpi=170, facecolor=SURFACE)
 print("docs/paper/fig_benchmark.pdf, .png")
+
+
+# ---- figure 3: one part taken away ----
+def at(tag, seed, age=50000):
+    for l in open(f"out/{tag}_s{seed}.jsonl"):
+        if l.startswith("{"):
+            r = json.loads(l)
+            if r.get("age") == age and "measure" in r:
+                m = r["measure"]
+                return m["W1"]["above"], m["W2"]["by_source"]["page:name"]["above"], m["W2"]["by_source"]["page:there"]["above"]
+
+
+ARMS = [("cleanw", "the whole brain"), ("ablrand", "cortex never developed"), ("ablnorelay", "no relay"),
+        ("ablnostore", "no episodic store"), ("ablnolook", "no looking"), ("ablnomatch", "no match neurons")]
+PANELS = ["naming a single picture", "naming a thing on a page", "\u201cis there a \u2026?\u201d on a page"]
+v = np.array([[at(tag, s) for s in range(3)] for tag, _ in ARMS])  # arms x seeds x panels
+fig, axes = plt.subplots(1, 3, figsize=(7.4, 2.9), facecolor=SURFACE, sharey=True)
+ys = np.arange(len(ARMS))[::-1]
+for j, ax in enumerate(axes):
+    ax.set_facecolor(SURFACE)
+    ax.axvline(v[0, :, j].mean(), color=MUTED, linewidth=0.8, linestyle=(0, (3, 2)), zorder=1)
+    ax.barh(ys, v[:, :, j].mean(axis=1), height=0.56, color=["#8f8e89"] + ["#2a78d6"] * (len(ARMS) - 1), zorder=2)
+    for i, y in enumerate(ys):
+        ax.scatter(v[i, :, j], [y] * 3, s=16, color=INK, edgecolor=SURFACE, linewidth=0.8, zorder=3)
+        ax.annotate(f"{v[i, :, j].mean():.2f}", (max(v[i, :, j].max(), 0), y), xytext=(5, -3), textcoords="offset points", color=INK, fontsize=8)
+    ax.set_xlim(0, 0.68)
+    ax.set_xticks([0, 0.2, 0.4, 0.6])
+    ax.set_title(PANELS[j], loc="left", color=INK, fontsize=9)
+    ax.tick_params(colors=MUTED, length=0)
+    ax.grid(axis="x", color=GRID, linewidth=0.6)
+    ax.set_axisbelow(True)
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+axes[0].set_yticks(ys)
+axes[0].set_yticklabels([name for _, name in ARMS], color=INK)
+axes[1].set_xlabel("score above what a blind answer gets, at 50,000 moments (bar: mean of three seeds; dots: the seeds)", color=MUTED, fontsize=8)
+fig.tight_layout()
+fig.savefig("docs/paper/fig_ablation.pdf", facecolor=SURFACE)
+fig.savefig("docs/paper/fig_ablation.png", dpi=170, facecolor=SURFACE)
+print("docs/paper/fig_ablation.pdf, .png")

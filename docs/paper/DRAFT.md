@@ -104,7 +104,7 @@ same response and regional average, a linear readout; softmax, Adam. Learning ra
 on the first 10,000 pictures of seed 0 (14 settings; 0.40–0.53 there). Also: with one or four earlier pictures lived
 again for each new one; started from the developed filters; with the developed filters kept.
 
-**Results** (mean ± spread of three seeds; (1) = one seed):
+**Results** (mean ± spread of three seeds; (1) = one seed; Figure 1, `fig_benchmark.pdf`, shows the curves):
 
 | learner | 500 | 5,000 | 50,000 pictures |
 |---|---|---|---|
@@ -181,7 +181,7 @@ Babbling and echo are measured at every test and never held for promotion; the e
 - Observed, not asked for: echo fades by itself once words work (the question's last word is said back in
   0.07–0.10 of answers); a slight bias to "no" (−0.04 to −0.17), where two-year-olds have a bias to "yes" [check].
 - **What each part buys** (one part taken away, three seeds each from birth, at 50,000 moments; mean above the
-  blind floor):
+  blind floor; Figure 3, `fig_ablation.pdf`, shows the seeds):
 
 | | first words | naming a thing on a page | "is there a …?" |
 |---|---|---|---|
