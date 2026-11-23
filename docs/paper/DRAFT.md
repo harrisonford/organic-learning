@@ -1,8 +1,9 @@
-# It Was the Code, Not the Rule: Taking Apart a Brain-Inspired Learner That Never Backpropagates
+# Organic Learning: Small-Scale Architecture Experiments Without Backpropagation
 
 **Second draft, 2026-11-23, rewritten after three independent readings (a style survey of well-known papers, a
 hostile referee, a cold reader). Not for circulation.** This note is not part of the paper (the build leaves it
-out). Every number is from a log in `out/`. **[pending]** marks a run that is not finished. References are tracked
+out). The title and the term "organic learning" are Kris's (2026-11-23); "It Was the Code, Not the Rule" stays
+as a possible subtitle. Every number is from a log in `out/`. **[pending]** marks a run that is not finished. References are tracked
 in REFERENCES.md and each must be opened by hand before anything is sent. Other titles to choose from:
 "Raising a Learner Without Backpropagation: What Helped, What Did Nothing, What We Got Wrong";
 "We Built a Brain-Like Learner Without Backprop. The Whitening Did the Work.";
@@ -38,6 +39,16 @@ babbles before it speaks. A part was admitted only if brains are known to do som
 left behaviour free to emerge; we allowed ourselves no rule that wires a signal directly to a behaviour. The
 learner was then raised in a staged world, from babbling through echoing to first words, on real photographs and
 on speech written for it.
+
+We call this way of working *organic learning*, and since we would like the name to mean something, here is
+what it commits us to. A part goes in only if brains are known to do something like it. No behaviour is wired in
+by rule, and nothing the learner does along the way, whether babbling, echoing or a bias towards "no", is ever
+turned into a target. Everything learns online, within one life, by local rules, with no error sent back through
+layers. Nothing is changed in order to raise a score; a benchmark is a yardstick and not a goal. And every part
+is taken out again to see whether it mattered, with what did nothing reported beside what worked. Where the
+learner we built falls short of these commitments, and it does in two places, we say so. The phrase has been used
+before, as the title of a patent on network architectures; we use it for a method and not for an architecture.
+**[reference to add: US patent 10,846,592.]**
 
 It worked better than we had expected, and for a while we thought we knew why. Our account was the obvious one:
 local rules, patiently assembled, are simply good at learning from one pass. This paper is about what happened
@@ -307,6 +318,16 @@ Experiment 1. **[pending: how often a picture recurs.]** Second, the judge is a 
 language model decides whether the learner's answer means what the adult's answer meant, lenient about form and
 strict about meaning. It agrees with a larger model on 93% of answers and wrongly accepts between 2 and 16 of 367
 wrong answers, depending on how they are batched. No person has labelled its judgements yet.
+
+How strict should such a judge be? Ours is told the child's age, and it grows stricter about form as the child
+grows: at first words a babble that sounds like the word will do, and later the word itself is wanted. About
+meaning it is strict at every age, so "woof" is not accepted for a dog. That is a decision about upbringing, and
+it could be wrong: parents accept a good try from a small child and expect more from an older one. In this
+learner the judge's verdict only sets the reward, which reaches the gating policy that decides when to speak and
+from where; the word cells are corrected by the adult's own answer whatever the judge says. So strictness can
+change how readily the learner speaks, and perhaps how quickly, without changing what its word cells are taught.
+**[pending: lives whose reward counts a good try in full, lives where it counts early and less with age, and the
+strict lives reported here, all tested by the same strict judge.]**
 
 A raw score would flatter the learner, because many questions can be answered without looking. We therefore
 report every score **above a blind baseline**. We drop the questions that can be answered by repeating the

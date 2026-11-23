@@ -90,6 +90,8 @@ Still Kris's own:
   (docs/paper/REFERENCES.md).
 - The author line (name, affiliation or none, public contact address) and the AI-use statement in Kris's words.
 - Releasing a level to kid-a; hardware (memory first); labelling about 200 answers for the judge's audit set.
+- **Queued behind the plateau lives: `organic-reward-queue`** (lives `kind_s0..2`, then `ramp_s0..2`; JUDGING.md
+  2026-11-23). Lives in world 5 with the keyed store come after it.
 - **Launch line for new lives** (when the plateau lives end):
   `TAG=... SEEDS="0 1 2" ARM=routes WORLD=5 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau -E KEY=looked" experiments/conv_pipeline.sh`
 
@@ -357,3 +359,12 @@ Still Kris's own:
   three seeds owed). Paper now 12 pages; sent to Kris.
   Picture licences to check before anything is public: the pages in fig_examples may hold COCO or Commons pictures.
   Next: three seeds of the showcase probe; queue D (16: the end-to-end reference with a whitening layer).
+- 2026-11-23 18:35 **Kris: the term "organic learning" and the title** "Organic Learning: Small-Scale Architecture
+  Experiments Without Backpropagation" (set; the term defined in the introduction as five commitments; the phrase
+  is the title of a US patent on network architectures, 10,846,592, to be cited). **Kris: is the judging lenient
+  early and stricter later, and is there a sweet spot?** Answered and built (JUDGING.md, 2026-11-23): form is
+  already judged more strictly with age, meaning strictly at every age; a near-miss level added to the judge
+  (`NEAR`; "woof" for a dog 0.99) and `REWARD=strict|lenient|ramp` in the life script; two arms queued behind the
+  plateau lives (`organic-reward-queue`), tests always strict. **Kris: answering speed, by training, organically**:
+  the reward is what sets it (the gating policy's patience), so the reward arms are the first experiment on it.
+  Next: read the plateau lives; queue D 16.

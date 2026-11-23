@@ -271,3 +271,44 @@ number of ours (0.25, then 0.35 proposed), and the name misled. Kris agreed to b
 - A consequence to know: a stage in which nothing is learned is also left, after six tests, with a level near zero
   on record. The record says what was learned; the world does not wait. Whether a stage that slides while the next
   is lived should hold the brain back (the 0.8 rule) is the next thing of this kind to look at.
+
+## 2026-11-23: how strict the reward is, as an experiment in upbringing (Kris's question)
+
+Kris: "for me is important to know if we are fuzzy ranking the responses of the model; we talked about ranking
+differently depending on the training level, so if [it is a] dog [and the] model says woof that's fine at an early
+layer and we get more strict on each layer ... and contrast with a fully strict ranking ... this could give hints
+if early fuzzy more lenient helps, if there's a sweet spot."
+
+**What there is today.** Leniency about *form* shrinks with the stage, in the letter-level grade (`curriculum.grade`:
+any sound at echo, a babble that sounds like the word at first words, the right word in any form at pages, the
+content words at preschool, word overlap after) and in the judge (told the child's age). Leniency about *meaning*
+was taken out on 2026-11-19, for a good reason at the time: the lenient judge accepted "bear" for a dog and the
+accepted answer was not corrected, so lives were taught their own mistakes. Since then the adult always answers
+with their own word, and the judge's verdict only sets the reward. So leniency about meaning can now be tried
+without that harm.
+
+**What reward reaches.** The gating policy (the orchestrator: when to speak, and from the echo, the word cells or
+the store). The word cells learn from the adult's answer whatever the verdict. So the expected effect is on how
+readily and how quickly the learner speaks, not on what its word cells hold. Kris also asked about answering
+time; this is where the two questions meet.
+
+**Built** (`organic/judge.py` `NEAR`, `near=True`; `experiments/curriculum_life.py` `REWARD`): a kinder question to
+the judge for lived moments, "would a caring adult count this as a good try for a child of that age": the same
+word in any form, or something closely tied to it (the sound the thing makes, a very similar thing, a part).
+Tried on 17 cases: "woof" for a dog 0.99 (strict 0.02), "moo" for a cow 0.99, "dogbanana" 0.43, "train" for a bus
+0.34, "wheel" for a car 0.23, "cat" for a dog 0.12, "bear", "table", "lion" for a mouse 0.01. The judge model is
+too kind with "yes" for "no" (0.86) and "three" for "two" (0.61), so yes/no and numbers have no near miss
+(`EXACT`). The reward of a lived answer is strict + k × (near − strict), with k by arm:
+
+| arm | k |
+|---|---|
+| `REWARD=strict` (all lives so far; the plateau lives are the control) | 0 |
+| `REWARD=lenient` | 1 all life long |
+| `REWARD=ramp` | 1 up to first words, 0.5 in the pages stage, 0 after |
+
+The tests are judged strictly in every arm: the ruler does not move. **Queued: `organic-reward-queue`**
+(out/tmp/reward_queue.sh): when the plateau lives end, lives `kind_s0..2` (lenient) and then `ramp_s0..2`, the
+plateau lives' launch line with only `REWARD` changed, to 120,000 moments. To read: the curves above the blind
+baseline, how much the learner speaks at all, and its answering times, beside the plateau lives at the same ages.
+Organic check: this is the adults' behaviour, not the brain's; caregivers do accept approximations from small
+children and expect more later. Nothing is wired in the learner.
