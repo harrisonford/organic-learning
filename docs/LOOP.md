@@ -281,3 +281,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   **Waiting for Kris:** the keyed store in new lives (yes/no); installing LaTeX on the server (to compile the paper).
   Next: the plateau lives' first stage changes (this evening); figures for the paper from the logs; the lateral
   network on three seeds; queue item 8 (preschool's sources).
+- 2026-11-23 16:00 Nothing new finished (lives at 25,000 in first words: 0.36 / 0.38 / 0.43, still rising; lateral
+  network seed 1 being coded). Made: `experiments/paper_figures.py` → docs/paper/fig_benchmark.pdf/.png (accuracy
+  against pictures seen, three seeds with their range; palette checked with the dataviz skill's validator, a marker
+  per series). matplotlib added to the project's environment for it.
+  Next: figure 2 (the stage curves) when the plateau lives have them; figure 3 (the ablation table as bars); read
+  the lateral queue; the lives' first stage change (earliest at 45,000, about 19:00).
