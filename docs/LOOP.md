@@ -535,7 +535,7 @@ Still Kris's own:
   (0.54–0.56); `plat_s1` in pages 0.43 above the floor at 65,000, `plat_s2` 0.42 on its first test there.
   Next: read gaze1; the backprop third seed and the tracked relay; queue E 24 (the first cortex probe: divisive
   normalisation) when the gaze probe has freed its memory.
-- 2026-11-24 00:00 **The first cortex probe is written and queued** (queue E 24, item 1; `organic-norm1`, after
+- 2026-11-23 23:48 **The first cortex probe is written and queued** (queue E 24, item 1; `organic-norm1`, after
   the gaze probe): divisive normalisation in place of "above the mean, rectified". R = D² / (σ² + pool), D the
   rectified drive times the window's contrast, the pool all kinds at the place (and, in a second arm, the
   surround), σ² the median pooled energy on unlabelled pictures: nothing searched. Read first for what it does
