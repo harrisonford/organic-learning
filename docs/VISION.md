@@ -1496,3 +1496,48 @@ stage's summary alone goes on to the relay (both stages together make a code twi
 Noted for the whitening item (queue E 26): the same drift is, with the retina's transient response, a known
 source of spatial whitening (Rucci & Victor 2015; not yet read by us), a local alternative to our batch step.
 
+### 2026-11-24 12:28: the control fails the first rule for the map's weights; the rule corrected
+
+**The control** (`serial_shuf`, seed 0, out/tmp/gaze4_shuf.log): the words' pull shuffled over the candidate
+places, so that it says nothing about where the named thing is.
+
+| moments lived | weight of the pull, real | weight of the pull, shuffled | first look on the named thing, real | shuffled |
+|---|---|---|---|---|
+| 3,000 | 0.15 | 0.00 | 0.41 | 0.49 |
+| 4,000 | 0.46 | 0.22 | 0.62 | 0.35 |
+| 5,000 | 0.58 | 0.35 | 0.65 | 0.49 |
+| 6,000 | 0.75 | 0.53 | 0.65 | 0.35 |
+
+**A source that says nothing gained more than half the map's weight.** So the rise of the real pull's weight was
+not, as I wrote at 11:16, the reward teaching the eye to trust the word: at most the part by which the real arm
+is ahead (0.75 against 0.53) is that, and one seed cannot say. What I claimed there ("the shift came by itself,
+from reward"; "a drift from the rule would favour the reflex") is withdrawn. The second seed of the real arm
+(0.25 / 0.54 / 0.67 at 3,000–5,000) repeats the rise and repeats nothing more.
+**What was wrong with the rule** (a mistake of mine in the rule, found by its control):
+1. The place of highest priority was always taken, and a source's eligibility was "how much more than the other
+   places it favoured the place taken". For the place that wins the map that is positive more often than not
+   for any source with weight: the choice selects for it. With reward still rising (its error positive on
+   average while the learner improves), every source with weight is pushed up.
+2. A weight at nothing cannot go below it, so noise alone lifts it; and the pull's shares of a page are more
+   extreme than the reflex's (0.77 against 0.23; the reflex about 0.6 against 0.4), so its steps are larger.
+3. The rate (0.1, the eye commands') is far too fast for a signal this weak: by my estimate the noise alone
+   moves a weight by several tenths in 4,000 moments.
+**Corrected** (`organic/speech.py`, `_led_look`, `_credit_map`, `gaze_rate`):
+- While living, the question's look is drawn among the places by their priority (the learner's own exploration
+  and its temperature, as its eye commands are drawn); tested, it takes the highest.
+- A source's eligibility is how much more it favoured the place taken than it favoured the places on average
+  under that draw. For a source that says nothing this is nothing on average, whatever the reward does. (The
+  textbook form of a three-factor rule; AuGMEnT's tags are of this kind: Rombouts et al. 2015.)
+- Only the question's look teaches the weights; the eye commands have their own credit.
+- The rate is that of a stable value, a hundredth of the eye commands' (0.001): values that move the eye by
+  reflex are learned slowly and kept (Kim & Hikosaka 2013). At this rate my estimate is a rise of about 0.02 in
+  10,000 moments of pages for a real pull and a wander of about 0.01 for a shuffled one: the small learner may
+  show little, and a life would show it late. That is what a weak teaching signal means.
+Running: `organic-gaze5` (real and shuffled at the slow rate, 12,000 moments, weights printed to three places);
+after the drift probe, the same pair at the eye commands' rate (`organic-rest1`), to see what the correction of
+the eligibility alone does. The seeds 1 and 2 of the first rule were stopped; seed 1's all-at-once arm stands
+(pages 0.51, "is there" 0.74 at 6,000).
+What stays true from 11:16: with the question's look the serial learner looks before it answers and is near the
+learner that gets every place for nothing. What moved the first look to the named thing was a weight that the
+rule inflated; whether reward alone can do it is open.
+

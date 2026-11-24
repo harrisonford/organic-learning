@@ -58,11 +58,12 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-gaze4`** (out/tmp/gaze4_queue.sh, started 2026-11-24 11:16; about five hours): the shuffled-pull
-  control on seed 0 → out/tmp/gaze4_shuf.log; seeds 1 and 2, all at once and serial → out/tmp/gaze4.log; then
-  the cortex's divisive normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log,
-  out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
-- **`organic-trace1`** (out/bench/trace_queue.sh; waits for `organic-gaze4`): queue E 29a.
+- **`organic-gaze5`** (out/tmp/gaze5_queue.sh, started 2026-11-24 12:40): the corrected rule for the map's
+  weights at the slow rate, real and shuffled pull, seed 0, 12,000 moments → out/tmp/gaze5_slow.log.
+- **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for gaze5 and trace1): the same pair at the eye commands'
+  rate → out/tmp/gaze5_fast.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive normalisation
+  on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
+- **`organic-trace1`** (out/bench/trace_queue.sh; waits for `organic-gaze5`): queue E 29a.
   `experiments/cortex_trace_probe.py`, seed 0 → out/bench/trace_probe.log (how alike the answers to a picture
   and to it two pixels aside; sparseness), then the stream on each arm's second stage →
   out/bench/stream_{l2plain,l2trace}10k_s0.log. Slow (about 0.7 s a picture under the machine's load): hours.
@@ -642,4 +643,13 @@ Still Kris's own:
   The shuffled-pull control so far: the pull's weight 0.01 and 0.00 at 2,000 and 3,000 moments (the real arm:
   0.01 and 0.15).
   Next: read gaze4 (control, seeds 1–2), then the normalisation seeds, then trace1.
+- 2026-11-24 12:28 **The shuffled-pull control fails the first rule for the map's weights**: with a pull that says nothing
+  its weight still rose to 0.53 by 6,000 moments (real: 0.75). The claim of 11:16 that the word's weight "grows
+  from reward" is withdrawn (VISION.md, same time). The rule had a selection bias (the highest place always taken,
+  eligibility against the plain mean), a floor that noise climbs, and a rate far too fast. Corrected: the look
+  drawn by priority while living, eligibility against the draw's own average, the slow rate of a stable value
+  (0.001). `organic-gaze4` and the first rule's seeds stopped; `organic-gaze5` (slow pair), then `organic-trace1`
+  (the drift probe), then `organic-rest1` (fast pair, seed 2's baseline, normalisation seeds 1–2).
+  Default digest unchanged (c52819a8c3a93a7b).
+  Next: read gaze5; the drift probe.
 
