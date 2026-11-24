@@ -255,11 +255,22 @@ class LoopBrain2:
                 self.orch.maybe_prune()
         return said, tick, reward, path, stays, gains_used
 
+    reward_spread = None  # None: the reward's error as it is (every brain before 2026-11-24). A dict {command: the
+    # usual size of its error}: the error is taken against its own usual size (docs/VISION.md, 2026-11-24 evening)
+
     def _credit(self, choices, reward, t_end, eta=0.1, fade=0.85):
         """Eligibility x reward prediction error for the command that was issued."""
         for t, active, g, a, col in choices:
             delta = reward - self.value[col]
             self.value[col] += 0.02 * delta
+            if self.reward_spread is not None:
+                # dopamine neurons code an error against the spread of the rewards they are used to (Tobler, Fiorillo
+                # & Schultz 2005), in the cortex's own form of normalisation: the error divided by its usual size plus
+                # itself. It lies between -1 and 1 whatever the reward's scale, and no number of ours sets the scale.
+                usual = self.reward_spread.get(col)
+                usual = abs(delta) if usual is None else usual + 0.02 * (abs(delta) - usual)
+                self.reward_spread[col] = usual
+                delta = delta / (usual + abs(delta) + 1e-8)
             e = fade ** (t_end - t)
             for c, gc, ac in zip(active, g, a):
                 self.orch.Wout[c, :, col] = np.clip(self.orch.Wout[c, :, col] + eta * delta * e * gc * ac, 0.0, 1.0)

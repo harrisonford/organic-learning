@@ -63,6 +63,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   on seeds 0–2 (4,096 relay numbers onto 1, 4 and 10 times as many cells, 7 inputs each, 5% on; a control with
   no inhibition) → out/bench/expand_probe_s{0,1,2}.log; then 100 inputs a cell on seed 0 →
   expand_probe_fan100_s0.log.
+- **`organic-expand2`** (out/bench/expand2_queue.sh): the sparse layer wired with 100 inputs a cell on seeds 1 and
+  2 → out/bench/expand_probe_fan100_s{1,2}.log.
+- **`organic-rpe1`** (out/tmp/rpe_queue.sh; waits for expand2): queue E 29d in the small learner, three seeds: arm
+  `all+rpe` → out/tmp/rpe_s{0,1,2}.log, then its fixed-gain control `all+gain` → out/tmp/rpe_gain_s{0,1,2}.log
+  (the gain used: out/tmp/rpe_gain.log); about an hour a run. Baseline: the "all" arms in out/tmp/gaze1.log,
+  gaze4.log, gaze4_s2all.log.
 - **`organic-trace2`** (out/bench/trace2_queue.sh; waits for rest1): the drift probe on seeds 1 and 2 →
   out/bench/trace_probe_s{1,2}.log, stream_{l2plain,l2trace}10k_s{1,2}.log (about five hours).
 - Ended as planned: lives `plat_s0..2` (120,000 moments; read in JUDGING.md, 2026-11-24). Finished and read: the
@@ -714,3 +720,14 @@ Still Kris's own:
   marked). Trace2: seed 1's first stage read (0.849 alike under a two-pixel shift).
   Next: seed 2 of the sparse layer and the wiring with 100 inputs, then draft 7 by email; trace2; the organic
   check for queue E 29d.
+- 2026-11-24 20:13 **The sparse layer on three seeds** (VISION.md, same time): with seven inputs a cell, naming new pictures
+  0.578 against 0.620 at ten times the cells and a picture seen once 0.95 against 0.85. **With a hundred inputs
+  a cell (seed 0) the cost on naming is gone** (0.612 against 0.613 at ten times the cells; seen once 0.98;
+  slower at 500 pictures): the reading "not in front of the word cells" is taken back to undecided; seeds 1–2
+  queued (`organic-expand2`). Paper's paragraph rewritten to say so. **Queue E 29d designed and queued**
+  (`organic-rpe1`; organic check in VISION.md): of "surprise sets how much is learned" only one part was not
+  already settled: the gating policy's reward error is now, behind a switch, taken against its own usual size
+  (adaptive coding by dopamine neurons, in the form of divisive normalisation); default digest unchanged; the
+  fixed-gain control runs with it. Trace2: seed 1's plain arm developed (0.811 alike under a two-pixel shift;
+  first stage 0.849).
+  Next: expand2's two seeds into the paper, then draft 7 by email; rpe1; trace2.

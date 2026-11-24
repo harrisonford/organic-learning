@@ -9,6 +9,9 @@ no leisure talk, no unasked comments). Two learners a seed, the same moments in 
                 lands; the map is biased by what stands out and by the heard words' pull; the adult's reply draws
                 the eye once before the word cells learn (organic/speech.py, gaze = "serial"); the question draws
                 the eye once before anything is said ("serial_noq": it does not, as first built)
+  all+rpe       (queue E 29d, 2026-11-24) as "all", with the reward's error taken against its own usual size
+  all+gain      its control: the error as it is, the policy's step larger by the fixed factor GAIN (how much larger
+                the normalised errors are on average: read from the all+rpe run)
   serial_shuf   the serial gaze with the words' pull shuffled over the places: the pull then says nothing about
                 where the named thing is, and its learned weight should stay near nothing
 Every EVERY moments, nothing learning: the grade on held-out first words and pages; the ticks before the answer
@@ -68,6 +71,19 @@ def run(seed, mode):
         if mode == "serial_shuf":  # the control of the map's learned weights: the words' pull lands on places at random
             pull, order = brain._pull, np.random.default_rng(seed + 31)
             brain._pull = lambda units: order.permutation(pull(units))
+    rpe = [0, 0.0, 0.0]  # how many errors, their summed size as they are, and as the policy took them
+    if "rpe" in mode.split("+"):  # the reward's error against its own usual size (organic/loop2.py)
+        brain.reward_spread = {}
+    credit = brain._credit
+    gain = float(os.environ.get("GAIN", 1.0)) if "gain" in mode.split("+") else 1.0  # the control: the error as it is, the step larger by a fixed factor
+
+    def counted(choices, reward, t_end, **kw):
+        for _, _, _, _, col in choices:
+            d = abs(reward - brain.value[col])
+            u = None if brain.reward_spread is None else brain.reward_spread.get(col, d)
+            rpe[0], rpe[1], rpe[2] = rpe[0] + 1, rpe[1] + d, rpe[2] + (d if u is None else d / (u + d + 1e-8))
+        return credit(choices, reward, t_end, eta=0.1 * gain, **kw)
+    brain._credit = counted
     world = Curriculum(seed=0, world=4)
     held = held_names(world)
     names = sorted(held)
@@ -116,6 +132,8 @@ def run(seed, mode):
             out.append(f"looks before answering {np.mean(took):.2f}; where it matters (n {len(any_)}): looked at all {np.mean(any_):.2f}, first look on the named thing {np.mean(first) if first else float('nan'):.2f} (n {len(first)})")
         if brain.gaze_gain is not None:
             out.append(f"the map's weights: stands out {brain.gaze_gain[0]:.3f}, the words' pull {brain.gaze_gain[1]:.3f}")
+        out.append(f"reward errors: size {rpe[1] / max(rpe[0], 1):.3f}, as the policy takes them {rpe[2] / max(rpe[0], 1):.3f}; patience {float(np.mean(brain.orch.patience[: int(brain.orch.C)])):.3f}")
+        rpe[:] = [0, 0.0, 0.0]
         out.append(f"living: ticks {np.mean(ticks):.1f}" + (f", looks a page (with the reply's) {np.mean(looks):.2f}" if looks else "") +
                    f" | clusters {int(brain.orch.C)} | {time.time() - t0:.0f}s, {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6:.2f} GB")
         print(" | ".join(out), flush=True)

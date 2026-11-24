@@ -335,7 +335,7 @@ or 0.604 ± 0.005 when it is given the relay, and the streaming discriminant has
 | divisive normalisation | filters answering at a place: sparseness 0.71 → 0.83; the response now grows with contrast and saturates | 0.630 ± 0.006 | 0.650 ± 0.004 |
 | a blurred start | filters a little coarser (0.28 against 0.30 cycles per pixel) and more coloured | 0.620 ± 0.005 | 0.659 ± 0.005 |
 | a second stage that learns from the eye's drift (one seed) | the same picture two pixels aside looks more alike: 0.80 → 0.83 | 0.631 | 0.640 |
-| a wide sparse layer after the relay (ten times the cells; two seeds) | two different pictures look less than half as alike; a picture seen once is remembered better | 0.573 | 0.600 (one seed) |
+| a wide sparse layer after the relay (ten times the cells, seven inputs each) | two different pictures look less than half as alike; a picture seen once is remembered better | 0.578 ± 0.009 | 0.606 ± 0.006 |
 
 *Divisive normalisation.* In cortex a neuron's response is divided by the pooled activity of its neighbours
 (Carandini & Heeger 2012). Our filters' responses were only thresholded. With each response divided by the
@@ -370,22 +370,28 @@ that tells neighbouring views apart less also tells pictures apart less. **[pend
 *A wide sparse layer.* The fly's mushroom body, the cerebellum's granule layer and the dentate gyrus all put
 the same thing in front of cells that learn associations: many more cells than inputs, each wired to a few
 inputs at random, and few of them active at once (Caron et al. 2013; Litwin-Kumar et al. 2017). We wired the
-relay's 4,096 numbers onto up to ten times as many cells, seven inputs each, and let one inhibitory loop keep
-5% of them on. The code does what such layers are said to do. Two different pictures look less than half as
-alike as before, and the code spreads over three times as many directions. That is the opposite of what a namer
-of new pictures needs, because two pictures of the same class become less alike too: the word cells fall from
-0.61 to 0.57, and to 0.51 when the layer is no wider than its input. What improves is memory for the single
-picture. A picture seen once is named right twenty pictures later 88% of the time on the relay's code and
-95% on the wide one. The same wiring without the inhibition changes nothing, as a linear map should. Biology
-puts these layers in front of memories, the hippocampus's among them, and that is where ours belongs: as the
-key of the episodic store, not in front of the word cells. We had built the experiment mainly for the word
-cells. The control arm for the store turned out to be the result. A first direct test of the layer as the store's key
-was too easy to say more: with either code the store found a stored picture from a blurred view of it every
-time. **[pending: the third seed; a harder test of the key.]**
+relay's 4,096 numbers onto up to ten times as many cells, seven inputs each as in the fly, and let one
+inhibitory loop keep 5% of them on. The code does what such layers are said to do. Two different pictures look
+less than half as alike as before, and the code spreads over three times as many directions. That is the
+opposite of what a namer of new pictures needs, because two pictures of the same class become less alike too:
+the word cells fall from 0.620 to 0.578, and to 0.509 when the layer is no wider than its input. What improves
+is memory for the single picture. A picture seen once is named right twenty pictures later 85% of the time on
+the relay's code and 95% on the wide one, on every seed. The same wiring without the inhibition changes
+nothing, as a linear map should.
 
-None of the four makes the learner a better namer of pictures by an amount we would defend, and one makes it
-worse. That is what working this way costs, and we would rather pay it than tune. The gap to the baselines is
-where it was.
+Seven inputs is the fly's number, but a fly's cell samples a seventh of its 50 input channels and ours a
+six-hundredth of 4,096. With a hundred inputs a cell, which we had planned as a second wiring and have so far
+run on one seed, the price all but disappears: at ten times the cells the word cells name new pictures as well
+as on the relay's code (0.612 against 0.613) and remember a picture seen once 98% of the time against 89%. The
+wide code is slower at the very start (0.19 against 0.34 after 500 pictures). **[pending: two more seeds of
+the second wiring.]** Biology puts these layers in front of memories, the hippocampus's among them, and the
+plainest reading of our numbers agrees: the layer makes a memory of single moments out of slow cells. A first
+direct test of it as the key of the episodic store was too easy to say more, since with either code the store
+found a stored picture from a blurred view of it every time.
+
+None of the four makes the learner a better namer of pictures by an amount we would defend, and one, wired
+as the fly wires it, makes it worse. That is what working this way costs, and we would rather pay it than tune.
+The gap to the baselines is where it was.
 
 ## Experiment 2: raising it
 

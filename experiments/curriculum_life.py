@@ -80,6 +80,8 @@ if os.environ.get("KEY") and getattr(getattr(brain, "words", None), "episodes", 
     brain.words.episodes.key = os.environ["KEY"]
 if os.environ.get("GAZE"):  # GAZE=serial: the eye fixates one place at a time, by the eye commands (docs/VISION.md, 2026-11-23). Kept with the brain.
     brain.gaze = os.environ["GAZE"]
+if os.environ.get("RPE") == "normalised":  # the reward's error against its own usual size (organic/loop2.py _credit; docs/VISION.md, 2026-11-24). Kept with the brain.
+    brain.reward_spread = {}
 if hasattr(brain, "mouth") and os.environ.get("MOTOR_UNITS"):  # the motor repertoire's size (each unit widens every cluster)
     brain.mouth.max_units = int(os.environ["MOTOR_UNITS"])
 if os.environ.get("EAR_HABITUATION") == "0":

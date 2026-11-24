@@ -1792,3 +1792,65 @@ stored still draws 0.17 of a wrong reply, against 0.24 on the relay's code), and
 a changed view (0.92 against 0.97). So the hand-set steepness stays for now, named as such. A test that could
 tell the keys apart needs stored moments that are alike and must not be confused: pages of one scene with
 different things asked about, in a learner. Owed, with the other gaze work on pages.
+
+### 2026-11-24 20:08: the sparse layer on three seeds; a hundred inputs a cell changes the reading (one seed)
+expand_probe_s{0,1,2}.log (7 inputs a cell), seeds 0 / 1 / 2 (mean), 10,000 pictures:
+
+| | the relay's code | as many sparse cells | 4 × | 10 × | 4 ×, no inhibition |
+|---|---|---|---|---|---|
+| word cells name a new picture | 0.613 / 0.616 / 0.631 (0.620) | 0.522 / 0.501 / 0.504 (0.509) | 0.569 / 0.561 / 0.568 (0.566) | 0.576 / 0.570 / 0.587 (0.578) | 0.605 / 0.612 / 0.622 (0.613) |
+| ridge on everything seen | 0.659 / 0.662 / 0.672 (0.664) | 0.516 / 0.498 / 0.487 (0.500) | 0.573 / 0.558 / 0.568 (0.566) | 0.600 / 0.606 / 0.611 (0.606) | 0.658 / 0.664 / 0.664 (0.662) |
+| a picture seen once, asked 20 later | 0.890 / 0.860 / 0.797 (0.849) | 0.887 / 0.857 / 0.843 (0.862) | 0.943 / 0.923 / 0.927 (0.931) | 0.953 / 0.957 / 0.947 (0.952) | 0.913 / 0.883 / 0.853 (0.883) |
+
+Three seeds agree with the two: with seven inputs a cell, naming falls by 0.04 at ten times the cells and the
+memory of one picture rises by 0.10.
+**A hundred inputs a cell, seed 0** (expand_probe_fan100_s0.log; planned as the second wiring in the check):
+
+| seed 0 | the relay's code | 4 ×, 7 inputs | 4 ×, 100 inputs | 10 ×, 7 inputs | 10 ×, 100 inputs |
+|---|---|---|---|---|---|
+| two different pictures alike | 0.035 | 0.014 | 0.010 | 0.013 | 0.008 |
+| directions used | 375 | 1,021 | 1,480 | 1,072 | 1,574 |
+| word cells name a new picture | 0.613 | 0.569 | 0.590 | 0.576 | 0.612 |
+| after 500 pictures | 0.344 | 0.232 | 0.190 | 0.233 | 0.185 |
+| a picture seen once, asked 20 later | 0.890 | 0.943 | 0.967 | 0.953 | 0.983 |
+
+With a hundred inputs a cell the layer separates pictures more (0.008 alike) and still names new ones as well
+as the relay's code at ten times the cells (0.612 against 0.613), with the memory of one picture at 0.98. So
+the cost on naming belonged to the thin wiring, not to the sparse layer. In proportion a hundred of 4,096 (2.4%)
+is the nearer to biology: a Kenyon cell takes 7 of about 50 channels (14%), a dentate granule cell thousands
+of its input's cells. The reading of 19:33 ("not in front of the word cells") is therefore taken back to
+"undecided": one seed. The price that remains is a slow start (0.19 against 0.34 after 500 pictures).
+Queued: seeds 1 and 2 of this wiring (`organic-expand2`). Not done, on purpose: a search over the number of
+inputs; if the two seeds agree, one more wiring at the fly's proportion (14%) would say whether the trend goes
+on, and that is all.
+
+### 2026-11-24 20:13: the reward's error against its own usual size (queue E 29d): the organic check and the probe
+**What 29d said, and what of it was already settled.** "Surprise sets how much is learned": three things in the
+survey. (1) A step scaled by the cell's own error: the word cells had it (`plastic_by_error`) and it was taken
+out on 2026-11-17 because it counts the error twice and cost 0.03; a broadcast surprise multiplying every step
+would be the same thing a third time. Not built. (2) A step that shrinks as evidence gathers (precision): the
+word cells' synapses have it (each synapse's step falls with its use). (3) An error taken against the spread
+of its context. **That one the gating policy lacks**: its error is the reward minus the command's value, in
+the reward's own units, times a rate of 0.1 that I set; so the size of a reward, which the world's designer
+chose, sets how fast the policy learns.
+**What biology has.** Dopamine neurons do not code a reward's error in absolute units: their response to a
+given error scales with the spread of the rewards the animal has come to expect, so that the neuron's range
+covers the range of outcomes (Tobler, Fiorillo & Schultz 2005, adaptive coding; among the best replicated
+findings about these cells). The form the cortex uses for the same job is divisive normalisation, which is
+also how value is coded in parietal cortex (Louie & Glimcher). [Both references to be opened by hand.]
+**The mechanism** (`organic/loop2.py _credit`, behind `reward_spread`; None by default, the default path's
+digest unchanged, c52819a8c3a93a7b; life env `RPE=normalised`): each command keeps the usual size of its own
+error (a running average of the unsigned error, at the rate its value already learns), and the policy takes
+the error divided by that usual size plus the error's own size. It lies between −1 and 1 whatever the reward's
+scale; an error of the usual size counts a half. Nothing of mine sets the scale, and a world that pays twice
+as much teaches exactly as before (true by construction, so not tested).
+**Organic check.** No rule of behaviour; one local quantity per command, learned; a canonical form. What is
+still a number of mine: the rate 0.1 (now in units that mean something: a share of the usual error) and the
+averaging rate 0.02 (the value's own).
+**The probe** (`organic-rpe1`: the small learner of the gaze probes, 6,000 moments, three seeds, arm
+"all+rpe"), **with its control from the start**: in the smoke test the normalised errors are about twice the
+size of the raw ones (0.42 against 0.22), so the policy's step is about doubled; an arm with the raw error and
+a step larger by exactly the factor measured in the first arm ("all+gain") tells the normalisation from a
+larger step. Baseline: the "all" arm of the gaze probes (same seeds and moments). Read: grades, ticks before
+answering, eye moves, patience. Expectation, stated before: little moves at this age; the ground is the
+mechanism, and what is watched is whether anything breaks.
