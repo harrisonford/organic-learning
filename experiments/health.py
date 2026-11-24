@@ -51,6 +51,8 @@ for u, path in DATA.items():
 # lives: out/monitor/lives.json maps a life's log (out/<name>.jsonl) to the systemd unit that runs it
 lives_file = os.path.join(ROOT, "out", "monitor", "lives.json")
 lives = json.load(open(lives_file)) if os.path.exists(lives_file) else {}
+# lives that ran to their planned number of moments (no verdict is written then): not an alert
+ENDED = set(json.load(open("out/monitor/ended.json"))) if os.path.exists("out/monitor/ended.json") else set()
 for name, unit in lives.items():
     state = show(unit, "ActiveState").get("ActiveState")
     log = os.path.join(ROOT, "out", name + ".jsonl")
@@ -61,7 +63,7 @@ for name, unit in lives.items():
                    "hours_since_checkpoint": round(hours, 1) if hours is not None else None}
     if state == "active" and hours is not None and hours > LIFE_HOURS:
         alerts.append(f"life {name} is running but has not written a checkpoint for {hours:.1f} hours")
-    if state != "active" and not rec.get("verdict"):
+    if state != "active" and not rec.get("verdict") and name not in ENDED:
         alerts.append(f"life {name} stopped ({state}) without a verdict (killed? out of memory?)")
 
 mem = {k: int(v.split()[0]) for k, v in (line.split(":") for line in open("/proc/meminfo")) if k in ("MemAvailable", "SwapFree")}

@@ -9,6 +9,8 @@ no leisure talk, no unasked comments). Two learners a seed, the same moments in 
                 lands; the map is biased by what stands out and by the heard words' pull; the adult's reply draws
                 the eye once before the word cells learn (organic/speech.py, gaze = "serial"); the question draws
                 the eye once before anything is said ("serial_noq": it does not, as first built)
+  serial_shuf   the serial gaze with the words' pull shuffled over the places: the pull then says nothing about
+                where the named thing is, and its learned weight should stay near nothing
 Every EVERY moments, nothing learning: the grade on held-out first words and pages; the ticks before the answer
 ends; on "is there a ...?" pages made here (so that it is known what is where): looks taken before answering, and,
 where one candidate place holds the named thing and another does not, whether the first look went to it.
@@ -61,6 +63,9 @@ def run(seed, mode):
     if mode.startswith("serial"):
         brain.gaze = "serial"
         brain.look_on_question = mode != "serial_noq"  # serial_noq: the question does not draw the eye (the first version, 2026-11-23)
+        if mode == "serial_shuf":  # the control of the map's learned weights: the words' pull lands on places at random
+            pull, order = brain._pull, np.random.default_rng(seed + 31)
+            brain._pull = lambda units: order.permutation(pull(units))
     world = Curriculum(seed=0, world=4)
     held = held_names(world)
     names = sorted(held)

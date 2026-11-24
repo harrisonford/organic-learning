@@ -58,8 +58,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-gaze3`** (started 2026-11-24 10:34): the serial gaze with the map's weights learned from reward,
-  seed 0 → out/tmp/gaze3.log (prints the two weights at each test).
+- **`organic-gaze4`** (out/tmp/gaze4_queue.sh, started 2026-11-24 11:20; about five hours): the shuffled-pull
+  control on seed 0 → out/tmp/gaze4_shuf.log; seeds 1 and 2, all at once and serial → out/tmp/gaze4.log; then
+  the cortex's divisive normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log,
+  out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
 - **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
   gaze (out/tmp/digest_gaze.log, two lines that must agree), then the serial arm with the question drawing the
   eye, seed 0 → out/tmp/gaze2.log.
@@ -620,4 +622,14 @@ Still Kris's own:
   backprop comparison closed, the plateau lives, without the gaze and cortex work, which have one seed).
   The plateau lives are written into JUDGING.md (2026-11-24).
   Next: read gaze3 and the three streams of the cortex probe; then queue E 29a.
+- 2026-11-24 11:16 **The word's weight in the eye's map grows from reward** (gaze3, seed 0; VISION.md same time): born 0,
+  it is 0.15 / 0.46 / 0.58 / 0.75 after 1,000–4,000 moments of pages; the first look lands on the named thing on
+  0.65 of pages (reflex 0.49); with one look before answering the serial learner is level with the one handed
+  every place (pages 0.53 against 0.56, "is there" 0.66 against 0.67). One seed. `organic-gaze4`: a control with
+  the pull shuffled over the places, then seeds 1 and 2.
+  **Divisive normalisation on the stream, seed 0**: level with the present response (word cells with the relay
+  0.624 against 0.613; ridge 0.654 against 0.659), the code sparser and saturating with contrast; the surround
+  pool a little weaker (0.610). Seeds 1 and 2 queued behind the gaze runs.
+  The health check no longer calls a life that ran to its planned end a death (out/monitor/ended.json).
+  Next: queue E 29a, the temporal term: organic check and design while the probes run.
 

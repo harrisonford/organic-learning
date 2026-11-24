@@ -1419,3 +1419,52 @@ out/tmp/gaze3.log; it prints the map's two weights at each test).
 
 **Architecture ideas from 2023–2026 work**: docs/RESEARCH_ARCH.md (second survey); queue E 29.
 
+### 2026-11-24 11:16: the word's weight in the eye's map grows from reward (gaze3, seed 0); divisive normalisation on the stream
+
+**The map's weights, learned** (`experiments/gaze_life_probe.py`, serial arm, seed 0; small learner; out/tmp/gaze3.log).
+Held-out, nothing learning; "first look" on the 37 "is there" pages where one candidate place holds the named
+thing and another does not:
+
+| moments lived | weight of what stands out | weight of the words' pull | first look on the named thing | pages | "is there" right |
+|---|---|---|---|---|---|
+| 1,000 | 1.00 | 0.00 | 0.49 | 0.04 | 0.00 |
+| 2,000 (pages begin) | 0.99 | 0.01 | 0.51 | 0.11 | 0.01 |
+| 3,000 | 0.85 | 0.15 | 0.41 | 0.36 | 0.51 |
+| 4,000 | 0.54 | 0.46 | 0.62 | 0.45 | 0.61 |
+| 5,000 | 0.42 | 0.58 | 0.65 | 0.57 | 0.68 |
+| 6,000 | 0.25 | 0.75 | 0.65 | 0.53 | 0.66 |
+
+The same seed's other arms at 3,000–6,000, pages: all at once 0.30 / 0.45 / 0.58 / 0.56; serial with my fixed half
+0.33 / 0.39 / 0.55 / 0.50; serial without the question's look 0.31 / 0.35 / 0.29 / 0.44. "Is there": all at once
+0.45 / 0.59 / 0.67 / 0.67.
+What this says, on one seed of a small learner:
+1. **The shift from looking at what stands out to looking at what was named came by itself**, from reward, in
+   about 3,000 moments of pages. Nothing set how much the word counts. An infant's looking makes the same shift
+   between three and nine months; ours is only observed, and the likeness is not evidence of the same mechanism.
+2. The first look goes to the named thing on 0.65 of the pages, up from the reflex's 0.49, and still under the
+   0.82 of the read-out with grown word cells: this learner's word cells are young (first words 0.30).
+3. **With one look before it answers (0.87 a page) the serial learner is level with the learner that is handed
+   every place for nothing** (pages 0.53 against 0.56, "is there" 0.66 against 0.67; one seed, 100 items: not
+   told apart). It pays about one tick more a moment.
+4. The caution I wrote beforehand was wrong in its size: the weight moved fast. Why it can: when the reflex's
+   choice happens to be the place the words favoured, the answer is better than usual, and when it is not,
+   worse; both push the words' weight up. A drift from the rule itself would favour the reflex (its eligibility
+   is always positive while reward is still rising), so the rise is not such a drift. **The control is running**
+   (`serial_shuf`: the pull shuffled over the places; its weight should stay near nothing).
+Running: `organic-gaze4` (the control on seed 0; seeds 1 and 2, all at once and serial).
+
+**Divisive normalisation, the stream** (10,000 pictures, seed 0; out/bench/stream_{norm0,divnorm,divnorm_s}10k_s0.log):
+
+| after 10,000 pictures | response as now | divisive, pool at the place | pool also over the surround |
+|---|---|---|---|
+| word cells with the relay | 0.613 | 0.624 | 0.610 |
+| word cells without | 0.502 | 0.519 | 0.506 |
+| ridge with the relay (reference) | 0.659 | 0.654 | 0.637 |
+| ridge without | 0.646 | 0.638 | 0.634 |
+
+Level, within what one seed and 2,000 test pictures can tell (about ±0.011). The code itself changed as cortex's
+does: sparser (0.83 against 0.71 over the kinds at a place; 3.9% of kinds above half the strongest against 8.5%)
+and a response that grows with contrast and saturates, where ours did not depend on contrast at all. The surround
+pool is the weaker of the two here and no sparser over kinds. Under rule 8 the divisive response is the one to
+carry forward, on its ground; the surround waits for three seeds. Seeds 1 and 2 are queued behind the gaze runs.
+
