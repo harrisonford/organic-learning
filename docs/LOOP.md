@@ -559,3 +559,24 @@ Still Kris's own:
   Lives at 70,000–75,000: `plat_s0` still in first words (0.52 above the floor at 75,000); pages `plat_s1` 0.47,
   `plat_s2` 0.45 above the floor.
   Next: read gaze2 and the digest; seeds 1–2 of the three arms if seed 0 says something; read norm1.
+- 2026-11-24 10:20 **The loop did not wake between 01:42 and 10:08** (Kris asked for the status at 10:08; nothing
+  was read in between; the units ran by themselves). What was found:
+  **The plateau lives ended as planned at 120,000 moments** (the health check's "stopped without a verdict" is
+  how a life that reaches TOTAL looks; none was killed). All three left every stage with no pass mark: first
+  words after 70,000 / 45,000 / 50,000 moments there, pages after 30,000 / 35,000 / 40,000, and ended in
+  preschool. At the end (above the floor): first words 0.46 / 0.46 / 0.46, pages 0.41 / 0.40 / 0.45, preschool
+  0.14 / 0.18 / 0.16. **The reward lives started by themselves** (`kind_s0..2`, in the babbling stage).
+  **Backprop with the relay settled again along the stream: 0.671 / 0.689 / 0.693** (mean 0.684); the wider
+  tuning grid found nothing better than rate 0.001, batch 32 for either relay. The comparison is closed: 0.688
+  ± 0.005 (fixed relay) against 0.687 ± 0.005 for the word cells.
+  **Serial gaze with the question drawing the eye** (gaze2, seed 0): the learner now looks before it answers
+  (0.87–0.93 looks), pages 0.50 at 6,000 moments (all at once 0.56; without the question's look 0.44), "is
+  there" 0.62 (0.67; 0.55). **But the first look is on the named thing on only 0.46–0.51 of pages: the reflex's
+  level, not the 0.82 of the read-out.** Suspected: the pull's size against the reflex's fixed half (the
+  read-out ordered by pull alone); to be measured, not guessed.
+  **The default path is unchanged**: the digest check as queued compared against a copy of the old code that
+  could not find the adults' wordings (data/ is found beside the code), so its two lines differed; with the
+  data linked both give c52819a8c3a93a7b.
+  **`organic-norm1` was killed for memory** (settling the relay needs more than its 1.3 GB cap); restarted at
+  10:12 with 2.6 GB (4.6 GB are free: the new lives are young).
+  Next: the pull's size in the serial gaze; read norm1; the plateau lives into JUDGING.md and the paper.
