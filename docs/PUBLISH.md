@@ -155,3 +155,21 @@ organic learner behaves and what each part does, measured honestly, not a score.
   CC BY 4.0.
 - **Zenodo**: Kris's account is linked to ORCID; a DOI is to be reserved in a draft record, nothing published until
   the paper is ready; then two linked records (the PDF; the code and logs from a GitHub release).
+
+## Update, 2026-11-24: where publishing stands
+
+- **The paper**: 16 pages. New since the last update: the like-for-like comparison with backpropagation is closed
+  (with the relay step in front of both, backprop 0.688 ± 0.005 and the word cells 0.687 ± 0.005: level; a relay
+  that tracks the stream and a wider search of its settings found nothing better); a subsection on looking one
+  place at a time (three seeds: a learner that looks where the heard words pull answers as well as one handed
+  every place at once); a fourth mistaken assumption (that reward could teach the eye what to trust; the
+  shuffled control undid a result we had already written down). Draft 6 (15 pages) is with Kris by email; draft 7
+  follows when the section on the cortex from biology is in.
+- **Owed for that section**: three seeds each of divisive normalisation, of a second stage that learns from the
+  eye's drift, and of a blurred start (seed 0 of each is read, VISION.md 2026-11-24; seeds 1–2 running); each
+  beside the same-shape backprop and the streaming baselines; then the sparse expansion (queue E 29f, running).
+- **Still owed before sending** (unchanged): the local lateral network on the whole stream; all 10,000 test
+  pictures; a life with no going back; three seeds of the answering times; a person's labels on 200 judgements;
+  picture licences for the examples figure; every reference opened by hand (docs/paper/REFERENCES.md, six more
+  rows since yesterday, none opened); the author line and the AI-use statement in Kris's words.
+- **arXiv and Zenodo**: as on 2026-11-23; nothing uploaded.

@@ -53,37 +53,20 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **Lives `plat_s0..2`** (organic-plat-s0/1/2): from birth, `GATE=plateau`, TOTAL=120000, world 4 (started
-  2026-11-23 12:00). The first lives with no pass mark; they may go on into preschool as it is.
-- **`organic-lateral-queue2`** (out/bench/lateral_queue2.sh): the published lateral network on seeds 1 and 2 →
-  out/bench/lateral_settled_s$S.log, stream_settled_s$S.log, stream_developed10k_s$S.log. Seed 1 done.
-- **`organic-bench-bprelay`** (out/bench/backprop_relay_queue.sh): end-to-end backprop of the same shape *with* the
-  relay step before its readout (queue D 16): tuned on the first 10,000 pictures of seed 0 (relay fixed or settled
-  again every 5,000 pictures; three rates) → out/bench/backprop_relay_tune_s0.log; then the best rate of each on
-  three seeds, 50,000 pictures → out/bench/backprop_relay_full.log.
-- **`organic-bench-bprelay2`** (out/bench/backprop_relay_queue2.sh): waits for the queue above, then widens the
-  tuning downwards and over batch size (rates 0.0003 and 0.0001, batches 8 and 32), because the first grid's best
-  rate was its lowest; a setting that wins is run on three seeds too (same two logs).
-- **`organic-gaze1`** (`experiments/gaze_life_probe.py`, capped at 1.4 GB; started 2026-11-23 23:43): a small
-  learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
-  twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
-  run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for trace1): the serial gaze (balance by its time course) on
-  seeds 1 and 2 → out/tmp/gaze6_s12.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive
-  normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
-- **`organic-diet2`** (out/bench/diet2_queue.sh): the blurred start on seeds 1 and 2 (waits for each seed's
-  present-cortex codes from rest1) → out/bench/diet_probe_s{1,2}.log, stream_{diet,dietb,norm0b}10k_s{1,2}.log.
+- **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
+  2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
+- **`organic-rest1`** (out/tmp/rest1_queue.sh): now on the streams of divisive normalisation, seeds 1 and 2 →
+  out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log (codes read: out/bench/norm_probe_s12.log).
+- **`organic-diet2`** (out/bench/diet2_queue.sh): the blurred start on seeds 1 and 2 →
+  out/bench/diet_probe_s{1,2}.log, stream_{diet,dietb,norm0b}10k_s{1,2}.log (last stream running).
+- **`organic-expand1`** (out/bench/expand_queue.sh; waits for diet2): queue E 29f, `experiments/expand_probe.py`
+  on seeds 0–2 (4,096 relay numbers onto 1, 4 and 10 times as many cells, 7 inputs each, 5% on; a control with
+  no inhibition) → out/bench/expand_probe_s{0,1,2}.log; then 100 inputs a cell on seed 0 →
+  expand_probe_fan100_s0.log.
 - **`organic-trace2`** (out/bench/trace2_queue.sh; waits for rest1): the drift probe on seeds 1 and 2 →
   out/bench/trace_probe_s{1,2}.log, stream_{l2plain,l2trace}10k_s{1,2}.log (about five hours).
-- **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
-  gaze (out/tmp/digest_gaze.log, two lines that must agree), then the serial arm with the question drawing the
-  eye, seed 0 → out/tmp/gaze2.log.
-- **`organic-norm1`** (out/bench/norm_queue.sh; waits for `organic-gaze2`, for memory): queue E 24, item 1.
-  `experiments/cortex_norm_probe.py` codes 10,000 CIFAR-10 pictures with the same developed filters and three
-  responses (as now; divisive normalisation with the pool at the place; the pool also over the surround) →
-  out/bench/norm_probe.log (what each does to the code: sparseness, growth with contrast); then the one-pass
-  stream on each → out/bench/stream_{norm0,divnorm,divnorm_s}10k_s0.log.
-- **`organic-reward-queue`**: waits for the plateau lives, then lives `kind_s0..2` and `ramp_s0..2` (JUDGING.md).
+- Ended as planned: lives `plat_s0..2` (120,000 moments; read in JUDGING.md, 2026-11-24). Finished and read: the
+  lateral network on three seeds, backprop with the relay, the gaze probes gaze1–gaze6, norm1, trace1, diet1.
 - Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
 - Launch line for a life with no pass mark:
   `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
@@ -705,4 +688,14 @@ Still Kris's own:
   against 0.297 cycles a pixel, colour 0.593 against 0.558).
   Next: the streams of seeds 1–2 (normalisation, blurred start), trace2; then the paper's section on the cortex
   from biology and draft 7 by email.
-
+- 2026-11-24 18:46 All healthy, 4.0 GB free; streams of seeds 1–2 still running (normalisation seed 1 repeats seed 0: word
+  cells with the relay 0.636 against 0.616, without 0.529 against 0.522, the ridge without the relay 0.637
+  against 0.644; blurred start, seeds 1–2: filters again coarser and more coloured, 0.281 and 0.275 against 0.297
+  and 0.295 cycles a pixel). Reward lives at 50,000 moments: all three still in first words (exact grades
+  0.48 / 0.52 / 0.53). **Queue E 29f written and queued** (`organic-expand1`; organic check in VISION.md, same
+  time): a wide sparse layer between the relay and the word cells, sized from the mushroom body and the dentate
+  gyrus; smoke test on 1,000 pictures: the sparse layer loses more than its width gives back (says little yet).
+  PUBLISH.md has today's state. The Running section above was brought up to date.
+  Next: read the normalisation and blurred-start seeds, write the paper's section on the cortex from biology
+  (the drift stage marked as one seed until trace2 is in), email draft 7; read expand1; then the organic check
+  for queue E 29d (surprise sets how much is learned).

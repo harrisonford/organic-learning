@@ -1679,3 +1679,32 @@ world. The reports are for deep networks, where early coarse learning shapes lat
 schedule costs nothing and is the eye's own, so it stays for the next cortex (rule 8), where a second stage
 gives it something to shape. Seeds 1 and 2 running (`organic-diet2`).
 
+
+### 2026-11-24 18:45: a sparse expansion before the cells that associate (queue E 29f): the organic check and the probe
+**What biology has.** In front of the cells that learn associations three structures put a wide layer that is
+sparsely active: the fly's mushroom body (about 50 glomeruli onto about 2,000 Kenyon cells; each cell has about
+7 claws on glomeruli picked at random, with no structure anyone has found; 5–10% of the cells answer an odour,
+held there by one inhibitory neuron that all of them drive and that inhibits all of them), the cerebellum's
+granule layer (4 dendrites a cell, the most numerous neurons of the brain) and the dentate gyrus in front of CA3
+(several times its input's cells, 2–5% active). Litwin-Kumar et al. 2017 show the small number of inputs a cell
+is close to the best for telling patterns apart. The wiring is not learned in the fly; the surveys of 2025
+(RESEARCH_ARCH.md, 6) say the layers are plastic in mammals.
+**Organic check.** No rule of behaviour and nothing designed for a task: random wiring and one inhibitory loop,
+each with numbers taken from the structures themselves (inputs a cell 7, share active 5%, 4 to 10 times more
+cells than inputs; the fly's ratio of 40 is beyond this machine for a first reading). The honest limit of the
+ground: these layers stand in front of *associative memories* (odour to value, the hippocampus's store), so
+the ground is strongest for the store's key and weaker for the word cells, which stand in for cortex. Both are
+read. A second limit: the relay's numbers are signed, a firing rate is not; the cells here sum signed inputs
+(a stand-in for on and off channels).
+**What is read, in this order** (`experiments/expand_probe.py`; codes of the present cortex, 10,000 pictures):
+1. the code itself: how alike two different pictures look, two of one class against two of different classes,
+   how many directions the code uses;
+2. the stream: word cells, and a ridge on everything seen (in its dual form; the code is too wide for the
+   other); a picture seen once and asked about twenty later;
+3. controls: as many cells as inputs (sparseness with no expansion), and the same wiring with no inhibition
+   (expansion with no sparseness: a linear map);
+4. one more wiring with 100 inputs a cell (the dentate gyrus's cells have thousands), seed 0.
+Smoke test on 1,000 pictures (says little): word cells 0.474 on the relay's code, 0.363 with as many sparse
+cells, 0.386 with four times as many, 0.470 with no inhibition; the ridge 0.470, 0.361, 0.414, 0.434. So at
+1,000 pictures the sparse layer loses more than its width gives back. The full reading is queued
+(`organic-expand1`, three seeds).
