@@ -58,11 +58,9 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-gaze6`** (started 2026-11-24 14:30): the serial gaze with the balance by its time course, seed 0, 6,000
-  moments → out/tmp/gaze6.log.
-- **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for gaze6 and trace1): the learned-weights pair at the eye
-  commands' rate → out/tmp/gaze5_fast.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive normalisation
-  on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
+- **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for trace1): the serial gaze (balance by its time course) on
+  seeds 1 and 2 → out/tmp/gaze6_s12.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive
+  normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
 - **`organic-trace1`** (out/bench/trace_queue.sh; running since 2026-11-24 14:25): queue E 29a.
   `experiments/cortex_trace_probe.py`, seed 0 → out/bench/trace_probe.log (how alike the answers to a picture
   and to it two pixels aside; sparseness), then the stream on each arm's second stage →
@@ -665,4 +663,10 @@ Still Kris's own:
   learned, no weight of mine. Default digest unchanged. Running: `organic-gaze6`; `organic-trace1` (the drift
   probe, first stage read: answers to a picture and to it two pixels aside alike 0.847); `organic-rest1` behind.
   Next: read gaze6; three seeds of serial (time) against all at once; the drift probe.
+- 2026-11-24 15:18 **The balance by its time course, seed 0** (gaze6; VISION.md same time): the first look goes to the named
+  thing on 0.51 → 0.70 of pages as the word cells learn (reflex 0.49), nothing learned about the balance; pages
+  0.50 against 0.56 all at once, "is there" 0.68 against 0.67, with 0.86 looks before answering. Seeds 1–2 queued
+  behind the drift probe; the fast learned-weights pair dropped (settled). Drift probe: plain arm done (second
+  stage 0.799 alike under a two-pixel shift, first stage 0.847); trace arm developing.
+  Next: read trace1 (trace arm, streams); then rest1.
 

@@ -1574,3 +1574,25 @@ survey gave them and are not derived in the learner; no one has opened those pap
 pull the first look is led by noise rather than by what stands out; the read-out's 0.82 needs grown word cells.
 Default path unchanged (digest c52819a8c3a93a7b). Running: `organic-gaze6` (serial, seed 0 → out/tmp/gaze6.log).
 
+### 2026-11-24 15:18: the balance by its time course, first reading (gaze6, seed 0)
+
+| moments lived | first words | first look on the named thing | pages | "is there" right | looks before answering |
+|---|---|---|---|---|---|
+| 1,000 | 0.10 | 0.51 | 0.04 | 0.00 | 1.22 |
+| 2,000 (pages begin) | 0.17 | 0.57 | 0.03 | 0.00 | 1.24 |
+| 3,000 | 0.22 | 0.62 | 0.32 | 0.45 | 0.89 |
+| 4,000 | 0.28 | 0.59 | 0.45 | 0.54 | 0.89 |
+| 5,000 | 0.24 | 0.65 | 0.51 | 0.50 | 0.87 |
+| 6,000 | 0.27 | 0.70 | 0.50 | 0.68 | 0.86 |
+
+All at once, same seed, at 3,000–6,000: pages 0.30 / 0.45 / 0.58 / 0.56, "is there" 0.45 / 0.59 / 0.67 / 0.67.
+The first look goes to the named thing more often as the word cells come to know the words (0.51 → 0.70; the
+reflex 0.49; the read-out with grown word cells 0.82), with nothing learned about the balance and no weight set.
+With that one look the serial learner is near the learner that is handed every place (pages 0.50 against 0.56,
+"is there" 0.68 against 0.67), on one seed. Seeds 1 and 2 are queued (`organic-rest1`, after the drift probe).
+The learned-weights pair at the eye commands' rate is not run: the question it would answer is settled by the
+slow pair and the first rule's control, and the machine's hours go to the cortex.
+**The drift probe, first arm** (trace_probe.log, seed 0): answers to a picture and to it two pixels aside are
+alike 0.847 in the first stage (after its 2 × 2 pooling) and 0.799 in a second stage developed without a trace
+(sparser: 0.818 against 0.687). The trace arm is developing.
+
