@@ -100,6 +100,11 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
     running.
 26. Both whitening steps by local rules (the paper's result rests on two batch stand-ins): the lateral network on
     the whole stream and among the 4,096 summary numbers (queue D 17), then the patches' whitening.
+27. A faithful soft winner-take-all development of the filters (the published SoftHebb rule, unchanged), measured
+    as the developed filters were: the paper's "Hebbian did no better than random" is so far a result about hard
+    winner-take-all only (docs/RESEARCH_RECENT.md).
+28. The relay by interneuron gains (Duong et al. 2023: online whitening with fixed synapses and gain-modulating
+    interneurons, slow synaptic plasticity beneath), a published local mechanism, beside the lateral network.
 
 ## Decisions waiting for Kris
 Kris, 2026-11-23 17:10: "on your questions i follow your decision you can decide for me". Decided by the loop:
