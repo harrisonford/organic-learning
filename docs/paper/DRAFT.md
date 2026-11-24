@@ -318,6 +318,75 @@ We suspect this says as much about the test as about the learners, since a class
 in 4,096 dimensions is far noisier than its rivals estimated from 550, and we draw only the modest conclusion:
 one-shot learning in this learner is memory of an instance, and we have not shown it to be more.
 
+### Giving the cortex what a cortex has
+
+The random-filter result left us two ways to go on. We could hunt for whatever raises the number. Or we could
+stop letting the number decide, and ask what an early visual system is known to have that ours does not. We took
+the second, and gave ourselves a rule for it: a mechanism that is well established in biology goes in whether
+or not the score moves, and it is still measured, first on what it does to the code and then on the stream, and
+reported either way. Four mechanisms have been through this so far. Each was read on 10,000 pictures of the
+stream, where the cortex as described above gives the word cells 0.620 ± 0.010 and the ridge 0.664 ± 0.007. For
+scale, after as many pictures of the full stream one-pass backpropagation of the same shape has 0.510 ± 0.025,
+or 0.604 ± 0.005 when it is given the relay, and the streaming discriminant has 0.672 ± 0.007.
+
+| added to the cortex | what it does to the code | word cells + relay | ridge + relay |
+|---|---|---|---|
+| nothing | | 0.620 ± 0.010 | 0.664 ± 0.007 |
+| divisive normalisation | filters answering at a place: sparseness 0.71 → 0.83; the response now grows with contrast and saturates | 0.630 ± 0.006 | 0.650 ± 0.004 |
+| a blurred start | filters a little coarser (0.28 against 0.30 cycles per pixel) and more coloured | 0.620 ± 0.005 | 0.659 ± 0.005 |
+| a second stage that learns from the eye's drift (one seed) | the same picture two pixels aside looks more alike: 0.80 → 0.83 | 0.631 | 0.640 |
+| a wide sparse layer after the relay (ten times the cells; two seeds) | two different pictures look less than half as alike; a picture seen once is remembered better | 0.573 | 0.600 (one seed) |
+
+*Divisive normalisation.* In cortex a neuron's response is divided by the pooled activity of its neighbours
+(Carandini & Heeger 2012). Our filters' responses were only thresholded. With each response divided by the
+summed activity of all filters at its place, the code changes exactly as the physiology says it should, and
+identically on every seed: fewer than half as many filters answer strongly at any place, and the response,
+which before did not know contrast at all, grows with it and levels off. On the stream the effect is small and
+goes both ways. The word cells gain a point (and a point without the relay), below what we read as a
+difference; the ridge loses a point and a half on every seed. Division conditions the code a little for a
+reader that sees each picture once and discards a little of what a reader with a covariance matrix could have
+used. Pooling over the surrounding places as well did nothing more for the word cells and cost the ridge another point. We keep the
+normalisation at the place, on its ground, and claim nothing for it.
+
+*A blurred start.* A newborn sees at about a fortieth of adult acuity, in weak colour, and before the eyes open
+the retina rehearses with waves of its own activity. Networks whose input matures the same way are reported to
+lean more on shape and to cope better with degraded pictures (Lu et al. 2025; Ligeralde et al. 2023). We let the
+filters develop on waves, then on blurred, pale pictures that sharpen and gain colour. They end up a little
+coarser and more coloured, every time. And nothing else moves: not the stream, and not the stream with test
+pictures blurred by a pixel (0.580 against 0.583 for the word cells). We think we know why. One layer of small
+filters that keeps learning through the sharp end of the schedule has, by the end, relearned the sharp world.
+The reports are for deep networks, where what is learned early shapes what later stages build on. The schedule
+is the eye's own and costs nothing, so it stays for a deeper cortex, with no gain claimed.
+
+*A second stage that learns from the eye's drift.* Eyes are never still. During a fixation the image slides
+over the retina by a few receptors, so a cortex gets, for nothing, several slightly shifted views of the same
+thing, and a rule that asks a cell to answer the next view as it answered the last one (Földiák 1991; Halvagal
+& Zenke 2023) should make it tolerant of the shift. We added a second stage of filters above the first, let it
+develop only after the first had settled, and gave it four drifting views of each fixation. On the one seed read so far, tolerance to
+a two-pixel shift rises from 0.80 to 0.83 with the rule, and the stage helps the word cells (0.613 for the first
+stage alone on that seed, 0.631 with it). But the same stage without the rule helps them more (0.646). A code
+that tells neighbouring views apart less also tells pictures apart less. **[pending: seeds 1 and 2.]**
+
+*A wide sparse layer.* The fly's mushroom body, the cerebellum's granule layer and the dentate gyrus all put
+the same thing in front of cells that learn associations: many more cells than inputs, each wired to a few
+inputs at random, and few of them active at once (Caron et al. 2013; Litwin-Kumar et al. 2017). We wired the
+relay's 4,096 numbers onto up to ten times as many cells, seven inputs each, and let one inhibitory loop keep
+5% of them on. The code does what such layers are said to do. Two different pictures look less than half as
+alike as before, and the code spreads over three times as many directions. That is the opposite of what a namer
+of new pictures needs, because two pictures of the same class become less alike too: the word cells fall from
+0.61 to 0.57, and to 0.51 when the layer is no wider than its input. What improves is memory for the single
+picture. A picture seen once is named right twenty pictures later 88% of the time on the relay's code and
+95% on the wide one. The same wiring without the inhibition changes nothing, as a linear map should. Biology
+puts these layers in front of memories, the hippocampus's among them, and that is where ours belongs: as the
+key of the episodic store, not in front of the word cells. We had built the experiment mainly for the word
+cells. The control arm for the store turned out to be the result. A first direct test of the layer as the store's key
+was too easy to say more: with either code the store found a stored picture from a blurred view of it every
+time. **[pending: the third seed; a harder test of the key.]**
+
+None of the four makes the learner a better namer of pictures by an amount we would defend, and one makes it
+worse. That is what working this way costs, and we would rather pay it than tune. The gap to the baselines is
+where it was.
+
 ## Experiment 2: raising it
 
 The benchmark is where the parts are measured against other people's methods. The learner was not built there. It

@@ -70,6 +70,13 @@ what we say it says. **Status** is how the assistant knows the entry:
 | ☐ | van Zoest, Donk & Theeuwes (2004). The role of stimulus-driven and goal-driven control in saccadic visual selection. *J. Exp. Psychol. HPP* 30(4), 746–759 | doi:10.1037/0096-1523.30.4.749 | fast saccades follow salience, slower ones the goal | survey agent 2026-11-24 |
 | ☐ | Donk & van Zoest (2008). Effects of salience are short-lived. *Psychological Science* 19(7), 733–739 | doi:10.1111/j.1467-9280.2008.02149.x | salience is a transient | survey agent 2026-11-24 |
 | ☐ | Schütz, Trommershäuser & Gegenfurtner (2012). Dynamic integration of information about salience and value for saccadic eye movements. *PNAS* 109(19), 7547–7552 | doi:10.1073/pnas.1115638109 | salience under 150 ms, value after 250 ms | survey agent 2026-11-24 |
+| ☐ | Carandini & Heeger (2012). Normalization as a canonical neural computation. *Nature Reviews Neuroscience* 13, 51–62 | doi:10.1038/nrn3136 | divisive normalisation | from memory, 2026-11-24: check volume and pages |
+| ☐ | Földiák (1991). Learning invariance from transformation sequences. *Neural Computation* 3(2), 194–200 | doi:10.1162/neco.1991.3.2.194 | the trace rule | from memory, 2026-11-24: check |
+| ☐ | Halvagal & Zenke (2023). The combination of Hebbian and predictive plasticity learns invariant object representations in deep sensory networks. *Nature Neuroscience* 26, 1906–1915 | doi:10.1038/s41593-023-01460-y [check] | a local rule with a predictive term over consecutive views | survey agent 2026-11-24 |
+| ☐ | Lu et al. (2025). [title to be taken from the paper] | https://arxiv.org/abs/2507.03168 [check: authors, title] | a visual diet that matures like an infant's gives reliance on shape | survey agent 2026-11-24 |
+| ☐ | Ligeralde et al. (2023). [title to be taken from the paper] | https://arxiv.org/abs/2312.02791 [check: authors, title] | filters first learned on retinal waves | survey agent 2026-11-24 |
+| ☐ | Caron, Ruta, Abbott & Axel (2013). Random convergence of olfactory inputs in the *Drosophila* mushroom body. *Nature* 497, 113–117 | doi:10.1038/nature12063 | Kenyon cells' inputs are picked at random | from memory, 2026-11-24: check |
+| ☐ | Litwin-Kumar, Harris, Axel, Sompolinsky & Abbott (2017). Optimal degrees of synaptic connectivity. *Neuron* 93(5), 1153–1164 | doi:10.1016/j.neuron.2017.01.030 | few inputs a cell is near the best for telling patterns apart | from memory, 2026-11-24: check |
 
 Not cited yet but in the notes, if wanted: the Dragon Hatchling (arXiv 2509.26507; trained by backpropagation
 through time), Monty (arXiv 2507.04494), "Alignment Without Binding" (workshop, 2026; a frozen random encoder beat

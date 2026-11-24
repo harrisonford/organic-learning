@@ -699,3 +699,18 @@ Still Kris's own:
   Next: read the normalisation and blurred-start seeds, write the paper's section on the cortex from biology
   (the drift stage marked as one seed until trace2 is in), email draft 7; read expand1; then the organic check
   for queue E 29d (surprise sets how much is learned).
+- 2026-11-24 19:37 **Divisive normalisation and the blurred start on three seeds** (VISION.md, same time; 10,000 pictures).
+  Normalisation: the code changes as the physiology says on every seed (sparseness 0.71 → 0.83; a response
+  that grows with contrast); word cells with the relay 0.630 against 0.620, the ridge 0.650 against 0.664 (down
+  on all three); the surround pool adds nothing. Adopted for the next cortex on its ground, nothing claimed.
+  Blurred start: filters coarser and more coloured every time, the stream level sharp and blurred (0.620 and
+  0.620; 0.580 and 0.583). **The sparse layer, two seeds** (expand_probe_s{0,1}.log): two pictures half as alike,
+  three times the directions; naming new pictures falls (0.61 → 0.57 at ten times the cells, 0.51 with as many
+  cells) and a picture seen once is remembered better (0.88 → 0.95); no inhibition: no change. It belongs in
+  front of the store, not the word cells. A first test of it as the store's key
+  (`experiments/expand_store_probe.py`, three seeds) is too easy to tell keys apart, and shows the sparse layer
+  does not replace the store's hand-set steepness. **The paper has the section "Giving the cortex what a cortex
+  has"** (17 pages; seven references added, unopened; the sparse layer on two seeds and the drift stage on one,
+  marked). Trace2: seed 1's first stage read (0.849 alike under a two-pixel shift).
+  Next: seed 2 of the sparse layer and the wiring with 100 inputs, then draft 7 by email; trace2; the organic
+  check for queue E 29d.

@@ -1708,3 +1708,87 @@ Smoke test on 1,000 pictures (says little): word cells 0.474 on the relay's code
 cells, 0.386 with four times as many, 0.470 with no inhibition; the ridge 0.470, 0.361, 0.414, 0.434. So at
 1,000 pictures the sparse layer loses more than its width gives back. The full reading is queued
 (`organic-expand1`, three seeds).
+
+### 2026-11-24 19:33: divisive normalisation and the blurred start on three seeds; the sparse layer's first two
+All on the stream at 10,000 pictures, 2,000 test pictures, seeds 0 / 1 / 2 (mean); the logs are
+out/bench/stream_{norm0,divnorm,divnorm_s,diet,dietb,norm0b}10k_s{0,1,2}.log, norm_probe*.log, diet_probe*.log.
+
+**Divisive normalisation** (queue E 24, item 1):
+
+| | the response as now | divided by the pool at the place | pool over the surround too |
+|---|---|---|---|
+| sparse over kinds at a place | 0.712 / 0.711 / 0.710 | 0.827 / 0.825 / 0.826 | the same |
+| kinds above half the strongest | 8.5% / 8.6% / 8.5% | 3.9% / 4.0% / 3.9% | the same |
+| sparse over places for a kind | 0.719 / 0.721 / 0.717 | 0.873 / 0.868 / 0.868 | 0.896 / 0.892 / 0.891 |
+| response at a quarter, at half the contrast (of full) | 1.00, 1.00 | 0.13–0.28, 0.41–0.64 | 0.14–0.24, 0.45–0.60 |
+| word cells with the relay | 0.613 / 0.616 / 0.631 (0.620) | 0.624 / 0.636 / 0.631 (0.630) | 0.610 / 0.618 / 0.614 (0.614) |
+| word cells, no relay | 0.502 / 0.522 / 0.524 (0.516) | 0.519 / 0.529 / 0.532 (0.527) | 0.506 / 0.518 / 0.518 (0.514) |
+| ridge with the relay | 0.659 / 0.662 / 0.672 (0.664) | 0.654 / 0.647 / 0.648 (0.650) | 0.637 / 0.642 / 0.637 (0.639) |
+| ridge, no relay | 0.646 / 0.644 / 0.655 (0.648) | 0.638 / 0.637 / 0.636 (0.637) | 0.634 / 0.628 / 0.629 (0.630) |
+
+What it does to the code is the same on every seed and is what the physiology says: far fewer kinds answer at
+a place (sparseness 0.71 → 0.83), and the response grows with contrast and saturates where the present one does
+not know contrast at all. On the stream it is small both ways: the word cells gain 0.010 (0.011 without the
+relay; below the 0.02 we read as a difference, though in the same direction on five of six comparisons) and the
+ridge loses 0.011–0.014 on all three seeds. So the division helps the reader that sees each picture once a
+little and costs the reader that inverts a covariance a little: it throws away some of what a second-order
+reader could use and conditions the rest. The pool over the surround does nothing for either and costs the
+ridge more. **Adopted for the next cortex on its ground (the pool at the place); the surround pool is not.**
+
+**A blurred start** (queue E 29b):
+
+| | sharp from the first step | blurred start |
+|---|---|---|
+| filters' mean spatial frequency (cycles a pixel) | 0.296 / 0.297 / 0.295 | 0.278 / 0.281 / 0.275 |
+| share of the filters' pattern that is colour | 0.560 / 0.558 / 0.556 | 0.612 / 0.593 / 0.614 |
+| word cells with the relay, sharp test | 0.613 / 0.616 / 0.631 (0.620) | 0.616 / 0.618 / 0.626 (0.620) |
+| ridge with the relay, sharp test | 0.659 / 0.662 / 0.672 (0.664) | 0.663 / 0.661 / 0.654 (0.659) |
+| word cells with the relay, test blurred by a pixel | 0.588 / 0.573 / 0.589 (0.583) | 0.585 / 0.574 / 0.582 (0.580) |
+| ridge with the relay, test blurred | 0.619 / 0.627 / 0.623 (0.623) | 0.625 / 0.615 / 0.624 (0.621) |
+
+**Nothing moved, on three seeds.** The filters end a little coarser and more coloured, every time, and no
+reading of the stream changes, with sharp or with blurred test pictures. The reading of 17:31 stands: one layer
+of small filters that goes on learning through the sharp end of the schedule has relearned the sharp world by
+the end. The schedule stays for a cortex with a second stage (rule 8), with no gain claimed.
+
+**The sparse layer, seeds 0 and 1** (expand_probe_s{0,1}.log; seed 2 and the wiring with 100 inputs running):
+
+| at 10,000 pictures | the relay's code | as many sparse cells | 4 × | 10 × | 4 ×, no inhibition |
+|---|---|---|---|---|---|
+| two different pictures alike (mean, unsigned) | 0.035 | 0.018 | 0.014 | 0.013 | 0.039 |
+| two of one class alike / of different classes | +0.012 / −0.002 | +0.006 / −0.001 | +0.006 / −0.001 | +0.006 / −0.001 | +0.014 / −0.002 |
+| directions the code uses | 375 / 380 | 857 / 838 | 1,021 / 1,038 | 1,072 / 1,089 | 321 |
+| word cells name a new picture | 0.613 / 0.616 | 0.522 / 0.501 | 0.569 / 0.561 | 0.576 / 0.570 | 0.605 |
+| ridge on everything seen | 0.659 / 0.662 | 0.516 / 0.498 | 0.573 / 0.558 | 0.600 | 0.658 |
+| a picture seen once, asked 20 later | 0.890 / 0.860 | 0.887 / 0.857 | 0.943 / 0.923 | 0.953 / 0.957 | 0.913 |
+
+The probe's own relay rows repeat the stream's (0.613, 0.616; ridge 0.659, 0.662), so the two are one test.
+What the sparse layer does is what it is said to do in the hippocampus and the mushroom body, and it is the
+opposite of what a namer of new pictures needs: two pictures look less alike (0.035 → 0.013) and the code uses
+three times the directions, and the likeness of two pictures of one class is halved with it. Naming new
+pictures falls (0.61 → 0.57 at ten times the cells; 0.51 with no expansion) and the memory of one picture seen
+once rises (0.88 → 0.95). The control with no inhibition changes nothing either way, as a linear map should.
+So the ground was read right in the check above: **this layer belongs in front of the store, as its key, and
+not in front of the word cells.** Next for it: the store keyed by the sparse code against the store as it is
+(the held-out-class test and "seen once, 20 later" with the store), after seed 2.
+
+### 2026-11-24 19:36: the sparse layer as the store's key: a first test that is too easy
+`experiments/expand_store_probe.py` (out/bench/expand_store_probe.log; three seeds, no learner): 1,000 test
+pictures stored; asked with the same pictures blurred by a pixel and with 1,000 never stored. The question
+behind it: the store's steepness (exp(12 × (likeness − 1)), set by hand) is what makes it a memory of moments;
+the dentate gyrus is said to do that by its wiring. Would a sparse key need no exponential?
+
+| key and answer | blurred picture finds its own moment | its own moment answers | strongest answer to a picture never stored |
+|---|---|---|---|
+| relay's code, exponential (the store as it is) | 1.000 | 0.71 | 0.000 |
+| relay's code, the likeness itself | 1.000 | 0.97 | 0.24 |
+| 4 × sparse cells, the likeness itself | 1.000 | 0.92 | 0.17 |
+| 4 × sparse cells, exponential | 1.000 | 0.45 | 0.000 |
+
+(The same on the three seeds to the second decimal.) **The test tells nothing apart**: a picture blurred by a
+pixel is 0.97 like itself on the relay's code and no other picture comes near, so every key is perfect. What
+it does show: the sparse layer by itself is not steep enough to stand in for the exponential (a picture never
+stored still draws 0.17 of a wrong reply, against 0.24 on the relay's code), and it costs some of the match to
+a changed view (0.92 against 0.97). So the hand-set steepness stays for now, named as such. A test that could
+tell the keys apart needs stored moments that are alike and must not be confused: pages of one scene with
+different things asked about, in a learner. Owed, with the other gaze work on pages.
