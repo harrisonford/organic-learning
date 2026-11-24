@@ -1186,3 +1186,64 @@ paper's account: a per-input step evens out inputs of different *size* on its ow
 removal of their *correlations*; and the "gradient readout does as well" control (Adam) had a per-coordinate step
 too, so that comparison was like for like in this respect.
 
+### 2026-11-23 21:45: a learned gaze and a cortex from biology: the organic checks (Kris's directions, rule 8)
+
+Three surveys: docs/RESEARCH_GAZE.md, docs/RESEARCH_CORTEX.md, docs/RESEARCH_RECENT.md. What follows is the plan
+they lead to. Every item names the biology it rests on; none is there because it scores. Each is built as a
+probe, measured (also by what it does to the code: sparseness, near copies, selectivity, how many looks an
+answer takes), taken out again, and adopted on its biological ground whatever the number (rule 8).
+
+**What "looking" is today.** One glimpse hands the word cells the whole view and up to four fixated windows at
+once; each cell takes the view that drives it most; match neurons count in how many views the heard word's cells
+are driven. No order, no cost, no choice. Nothing to learn.
+
+**The learned gaze, in the order of how well each part is established:**
+1. *Looking becomes serial* (wiring; a priority map and winner-take-all: Bisley & Goldberg 2010). One fixation a
+   tick. Before a place is fixated it is seen only as the coarse whole view shows it (the periphery); the fovea's
+   detail comes with the fixation. A look costs a tick, as waiting does now, so how many looks an answer takes
+   is something the learner pays for and can learn about. The reflex (organic/gaze.py) stays as the salience
+   term: it is the newborn's gaze.
+2. *The heard word biases the map* (Tanenhaus et al. 1995; Bergelson & Swingley 2012; Bichot et al. 2015;
+   McMurray et al. 2012). No new rule: the cells of the words just heard are already driven by what is seen
+   (their own delta rule). Their drive from the coarse view of each candidate place is added to its salience.
+   The eye then goes first where the named thing probably is. Organic check: this is the template account, and
+   the learning is the word cells' own; what is wired is only that the drive reaches the map.
+3. *Value opens the gate* (Kawagoe et al. 1998; Kim & Hikosaka 2013; Yagishita et al. 2014). A three-factor
+   rule: a trace on the synapses from what was seen at a place (coarse) and what was heard to the choice of that
+   place; the moment's reward prediction error (r − V, the signal the gating policy already has) turns traces
+   into changes. A fast and a slow memory of value, as in the caudate's head and tail.
+4. *Staying and letting go* (Hanes & Schall 1996; Johnson, Posner & Rothbart 1991). The learner already speaks
+   when its confidence passes a learned patience; with serial looking the same rise to a threshold decides
+   between another look and an answer. Inhibition of return is in the reflex already.
+5. Later, and marked as less established as a learning signal: the information a look gave (Horan et al. 2019)
+   as part of the reward.
+What emerges and is only observed (never a target): the order of looks, how many looks by kind of question, the
+time to the named thing by age (children: 984 → 769 ms from 15 to 25 months).
+First probe (`experiments/look3_probe.py`, to write): on pages, with a saved learner, nothing learning except
+the gaze: how many looks until the named thing is fixated under the reflex alone, with the word's bias, with
+value; naming when only the first k looks are had.
+
+**The cortex against biology** (docs/RESEARCH_CORTEX.md, table C). In the order of how well established and how
+far off we are:
+1. *Divisive normalisation* in place of "response above the mean, rectified" (Carandini & Heeger 2012; Burg et
+   al. 2021): R = Dⁿ / (σⁿ + pool), n about 2, the pool over similar filters and the near surround. Ours is
+   subtractive and far too dense (about half the units on; V1: 0.5% strongly, lifetime sparseness 0.4–0.9).
+2. *Complex cells and stages* in place of one 4×4 average (Rust et al. 2005; Serre et al. 2007): squared
+   responses summed over about twice the field within a feature, then stages that each about double the field.
+3. *Several patch sizes at each place* (De Valois et al. 1982).
+4. *A retina* in place of exact batch whitening of patches (Pitkow & Meister 2012; Mante et al. 2005):
+   centre-surround ON and OFF and colour-opponent channels, local gain control, a threshold. This also takes
+   away one of the paper's two batch stand-ins. (Tried on 2026-11-17 as a bare centre-surround without gain
+   control or threshold: 0.469 against 0.537 for whitening. Under rule 8 the number does not decide; the
+   faithful version is owed.)
+5. *Soft competition in development* (queue E 27) and *the relay by interneuron gains* (queue E 28).
+6. *Filters before experience*: the same rule first run on wave-like spontaneous patterns (Albert, Schnabel &
+   Field 2008; Espinosa & Stryker 2012), then on pictures.
+7. *No shared weights* (Pogodin et al. 2021): the largest change in cost; last.
+Width: V1 is 25 to 356 times its input, so 256 filters are not too many; more is a question of the machine, not
+of biology, and is not sought for a score (rule 7).
+
+**Order of work.** The gaze first (Kris named it first, and it needs no new cortex). Then the cortex items one
+at a time, each as a probe on 10,000 pictures beside the present cortex. Memory decides when: 2.3 GB are free
+beside three lives and the backprop queue, so small probes only until a queue ends.
+

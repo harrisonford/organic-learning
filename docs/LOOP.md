@@ -470,4 +470,12 @@ Still Kris's own:
   rule, unchanged), measured as the developed filters were; 28. the relay by interneuron gains (Duong et al.
   2023), a published local and online whitening, beside the lateral network.
   Next: the two other surveys (gaze; early visual cortex), then the organic checks.
+- 2026-11-23 21:45 **The gaze and cortex surveys are back** (docs/RESEARCH_GAZE.md, docs/RESEARCH_CORTEX.md) and
+  the plan with its organic checks is in VISION.md (21:45). Gaze: make looking serial (one fixation a tick, the
+  periphery coarse), let the heard word's cells bias the priority map (no new rule), a three-factor value rule
+  on the choice of place, staying by the patience that exists. Cortex, by how established and how far off we
+  are: divisive normalisation, complex cells and stages, several patch sizes, a retina in place of batch
+  whitening, soft competition, filters before experience, no shared weights.
+  Next: `experiments/look3_probe.py` (the serial gaze as a probe on pages with a saved learner; memory: check
+  look2_probe's need first); the backprop full runs; the lives.
 
