@@ -120,6 +120,17 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
     winner-take-all only (docs/RESEARCH_RECENT.md).
 28. The relay by interneuron gains (Duong et al. 2023: online whitening with fixed synapses and gain-modulating
     interneurons, slow synaptic plasticity beneath), a published local mechanism, beside the lateral network.
+29. **From the second survey (docs/RESEARCH_ARCH.md, 2026-11-24), in this order:** (a) a temporal term in the
+    filters' rule: answer the next view of a thing as this one was answered (Halvagal & Zenke 2023), on the
+    serial gaze's successive views; (b) a blurred start: the filters develop on waves, then on blurred pale
+    pictures that sharpen (Lu et al. 2025); (c) critical periods in sequence when the cortex has stages;
+    (d) surprise sets how much is learned (one broadcast surprise; errors divided by their own variance);
+    (e) what comes back in sleep is tagged at the moment itself; (f) a sparse expansion before the word cells
+    and as the store's key. Each after its organic check, as a probe, read first on what it does to the code.
+30. **The eye's map without a hand-set weight** (Kris, 2026-11-24: "why fixed, research a better solution").
+    Measured: the word's pull is 0.06 at the named place against a reflex term that varies by 0.19, so
+    "0.5 × standing-out + pull" drowns the word (first look on the named thing 0.50–0.53; by pull alone
+    0.81–0.85; any form free of the raw sizes 0.79–0.86). Survey running on how the brain combines them.
 
 ## Decisions waiting for Kris
 Kris, 2026-11-23 17:10: "on your questions i follow your decision you can decide for me". Decided by the loop:
