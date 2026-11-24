@@ -25,6 +25,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    not more filter kinds, not tuning to a benchmark, not a trick from the literature. The public benchmark is a
    ruler for checking what we claim; nothing in the brain is changed to move it. Size is the last question, asked
    only when a measured need points to it. (I had proposed 1,024 filter kinds for the benchmark: withdrawn.)
+8. **Biology decides, not the score** (Kris, 2026-11-23 evening: "we want to improve ONLY organically, no
+   performance hacking, in fact if there's something very biological that doesnt improve we implement anyways as
+   it can make sense the longer we add biological mechanisms"). A mechanism that brains are well known to have is
+   adopted on that ground, also when it moves no number today; it is still measured, taken out again and reported
+   as what it did. The other half stands: nothing goes in because it scores. Sizes and architecture are revised
+   from what is known of the brain and from recent work (Kris: a 2011 recipe is too old a ground), not from a
+   search over scores. The learner stays on the processor (Kris: "its fine then use cpu").
 
 ## Running
 - **Lives `plat_s0..2`** (organic-plat-s0/1/2): from birth, `GATE=plateau`, TOTAL=120000, world 4 (started
@@ -83,6 +90,16 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 13. An ablation per organ in lives, and the same lessons in shuffled order (the paper needs both).
 14. A person's labels on 200 judged answers (Kris), and scores corrected by the judge's measured error rates.
 15. Pivot frames for two-word text (docs/RESEARCH_TWO_WORDS.md), only after 7 says what is missing.
+**E. Kris's directions of 2026-11-23 evening (under rule 8; a survey first, then the organic check, then a probe)**
+23. **A learned gaze.** Today where the eye goes is a reflex (organic/gaze.py) and nothing about it is learned.
+    Survey running (how brains learn where to look: colliculus, frontal eye fields, basal ganglia and reward,
+    infants, a heard word drawing the eye). Then: what is innate and what is learned, written down; a probe.
+24. **The cortex's architecture and sizes from biology and recent work**, not from a 2011 recipe. Survey running
+    (what is known of early visual cortex in numbers; local-rule vision models of 2020–2026). The same order.
+25. **What recent papers (2022–2026) bring**, for the paper's citations and for mechanisms worth building. Survey
+    running.
+26. Both whitening steps by local rules (the paper's result rests on two batch stand-ins): the lateral network on
+    the whole stream and among the 4,096 summary numbers (queue D 17), then the patches' whitening.
 
 ## Decisions waiting for Kris
 Kris, 2026-11-23 17:10: "on your questions i follow your decision you can decide for me". Decided by the loop:
@@ -422,3 +439,17 @@ Still Kris's own:
   does not see floats); docs/paper/build.py now turns the tables into ordinary ones; 14 pages, no overflow.
   Backprop with the relay: tuning done (tracked 0.01: 0.533), full runs started with rate 0.001.
   Next: the full runs; `plat_s1` in the pages stage, the other two leaving; queue D 17–18 when memory allows.
+- 2026-11-23 21:25 **Kris read draft 5 and gave directions** (rule 8 and queue E above): improve only organically,
+  and adopt what is well established in biology also when it moves no number; a learned gaze; the cortex's sizes
+  and architecture from biology and recent work; recent papers; the learner stays on the processor (the graphics
+  card is full with the two adult models, and a moment's time is spread over many small steps: CRAFT.md,
+  2026-11-18). Paper: the patent note moved to the end, the world-reverting bug taken out of the mistakes (Kris:
+  bugs are not research mistakes; it touched no life the paper reports), the judge told as the wrong assumption
+  it was, the repository's link, where the sizes come from. Three surveys run in the background (gaze; early
+  visual cortex in numbers and recent local-rule vision models; papers of 2022–2026).
+  What the code does today, read for the gaze: "looking" is not a sequence of eye movements. In one glimpse the
+  word cells get the whole view and up to four fixated windows at once, and each cell takes the view that drives
+  it most. So there is no order of looking, no cost of looking and no choice to learn. A learned gaze starts by
+  making looking serial: one fixation a tick, the next place chosen.
+  Next: read the three surveys; the organic check for a serial, learned gaze; then the probe.
+
