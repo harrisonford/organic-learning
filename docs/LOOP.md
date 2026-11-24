@@ -492,4 +492,14 @@ Still Kris's own:
   the first one or two looks.
   Next: read the probe; if the word leads the eye, the serial gaze goes into the learner behind a switch; the
   backprop seeds 1 and 2.
+- 2026-11-23 22:29 **The heard word leads the eye** (VISION.md 22:29; two seeds, the third running): with the
+  looks taken one at a time, the named thing is in the fovea on the first look on 0.82 / 0.85 of pages when the
+  places are ordered by how much their blurred view drives the cells of the words just heard, against 0.46 / 0.46
+  in the reflex's order and 0.38 / 0.41 at random. No new rule: the word cells' own synapses. Found in the code:
+  the learner has two eyes; the gating policy already learns eye commands by reward on the old one, and the word
+  cells are served by the new one, which does not move. Joining them is the step.
+  Running: `organic-look3b` (after `organic-look3`): how sure the word cells are look by look, stopping by a
+  threshold, how sure before and after the named thing enters the fovea → out/tmp/look3b.log.
+  Next: read look3b; then serial looking in `organic/speech.py` behind a switch that leaves today's behaviour
+  untouched by default (the reward lives start by themselves when the plateau lives end and must stay comparable).
 

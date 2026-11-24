@@ -1247,3 +1247,36 @@ of biology, and is not sought for a score (rule 7).
 at a time, each as a probe on 10,000 pictures beside the present cortex. Memory decides when: 2.3 GB are free
 beside three lives and the backprop queue, so small probes only until a queue ends.
 
+### 2026-11-23 22:29: the heard word leads the eye (look3_probe.py, seeds 0 and 1; seed 2 running)
+
+Word cells raised as the learner is now (the whole view and every fixated place at once; 6,000 moments of single
+pictures, pages, "is there a …?", "how many …?"). Then nothing learns, the looks are taken one at a time, and the
+same candidate places are ordered three ways. Held-out pages where one candidate place holds the named thing and
+another does not (111 of 300 "is there" pages), "is there a …?":
+
+| order of looks | named thing in the fovea on the first look (s0 / s1) | mean look | right with one look only |
+|---|---|---|---|
+| reflex (strongest contrast first; today) | 0.46 / 0.46 | 1.73 / 1.73 | 0.600 / 0.610 |
+| the heard word's pull on the periphery | 0.82 / 0.85 | 1.23 / 1.19 | 0.671 / 0.700 |
+| random | 0.38 / 0.41 | 1.78 / 1.78 | 0.571 / 0.595 |
+
+(with all looks: 0.710 / 0.743; the commonest answer 0.52.) "How many …?", seed 0: first look 0.92 against 0.57.
+So the word cells' own visual synapses, read on a blurred view of each place before the eye moves, already know
+where the named thing probably is. No new learning rule was needed for that: it is the template account, and the
+learner had the template all along without using it to move its eye. The reflex is no better than chance at
+finding what was asked for, as it should be: it knows nothing of the question.
+What this does not show yet: that the answer gets better. With one look the word's order answers 7–9 points
+better than the reflex's; with all looks the orders are the same by construction (the same views). The gain of a
+serial, word-led gaze is in looks saved, which matters only once a look costs time.
+
+**What the learner's code has, read for the next step.** There are two eyes in `organic/speech.py`. The old one
+(`self.eye`, a grid of targets at three levels of detail) is moved tick by tick by the gating policy, which
+chooses among eye commands with the contrast reflex as a bias and is credited by reward (`_choose`, `_credit`):
+a learned gaze of the kind the survey describes, feeding the gating policy only. The new one (`_glimpse`, 2026-11-17)
+hands the word cells the whole view and up to four fixated windows before the first tick: no order, no cost. The
+word cells are the part that names things, and they are served by the eye that does not learn. The step is to
+join them: the places the word cells get become the places the eye commands choose among, one a tick, with the
+reflex and the heard word's pull as the biases and reward as the teacher. When to stop looking is the second
+question (a rise to a threshold): the extended probe reads how sure the word cells are look by look
+(`organic-look3b`).
+

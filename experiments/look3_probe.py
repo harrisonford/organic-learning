@@ -99,7 +99,11 @@ def run(seed):
         words.look(sharp)
         return code(coarse(img))
 
-    for n in range(N):
+    kept = f"out/tmp/look3_words_{N}_s{seed}.pkl"  # the raised word cells, kept so that a new read-out takes seconds
+    if os.path.exists(kept):
+        words = pickle.load(open(kept, "rb"))
+        words.ear = ear
+    for n in range(0 if not os.path.exists(kept) else N, N):
         kind = rng.choice(["one", "one", "one", "page", "there", "count"])
         if kind == "one":
             r, w = rng.choice(singles)
@@ -113,10 +117,16 @@ def run(seed):
         else:
             tiles, shade, q, a = lived_scenes.make(kind, rng.randrange(10 ** 9))
             words.learn(hear(q), see(make_page(tiles, shade)), hear(a))
+    if not os.path.exists(kept):
+        e, words.ear = words.ear, None
+        pickle.dump(words, open(kept, "wb"))
+        words.ear = e
     print(f"seed {seed}: word cells raised on {N} moments ({time.time() - t0:.0f}s, {len(words.units)} cells)", flush=True)
     te = random.Random(1000 + seed)
     for kind in ("there", "count"):
         when = collections.defaultdict(list)  # order -> on which look the named thing was in the fovea
+        sure = collections.defaultdict(list)  # order -> per page: [(how sure the word cells are, right?) after 0, 1, 2 ... looks]
+        jump = []  # how sure before and after the look that brought the named thing into the fovea (the reflex's order)
         right = collections.defaultdict(list)  # (order, how many looks) -> answers right
         places, pulled = [], []
         for n in range(TESTS):
@@ -136,14 +146,26 @@ def run(seed):
             there = [k for k, t in enumerate(tiles) if t is not None and name_of.get(t) == asked]
             if there and fix:
                 inside = np.any([holds(fix, k, img.shape[0] // 2) for k in there], axis=0)
+            else:
+                inside = np.zeros(len(fix), bool)
+            if there and fix:
                 if inside.any() and (~inside).any():  # only pages where the order of looks can matter
                     pulled.append(float(pull[inside].max() > pull[~inside].max()))
                     for name, order in orders.items():
                         when[name].append(1 + next(i for i, j in enumerate(order) if inside[j]))
             for name, order in orders.items():
-                for k in sorted({min(k, len(fix)) for k in (1, 2, len(fix))}):
+                steps = []
+                for k in range(len(fix) + 1):
                     words.look([sharp[j] for j in order[:k]])
-                    right[(name, "all" if k == len(fix) else k)].append(tidy(words.recall(heard, whole)[0] or "") == a)
+                    said, conf = words.recall(heard, whole)
+                    steps.append((float(conf), tidy(said or "") == a))
+                    if k in (1, 2) and k < len(fix):
+                        right[(name, k)].append(steps[-1][1])
+                right[(name, "all")].append(steps[-1][1])
+                sure[name].append(steps)
+                if name == "reflex" and there and fix and inside.any() and (~inside).any():
+                    k = 1 + next(i for i, j in enumerate(order) if inside[j])
+                    jump.append((steps[k - 1][0], steps[k][0]))
         base = collections.Counter(held_scenes.make(kind, n)[3] for n in range(TESTS)).most_common(1)[0][1] / TESTS
         print(f"seed {seed} {kind:5}: places a page {np.mean(places):.1f} | the named thing in one place and something else in another on {len(when['reflex'])} pages; "
               f"its place is the one the word pulls most on {np.mean(pulled):.2f} of them", flush=True)
@@ -152,6 +174,22 @@ def run(seed):
             print(f"   {name:6}: the named thing in the fovea on look {w.mean():.2f} (on the first look {np.mean(w == 1):.2f}, by the second {np.mean(w <= 2):.2f}) | "
                   f"right with 1 look {np.mean(right[(name, 1)]):.3f} (n {len(right[(name, 1)])}), 2 looks {np.mean(right[(name, 2)]):.3f} (n {len(right[(name, 2)])}), "
                   f"all {np.mean(right[(name, 'all')]):.3f} | commonest answer {base:.2f}", flush=True)
+        # staying as a rise to a threshold (Hanes & Schall 1996): the eye takes another look until the word cells are sure
+        # enough. For a few thresholds (quantiles of how sure they are with all looks): looks taken, answers right.
+        level = np.quantile([st[-1][0] for st in sure["reflex"]], [0.25, 0.5, 0.75])
+        for name in ("reflex", "word", "random"):
+            out = []
+            for th in level:
+                took, ok = [], []
+                for st in sure[name]:
+                    k = next((i for i, (c, _) in enumerate(st) if c >= th), len(st) - 1)
+                    took.append(k), ok.append(st[k][1])
+                out.append(f"sure >= {th:.2f}: {np.mean(took):.2f} looks, right {np.mean(ok):.3f}")
+            print(f"   {name:6} stops when " + " | ".join(out), flush=True)
+        if jump:
+            j = np.array(jump)
+            print(f"   how sure before / after the look that brings the named thing into the fovea: {j[:, 0].mean():.3f} / {j[:, 1].mean():.3f} (n {len(j)}); "
+                  f"sure and right go together: right answers {np.mean([st[-1][0] for st in sure['reflex'] if st[-1][1]]):.3f}, wrong {np.mean([st[-1][0] for st in sure['reflex'] if not st[-1][1]]):.3f}", flush=True)
 
 
 for seed in SEEDS:
