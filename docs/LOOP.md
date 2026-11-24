@@ -49,6 +49,8 @@ from 01:42 to 10:08 on 2026-11-24). So Claude Code runs inside `tmux` on the des
 detach with Ctrl-b d; come back with `tmux attach -t organic`). After any restart of Claude Code (`--continue`
 or `--resume`) the self-paced loop is not restored: the `/loop` line has to be typed again. A reboot of the
 desktop ends the tmux session too.
+herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its GitHub release, checksum checked) does
+the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
 - **Lives `plat_s0..2`** (organic-plat-s0/1/2): from birth, `GATE=plateau`, TOTAL=120000, world 4 (started
