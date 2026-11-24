@@ -140,7 +140,7 @@ organic learner behaves and what each part does, measured honestly, not a score.
 - **The paper**: docs/paper/DRAFT.md, second draft, rewritten for readers after three independent readings; title
   "Organic Learning: Small-Scale Architecture Experiments Without Backpropagation" (Kris's; the term defined in the
   introduction; the phrase is the title of US patent 10,846,592, to be cited). Built to PDF by docs/paper/build.py
-  (14 pages, five figures, an appendix of settings, compute and the judge's instruction). An explainer page for Kris: docs/paper/explainer.html.
+  (15 pages, five figures, an appendix; 26 recent papers cited after the survey of 2026-11-23, docs/RESEARCH_RECENT.md). An explainer page for Kris: docs/paper/explainer.html.
 - **What a hostile referee found and the logs confirmed** (VISION.md, 2026-11-23 18:00): both whitening steps are
   batch; like for like (no relay) backprop wins 0.616 to 0.591; streaming LDA needs no relay; the life repeats its
   lessons; one number was tuned. The draft says each. **The claim is now: a decorrelated code, and not the local

@@ -452,4 +452,17 @@ Still Kris's own:
   it most. So there is no order of looking, no cost of looking and no choice to learn. A learned gaze starts by
   making looking serial: one fixation a tick, the next place chosen.
   Next: read the three surveys; the organic check for a serial, learned gaze; then the probe.
+- 2026-11-23 21:27 **The survey of recent work is back** (docs/RESEARCH_RECENT.md; queue E 25). **The paper's main
+  finding is known from the other side**: Thiry et al. 2021 (whitened patches and a linear classifier match
+  trained networks on CIFAR-10; training the patches changes nothing), Prabhu et al. 2024 (random features,
+  decorrelation and class means in one pass match continually trained networks; the decorrelation matters most),
+  Dalm et al. 2024 (decorrelated inputs speed up backprop itself). The draft now says so in the introduction and
+  cites 26 recent papers in related work (all in REFERENCES.md, none opened by a person yet); 15 pages. What stays
+  ours: the finding reached from a learner built of local rules, the like-for-like controls in a one-pass stream,
+  the staged life. **"Hebbian is no better than random" is scoped to hard winner-take-all**: SoftHebb's own
+  control says the same for hard WTA and reports a gain for soft WTA, which we never built faithfully.
+  **Owed from this** (queue E): 27. a faithful soft winner-take-all development of the filters (the published
+  rule, unchanged), measured as the developed filters were; 28. the relay by interneuron gains (Duong et al.
+  2023), a published local and online whitening, beside the lateral network.
+  Next: the two other surveys (gaze; early visual cortex), then the organic checks.
 

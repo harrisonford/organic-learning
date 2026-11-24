@@ -64,6 +64,13 @@ reader can be local or gradient-based; it does not matter. A fast episodic store
 one-shot memory of an instance, disturbs nothing already learned, and does not generalise to the category. Most
 of the rest of what we built, including the parts we were proudest of, did little or nothing.
 
+We did not discover that whitened features are strong. Thiry et al. (2021) showed that one layer of whitened
+image patches with a linear classifier matches trained networks on CIFAR-10, Prabhu et al. (2024) that a random
+code, decorrelated and read by class means, matches continually trained deep networks in a single pass, and
+Dalm et al. (2024) that decorrelating its inputs speeds up backpropagation itself. What this paper adds is the
+view from the other side: a learner built on purpose from local rules, whose builders credited the rules, taken
+apart until the credit sat where that literature says it should.
+
 We show these things on one small benchmark and in one small world. We conjecture, but do not show, that the same
 division of credit would be found in other local learners that report a single-pass advantage. We do not claim an
 alternative to backpropagation at scale, a model of a child, or even the best gradient-free learner on these
@@ -262,7 +269,10 @@ the code for a reader too simple to condition it for itself.
 
 We spent weeks on the visual cortex. With random filters, never trained at all, the learner scores 0.693; with
 the developed ones, 0.687. Random whitened patches have been known to be hard to beat for a long time (Coates, Lee
-& Ng 2011; Saxe et al. 2011), and we rediscovered it the expensive way. The developed filters are not worthless:
+& Ng 2011; Saxe et al. 2011; Thiry et al. 2021), and we rediscovered it the expensive way. The result is about
+our rule, hard winner-take-all, and not about Hebbian learning in general: Journé et al. (2023) report the same
+thing for hard winner-take-all on one layer (62.7% against 63.9% for random weights) and then a clear gain from a
+soft version of the competition (71.1%), which we have not yet built faithfully. The developed filters are not worthless:
 the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in
 them is better. Our reader cannot use it. When we looked inside, the developed filters were more selective than
 random ones but 658 pairs among them were near copies of each other; random filters had none.
@@ -467,6 +477,14 @@ labelled the judge's decisions. The staged world supports the benchmark's findin
 *Fixed features and one trained layer.* What Experiment 1 finds belongs to a known family: features that the task
 does not train, read by a single trained layer. Random whitened filters with a pooled, rectified response were
 shown long ago to be hard to beat among single-layer feature learners (Coates, Lee & Ng 2011; Saxe et al. 2011).
+The modern statements are stronger and closer to ours. Thiry et al. (2021) reach 86.7% on CIFAR-10 with one layer
+of whitened patches sampled from the data and a linear classifier, find that training the patches changes
+nothing, and that whitening is what the result depends on. In the online setting, Prabhu et al. (2024) show that
+random features, decorrelated and read by class means in one pass, match or beat deep networks trained
+continually, and that taking the decorrelation away costs more than taking the random features away. Frozen
+features with a decorrelated or closed-form readout are now a standard strong baseline in continual learning
+(McDonnell et al. 2023; Zhuang et al. 2022, 2024; Panos et al. 2023). Our streaming discriminant row is that
+baseline, and it is ahead of our learner.
 Streaming linear discriminant analysis (Hayes & Kanan 2020) and the fruit-fly associative learner of Shen,
 Dasgupta & Navlakha (2021) learn in one pass without forgetting, but on features from a network pretrained with
 labels by backpropagation; the sparse-distributed-memory learner of Bricken et al. (2023) likewise, and it is
@@ -475,11 +493,32 @@ sparse codes, used for continual learning of text domains (arXiv 2607.26523). In
 trained by backpropagation or with labels, the input is photographs, and the comparison is the same architecture
 trained end to end.
 
+*Why decorrelation helps a learner.* That correlated inputs slow gradient learning is old (Le Cun, Kanter & Solla
+1991). Recent work makes it a design principle: a local decorrelating rule at every layer more than halves the
+training time of deep networks (Dalm et al. 2024), input correlations are identified as the data's share of the
+natural gradient (Offergeld & Ahmad 2024), a frozen patch-whitening layer is the single most useful ingredient in
+the fastest CIFAR-10 training recipes (Jordan 2024), and with decorrelated inputs even crude credit assignment
+such as node perturbation comes close to backpropagation (Ahmad et al. 2022; Dalm et al. 2023). So the benefit
+is not special to local rules, which is what our like-for-like baseline is there to measure. One caution cuts the
+other way: full whitening can discard information a learner needs to generalise (Wadia et al. 2021); our relay is
+a regularised whitening, and its regulariser mattered.
+
+*Whitening in brains.* The relay stands in for circuitry that is being worked out now. Populations can whiten
+their responses online with fixed synapses and interneurons that adjust gains (Duong et al. 2023a), with slow
+synaptic plasticity setting the structure the gains work within (Duong et al. 2023b); a similarity-matching
+circuit of this kind predicts the wiring of the fly larva's olfactory system (Chapochnikov et al. 2023); and
+recordings place a decorrelation step in visual cortex and not before it (Elsayed et al. 2026). The picture is
+not uniform: under natural gaze shifts the retina's output is more redundant than efficient-coding theory
+predicts (Karamanlis et al. 2025).
+
 *Hebbian vision.* Deep Hebbian networks reach high accuracy on CIFAR-10 with many epochs of local learning and a
 gradient-trained supervised head (Journé et al. 2023), and their single-layer precursor reports a one-epoch
-advantage over backpropagation (Moraitis et al. 2022). We add the single-pass setting with a label stream, the
-random-filter control, the gradient-readout control, and the finding that decorrelation accounts for the
-advantage.
+advantage over backpropagation (Moraitis et al. 2022). Hard winner-take-all with lateral inhibition has since
+matched its backpropagation twin at 75% (Jiménez Nimmo & Mondragón 2025), in a pipeline that whitens its input
+and reports no random-filter control, so it cannot say which of the two did the work. With depth the choice of
+local rule does matter (Wu et al. 2026). We add the single-pass setting with a label stream, the random-filter
+control, the gradient-readout control, and the measurement that, for one layer and our rule, decorrelation
+accounts for the advantage.
 
 *Hebbian models of word learning.* The assembly-calculus models of language (Mitropolsky & Papadimitriou 2023,
 2025) and the brain-constrained spiking models of Tomasello et al. (2018) and Constant, Pulvermüller & Tomasello
@@ -487,9 +526,17 @@ advantage.
 stand in for vision. Ours learns from photographs and from free adult speech, and is far less principled as a
 model of any brain area.
 
-*One pass with backpropagation.* A contrastive model of a child's view, trained in one chronological pass, falls
-to near chance without replay buffers that hold most of the stream (BabyCL; arXiv 2606.05115). This is the
-setting in which our end-to-end baseline also trails.
+*One pass with backpropagation, and a child's view.* A contrastive model of a child's view, trained in one
+chronological pass, falls to near chance without replay buffers that hold most of the stream (BabyCL; arXiv
+2606.05115). This is the setting in which our end-to-end baseline also trails. Trained offline, a contrastive
+model learns word-to-referent mappings from 61 hours of one child's head-camera recordings (Vong et al. 2024).
+Whether the order of a childhood helps a learner is unsettled: curricula mostly failed to help language models
+trained on child-sized corpora (Warstadt et al. 2023), while developmental order helped visual learning from
+infant video (Sheybani et al. 2023). Our stages are an assumption we have not yet tested against shuffled order.
+
+*A model as the judge.* Large language models agree with human graders often but not reliably, small ones less
+(Zheng et al. 2023; Thakur et al. 2025; Bavaresco et al. 2025), which is why we report our judge's measured
+errors and still owe the reader a person's labels.
 
 *Fast and slow memory.* Complementary learning systems (McClelland, McNaughton & O'Reilly 1995) predict the
 dissociation we measure. Agents trained by gradient with an external episodic memory show one-shot word learning
