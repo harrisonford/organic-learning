@@ -49,7 +49,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-norm1`** (out/bench/norm_queue.sh; waits for `organic-gaze1`, for memory): queue E 24, item 1.
+- **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
+  gaze (out/tmp/digest_gaze.log, two lines that must agree), then the serial arm with the question drawing the
+  eye, seed 0 → out/tmp/gaze2.log.
+- **`organic-norm1`** (out/bench/norm_queue.sh; waits for `organic-gaze2`, for memory): queue E 24, item 1.
   `experiments/cortex_norm_probe.py` codes 10,000 CIFAR-10 pictures with the same developed filters and three
   responses (as now; divisive normalisation with the pool at the place; the pool also over the surround) →
   out/bench/norm_probe.log (what each does to the code: sparseness, growth with contrast); then the one-pass
@@ -543,3 +546,16 @@ Still Kris's own:
   the stream's number does not decide adoption. The gaze probe was restarted with seed 0 alone so that this can
   follow it sooner.
   Next: read gaze1 (seed 0, both ways) and decide on seeds 1–2; read norm1.
+- 2026-11-24 00:58 **The serial gaze as first built is never used** (VISION.md 00:58; gaze1, seed 0): the small
+  learner answers at about the third tick, before its first eye command can be given, so it answers pages from
+  the coarse view: pages 0.44 against 0.56 with the lives' looking at 6,000 moments, "is there" 0.55 against 0.67;
+  looks before answering 0.01. And in both arms the eye commands die out by 3,000 moments: a gaze taught by
+  reward and the cost of time alone learns not to look. The build had the reply draw the eye by reflex and not
+  the question, which is not what is known (a heard word draws the eye within 200 ms, before any answer).
+  Changed: `look_on_question` (the question draws the eye once, one tick). `organic-gaze2` reruns the serial arm
+  after checking the default path's digest; `organic-norm1` waits behind it.
+  **Backprop with the relay, three seeds: 0.688 ± 0.005** (0.682, 0.690, 0.691) against 0.687 ± 0.005 for the
+  word cells: level. In the paper, with the wider tuning grid and the tracked relay still pending.
+  Lives at 70,000–75,000: `plat_s0` still in first words (0.52 above the floor at 75,000); pages `plat_s1` 0.47,
+  `plat_s2` 0.45 above the floor.
+  Next: read gaze2 and the digest; seeds 1–2 of the three arms if seed 0 says something; read norm1.

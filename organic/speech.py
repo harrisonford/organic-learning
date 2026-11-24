@@ -314,7 +314,10 @@ class SpeakingBrain(LoopBrain2):
     # out) and by the heard words (how far each place, as the periphery shows it, drives the cells of the words just
     # heard: the word cells' own visual synapses, nothing new learned). None: all fixations at once, as since 2026-11-17.
     gaze = None
-    look_on_reply = True  # serial gaze: an utterance heard while looking draws the eye once (the adult's reply, a comment)
+    # serial gaze: an utterance heard while looking draws the eye once, by reflex (a heard word draws the eye to what it
+    # names within a fifth of a second, in adults and in infants: Tanenhaus et al. 1995; Bergelson & Swingley 2012)
+    look_on_question = True  # the question, before anything is said (it takes a tick)
+    look_on_reply = True  # the adult's reply, an unasked comment, what is said back in leisure talk
     _gazed = None  # serial gaze: this moment's candidate places and the looks taken
 
     apart = 0.5  # the gaze goes only to what stands apart: its surround at most this fraction as busy as itself (organic/gaze.py)
@@ -325,7 +328,7 @@ class SpeakingBrain(LoopBrain2):
         f = scene.shape[0] // self.view
         return scene if f <= 1 else scene[: self.view * f, : self.view * f].reshape(self.view, f, self.view, f, -1).mean(axis=(1, 3))
 
-    def _glimpse(self, scene):
+    def _glimpse(self, scene, new=False):
         """One look at the scene: the cortex's code of the whole view (None when the eyes see nothing), and, in a
         brain that looks, of what the eye then fixates (organic/gaze.py): a window of half the scene in the scene's
         full detail, filling the view. The word cells are told the fixations. Kept for the moment: the layers' codes
@@ -362,6 +365,9 @@ class SpeakingBrain(LoopBrain2):
             else:
                 self._kept = []
             self._glimpsed = (img, self._allc, self._kept, vis, looks)
+        if new and self._gazed is not None:  # a new moment with a scene already seen: the serial gaze starts again
+            self._gazed["taken"].clear()
+            looks.clear()
         if getattr(self, "words", None) is not None:
             self.words.look(looks)
         return vis
@@ -430,18 +436,19 @@ class SpeakingBrain(LoopBrain2):
         """An utterance is heard while looking: the eye goes once to the candidate place not yet looked at that stands
         out most and that the utterance's words pull most (no choice of the gating policy's, and nothing learned: the reflex)."""
         g = self._gazed
-        if g is None or not self.look_on_reply:
-            return
+        if g is None:
+            return False
         left = [i for i, p in enumerate(g["places"]) if p not in g["taken"]]
-        if left:
-            pull = self._pull(units)
-            self._look(g["places"][max(left, key=lambda i: 0.5 * g["strength"][i] + pull[i])])
+        if not left:
+            return False
+        pull = self._pull(units)
+        return self._look(g["places"][max(left, key=lambda i: 0.5 * g["strength"][i] + pull[i])])
 
-    def _vis(self, img):
+    def _vis(self, img, new=False):
         """The whole view, as the word cells' (or the hub's) visual synapses get it; None when the eyes see nothing."""
         if self.cortex is None:
             return None
-        return self._glimpse(img)
+        return self._glimpse(img, new)
 
     def _taught(self):
         """After the word cells have learned from a moment: the cortex's first layer hears their feedback, for each view."""
@@ -465,8 +472,9 @@ class SpeakingBrain(LoopBrain2):
         self.mirror(says)
         self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
         if getattr(self, "words", None) is not None:
-            vis = self._vis(img)
-            self._led_look(heard)  # serial gaze: what is said draws the eye
+            vis = self._vis(img, new=True)
+            if self.look_on_reply:
+                self._led_look(heard)  # serial gaze: what is said draws the eye
             self.words.learn([], vis, heard)
             self._taught()
         self.observed = getattr(self, "observed", 0) + 1
@@ -528,7 +536,8 @@ class SpeakingBrain(LoopBrain2):
                     self.mlu += 0.02 * (len(before) - self.mlu)
                     taken = heard[-(int(round(self.mlu)) + 1):]
                 vis = self._vis(img)
-                self._led_look(heard)  # serial gaze: what is said back draws the eye
+                if self.look_on_reply:
+                    self._led_look(heard)  # serial gaze: what is said back draws the eye
                 self.words.learn(before, vis, taken)
                 self._taught()
         self.chats = getattr(self, "chats", 0) + 1
@@ -619,8 +628,10 @@ class SpeakingBrain(LoopBrain2):
         codes = None
         vis, recalled, confidence = None, None, 0.0
         if self.cortex is not None:
-            vis = self._glimpse(scene)  # the whole view as the word cells (or the hub) get it, and what the eye fixated
+            vis = self._glimpse(scene, new=True)  # the whole view as the word cells (or the hub) get it, and what the eye fixated
             codes = [self._allc[i] for i in self.cortex_layers]
+            if self.look_on_question and self._led_look(heard):  # serial gaze: the question draws the eye before anything is said
+                tick = 1
         hub = getattr(self, "hub", None)
         words = getattr(self, "words", None)
         if hub is not None:
@@ -726,7 +737,7 @@ class SpeakingBrain(LoopBrain2):
                     if self.cortex is not None:
                         self._glimpse(scene)  # the same look (the word cells may have been shown something else since)
                     reply = self.ear.units(answer)
-                    if self.cortex is not None:
+                    if self.cortex is not None and self.look_on_reply:
                         self._led_look(list(heard) + list(reply))  # serial gaze: the adult's reply draws the eye once more
                     words.learn(heard, vis, reply)
                     self._taught()

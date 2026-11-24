@@ -1345,3 +1345,42 @@ same moments, both ways. Read: looks before answering, the first look on the nam
 A small learner from a late start is not a life; the same from a grown learner's checkpoint is owed when memory
 allows, then lives.
 
+### 2026-11-24 00:58: the serial gaze as first built is never used; the question must draw the eye too
+
+`experiments/gaze_life_probe.py`, seed 0 (out/tmp/gaze1.log): a small learner (1,000 clusters, an ear that has
+heard speech; 2,000 moments of first words, then pages) raised twice on the same moments. Held-out, nothing learning:
+
+| moments lived | pages, all at once | pages, serial | "is there" right, all at once | serial | looks before answering (serial) | eye moves (both) |
+|---|---|---|---|---|---|---|
+| 3,000 | 0.30 | 0.31 | 0.45 | 0.47 | 0.03 | 0.04–0.08 |
+| 4,000 | 0.45 | 0.35 | 0.59 | 0.56 | 0.01 | 0.00–0.01 |
+| 5,000 | 0.58 | 0.29 | 0.67 | 0.59 | 0.02 | 0.02–0.06 |
+| 6,000 | 0.56 | 0.44 | 0.67 | 0.55 | 0.01 | 0.07–0.08 |
+
+One seed of a small learner, so only the plain facts are read:
+1. **The learner stops moving its eye once it answers.** In both arms the eye commands fall from two a moment
+   at 1,000 moments to none by 3,000. This is the old eye too: where looks are free (all at once) a command only
+   costs time, and the gating policy learns that. A gaze learned from reward and a cost of time alone learns
+   not to look.
+2. **With the serial gaze it answers before its first eye command.** The old eye spends three ticks at a place
+   before a command can be given, and the answer begins at about the third tick. So the word cells answer from
+   the coarse page and the pages fall behind (0.44 against 0.56). What kept the word cells learning the pages at
+   all is the look the adult's reply draws (0.95 a page).
+3. Nothing ties the decision to speak to what a look would bring: the gating policy's patience is on its own
+   motor confidence, and how sure the word cells are is a weak signal (the read-out above).
+What was wrong in the build, on its own ground and not by the number: the reply drew the eye by reflex and the
+question did not. That is not what is known. A heard word draws the eye to what it names within about 200 ms,
+before any answer and without being asked to (Tanenhaus et al. 1995; in infants Bergelson & Swingley 2012), and
+a speaker fixates a thing close to a second before naming it (Griffin & Bock 2000). The first look after a
+question is the reflex's, led by the question's words; what can be learned is what follows it.
+**Changed** (`look_on_question`, on with the serial gaze): on hearing the question the eye goes once to the
+candidate place that stands out and that the question's words pull most, before anything is said; it takes one
+tick. The eye commands after it stay the gating policy's. Also: the serial gaze starts again at each new moment
+(a scene asked about twice kept its looks).
+Organic check: is this the designer saying "look at the named thing"? The reflex is "the eye goes where the
+heard words' cells are driven"; where that is, the word cells have learned. Before they know a word the look
+goes to what stands out, as a newborn's. Rule 7: the change is not made to raise the pages' grade; the grade is
+read, and the arm without it is kept as `serial_noq`.
+Queued: `organic-gaze2` (first a check that the default path still gives the same digest as before the serial
+gaze existed; then the serial arm again, seed 0 → out/tmp/gaze2.log).
+

@@ -242,13 +242,12 @@ which is five times the number of updates; we ran that on one seed only. So far,
 Take the relay away and the order flips. Without it the word cells reach 0.591, and one-pass backpropagation, at
 0.616, is ahead of them. Like for like, backpropagation wins. Everything the learner gains over it, and three
 points more, comes from one whitening step that the backpropagation baseline was not given. That is the fair way
-to read our headline number, and it is why the headline is not in the title. **[pending: the end-to-end baseline
-with a whitening layer in front of its readout, which is the comparison this paragraph calls for. A first
-reading on one seed and the first 10,000 pictures: with the relay in front of its readout, backpropagation reaches
-0.60, against 0.52 without it and 0.62 for the word cells. On the whole stream, two seeds so far: 0.682 and 0.690
-with the relay, against 0.627 without it (first seed) and 0.687 ± 0.005 for the word cells. If the third seed
-agrees, the lead is gone, as the literature on decorrelation would predict. Its best learning rate was the lowest we had tried, so the
-search is being widened before the three-seed runs are read.]**
+to read our headline number, and it is why the headline is not in the title. With the relay in front of its readout, backpropagation reaches 0.688 ± 0.005 on the whole stream (three
+seeds: 0.682, 0.690, 0.691), against 0.627 without it (one seed) and 0.687 ± 0.005 for the word cells. Given the same
+decorrelated code, the two are level. The lead was the whitening step, as the literature on decorrelation would
+predict. **[pending: the baseline's best learning rate was the lowest we had tried, so the search is being widened
+(lower rates, smaller batches); a setting that wins will be run on three seeds and replace this number. Also
+pending: the relay settled again as the stream goes, in place of the fixed one.]**
 
 Is the local rule at least a good reader of the code? It is exactly as good as gradient descent and no better. A
 softmax readout trained by gradient on the same relayed code reaches 0.694, against 0.687 for the word cells,

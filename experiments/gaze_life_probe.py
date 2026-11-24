@@ -7,7 +7,8 @@ no leisure talk, no unasked comments). Two learners a seed, the same moments in 
   all at once   the word cells get the whole view and every fixated place before the first tick (the lives' looking)
   serial        the whole view only; each eye command of the gating policy brings what the fovea has where the eye
                 lands; the map is biased by what stands out and by the heard words' pull; the adult's reply draws
-                the eye once before the word cells learn (organic/speech.py, gaze = "serial")
+                the eye once before the word cells learn (organic/speech.py, gaze = "serial"); the question draws
+                the eye once before anything is said ("serial_noq": it does not, as first built)
 Every EVERY moments, nothing learning: the grade on held-out first words and pages; the ticks before the answer
 ends; on "is there a ...?" pages made here (so that it is known what is where): looks taken before answering, and,
 where one candidate place holds the named thing and another does not, whether the first look went to it.
@@ -57,8 +58,9 @@ def run(seed, mode):
     brain.orch.set_budget(int(os.environ.get("CLUSTERS", 1000)), 1024)  # the lives have 2,000; half here, for memory beside three lives
     brain.words.plastic_by_error = False
     brain.words.episodes.key = "looked"
-    if mode == "serial":
+    if mode.startswith("serial"):
         brain.gaze = "serial"
+        brain.look_on_question = mode != "serial_noq"  # serial_noq: the question does not draw the eye (the first version, 2026-11-23)
     world = Curriculum(seed=0, world=4)
     held = held_names(world)
     names = sorted(held)
@@ -75,7 +77,7 @@ def run(seed, mode):
             looks.append(len(brain._gazed["taken"]))
         if n % EVERY:
             continue
-        out = [f"seed {seed} {mode:6} {n:6}"]
+        out = [f"seed {seed} {mode:10} {n:6}"]
         for st, items in tests.items():
             g, tk = collections.defaultdict(list), []
             for m in items:
@@ -91,7 +93,7 @@ def run(seed, mode):
             right.append(tidy(said or "") == a)
             moves.append(len(path) - 1)
             gz = brain._gazed
-            if gz is None or mode != "serial":
+            if gz is None or brain.gaze != "serial":
                 continue
             took.append(len(gz["taken"]))
             asked = [w for w in names if re.search(rf"\b({re.escape(w)}|{re.escape(plural(w))})\b", q)]
