@@ -1468,3 +1468,31 @@ and a response that grows with contrast and saturates, where ours did not depend
 pool is the weaker of the two here and no sparser over kinds. Under rule 8 the divisive response is the one to
 carry forward, on its ground; the surround waits for three seeds. Seeds 1 and 2 are queued behind the gaze runs.
 
+### 2026-11-24 11:28: a second stage that learns from the eye's drift (queue E 29a): the organic check and the probe
+
+**What is established.** Complex cells answer to their feature over a range of positions; simple cells do not.
+The account with the most support for how that tolerance is acquired is temporal: what the eye sees a moment
+later is nearly always the same thing slightly moved, and a cell that has just fired is still marked when the
+next view comes, so it learns that view as well (Földiák 1991; Wallis & Rolls 1997). The monkey experiments that
+swap one object for another during a saccade change what IT cells treat as the same thing, in the direction
+this predicts (Li & DiCarlo 2008). Halvagal & Zenke 2023 give a modern local rule built around the same term
+and show that without it a stack of local layers learns nothing useful. The source of the small movements is the
+eye itself: within a fixation it drifts by about a receptive field (Rucci & Poletti 2015).
+**What we have.** Stills, and a fixed 4 × 4 average as the only tolerance to position. No cell has learned what
+goes together across a small movement.
+**The probe** (`experiments/cortex_trace_probe.py`). The first stage stays (developed filters, pooled 2 × 2). A
+second stage, the one of 2026-11-17 (256 kinds in 16 groups of 16, each listening to 32 kinds of the first over
+3 × 3 places), develops by the first stage's own rule on fixations of four views, the picture sliding a pixel at
+a time. Two arms on exactly the same views: *plain* (only the winner of a view learns it) and *trace* (a cell
+that won an earlier view at that place learns the present one too, in proportion to a trace that keeps 0.7 a
+view). Read: how alike a cell's answers are to a picture and to it two pixels aside; sparseness; then the stream
+on the second stage's summary beside the first stage's (0.613 on these pictures).
+**What is wired and what is learned.** Wired: that a cell's having fired lingers (a trace), and that the eye
+drifts. Learned: which first-stage cells a second-stage cell pools. Nothing names a feature or a tolerance.
+**Stand-ins, written down.** The trace's persistence (0.7 a view) is borrowed from the persistence the eye's own
+memory of what it saw has in the learner (`seen = 0.7 * seen`); it is a time constant, and I have not derived it
+from a tick's length. The drift is a random walk of one pixel a view, kept within three pixels. The second
+stage's summary alone goes on to the relay (both stages together make a code twice as wide; later).
+Noted for the whitening item (queue E 26): the same drift is, with the retina's transient response, a known
+source of spatial whitening (Rucci & Victor 2015; not yet read by us), a local alternative to our batch step.
+

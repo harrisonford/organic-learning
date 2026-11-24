@@ -58,7 +58,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-gaze4`** (out/tmp/gaze4_queue.sh, started 2026-11-24 11:20; about five hours): the shuffled-pull
+- **`organic-gaze4`** (out/tmp/gaze4_queue.sh, started 2026-11-24 11:16; about five hours): the shuffled-pull
   control on seed 0 → out/tmp/gaze4_shuf.log; seeds 1 and 2, all at once and serial → out/tmp/gaze4.log; then
   the cortex's divisive normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log,
   out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
