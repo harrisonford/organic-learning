@@ -47,8 +47,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   rate was its lowest; a setting that wins is run on three seeds too (same two logs).
 - **`organic-gaze1`** (`experiments/gaze_life_probe.py`, capped at 1.4 GB; started 2026-11-23 23:43): a small
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
-  twice a seed on the same moments, with the lives' looking and with the serial gaze; seeds 0–2, about an hour a
-  run → out/tmp/gaze1.log.
+  twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
+  run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
+- **`organic-norm1`** (out/bench/norm_queue.sh; waits for `organic-gaze1`, for memory): queue E 24, item 1.
+  `experiments/cortex_norm_probe.py` codes 10,000 CIFAR-10 pictures with the same developed filters and three
+  responses (as now; divisive normalisation with the pool at the place; the pool also over the surround) →
+  out/bench/norm_probe.log (what each does to the code: sparseness, growth with contrast); then the one-pass
+  stream on each → out/bench/stream_{norm0,divnorm,divnorm_s}10k_s0.log.
 - **`organic-reward-queue`**: waits for the plateau lives, then lives `kind_s0..2` and `ramp_s0..2` (JUDGING.md).
 - Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
 - Launch line for a life with no pass mark:
@@ -530,3 +535,11 @@ Still Kris's own:
   (0.54–0.56); `plat_s1` in pages 0.43 above the floor at 65,000, `plat_s2` 0.42 on its first test there.
   Next: read gaze1; the backprop third seed and the tracked relay; queue E 24 (the first cortex probe: divisive
   normalisation) when the gaze probe has freed its memory.
+- 2026-11-24 00:00 **The first cortex probe is written and queued** (queue E 24, item 1; `organic-norm1`, after
+  the gaze probe): divisive normalisation in place of "above the mean, rectified". R = D² / (σ² + pool), D the
+  rectified drive times the window's contrast, the pool all kinds at the place (and, in a second arm, the
+  surround), σ² the median pooled energy on unlabelled pictures: nothing searched. Read first for what it does
+  to the code (sparseness over kinds and over places, response against contrast), then the stream. Under rule 8
+  the stream's number does not decide adoption. The gaze probe was restarted with seed 0 alone so that this can
+  follow it sooner.
+  Next: read gaze1 (seed 0, both ways) and decide on seeds 1–2; read norm1.
