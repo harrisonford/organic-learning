@@ -652,4 +652,10 @@ Still Kris's own:
   (the drift probe), then `organic-rest1` (fast pair, seed 2's baseline, normalisation seeds 1–2).
   Default digest unchanged (c52819a8c3a93a7b).
   Next: read gaze5; the drift probe.
+- 2026-11-24 13:28 **The corrected rule at the slow rate, real arm** (gaze5_slow.log, seed 0): the pull's weight is 0.000 /
+  0.001 / 0.005 / 0.008 / 0.010 at 4,000–12,000 moments: slow and steady, about what was estimated; the first look
+  stays the reflex's (0.49–0.51); pages 0.59 and "is there" 0.75 at 12,000 with 0.86 looks before answering. The
+  shuffled control is running; the reading waits for it. Reward lives at 25,000: all three in first words
+  (exact grades 0.43–0.46).
+  Next: the control; then the drift probe starts by itself.
 
