@@ -64,6 +64,12 @@ what we say it says. **Status** is how the assistant knows the entry:
 | ☐ | Zheng et al. (2023). Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. *NeurIPS Datasets and Benchmarks* | https://arxiv.org/abs/2306.05685 | judges agree with people often, with biases | survey agent |
 | ☐ | Thakur, Choudhary, Ramayapally, Vaidyanathan & Hupkes (2025). Judging the judges: evaluating alignment and vulnerabilities in LLMs-as-judges. *GEM workshop (ACL)* | https://arxiv.org/abs/2406.12624 | only the largest judges align reasonably | survey agent |
 | ☐ | Bavaresco et al. (2025). LLMs instead of human judges? A large scale empirical study across 20 NLP evaluation tasks. *ACL* | https://arxiv.org/abs/2406.18403 | agreement varies by model and dataset | survey agent |
+| ☐ | Tanenhaus, Spivey-Knowlton, Eberhard & Sedivy (1995). Integration of visual and linguistic information in spoken language comprehension. *Science* 268, 1632–1634 | doi:10.1126/science.7777863 | a heard word draws the eye to what it names | survey agent 2026-11-23 |
+| ☐ | Bergelson & Swingley (2012). At 6–9 months, human infants know the meanings of many common nouns. *PNAS* 109(9), 3253–3258 | doi:10.1073/pnas.1113380109 | word-driven looking in infants | survey agent 2026-11-24 |
+| ☐ | Bichot, Heard, DeGennaro & Desimone (2015). A source for feature-based attention in the prefrontal cortex. *Neuron* 88(4), 832–844 | doi:10.1016/j.neuron.2015.10.001 [check] | the template account | survey agent 2026-11-23 |
+| ☐ | van Zoest, Donk & Theeuwes (2004). The role of stimulus-driven and goal-driven control in saccadic visual selection. *J. Exp. Psychol. HPP* 30(4), 746–759 | doi:10.1037/0096-1523.30.4.749 | fast saccades follow salience, slower ones the goal | survey agent 2026-11-24 |
+| ☐ | Donk & van Zoest (2008). Effects of salience are short-lived. *Psychological Science* 19(7), 733–739 | doi:10.1111/j.1467-9280.2008.02149.x | salience is a transient | survey agent 2026-11-24 |
+| ☐ | Schütz, Trommershäuser & Gegenfurtner (2012). Dynamic integration of information about salience and value for saccadic eye movements. *PNAS* 109(19), 7547–7552 | doi:10.1073/pnas.1115638109 | salience under 150 ms, value after 250 ms | survey agent 2026-11-24 |
 
 Not cited yet but in the notes, if wanted: the Dragon Hatchling (arXiv 2509.26507; trained by backpropagation
 through time), Monty (arXiv 2507.04494), "Alignment Without Binding" (workshop, 2026; a frozen random encoder beat

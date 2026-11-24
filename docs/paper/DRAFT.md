@@ -124,7 +124,8 @@ is the fast half of a complementary-learning-systems pair (McClelland, McNaughto
 
 **Looking.** When a picture contains several things, a gaze driven by colour contrast fixates the regions that
 stand out, and the fixated region is then seen at full resolution, as the thing would look alone. A small set of
-match units compares what is fixated with a name that was just heard.
+match units compares what is fixated with a name that was just heard. In the lives reported here every fixated
+region reaches the word cells at once and for nothing; a later section rebuilds looking as one look at a time.
 
 **Mouth.** Motor units are formed by babbling, and an auditory-motor map learns what each sounds like. A gating
 policy learns from reward whether to echo what was heard, to speak from the word cells, or to speak from the store.
@@ -431,6 +432,47 @@ back for the same picture on a different page 85–92% of the time (11–15% wit
 cells alone). For a different picture of the same kind of thing it brings back nothing: an instance again, not a
 category. We tested this on saved learners and in a probe; no full life has been run with the new key yet.
 
+### One look at a time
+
+Looking, as the lives above have it, is generous. The word cells are handed the whole view and every region the
+gaze reflex picks, all at once and at no cost. No eye works like that, and there was nothing in it to learn. So we
+rebuilt it: the word cells first get the whole view, coarse, and each look then brings them one region in detail.
+
+Before building anything we asked the word cells a question: do they already know where to look? We raised them
+as usual, then took looks one at a time and ranked the candidate regions by how strongly a blurred view of each
+drove the cells of the words in the question. On pages where the order of looks could matter, the named thing
+was in the fovea on the first look 81–85% of the time (three seeds), against 46% when the regions were ranked by
+contrast and 38–41% at random. Nothing new was learned for this. It is the word cells' own picture of what a
+word's thing looks like, the "template" of the attention literature (Bichot et al., 2015), and it is how a heard
+word draws a listener's eye (Tanenhaus et al., 1995), in infants too (Bergelson & Swingley, 2012). The learner
+had it all along and had never used it to move its eye.
+
+What remained was how the eye should weigh what stands out against what was asked for, and we got that wrong
+twice before getting it from the literature (see the next section). What is established is a matter of timing:
+contrast moves the eye only in the first quarter of a second after a scene appears, and later looks follow what
+is sought (van Zoest, Donk & Theeuwes, 2004; Donk & van Zoest, 2008; Schütz et al., 2012). A look drawn by a
+heard word always comes later than that. So in the learner what stands out is a transient that fades from the
+moment the scene appears, and the pull of the heard words is sustained. Nothing about the balance is learned,
+and no weight of ours sets it. Before the word cells know a word, its pull is nothing and the reflex decides,
+as in a newborn.
+
+We tested this in small learners, not in lives: 6,000 moments each, starting in first words with an ear that had
+already heard speech, graded by the letter, and raised twice on exactly the same moments.
+
+| at 6,000 moments (three seeds) | every region at once | one look at a time |
+|---|---|---|
+| pages | 0.56 / 0.51 / 0.59 | 0.50 / 0.61 / 0.59 |
+| "is there a …?" right | 0.67 / 0.74 / 0.69 | 0.68 / 0.73 / 0.72 |
+| detailed views the word cells get before answering | all candidates, free | 0.86 / 0.88 / 0.88 looks |
+| first look lands on the named thing | – | 0.70 / 0.70 / 0.68 |
+
+A learner that takes about one look, at the region its words pull, answers as well as one that is given every
+region for nothing. Its first look finds the named thing more often as its word cells learn (51–62% at 3,000
+moments, 68–70% at 6,000; the reflex alone manages 49%). The price is about one tick more per moment. This is a
+small learner and a hundred test items per seed, so "as well as" means "not told apart". Counting is untested,
+and there every region must be seen. The eye movements that the gating policy could learn from reward die out in
+both arms: reward and a cost on time, by themselves, teach an eye not to look.
+
 ## What did nothing, and what we got wrong
 
 A fair amount of what we built contributed nothing we could measure. Replay from the episodic store did not
@@ -444,7 +486,7 @@ the lost answers had not been erased so much as displaced by that stage's larger
 ("couch" for a bed). The stage's test also turned out to be answerable blind more than half the time, and we have
 since rebuilt it.
 
-Then there are the things we got wrong. Three of our assumptions were mistaken, and each of them made the learner
+Then there are the things we got wrong. Four of our assumptions were mistaken, and each of them made the learner
 look better, or at least busier, than it was.
 
 *We turned a behaviour into a target.* Echoing was a gate: a learner had to keep 80% of its echo score to move
@@ -461,6 +503,16 @@ the question repeated back; and because an adult who accepts an answer repeats t
 lessons taught the learner its own error. Kindness about the form of an answer is harmless. Kindness about its
 meaning is a training signal. The judge described above is strict on meaning for that reason, and how strict the
 reward should be at each age is now an experiment of its own.
+
+*We assumed reward could teach the eye what to trust.* When looks became serial, something had to weigh what
+stands out against what was asked for. We first added the two with a weight we made up, which drowned the word.
+Then we let reward learn the two weights, and got a result we liked: the word's weight rose from nothing to 0.75
+and the first look began to find the named thing. The control undid it. With the word's signal shuffled across
+the regions, so that it said nothing, its weight still rose to 0.53. The rule always took the best-scoring
+region and then credited whatever had scored it. With that bias removed and a rate slow enough for so weak a
+signal, the real weight reached 0.010 in 10,000 moments and the shuffled one 0.006. Where the first look lands
+changes too few answers for reward to teach it in any span we could run. The answer was in the literature we had
+already collected (the timing described above), and we had passed over it because it needed a clock.
 
 Two smaller confessions belong here. The relay's regulariser was chosen from four values by looking at held-out
 naming in the learner's world, so one number in this paper was tuned. And the pass marks that moved the first

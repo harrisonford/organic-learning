@@ -697,4 +697,12 @@ Still Kris's own:
   desktop and Remote Control; "Keeping the loop alive" above).
   Next: rest1 (normalisation seeds), trace2, diet2; then the paper's section on looking and on the cortex from
   biology, and draft 7 by email.
+- 2026-11-24 17:40 The loop runs inside herdr on the desktop now (Kris moved the session; the process no longer hangs on an
+  SSH connection). **The paper has a section on looking one place at a time** (three seeds of the small learner,
+  the read-out, the timing account) and a fourth mistaken assumption (that reward could teach the eye what to
+  trust; the shuffled control). Six references added to REFERENCES.md, unopened. Normalisation: seed 1 coded
+  (sparseness 0.825 against 0.711, as seed 0), streams running; blurred start seed 1 developed (filters 0.281
+  against 0.297 cycles a pixel, colour 0.593 against 0.558).
+  Next: the streams of seeds 1–2 (normalisation, blurred start), trace2; then the paper's section on the cortex
+  from biology and draft 7 by email.
 
