@@ -1596,3 +1596,30 @@ slow pair and the first rule's control, and the machine's hours go to the cortex
 alike 0.847 in the first stage (after its 2 × 2 pooling) and 0.799 in a second stage developed without a trace
 (sparser: 0.818 against 0.687). The trace arm is developing.
 
+### 2026-11-24 16:18: the second stage and the trace, read (drift probe, seed 0)
+
+| | first stage alone (as now) | second stage, plain | second stage, trace |
+|---|---|---|---|
+| answers to a picture and to it two pixels aside, alike | 0.847 | 0.799 | 0.826 |
+| sparseness over the kinds at a place | 0.687 | 0.818 | 0.814 |
+| stream, 10,000 pictures: word cells with the relay | 0.613 | 0.646 | 0.631 |
+| word cells without the relay | 0.502 | 0.513 | 0.509 |
+| ridge with the relay (reference) | 0.659 | 0.655 | 0.640 |
+| ridge without | 0.646 | 0.638 | 0.630 |
+
+One seed; the stream's chance error is about ±0.011.
+1. **The trace does what it is for**: cells that keep a trace of having fired answer more alike when the picture
+   slides (0.826 against 0.799 for the same stage without it), with the same sparseness.
+2. **It does not reach the tolerance the fixed 2 × 2 average already gives the first stage** (0.847). A second
+   stage looks at 3 × 3 places of the first, so it is more particular about position than what it is built on;
+   the trace wins back a little over half of that.
+3. **On the stream the second stage helps the word cells (0.646 and 0.631 against 0.613) and not the ridge.** The
+   trace arm is the lower of the two second stages by about 0.015 for both learners: single centred pictures do
+   not ask for tolerance to position, and tolerance is paid for in detail. Where tolerance should pay is where
+   the eye lands a little off a thing, on pages; that is not measured here.
+4. The second stage's gain for the word cells is larger than the +0.01 measured on 2026-11-17 for the same layer;
+   then it was added beside the first stage's summary, here it replaces it.
+Under rule 8 the trace is carried forward on its ground (the established account of how tolerance is acquired),
+with its cost on this benchmark stated. Seeds 1 and 2 are queued (`organic-trace2`, after `organic-rest1`).
+Owed before anything is adopted in a learner: three seeds; the tolerance read on pages with the serial gaze.
+

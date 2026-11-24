@@ -61,10 +61,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 - **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for trace1): the serial gaze (balance by its time course) on
   seeds 1 and 2 → out/tmp/gaze6_s12.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive
   normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
-- **`organic-trace1`** (out/bench/trace_queue.sh; running since 2026-11-24 14:25): queue E 29a.
-  `experiments/cortex_trace_probe.py`, seed 0 → out/bench/trace_probe.log (how alike the answers to a picture
-  and to it two pixels aside; sparseness), then the stream on each arm's second stage →
-  out/bench/stream_{l2plain,l2trace}10k_s0.log. Slow (about 0.7 s a picture under the machine's load): hours.
+- **`organic-trace2`** (out/bench/trace2_queue.sh; waits for rest1): the drift probe on seeds 1 and 2 →
+  out/bench/trace_probe_s{1,2}.log, stream_{l2plain,l2trace}10k_s{1,2}.log (about five hours).
 - **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
   gaze (out/tmp/digest_gaze.log, two lines that must agree), then the serial arm with the question drawing the
   eye, seed 0 → out/tmp/gaze2.log.
@@ -669,4 +667,11 @@ Still Kris's own:
   behind the drift probe; the fast learned-weights pair dropped (settled). Drift probe: plain arm done (second
   stage 0.799 alike under a two-pixel shift, first stage 0.847); trace arm developing.
   Next: read trace1 (trace arm, streams); then rest1.
+- 2026-11-24 16:18 **The drift probe, seed 0** (VISION.md same time): the trace raises the second stage's tolerance to a
+  two-pixel shift (0.826 against 0.799 without it; the first stage's pooled output 0.847); on the stream the
+  second stage helps the word cells (plain 0.646, trace 0.631, first stage alone 0.613) and not the ridge (0.655,
+  0.640, 0.659). Carried forward on its ground with its cost stated; seeds 1–2 queued (`organic-trace2`).
+  `organic-rest1` is on the gaze seeds.
+  Next: read rest1 (gaze seeds 1–2, seed 2's baseline, normalisation seeds); then the paper's new section when
+  three seeds are in; then queue E 29b (a blurred start).
 
