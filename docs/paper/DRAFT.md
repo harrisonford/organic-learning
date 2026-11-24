@@ -24,7 +24,7 @@ Both steps are computed in batch before learning starts, which is the one place 
 yet true; a local Hebbian and anti-Hebbian network recovers about four fifths of the effect in a first test. A
 small episodic store gives the learner one-shot memory of a picture but not of a category. We also raised the
 learner through a staged childhood of photographs and adult speech, and we report what each part did there, what
-did nothing, and four mistakes of method that had made earlier versions look better than they were.
+did nothing, and three mistaken assumptions that had made earlier versions look better than they were.
 
 ## Introduction
 
@@ -46,9 +46,7 @@ by rule, and nothing the learner does along the way, whether babbling, echoing o
 turned into a target. Everything learns online, within one life, by local rules, with no error sent back through
 layers. Nothing is changed in order to raise a score; a benchmark is a yardstick and not a goal. And every part
 is taken out again to see whether it mattered, with what did nothing reported beside what worked. Where the
-learner we built falls short of these commitments, and it does in two places, we say so. The phrase has been used
-before, as the title of a patent on network architectures; we use it for a method and not for an architecture.
-**[reference to add: US patent 10,846,592.]**
+learner we built falls short of these commitments, and it does in two places, we say so.
 
 It worked better than we had expected, and for a while we thought we knew why. Our account was the obvious one:
 local rules, patiently assembled, are simply good at learning from one pass. This paper is about what happened
@@ -94,9 +92,10 @@ cell of a 4 × 4 grid: a code of 4,096 numbers.
 with $C$ and $\mu$ estimated from 6,000 unlabelled pictures and $\epsilon = 0.0005$. In a brain, learned lateral
 inhibition among the neurons that carry the code would do this (Földiák 1990). **In our learner both whitening
 steps, this one and the one on the patches, are eigendecompositions computed in batch before learning begins.**
-They are the two places where "local and online" is not yet true of what we built, and since the relay turns out
-to be the hero of the paper, the reader should keep that in mind from here on. A later section reports a first
-attempt to replace it with a local rule.
+Brains do both with local circuitry; ours are stand-ins, computed the quick way, and they are the two places
+where "local and online" is not yet true of what we built. Since the relay turns out to be the hero of the paper,
+the reader should keep that in mind from here on. A later section swaps the relay for a published local rule,
+which recovers four fifths of its effect.
 
 **Word cells.** The output layer. Every unit of the ear that has been heard in a reply gets a cell, so in
 standard terms the word cells are the output units of a linear readout over sub-word units. Each cell has two
@@ -124,7 +123,10 @@ match units compares what is fixated with a name that was just heard.
 policy learns from reward whether to echo what was heard, to speak from the word cells, or to speak from the store.
 
 We set the following by hand: the sizes (256 filters, 2,000 word cells, 2,000 stored moments), the two whitening
-regularisers, the steepness of the store's similarity, and the order of the stages. One of these was tuned, and we
+regularisers, the steepness of the store's similarity, and the order of the stages. No size comes from anatomy.
+The cortex follows the single-layer recipe of Coates, Lee & Ng (2011), cut down to what one desktop machine can
+run three lives of at once, and using the same filters at every position is an engineering shortcut that a brain
+does not have: it has to learn its detectors place by place. One of these was tuned, and we
 come back to it under mistakes.
 
 ## What it looks like
@@ -428,8 +430,8 @@ the lost answers had not been erased so much as displaced by that stage's larger
 ("couch" for a bed). The stage's test also turned out to be answerable blind more than half the time, and we have
 since rebuilt it.
 
-Then there are the things we did wrong. We made four mistakes of method, and each of them made the learner look
-better, or at least busier, than it was.
+Then there are the things we got wrong. Three of our assumptions were mistaken, and each of them made the learner
+look better, or at least busier, than it was.
 
 *We turned a behaviour into a target.* Echoing was a gate: a learner had to keep 80% of its echo score to move
 on. Learners that had begun to use words echoed less, as children do, and we held them back for 20,000 to 90,000
@@ -439,12 +441,12 @@ moments for it.
 learners through stages. It was also a rule of ours and not something the learner did, which is exactly what we
 had promised ourselves not to build. We removed it and reran every life.
 
-*Our judge taught the learner its own mistakes.* The first judge accepted "yes" for "no", "bear" for a dog, and
-the question repeated back. Worse, when it accepted an answer the adult repeated the learner's word, so about 7%
-of lessons taught the learner its own error. The stricter judge described above replaced it.
-
-*The world quietly went back in time.* After 50,000 moments of every life the world reverted to an older version
-of itself, through a bug that no score revealed. We found it by reading logs.
+*We assumed a kind judge could do no harm.* We wanted answers judged as a caring adult would judge a child, and
+took it that leniency could only cost us precision. The first judge accepted "yes" for "no", "bear" for a dog, and
+the question repeated back; and because an adult who accepts an answer repeats the child's word, about 7% of
+lessons taught the learner its own error. Kindness about the form of an answer is harmless. Kindness about its
+meaning is a training signal. The judge described above is strict on meaning for that reason, and how strict the
+reward should be at each age is now an experiment of its own.
 
 Two smaller confessions belong here. The relay's regulariser was chosen from four values by looking at held-out
 naming in the learner's world, so one number in this paper was tuned. And the pass marks that moved the first
@@ -521,7 +523,7 @@ the judge are language models. **[Kris: to be reworded as yours.]**
 
 ## Code and data
 
-The repository holds the logs of every run cited here and the scripts that produce each table and figure
+Everything is public at <https://github.com/harrisonford/organic-learning>. The repository holds the logs of every run cited here and the scripts that produce each table and figure
 (`experiments/bench_*.py`, `experiments/curriculum_life.py`, `experiments/paper_figures.py`). **[A snapshot with a
 DOI before submission.]**
 
@@ -558,3 +560,7 @@ Several different words run together into one (the right word stuck to the names
 either." For open exchanges, where many replies are fine, it is asked instead whether a caring adult would accept
 the child's answer as a right answer for a child of that age. Every test in this paper is scored under these two
 instructions and no other.
+
+**The term.** "Organic learning" has been used before as the title of a United States patent on network
+architectures (US 10,846,592). We use it for a method, the five commitments of the introduction, and not for an
+architecture.

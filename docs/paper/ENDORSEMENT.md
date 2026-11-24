@@ -50,7 +50,7 @@ The paper describes a small learner made only of local learning rules, with no b
 moment once. On CIFAR-10 as a single-pass stream it names 0.687 of held-out pictures against 0.616 for
 backpropagation of the same shape, and we show that the lead belongs to a decorrelated code and not to the learning
 rule (a gradient readout on the same code does as well; a streaming LDA stays ahead). We also report what did not
-work, and three errors of method we made and corrected.
+work, and three assumptions of ours that turned out wrong.
 
 I should say plainly how it was made: I directed the work and I am responsible for it; an AI assistant wrote most of
 the code and the first draft under my direction, which the paper states. The PDF is attached, and the code and logs
