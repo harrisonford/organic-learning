@@ -63,6 +63,7 @@ def run(seed, mode):
     if mode.startswith("serial"):
         brain.gaze = "serial"
         brain.gaze_rate = float(os.environ.get("GAZE_RATE", brain.gaze_rate))
+        brain.gaze_balance = os.environ.get("GAZE_BALANCE", brain.gaze_balance)  # "time" (default) or "learned"
         brain.look_on_question = mode != "serial_noq"  # serial_noq: the question does not draw the eye (the first version, 2026-11-23)
         if mode == "serial_shuf":  # the control of the map's learned weights: the words' pull lands on places at random
             pull, order = brain._pull, np.random.default_rng(seed + 31)

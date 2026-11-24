@@ -1541,3 +1541,36 @@ What stays true from 11:16: with the question's look the serial learner looks be
 learner that gets every place for nothing. What moved the first look to the named thing was a weight that the
 rule inflated; whether reward alone can do it is open.
 
+### 2026-11-24 14:30: reward does not teach the balance; the balance by its time course
+
+**The corrected rule at the slow rate, with its control** (gaze5_slow.log, seed 0, 12,000 moments):
+
+| moments lived | the pull's weight, real | shuffled | first look on the named thing, real | shuffled |
+|---|---|---|---|---|
+| 4,000 | 0.000 | 0.001 | 0.49 | 0.49 |
+| 8,000 | 0.005 | 0.002 | 0.49 | 0.49 |
+| 12,000 | 0.010 | 0.006 | 0.51 | 0.51 |
+
+The real pull's weight is not told apart from that of a pull that says nothing. What both show is a weight that
+cannot go below nothing being lifted by noise. So: **at a rate a stable value could have, reward does not teach
+the eye to trust the word within 10,000 moments of pages**; at the eye commands' rate the first rule inflated the
+weight and a clean one would let it wander (that pair still runs, `organic-rest1`, for the record). The teaching
+signal is too weak for this: where the first look lands changes the answer on few pages and by little. A
+negative result, and it stays in the record with its control.
+**What I had passed over.** The survey gave three grounded ways to set the balance. I built the one it marked as
+our own reading (two learned weights) and left out the one with the plainest evidence, because "a tick does
+not resolve it". That was the wrong call: what stands out moves the eye only in the first quarter of a second
+after a scene appears, and later looks follow what is sought (van Zoest, Donk & Theeuwes 2004; Donk & van Zoest
+2008; Siebold et al. 2011; Schütz et al. 2012). A look drawn by a heard word comes after the word, long after.
+**As built now** (`gaze_balance = "time"`, the default of the serial gaze; "learned" kept for its controls): what
+stands out counts as a transient that fades from the moment the scene appeared, exp(−t / 100 ms); the heard
+words' pull counts as it is; each source's places still compete among themselves. A tick is taken as 200 ms
+(the learner hears and says one unit a tick; people say four or five syllables a second). Nothing about the
+balance is learned and nothing is set by a weight of mine: after a question of three units what stands out
+counts 0.002 of itself. Before the word cells know a word their pull is nothing and the reflex decides, as in
+a newborn; as they come to know it, the look follows it. What moves with age is the word cells' knowledge.
+**Stand-ins:** the two times (200 ms a tick, 100 ms for the transient) are taken from the reports above as the
+survey gave them and are not derived in the learner; no one has opened those papers yet. With a noisy young
+pull the first look is led by noise rather than by what stands out; the read-out's 0.82 needs grown word cells.
+Default path unchanged (digest c52819a8c3a93a7b). Running: `organic-gaze6` (serial, seed 0 → out/tmp/gaze6.log).
+

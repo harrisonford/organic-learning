@@ -58,12 +58,12 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-gaze5`** (out/tmp/gaze5_queue.sh, started 2026-11-24 12:28): the corrected rule for the map's
-  weights at the slow rate, real and shuffled pull, seed 0, 12,000 moments → out/tmp/gaze5_slow.log.
-- **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for gaze5 and trace1): the same pair at the eye commands'
-  rate → out/tmp/gaze5_fast.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive normalisation
+- **`organic-gaze6`** (started 2026-11-24 14:30): the serial gaze with the balance by its time course, seed 0, 6,000
+  moments → out/tmp/gaze6.log.
+- **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for gaze6 and trace1): the learned-weights pair at the eye
+  commands' rate → out/tmp/gaze5_fast.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive normalisation
   on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
-- **`organic-trace1`** (out/bench/trace_queue.sh; waits for `organic-gaze5`): queue E 29a.
+- **`organic-trace1`** (out/bench/trace_queue.sh; running since 2026-11-24 14:25): queue E 29a.
   `experiments/cortex_trace_probe.py`, seed 0 → out/bench/trace_probe.log (how alike the answers to a picture
   and to it two pixels aside; sparseness), then the stream on each arm's second stage →
   out/bench/stream_{l2plain,l2trace}10k_s0.log. Slow (about 0.7 s a picture under the machine's load): hours.
@@ -658,4 +658,11 @@ Still Kris's own:
   shuffled control is running; the reading waits for it. Reward lives at 25,000: all three in first words
   (exact grades 0.43–0.46).
   Next: the control; then the drift probe starts by itself.
+- 2026-11-24 14:30 **Reward does not teach the map's balance** (VISION.md, same time): corrected rule, slow rate, 12,000
+  moments: the pull's weight 0.010 real against 0.006 shuffled; first look at the reflex's level in both. Negative,
+  kept with its control. **The balance is now set by its time course** (`gaze_balance = "time"`): what stands out
+  is a transient (gone a quarter of a second after the scene appeared), the heard words' pull stays; nothing
+  learned, no weight of mine. Default digest unchanged. Running: `organic-gaze6`; `organic-trace1` (the drift
+  probe, first stage read: answers to a picture and to it two pixels aside alike 0.847); `organic-rest1` behind.
+  Next: read gaze6; three seeds of serial (time) against all at once; the drift probe.
 

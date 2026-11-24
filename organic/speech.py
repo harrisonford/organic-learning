@@ -337,6 +337,17 @@ class SpeakingBrain(LoopBrain2):
     # over days and kept (Kim & Hikosaka 2013: the caudate's tail, against its head for values learned in a few
     # trials): a hundredth of the eye commands' rate.
     gaze_rate = 0.001
+    # gaze_balance = "time" (2026-11-24, after the learned weights' control: at the slow rate a real pull's weight was
+    # 0.010 after 10,000 moments of pages and a shuffled one's 0.006; reward does not teach the balance in any span we
+    # can run). What is established about the balance is its time course: what stands out moves the eye only for
+    # about a quarter of a second after a scene appears, and later looks follow what is sought (van Zoest, Donk &
+    # Theeuwes 2004; Donk & van Zoest 2008; Schütz et al. 2012). So what stands out counts as a transient, fading
+    # from the moment the scene appeared, and the heard words' pull as it is; nothing is learned about the balance.
+    # A tick is taken as a fifth of a second (the learner hears and says one unit a tick; people say four or five
+    # syllables a second) and the transient's time constant as a tenth (gone by a quarter of a second).
+    # "learned": the two weights learned from reward, as first built (kept for its controls).
+    gaze_balance = "time"
+    tick_ms, salience_ms = 200.0, 100.0
 
     apart = 0.5  # the gaze goes only to what stands apart: its surround at most this fraction as busy as itself (organic/gaze.py)
     view = 64  # the side of the view; a larger scene is seen whole only coarsely
@@ -424,11 +435,13 @@ class SpeakingBrain(LoopBrain2):
                 pull = (h @ np.maximum(w.Wv[:n] @ np.stack([w._visual(v) for v in g["far"]]).T, 0)).astype(np.float32)
         return pull
 
-    def _priority(self, pull):
+    def _priority(self, pull, elapsed=0):
         """The eye's map over the candidate places, and each source's own map: within a source the places compete
-        (each place's share of the source's whole activity); the map is the sources' average by their learned weights."""
+        (each place's share of the source's whole activity). `elapsed`: ticks since the scene appeared."""
         s = np.asarray(self._gazed["strength"], np.float32)
         maps = np.stack([s / (s.sum() + 1e-8), pull / (pull.sum() + 1e-8)])
+        if self.gaze_balance == "time":  # what stands out is a transient; what is sought stays
+            return float(np.exp(-elapsed * self.tick_ms / self.salience_ms)) * maps[0] + maps[1], maps
         gain = self.gaze_gain if self.gaze_gain is not None else np.array([1.0, 0.0], np.float32)
         return gain @ maps, maps
 
@@ -481,9 +494,9 @@ class SpeakingBrain(LoopBrain2):
         left = [i for i, p in enumerate(g["places"]) if p not in g["taken"]]
         if not left:
             return False
-        priority, maps = self._priority(self._pull(units))
+        priority, maps = self._priority(self._pull(units), len(units))  # the utterance took as many ticks as it has units
         i = max(left, key=lambda j: priority[j])
-        if explore and len(left) > 1:  # while living: drawn by priority, with the temperature of the eye commands' exploration
+        if explore and len(left) > 1 and self.gaze_balance == "learned":  # while living: drawn by priority, with the temperature of the eye commands' exploration
             p = np.exp((priority[left] - priority[left].max()) / 0.15)
             p = p / p.sum()
             i = left[int(self.rng.choice(len(left), p=p))]
@@ -740,7 +753,7 @@ class SpeakingBrain(LoopBrain2):
             reflex[target] -= 1.0
             if serial is not None and self.reflex_loop and serial["places"]:
                 # the map the eye commands choose on: what stands out, what the heard words pull, and not where it has been
-                pull = self._priority(self._pull(heard)) if pull is None else pull
+                pull = self._priority(self._pull(heard), len(heard) + tick) if pull is None else pull
                 for i, place in enumerate(serial["places"]):
                     reflex[self._target(place)] += -1.0 if place in serial["taken"] else pull[0][i]
             if not self.use_stay:
