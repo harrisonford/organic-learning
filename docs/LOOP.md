@@ -42,6 +42,14 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    streaming baselines, and in a life where a life is the test. The paper's draft goes to Kris by email
    (the address used for drafts 1–5) when it has changed materially; not on every round.
 
+## Keeping the loop alive (2026-11-24)
+The probes and lives are systemd user units with lingering on: they run without any terminal. The loop itself is
+the Claude Code process, and it dies with the terminal it was started from (a dropped SSH connection stopped it
+from 01:42 to 10:08 on 2026-11-24). So Claude Code runs inside `tmux` on the desktop (`tmux new -s organic`;
+detach with Ctrl-b d; come back with `tmux attach -t organic`). After any restart of Claude Code (`--continue`
+or `--resume`) the self-paced loop is not restored: the `/loop` line has to be typed again. A reboot of the
+desktop ends the tmux session too.
+
 ## Running
 - **Lives `plat_s0..2`** (organic-plat-s0/1/2): from birth, `GATE=plateau`, TOTAL=120000, world 4 (started
   2026-11-23 12:00). The first lives with no pass mark; they may go on into preschool as it is.
