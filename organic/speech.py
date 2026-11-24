@@ -308,6 +308,14 @@ class SpeakingBrain(LoopBrain2):
     looking = False  # the eye fixates what stands out and the word cells get those views too (docs/VISION.md, 2026-11-17)
     teach = 0.0  # the rate at which the cortex's first layer learns from the word cells' feedback (0: a fixed cortex)
     _glimpsed = None
+    # gaze = "serial" (docs/VISION.md, 2026-11-23): the eye fixates one place at a time. The word cells first get the
+    # whole view only; each eye command then brings them what the fovea has where the eye lands. The eye commands are
+    # the gating policy's, learned from reward as before; the map they choose on is biased by the reflex (what stands
+    # out) and by the heard words (how far each place, as the periphery shows it, drives the cells of the words just
+    # heard: the word cells' own visual synapses, nothing new learned). None: all fixations at once, as since 2026-11-17.
+    gaze = None
+    look_on_reply = True  # serial gaze: an utterance heard while looking draws the eye once (the adult's reply, a comment)
+    _gazed = None  # serial gaze: this moment's candidate places and the looks taken
 
     apart = 0.5  # the gaze goes only to what stands apart: its surround at most this fraction as busy as itself (organic/gaze.py)
     view = 64  # the side of the view; a larger scene is seen whole only coarsely
@@ -326,7 +334,7 @@ class SpeakingBrain(LoopBrain2):
         if self._glimpsed is not None and self._glimpsed[0] is img:
             _, self._allc, self._kept, vis, looks = self._glimpsed
         else:
-            self._kept, looks, vis = [], None, None
+            self._kept, looks, vis, self._gazed = [], None, None, None
 
             def code(view):
                 if self.teach:
@@ -346,13 +354,88 @@ class SpeakingBrain(LoopBrain2):
                     from .gaze import fixations
                     side = scene.shape[0] // 2
                     fill = lambda w: w if side == self.view else np.asarray(Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).resize((self.view, self.view), Image.BILINEAR), np.float32) / 255  # noqa: E731
-                    looks = [unit(code(fill(scene[r : r + side, c : c + side]))) for r, c in fixations(scene, most=4, apart=self.apart)]
+                    if self.gaze == "serial":
+                        looks = []
+                        self._gazed = self._candidates(scene, whole, unit, code, looks)
+                    else:
+                        looks = [unit(code(fill(scene[r : r + side, c : c + side]))) for r, c in fixations(scene, most=4, apart=self.apart)]
             else:
                 self._kept = []
             self._glimpsed = (img, self._allc, self._kept, vis, looks)
         if getattr(self, "words", None) is not None:
             self.words.look(looks)
         return vis
+
+    # ------------------------------------------------------- a serial gaze
+
+    def _candidates(self, scene, whole, unit, code, looks):
+        """The places that draw the eye in this scene (organic/gaze.py), each as the periphery has it before the eye
+        moves: the whole view's own coarseness, that place enlarged. What the fovea has there is coded when the eye lands."""
+        from PIL import Image
+        from .gaze import fixations
+        found = fixations(scene, most=4, apart=self.apart, strengths=True)
+        side, k = scene.shape[0] // 2, scene.shape[0] // whole.shape[0]
+
+        def fill(w):
+            return w if w.shape[0] == self.view else np.asarray(Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).resize((self.view, self.view), Image.BILINEAR), np.float32) / 255
+
+        far = [unit(self.cortex.code(fill(whole[r // k : (r + side) // k, c // k : (c + side) // k]), grid=self.cortex_grid)) for r, c, _ in found]
+        top = max([s for _, _, s in found] or [1.0])
+        places = [(r, c) for r, c, _ in found]
+        # a scene no larger than the view: the fovea has no more detail than the periphery had (but a cortex that is taught codes its views itself)
+        sharp = dict(zip(places, far)) if k == 1 and not self.teach else {}
+        return {"scene": scene, "side": side, "places": places, "strength": [s / top for _, _, s in found], "far": far, "sharp": sharp,
+                "taken": [], "looks": looks, "see": lambda r, c: unit(code(fill(scene[r : r + side, c : c + side])))}
+
+    def _pull(self, units):
+        """How much the words just heard draw the eye to each candidate place: the drive of their cells' visual
+        synapses from the place as the periphery shows it (a template held by the cells that hear the word)."""
+        g, w = self._gazed, self.words
+        pull = np.zeros(len(g["places"]), np.float32)
+        if len(pull) and len(units):
+            n = len(w.units)
+            h = w._hearing(units, n)
+            if h is not None:
+                pull = (h @ np.maximum(w.Wv[:n] @ np.stack([w._visual(v) for v in g["far"]]).T, 0)).astype(np.float32)
+        return pull
+
+    def _place(self, target):
+        """The window the fovea has when the eye points at a target of its map: half the scene, centred there as far as the scene allows."""
+        g = self._gazed
+        side, step, size = g["side"], g["side"] // 2, self.eye.sensor.size
+        x, y = self.eye.sensor.targets[target]
+        at = lambda v, full: int(np.clip(round((v / size * full - side / 2) / step), 0, (full - side) // step)) * step  # noqa: E731
+        return at(y, g["scene"].shape[0]), at(x, g["scene"].shape[1])
+
+    def _target(self, place):
+        """The target of the eye's map nearest the middle of a place."""
+        g, size = self._gazed, self.eye.sensor.size
+        cy, cx = (place[0] + g["side"] / 2) / g["scene"].shape[0] * size, (place[1] + g["side"] / 2) / g["scene"].shape[1] * size
+        return int(np.argmin([(x - cx) ** 2 + (y - cy) ** 2 for x, y in self.eye.sensor.targets]))
+
+    def _look(self, place):
+        """The eye lands on a place: the word cells get what the fovea has there. False if it had been there in this moment."""
+        g = self._gazed
+        # only at a place that stands apart: handing the word cells parts of one thing costs its naming (2026-11-17, `apart`)
+        if g is None or place not in g["places"] or place in g["taken"]:
+            return False
+        if place not in g["sharp"]:
+            g["sharp"][place] = g["see"](*place)
+        g["taken"].append(place)
+        g["looks"].append(g["sharp"][place])
+        self.words.look(g["looks"])
+        return True
+
+    def _led_look(self, units):
+        """An utterance is heard while looking: the eye goes once to the candidate place not yet looked at that stands
+        out most and that the utterance's words pull most (no choice of the gating policy's, and nothing learned: the reflex)."""
+        g = self._gazed
+        if g is None or not self.look_on_reply:
+            return
+        left = [i for i, p in enumerate(g["places"]) if p not in g["taken"]]
+        if left:
+            pull = self._pull(units)
+            self._look(g["places"][max(left, key=lambda i: 0.5 * g["strength"][i] + pull[i])])
 
     def _vis(self, img):
         """The whole view, as the word cells' (or the hub's) visual synapses get it; None when the eyes see nothing."""
@@ -371,7 +454,7 @@ class SpeakingBrain(LoopBrain2):
             self._glimpsed = None  # the cortex has changed: the next look is a new look
 
     def __getstate__(self):
-        return {k: v for k, v in self.__dict__.items() if k not in ("_glimpsed", "_kept", "_allc")}
+        return {k: v for k, v in self.__dict__.items() if k not in ("_glimpsed", "_kept", "_allc", "_gazed")}
 
     def observe(self, img, says):
         """An adult talks about what is seen, unasked (docs/REVIEW_2026-11-10.md 4.4): the ear hears it, the mouth
@@ -382,7 +465,9 @@ class SpeakingBrain(LoopBrain2):
         self.mirror(says)
         self.heard_recent = 0.9 * self.heard_recent + 0.1 * self.ear.question(heard)
         if getattr(self, "words", None) is not None:
-            self.words.learn([], self._vis(img), heard)
+            vis = self._vis(img)
+            self._led_look(heard)  # serial gaze: what is said draws the eye
+            self.words.learn([], vis, heard)
             self._taught()
         self.observed = getattr(self, "observed", 0) + 1
 
@@ -442,7 +527,9 @@ class SpeakingBrain(LoopBrain2):
                     # (docs/RESEARCH_TWO_WORDS.md 3; measured 2026-11-17: the length of the replies is what costs lessons)
                     self.mlu += 0.02 * (len(before) - self.mlu)
                     taken = heard[-(int(round(self.mlu)) + 1):]
-                self.words.learn(before, self._vis(img), taken)
+                vis = self._vis(img)
+                self._led_look(heard)  # serial gaze: what is said back draws the eye
+                self.words.learn(before, vis, taken)
                 self._taught()
         self.chats = getattr(self, "chats", 0) + 1
         return said, back
@@ -540,6 +627,8 @@ class SpeakingBrain(LoopBrain2):
             recalled, confidence = hub.recall(heard, vis)
         if words is not None:
             recalled, confidence = words.recall(heard, vis)
+        serial = self._gazed if words is not None and self.cortex is not None else None  # a serial gaze: this moment's places
+        pull = None
         while tick < self.max_ticks:
             level = min(phase, 2)
             code = self.eye.view(img, target, level, gain)
@@ -591,6 +680,11 @@ class SpeakingBrain(LoopBrain2):
                 reflex[:T] = change / (change.max() + 1e-8) * min(1.0, change.max() * 10)
             prev_glance = glance
             reflex[target] -= 1.0
+            if serial is not None and self.reflex_loop and serial["places"]:
+                # the map the eye commands choose on: what stands out, what the heard words pull, and not where it has been
+                pull = self._pull(heard) if pull is None else pull
+                for i, place in enumerate(serial["places"]):
+                    reflex[self._target(place)] += -1.0 if place in serial["taken"] else 0.5 * serial["strength"][i] + pull[i]
             if not self.use_stay:
                 reflex[T] = -1e9
             k, rm = self._choose(s, self.move_group, reflex, explore)
@@ -604,6 +698,8 @@ class SpeakingBrain(LoopBrain2):
             fine_sum, fine_n = np.zeros(D, np.float32), 0
             path.append(target)
             last_cmd = f"eye:{target}"
+            if serial is not None and self._look(self._place(target)):
+                recalled, confidence = words.recall(heard, vis)  # what the word cells expect, now with what the fovea has here
             if self.use_gains:
                 kg, rg = self._choose(s, self.gain_group, np.zeros(self.gains + 1), explore)
                 gain = None if kg == self.gains else kg
@@ -629,7 +725,10 @@ class SpeakingBrain(LoopBrain2):
                 if words is not None:  # the adult's reply is heard too: its units are what the word cells predict
                     if self.cortex is not None:
                         self._glimpse(scene)  # the same look (the word cells may have been shown something else since)
-                    words.learn(heard, vis, self.ear.units(answer))
+                    reply = self.ear.units(answer)
+                    if self.cortex is not None:
+                        self._led_look(list(heard) + list(reply))  # serial gaze: the adult's reply draws the eye once more
+                    words.learn(heard, vis, reply)
                     self._taught()
                 base = snapshot[2] if snapshot else self._base(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 targets = self.mouth.decompose(answer)

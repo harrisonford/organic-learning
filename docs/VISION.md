@@ -1280,3 +1280,68 @@ reflex and the heard word's pull as the biases and reward as the teacher. When t
 question (a rise to a threshold): the extended probe reads how sure the word cells are look by look
 (`organic-look3b`).
 
+### 2026-11-23 23:45: the gaze read-outs on three seeds, and the serial gaze in the learner (behind a switch)
+
+**The read-outs** (look3_probe.py, seeds 0 / 1 / 2; "is there a …?", 111 of 300 held-out pages where one candidate
+place holds the named thing and another does not):
+
+| order of looks | named thing in the fovea on the first look | right with one look only |
+|---|---|---|
+| reflex (today) | 0.46 / 0.46 / 0.46 | 0.600 / 0.610 / 0.629 |
+| the heard word's pull | 0.82 / 0.85 / 0.81 | 0.671 / 0.700 / 0.714 |
+| random | 0.38 / 0.41 / 0.38 | 0.571 / 0.595 / 0.571 |
+
+With all looks 0.710 / 0.743 / 0.793 in every order (the same views). "How many …?": first look 0.92 / 0.90 / 0.91
+against 0.57, and no gain in the answer from any order, as it must be: to count, every place has to be seen.
+
+**When to stop looking is the weak part.** How sure the word cells are, look by look (the reflex's order):
+- it rises with the look that brings the named thing into the fovea: 0.388 → 0.434, 0.374 → 0.434, 0.421 → 0.464
+  ("how many": 0.308 → 0.322, 0.325 → 0.331, 0.307 → 0.332);
+- it separates right answers from wrong ones only a little: 0.443 against 0.390, 0.447 / 0.390, 0.475 / 0.439
+  ("how many": 0.338 / 0.328, 0.352 / 0.345, 0.354 / 0.347);
+- a rule "another look until sure enough" stops after nearly the same number of looks in every order (word against
+  reflex: 1.19 against 1.23, 1.29 / 1.32, 1.22 / 1.22 at the middle level) with a little more right at the low
+  level (0.667 / 0.643, 0.740 / 0.727, 0.743 / 0.697).
+So the word cells know *where* far better than they know *whether they have seen enough*. The step 4 of the plan
+(staying as a rise to a threshold on the word cells' sureness) has little to stand on in what the word cells now
+carry. Not built. What decides between another look and an answer stays what it is: the gating policy's own
+patience, taught by reward and the cost of time.
+
+**The serial gaze, as built** (`organic/speech.py`, `gaze = "serial"`; life env `GAZE=serial`; off by default):
+- `_glimpse` codes the whole view and finds the candidate places (organic/gaze.py, as before), and codes each as
+  the periphery has it (the whole view's own coarseness, that place enlarged). The word cells get the whole view.
+- Each tick's eye command is the gating policy's, as it always was for the old eye. The map it chooses on gets,
+  at the target of each candidate place: half its standing-out (the reflex), plus the heard words' pull (the drive
+  of the heard words' cells from the place's coarse view, the probe's measure), or −1 where the eye has been
+  (inhibition of return). When the eye lands on a candidate place the word cells get the fovea's view of it and
+  recall again.
+- The eye commands are credited as before: an eligibility on the active clusters, fading back from the reward,
+  times the reward's error against that command's own running value. That is a three-factor rule already; the
+  plan's step 3 was half there. Not there: a fast and a slow memory of value.
+- When an utterance is heard while looking (the adult's reply, an unasked comment, what is said back in leisure
+  talk), the eye goes once more, to the place its words pull most, before the word cells learn. This one is a
+  reflex, not a choice (no vote of the gating policy, nothing credited).
+Organic check. What is wired: that the word cells' drive reaches the eye's map (the template account: Bichot et
+al. 2015; a heard word draws the eye: Tanenhaus et al. 1995, Bergelson & Swingley 2012), inhibition of return
+(in the reflex already), that the fovea's view arrives when the eye lands. What is learned: where to look and
+whether to look again, by the gating policy from reward; what a word's thing looks like, by the word cells.
+Nothing says "look at the named thing".
+Two choices that are stand-ins, written down as such:
+1. *The periphery is the coarse page with the place enlarged.* A real periphery does not enlarge; a real template
+   acts on features wherever they are. Our word cells' synapses are tied to position in the view, so the place
+   has to fill the view to be compared. A cortex with position-tolerant stages (queue E 24, complex cells) would
+   make this unnecessary.
+2. *The fovea hands the word cells a view only at places that stand apart.* A real fovea always delivers. On
+   2026-11-17 handing the word cells parts of a single thing cost its naming, and the `apart` rule came from
+   that; the serial gaze keeps it so that this step changes one thing. Owed: the fovea always delivering.
+What the learner may lose: today it gets every candidate place for nothing. With the serial gaze a look costs
+ticks, the old eye takes three ticks at a place before the next command, and an answer given before the first
+command has seen the page only coarsely. Whether the patience learns to wait for a look is the question.
+
+Checked: with the switch off, a learner of 300 moments says and does exactly the same before and after the change
+(one digest over all answers, ticks, rewards and eye paths).
+**Running** (`experiments/gaze_life_probe.py`, unit `organic-gaze1`): a small learner raised twice a seed on the
+same moments, both ways. Read: looks before answering, the first look on the named thing, grades on pages, ticks.
+A small learner from a late start is not a life; the same from a grown learner's checkpoint is owed when memory
+allows, then lives.
+

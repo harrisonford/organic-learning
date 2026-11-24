@@ -16,8 +16,9 @@ later choose among these places; this only says which places there are.
 import numpy as np
 
 
-def fixations(img, side=None, ring=None, most=6, apart=0.0):
-    """Top-left corners (row, column) of the windows the eye fixates in a picture, the strongest first."""
+def fixations(img, side=None, ring=None, most=6, apart=0.0, strengths=False):
+    """Top-left corners (row, column) of the windows the eye fixates in a picture, the strongest first.
+    `strengths`: also how far each stands out, as (row, column, strength)."""
     img = np.asarray(img, np.float32)
     H, W = img.shape[:2]
     side = side or H // 2
@@ -48,6 +49,6 @@ def fixations(img, side=None, ring=None, most=6, apart=0.0):
     for s, r, c in found:
         if s <= 0 or len(out) >= most:
             break
-        if all(abs(r - r2) >= side or abs(c - c2) >= side for r2, c2 in out):  # not where it has already looked
-            out.append((r, c))
-    return out
+        if all(abs(r - r2) >= side or abs(c - c2) >= side for r2, c2, _ in out):  # not where it has already looked
+            out.append((r, c, float(s)))
+    return out if strengths else [(r, c) for r, c, _ in out]

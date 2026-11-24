@@ -45,6 +45,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 - **`organic-bench-bprelay2`** (out/bench/backprop_relay_queue2.sh): waits for the queue above, then widens the
   tuning downwards and over batch size (rates 0.0003 and 0.0001, batches 8 and 32), because the first grid's best
   rate was its lowest; a setting that wins is run on three seeds too (same two logs).
+- **`organic-gaze1`** (`experiments/gaze_life_probe.py`, capped at 1.4 GB; started 2026-11-23 23:43): a small
+  learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
+  twice a seed on the same moments, with the lives' looking and with the serial gaze; seeds 0–2, about an hour a
+  run → out/tmp/gaze1.log.
 - **`organic-reward-queue`**: waits for the plateau lives, then lives `kind_s0..2` and `ramp_s0..2` (JUDGING.md).
 - Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
 - Launch line for a life with no pass mark:
@@ -91,9 +95,12 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 14. A person's labels on 200 judged answers (Kris), and scores corrected by the judge's measured error rates.
 15. Pivot frames for two-word text (docs/RESEARCH_TWO_WORDS.md), only after 7 says what is missing.
 **E. Kris's directions of 2026-11-23 evening (under rule 8; a survey first, then the organic check, then a probe)**
-23. **A learned gaze.** Today where the eye goes is a reflex (organic/gaze.py) and nothing about it is learned.
-    Survey running (how brains learn where to look: colliculus, frontal eye fields, basal ganglia and reward,
-    infants, a heard word drawing the eye). Then: what is innate and what is learned, written down; a probe.
+23. **A learned gaze.** Survey done (docs/RESEARCH_GAZE.md); plan and organic check in VISION.md (2026-11-23
+    21:45). Done: the probe that the heard word leads the eye (three seeds); the serial gaze in the learner
+    behind `gaze = "serial"` (life env `GAZE=serial`; default unchanged, checked by digest). Running: the small
+    learner raised both ways (`organic-gaze1`). Owed: the same from a grown learner's checkpoint, both ways, when
+    a life's worth of memory is free (about 1.6 GB); then lives with `GAZE=serial`. Later steps: a fast and a slow
+    memory of a place's value; the fovea handing over whatever it is on (now only places that stand apart).
 24. **The cortex's architecture and sizes from biology and recent work**, not from a 2011 recipe. Survey running
     (what is known of early visual cortex in numbers; local-rule vision models of 2020–2026). The same order.
 25. **What recent papers (2022–2026) bring**, for the paper's citations and for mechanisms worth building. Survey
@@ -502,4 +509,24 @@ Still Kris's own:
   threshold, how sure before and after the named thing enters the fovea → out/tmp/look3b.log.
   Next: read look3b; then serial looking in `organic/speech.py` behind a switch that leaves today's behaviour
   untouched by default (the reward lives start by themselves when the plateau lives end and must stay comparable).
-
+- 2026-11-23 23:45 **Both gaze read-outs are in, three seeds** (out/tmp/look3.log, look3b.log; VISION.md 23:45).
+  The heard word's order puts the named thing in the fovea on the first look on 0.82 / 0.85 / 0.81 of the pages
+  where it matters (reflex 0.46, random 0.38–0.41), and answers right with one look on 0.67 / 0.70 / 0.71
+  (reflex 0.60 / 0.61 / 0.63). **When to stop is the weak part**: how sure the word cells are rises when the
+  named thing enters the fovea (0.39 → 0.43, 0.37 → 0.43, 0.42 → 0.46) but separates right from wrong answers
+  only a little (0.44 against 0.39), and for "how many" hardly at all (0.34 against 0.33); stopping at a level of
+  sureness saves almost no looks in any order. Counting gains nothing from the order: every place must be seen.
+  **The serial gaze is in the learner, behind a switch** (`organic/speech.py`, `gaze = "serial"`; life env
+  `GAZE=serial`): the word cells first get the whole view only; each eye command of the gating policy that lands
+  on a place that stands apart brings them what the fovea has there; the map the commands choose on is biased by
+  what stands out, by the heard words' pull and against places already seen; the adult's reply (or a comment)
+  draws the eye once before the word cells learn. The eye commands are the gating policy's, credited by reward as
+  they always were (eligibility × reward prediction error: a three-factor rule already). Default behaviour is
+  untouched: the same digest of 300 moments before and after the change.
+  **Running: `organic-gaze1`** (the small learner, both ways, three seeds). Not possible yet: the same from a
+  grown learner's checkpoint (memory: 3.3 GB free beside three lives, a checkpoint needs about 1.6).
+  Backprop with the relay, seed 1: **0.690** (seed 0: 0.682); the paper's pending mark carries both.
+  Lives: `plat_s2` left first words at 60,000 lived (0.54 above the floor); `plat_s0` is still in them at 70,000
+  (0.54–0.56); `plat_s1` in pages 0.43 above the floor at 65,000, `plat_s2` 0.42 on its first test there.
+  Next: read gaze1; the backprop third seed and the tracked relay; queue E 24 (the first cortex probe: divisive
+  normalisation) when the gaze probe has freed its memory.

@@ -78,6 +78,8 @@ if os.environ.get("KEY") and getattr(getattr(brain, "words", None), "episodes", 
     # KEY=looked: the episodic store keeps a moment under what the eye was on, not under the whole view (docs/VISION.md,
     # 2026-11-23; adopted for new lives the same day: Kris left the decision to the loop). Kept with the brain.
     brain.words.episodes.key = os.environ["KEY"]
+if os.environ.get("GAZE"):  # GAZE=serial: the eye fixates one place at a time, by the eye commands (docs/VISION.md, 2026-11-23). Kept with the brain.
+    brain.gaze = os.environ["GAZE"]
 if hasattr(brain, "mouth") and os.environ.get("MOTOR_UNITS"):  # the motor repertoire's size (each unit widens every cluster)
     brain.mouth.max_units = int(os.environ["MOTOR_UNITS"])
 if os.environ.get("EAR_HABITUATION") == "0":
