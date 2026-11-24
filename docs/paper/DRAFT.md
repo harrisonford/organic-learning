@@ -245,8 +245,10 @@ points more, comes from one whitening step that the backpropagation baseline was
 to read our headline number, and it is why the headline is not in the title. **[pending: the end-to-end baseline
 with a whitening layer in front of its readout, which is the comparison this paragraph calls for. A first
 reading on one seed and the first 10,000 pictures: with the relay in front of its readout, backpropagation reaches
-0.60, against 0.52 without it and 0.62 for the word cells. Its best learning rate was the lowest we had tried, so
-the search is being widened before the three-seed runs are read.]**
+0.60, against 0.52 without it and 0.62 for the word cells. On the whole stream, still one seed: 0.682 with the
+relay, against 0.627 without it and 0.687 ± 0.005 for the word cells. If the other seeds agree, the lead is gone,
+as the literature on decorrelation would predict. Its best learning rate was the lowest we had tried, so the
+search is being widened before the three-seed runs are read.]**
 
 Is the local rule at least a good reader of the code? It is exactly as good as gradient descent and no better. A
 softmax readout trained by gradient on the same relayed code reaches 0.694, against 0.687 for the word cells,

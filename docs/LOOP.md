@@ -478,4 +478,18 @@ Still Kris's own:
   whitening, soft competition, filters before experience, no shared weights.
   Next: `experiments/look3_probe.py` (the serial gaze as a probe on pages with a saved learner; memory: check
   look2_probe's need first); the backprop full runs; the lives.
+- 2026-11-23 22:02 **Backprop with the relay, the whole stream, seed 0: 0.682** (fixed relay, rate 0.001;
+  out/bench/backprop_relay_full.log). Without the relay the same seed had 0.627; the word cells with the relay
+  have 0.687 ± 0.005 over three seeds. One seed, but it says what the literature says: given the same
+  decorrelated code, end-to-end backprop is level with the local learner. The paper's pending mark carries it.
+  Lives at 60,000: `plat_s1` in pages (0.17 above the floor on its first test there; first words 0.45);
+  seeds 0 and 2 still in first words (0.46, 0.49).
+  **The first gaze probe is written and running**: `experiments/look3_probe.py`, unit `organic-look3` (capped
+  at 1 GB; seeds 0–2, 6,000 moments each, about 15 minutes a seed) → out/tmp/look3.log. The word cells are
+  raised as today (the whole view and all fixated places at once); then, nothing learning, the looks are taken
+  one at a time in three orders: the reflex's, the heard word's (the place whose coarse view most drives the
+  cells of the words just heard), random. Read: on which look the named thing is in the fovea; the answer with
+  the first one or two looks.
+  Next: read the probe; if the word leads the eye, the serial gaze goes into the learner behind a switch; the
+  backprop seeds 1 and 2.
 
