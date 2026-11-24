@@ -559,7 +559,7 @@ Still Kris's own:
   Lives at 70,000–75,000: `plat_s0` still in first words (0.52 above the floor at 75,000); pages `plat_s1` 0.47,
   `plat_s2` 0.45 above the floor.
   Next: read gaze2 and the digest; seeds 1–2 of the three arms if seed 0 says something; read norm1.
-- 2026-11-24 10:20 **The loop did not wake between 01:42 and 10:08** (Kris asked for the status at 10:08; nothing
+- 2026-11-24 10:13 **The loop did not wake between 01:42 and 10:08** (Kris asked for the status at 10:08; nothing
   was read in between; the units ran by themselves). What was found:
   **The plateau lives ended as planned at 120,000 moments** (the health check's "stopped without a verdict" is
   how a life that reaches TOTAL looks; none was killed). All three left every stage with no pass mark: first
