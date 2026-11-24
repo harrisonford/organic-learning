@@ -377,8 +377,11 @@ stages.]**
 
 These lives moved from stage to stage when a score crossed a pass mark that we had chosen with earlier scores in
 front of us. We no longer think a mark of ours should decide when a learner is ready, and the lives now running
-move on when the curve of the current stage stops rising. Under that rule the first of three seeds left first
-words after 45,000 moments there, at 0.45, and the other two are still in it at 0.48–0.49. The old mark had let
+move on when the curve of the current stage stops rising. Under that rule the three seeds left first
+words after 45,000, 50,000 and 70,000 moments there, at 0.49, 0.49 and 0.53 above blind answering, and pages after
+30,000 to 40,000 moments at 0.31 to 0.36. In the stage after pages none of them rose above blind answering in the
+10,000 to 30,000 moments it had there (0.00 to 0.02), and first words and pages fell by about a tenth meanwhile:
+the rule moves the learner on, it does not make the next stage learnable. The old mark had let
 the earlier lives go after 5,000 to 10,000 moments at 0.27–0.29: it was sending the learner on with little more
 than half of what it could get from the stage.
 **[pending: those lives; the same lessons in shuffled order.]**

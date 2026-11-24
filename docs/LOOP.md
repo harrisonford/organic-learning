@@ -534,8 +534,9 @@ Still Kris's own:
   **Running: `organic-gaze1`** (the small learner, both ways, three seeds). Not possible yet: the same from a
   grown learner's checkpoint (memory: 3.3 GB free beside three lives, a checkpoint needs about 1.6).
   Backprop with the relay, seed 1: **0.690** (seed 0: 0.682); the paper's pending mark carries both.
-  Lives: `plat_s2` left first words at 60,000 lived (0.54 above the floor); `plat_s0` is still in them at 70,000
-  (0.54–0.56); `plat_s1` in pages 0.43 above the floor at 65,000, `plat_s2` 0.42 on its first test there.
+  Lives: `plat_s2` left first words at 60,000 lived (exact grade 0.54); `plat_s0` is still in them at 70,000
+  (0.54–0.56); `plat_s1` in pages, exact grade 0.43 at 65,000, `plat_s2` 0.42 on its first test there.
+  (Corrected 2026-11-24: these are the log line's exact grades, which I had called "above the floor".)
   Next: read gaze1; the backprop third seed and the tracked relay; queue E 24 (the first cortex probe: divisive
   normalisation) when the gaze probe has freed its memory.
 - 2026-11-23 23:48 **The first cortex probe is written and queued** (queue E 24, item 1; `organic-norm1`, after
@@ -556,16 +557,18 @@ Still Kris's own:
   after checking the default path's digest; `organic-norm1` waits behind it.
   **Backprop with the relay, three seeds: 0.688 ± 0.005** (0.682, 0.690, 0.691) against 0.687 ± 0.005 for the
   word cells: level. In the paper, with the wider tuning grid and the tracked relay still pending.
-  Lives at 70,000–75,000: `plat_s0` still in first words (0.52 above the floor at 75,000); pages `plat_s1` 0.47,
-  `plat_s2` 0.45 above the floor.
+  Lives at 70,000–75,000: `plat_s0` still in first words (exact grade 0.52 at 75,000); pages `plat_s1` 0.47,
+  `plat_s2` 0.45 (exact grades; corrected 2026-11-24, I had written "above the floor").
   Next: read gaze2 and the digest; seeds 1–2 of the three arms if seed 0 says something; read norm1.
 - 2026-11-24 10:13 **The loop did not wake between 01:42 and 10:08** (Kris asked for the status at 10:08; nothing
   was read in between; the units ran by themselves). What was found:
   **The plateau lives ended as planned at 120,000 moments** (the health check's "stopped without a verdict" is
   how a life that reaches TOTAL looks; none was killed). All three left every stage with no pass mark: first
   words after 70,000 / 45,000 / 50,000 moments there, pages after 30,000 / 35,000 / 40,000, and ended in
-  preschool. At the end (above the floor): first words 0.46 / 0.46 / 0.46, pages 0.41 / 0.40 / 0.45, preschool
-  0.14 / 0.18 / 0.16. **The reward lives started by themselves** (`kind_s0..2`, in the babbling stage).
+  preschool. Above the floor (the records' `above`; the three numbers first written here were exact grades,
+  corrected the same morning): first words when left 0.53 / 0.49 / 0.49; pages when left 0.33 / 0.31 / 0.36;
+  **preschool never rose above blind answering** (0.00 / 0.02 / 0.02 after 10,000 / 30,000 / 20,000 moments
+  there), and while the learner was there first words fell to 0.42 / 0.39 / 0.39 and pages to 0.27 / 0.25 / 0.30. **The reward lives started by themselves** (`kind_s0..2`, in the babbling stage).
   **Backprop with the relay settled again along the stream: 0.671 / 0.689 / 0.693** (mean 0.684); the wider
   tuning grid found nothing better than rate 0.001, batch 32 for either relay. The comparison is closed: 0.688
   ± 0.005 (fixed relay) against 0.687 ± 0.005 for the word cells.
