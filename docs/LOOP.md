@@ -69,8 +69,8 @@ desktop ends the tmux session too.
 - **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for trace1): the serial gaze (balance by its time course) on
   seeds 1 and 2 → out/tmp/gaze6_s12.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive
   normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
-- **`organic-diet1`** (out/bench/diet_queue.sh, started 2026-11-24 16:48): queue E 29b, seed 0 → out/bench/diet_probe.log,
-  stream_{diet,dietb,norm0b}10k_s0.log (the b's: test pictures blurred).
+- **`organic-diet2`** (out/bench/diet2_queue.sh): the blurred start on seeds 1 and 2 (waits for each seed's
+  present-cortex codes from rest1) → out/bench/diet_probe_s{1,2}.log, stream_{diet,dietb,norm0b}10k_s{1,2}.log.
 - **`organic-trace2`** (out/bench/trace2_queue.sh; waits for rest1): the drift probe on seeds 1 and 2 →
   out/bench/trace_probe_s{1,2}.log, stream_{l2plain,l2trace}10k_s{1,2}.log (about five hours).
 - **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
@@ -688,4 +688,11 @@ Still Kris's own:
   VISION.md same time): the filters develop on a maturing eye's view (waves, then pictures sharpening and gaining
   colour); read on the filters themselves, the stream, and the stream with blurred test pictures for both cortices.
   Next: read rest1 (gaze seeds), diet1; then trace2 runs.
+- 2026-11-24 17:31 **The serial gaze is level with all at once on three seeds** (VISION.md same time): pages 0.57 against 0.55,
+  "is there" 0.71 against 0.70, with 0.87 looks before answering; first look on the named thing 0.68–0.70.
+  **A blurred start, seed 0: nothing moved** (0.616 against 0.613 sharp, 0.585 against 0.588 blurred); kept as
+  measured, seeds 1–2 running. Kris asked how to keep the loop running without the laptop: answered (tmux on the
+  desktop and Remote Control; "Keeping the loop alive" above).
+  Next: rest1 (normalisation seeds), trace2, diet2; then the paper's section on looking and on the cortex from
+  biology, and draft 7 by email.
 

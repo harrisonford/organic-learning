@@ -1643,3 +1643,39 @@ steps are mine; the order (waves, coarse, fine) is what is established. The wind
 one (settled on sharp pictures), so that this changes one thing; a retina that matures with the eye is item 4.
 Running: `organic-diet1` (seed 0), beside the gaze seeds (memory checked: 3.7 GB free, the probe takes about 1.2).
 
+### 2026-11-24 17:31: the serial gaze on three seeds; the blurred start on one
+
+**The serial gaze, balance by its time course, against all at once** (small learner, 6,000 moments, seeds 0 / 1 / 2;
+100 held-out items each):
+
+| at 6,000 moments | all at once (the lives' looking) | serial |
+|---|---|---|
+| pages | 0.56 / 0.51 / 0.59 (mean 0.55) | 0.50 / 0.61 / 0.59 (mean 0.57) |
+| "is there" right | 0.67 / 0.74 / 0.69 (mean 0.70) | 0.68 / 0.73 / 0.72 (mean 0.71) |
+| views of places the word cells get | every candidate, for nothing | 0.86 / 0.88 / 0.88 looks before answering |
+| first look on the named thing (where it matters) | – | 0.70 / 0.70 / 0.68 (the reflex: 0.49) |
+
+**Level on three seeds.** A learner that looks at one place, the one the heard words pull, answers as well as one
+that is handed every place at once. The first look goes to the named thing more often as the word cells learn
+(0.51–0.62 at 3,000 moments, 0.68–0.70 at 6,000). Nothing was learned about where to look except what words'
+things look like, and no weight was set. What it costs: about one tick more a moment.
+Not shown: a grown learner (the read-out promises 0.82 first looks); counting, where every place must be seen and
+the eye commands would have to learn to go on looking (they die out here, as before).
+**A blurred start, seed 0** (diet_probe.log; stream at 10,000 pictures):
+
+| | present cortex (sharp from the first step) | blurred start |
+|---|---|---|
+| filters' mean spatial frequency (cycles a pixel) | 0.296 | 0.278 |
+| share of the filters' pattern that is colour | 0.560 | 0.612 |
+| word cells with the relay, sharp test | 0.613 | 0.616 |
+| ridge with the relay, sharp test | 0.659 | 0.663 |
+| word cells with the relay, test blurred by a pixel | 0.588 | 0.585 |
+| ridge with the relay, test blurred | 0.619 | 0.625 |
+
+Nothing moved: the filters end a little coarser and more coloured, and the stream is level with sharp and with
+blurred test pictures. The robustness the literature reports for a blurred start is not there in one layer of
+5 × 5 filters that go on learning through the sharp end of the schedule: by the end they have relearned the sharp
+world. The reports are for deep networks, where early coarse learning shapes later stages. Kept as measured; the
+schedule costs nothing and is the eye's own, so it stays for the next cortex (rule 8), where a second stage
+gives it something to shape. Seeds 1 and 2 running (`organic-diet2`).
+
