@@ -70,8 +70,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 19. How often a picture comes again in a life; a life with no going back to earlier stages; the shuffled order.
 20. A picture-blanked learner as one more blind baseline; a person's labels on 200 judgements (Kris).
 21. The new-class test with even counts, altered views of the shown picture, and beyond the store's capacity.
-22. For the reader: a drawing of the learner (done 2026-11-23: `fig_architecture`, figure 1), a life's curves and
-    examples (done: the showcase section); still owed: a table of settings, compute, the judge's instruction.
+22. Done 2026-11-23: a drawing of the learner (`fig_architecture`, figure 1), a life's curves and examples (the
+    showcase section), and an appendix with the settings, the compute and the judge's instruction.
 **C. Ideas proposed (each needs the organic check written down before it is built)**
 9. **Next to build (as a probe first):** lateral anti-Hebbian learning among the cortex's kinds: one local rule for
    what the batch relay does and for what development lacks (VISION.md, 2026-11-20 night: developed kinds are
@@ -407,3 +407,18 @@ Still Kris's own:
   Next: the backprop full runs (about 100 minutes each, six of them, then the wider grid); the lives' stage
   change or end; settings table, compute and the judge's instruction for the paper; the showcase probe on seeds 1
   and 2 and queue D 18 when memory allows.
+- 2026-11-23 21:08 **The first life to leave a stage with no pass mark**: `plat_s1` left first words at 55,000
+  lived (45,000 in the stage), level 0.45; its last three tests were above the three before by 0.025, under the
+  chance error 0.030. Its last single test was its best (0.49), so this may be the chance leave foreseen at 20:20
+  (the dip at 45,000 sits in the newer window). Seeds 0 and 2 are still there (0.49, 0.48; margins 0.049, 0.033).
+  **The paper's appendix** (queue D 22, now done): settings table, compute, the judge's instruction word for word.
+  Collecting the settings turned up something the draft had never said: **each word-cell synapse's step shrinks
+  with its own use**, 1/(1 + u/5) with u the running sum of that input's squared activity (`maturation` in
+  organic/words.py): an AdaGrad-like step. It is local, and now stated in the paper's description of the word
+  cells; it bears on the reading of "the rule is a delta rule" and of the relay (a per-input step already evens
+  out inputs of different size, which the relay then does for their correlations). Two wrong values caught while
+  writing the table (ticks at most 12, not 6; store 2,000, the 6,000 is only with replay). **A layout fault
+  fixed**: a page with a table and floating figures ran past its bottom margin and lost text (pandoc's longtable
+  does not see floats); docs/paper/build.py now turns the tables into ordinary ones; 14 pages, no overflow.
+  Backprop with the relay: tuning done (tracked 0.01: 0.533), full runs started with rate 0.001.
+  Next: the full runs; `plat_s1` in the pages stage, the other two leaving; queue D 17–18 when memory allows.

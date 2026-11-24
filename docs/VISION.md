@@ -1168,3 +1168,21 @@ local rule (visual cortex, ear, word cells, store, mouth), computed in batch bef
 steps), learned from reward (the gating policy), a fixed reflex (where the eye goes). The two batch boxes are the
 ones the paper's result rests on, and the drawing shows that at a glance.
 
+### 2026-11-23 21:08: the first stage left with no pass mark; the word cells' step, never stated before
+
+`plat_s1` left first words at 55,000 lived: the mean of its last three tests (0.40, 0.46, 0.49 → 0.45) was above
+the three before (0.39, 0.44, 0.46 → 0.43) by 0.025, and the chance error of that difference is 0.030. Its newest test was its highest, and the low test at 45,000 is what closed the gap: a leave
+on one noisy test, as feared. The rule was not changed. What it shows about the rule: with 300 questions and
+three tests a side it cannot tell a rise slower than about 0.03 per 15,000 moments from none, and late first
+words rises at about that pace. More tests a side (PLATEAU_SPAN) or a slope over the whole stage would see
+finer; that is a choice for the next lives, with Kris.
+
+**The word cells' step.** Writing the paper's table of settings: the step of each synapse is not one number. It
+is the cell's error times the input, divided by (1 + u/5), u the running sum of that input's squared activity
+(`maturation = 5` in organic/words.py), and the correction is shared among the kinds of input active in the
+moment. A synapse that has carried much signal moves little: consolidation with use, local, and the same idea as
+AdaGrad's per-coordinate step. The paper described a plain delta rule; it now says this. It matters for the
+paper's account: a per-input step evens out inputs of different *size* on its own, so what the relay adds is the
+removal of their *correlations*; and the "gradient readout does as well" control (Adam) had a per-coordinate step
+too, so that comparison was like for like in this respect.
+

@@ -103,7 +103,10 @@ standard terms the word cells are the output units of a linear readout over sub-
 sets of input weights, which we call dendrites. The content dendrite listens to the relayed visual code and to
 what was just heard; the context dendrite listens to the ear's trace and predicts which unit comes next. Each
 dendrite learns by the delta rule to predict the cell's own firing, $\Delta w = \eta\,(y - \hat{y})\,x$, where $\hat{y}$ is
-that dendrite's prediction (in the spirit of Urbanczik & Senn 2014, and identical to the Rescorla–Wagner rule). A
+that dendrite's prediction (in the spirit of Urbanczik & Senn 2014, and identical to the Rescorla–Wagner rule).
+The step is not the same for every synapse: each one consolidates with its own use, $\eta_i = 1/(1 + u_i/5)$ with
+$u_i$ the running sum of that input's squared activity, so a synapse that has carried much signal moves little.
+Readers who know AdaGrad will recognise it; it uses only what the synapse itself has seen. A
 cell fires when its two dendrites agree, and a reply is a sequence of cells. We want to be plain about one thing:
 a delta rule on a single layer *is* gradient descent on that layer. What the learner never does is send an error
 back through a layer to change the features beneath it.
@@ -361,10 +364,10 @@ stages.]**
 
 These lives moved from stage to stage when a score crossed a pass mark that we had chosen with earlier scores in
 front of us. We no longer think a mark of ours should decide when a learner is ready, and the lives now running
-move on when the curve of the current stage stops rising. Under that rule the three seeds have now spent 40,000
-moments in first words, where the old mark let the earlier lives go after 5,000 to 10,000 at 0.27–0.29, and
-they are still improving at 0.46–0.50. Our mark had been sending the learner on with little more than half of
-what it could get from the stage.
+move on when the curve of the current stage stops rising. Under that rule the first of three seeds left first
+words after 45,000 moments there, at 0.45, and the other two are still in it at 0.48–0.49. The old mark had let
+the earlier lives go after 5,000 to 10,000 moments at 0.27–0.29: it was sending the learner on with little more
+than half of what it could get from the stage.
 **[pending: those lives; the same lessons in shuffled order.]**
 
 Some things we observed without asking for them. Echoing fades by itself once words start to work; by the pages
@@ -521,3 +524,37 @@ the judge are language models. **[Kris: to be reworded as yours.]**
 The repository holds the logs of every run cited here and the scripts that produce each table and figure
 (`experiments/bench_*.py`, `experiments/curriculum_life.py`, `experiments/paper_figures.py`). **[A snapshot with a
 DOI before submission.]**
+
+## Appendix: settings, compute, and the judge's instruction
+
+**Settings.** Nothing below was searched over except where the table says so.
+
+| Part | Setting | Value |
+|---|---|---|
+| Patch whitening | patch; regulariser (share of the largest eigenvalue) | 5 × 5 colour; 0.001 |
+| Visual cortex | filters; Hebbian step; penalty on a filter that wins too often | 256; 0.02; 0.3 × (its wins / mean wins − 1) |
+| Visual cortex | patches learned from, per picture | 32, among those with at least 0.3 of the picture's strongest contrast |
+| Summary | average of each filter over a grid | 4 × 4, giving 4,096 numbers |
+| Relay | pictures it is estimated from; regulariser | 6,000 unlabelled; 0.0005 (chosen among four values, see mistakes) |
+| Word cells | most cells; step of synapse $i$ | 2,000; $1/(1 + u_i/5)$, shared among the inputs active in that moment |
+| Episodic store | moments held; steepness of the comparison | 2,000; 12 |
+| Speaking | cost of each tick of waiting; most ticks; step of the patience | 0.02 of the reward; 12; 0.05 |
+| Tests | questions per stage; how often | 300 held out; every 5,000 moments |
+| Moving on (lives with no pass mark) | tests averaged on each side of the comparison | 3 |
+| Backpropagation reference | optimiser; rate; batch (searched: 14 settings on 10,000 pictures of seed 0) | Adam; 0.003; 32 |
+
+**Compute.** Everything ran on one desktop machine: an eight-core AMD Ryzen 7 5700G with 15 GB of memory, and an
+8 GB graphics card (RTX 3070) that serves only the judge. The learner is plain NumPy on the processor. A moment
+takes about half a second, so a life of 115,000 moments takes some sixteen hours, and three lives run side by
+side. One pass of the benchmark stream takes minutes for the readers on a fixed code and about a hundred minutes
+for the backpropagation reference.
+
+**The judge.** A language model of about four billion parameters, served on the same machine and asked for the
+probability of "yes". For questions the world settles (what is in a picture, how many, yes or no) its instruction
+is, word for word: "The adult's own answer is the truth about what is there. Did the child mean the same as the
+adult? Another way of saying the same word counts (baby talk, a mispronunciation, an extra word). A different
+thing, the opposite of yes or no, a different number, or only repeating the adult's question does not count.
+Several different words run together into one (the right word stuck to the names of other things) do not count
+either." For open exchanges, where many replies are fine, it is asked instead whether a caring adult would accept
+the child's answer as a right answer for a child of that age. Every test in this paper is scored under these two
+instructions and no other.

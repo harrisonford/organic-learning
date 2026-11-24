@@ -58,6 +58,13 @@ run = lambda *a: subprocess.run(a, cwd=HERE, check=True, stdout=subprocess.PIPE,
 run("pandoc", "paper.md", "-s", "-N", "-o", "paper.tex", "-H", "head.tex", "-V", "documentclass=article", "-V", "fontsize=10pt",
     "-V", "geometry:margin=2.6cm", "-V", "colorlinks=true", "-V", "linkcolor=black", "-V", "urlcolor=blue")
 os.remove(os.path.join(HERE, "paper.md"))
+# pandoc writes every table as a longtable, and a longtable does not see the figures floating on its page: a page with
+# both ran past its bottom margin (2026-11-23). The tables here are short, so each becomes an ordinary table that stays whole.
+tex = open(os.path.join(HERE, "paper.tex"), encoding="utf-8").read()
+tex = tex.replace("\\begin{longtable}[]{", "\\begin{center}\\begin{tabular}{").replace("\\endhead\n", "").replace("\\bottomrule\\noalign{}\n\\endlastfoot\n", "")
+tex = tex.replace("\\end{longtable}", "\\bottomrule\\noalign{}\n\\end{tabular}\\end{center}")
+assert "longtable}" not in tex.split("\\begin{document}")[1] and "\\endlastfoot" not in tex
+open(os.path.join(HERE, "paper.tex"), "w", encoding="utf-8").write(tex)
 os.remove(os.path.join(HERE, "head.tex"))
 for _ in range(2):
     out = subprocess.run(["pdflatex", "-interaction=nonstopmode", "-halt-on-error", "paper.tex"], cwd=HERE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
