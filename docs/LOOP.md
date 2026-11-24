@@ -32,6 +32,15 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    as what it did. The other half stands: nothing goes in because it scores. Sizes and architecture are revised
    from what is known of the brain and from recent work (Kris: a 2011 recipe is too old a ground), not from a
    search over scores. The learner stays on the processor (Kris: "its fine then use cpu").
+9. **Iterate on the architecture in the loop; measure against the current paradigms; send the draft** (Kris,
+   2026-11-24 10:35: "once you finish research and results you can iterate on architecture on a loop given you
+   understand the philosophy on design go full organic learning over performance but we do measure performance
+   and difference with current paradigms you can work on a loop and you send me the draft paper to my email").
+   So: when the running results are read, the loop takes the architecture items one at a time (queue E 23–30),
+   each after its organic check, adopted on its biological ground (rule 8). Every change is still measured, and
+   measured beside what the field does now: on the CIFAR-10 stream beside the same-shape backprop and the
+   streaming baselines, and in a life where a life is the test. The paper's draft goes to Kris by email
+   (the address used for drafts 1–5) when it has changed materially; not on every round.
 
 ## Running
 - **Lives `plat_s0..2`** (organic-plat-s0/1/2): from birth, `GATE=plateau`, TOTAL=120000, world 4 (started
