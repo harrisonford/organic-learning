@@ -61,6 +61,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
 - **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for trace1): the serial gaze (balance by its time course) on
   seeds 1 and 2 → out/tmp/gaze6_s12.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive
   normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log, stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
+- **`organic-diet1`** (out/bench/diet_queue.sh, started 2026-11-24 16:48): queue E 29b, seed 0 → out/bench/diet_probe.log,
+  stream_{diet,dietb,norm0b}10k_s0.log (the b's: test pictures blurred).
 - **`organic-trace2`** (out/bench/trace2_queue.sh; waits for rest1): the drift probe on seeds 1 and 2 →
   out/bench/trace_probe_s{1,2}.log, stream_{l2plain,l2trace}10k_s{1,2}.log (about five hours).
 - **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
@@ -674,4 +676,8 @@ Still Kris's own:
   `organic-rest1` is on the gaze seeds.
   Next: read rest1 (gaze seeds 1–2, seed 2's baseline, normalisation seeds); then the paper's new section when
   three seeds are in; then queue E 29b (a blurred start).
+- 2026-11-24 16:48 Kris: "ok keep going keep on looping and improving". **Queue E 29b written and running** (`organic-diet1`;
+  VISION.md same time): the filters develop on a maturing eye's view (waves, then pictures sharpening and gaining
+  colour); read on the filters themselves, the stream, and the stream with blurred test pictures for both cortices.
+  Next: read rest1 (gaze seeds), diet1; then trace2 runs.
 

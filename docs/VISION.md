@@ -1623,3 +1623,23 @@ Under rule 8 the trace is carried forward on its ground (the established account
 with its cost on this benchmark stated. Seeds 1 and 2 are queued (`organic-trace2`, after `organic-rest1`).
 Owed before anything is adopted in a learner: three seeds; the tolerance read on pages with the serial gaze.
 
+### 2026-11-24 16:48: a blurred start (queue E 29b): the organic check and the probe
+
+**What is established.** Before the eyes open the retina drives the cortex with its own waves; a newborn resolves
+about a fortieth of an adult's detail and little colour; acuity rises over months, about evenly in the logarithm.
+Models: V1-like filters from spontaneous patterns alone (Albert, Schnabel & Field 2008); a start without fine
+detail gives more reliance on shape and more robustness when pictures are degraded (Vogelsang et al. 2018; Lu et
+al. 2025; Ligeralde et al. 2023). **What we have:** filters that develop on sharp, coloured pictures from the
+first step.
+**The probe** (`experiments/cortex_diet_probe.py`): the same rule, steps, first weights and window decorrelation
+as the present cortex of the seed; only what is seen while developing differs: an eighth of the steps on waves
+(blobs of slow noise with soft edges, no colour), then pictures whose blur falls evenly in the logarithm from a
+fortieth of full detail to none, colour coming in with the detail. Read: the filters' spatial frequencies and
+how much of their pattern is colour; the stream with sharp test pictures; and for both cortices the stream with
+the test pictures blurred a little (one pixel), which is where the literature says a blurred start should show.
+**Wired / learned.** Wired: that the eye matures (a schedule on what reaches the cortex). Learned: the filters,
+by the rule they had. **Stand-ins:** the share of steps on waves and the fit of the whole schedule to 16,000
+steps are mine; the order (waves, coarse, fine) is what is established. The window decorrelation is the present
+one (settled on sharp pictures), so that this changes one thing; a retina that matures with the eye is item 4.
+Running: `organic-diet1` (seed 0), beside the gaze seeds (memory checked: 3.7 GB free, the probe takes about 1.2).
+
