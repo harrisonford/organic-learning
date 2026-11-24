@@ -107,6 +107,8 @@ def run(seed, mode):
         out.append(f'"is there" pages right {np.mean(right):.2f}, eye moves {np.mean(moves):.2f}')
         if took:
             out.append(f"looks before answering {np.mean(took):.2f}; where it matters (n {len(any_)}): looked at all {np.mean(any_):.2f}, first look on the named thing {np.mean(first) if first else float('nan'):.2f} (n {len(first)})")
+        if brain.gaze_gain is not None:
+            out.append(f"the map's weights: stands out {brain.gaze_gain[0]:.2f}, the words' pull {brain.gaze_gain[1]:.2f}")
         out.append(f"living: ticks {np.mean(ticks):.1f}" + (f", looks a page (with the reply's) {np.mean(looks):.2f}" if looks else "") +
                    f" | clusters {int(brain.orch.C)} | {time.time() - t0:.0f}s, {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6:.2f} GB")
         print(" | ".join(out), flush=True)

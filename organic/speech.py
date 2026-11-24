@@ -319,6 +319,15 @@ class SpeakingBrain(LoopBrain2):
     look_on_question = True  # the question, before anything is said (it takes a tick)
     look_on_reply = True  # the adult's reply, an unasked comment, what is said back in leisure talk
     _gazed = None  # serial gaze: this moment's candidate places and the looks taken
+    # The eye's map has two sources: what stands out (the reflex) and what the heard words pull (the template). How
+    # much each counts is not set by hand (Kris, 2026-11-24): each source's places compete among themselves (divisive
+    # normalisation across the map: Louie et al. 2011; Mysore & Knudsen 2011), the map is their weighted average
+    # (Ipata et al. 2009; Wolfe 2021), and the two weights are learned from reward (reward reshapes priority maps:
+    # Chelazzi et al. 2014; Hikosaka et al. 2014) by the rule the eye commands already learn by: an eligibility (how
+    # much more than the other places the source favoured the place looked at) times the reward's error. The weights
+    # share a fixed total. Born with the reflex only, as a three-month-old looks (Frank, Vul & Johnson 2009).
+    gaze_gain = None  # [what stands out, what the heard words pull]; None: not yet looked (1, 0)
+    gaze_value = 0.0  # the usual reward of a moment with a choice of where to look
 
     apart = 0.5  # the gaze goes only to what stands apart: its surround at most this fraction as busy as itself (organic/gaze.py)
     view = 64  # the side of the view; a larger scene is seen whole only coarsely
@@ -367,6 +376,7 @@ class SpeakingBrain(LoopBrain2):
             self._glimpsed = (img, self._allc, self._kept, vis, looks)
         if new and self._gazed is not None:  # a new moment with a scene already seen: the serial gaze starts again
             self._gazed["taken"].clear()
+            self._gazed["credit"] = []
             looks.clear()
         if getattr(self, "words", None) is not None:
             self.words.look(looks)
@@ -391,7 +401,7 @@ class SpeakingBrain(LoopBrain2):
         # a scene no larger than the view: the fovea has no more detail than the periphery had (but a cortex that is taught codes its views itself)
         sharp = dict(zip(places, far)) if k == 1 and not self.teach else {}
         return {"scene": scene, "side": side, "places": places, "strength": [s / top for _, _, s in found], "far": far, "sharp": sharp,
-                "taken": [], "looks": looks, "see": lambda r, c: unit(code(fill(scene[r : r + side, c : c + side])))}
+                "taken": [], "looks": looks, "credit": [], "see": lambda r, c: unit(code(fill(scene[r : r + side, c : c + side])))}
 
     def _pull(self, units):
         """How much the words just heard draw the eye to each candidate place: the drive of their cells' visual
@@ -404,6 +414,34 @@ class SpeakingBrain(LoopBrain2):
             if h is not None:
                 pull = (h @ np.maximum(w.Wv[:n] @ np.stack([w._visual(v) for v in g["far"]]).T, 0)).astype(np.float32)
         return pull
+
+    def _priority(self, pull):
+        """The eye's map over the candidate places, and each source's own map: within a source the places compete
+        (each place's share of the source's whole activity); the map is the sources' average by their learned weights."""
+        s = np.asarray(self._gazed["strength"], np.float32)
+        maps = np.stack([s / (s.sum() + 1e-8), pull / (pull.sum() + 1e-8)])
+        gain = self.gaze_gain if self.gaze_gain is not None else np.array([1.0, 0.0], np.float32)
+        return gain @ maps, maps
+
+    def _eligible(self, i, maps):
+        """The eye is about to look at candidate place i: how much more than the other places still to see each source favoured it."""
+        g = self._gazed
+        left = [j for j, p in enumerate(g["places"]) if p not in g["taken"]]
+        if len(left) > 1:
+            g["credit"].append(maps[:, i] - maps[:, left].mean(axis=1))
+
+    def _credit_map(self, reward, eta=0.1):
+        """After the reward: the sources' weights change by eligibility x the reward's error (as the eye commands do in
+        _credit, with its rates), and stay non-negative with a fixed total."""
+        g = self._gazed
+        if g is None or not g["credit"]:
+            return
+        delta = reward - self.gaze_value
+        self.gaze_value += 0.02 * delta
+        gain = self.gaze_gain if self.gaze_gain is not None else np.array([1.0, 0.0], np.float32)
+        gain = np.maximum(gain + eta * delta * np.sum(g["credit"], axis=0), 0.0)
+        self.gaze_gain = (gain / gain.sum()).astype(np.float32) if gain.sum() > 0 else np.array([1.0, 0.0], np.float32)
+        g["credit"] = []
 
     def _place(self, target):
         """The window the fovea has when the eye points at a target of its map: half the scene, centred there as far as the scene allows."""
@@ -432,7 +470,7 @@ class SpeakingBrain(LoopBrain2):
         self.words.look(g["looks"])
         return True
 
-    def _led_look(self, units):
+    def _led_look(self, units, credit=False):
         """An utterance is heard while looking: the eye goes once to the candidate place not yet looked at that stands
         out most and that the utterance's words pull most (no choice of the gating policy's, and nothing learned: the reflex)."""
         g = self._gazed
@@ -441,8 +479,11 @@ class SpeakingBrain(LoopBrain2):
         left = [i for i, p in enumerate(g["places"]) if p not in g["taken"]]
         if not left:
             return False
-        pull = self._pull(units)
-        return self._look(g["places"][max(left, key=lambda i: 0.5 * g["strength"][i] + pull[i])])
+        priority, maps = self._priority(self._pull(units))
+        i = max(left, key=lambda j: priority[j])
+        if credit:
+            self._eligible(i, maps)
+        return self._look(g["places"][i])
 
     def _vis(self, img, new=False):
         """The whole view, as the word cells' (or the hub's) visual synapses get it; None when the eyes see nothing."""
@@ -630,7 +671,7 @@ class SpeakingBrain(LoopBrain2):
         if self.cortex is not None:
             vis = self._glimpse(scene, new=True)  # the whole view as the word cells (or the hub) get it, and what the eye fixated
             codes = [self._allc[i] for i in self.cortex_layers]
-            if self.look_on_question and self._led_look(heard):  # serial gaze: the question draws the eye before anything is said
+            if self.look_on_question and self._led_look(heard, credit=True):  # serial gaze: the question draws the eye before anything is said
                 tick = 1
         hub = getattr(self, "hub", None)
         words = getattr(self, "words", None)
@@ -693,9 +734,9 @@ class SpeakingBrain(LoopBrain2):
             reflex[target] -= 1.0
             if serial is not None and self.reflex_loop and serial["places"]:
                 # the map the eye commands choose on: what stands out, what the heard words pull, and not where it has been
-                pull = self._pull(heard) if pull is None else pull
+                pull = self._priority(self._pull(heard)) if pull is None else pull
                 for i, place in enumerate(serial["places"]):
-                    reflex[self._target(place)] += -1.0 if place in serial["taken"] else 0.5 * serial["strength"][i] + pull[i]
+                    reflex[self._target(place)] += -1.0 if place in serial["taken"] else pull[0][i]
             if not self.use_stay:
                 reflex[T] = -1e9
             k, rm = self._choose(s, self.move_group, reflex, explore)
@@ -709,7 +750,10 @@ class SpeakingBrain(LoopBrain2):
             fine_sum, fine_n = np.zeros(D, np.float32), 0
             path.append(target)
             last_cmd = f"eye:{target}"
-            if serial is not None and self._look(self._place(target)):
+            if serial is not None and self._place(target) in serial["places"] and self._place(target) not in serial["taken"]:
+                if pull is not None:
+                    self._eligible(serial["places"].index(self._place(target)), pull[1])
+                self._look(self._place(target))
                 recalled, confidence = words.recall(heard, vis)  # what the word cells expect, now with what the fovea has here
             if self.use_gains:
                 kg, rg = self._choose(s, self.gain_group, np.zeros(self.gains + 1), explore)
@@ -752,6 +796,7 @@ class SpeakingBrain(LoopBrain2):
                     late = correct and reward < 1.0 - time_cost * tick - 1e-6
                     self._tune_patience(snapshot[1], correct, late)
                 self._credit(choices, reward, tick)
+                self._credit_map(reward)
                 if self.sleep_cleanup and self.age % 2000 == 0:
                     merged, retired = self.orch.consolidate()
                     self.sleep_log = getattr(self, "sleep_log", []) + [(self.age, merged, retired, int(self.orch.C))]

@@ -49,6 +49,8 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
+- **`organic-gaze3`** (started 2026-11-24 10:55): the serial gaze with the map's weights learned from reward,
+  seed 0 → out/tmp/gaze3.log (prints the two weights at each test).
 - **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
   gaze (out/tmp/digest_gaze.log, two lines that must agree), then the serial arm with the question drawing the
   eye, seed 0 → out/tmp/gaze2.log.
@@ -594,3 +596,13 @@ Still Kris's own:
   **`organic-norm1` was killed for memory** (settling the relay needs more than its 1.3 GB cap); restarted at
   10:12 with 2.6 GB (4.6 GB are free: the new lives are young).
   Next: the pull's size in the serial gaze; read norm1; the plateau lives into JUDGING.md and the paper.
+- 2026-11-24 10:55 **Kris: "why fixed, research a better solution … did we find more interesting sota research
+  that we can take architecture ideas from".** Two surveys run and written: how the map combines its sources
+  (RESEARCH_GAZE.md, second part) and architecture ideas of 2023–2026 (RESEARCH_ARCH.md; queue E 29). The fixed
+  half is gone: each source's places compete, the map is their weighted average, the weights are learned from
+  reward on a fixed total, born with the reflex alone (VISION.md 11:10; queue E 30). Default digest unchanged.
+  `organic-gaze3` running. Divisive normalisation, the code itself (norm_probe.log, seed 0): sparseness over the
+  kinds at a place 0.83 against 0.71 now, kinds above half the strongest 3.9% against 8.5%, over places for a
+  kind 0.87 (0.90 with the surround) against 0.72; the response at a quarter and half the contrast is 0.13 and
+  0.41 of that at full (now: 1.00 and 1.00, no dependence on contrast at all). The streams are running.
+  Next: read gaze3 and the streams; plateau lives into JUDGING.md; then queue E 29a (the temporal term).

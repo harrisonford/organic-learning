@@ -68,3 +68,39 @@ Rakhshan, Schafer, Moore & Soltani 2025 (reward-dependent Hebbian target selecti
 7. Information gained by a look as part of the teaching signal (the neural signals are established; their use
    as a plasticity signal for gaze is an extrapolation).
 8. Tags set by feedback from the chosen action (a model's proposal; least direct evidence).
+
+## How the map combines what stands out with what is sought (second survey, 2026-11-24)
+
+Asked by Kris ("why fixed, research a better solution") after the serial gaze was found to add the two with a
+hand-set half. A survey agent read abstracts and some full texts; nothing here was opened by a person yet.
+- **No single rule is established at the map itself.** Reviews (Bisley & Mirpour 2019; Fecteau & Munoz 2006) say
+  the map is driven by salience and by top-down signals and read out by winner-take-all, probably in the
+  intermediate superior colliculus. LIP sums disparate signals (Ipata et al. 2009); Guided Search 6.0 (Wolfe 2021)
+  builds the map as a weighted average of sources with no fixed weights.
+- **Upstream the goal acts as a gain** on feature-tuned cells (Treue & Martínez-Trujillo 1999; Reynolds & Heeger
+  2009: R = A·E / (S + σ), attention multiplying the drive before normalisation).
+- **Alternatives compete by divisive normalisation**: LIP for value (Louie, Grattan & Glimcher 2011:
+  R = Rmax·(V_in + β) / (σ + V_in + V_out)); superior colliculus and optic tectum (Vokoun et al. 2014; Mysore &
+  Knudsen 2011: global divisive inhibition gives a switch-like "strongest against the rest"; Banerjee, Kothari &
+  Mysore 2026). A model with target-specific gain and local normalisation predicts human fixations in search, and
+  without the normalisation salient items dominate (Miconi, Groomes & Kreiman 2016).
+- **Time sets the balance too**: saccades under about 150 ms follow salience, those after about 250 ms the goal
+  or value (van Zoest, Donk & Theeuwes 2004; Donk & van Zoest 2008; Siebold et al. 2011; Schütz, Trommershäuser &
+  Gegenfurtner 2012). Salience is a transient and the goal arrives later and stays.
+- **Priority is learned from reward**: reward training alters priority maps durably (Chelazzi et al. 2014),
+  value-driven capture (Anderson et al. 2011; with striatal dopamine, Anderson et al. 2016), the caudate tail to
+  the colliculus (Hikosaka et al. 2014); a rule: Δw = β·δ·tag, tags set by pre × post activity gated by feedback
+  from the chosen response (Rombouts et al. 2015); the gain of each feature map as its signal-to-noise over the
+  maps' mean (Navalpakkam & Itti 2007). A single learned salience-to-goal ratio is *not* an established finding.
+- **Infants**: fixations of three-month-olds are best predicted by salience, faces take over by 6–9 months (Frank,
+  Vul & Johnson 2009; Kwon et al. 2016); word-driven looking from 6 months (Bergelson & Swingley 2012). What
+  changes is thought to be endogenous control and experience; no mechanism is shown.
+- No model of 2020–2026 learns a saccade map with strictly local rules (closest: Cox et al. 2022; Leukos, Liang &
+  Lindsay 2026; N'Guyen, Thurat & Girard 2014).
+**Built from this** (VISION.md, 2026-11-24): each source's places compete (each place's share of the source's whole
+activity), the map is the sources' weighted average, and the two weights are learned from reward by the rule the
+eye commands already have, on a fixed total, starting from the reflex alone. Established: normalisation across
+alternatives; reward reshaping priority. Our reading, not a finding: that the balance is two scalar weights.
+Not built: the time course (a transient salience against a sustained goal), which would set the balance by when
+a look is made and needs time constants a tick does not resolve.
+

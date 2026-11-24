@@ -1384,3 +1384,38 @@ read, and the arm without it is kept as `serial_noq`.
 Queued: `organic-gaze2` (first a check that the default path still gives the same digest as before the serial
 gaze existed; then the serial arm again, seed 0 → out/tmp/gaze2.log).
 
+### 2026-11-24 11:10: the eye's map without a hand-set weight; the question's look, second reading
+
+**The serial gaze with the question drawing the eye** (gaze2, seed 0; small learner; held-out, nothing learning):
+looks before answering 0.87–0.93 a page; pages 0.33 / 0.39 / 0.55 / 0.50 at 3,000–6,000 moments (all at once 0.30
+/ 0.45 / 0.58 / 0.56; without the question's look 0.31 / 0.35 / 0.29 / 0.44); "is there" 0.62 at 6,000 (0.67;
+0.55). But the first look was on the named thing on only 0.46–0.51 of the pages where it matters: the reflex's level.
+**Why** (out/tmp/pull_size.py on the read-out's word cells, three seeds): the pull is 0.06 at the named place and
+0.02 at the others, and half the standing-out varies by 0.19 across a page. "0.5 × standing-out + pull" was my
+number, set without measuring either term; it drowned the word (first look on the named thing 0.50–0.53; by pull
+alone 0.81–0.85; standing-out × pull 0.79–0.82; each scaled to its largest on the page and added 0.79–0.83).
+Kris: "why fixed, research a better solution". The survey is in docs/RESEARCH_GAZE.md (second part).
+**As built now** (`organic/speech.py`, `_priority`, `_eligible`, `_credit_map`):
+- Within each source the places compete: a place's value is its share of the source's whole activity over the
+  candidate places (divisive normalisation across alternatives: Louie et al. 2011 in LIP; Mysore & Knudsen 2011 and
+  Banerjee et al. 2026 in the colliculus and tectum). This takes the raw sizes out.
+- The map is the sources' weighted average (Ipata et al. 2009; Wolfe 2021), the weights non-negative on a fixed total.
+- The weights are learned from reward (Chelazzi et al. 2014; Hikosaka et al. 2014), by the rule the eye commands
+  already learn by: for each look taken before the answer, an eligibility (how much more than the other places
+  still unseen the source favoured the place looked at) times the reward's error against the usual reward of such
+  moments; the same two rates as `_credit` (0.1 and 0.02), no new number.
+- The learner is born with the reflex alone (weights 1 and 0): a three-month-old's looking follows salience
+  (Frank, Vul & Johnson 2009). Whether and when the words' pull takes over is observed, never a target; infants
+  show word-driven looks from six months.
+Organic check: nothing says how much the word counts. If going where the words pull earns more than usual, the
+pull's weight grows; if the word cells know nothing yet, it has nothing to grow on. What is ours and not a
+finding: two scalar weights for the balance. What is left out: the time course (fast looks follow salience, later
+ones the goal), which a tick does not resolve.
+Caution written before the reading: the teaching signal is small. In the read-out an answer after one look was
+7–9 points better when the look was the word's, on a third of the pages. The weight may move slowly or not at all
+in 4,000 moments of a small learner; a life is the test.
+Default path checked again (digest c52819a8c3a93a7b as before). **Running: `organic-gaze3`** (serial, seed 0 →
+out/tmp/gaze3.log; it prints the map's two weights at each test).
+
+**Architecture ideas from 2023–2026 work**: docs/RESEARCH_ARCH.md (second survey); queue E 29.
+
