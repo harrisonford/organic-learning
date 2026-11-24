@@ -1384,7 +1384,7 @@ read, and the arm without it is kept as `serial_noq`.
 Queued: `organic-gaze2` (first a check that the default path still gives the same digest as before the serial
 gaze existed; then the serial arm again, seed 0 → out/tmp/gaze2.log).
 
-### 2026-11-24 11:10: the eye's map without a hand-set weight; the question's look, second reading
+### 2026-11-24 10:34: the eye's map without a hand-set weight; the question's look, second reading
 
 **The serial gaze with the question drawing the eye** (gaze2, seed 0; small learner; held-out, nothing learning):
 looks before answering 0.87–0.93 a page; pages 0.33 / 0.39 / 0.55 / 0.50 at 3,000–6,000 moments (all at once 0.30
