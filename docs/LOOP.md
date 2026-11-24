@@ -58,7 +58,7 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   learner (1,000 clusters, an ear that has heard speech, 2,000 moments of first words then 4,000 of pages) raised
   twice on the same moments, with the lives' looking and with the serial gaze; seed 0 first, about an hour a
   run → out/tmp/gaze1.log. Seeds 1 and 2 after the reading, if the small learner says anything about the gaze.
-- **`organic-gaze5`** (out/tmp/gaze5_queue.sh, started 2026-11-24 12:40): the corrected rule for the map's
+- **`organic-gaze5`** (out/tmp/gaze5_queue.sh, started 2026-11-24 12:28): the corrected rule for the map's
   weights at the slow rate, real and shuffled pull, seed 0, 12,000 moments → out/tmp/gaze5_slow.log.
 - **`organic-rest1`** (out/tmp/rest1_queue.sh; waits for gaze5 and trace1): the same pair at the eye commands'
   rate → out/tmp/gaze5_fast.log; seed 2's all-at-once baseline → out/tmp/gaze4_s2all.log; divisive normalisation
