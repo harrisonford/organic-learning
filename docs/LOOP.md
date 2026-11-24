@@ -62,6 +62,10 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
   control on seed 0 → out/tmp/gaze4_shuf.log; seeds 1 and 2, all at once and serial → out/tmp/gaze4.log; then
   the cortex's divisive normalisation on seeds 1 and 2 → out/bench/norm_probe_s12.log,
   out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log.
+- **`organic-trace1`** (out/bench/trace_queue.sh; waits for `organic-gaze4`): queue E 29a.
+  `experiments/cortex_trace_probe.py`, seed 0 → out/bench/trace_probe.log (how alike the answers to a picture
+  and to it two pixels aside; sparseness), then the stream on each arm's second stage →
+  out/bench/stream_{l2plain,l2trace}10k_s0.log. Slow (about 0.7 s a picture under the machine's load): hours.
 - **`organic-gaze2`** (out/tmp/gaze2_queue.sh): the default path's digest against the code before the serial
   gaze (out/tmp/digest_gaze.log, two lines that must agree), then the serial arm with the question drawing the
   eye, seed 0 → out/tmp/gaze2.log.
@@ -632,4 +636,10 @@ Still Kris's own:
   pool a little weaker (0.610). Seeds 1 and 2 queued behind the gaze runs.
   The health check no longer calls a life that ran to its planned end a death (out/monitor/ended.json).
   Next: queue E 29a, the temporal term: organic check and design while the probes run.
+- 2026-11-24 11:33 **The drift probe is written, smoke-tested and queued** (`organic-trace1`, behind `organic-gaze4`;
+  VISION.md 11:28). Smoke test on 40 fixations only (says nothing yet): answers to a picture and to it two
+  pixels aside alike 0.854 in the first stage, 0.773 (plain) and 0.794 (trace) in the second.
+  The shuffled-pull control so far: the pull's weight 0.01 and 0.00 at 2,000 and 3,000 moments (the real arm:
+  0.01 and 0.15).
+  Next: read gaze4 (control, seeds 1–2), then the normalisation seeds, then trace1.
 
