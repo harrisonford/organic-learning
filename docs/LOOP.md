@@ -615,3 +615,9 @@ Still Kris's own:
   kind 0.87 (0.90 with the surround) against 0.72; the response at a quarter and half the contrast is 0.13 and
   0.41 of that at full (now: 1.00 and 1.00, no dependence on contrast at all). The streams are running.
   Next: read gaze3 and the streams; plateau lives into JUDGING.md; then queue E 29a (the temporal term).
+- 2026-11-24 10:40 **Rule 9 from Kris** (above): iterate on the architecture in the loop, organic over
+  performance, measured beside the current paradigms; drafts by email. **Draft 6 sent** to Kris (15 pages: the
+  backprop comparison closed, the plateau lives, without the gaze and cortex work, which have one seed).
+  The plateau lives are written into JUDGING.md (2026-11-24).
+  Next: read gaze3 and the three streams of the cortex probe; then queue E 29a.
+

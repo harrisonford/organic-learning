@@ -312,3 +312,32 @@ plateau lives' launch line with only `REWARD` changed, to 120,000 moments. To re
 baseline, how much the learner speaks at all, and its answering times, beside the plateau lives at the same ages.
 Organic check: this is the adults' behaviour, not the brain's; caregivers do accept approximations from small
 children and expect more later. Nothing is wired in the learner.
+
+## 2026-11-24: the lives with no pass mark, read (plat_s0..2, 120,000 moments each)
+
+Above blind answering (the records' `above`; the log line's three numbers are score / exact / judged, not this):
+
+| | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| moments in first words before the curve stopped rising | 70,000 | 45,000 | 50,000 |
+| first words, last test in the stage | 0.53 | 0.49 | 0.49 |
+| moments in pages | 30,000 | 35,000 | 40,000 |
+| pages, last test in the stage | 0.33 | 0.31 | 0.36 |
+| moments in preschool (to the life's end) | 10,000 | 30,000 | 20,000 |
+| preschool at the end | 0.00 | 0.02 | 0.02 |
+| first words at the end | 0.42 | 0.39 | 0.39 |
+| pages at the end | 0.27 | 0.25 | 0.30 |
+
+1. **The rule does what it was made for.** No mark of ours decided anything, and all three learners stayed in
+   first words about five to ten times longer than the old mark let them (5,000–10,000 moments at 0.27–0.29) and
+   left at 0.49–0.53.
+2. **It is uneven between seeds** (45,000 to 70,000 moments in first words). The first leave (seed 1) was on a
+   margin just under the chance error with its newest test its best. A finer rule (more tests on each side, or
+   the error of the difference) is a choice for the next lives.
+3. **Preschool is not learned at all, by any of them** (0.00–0.02 above blind answering after up to 30,000
+   moments), and the earlier stages lose about a tenth while the learner is there (three moments in ten are
+   still theirs). The queue has said since 2026-11-10 that preschool's test is mostly answerable blind and that
+   the stage's sources need rebuilding (queue 8); this is the same wall met by a learner that arrived later
+   and knowing more. Moving on when the curve flattens does not make the next stage learnable.
+The reward arms (`kind_s0..2` running, then `ramp_s0..2`) are read beside these at the same ages.
+
