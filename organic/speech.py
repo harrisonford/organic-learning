@@ -801,6 +801,8 @@ class SpeakingBrain(LoopBrain2):
                     if self.cortex is not None and self.look_on_reply:
                         self._led_look(list(heard) + list(reply))  # serial gaze: the adult's reply draws the eye once more
                     words.learn(heard, vis, reply)
+                    if words.episodes is not None and words.episodes.tag is not None:
+                        words.episodes.rewarded(reward)  # the moment is marked by the reward that came with it (off unless the store has tags)
                     self._taught()
                 base = snapshot[2] if snapshot else self._base(q_code, seen, target, last_cmd, self._cortex_now(codes, tick))
                 targets = self.mouth.decompose(answer)

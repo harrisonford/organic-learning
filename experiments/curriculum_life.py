@@ -143,6 +143,8 @@ def replay_on():
     ep.grow(int(os.environ.get("EPISODES_CAP", 6000)))
     ep.fade = float(os.environ.get("EPISODES_FADE", 6000))
     ep.returns = {}
+    if os.environ.get("REPLAY_TAG") == "reward" and ep.tag is None:  # only moments at which reward came return in sleep (docs/VISION.md, 2026-11-24 night)
+        ep.tag = np.zeros(ep.capacity, np.float32)
     brain.replay = REPLAY
     print(f"replay on at {brain.age}: the store holds {ep.n} moments of {ep.capacity}", flush=True)
 
@@ -513,6 +515,8 @@ while brain.age < TOTAL:
         label = lambda k: STAGES[k] if k >= 0 else "talk"  # noqa: E731
         rec["episodes"] = {"held": int(ep.n), "from": {label(int(k)): int(c) for k, c in zip(*np.unique(ep.mark[: ep.n], return_counts=True))},
                            "came_back": {label(k): [c, round(t / c, 3)] for k, (c, t) in (ep.returns or {}).items()}}
+        if ep.tag is not None:  # of each stage's stored moments, how many reward marked, and how much of it they hold together
+            rec["episodes"]["rewarded"] = {label(int(k)): [int((ep.tag[: ep.n][ep.mark[: ep.n] == k] > 0).sum()), round(float(ep.tag[: ep.n][ep.mark[: ep.n] == k].sum()), 2)] for k in np.unique(ep.mark[: ep.n])}
         if ep.returns is not None:
             ep.returns = {}
     rec["lived"], lived = lived, {}

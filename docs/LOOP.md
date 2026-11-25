@@ -55,18 +55,21 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-rest1`** (out/tmp/rest1_queue.sh): now on the streams of divisive normalisation, seeds 1 and 2 →
-  out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log (codes read: out/bench/norm_probe_s12.log).
-- **`organic-diet2`** (out/bench/diet2_queue.sh): the blurred start on seeds 1 and 2 →
-  out/bench/diet_probe_s{1,2}.log, stream_{diet,dietb,norm0b}10k_s{1,2}.log (last stream running).
 - **`organic-rpe1`** (out/tmp/rpe_queue.sh; waits for expand2): queue E 29d in the small learner, three seeds: arm
   `all+rpe` → out/tmp/rpe_s{0,1,2}.log, then its fixed-gain control `all+gain` → out/tmp/rpe_gain_s{0,1,2}.log
   (the gain used: out/tmp/rpe_gain.log); about an hour a run. Baseline: the "all" arms in out/tmp/gaze1.log,
   gaze4.log, gaze4_s2all.log.
-- **`organic-trace2`** (out/bench/trace2_queue.sh; waits for rest1): the drift probe on seeds 1 and 2 →
-  out/bench/trace_probe_s{1,2}.log, stream_{l2plain,l2trace}10k_s{1,2}.log (about five hours).
+- **`organic-trace2`** (out/bench/trace2_queue.sh): the drift probe, seed 1 read, seed 2 developing →
+  out/bench/trace_probe_s2.log, stream_{l2plain,l2trace}10k_s2.log.
+- **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
+  marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
+  preschool, one at a time and only with 5.7 GB available (so it waits behind the reward lives): `tagn_s*`
+  (nothing), `tagr_s*` (`REPLAY=0.3 REPLAY_TAG=reward`), then `tagb_s*` (`REPLAY=0.3`); units
+  organic-tagn-s1 … ; notes in out/tmp/tag_queue.log; records out/tag{n,r,b}_s*.jsonl. The first arm is also the
+  smoke test of continuing from a level with today's code: look at its log when it starts.
 - Ended as planned: lives `plat_s0..2` (120,000 moments; read in JUDGING.md, 2026-11-24). Finished and read: the
   lateral network on three seeds, backprop with the relay, the gaze probes gaze1–gaze6, norm1, trace1, diet1.
+  Also finished and read: rest1 (normalisation seeds), diet2 (blurred start seeds), expand1 and expand2.
 - Finished and read: the clean and cleanw lives, the five ablation arms, the benchmark probes, the readout control.
 - Launch line for a life with no pass mark:
   `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
@@ -734,3 +737,20 @@ Still Kris's own:
   two-pixel shift, plain 0.811, first stage 0.849; streams next), the reward lives.
   Next: read rpe1 and trace2 as they come; reward lives at 75,000; then the serial gaze from a grown learner's
   checkpoint when 1.6 GB is free; queue E 29e (what comes back in sleep is tagged at the moment): organic check.
+- 2026-11-24 22:14 All healthy, 2.5 GB free. **Read:** the drift stage on seed 1 (the trace gives back the tolerance a plain
+  second stage loses, 0.837 against 0.811, first stage 0.849; on the stream the two do not differ: 0.626 and
+  0.624, ridge 0.639 and 0.635); the reward's error against its usual size on seed 0 (the normalised error stays
+  near 0.45 while the raw one grows from 0.22 to 0.37, so the step falls by itself from 1.9 to 1.3 times the raw
+  one; grades as the baseline and the fixed-gain control within one seed's noise); the reward lives at 65,000
+  (two in pages, as the plateau lives at the same ages: no difference from a kinder reward so far; JUDGING.md).
+  **Queue E 29e: organic check written, built behind a switch, test queued** (VISION.md, same time): a stored
+  moment keeps the reward that came with it and only such moments return in sleep (`Episodes.tag`, life env
+  `REPLAY_TAG=reward`; default digest unchanged). From the plateau lives' records it would make the earlier
+  stages about four parts in ten of what returns (one in ten when replay was tried) and remove talk from sleep
+  by itself. The test is at life scale, in preschool where the loss is real (`organic-tag1`, waits for memory
+  behind the reward lives). Expectation written down: a small effect at most.
+  Next: rpe1 seeds 1–2 and trace2 seed 2 as they come (then the paper's drift row, three seeds); reward lives at
+  75,000; while tag1 waits: queue E 26/28 (the relay by local rules: the lateral network among the summary's
+  numbers, interneuron gains), which needs little memory; the serial gaze from a grown learner's checkpoint
+  when memory allows.
+

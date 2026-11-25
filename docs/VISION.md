@@ -1878,3 +1878,69 @@ memory of single moments (the store). Not adopted as the store's key either unti
 (pages of one scene, in a learner). Kept as measured: the mechanism does what biology says it does (a memory
 of moments out of slow cells), and the cost of a thin wiring is known. No further wirings are tried (that
 would be a search).
+
+### 2026-11-24 22:13: the drift stage on a second seed; the reward's error, first seed; the reward lives at 65,000
+**The drift stage, seed 1** (trace_probe_s1.log, stream_l2{plain,trace}10k_s1.log; 10,000 pictures). A picture and
+itself two pixels aside are answered 0.849 alike by the first stage, 0.811 by a second stage developed plainly,
+0.837 by one developed with the trace (seed 0: 0.847 / 0.799 / 0.826): the trace again gives back most of what a
+plain second stage loses, and no more than the first stage already had. On the stream the two second stages do
+not differ: word cells with the relay 0.624 plain, 0.626 trace (seed 0: 0.646, 0.631); ridge with the relay 0.635
+and 0.639 (seed 0: 0.655, 0.640). Seed 0's lower trace arm was one seed's noise. Seed 2 is developing.
+**The reward's error against its usual size, seed 0** (rpe_s0.log, rpe_gain_s0.log; 6,000 moments). The raw
+errors grow as the learner starts to earn (0.22 at 1,000 moments, 0.37 at 6,000); the normalised ones stay near
+0.41–0.46 throughout, as the form says they must. So the step it gives is 1.9 times the raw one early and 1.3
+times late: a rate that is largest while little is known and falls by itself. The fixed-gain control used the
+mean factor, 1.59. At 6,000 moments: first words 0.31 (baseline 0.35), pages 0.61 (0.56), "is there" on a page
+0.70 (0.67), ticks 5.0 (5.1), patience 0.524; the control at 5,000: 0.23, 0.42, 0.68. One seed: nothing to read
+but that nothing broke. Seeds 1 and 2 run.
+**The reward lives (lenient all life) at 65,000 moments**, beside the plateau lives at the same age, above blind
+answering (the records' `above`): first words 0.46 / 0.49 / 0.46 against 0.53 / 0.46 / 0.48. Seeds 0 and 2 left
+first words at 55,000 lived (45,000 there; the plateau lives: 70,000 / 45,000 / 50,000 there) and are in pages
+at 0.27 / 0.24 after 10,000 moments there (the plateau lives after 10,000 there: 0.32 / 0.26 / 0.27). Seed 1 is still in
+first words (0.49). **No difference so far from a kinder reward.**
+
+### 2026-11-24 22:13: what comes back in sleep is marked at the moment (queue E 29e): the organic check and the test
+**Where this stands.** Replay from the fast store was built on 2026-11-18 and did not protect the earlier
+stages in a life (docs/RESEARCH_MEMORY.md): the store was more than half leisure talk, the store's surprise
+read 0.83–0.87 for every moment so that "the more strongly held, the more often" chose nothing, and the earlier
+stages were about 3% of what came back. The lives since then run without it.
+**What biology has.** The hippocampus does not replay a day evenly. While the animal pauses at a reward, sharp
+wave ripples replay the path just taken, and their number follows the size of the reward (Singer & Frank 2009;
+Ambrose, Pfeiffer & Foster 2016). Those awake ripples select what sleep replays: trials followed by them come
+back in the night's sleep, trials without them do not (Yang et al. 2024). Against a simple reading: replay also
+favours what was experienced less (Gupta et al. 2010; Carey, Tanaka & van der Meer 2019), and in people rest
+replays the weakly learned (Schapiro et al. 2018). So "reward at the moment marks it for sleep" is established;
+"only the rewarded returns" is the strong form of it. [All to be opened by hand.]
+**The mechanism** (`organic/episodes.py`: `tag`, `rewarded`; one line in `organic/speech.py`; life env
+`REPLAY_TAG=reward`; None by default, the default path's digest unchanged, c52819a8c3a93a7b). A stored moment
+keeps the reward that came with it (the reward the gating policy already gets for that answer; nothing below
+zero). At rest a moment comes back in proportion to how strongly it is held times that reward. The moment's
+strength, its fading and what leaves a full store are as they were.
+**Organic check.** No rule about kinds of moment: leisure talk, comments and overheard speech are never graded,
+so no reward comes at them and they do not return, which is what removes the talk from sleep. No new number.
+The reward is one the learner already receives. What stays set by hand is the old debt (the store's size, how
+long a moment lasts, 0.3 returns for every lived moment). Not taken from the survey: recent and old memories
+in separate blocks of sleep (Chang et al. 2025); one thing at a time.
+**What it would choose, read from the records before anything is run** (the plateau lives in preschool; a
+stage's mean reward taken as its judged grade): of the store's 2,000 moments 1,091 are talk. Among the lessons
+kept, first words and pages are 0.08 and 0.15 by count; weighted by reward they would be 0.11–0.18 and
+0.21–0.29, preschool 0.54–0.60 (a fifth of preschool's answers are right without looking, so its moments are
+marked too). Earlier stages would be about four parts in ten of what returns, against about one in ten when it
+was tried. With 0.3 returns a lived moment that is about 0.12 more practice of the earlier stages on top of the
+0.30 the world's mix already gives.
+**Stated before the test:** a small effect at most. The delta rule learns nothing from a moment it still
+answers; a marked moment teaches only once the cells have drifted from it. And the rule rehearses what was got
+right and never what was got wrong, the opposite of Schapiro's finding; if earlier stages are held but the new
+stage slows, that is the cost to look for.
+**The test** (`organic-tag1`, out/tmp/tag_queue.sh; the lesson of 2026-11-18 was a test with nothing to lose in
+its control). Where the loss is real: preschool. Each arm is a life continued from a plateau life's level as it
+left pages (out/levels/plat_s*_W2.pkl), 20,000 moments of preschool, the plateau lives' launch line with one
+thing changed: `tagn` nothing (the same life lived again from its level: how far two lives from one level
+differ; the plateau life itself is a second sample), `tagr` replay with the mark, `tagb` replay as built. Read:
+first words and pages above blind answering over the four tests, preschool itself, and the record of whose
+moments came back. In the plateau lives first words fell by 0.05 / 0.00 / 0.09 and pages by 0.06 / 0.08 / 0.08
+within 10,000 moments. One life at a time and only with 5.7 GB available, so it waits behind the reward lives;
+about four hours an arm, nine arms.
+**Smoke test** (a small brain, 400 moments; out/tmp/smoke_tag.py): 97 of 480 stored moments marked, all of them
+lessons, none of the comments; 50 asked back, 50 came, every one marked.
+

@@ -49,6 +49,9 @@ class Episodes:
     clock = 0
     mark_now = -1  # for the experimenter only: a label for the moments written now (the stage they are from)
     returns = None  # for the experimenter only: {label: [how many came back, their summed surprise]}
+    tag = None  # None: any stored moment may come back at rest (every brain before 2026-11-24). An array: the reward
+    # that came at each stored moment while awake; only such moments come back, the more reward the more often
+    # (awake ripples at reward mark what sleep replays: docs/VISION.md, 2026-11-24 night)
 
     def _new(self):
         if self.asked is None:
@@ -68,6 +71,8 @@ class Episodes:
         self.strength = np.concatenate([self.strength, np.zeros(more, np.float32)])
         self.when = np.concatenate([self.when, np.zeros(more, np.int64)])
         self.mark = np.concatenate([self.mark, np.full(more, -1, np.int8)])
+        if self.tag is not None:
+            self.tag = np.concatenate([self.tag, np.zeros(more, np.float32)])
         self.reply, self.asked, self.views = self.reply + [()] * more, self.asked + [None] * more, self.views + [None] * more
         self.at, self.capacity = self.n % capacity, capacity
 
@@ -99,6 +104,8 @@ class Episodes:
         self.asked[k] = None if asked is None else tuple(asked)
         self.views[k] = None if views is None or not len(views) else np.asarray(views, np.float16)
         self.mark[k] = self.mark_now
+        if self.tag is not None:
+            self.tag[k] = 0.0  # no reward has come at this moment yet
         self.n = min(self.n + 1, self.capacity)
         self.writes += 1
         self.last = k
@@ -108,9 +115,16 @@ class Episodes:
         if not self.n or self.asked is None:
             return []
         p = self.held().astype(np.float64) * np.array([a is not None for a in self.asked[: self.n]])
+        if self.tag is not None:
+            p = p * self.tag[: self.n]
         if p.sum() <= 0:
             return []
         return [int(k) for k in rng.choice(self.n, size=min(count, int((p > 0).sum())), replace=False, p=p / p.sum())]
+
+    def rewarded(self, reward):
+        """Reward came at the moment just written (it is marked by it; a moment that was not kept is not)."""
+        if self.tag is not None and self.last is not None:
+            self.tag[self.last] = max(float(reward), 0.0)
 
     def lived_again(self, k, unexpected):
         """A moment that came back is held as far as the word cells were surprised by it this time."""

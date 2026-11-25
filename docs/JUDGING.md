@@ -341,3 +341,9 @@ Above blind answering (the records' `above`; the log line's three numbers are sc
    and knowing more. Moving on when the curve flattens does not make the next stage learnable.
 The reward arms (`kind_s0..2` running, then `ramp_s0..2`) are read beside these at the same ages.
 
+**2026-11-24 22:13: the reward lives at 65,000 moments** (`kind_s0..2`, a good try counts in full all life long), above blind
+answering, beside the plateau lives at the same age: first words 0.46 / 0.49 / 0.46 against 0.53 / 0.46 / 0.48.
+Seeds 0 and 2 left first words after 45,000 moments there (the plateau lives: 70,000 / 45,000 / 50,000) at
+0.46 / 0.50, and after 10,000 moments of pages are at 0.27 / 0.24 (the plateau lives after 10,000 there: 0.32 / 0.26 / 0.27).
+Seed 1 is still in first words at 0.49. Nothing so far tells a kinder reward from a strict one.
+
