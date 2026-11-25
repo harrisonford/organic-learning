@@ -284,7 +284,20 @@ whole layer from 5,000 labelled pictures names 0.614 ± 0.002 against 0.517 ± 0
 developed), and it holds in ours: after 10,000 pictures of the stream the word cells name 0.689 ± 0.005 on the
 soft layer, 0.548 ± 0.002 on the same layer as born, and 0.620 ± 0.010 on our hard-rule cortex; ridge regression
 on the same three codes reaches 0.700 ± 0.001, 0.605 ± 0.002 and 0.664 ± 0.007. A competition in which the
-losers unlearn develops filters worth having; ours did not. The relay still earns its place on the better
+losers unlearn develops filters worth having; ours did not.
+
+We then took their rule apart, one part at a time, on the same three seeds (word cells with the relay after
+10,000 pictures; 0.689 for the rule as published, 0.548 for the layer as born). If only the winner learns, the
+layer ends under where it was born, 0.502 ± 0.009, with about 900 pairs of near-copy filters among the 256: our
+own failure, reproduced in their layer. If the losers learn with the winner's sign instead of against it, it is
+worse still, 0.433 ± 0.011, and some 19,000 of the 32,640 pairs are near copies. The unlearning by the losers is
+what does the work. One step of the rule is not local, though: in the authors' code every change is divided by
+the largest change anywhere in the layer, a number no synapse has. We tried the two obvious local stand-ins and
+neither works. If each filter divides by its own largest change, the weights grow to hundreds of times their length at
+birth and the code is destroyed (0.238 ± 0.017). If the factor is held at its early value the layer hardly develops (0.578 ± 0.020),
+and held at its median over the run the weights overflow. We did not design a third. So the best Hebbian
+filters we measured come from a rule that is local except for one shared step, and a fully local rule that
+does as well is, for us, still open. The relay still earns its place on the better
 layer: without it the word cells fall from 0.689 to 0.591 ± 0.013. **[pending: the whole stream on the soft
 layer, with backpropagation of that layer's shape tuned as the first reference was; until then the headline
 comparison in this paper is the one on our cortex.]** The developed filters are not worthless:

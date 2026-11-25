@@ -2746,3 +2746,43 @@ pair rate within a factor of two of 0.0025) and its cells will stay different (f
 0.9). In the stream: **over our cortex's 0.613 on seed 0, my guess 0.63 to 0.67**; under the soft rule in its
 own pipeline (0.689). If the cells stay different and the stream does not move, then different filters are
 not what our cortex lacks, and that is worth as much.
+
+### 2026-11-25 10:03: the dissection on three seeds; SAILnet in our cortex's place after 25,000 batches; the soft layer's references, seed 0
+**The dissection, three seeds** (word cells + relay / ridge + relay at 10,000 pictures; logs
+`softhebb_dissect_s{0,1,2}.log`, `softhebb_dissect2_s0.log`, `stream_sh{h,p,e,o}10k_s*.log`):
+| the rule | word cells + relay | ridge + relay | near-copy pairs (of 32,640) |
+|---|---|---|---|
+| published | 0.689 ± 0.005 | 0.700 ± 0.001 | 2 (seed 0) |
+| layer as born | 0.548 ± 0.002 | 0.605 ± 0.002 | 0 |
+| hard: only the winner learns | 0.502 ± 0.009 | 0.571 ± 0.005 | 916 / 930 / 903 |
+| soft, losers learn with the winner's sign | 0.433 ± 0.011 | 0.499 ± 0.008 | 19,031 / 19,033 / 19,610 |
+| the layer-wide factor held at its early value (1.06e-5 / 1.49e-5 / 1.16e-5) | 0.578 ± 0.020 | 0.616 ± 0.009 | 0 |
+| the factor held at its median | weights not finite, all three seeds | | |
+| each kind divides by its own largest change | 0.238 ± 0.017 | 0.352 / 0.359 / (running) | 31,376 / 31,376 / 20,262 |
+Every arm says on three seeds what it said on one. In the paper as a paragraph (the own-division weights are
+hundreds of times their birth length on average, 11,305 to 21,520 against 25: I first wrote "ten-thousand-fold"
+and took it out before it left this machine).
+
+**SAILnet in our cortex's place, seed 0, after the 25,000 batches at the code's rates**
+(`out/bench/sailc_develop_s0.log`; the last 10,000 batches run):
+- **It holds its targets, as stated:** a cell fires 0.049 times an image (target 0.05), two cells to the same
+  image 0.0047 (target 0.0025; within the factor of two I allowed, at its edge).
+- **It does not keep its cells different, against what I stated:** 5,797 near-copy pairs, **92 different
+  filters among 256** (1,367 pairs after 1,000 batches, 3,997 after 5,000, 5,010 after 10,000: slowing).
+  Inhibition goes on growing (87 on average, the strongest 1,739).
+- **A reading I had not thought of beforehand:** a 5 × 5 colour window with its mean removed has 74
+  dimensions. 256 cells are three and a half cells to a dimension, and the layer has made about one filter per
+  dimension and a quarter more, the rest copies that take turns (the inhibition between two copies makes them
+  fire to different images, which is all the rule asks: uncorrelated counts, not different weights). The
+  paper's layers are 1 to 6 cells per dimension on 256-dimensional patches, where there is far more to tell
+  apart. Whether this is the reason is a guess until tested; the test that needs no constant of mine is the
+  same layer with as many cells as it can use, or on our second layer's larger input. First the stream
+  reading (`organic-sailc2`).
+
+**The soft layer's references, seed 0, whole stream** (`stream_shfull_s0.log`, `backprop_soft_full.log`; 50,000
+pictures once, 2,000 tests): word cells + relay 0.729 (no relay 0.675); ridge + relay 0.740 (0.745 without);
+streaming LDA + relay 0.743 (0.741). Backprop of the layer's shape, tuned on the first 10,000 as the first
+reference was (24 settings): filters learned from random, no relay 0.547; with the fixed relay 0.597; the
+developed filters kept and only a softmax readout learned by gradient, no relay 0.623; with relay: running.
+The same order as on our cortex (local readers on local filters over one-pass backprop), with a wider gap.
+Seeds 1 and 2 follow; nothing in the paper's table until they are in.

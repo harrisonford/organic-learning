@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from organic.adults import PER_DAY, Adults, image_part, parse_json  # noqa: E402
 
 DAILY = 200  # photo share; text world 140, curriculum 100, reserve 60 (total 500 = half the allowance)
-MODELS = ["nvidia/nemotron-3.5-super-vl:free", "dots-studio/dots-3-note-preview:free"]
+MODELS = ["nvidia/nemotron-3.5-super-vl:free", "inclusionai/ling-3.2-flash:free"]  # ling in place of dots-studio/dots-3-note-preview:free (withdrawn; 404), after the scan of 2026-11-25 (out/model_scan.log, docs/WORLD.md)
 ANGLES = [
     "the people: what they are doing, wearing, holding, how many, how they might feel",
     "the objects: what they are, how many, what they are for",
