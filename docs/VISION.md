@@ -2245,3 +2245,53 @@ Three arms on seed 0, 256 kinds, each the published layer with one part taken ou
 windows); the constant factor: I do not know. The weights are born long (25) and the first changes are a
 hundred times the later ones, so a constant may be too large at the start; a smoke test showed the factor
 between 9e-7 and 1e-4 within the first 1,500 pictures.
+
+### 2026-11-25 03:27: the soft rule on seed 1; the relay circuit on seed 1; the references for the soft layer
+**The published soft rule, seed 1** (softhebb_probe_s1.log, stream_{sh,shr,sh96,shr96}10k_s1.log; 10,000
+pictures of the stream; seed 0 beside it).
+
+| | word cells + relay | word cells | ridge + relay | ridge | seen once |
+|---|---|---|---|---|---|
+| 256 kinds developed, seed 0 / seed 1 | 0.689 / 0.684 | 0.579 / 0.591 | 0.700 / 0.700 | 0.689 / 0.697 | 0.903 / 0.890 |
+| the same layer as born | 0.549 / 0.546 | 0.411 / 0.412 | 0.603 / 0.607 | 0.597 / 0.597 | 0.843 / 0.817 |
+| 96 kinds developed | 0.662 / 0.655 | 0.590 / 0.597 | 0.666 / 0.664 | 0.669 / 0.662 | 0.830 / 0.843 |
+| 96 kinds as born | 0.544 / 0.537 | 0.412 / 0.414 | 0.579 / 0.567 | 0.565 / 0.557 | 0.790 / 0.727 |
+
+Their measure in small on seed 1 (a ridge on the whole map, 96 kinds, 5,000 pictures): 0.613 developed against
+0.515 as born (seed 0: 0.616 / 0.515). The code: two summaries alike 0.151 developed against 0.289 as born,
+directions 27 against 8, through the relay 576 against 240. The weights after 50,000 pictures are 1.00 / 6.92 /
+14.03 long (least, mean, most): as on seed 0, most kinds have not come to length 1. Seed 1 says what seed 0
+said, to the second decimal. Seed 2 is in its streams.
+
+**The relay circuit at a step of 0.03, seed 1** (relay_local_r1e-4_s1.log; word cells at 10,000 pictures; seed 0
+beside it): the batch relay 0.613 / 0.616; the circuit's resting point 0.608 / 0.601; developed on the relay's
+6,000 pictures and held 0.600 / 0.590; developed on 20,000 and held 0.601 / 0.598; from nothing along the
+stream 0.603 / 0.606; developed on 6,000 and then learning on 0.613 / 0.608. On seed 1 the arm a brain would
+have is 0.008 under the batch relay, not equal to it; every arm is within 0.026. Seed 2 so far: batch 0.631,
+resting point 0.618, developed on 6,000 and held 0.615. The reading waits for seed 2.
+
+**The reward lives at 90,000 moments** (seed 0 at 85,000): pages above blind answering 0.31 / 0.27 / 0.33, first
+words 0.45 / 0.47 / 0.46. Nothing new.
+
+**The references for the soft layer** (written now, so that they are ready when seed 2 is in; `organic-softbase1`,
+out/tmp/soft_baselines_queue.sh, behind the probes that are running):
+- `experiments/bench_soft_codes.py`: the layers the probe kept code the whole CIFAR-10 stream (50,000 pictures,
+  the 10,000 test pictures), because the paper's headline is read there and the probe kept 10,000 only. Nothing
+  is developed again.
+- `experiments/bench_backprop_soft.py`: backprop of the soft layer's shape, as `bench_backprop.py` is of our
+  cortex's: the same standardised colours, 5 × 5 windows, 256 filters, the same response, the same two averages,
+  unit length, a linear readout; Adam, one pass. Filters born random (unit length) or the soft rule's, frozen or
+  not; with and without the fixed relay. Backprop is given the response's power as a choice (0.7, the layer's
+  own, or 1, the usual rectifier), and rate × batch × power are tuned on the first 10,000 pictures of seed 0 as
+  the first reference was. **Checked before any run:** its way in with the developed filters gives the probe's
+  own codes (largest difference 6e-5 on 200 pictures, which is the codes' half precision); its way back against
+  small changes in double precision agrees to six decimals at power 1 and within 0.5% at power 0.7 (where the
+  slope at zero is infinite and is taken at no less than 0.001 above zero). The way back through the relay is
+  checked as the queue's first step (backprop_soft_check.log).
+- Then, for each seed on the whole stream: word cells, ridge and streaming LDA on the developed layer's code,
+  with and without the relay; backprop at its best settings; and the same readouts on the layer as born.
+**What these can change in the paper.** If the three seeds agree, the sentence "random filters do as well as
+the filters we developed" becomes a statement about our hard rule, and the comparison with backprop has to be
+made on the better layer. I do not know which way that comparison goes: the soft layer gives the word cells
+0.07 more than our cortex does, but backprop of the soft layer's shape may gain as much or more from the same
+way in (raw colours and a softer response in place of our decorrelated windows).
