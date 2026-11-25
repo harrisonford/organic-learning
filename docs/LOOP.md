@@ -1055,4 +1055,13 @@ Still Kris's own:
   0.25, 0.35). **Paper, a methods omission closed:** the Setup now says the eye is 64 pixels and CIFAR is enlarged
   to it (and that the soft layer sees the pictures at their own size); 20 pages.
   Next: shrfull seeds 1–2 → the as-born rows into the second table, email draft 9; native4; softbase2.
+- 2026-11-25 16:57 Health unchanged (photo alert until midnight; the three planned endings); **2.4 GB free** (ramp lives growing;
+  nothing started). **The soft layer as born, whole stream, three seeds for the word cells:** 0.630 ± 0.004
+  with the relay, 0.503 ± 0.010 without (backprop 0.606 / 0.562): two points ahead with the relay, six behind
+  without; the soft rule's development is worth 0.100 / 0.168 to the word cells. Into the paper (two rows, one
+  paragraph; pending mark now only softbase2's rows). **Draft 9 emailed to Kris 16:55.** tagn_s1 at 105,000:
+  0.40 / 0.19 / 0.02 (plat_s1: 0.42 / 0.25 / 0.00). Ramp lives at 20,000, first words 0.33 / 0.31 / 0.31.
+  Next: shrfull seed 2's second-order rows (17:30) into VISION; softbase1 and tagn_s1 end → native4 opens;
+  watch memory (if available falls under 2.1 GB with nothing of mine to stop, softbase2 and native4 stay
+  gated; the tag queue's next arm needs 5.7 GB and will wait); photo log after midnight.
 

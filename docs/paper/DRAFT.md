@@ -326,12 +326,14 @@ layer as it is born and kept. Every row is three seeds.
 | gradient softmax readout + relay, soft filters frozen | 0.432 ± 0.001 | 0.635 ± 0.001 | 0.739 ± 0.003 |
 | **word cells + relay** | 0.416 ± 0.055 | 0.654 ± 0.010 | **0.730 ± 0.004** |
 | word cells, no relay | 0.384 ± 0.041 | 0.574 ± 0.003 | 0.671 ± 0.005 |
+| word cells + relay, the layer as born | 0.354 ± 0.020 | 0.530 ± 0.006 | 0.630 ± 0.004 |
 | gradient softmax readout, no relay, soft filters frozen | 0.292 ± 0.036 | 0.478 ± 0.045 | 0.619 ± 0.016 |
 | backprop + relay, one pass | 0.304 ± 0.009 | 0.475 ± 0.007 | 0.606 ± 0.008 |
 | **backprop, one pass** | 0.271 ± 0.007 | 0.419 ± 0.026 | **0.562 ± 0.013** |
+| word cells, no relay, the layer as born | 0.270 ± 0.009 | 0.386 ± 0.015 | 0.503 ± 0.010 |
 
-**[pending: the word cells on the same layer as born, on the whole stream; backpropagation started from the soft
-filters, with and without the relay; the gradient readout without the relay at the layer's own exponent.]**
+**[pending: backpropagation started from the soft filters, with and without the relay; the gradient readout
+without the relay at the layer's own exponent.]**
 
 On the better layer the word cells end at 0.730, four points above where our cortex leaves them, and seventeen
 above backpropagation of the same shape. The order no longer flips when the relay is taken away: 0.671 against
@@ -342,7 +344,15 @@ local rule is for, and we think that is a fair thing for it to be good at; but t
 filters from more pictures. The row that can is backpropagation started from the soft filters, and it is
 running.
 
-Three things do not wait for that row. First, the reader: a softmax readout trained by gradient on the frozen
+What can be said already comes from the layer as it is born, which has seen no pictures at all. There the
+contest is like for like, and it goes as it went on our cortex. With the relay the word cells on filters nobody
+developed reach 0.630, and backpropagation, which learns its filters behind the same relay, reaches 0.606: two
+points, at the edge of what we interpret. Without the relay the order flips, 0.503 against 0.562. So the local
+learner's lead on this layer has two parts. A small one, if it is one at all, is there before any development.
+The large one is the development itself, which is worth ten points to the word cells with the relay and
+seventeen without it, and which was paid for in unlabelled pictures.
+
+Three more things do not wait for the pending row. First, the reader: a softmax readout trained by gradient on the frozen
 soft filters, behind the same relay, reaches 0.739 against 0.730 for the word cells, a difference we do not
 interpret. As on our cortex, the local reader is as good as the gradient one and no better. Without the relay
 the gradient readout falls to 0.619 and the word cells to 0.671; that readout ran at the exponent tuned for the

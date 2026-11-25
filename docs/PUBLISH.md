@@ -250,3 +250,7 @@ organic learner behaves and what each part does, measured honestly, not a score.
 - **2026-11-25 15:55:** the Setup of Experiment 1 now states that the eye is 64 pixels across and CIFAR pictures are
   enlarged to it by bilinear interpolation (item 3 of the 12:59 caution; it was true whatever the native-size
   seeds say, and the draft had not said it).
+- **2026-11-25 16:55: draft 9 sent to Kris** (20 pages): second benchmark table (soft layer; as-born rows in on three
+  seeds: word cells + relay 0.630 ± 0.004, without 0.503 ± 0.010), the three-seed dissection, the eye's size in
+  the Setup. Pending in it: backprop started from the soft filters; frozen readout at the layer's exponent
+  (softbase2). Abstract to be reworded after softbase2 and the native-size control.

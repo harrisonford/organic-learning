@@ -2960,3 +2960,24 @@ is the noise of a single test and not a drift apart.
 
 **Not opened:** King, Zylberberg & DeWeese (2013, J. Neurosci. 33:5475), the interneuron form of SAILnet: the
 journal refuses automated readers and there is no preprint. It stays on the list for Kris's hand or a library.
+
+### 2026-11-25 16:55, the soft layer as born, on the whole stream
+
+`out/bench/stream_shrfull_s{0,1,2}.log` (softbase1's last part; the word cells' rows on three seeds, the
+second-order readers' on two so far, seed 2 running):
+
+| on the layer as born | 500 | 5,000 | 10,000 | 50,000 |
+|---|---|---|---|---|
+| word cells + relay | 0.354 ± 0.020 | 0.530 ± 0.006 | 0.565 ± 0.011 | 0.630 ± 0.004 (0.633, 0.626, 0.631) |
+| word cells, no relay | 0.270 ± 0.009 | 0.386 ± 0.015 | 0.424 ± 0.003 | 0.503 ± 0.010 (0.493, 0.503, 0.513) |
+| ridge + relay / ridge (seeds 0, 1) | | | | 0.661 / 0.641 |
+| streaming LDA + relay / without (seeds 0, 1) | | | | 0.662 / 0.655 |
+
+- **The like-for-like contest on this layer is the one as born** (no pictures seen by anybody but the relay's
+  6,000, which backprop's relay has too). With the relay: word cells 0.630 against backprop 0.606 ± 0.008, two
+  points, the edge of what we interpret. Without: 0.503 against 0.562, backprop ahead by six. The order flips
+  with the relay, as on our cortex (0.687 / 0.591 against 0.688 / 0.616).
+- **Development by the soft rule** is worth 0.100 to the word cells with the relay (0.630 → 0.730) and 0.168
+  without (0.503 → 0.671); to ridge about 0.08–0.10. Paid for in 50,000 unlabelled pictures.
+- In the paper: two rows added to the second table and a paragraph; the pending mark now names only softbase2's
+  rows. **Draft 9 sent to Kris 16:55** (20 pages).
