@@ -58,7 +58,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
-- **`organic-native1`** (out/tmp/native_queue.sh; started 12:45; MemoryMax 1800M; about 50 minutes): the benchmark's
+- **`organic-native1`** (out/tmp/native_queue.sh; started 12:16; MemoryMax 1800M; about 50 minutes): the benchmark's
   cortex on CIFAR at its own 32 × 32, filters as born and developed by our hard rule, seed 0 →
   out/bench/native_code_s0.log, stream_{nat_r,nat_d}10k_s0.log.
 - **`organic-sailc1`** (started 09:19; MemoryMax 900M; about 45 minutes): SAILnet in our cortex's place, seed 0 →
