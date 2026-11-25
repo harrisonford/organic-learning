@@ -58,6 +58,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
+- **`organic-softbase2`** (out/tmp/soft_baselines2_queue.sh; MemoryMax 1800M; waits for softbase1 and native4, each run
+  for 3.3 GB available; about six hours): backprop started from the developed soft filters, with and without
+  relay, and frozen filters without relay at power 0.7; three seeds → out/bench/backprop_soft_full2.log.
 - **`organic-native4`** (out/tmp/native_queue4.sh; MemoryMax 1500M; every step waits for 3.3 GB available): the
   native-size control on seeds 1 and 2 (native_code_s{1,2}.log, stream_{nat_r,nat_d}10k_s{1,2}.log), then the same
   script on blown-up pictures, three seeds (big_code_s*.log, stream_{big_r,big_d}10k_s*.log). It may wait for
@@ -1021,4 +1024,14 @@ Still Kris's own:
   Next: native4's rows as memory allows → if three seeds agree, the paper's section on our development and
   the comparison with the soft layer are reworded (and which size is the learner's benchmark is a question
   for Kris); softbase1 seed 2 → table, headline, draft 9; tagn_s1's first checkpoint; ramp lives at 5,000.
+- 2026-11-25 13:52 Health: photo alert (until midnight), the three planned endings; 2.8 GB free, so `native4` waits (gate 3.3 GB;
+  it opens when softbase1 ends, about 17:30, or tagn_s1 does). **Soft layer, whole stream, local readers on
+  three seeds** (table in VISION.md): word cells + relay 0.730 ± 0.004 (0.671 without), ridge 0.744, streaming
+  LDA 0.748; backprop from random 0.562 ± 0.013 (three seeds), with relay 0.604 and frozen + relay 0.737 on two
+  seeds so far. **Said beside it:** the soft layer developed on 50,000 other pictures first; the row that
+  separates the two (backprop started from the developed filters) was not in the first queue: `organic-softbase2`
+  queued. **tagn_s1 at 95,000:** continuing from a level works; two lives from one level differ by 0.05–0.07
+  after 5,000 moments (first words 0.45 against 0.40, pages 0.25 against 0.18). Ramp lives at 5,000 (babbling).
+  Next: softbase1 seed 2's last three rows (about 15:40) → the soft layer's rows into the paper's table as a
+  second table with the pending row marked; native4 when memory opens; photo log after midnight.
 
