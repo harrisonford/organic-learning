@@ -125,3 +125,6 @@ Intrator & Cooper 1992 (the network form with lateral inhibition).
 - Not opened: Udeigwe, Munro & Ermentrout 2017 (login redirect); a later table of the group (rate 1e-6, first
   threshold 0.7, memory constant 300–1000 in a search result only); Kirkwood, Rioult & Bear 1996; Földiák
   1990; Law & Cooper 1994; Cooper & Scofield 1988.
+- Földiák (1990), *Biological Cybernetics* 64, 165–170: opened (scan with a text layer); rules and numbers in
+  VISION.md. Falconbridge, Stamps & Badcock 2006 and Zylberberg, Murphy & DeWeese 2011: named from memory, not
+  opened.

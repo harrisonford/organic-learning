@@ -911,4 +911,9 @@ Still Kris's own:
   learned locally (Földiák 1990; the similarity-matching circuits) with BCM on the feed-forward synapses, and
   for the centre-surround input the BCM work used; nothing built before its source is read. softbase1's whole
   stream when it comes; sh7 seeds 1–2 into one sentence of the paper.
+- 2026-11-25 07:20 **Read: Földiák 1990** (anti-Hebbian feedback whose strength is learned by a local rule; three rules and
+  their numbers in VISION.md). BCM under that feedback would be my combination: not built. **Next for queue E
+  27:** open Zylberberg, Murphy & DeWeese 2011 (a complete published layer with these local rules on natural
+  image patches; open access), read rules and numbers, organic check, then that layer unchanged as the next arm;
+  bcm4's reading at 10,000,000 presentations; bcm3's streams after sh7.
 

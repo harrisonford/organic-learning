@@ -2627,3 +2627,28 @@ the arm goes to three seeds.
   Pehlevan & Chklovskii), with BCM on the feed-forward synapses; (b) the centre-surround or decorrelated input
   the BCM work used, which removes the direction all cells now share. Each needs its reading first (Földiák
   1990 has **not been opened**). Nothing built until then.
+
+### 2026-11-25 07:20: an inhibition that learns its own strength, read in the paper (Földiák 1990)
+Földiák (1990), "Forming sparse representations by local anti-Hebbian learning", *Biological Cybernetics* 64,
+165–170 (a scanned copy with a text layer, read this morning; symbols as printed, where the scan allows).
+- **The network:** n units over m inputs; feed-forward weights q, feedback weights w between the units,
+  a threshold t for each unit. The output settles by dy*/dt = f(Σ_j q_ij x_j + Σ_j w_ij y*_j − t_i) − y*_i with
+  f(u) = 1 / (1 + exp(−λu)), then is rounded to 0 or 1. Feed-forward weights born random (uniform on [0, 1],
+  unit length), feedback weights born at 0.
+- **Three rules, each with terms of the two cells a connection joins only** ("all the information necessary
+  for the modification is available locally at the site of the connection"):
+  anti-Hebbian between units Δw_ij = −α (y_i y_j − p²), kept at or under zero and zero for i = j;
+  Hebbian into a unit Δq_ij = β y_i (x_j − q_ij); threshold Δt_i = γ (y_i − p).
+- **Its numbers:** lines on an 8 × 8 grid, 16 units: α = 0.1, β = γ = 0.02, λ = 10, p = 1/8, thresholds settled
+  first (100 cycles at γ = 0.1 with α = β = 0); letters: α = 0.01, β = 0.001, γ = 0.01, λ = 10, p = 0.1, 8,000
+  presentations.
+- **For us:** the strength of inhibition is not a number here, it is learned (two units that fire together
+  more than chance come to inhibit each other), which is what the BCM layer lacks. What is set by hand is p,
+  the share of presentations a unit should fire at; the units are binary and the inputs are made-up patterns.
+- **What follows, and what does not.** Putting BCM's feed-forward rule under Földiák's feedback rule would be
+  a combination of mine: not built. The published line that carries this network to natural images is, as I
+  remember it and **have not opened**, Falconbridge, Stamps & Badcock (2006, *Neural Computation*) and
+  Zylberberg, Murphy & DeWeese (2011, *PLoS Computational Biology*; open access): complete layers with these
+  three local rules and their own constants, on whitened image patches. **Next: open the 2011 paper, read its
+  rules and numbers, write the organic check; if it stands, that layer, unchanged, is the next arm in the soft
+  layer's place** (its own input as one arm, the soft layer's windows as the other).
