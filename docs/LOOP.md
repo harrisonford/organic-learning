@@ -863,3 +863,8 @@ Still Kris's own:
   the tuning); if own holds: the soft rule in our cortex's place (the eye's 64 × 64 pictures; raw standardised
   windows and decorrelated windows as two arms) after reading BCM / ABS in the papers; the dissection on seeds
   1–2 for whatever goes into the paper.
+- 2026-11-25 05:09 Sources read for the soft rule's unlearning (VISION.md): its authors ground it in earlier machine
+  learning, not biology; the biological form (Bienenstock, Cooper & Munro 1982, reference verified) puts the
+  sign on the cell's own activity against its own sliding threshold. **Owed after sh6: that form as a third arm,
+  taken from the 1982 paper itself (open it first).** Artola et al. 1990 not opened: unverified, cited nowhere
+  for readers.

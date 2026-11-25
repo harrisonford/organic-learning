@@ -100,3 +100,10 @@ judges align reasonably with people · ✓ Bavaresco et al. 2025 (2406.18403) ·
 
 Venues the agent gave from memory, not from the page (check before printing): Ahmad et al. 2022 (TMLR), Lipshutz
 et al. 2022 (ICLR 2023), Gavrikov & Keuper (CVPR 2023), Trockman et al. (ICLR 2023), Ye et al. (ICLR 2025).
+
+**Added 2026-11-25 05:09 (read for queue E 27).** Journé et al. 2023 (arXiv 2209.11883, ar5iv rendering to the start of
+section 4): the anti-Hebbian term is justified by earlier machine-learning work (Krotov & Hopfield 2019; Grinberg
+et al. 2019), not by biology; the per-neuron rate is theirs ("stabilizes to zero as neuron weight vectors
+converge to a sphere of radius 1"). ✓ Bienenstock, Cooper & Munro 1982, *J. Neurosci.* 2(1):32–48, doi
+10.1523/JNEUROSCI.02-01-00032.1982 (statement read on the encyclopedia page only). ✗ Artola, Bröcher & Singer
+1990 (not opened: the record's page did not load).

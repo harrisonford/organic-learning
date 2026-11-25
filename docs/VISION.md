@@ -2445,3 +2445,27 @@ closed most of that while learning on. Saved as data/visual_cortex2_circuit.pkl;
 pages: 0.29 above blind answering). In preschool: 0.04 / 0.01; pages now 0.23 / 0.18 and first words 0.41 /
 0.37, both under where they were at 90,000 (pages 0.31 / 0.33, first words 0.45 / 0.46). Earlier stages give way
 when a new one starts, as in the plateau lives.
+
+### 2026-11-25 05:09: what the sources say about the soft rule's unlearning (read tonight, not recalled)
+- **Its authors do not ground it in biology.** Journé et al. (arXiv 2209.11883, section 3, read in the ar5iv
+  rendering as far as the start of section 4): they "introduce a new, simple form of anti-Hebbian plasticity
+  for soft WTA networks, that simply negates SoftHebb's weight update ... in all neurons except the maximally
+  activated one", and give earlier machine-learning work as the reason (Krotov & Hopfield 2019; Grinberg et
+  al. 2019). The biology they cite is for the competition (Douglas et al. 1989; Douglas & Martin 2004), not
+  for the unlearning. The rate that falls as a kind's weights near length 1 is theirs too, given for
+  robustness and speed. **The division by the largest change in the layer is not in the text that was read**
+  (it is in their code); the appendix was not read word for word.
+- **Bienenstock, Cooper & Munro (1982)**, *Journal of Neuroscience* 2(1), 32–48, doi
+  10.1523/JNEUROSCI.02-01-00032.1982 (reference and statement read on the encyclopedia page, not in the paper):
+  a cell in a high-activity state potentiates its active synapses and in a lower-activity state depresses
+  them, and the threshold between the two slides with the cell's own average activity.
+- **Artola, Bröcher & Singer (1990)** could not be opened tonight (the record's page did not load). It stays
+  cited from memory and unverified, and goes into no document for readers until it is read.
+- **What follows for the organic check.** "Active losers weaken" has a biological form, but not the published
+  one. In the published rule a kind's sign depends on whether it is the strongest at that place: a fact about
+  the others. In the biological form the sign depends on the cell's own activity after the competition
+  against its own sliding threshold: a fact the cell has. With a sharp competition the two agree (the winner
+  is high, the rest low). **A third arm is therefore owed after own/early: the sign by the cell's own activity
+  against its own running threshold** (the form in Bienenstock et al., to be taken from the paper itself, not
+  designed here). If it develops the layer as the published rule does, every part of the rule is something a
+  cell could do.
