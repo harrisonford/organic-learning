@@ -58,9 +58,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
-- **`organic-bcm4`** (started 07:38; MemoryMax 700M; about 30 minutes): the BCM layer's development read on to
-  10,000,000 presentations → out/bench/bcm_develop_10000000_s0.log, bcm_weights_10000000_s0.npz.
-  **`organic-bcm3`** (out/tmp/bcm_queue.sh; MemoryMax 1500M; waits for sh7 and bcm4): codes and streams of the
+- **`organic-sail1`** (started 08:33; MemoryMax 700M; about 30 minutes): the SAILnet layer's development, seed 0 →
+  out/bench/sail_develop_s0.log, sail_weights_s0.npz. **`organic-sail2`** (out/tmp/sail_queue.sh; MemoryMax
+  1500M; waits for sail1 and bcm3): its codes and streams → sail_code_s0.log, stream_{sail,sailr}10k_s0.log.
+- **`organic-bcm3`** (out/tmp/bcm_queue.sh; MemoryMax 1500M; waits for sh7 and bcm4): codes and streams of the
   BCM layer at 250,000 / 2,500,000 / 10,000,000 presentations and as born → bcm_code_s0.log,
   stream_{bcm,bcm_2500000,bcm_10000000,bcmr}10k_s0.log.
 - **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; started 04:45; MemoryMax 1800M; about
@@ -916,4 +917,21 @@ Still Kris's own:
   27:** open Zylberberg, Murphy & DeWeese 2011 (a complete published layer with these local rules on natural
   image patches; open access), read rules and numbers, organic check, then that layer unchanged as the next arm;
   bcm4's reading at 10,000,000 presentations; bcm3's streams after sh7.
+- 2026-11-25 08:34 All healthy, 3.7–3.8 GB free. **BCM at 10,000,000 presentations: ten different filters of 256** (as stated);
+  the lengths go on growing and the activity is at the sigmoid's top, so "stable" is withdrawn as not shown
+  (VISION.md). **Dissection seed 1 read:** same picture as seed 0 in every arm (hard 0.496, no unlearning 0.423,
+  own 0.256, early 0.600 against published 0.684 and as born 0.546); seed 2 runs. **softbase1:** tuning done
+  (best: no relay power 1 rate 0.001 batch 8, 0.477; fixed relay power 0.7 rate 0.001 batch 32, 0.528); **the
+  soft layer on the whole stream, seed 0: word cells + relay 0.729 at 50,000 pictures, without relay 0.675**
+  (our cortex in the paper's table: 0.693 ± 0.002); ridge, streaming LDA and backprop follow. **Read: Zylberberg,
+  Murphy & DeWeese 2011 (preprint text) and the authors' code**: a complete published layer with Földiák's
+  three local rules, spiking cells, every number given; organic check passed for an arm (p, the target rate,
+  is the authors' set point). **`experiments/sailnet_probe.py`** written from the code; smoke test (1,000
+  batches, another seed): on our raw colour windows the cells fire five times the target and pile onto one
+  filter while still far from settled; the stated run (25,000 + 10,000 batches) is `organic-sail1`, its
+  stream reading `organic-sail2`.
+  **Next:** sail1's reading (if the layer does not settle on raw windows, the reason is the input's units:
+  theirs is whitened and brought to unit deviation patch by patch; that input, in small, is then the second
+  arm, with the response given the same input); bcm3 and sail2 streams; softbase1 seed 0 complete, then the
+  paper's table; the lives' end at 120,000 (about 09:00) and the ramp lives' start.
 

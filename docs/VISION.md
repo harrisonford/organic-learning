@@ -2652,3 +2652,63 @@ Földiák (1990), "Forming sparse representations by local anti-Hebbian learning
   three local rules and their own constants, on whitened image patches. **Next: open the 2011 paper, read its
   rules and numbers, write the organic check; if it stands, that layer, unchanged, is the next arm in the soft
   layer's place** (its own input as one arm, the soft layer's windows as the other).
+
+### 2026-11-25 08:31: BCM at 10,000,000 presentations; dissection seed 1; a published layer with learned inhibition (SAILnet)
+**The BCM layer read on** (`out/bench/bcm_develop_10000000_s0.log`): at 5,000,000 presentations 19 different
+filters of 256 (8,970 near-copy pairs), **at 10,000,000 ten different filters (14,345 pairs)**: what I
+stated (fewer than 40). **A correction to "stable, as I said":** the weights' lengths go on growing (mean 1.87
+at 2,500,000, 3.45 at 5,000,000, 8.82 at 10,000,000; longest 30.6) and the largest activity has reached the
+sigmoid's top (49.07 of 50). Nothing ran away to infinity, but I have not seen the lengths level off, so
+"stable" is not shown on our input; what bounds the cells here may be the sigmoid and not the threshold. The
+stream reading comes with `organic-bcm3`.
+
+**The dissection, seed 1** (logs `softhebb_dissect_s1.log`, `stream_sh{h,p,e,o}10k_s1.log`; word cells + relay /
+ridge + relay at 10,000 pictures; published 0.684 / 0.700, as born 0.546 / 0.607): hard 0.496 / 0.567 (930
+near-copy pairs); no unlearning 0.423 / 0.495 (19,033 pairs); the factor at its median (0.00085): ran away; each
+kind's own division 0.256 / 0.359 (weights 72,000 long); **the factor at its early value (1.49e-5): 0.600 /
+0.620**, where seed 0 (1.06e-5) gave 0.561 / 0.605. Same picture as seed 0 in every arm; the early-value arm
+gets further on this seed, with a step 40% larger. That a fixed step somewhere between "early" and "median"
+might do is a thought I am not following: it would be a search for a constant.
+
+**A published layer whose inhibition learns its strength.** Zylberberg, Murphy & DeWeese (2011), "A Sparse
+Coding Model with Synaptically Local Plasticity and Spiking Neurons Can Account for the Diverse Shapes of V1
+Simple Cell Receptive Fields", *PLoS Computational Biology* 7(10): e1002250 (the preprint's text read this
+morning, arXiv 1109.2239v1; **the journal's own pages still to be compared**), and the authors' published code
+(a public repository: `init.m`, `SAILnet.m`, `activities.m`, read, not run).
+- **Cells:** leaky integrate-and-fire. For 50 steps a cell's potential follows u ← 0.9 u + 0.1 (Q x − W a),
+  a the cells that fired on the step before; a cell fires when u reaches its threshold θ and starts again
+  from 0; its answer to an image is its count of spikes n.
+- **Three rules** (the paper's equation 1; Földiák's, with counts): between cells ΔW_im = α (n_i n_m − p²), no
+  self-connection, never below zero; into a cell ΔQ_ik = β n_i (x_k − n_i Q_ik) (Oja's form of Hebb's rule);
+  threshold Δθ_i = γ (n_i − p). "each of our learning rules is 'synaptically' local: the information required
+  ... is merely the activity of the pre- and post-synaptic units."
+- **Numbers.** Code: Q born Gaussian with each cell's weights at unit length, W born 0, θ born 2, α = 1,
+  β = 0.01, γ = 0.1, p = 0.05 spikes an image, batches of 100 patches (the batch's average change), 25,000
+  batches. Paper: θ born 5; "we start the training with large values for the learning rates, and these are
+  eventually reduced. For the last 10⁴ batches ... (α, β, γ) = (0.1, 0.001, 0.01)"; about 10⁷ presentations to
+  settle. Input: 16 × 16 patches of whitened natural images, each patch at zero mean and unit deviation; 256
+  cells in the code, 1,536 in the paper.
+- **What the authors call unrealistic themselves:** the cells inhibit each other directly (no interneurons),
+  learning in batches, continuous inputs, inference and learning in turns.
+
+**Organic check.** Every change uses the two cells a connection joins, or the cell's own count: local, with
+no step shared by the layer, no normalisation by anyone, and the strength of inhibition learned (two cells
+that fire together more than chance come to inhibit each other): the part the BCM layer lacked. Spiking cells
+are closer to biology than anything else in our cortex. **What is set by hand is p**, a cell's target rate;
+it is a set point each cell keeps for itself (the well-known homeostasis of firing rate), not a weight that
+balances two mechanisms, and it is the authors' number. The batch is an average of local changes. Direct
+inhibition between excitatory cells is not Dale's law; the authors' later work is said to give it
+interneurons (King, Zylberberg & DeWeese 2013: **not opened**). It passes for an arm.
+
+**The arm** (`experiments/sailnet_probe.py`): the code's layer unchanged, 256 cells; 25,000 batches at the
+code's rates, then 10,000 at the paper's last rates (both published; nothing else). **Ours, and said:** the
+input is the soft layer's (5 × 5 colour windows, each colour standardised; not whitened, not brought to unit
+deviation patch by patch), and the first reading takes only the learned feed-forward weights Q through the
+soft layer's own response (as every arm of the dissection was read); the layer's own answer, spike counts
+under inhibition, would be a second and much dearer reading.
+
+**Stated before it is run:** the cells will stay different (fewer than 10 near-copy pairs above 0.9 among
+256), because that is what the learned inhibition is for. In the stream, word cells + relay at 10,000
+pictures: **over the layer as born (0.549) and under the published soft rule (0.689); my guess 0.58 to 0.66.**
+What could make it fail: the weights were learned for spiking cells under inhibition and are read here
+without either; and raw colour windows may give mostly colour blobs.
