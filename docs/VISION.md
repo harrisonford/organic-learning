@@ -1944,3 +1944,46 @@ about four hours an arm, nine arms.
 **Smoke test** (a small brain, 400 moments; out/tmp/smoke_tag.py): 97 of 480 stored moments marked, all of them
 lessons, none of the comments; 50 asked back, 50 came, every one marked.
 
+### 2026-11-24 23:11: the relay by a local rule, learned as the pictures come (queue E 26 and 28): the organic check and the probe
+**What is owed.** The relay between the cortex and the word cells is the paper's main finding and it is a batch
+stand-in: one matrix computed at once from 6,000 summaries, with a constant of mine (`shrink`, 0.0005 of the
+largest variance in the benchmark's cortex) that keeps the weak directions from being blown up. The lateral
+network among a place's kinds (2026-11-23) did four fifths of the relay's work by local rules, but one stage
+earlier and on a fifth of the stream. The relay's own place, among the summary's 4,096 numbers, has not been
+tried.
+**What biology and the literature have** (the equations read in the papers tonight, not recalled). Whitening
+by inhibitory interneurons: principal cells excite interneurons, which inhibit them back; the synapse between
+a principal cell and an interneuron grows with the product of their activities and decays (Lipshutz, Pehlevan
+& Chklovskii 2022, Algorithm 2: z = Wᵀy; y settles at x − Wz; W += η(yzᵀ − W); with as many interneurons as
+principal cells it converges to the symmetric whitening the relay computes). With the principal cells' own
+leak (Duong, Simoncelli, Chklovskii & Lipshutz 2023, equation 6) the settled state is y = (I + WWᵀ)⁻¹x. The
+gain-only circuit of Duong et al. 2023a (queue 28 as first written) needs N(N+1)/2 interneurons for N cells:
+8.4 million here. Not built; the synaptic form is the one that fits the relay's size.
+**Where the hand-set constant goes.** Inhibition can only take away (WWᵀ is never negative) and the leak is 1,
+so a direction whose variance is under 1 cannot be raised: it is passed as it is; every direction above is
+brought down to 1. With each cell's input scaled so that the cells' variance is 1 on average (a running
+average, no constant), that floor sits at the mean variance. **Measured on the benchmark's summaries (seed 0):
+the mean variance is 0.00094 of the largest; my `shrink` was 0.0005.** The circuit's floor falls within a
+factor of two of the constant I had tuned by hand; 183 directions stand above it (241 above the batch floor).
+The constant is not needed: the leak and the direction of inhibition do its work.
+**Organic check.** Published rules, unchanged; every change depends on the two cells at a synapse's ends; no
+constant of mine but the papers' rate (0.001 a picture). The authors' own caveats hold here too: the two
+directions of an interneuron's connection are taken as equal (weight transport), and the weights are not
+sign-constrained. Departures of the probe, said in its header: a block of 50 pictures settles with the
+synapses as they were when the block began, the settled state is computed in closed form, and each cell's
+average and scale are running averages over all it has seen.
+**The probe** (`experiments/relay_local_probe.py`; `organic-relay1` behind the drift probe: a smoke test on
+1,000 pictures, then seed 0 on 10,000). Arms: the batch relay; *settled*, where the circuit's rule comes to
+rest, computed at once (does the new floor cost anything?); *developed*, the circuit after one sight of the
+stream's pictures without their names, then held still (the stream's own pictures, since the pictures the
+batch relay was settled on were not kept as codes: said here, to be replaced); *plastic*, the circuit learning
+from nothing along the stream while the word cells learn from what it sends. Read first on the code (two
+pictures alike, directions used, pairs of cells that still go together), then the word cells.
+**Stated before:** settled should be near the batch relay (0.620); developed a little under it (one pass, the
+weak directions slow); plastic lower still at the start and unknown at the end: the word cells' early
+associations were made in a code that has since moved.
+**The reward's error, seed 1** (rpe_s1.log; gain for its control 1.70): first words 0.28 (baseline 0.25), pages
+0.50 (0.51), "is there" 0.71 (0.74) at 6,000 moments. Two seeds: as the baseline. Noted to watch: with either
+larger step (normalised, or the fixed gain) the eye moves on "is there" pages fall to 0.00 at the end, where
+the baselines have 0.07–0.08.
+

@@ -61,6 +61,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   gaze4.log, gaze4_s2all.log.
 - **`organic-trace2`** (out/bench/trace2_queue.sh): the drift probe, seed 1 read, seed 2 developing →
   out/bench/trace_probe_s2.log, stream_{l2plain,l2trace}10k_s2.log.
+- **`organic-relay1`** (out/tmp/relay_local_queue.sh; waits for trace2): queue E 26/28, the relay by a local rule
+  (`experiments/relay_local_probe.py`): a smoke test → out/bench/relay_local_smoke.log, then seed 0 →
+  out/bench/relay_local_s0.log (about 1.2 hours). Seeds 1 and 2 only after seed 0 is read.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
   preschool, one at a time and only with 5.7 GB available (so it waits behind the reward lives): `tagn_s*`
@@ -753,4 +756,15 @@ Still Kris's own:
   75,000; while tag1 waits: queue E 26/28 (the relay by local rules: the lateral network among the summary's
   numbers, interneuron gains), which needs little memory; the serial gaze from a grown learner's checkpoint
   when memory allows.
+- 2026-11-24 23:11 All healthy, 2.2–2.4 GB free (at the floor: nothing heavy started). Read: the reward's error on seed 1
+  (as the baseline; control for it running); the drift stage's seed 2 is in its trace arm; the reward lives at
+  70,000 (two in pages, one in first words). **Queue E 26/28: organic check, probe written and queued**
+  (VISION.md, same time): the relay learned online by a published interneuron circuit (Lipshutz et al. 2022 with
+  the leak of Duong et al. 2023b; equations read from the papers tonight). The cell's leak and the fact that
+  inhibition only takes away put the floor at the mean variance, which measures 0.00094 of the largest where my
+  hand-set `shrink` was 0.0005: the constant is not needed. The gain-only circuit (28 as written) would need 8.4
+  million interneurons: not built. `organic-relay1` runs behind trace2.
+  Next: read the smoke test and seed 0 of relay1 (then seeds 1–2, and the pictures of development coded so the
+  developed arm does not use the stream's own); rpe1 seeds; trace2 seed 2 into the paper's drift row; reward
+  lives at 75,000; tag1 waits for memory.
 
