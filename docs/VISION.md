@@ -2173,3 +2173,57 @@ words: after 50,000 pictures the kinds' weight lengths are at 1.0 for the first 
 96 kinds), not all at 1; and in the last batch one kind is the strongest at a third of all places.
 The reading in our measure (the stream; word cells and ridge) is running (`organic-sh2`; the first queue
 stopped there on a fault of mine in how the file was written).
+
+### 2026-11-25 02:19: the published soft rule in our measure, seed 0: my expectation was wrong; the relay circuit at the right step, seed 0
+**The soft rule on the stream** (stream_{sh,shr,sh96,shr96}10k_s0.log; 10,000 pictures; seed 0). Beside our
+cortex on the same seed and stream (norm0: hard winner-take-all on decorrelated windows, 256 kinds).
+
+| after 10,000 pictures | soft rule, 256 kinds | the same layer as born | soft rule, 96 kinds | as born, 96 | our cortex |
+|---|---|---|---|---|---|
+| word cells + relay | **0.689** | 0.549 | 0.662 | 0.544 | 0.613 |
+| word cells, no relay | 0.579 | 0.411 | 0.590 | 0.412 | 0.502 |
+| ridge + relay | 0.700 | 0.603 | 0.666 | 0.579 | 0.659 |
+| ridge, no relay | 0.689 | 0.597 | 0.669 | 0.565 | 0.646 |
+| word cells + relay after 1,000 pictures | 0.531 | 0.421 | 0.532 | 0.413 | 0.473 |
+| a picture seen once, asked 20 later | 0.903 | 0.843 | 0.830 | 0.790 | 0.890 |
+
+**I said before the run: under 0.02 between developed and as born, and both under our cortex. It is 0.14 between
+them, and the developed layer is 0.076 above our cortex for the word cells and 0.041 for the ridge.** One seed;
+seeds 1 and 2 are running (`organic-sh4`). What it already says, if they agree:
+- "Filters developed without labels do no better than filters never developed" is a finding about **our hard
+  rule**, as Journé et al. found for theirs. A soft competition in which the losers unlearn develops filters
+  that are worth fourteen points to the word cells. The paper's sentence and section must change.
+- At 10,000 pictures the word cells on this layer are where they were at 50,000 on ours (0.687), above the
+  streaming discriminant with the relay (0.672) and one-pass backprop of the same shape (0.510; 0.604 with the
+  relay), all on our cortex's code: to be compared again like for like, each on this code.
+- The relay still matters on it (0.579 → 0.689 for the word cells) and hardly for the ridge (0.689 → 0.700),
+  as before.
+- The layer as born is worse than our never-developed filters (0.549 against about 0.64): with no
+  decorrelation of the windows, random filters see mostly the windows' common brightness. The rule finds its
+  way out of that by itself.
+**What is not known yet, and the order:** (1) seeds; (2) which part of the rule does it, and above all whether
+it survives without its one non-local step (the division by the largest change in the layer); (3) the rule in
+our cortex's place (the eye's 64 × 64 pictures, decorrelated windows). Nothing is adopted before (2).
+
+**The relay circuit at a step of 0.03, seed 0** (relay_local_r1e-4_s0.log; all arms on the batch relay's own
+unlabelled pictures; 10,000 pictures of the stream).
+
+| | two pictures alike | directions | pairs of cells together | word cells at 1,000 | at 10,000 | seen once |
+|---|---|---|---|---|---|---|
+| the batch relay | 0.035 | 350 | 0.024 | 0.473 | 0.613 | 0.890 |
+| the circuit's resting point | 0.040 | 289 | 0.031 | 0.469 | 0.608 | 0.883 |
+| developed on the relay's 6,000 pictures, held still | 0.045 | 236 | 0.041 | 0.470 | 0.600 | 0.883 |
+| developed on 20,000, held still | 0.040 | 282 | 0.031 | 0.468 | 0.601 | 0.880 |
+| from nothing, learning along the stream | 0.040 | 285 | 0.030 | 0.441 | 0.603 | 0.890 |
+| developed on 6,000, then learning on | 0.039 | 302 | 0.028 | 0.476 | **0.613** | 0.887 |
+
+At the right step the circuit does the relay's work: every arm is within 0.013 of the batch relay, and the arm
+a brain would have (developed before the lessons, never held still) equals it on this seed. Against what I
+stated: developed on 20,000 is within 0.01 of the resting point (yes); from nothing it is under at the start
+(0.441 against 0.473 at 1,000) and 0.010 under at the end (yes, barely); developed-then-learning-on is not
+between the developed arms but above both. **The word cells are not hurt by a code that keeps moving slowly
+under them.** Seeds 1 and 2 are running.
+
+**The reward lives at 85,000 moments:** pages above blind answering 0.31 / 0.23 / 0.31 (after 30,000 / 15,000 /
+30,000 moments there; the plateau lives after as long: 0.33 / 0.28 / 0.35). First words 0.45 / 0.46 / 0.46.
+Nothing new.

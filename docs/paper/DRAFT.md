@@ -274,7 +274,13 @@ the developed ones, 0.687. Random whitened patches have been known to be hard to
 & Ng 2011; Saxe et al. 2011; Thiry et al. 2021), and we rediscovered it the expensive way. The result is about
 our rule, hard winner-take-all, and not about Hebbian learning in general: Journé et al. (2023) report the same
 thing for hard winner-take-all on one layer (62.7% against 63.9% for random weights) and then a clear gain from a
-soft version of the competition (71.1%), which we have not yet built faithfully. The developed filters are not worthless:
+soft version of the competition (71.1%). We have now built their layer from their own code, changing nothing,
+and read it as we read everything else. Their finding holds in their measure (on the first seed, a linear
+readout of the whole layer from 5,000 labelled pictures names 0.616 against 0.515 for the same layer never
+developed), and it holds in ours: after 10,000 pictures of the stream the word cells name 0.689 on the soft
+layer, 0.549 on the same layer as born, and 0.613 on our hard-rule cortex. A competition in which the losers
+unlearn develops filters worth having; ours did not. **[pending: seeds 1 and 2; then this section, the
+abstract and the comparison with backpropagation are redone on the soft layer.]** The developed filters are not worthless:
 the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in
 them is better. Our reader cannot use it. When we looked inside, the developed filters were more selective than
 random ones but 658 pairs among them were near copies of each other; random filters had none.
