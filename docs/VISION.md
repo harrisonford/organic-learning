@@ -2981,3 +2981,27 @@ second-order readers' on two so far, seed 2 running):
   without (0.503 → 0.671); to ridge about 0.08–0.10. Paid for in 50,000 unlabelled pictures.
 - In the paper: two rows added to the second table and a paragraph; the pending mark now names only softbase2's
   rows. **Draft 9 sent to Kris 16:55** (20 pages).
+
+### 2026-11-25 17:45, softbase1 ended; the replay test's first arm ended
+
+**The layer as born, second-order readers, three seeds** (stream_shrfull_s*.log, complete): ridge + relay
+0.666 ± 0.008, ridge 0.646 ± 0.007; streaming LDA + relay 0.663 ± 0.003, without 0.657 ± 0.003 (developed:
+0.744 / 0.744 / 0.748 / 0.747). The soft rule's development is worth about 0.08 to them (0.10 to the word cells).
+On the as-born layer the relay is worth 0.02 to ridge and nothing we interpret to streaming LDA. One sentence
+added to the paper's section; no new rows.
+
+**The replay test's first arm, whole** (`tagn_s1`: seed 1's plateau life lived again from its level at 90,000,
+nothing changed, to 110,000), beside the plateau life at the same ages (first words / pages / preschool):
+
+| age | tagn_s1 | plat_s1 |
+|---|---|---|
+| 95,000 | 0.45 / 0.25 / 0.01 | 0.40 / 0.18 / 0.02 |
+| 100,000 | 0.42 / 0.23 / 0.00 | 0.46 / 0.23 / 0.01 |
+| 105,000 | 0.40 / 0.19 / 0.02 | 0.42 / 0.25 / 0.00 |
+| 110,000 | 0.35 / 0.20 / 0.03 | 0.37 / 0.19 / 0.02 |
+| mean | 0.405 / 0.218 / 0.015 | 0.413 / 0.213 / 0.013 |
+
+Two lives from one level, same code: at one test they differ by up to 0.07, over the four tests their means
+agree to 0.01. **So an arm of the replay test is read on its mean over the four tests,** and with one pair as
+the only measure of the noise, a difference under about 0.03 on that mean says nothing. (The babbling stage's
+number jumps between 0.03 and 0.41 from test to test in both lives: not a measure to read here.)

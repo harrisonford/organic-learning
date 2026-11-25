@@ -82,7 +82,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   columns must agree); backprop of the layer's shape tuned on seed 0 (backprop_soft_tune_s0.log); per seed the
   whole stream on the developed code (stream_shfull_s{0,1,2}.log: word cells, ridge, streaming LDA, with and
   without relay) and backprop at its best settings (backprop_soft_full.log); then stream_shrfull_s{0,1,2}.log.
-  **State 14:55: everything done and in the paper but the last part** (the layer as born on the whole stream,
+  **ENDED 17:26, all read (VISION.md 14:55, 16:55, 17:45).** State 14:55: everything done and in the paper but the last part (the layer as born on the whole stream,
   stream_shrfull_s{0,1,2}.log, about an hour a seed, ends about 17:45). When it is in: the as-born row into the
   paper's second table, build, email draft 9.
 - Finished and read tonight: sh6 (own / early, seed 0), sh5 (the dissection, seed 0), mkcircuit1 (the circuit for a life), relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
@@ -1064,4 +1064,13 @@ Still Kris's own:
   Next: shrfull seed 2's second-order rows (17:30) into VISION; softbase1 and tagn_s1 end → native4 opens;
   watch memory (if available falls under 2.1 GB with nothing of mine to stop, softbase2 and native4 stay
   gated; the tag queue's next arm needs 5.7 GB and will wait); photo log after midnight.
+- 2026-11-25 17:45 Health unchanged (photo alert until midnight; the three planned endings). `organic-softbase1` ended 17:26 and
+  `tagn_s1` at 110,000: **5.1 GB free**, native4 is counting its three minutes at the gate; softbase2 behind it;
+  the tag queue's next arm needs 5.7 GB and will wait behind both (about ten hours: the paper's rows first).
+  **As born, second-order readers, three seeds:** ridge + relay 0.666 ± 0.008, streaming LDA + relay 0.663 ± 0.003
+  (one sentence into the paper). **tagn_s1 whole:** over four tests its means are 0.405 / 0.218 / 0.015 against
+  plat_s1's 0.413 / 0.213 / 0.013; single tests differ by up to 0.07 → the replay arms are read on the mean of
+  four tests; under about 0.03 says nothing. Ramp lives at 25,000 (seed 1 at 20,000): first words 0.36 / 0.31 / 0.42.
+  Next: native4's seeds 1–2 (about 45 minutes a step) → three-seed native table → the paper's section on our
+  development and the question for Kris; then softbase2; photo log after midnight.
 

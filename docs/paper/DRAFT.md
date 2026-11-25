@@ -358,7 +358,8 @@ interpret. As on our cortex, the local reader is as good as the gradient one and
 the gradient readout falls to 0.619 and the word cells to 0.671; that readout ran at the exponent tuned for the
 end-to-end network and not at the layer's own, so the pair is not yet like for like. Second, ridge regression
 and the streaming discriminant are ahead again, at 0.744 and 0.748, and the relay is worth nothing to them where
-it is worth six points to the word cells. Third, backpropagation of this shape does worse than backpropagation
+it is worth six points to the word cells. On the layer as born they reach 0.666 and 0.663 behind the relay, so
+the development is worth eight points to them as well. Third, backpropagation of this shape does worse than backpropagation
 of ours (0.562 against 0.616). Our shape whitens each patch before the filters and the soft layer's does not.
 That fits the account of the last section, and it is not a test of it.
 
