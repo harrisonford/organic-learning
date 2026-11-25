@@ -2786,3 +2786,18 @@ reference was (24 settings): filters learned from random, no relay 0.547; with t
 developed filters kept and only a softmax readout learned by gradient, no relay 0.623; with relay: running.
 The same order as on our cortex (local readers on local filters over one-pass backprop), with a wider gap.
 Seeds 1 and 2 follow; nothing in the paper's table until they are in.
+
+### 2026-11-25 10:50: the BCM layer in the stream (first readings); a gradient readout on the soft layer's frozen filters
+- **BCM, seed 0, word cells + relay / ridge + relay at 10,000 pictures** (`stream_bcm*10k_s0.log`): after the
+  simulator's 250,000 presentations **0.443 / 0.506**; after 2,500,000 **0.371** (ridge running); 10,000,000 and
+  the layer as born still to come. Under the range I gave (0.45 to 0.55). Even the first reading, where one
+  cell of 256 had developed and all filters still counted as different, is ten points under the soft layer as
+  born (0.549): through the relay its code uses 77 directions where the same cells as born use 254
+  (`bcm_code_s0.log`). A few long filters and a common drift are enough to spend the code on a few directions.
+- **SAILnet in our cortex's place, final** (35,000 batches): rates on target (0.049), 98 different filters of
+  256, 5,592 near-copy pairs. Stream reading queued.
+- **The soft layer's last reference on seed 0:** the developed filters frozen, a softmax readout trained by
+  gradient through the fixed relay: **0.737 at 50,000**, over the word cells + relay (0.729) and level with
+  streaming LDA (0.743). A softmax readout's gradient is a delta rule on one layer of synapses, so this is not
+  backprop through anything; it says our reader leaves about a point on the table on this code, where on our
+  cortex the two were level. Seed 1 of the whole stream: word cells + relay 0.734 (no relay 0.671).

@@ -207,3 +207,25 @@ organic learner behaves and what each part does, measured honestly, not a score.
   Tobler, Fiorillo & Schultz 2005; Louie & Glimcher.
 - **A caution for the reader of the draft:** the circuit's numbers are from blocks of 50 pictures and a matrix
   solve for the settled activity; the paper says both.
+
+### Update, 2026-11-25 10:50
+- **In the draft since draft 8:** a paragraph on the soft rule taken apart on three seeds (the losers' unlearning
+  does the work; the division by the layer's largest change is not local and neither local stand-in works). No
+  new reference is cited by it. Draft 9 goes to Kris when the soft layer's whole-stream rows are in.
+- **The pending mark stands** (seed 0 complete, seed 1 begun, about 16:00 for the rest). What seed 0 says, so that
+  the rewrite is not a surprise: end-to-end backprop of the soft layer's shape 0.547 (0.597 with the fixed
+  relay) against word cells + relay 0.729; **but a softmax readout trained by gradient on the frozen developed
+  filters through the relay reaches 0.737, over the word cells**, as streaming LDA does (0.743). On our cortex
+  that same row was level with the word cells (0.694 against 0.693). The headline has to be said as it is:
+  local filters with any one-pass reader beat one-pass backprop of the same shape; our own reader is not the
+  best of the readers.
+- **Not in the paper, and not to be until they are more than one seed:** the BCM layer (independent cells end as
+  ten filters; under the layer as born in the stream) and SAILnet (one filter on raw windows; 98 different
+  filters of 256 on our cortex's windows, stream reading pending). If either enters the paper, its references
+  are: Intrator & Cooper 1992 and Blais et al. 1998 (opened); Bienenstock, Cooper & Munro 1982 (reference
+  verified, text not opened); the Plasticity simulator as software, with the date read; Zylberberg, Murphy &
+  DeWeese 2011 (preprint opened, **journal pages to be compared**) and its code; Földiák 1990 (opened).
+- **The photo world** stood still for a day (a free model withdrawn); mended (docs/WORLD.md). Nothing in the
+  paper depends on it, but the lives of the next generation will start in a world whose photo questions are
+  partly written by a different adult: one more reason for the frozen-world question put to Kris.
+- **arXiv and Zenodo:** nothing uploaded.
