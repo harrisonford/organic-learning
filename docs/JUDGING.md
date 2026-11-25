@@ -353,3 +353,33 @@ Seed 1 is still in first words at 0.49. Nothing so far tells a kinder reward fro
 answering after 10,000 moments there: 0.27 / – / 0.24 (plateau: 0.32 / 0.26 / 0.27); after 20,000: 0.28 / – / 0.29
 (plateau: 0.30 / 0.29 / 0.33). First words at 75,000: 0.45 / 0.48 / 0.49. A reward that counts a good try in
 full has changed neither how long a stage takes nor where it levels off.
+
+## 2026-11-25: the reward lives, read (kind_s0..2: a good try counts in full all life long; 120,000 moments each)
+
+Above blind answering, as the table of 2026-11-24, with the plateau lives (strict reward) in brackets:
+
+| | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| moments in first words | 45,000 (70,000) | 55,000 (45,000) | 45,000 (50,000) |
+| first words, last test in the stage | 0.46 (0.53) | 0.45 (0.49) | 0.50 (0.49) |
+| moments in pages | 35,000 (30,000) | 50,000 to the life's end (35,000) | 35,000 (40,000) |
+| pages, last test in the stage | 0.31 (0.33) | 0.32 (0.31) | 0.33 (0.36) |
+| moments in preschool (to the life's end) | 30,000 (10,000) | none (30,000) | 30,000 (20,000) |
+| preschool at the end | 0.04 (0.00) | – (0.02) | 0.04 (0.02) |
+| first words at the end | 0.37 (0.42) | 0.44 (0.39) | 0.31 (0.39) |
+| pages at the end | 0.30 (0.27) | 0.32 (0.25) | 0.21 (0.30) |
+
+1. **A kinder reward changed nothing we can see.** Where a stage levels off (first words 0.45–0.50 against
+   0.49–0.53; pages 0.31–0.33 against 0.31–0.36) and how long it takes are inside the spread between seeds of
+   either arm. If anything the strict lives left first words a few points higher; with three seeds and one
+   seed of the strict arm at 0.53 that is not a finding.
+2. **Preschool stays unlearned** (0.04 after 30,000 moments, against 0.00–0.02): the wall is the stage's, not
+   the reward's.
+3. **The earlier stages lose as before** while the learner is in preschool: first words 0.46 → 0.37 and
+   0.50 → 0.31 on the two seeds that got there; seed 1, which never left pages, kept its first words (0.44).
+4. A correction to the notes of 2026-11-24 and 2026-11-25 above: seed 1 was in first words 55,000 moments
+   by the count used in these tables, not 60,000.
+5. **A caution on the comparison** (put to Kris on 2026-11-25): the two generations did not live in the same
+   world to the last file; the world's text and photo questions grew between them.
+The ramp lives (`ramp_s0..2`: in full up to first words, half in pages, strict after) started at 12:20 on
+2026-11-25 and are read against both at the same ages.

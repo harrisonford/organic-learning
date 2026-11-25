@@ -2868,3 +2868,23 @@ born (`nat_r`) and developed by our hard rule (`nat_d`); seed 0, then three seed
 gives 30 × 30, which may cost some of it back). Developed against as born: **within 0.01 either way**, since
 the hard rule's failure is its near copies. If the developed filters now do better than random, the paper's
 sentence about our development was about the blown-up input and has to say so.
+
+### 2026-11-25 12:58: the benchmark's cortex on CIFAR at its own size, seed 0: the hard rule's development helps there
+`out/bench/native_code_s0.log`, `stream_{nat_r,nat_d}10k_s0.log` (word cells + relay / ridge + relay at 10,000):
+| our cortex, seed 0 | word cells + relay | ridge + relay | near-copy pairs among the filters |
+|---|---|---|---|
+| blown up to 64 (the benchmark), filters as born or developed | 0.613 | 0.659 | 0 as born; 658 developed |
+| at 32, filters as born | 0.627 | 0.633 | 0 |
+| **at 32, developed by our hard rule** | **0.656** | **0.667** | 100 (194 different filters) |
+| SAILnet's filters at unit length, blown up (`sailcu`) | 0.588 | 0.635 | 5,592 |
+- **As born:** 0.627 against 0.613. I had said 0.64 to 0.68: less than I thought (the coarser map takes back
+  most of what the fuller windows give; ridge is even lower at 32, 0.633 against 0.659).
+- **Developed against as born: +0.029 for the word cells, +0.034 for ridge.** I had said within 0.01. On
+  pictures at their own size our hard rule makes a sixth of the near copies it made on blown-up ones (100
+  pairs against 658) and its filters are worth three points. **One seed.** If seeds 1 and 2 agree
+  (`organic-native2`), the paper's "our Hebbian development did nothing for the learner" was a finding about
+  blown-up pictures, and has to be said so; the hard rule would still be seven points under the published
+  soft rule's gain (0.548 → 0.689 in its pipeline), but not nothing.
+- `sailcu`: SAILnet's filters at unit length give 0.588 on the blown-up benchmark, under our cortex's 0.613;
+  with a hundred cells alike it could hardly do otherwise. Its test on real-sized pictures is the one that
+  counts now, after the three seeds of the control.
