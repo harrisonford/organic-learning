@@ -11,8 +11,11 @@ are named at fixed points of the stream. Learners on the same codes:
 "+relay": the code decorrelated on its way (the cortex's relay). "+store": the word cells with the episodic store.
 Also read, between 5,000 and 5,300 pictures: is a picture seen once named right twenty pictures later (one-shot)?
     SEEDS=0 VARIANT=developed ARMS=cells+relay,cells,cells+relay+store,ncm,ncm+relay,slda,slda+relay,ridge,ridge+relay python experiments/bench_stream.py
+    SET=photos ... the same stream on another set of pictures (2026-11-25; experiments/bench_photos.py): the codes
+               out/bench/{SET}_{VARIANT}_s{seed}_{train,test}.npy, the labels {SET}_{train,test}_labels.npy, the
+               words {SET}_names.json. The default, cifar10, is as it was.
 """
-import collections, os, pickle, sys, time
+import collections, json, os, pickle, sys, time
 import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -21,10 +24,11 @@ VARIANT, CORTEX_SEED = os.environ.get("VARIANT", "developed"), int(os.environ.ge
 ARMS = os.environ.get("ARMS", "cells+relay,cells,cells+relay+store,ncm,ncm+relay,slda,slda+relay,ridge,ridge+relay").split(",")
 N, TESTS = int(os.environ.get("N", 50000)), int(os.environ.get("TESTS", 2000))
 AT = [n for n in (500, 1000, 2000, 5000, 10000, 20000, 50000) if n <= N]
-NAMES = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]
-Xtr = np.load(f"out/bench/cifar10_{VARIANT}_s{CORTEX_SEED}_train.npy", mmap_mode="r")
-Xte = np.load(f"out/bench/cifar10_{VARIANT}_s{CORTEX_SEED}_test.npy", mmap_mode="r")
-ytr, yte = np.load("out/bench/cifar10_train_labels.npy"), np.load("out/bench/cifar10_test_labels.npy")
+SET = os.environ.get("SET", "cifar10")
+NAMES = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"] if SET == "cifar10" else json.load(open(f"out/bench/{SET}_names.json"))
+Xtr = np.load(f"out/bench/{SET}_{VARIANT}_s{CORTEX_SEED}_train.npy", mmap_mode="r")
+Xte = np.load(f"out/bench/{SET}_{VARIANT}_s{CORTEX_SEED}_test.npy", mmap_mode="r")
+ytr, yte = np.load(f"out/bench/{SET}_train_labels.npy"), np.load(f"out/bench/{SET}_test_labels.npy")
 relay = pickle.load(open(f"out/bench/cortex_{VARIANT}_s{CORTEX_SEED}.pkl", "rb")).relay
 D, C = Xtr.shape[1], len(NAMES)
 

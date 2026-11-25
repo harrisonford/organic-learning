@@ -41,6 +41,13 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    measured beside what the field does now: on the CIFAR-10 stream beside the same-shape backprop and the
    streaming baselines, and in a life where a life is the test. The paper's draft goes to Kris by email
    (the address used for drafts 1–5) when it has changed materially; not on every round.
+10. **All kinds of real pictures, not only CIFAR** (Kris, 2026-11-25 20:20: "should use all type of pictures
+   honestly why only cifar those pictures are shit we should have also wiki pics etc"). Vision is measured, and
+   the cortex developed, on real pictures at the eye's size from several sources (COCO, Wikimedia Commons, more
+   when we have them). CIFAR-10 stays as the row that can be compared with the literature, not as the only or
+   the headline evidence. First step: the photo stream (experiments/bench_photos.py; `SET=photos` in
+   bench_stream.py). My reading, to be confirmed by Kris: this settles "which size is the paper's benchmark"
+   for the 64-pixel eye fed real pictures.
 
 ## Keeping the loop alive (2026-11-24)
 The probes and lives are systemd user units with lingering on: they run without any terminal. The loop itself is
@@ -53,6 +60,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-photos1`** (out/tmp/photos_queue.sh; started 20:35; MemoryMax 1800M; gated at 3.3 GB a stage; about
+  three hours): the photo benchmark, seed 0 → out/bench/photos_code_{ph_r,ph_d}_s0.log (near copies, the code's
+  reading), stream_photos_{ph_r,ph_d}_s0.log (50,000 pictures seen once, 4,000 tests, 33 words; word cells,
+  ridge, streaming LDA, with and without the relay). What I said before it ran: VISION.md 20:30. Then: seeds
+  1–2; backprop of the same shape on the same stream (bench_backprop.py needs the same `SET` switch).
 - **`organic-sailn2`** (out/tmp/sailn_queue2.sh; started 19:47; MemoryMax 1400M; gated at 3.3 GB a stage; about
   50 minutes a seed): SAILnet at native size on seeds 1 and 2 → sailn_develop_s{1,2}.log, sailn_code_s{1,2}.log,
   stream_{sailn,sailnu}10k_s{1,2}.log. Beside them: nat_r / nat_d of the same seed.
@@ -1102,4 +1114,16 @@ Still Kris's own:
   Next: sailn seeds 1–2 (about 21:30) → three-seed row; big rows seeds 1–2 (about 21:15) → the paper's section
   with both sizes; if SAILnet holds on three seeds: its own answer (spikes under inhibition) as the layer's
   response, and whether it belongs in the paper beside the hard rule; softbase2; photo log after midnight.
+- 2026-11-25 20:40 **Kris (20:20): use all kinds of pictures, not only CIFAR** → standing rule 10; memory and memoize written.
+  On disk already, real at the eye's size: 95,249 labelled COCO crops (35 words), 3,482 Wikimedia Commons
+  pictures (16 words), 118,287 unlabelled COCO photographs. **Built the photo stream:**
+  `experiments/bench_photos.py` (33 words with at least 1,000 crops; a twentieth of the photographs held out
+  whole: 4,884 tests, 170 of them from Commons; stream 50,000, 1,747 from Commons; the cortex develops on the
+  115,475 unlabelled photographs that are not test photographs); `bench_stream.py` gains `SET` (default
+  cifar10, unchanged; edited atomically while queues use it). The word cells say all 33 words (checked).
+  **Started `organic-photos1`** (seed 0). Also read on the way: SAILnet native seed 1 has 201 different
+  filters, word cells + relay 0.625 as developed (seed 0: 0.633); enlarged rows seed 1: as born 0.651 / 0.661,
+  developed 0.619 / 0.662. Health unchanged; 3.5 GB free with native4, sailn2 and photos1 gated.
+  Next: photos1's code logs (about 21:30) and streams; sailn2 and native4's last seeds → three-seed tables;
+  the paper's section on our development with both sizes, and a place for the photo stream; softbase2.
 

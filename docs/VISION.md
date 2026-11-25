@@ -3082,3 +3082,38 @@ SAILnet's forty or so longest filters are the least clean (mixed colour blobs).
 0.647 (word cells + relay / ridge + relay), developed 0.617 / 0.659; 277 near-copy pairs, 167 different
 filters. On enlarged pictures development moves the word cells by −0.014 and ridge by +0.012: the paper's
 "did nothing", on these 10,000 pictures. Seeds 1–2 running.
+
+### 2026-11-25 20:30, real photographs as the stream (Kris: "should use all type of pictures")
+
+**Kris, 20:20:** "should use all type of pictures honestly why only cifar those pictures are shit we should have
+also wiki pics etc". He is right, and today's measurements say why: CIFAR's pictures are 32 pixels, the eye is
+64, and an enlarged picture has half the detail a real one has in every window. Our development looked useless
+and a published local rule collapsed on that input; both work on pictures at their real size.
+
+**What is on disk, real at 64 pixels:** 95,249 objects cut from COCO photographs, each named with one of 35
+words; 3,482 Wikimedia Commons photographs named with one of 16 words; 118,287 whole COCO photographs with no
+labels. No download was needed.
+
+**The photo stream** (`experiments/bench_photos.py`; decisions, each said):
+- *Classes:* the 33 words with at least 1,000 COCO crops (mouse and sports ball fall out; so does rabbit, which
+  only Commons has, 73 pictures). A word's Commons pictures are added to it.
+- *Held out:* a twentieth of the COCO photographs with every crop cut from them, and a twentieth of the Commons
+  pictures: 4,884 tests (170 from Commons). No photograph gives crops to both sides.
+- *Stream:* 50,000 of the remaining 93,000, drawn once (1,747 from Commons), the size of CIFAR-10's, each seen
+  once in an order set by the seed. Words are as common as they are in the pool (the commonest is 5.1% of the
+  tests, so always saying it would be right 5.1% of the time).
+- *Development:* the cortex develops, and the relay settles, on the unlabelled whole photographs, minus the
+  2,812 held-out ones (115,475). Whole scenes and cut-out objects are not the same statistics; it is what a
+  learner that looks around before it is taught would have.
+- *Readers and references:* the same as on CIFAR (`SET=photos` in bench_stream.py, default unchanged). 4,000 of
+  the tests are read at each point (sampling error about 0.008). Backprop of the same shape on this stream is
+  the next piece (bench_backprop.py needs the same switch); until it has run this is not yet a comparison
+  with the current paradigm, only our learner on better pictures.
+- *Not in it yet:* CIFAR-100's pictures as the lives see them, a per-source reading (Commons alone is 170
+  tests), other sources. Commons is 3.5% of what we have; more Wikimedia pictures would need a slow, polite
+  download and are worth it if the first numbers are.
+
+**Said before it runs (seed 0):** a window of a COCO picture at 64 holds 48 directions, as CIFAR at 32 does, so
+I expect our development to help here as it does there: developed above born by 0.02–0.04 for ridge behind the
+relay and 0.01–0.03 for the word cells. Level: cut-out objects in 33 classes are harder than CIFAR's ten; I
+expect the word cells behind the relay between 0.30 and 0.40 after 50,000, ridge a few points above.
