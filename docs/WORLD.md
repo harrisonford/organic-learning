@@ -133,4 +133,12 @@ failed requests were counted against the day's allowance (459 of 500 used by 09:
   One adult writing and checking its own questions is not agreement between two adults, so that is not done.
 - The one-shot frame scripts (naming, observation, echo frames) still name the withdrawn model; to be changed
   when they are next run.
+- **2026-11-25 10:03: the scan's row and the decision.** `inclusionai/ling-3.2-flash:free`: writing 10 of 10 well-formed and
+  right in the two samples read ("What does a doggy say?" woof / woof woof / bark), 211 seconds (busy
+  upstream); looking: "Apple" for the 64-pixel apple. By the same bar as on 2026-11-04 it passes both jobs, and
+  it is a named provider's model, not a stealth one. **Added as the photo world's second adult**
+  (`experiments/world/annotate.py`; the daemon restarted; today's allowance is spent, so it writes again after
+  midnight). What to watch tomorrow: the share of its questions the other adult judges right, against the
+  withdrawn model's; if it is slow the photo world will make fewer than its 200 requests a day. The scan cost
+  23 requests of the reserve (retries while the models were busy).
 

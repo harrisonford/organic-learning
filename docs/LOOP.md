@@ -953,4 +953,15 @@ Still Kris's own:
   nothing new (seed 1 pages 0.34; seeds 0 and 2 preschool 0.02).
   Next: the scan's row (then the photo daemon's second adult, or the question to Kris); sailc1's reading; bcm3,
   sail2, sailc2 streams; softbase1's backprop rows for seed 0, then seeds 1–2 and the paper's table.
+- 2026-11-25 10:03 Health: the photo alert stands until midnight (allowance spent); 3.2 GB free. **The photo world has its second
+  adult again** (`inclusionai/ling-3.2-flash:free`, passed the scan; WORLD.md); check out/annotate.log after
+  00:05 on 2026-11-26. **Dissection complete on three seeds** (table in VISION.md) **and in the paper** as a
+  paragraph: the losers' unlearning does the work; the layer-wide division is not local and neither local
+  stand-in works. **SAILnet in our cortex's place** after 25,000 batches: holds its target rates, but 92
+  different filters of 256 (5,797 near-copy pairs; I had said fewer than 10); about one filter per input
+  dimension (74). Final reading and streams still to come (sailc1, then sailc2 behind bcm3 and sail2).
+  **softbase1, seed 0:** backprop of the soft shape 0.547 (no relay), 0.597 (fixed relay), frozen developed
+  filters + gradient readout 0.623, against word cells + relay 0.729 and streaming LDA 0.743.
+  Next: bcm3 / sail2 / sailc2 streams (about 11:40 for the last); softbase1 seeds 1–2 (about 16:00), then the
+  paper's table and headline on the soft layer, draft 9 by email; the lives' end at 120,000.
 
