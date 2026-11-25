@@ -2096,3 +2096,27 @@ the relay has decorrelated the summary, because on 2026-11-17 most of what a fir
 decorrelation, the graded response and the number of kinds; and both under our cortex (0.620 word cells, 0.664
 ridge), whose windows are decorrelated before the filters see them. If the developed layer is clearly ahead in
 our measure too, the paper's sentence is rewritten and the rule is tried on our decorrelated windows next.
+
+### 2026-11-25 00:26: the relay circuit at the papers' rate does not come to rest at this size; why, and the check
+**What came back** (relay_local_s0.log; seed 0; the first run, developed on the stream's own pictures without
+names). The circuit after 10,000 pictures, held still: two pictures alike 0.055, directions used 170, pairs of
+cells that go together 0.078; word cells 0.584 at 10,000 pictures and 0.860 for a picture seen once. Its own
+resting point computed at once: 0.038, 316, 0.027; 0.609 and 0.883. The batch relay: 0.035, 350, 0.024; 0.613
+and 0.890. And after only 1,000 pictures (the smoke test) the circuit had 207 directions and 0.060: **it is
+further from its resting point after ten times the pictures.** So the rule's resting point is as good as the
+batch relay, and the rule as I ran it does not get there.
+**Why (worked out, then checked small).** One picture changes the synapses by rate × (y zᵀ − W): along the
+picture's own activity the synapses are multiplied by 1 + rate × |y|². The papers' rate, 0.001, is for
+circuits of tens of cells, where |y|² is tens and the step is a few hundredths. With 4,096 cells |y|² is in
+the hundreds, so one picture moves the synapses along itself by tens of per cent: not a slow rule any more.
+`experiments/relay_small_check.py` (256 made-up cells, variances falling as in the summary): with
+rate × |y|² = 0.08 the circuit comes to its resting point (variance 1.0 along every direction above the floor,
+the input's own under it, by 5,000 pictures); with rate × |y|² = 1 the strongest directions stay at 2.5 to 4
+times the floor and never settle; with 4 they wander.
+**Next** (`organic-relay2`, `experiments/relay_local_spectrum.py`): the same reading at full size, direction by
+direction, at the papers' rate and at a tenth of it, with |y|² printed. If it confirms, the rate is stated as
+what it is, a share by which one picture may move a synapse along itself (rate × |y|², the papers' regime:
+a few hundredths), so that it means the same at any size; then the arms again on three seeds, developed on the
+relay's own unlabelled pictures (seed 0's are coded and match the relay's average to 2e-7).
+**A fault of mine, said:** I took "the papers' rate" as if a rate had no units. The first run's word-cell
+numbers for the circuit (0.584) are a run at the wrong step and are not the circuit's result.

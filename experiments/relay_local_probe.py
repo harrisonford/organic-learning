@@ -57,13 +57,14 @@ class Circuit:
     def _settle(self):
         M = self.W @ self.W.T
         M[np.diag_indices_from(M)] += 1.0
-        self.A = sl.cho_solve(sl.cho_factor(M, lower=True, overwrite_a=True), np.eye(len(M), dtype=np.float32)).astype(np.float32)
+        self.A = sl.cho_factor(M, lower=True, overwrite_a=True)  # kept factored: the settled state of any picture is two triangular solves
 
     def code(self, V):
         """What the principal cells send for each row of V (with the synapses as they are)."""
         if self.A is None:
             self._settle()
-        return ((np.asarray(V, np.float32) - self.mu) / np.sqrt(self.var)) @ self.A
+        X = (np.asarray(V, np.float32) - self.mu) / np.float32(np.sqrt(self.var))
+        return sl.cho_solve(self.A, X.T).T
 
     def learn(self, V):
         """A block of pictures: every cell's running average and scale, then every synapse by its own two cells."""
@@ -149,37 +150,42 @@ def stream(code, learn, Vtr, Vte, order, tests, seed, label):
           + (f" | seen once, 20 later: {np.mean(shots):.3f}" if shots else "") + f" ({time.time() - t0:.0f}s)", flush=True)
 
 
-for seed in SEEDS:
-    relay = pickle.load(open(f"out/bench/cortex_{VARIANT}_s{seed}.pkl", "rb")).relay
-    Vtr = np.asarray(np.load(f"out/bench/cifar10_{VARIANT}_s{seed}_train.npy")[:N], np.float32)
-    Vte = np.asarray(np.load(f"out/bench/cifar10_{VARIANT}_s{seed}_test.npy"), np.float32)
-    order = np.random.default_rng(seed).permutation(len(Vtr))[:N]
-    tests = np.random.default_rng(99).permutation(len(Vte))[:2000]
-    sample = tests[:1500]
-    dev = f"out/bench/cifar100_{VARIANT}_s{seed}_dev.npy"
-    own = os.path.exists(dev)  # the unlabelled pictures the batch relay had; else the stream's own
-    Vdev = np.load(dev, mmap_mode="r") if own else Vtr
-    print(f"seed {seed} development on " + ("the unlabelled pictures the batch relay was settled on" if own else "THE STREAM'S OWN PICTURES (no names)"), flush=True)
-    for arm in ARMS:
-        learn = None
-        if arm == "relay":
-            code = lambda V: (np.asarray(V, np.float32) - relay.mu) @ relay.Z  # noqa: E731
-        elif arm == "settled":
-            code, above = fixed_point(np.asarray(Vdev[:6000] if own else Vdev, np.float32))
-            print(f"seed {seed} settled    directions above the floor {above} of {Vtr.shape[1]}", flush=True)
-        else:
-            t0, c = time.time(), Circuit(Vtr.shape[1], np.random.default_rng(2000 + seed))
-            code = c.code
-            if arm != "plastic":
-                sights = len(Vdev) if arm == "developed20" or not own else 6000
-                first = np.arange(sights) if own else np.random.default_rng(500 + seed).permutation(len(Vdev))
-                for a in range(0, len(first), BLOCK):
-                    c.learn(np.asarray(Vdev[first[a: a + BLOCK]], np.float32))
-                print(f"seed {seed} {arm:10} developed on {len(first)} pictures ({time.time() - t0:.0f}s)", flush=True)
-            if arm in ("plastic", "lifelong"):
-                learn = c.learn
-        if learn is None:
-            read_code(arm, code(Vte[sample]), yte[sample], seed)
-        stream(code, learn, Vtr, Vte, order, tests, seed, arm)
-        if learn is not None:
-            read_code(arm, code(Vte[sample]), yte[sample], seed)
+def main():
+    for seed in SEEDS:
+        relay = pickle.load(open(f"out/bench/cortex_{VARIANT}_s{seed}.pkl", "rb")).relay
+        Vtr = np.asarray(np.load(f"out/bench/cifar10_{VARIANT}_s{seed}_train.npy")[:N], np.float32)
+        Vte = np.asarray(np.load(f"out/bench/cifar10_{VARIANT}_s{seed}_test.npy"), np.float32)
+        order = np.random.default_rng(seed).permutation(len(Vtr))[:N]
+        tests = np.random.default_rng(99).permutation(len(Vte))[:2000]
+        sample = tests[:1500]
+        dev = f"out/bench/cifar100_{VARIANT}_s{seed}_dev.npy"
+        own = os.path.exists(dev)  # the unlabelled pictures the batch relay had; else the stream's own
+        Vdev = np.load(dev, mmap_mode="r") if own else Vtr
+        print(f"seed {seed} development on " + ("the unlabelled pictures the batch relay was settled on" if own else "THE STREAM'S OWN PICTURES (no names)"), flush=True)
+        for arm in ARMS:
+            learn = None
+            if arm == "relay":
+                code = lambda V: (np.asarray(V, np.float32) - relay.mu) @ relay.Z  # noqa: E731
+            elif arm == "settled":
+                code, above = fixed_point(np.asarray(Vdev[:6000] if own else Vdev, np.float32))
+                print(f"seed {seed} settled    directions above the floor {above} of {Vtr.shape[1]}", flush=True)
+            else:
+                t0, c = time.time(), Circuit(Vtr.shape[1], np.random.default_rng(2000 + seed))
+                code = c.code
+                if arm != "plastic":
+                    sights = len(Vdev) if arm == "developed20" or not own else 6000
+                    first = np.arange(sights) if own else np.random.default_rng(500 + seed).permutation(len(Vdev))
+                    for a in range(0, len(first), BLOCK):
+                        c.learn(np.asarray(Vdev[first[a: a + BLOCK]], np.float32))
+                    print(f"seed {seed} {arm:10} developed on {len(first)} pictures ({time.time() - t0:.0f}s)", flush=True)
+                if arm in ("plastic", "lifelong"):
+                    learn = c.learn
+            if learn is None:
+                read_code(arm, code(Vte[sample]), yte[sample], seed)
+            stream(code, learn, Vtr, Vte, order, tests, seed, arm)
+            if learn is not None:
+                read_code(arm, code(Vte[sample]), yte[sample], seed)
+
+
+if __name__ == "__main__":
+    main()

@@ -55,15 +55,16 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-rpe1`** (out/tmp/rpe_queue.sh; waits for expand2): queue E 29d in the small learner, three seeds: arm
-  `all+rpe` → out/tmp/rpe_s{0,1,2}.log, then its fixed-gain control `all+gain` → out/tmp/rpe_gain_s{0,1,2}.log
-  (the gain used: out/tmp/rpe_gain.log); about an hour a run. Baseline: the "all" arms in out/tmp/gaze1.log,
-  gaze4.log, gaze4_s2all.log.
-- **`organic-trace2`** (out/bench/trace2_queue.sh): the drift probe, seed 1 read, seed 2 developing →
-  out/bench/trace_probe_s2.log, stream_{l2plain,l2trace}10k_s2.log.
-- **`organic-relay1`** (out/tmp/relay_local_queue.sh; waits for trace2): queue E 26/28, the relay by a local rule
-  (`experiments/relay_local_probe.py`): a smoke test → out/bench/relay_local_smoke.log, then seed 0 →
-  out/bench/relay_local_s0.log (about 1.2 hours). Seeds 1 and 2 only after seed 0 is read.
+- **`organic-relay1`** (out/tmp/relay_local_queue.sh): queue E 26/28, the first run of the relay circuit on seed 0
+  (out/bench/relay_local_s0.log), at the papers' rate, which is too large at this size (VISION.md 2026-11-25):
+  only its `relay` and `settled` arms are results.
+- **`organic-relay2`** (out/tmp/relay_spectrum_queue.sh; waits for relay1): where the circuit sits direction by
+  direction, at rate 1e-3 and 1e-4 → out/bench/relay_spectrum_r{1e-3,1e-4}_s0.log (`experiments/relay_local_spectrum.py`).
+- **`organic-devcodes1`**: the unlabelled pictures the batch relay was settled on (and 14,000 more) as codes,
+  seeds 0–2 → out/bench/cifar100_norm0_s{seed}_dev.npy, out/bench/dev_codes.log.
+- **`organic-sh1`** (out/tmp/softhebb_queue.sh; waits for devcodes1): queue E 27, the published soft
+  winner-take-all rule unchanged (`experiments/softhebb_probe.py`), seed 0 → out/bench/softhebb_probe_s0.log, then
+  the stream on its codes → out/bench/stream_{sh,shr,sh96,shr96}10k_s0.log.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
   preschool, one at a time and only with 5.7 GB available (so it waits behind the reward lives): `tagn_s*`
@@ -769,3 +770,20 @@ Still Kris's own:
   developed arm does not use the stream's own); rpe1 seeds; trace2 seed 2 into the paper's drift row; reward
   lives at 75,000; tag1 waits for memory.
 
+- 2026-11-25 00:26 All healthy, 2.7–3.5 GB free. **Read:** the drift stage on three seeds (the trace gives back half of the
+  tolerance a second stage loses, 0.805 → 0.829 of 0.848, and changes nothing on the stream; the paper's row and
+  paragraph are filled, its pending mark gone); the reward's error on three seeds with its control (grades as
+  the baseline; **adopted for lives born from now on**, `RPE=normalised` in the launch line; the eye stops
+  moving on "is there" pages with either larger step, to be watched with the serial gaze); the reward lives at
+  75,000 (all three in pages, no difference from the plateau lives; JUDGING.md). **The relay circuit, first
+  run:** its resting point is as good as the batch relay (0.609 against 0.613, with no constant of mine) but at
+  the papers' rate the circuit does not reach it at this size (0.584, and further from rest after 10,000
+  pictures than after 1,000); worked out why (one picture's step is rate × |y|², tens of per cent with 4,096
+  cells) and checked on a small made-up input; the full-size reading is queued (`organic-relay2`). The
+  development pictures are being coded so no arm uses the stream's own. **Queue E 27: organic check, probe
+  written, smoke-tested and queued** (`organic-sh1`): the published SoftHebb layer exactly as in the authors'
+  code, developed against as born, in our measure and, as the control that it is their rule, in theirs in
+  small.
+  Next: read relay2 (then fix the rate's meaning, run the arms on three seeds on the relay's own pictures);
+  read sh1 seed 0 (then seeds 1–2, or the paper's sentence); reward lives at 85,000; tag1 waits for memory;
+  email draft 8 when the relay or the soft rule changes what the paper says.
