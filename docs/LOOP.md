@@ -58,6 +58,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
+- **`organic-native1`** (out/tmp/native_queue.sh; started 12:45; MemoryMax 1800M; about 50 minutes): the benchmark's
+  cortex on CIFAR at its own 32 × 32, filters as born and developed by our hard rule, seed 0 →
+  out/bench/native_code_s0.log, stream_{nat_r,nat_d}10k_s0.log.
 - **`organic-sailc1`** (started 09:19; MemoryMax 900M; about 45 minutes): SAILnet in our cortex's place, seed 0 →
   out/bench/sailc_develop_s0.log, sailc_weights_s0.npz. **`organic-sailc2`** (out/tmp/sailc_queue.sh; MemoryMax
   1500M; waits for sailc1 and sail2): codes and streams → sailc_code_s0.log, stream_{sailc,sailcu}10k_s0.log.
@@ -984,4 +987,17 @@ Still Kris's own:
   cells + relay 0.734, ridge + relay 0.751, streaming LDA + relay 0.753, backprop (random, no relay) 0.572.
   Next: sailc streams; tagn_s1's first checkpoint (the smoke test of continuing from a level); the kind lives
   read together into JUDGING.md when s0 and s2 end; softbase1 → paper.
+- 2026-11-25 12:16 Health: photo alert (until midnight); kind_s1 and kind_s2 ended as planned at 120,000 (the "without a verdict"
+  alerts are that), kind_s0 at 115,000; 6.0 GB free; `tagn_s1` runs (no checkpoint yet). **SAILnet in our
+  cortex's place, stream: 0.484** (our cortex 0.613; I had said 0.63–0.67). Its filters: 107 cells one long
+  filter, 75 alone, and **the short ones are oriented edges and gratings** (docs/img/sailc_filters_s0.png).
+  **A fault found in the benchmark's input** (`experiments/upsample_probe.py`): CIFAR is shown blown up from 32
+  to 64, and a 5 × 5 window of a blown-up picture holds 22 directions above the decorrelation's floor where a
+  window of a real picture holds 47–48 (COCO at 64, CIFAR at 32). It bears on the paper's "developed filters do
+  no better than random" and on the comparison of our cortex with the soft layer. **The control runs:**
+  `organic-native1` (the same cortex and code on CIFAR at 32; expectation in VISION.md: as born 0.64–0.68,
+  developed within 0.01 of it). softbase1 seed 1: backprop 0.572 / 0.611 (relay) / frozen no-relay 0.602.
+  Next: native1's two streams; if as-born moves as stated, three seeds and the paper's benchmark has to be
+  thought again (which input is the learner's); sailcu's stream; kind_s0's end and the three reward lives read
+  together into JUDGING.md; the ramp lives' start (memory); softbase1.
 

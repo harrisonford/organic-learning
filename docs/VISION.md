@@ -2829,3 +2829,42 @@ Word cells + relay / ridge + relay at 10,000 pictures (`stream_{bcm,bcm_2500000,
 without interaction (copies), SAILnet on raw windows (one filter), and SAILnet on our cortex's windows (98
 filters; stream pending). The only rule that has made filters worth having is still the one with a non-local
 step.
+
+### 2026-11-25 12:15: SAILnet in our cortex's place, in the stream; what its filters show; and a fault in our benchmark's input
+**The stream** (`stream_sailc10k_s0.log`; seed 0, 10,000 pictures): Q as developed, word cells + relay **0.484**,
+ridge + relay 0.571, against our cortex's 0.613 and 0.659 on the same seed. I had said 0.63 to 0.67: wrong, by
+fifteen points. (The same Q at unit length, `sailcu`, is in the stream now.)
+**What the filters are** (`docs/img/sailc_filters_s0.png`, sorted by length; lengths 0.99 to 6.69):
+- 107 of the 256 cells are one filter, and they are the long ones. Further groups of 14, 13, 6 and 5; 75 cells
+  are alone. All the filters together span 3 directions by the participation measure (as born: 58).
+- **The short filters are oriented edges, bars and gratings, grey and colour-opponent**: what the paper shows
+  and what V1's simple cells look like. So the rule does on our input what it is published to do, for about a
+  third of the cells.
+- The long filter answers above 0.5 to 16% of the benchmark's windows and to 3.7% of the windows of COCO
+  photographs at the same size. That sent me to look at the windows themselves.
+
+**The fault: the benchmark's pictures are blown up, and a 5 × 5 window of a blown-up picture is nearly empty.**
+The benchmark shows CIFAR's 32 × 32 pictures to the cortex at 64 × 64 (bilinear), as the lives' world shows
+CIFAR, because the learner's eye is 64 × 64. Measured this noon (`experiments/upsample_probe.py`; 600 pictures
+each, windows as the cortex's development takes them, mean removed, unit length):
+| pictures | directions holding 99% of the windows' variance | directions above the decorrelation's floor (a thousandth of the largest) | participation after the cortex's decorrelation |
+|---|---|---|---|
+| CIFAR blown up to 64 (the benchmark; CIFAR in the lives) | 14 | 22 of 75 | 19 |
+| CIFAR at its own 32 | 33 | 47 of 75 | 33 |
+| COCO photographs brought down to 64 (most of the lives' pictures) | 34 | 48 of 75 | 35 |
+A 5 × 5 window at 64 sees two and a half of CIFAR's own pixels across; blown up, it holds less than half of
+what a window of a real picture holds. **Every filter rule we tried on the benchmark in our cortex's place,
+our hard rule included, had 22 directions to tell 256 filters apart with.** That does not excuse the hard rule
+(its near copies are its own) and it does not touch the lives' COCO pictures, but it bears on three things
+the paper says: (1) "developed filters do no better than random" on our cortex was measured on windows with
+little in them; (2) our cortex's 0.620 against the soft layer's 0.689 compares a cortex looking at blown-up
+pictures with a layer looking at the pictures themselves; (3) SAILnet's collapse onto one filter here may be
+the input's and not the rule's.
+**The control, with nothing new in it** (`experiments/cortex_native_probe.py`): the benchmark's own cortex,
+code and stream, the pictures at their own 32 × 32 (decorrelation settled on them, the relay too); filters as
+born (`nat_r`) and developed by our hard rule (`nat_d`); seed 0, then three seeds if it moves.
+**Stated before it is run:** as born, word cells + relay at 10,000 pictures **over 0.613, my guess 0.64 to
+0.68** (twice the directions in a window; but a coarser map, 14 × 14 after pooling where the blown-up picture
+gives 30 × 30, which may cost some of it back). Developed against as born: **within 0.01 either way**, since
+the hard rule's failure is its near copies. If the developed filters now do better than random, the paper's
+sentence about our development was about the blown-up input and has to say so.
