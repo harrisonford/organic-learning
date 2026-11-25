@@ -55,15 +55,16 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-sh6`** (out/tmp/softhebb_dissect2_queue.sh; started 05:10, about 45 minutes): the dissection's second
-  step, seed 0 → out/bench/softhebb_dissect2_s0.log, then stream_{sho,she}10k_s0.log.
+- **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
+  dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
+  stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
 - **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; started 04:45; MemoryMax 1800M; about
   eight hours): the references for the soft layer. In order: the whole stream coded (soft_codes.log; variants
   `shfull`, `shrfull`); the way back through the relay checked (backprop_soft_check.log: READ IT FIRST, the two
   columns must agree); backprop of the layer's shape tuned on seed 0 (backprop_soft_tune_s0.log); per seed the
   whole stream on the developed code (stream_shfull_s{0,1,2}.log: word cells, ridge, streaming LDA, with and
   without relay) and backprop at its best settings (backprop_soft_full.log); then stream_shrfull_s{0,1,2}.log.
-- Finished and read tonight: sh5 (the dissection, seed 0), mkcircuit1 (the circuit for a life), relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
+- Finished and read tonight: sh6 (own / early, seed 0), sh5 (the dissection, seed 0), mkcircuit1 (the circuit for a life), relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
   direction-by-direction reading), devcodes1, rpe1, trace2.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
@@ -868,3 +869,15 @@ Still Kris's own:
   sign on the cell's own activity against its own sliding threshold. **Owed after sh6: that form as a third arm,
   taken from the 1982 paper itself (open it first).** Artola et al. 1990 not opened: unverified, cited nowhere
   for readers.
+- 2026-11-25 06:03 All healthy, 3.7 GB free. **The dissection's second step (seed 0):** own (each kind divides by its own
+  largest change) destroys the layer (0.222; weights 90,000 long); early (the factor held at 1e-5) hardly
+  develops (0.561 against 0.549 as born). The published layer needs a step shared by the layer that follows the
+  changes' size: not local, and no stand-in of mine will be designed. **`organic-sh7`**
+  (out/tmp/softhebb_dissect3_queue.sh; MemoryMax 1500M; about 3.5 hours): all five arms on seeds 1 and 2 →
+  softhebb_dissect_s{1,2}.log, stream_{shh,shp,shc,she,sho}10k_s{1,2}.log. **Read tonight:** Blais et al. 1998
+  (the quadratic BCM rule: its own stability, one cell). **The candidate for a fully local rule: BCM cells with
+  lateral inhibition in the soft layer's pipeline; first read the network form (Intrator & Cooper 1992,
+  Castellani et al. 1999) and take its constants from there.** softbase1: all three seeds' whole streams coded
+  (equal to the kept codes); backprop of the soft shape without relay tuned (best 0.477 at 10,000: power 1,
+  rate 0.001, batch 8); relay arms running; way back through the relay exact at power 1. Next: find and read
+  the BCM network form; softbase1's relay tuning and seed 0's whole stream; sh7.

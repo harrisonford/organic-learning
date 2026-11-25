@@ -2469,3 +2469,53 @@ when a new one starts, as in the plateau lives.
   against its own running threshold** (the form in Bienenstock et al., to be taken from the paper itself, not
   designed here). If it develops the layer as the published rule does, every part of the rule is something a
   cell could do.
+
+### 2026-11-25 06:03: the layer-wide division cannot simply be made a cell's own; what the BCM papers give
+**The dissection's second step, seed 0** (softhebb_dissect2_s0.log, stream_{sho,she}10k_s0.log; all rows seed 0).
+
+| | weight lengths (least / mean / most) | near-copy pairs | directions, summary / relay | word cells + relay | ridge + relay |
+|---|---|---|---|---|---|
+| published (division by the largest change in the layer) | 1.00 / 6.76 / 12.19 | 2 | 27 / 577 | **0.689** | 0.700 |
+| the layer as born | 25 | – | 8 / 236 | 0.549 | 0.603 |
+| own: each kind divides by its own largest change | 1.00 / 21,520 / 90,157 | 31,376 | 6 / 29 | 0.222 | 0.352 |
+| early: the factor held at 1.06e-5 | 2.09 / 8.65 / 15.37 | 0 | 9 / 296 | 0.561 | 0.605 |
+| the factor held at its median (0.00086) | ran away | | | | |
+
+Against what I stated: own "within 0.03 of 0.689, but I do not know": wrong, it destroys the layer. early
+"stable and too slow, 0.60–0.65": stable and slower than that (0.561, hardly above the layer as born).
+- **Why own fails** (my reading, not tested further): at a place most kinds are losers with a share near zero,
+  so their changes are tiny. Dividing each kind's changes by its own largest makes every kind move at full
+  rate whatever it had to learn; the difference in size between the winner's change and the losers' is the
+  rule's information, and a division made cell by cell erases it.
+- **So the published layer is not local as it stands, and the two obvious local stand-ins do not work.** The
+  step has to follow the size of the changes (which falls a hundredfold as the weights shorten from 25 towards
+  1) and has to be the same for all kinds. This is not in the paper's text as far as it was read; it is in the
+  code. If the dissection holds on seeds 1 and 2 (`organic-sh7`, all five arms, about 3.5 hours) the paper
+  should say so in one sentence.
+- **No third stand-in of mine.** A step shared by the layer that follows the changes' size could be imagined
+  (a broadcast signal), and I could design one; that would be hand-design. The question goes to biology instead.
+**What the BCM papers give** (read in the paper: Blais, Intrator, Shouval & Cooper 1998, *Neural Computation* 10,
+1797–1813; the 1982 and 1994 papers could not be opened tonight, the server asks for a browser check).
+- Their words for the family: modification functions "characterized by a negative region for small
+  postsynaptic depolarization, a positive region for large postsynaptic depolarization, and a threshold that
+  moves and switches between the Hebbian and anti-Hebbian regions."
+- The quadratic form (from Intrator & Cooper 1992, as given in their equations 3.11–3.12): with c the cell's
+  rectified activity, the change of a synapse is c (c − θ) σ′ times its input, θ = E[c²], the averages kept as
+  running averages with a time constant. "Unlike the measures [kurtosis, skewness], the QBCM rule does not
+  require any additional stabilization."
+- They study one cell on purpose ("we eliminate possible network-lateral interaction effects"); many cells need
+  lateral inhibition, which that paper does not give. The network form is in Intrator & Cooper 1992 (not opened).
+- **What this means for us.** The rule that biology has for "active losers weaken" carries its own stability
+  (the sliding threshold) and needs neither weights born long, nor a rate tied to their length, nor a
+  division by anything shared. That is the candidate: cells with the quadratic BCM rule and lateral
+  inhibition, in the soft layer's pipeline (same way in, same response and averages out), so that only the
+  rule differs. **Not built tonight:** the network form with inhibition has to be read first (Intrator &
+  Cooper 1992; Castellani et al. 1999), and its constants (the threshold's time constant, the inhibition's
+  strength, the rate) taken from there. Building from the one-cell paper plus my own inhibition would be a
+  design of mine.
+**Backprop of the soft layer's shape, first numbers** (backprop_soft_tune_s0.log; seed 0, first 10,000 pictures of
+the whole stream, 1,000 test pictures; not yet like for like with the table above, which has batch 1 and 2,000):
+without the relay the best of 12 settings is 0.477 (the usual rectifier, rate 0.001, 8 pictures a step); the
+layer's own power 0.7 gives at most 0.446. The way back through the relay is exact at power 1 (six decimals;
+run tonight as `organic-bpcheck2`) and within 3% at power 0.7 but for one tiny weight (the guard at zero). The
+relay arms and the whole stream are running.

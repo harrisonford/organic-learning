@@ -107,3 +107,7 @@ et al. 2019), not by biology; the per-neuron rate is theirs ("stabilizes to zero
 converge to a sphere of radius 1"). ✓ Bienenstock, Cooper & Munro 1982, *J. Neurosci.* 2(1):32–48, doi
 10.1523/JNEUROSCI.02-01-00032.1982 (statement read on the encyclopedia page only). ✗ Artola, Bröcher & Singer
 1990 (not opened: the record's page did not load).
+✓ Blais, Intrator, Shouval & Cooper 1998, *Neural Computation* 10, 1797–1813 (read in the paper's PDF): the
+quadratic BCM rule c(c − θ)σ′d with θ = E[c²], stable without normalisation; one cell only. Not opened (server
+asks for a browser check): Bienenstock, Cooper & Munro 1982; Law & Cooper 1994 (*PNAS* 91, 7797–7801). To find:
+Intrator & Cooper 1992 (the network form with lateral inhibition).
