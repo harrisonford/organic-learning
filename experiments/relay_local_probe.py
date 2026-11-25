@@ -39,7 +39,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 VARIANT = os.environ.get("VARIANT", "norm0")
 ARMS = os.environ.get("ARMS", "relay,settled,developed,developed20,plastic,lifelong").split(",")
-RATE, BLOCK = float(os.environ.get("RATE", 1e-3)), int(os.environ.get("BLOCK", 50))  # the rate: the papers' (1e-3 a picture)
+# The rate. One picture multiplies the synapses along its own activity by 1 + rate x |y|^2. The papers' 1e-3 is for
+# tens of cells (a step of a few hundredths); with 4,096 cells |y|^2 is 300 to 380, and at 1e-3 the circuit does not
+# come to rest (experiments/relay_local_spectrum.py, relay_small_check.py; docs/VISION.md 2026-11-25). 1e-4 keeps
+# the step at 0.03, the papers' regime: the rule is theirs, the rate is in the units of this size.
+RATE, BLOCK = float(os.environ.get("RATE", 1e-4)), int(os.environ.get("BLOCK", 50))
 N = int(os.environ.get("N", 10000))
 AT = [n for n in (500, 1000, 2000, 5000, 10000) if n <= N]
 NAMES = ["airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck"]

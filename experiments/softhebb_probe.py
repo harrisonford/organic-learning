@@ -162,7 +162,7 @@ if __name__ == "__main__":
                     np.save(f"out/bench/cifar10_{name}_s{seed}_{part}.npy", S.astype(np.float16))
                 through = (S - relay.mu) @ relay.Z
                 print(f"seed {seed} " + read_code(f"{name:6} summary", S[:1500], yte[:1500]) + " | " + read_code("through the relay", through[:1500], yte[:1500]), flush=True)
-                pickle.dump(types.SimpleNamespace(relay=relay, W=weights, standard=standard), open(f"out/bench/cortex_{name}_s{seed}.pkl", "wb"))
+                pickle.dump(types.SimpleNamespace(relay=relay, W=weights, standard=(standard.mean, standard.var)), open(f"out/bench/cortex_{name}_s{seed}.pkl", "wb"))
                 del relay, through, S
             if REPLICATE and kinds == 96:
                 for name, weights in (("developed", W), ("as born", born)):

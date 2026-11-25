@@ -2120,3 +2120,56 @@ a few hundredths), so that it means the same at any size; then the arms again on
 relay's own unlabelled pictures (seed 0's are coded and match the relay's average to 2e-7).
 **A fault of mine, said:** I took "the papers' rate" as if a rate had no units. The first run's word-cell
 numbers for the circuit (0.584) are a run at the wrong step and are not the circuit's result.
+
+### 2026-11-25 01:14: the relay circuit read direction by direction; the soft rule in its authors' measure
+**The relay circuit at full size** (relay_spectrum_r1e-3_s0.log, relay_spectrum_r1e-4_s0.log; seed 0; the batch
+relay's own unlabelled pictures, read on 1,000 test pictures along the eigen-directions of the input). The
+input's variance, in the circuit's units, along directions 1 / 3 / 10 / 30 / 100 / 183 / 300 / 1,000 / 3,000:
+1,020 / 367 / 69 / 21 / 3.4 / 1.05 / 0.31 / 0.016 / 0.0003. The resting point brings the first six to 1 and
+leaves the last three.
+
+| the output's variance there | 1 | 3 | 10 | 30 | 100 | 183 | 300 | 1,000 | 3,000 | \|y\|² |
+|---|---|---|---|---|---|---|---|---|---|---|
+| resting point | 1 | 1 | 1 | 1 | 1 | 1 | 0.31 | 0.016 | 0.0003 | |
+| rate 0.001, after 2,000 pictures | 1.15 | 1.05 | 1.32 | 1.12 | 1.18 | 0.90 | 0.35 | 0.023 | 0.0015 | 356 |
+| rate 0.001, after 20,000 | 1.36 | 1.22 | 1.40 | 1.13 | 1.18 | 1.05 | 0.42 | 0.026 | 0.0015 | 383 |
+| rate 0.0001, after 2,000 | 1.81 | 1.72 | 2.33 | 2.26 | 1.29 | 0.48 | 0.15 | 0.018 | 0.0084 | 358 |
+| rate 0.0001, after 6,000 | 1.12 | 0.95 | 1.24 | 1.20 | 1.08 | 0.55 | 0.18 | 0.015 | 0.0035 | 279 |
+| rate 0.0001, after 20,000 | 1.06 | 0.90 | 1.13 | 0.99 | 0.98 | 0.74 | 0.26 | 0.019 | 0.0014 | 306 |
+
+As worked out: at the papers' rate one picture's step is 0.38 (rate × |y|²) and the circuit stops moving after
+2,000 pictures with the strong directions 10–40% above the floor, wandering, and the weakest raised five times
+by what leaks into them. At a tenth of the rate the step is 0.03 and the circuit goes on approaching its
+resting point for all 20,000 pictures: the strong directions within 13% of the floor, the ones near the floor
+still held down by synapses the circuit was born with (they fade at the rule's own slow pace), the weakest
+still falling. **The rule comes to rest when its step is in the papers' regime; it is slow near the floor.**
+**Decided.** The rule stays the papers', unchanged; the rate is 0.0001, said for what it is (a step of 0.03 a
+picture at this size). I did not add a mechanism that scales the rate by the population's activity: that
+would be mine. The arms run again on three seeds at this rate, developed on the batch relay's own unlabelled
+pictures (`organic-relay3` → relay_local_r1e-4_s{0,1,2}.log): the batch relay, the resting point, developed on
+the relay's 6,000 pictures, on 20,000, learning from nothing along the stream, and developed on 6,000 then
+learning on. **Stated before:** developed on 20,000 within 0.01 of the resting point; on 6,000 a little under;
+from nothing along the stream clearly under at the start (the first thousand pictures are coded by a circuit
+far from rest) and under at the end; developed-then-learning-on between the two developed arms.
+The first run's last arm, for the record (rate 0.001, learning from nothing along the stream): 0.587 at 10,000
+pictures, 181 directions; a run at the wrong step, as its developed arm.
+
+**The published soft rule, seed 0, on the code and in its authors' measure** (softhebb_probe_s0.log; 50,000
+unlabelled pictures seen once).
+
+| | 256 kinds, developed | 256, as born | 96, developed | 96, as born |
+|---|---|---|---|---|
+| two pictures' summaries alike | 0.150 | 0.293 | 0.216 | 0.298 |
+| directions the summary uses | 27 | 8 | 14 | 8 |
+| the same through the relay | 0.025, 577 | 0.045, 236 | 0.035, 361 | 0.048, 213 |
+| a ridge on the whole map, 5,000 labelled pictures | | | **0.616** | **0.515** |
+
+**The control passes: it is their rule.** In their measure in small the developed layer is ten points above the
+layer as born (they report seven with ten times the labels and a trained classifier). My statement before the
+run ("a few points, less than their seven") was too low. And the code itself is different in kind from
+anything our hard rule gave: the summaries of two pictures are half as alike and use three times the
+directions before any relay, and after the relay more than twice the directions. Noted against the paper's
+words: after 50,000 pictures the kinds' weight lengths are at 1.0 for the first and 6.8 on average (4.3 with
+96 kinds), not all at 1; and in the last batch one kind is the strongest at a third of all places.
+The reading in our measure (the stream; word cells and ridge) is running (`organic-sh2`; the first queue
+stopped there on a fault of mine in how the file was written).

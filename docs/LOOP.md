@@ -55,16 +55,15 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-relay1`** (out/tmp/relay_local_queue.sh): queue E 26/28, the first run of the relay circuit on seed 0
-  (out/bench/relay_local_s0.log), at the papers' rate, which is too large at this size (VISION.md 2026-11-25):
-  only its `relay` and `settled` arms are results.
-- **`organic-relay2`** (out/tmp/relay_spectrum_queue.sh; waits for relay1): where the circuit sits direction by
-  direction, at rate 1e-3 and 1e-4 → out/bench/relay_spectrum_r{1e-3,1e-4}_s0.log (`experiments/relay_local_spectrum.py`).
-- **`organic-devcodes1`**: the unlabelled pictures the batch relay was settled on (and 14,000 more) as codes,
-  seeds 0–2 → out/bench/cifar100_norm0_s{seed}_dev.npy, out/bench/dev_codes.log.
-- **`organic-sh1`** (out/tmp/softhebb_queue.sh; waits for devcodes1): queue E 27, the published soft
-  winner-take-all rule unchanged (`experiments/softhebb_probe.py`), seed 0 → out/bench/softhebb_probe_s0.log, then
-  the stream on its codes → out/bench/stream_{sh,shr,sh96,shr96}10k_s0.log.
+- **`organic-sh2`** (out/tmp/softhebb_stream_queue.sh): queue E 27, the stream on the soft rule's codes, seed 0 →
+  out/bench/stream_{sh,shr,sh96,shr96}10k_s0.log (the probe itself is read: out/bench/softhebb_probe_s0.log).
+- **`organic-relay3`** (out/tmp/relay3_queue.sh; waits for sh2): queue E 26/28, the relay circuit's six arms at
+  rate 1e-4 on the batch relay's own unlabelled pictures, seeds 0–2 → out/bench/relay_local_r1e-4_s{0,1,2}.log
+  (about 50 minutes a seed).
+- **`organic-sh3`** (out/tmp/softhebb_seeds_queue.sh; waits for relay3): the soft rule on seeds 1 and 2 →
+  out/bench/softhebb_probe_s{1,2}.log, stream_{sh,shr,sh96,shr96}10k_s{1,2}.log.
+- Finished and read tonight: relay1 (first run, wrong step), relay2 (the direction-by-direction reading),
+  devcodes1 (out/bench/cifar100_norm0_s{0,1,2}_dev.npy), rpe1, trace2.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
   preschool, one at a time and only with 5.7 GB available (so it waits behind the reward lives): `tagn_s*`
