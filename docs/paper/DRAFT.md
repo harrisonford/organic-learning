@@ -334,7 +334,8 @@ or 0.604 ± 0.005 when it is given the relay, and the streaming discriminant has
 | nothing | | 0.620 ± 0.010 | 0.664 ± 0.007 |
 | divisive normalisation | filters answering at a place: sparseness 0.71 → 0.83; the response now grows with contrast and saturates | 0.630 ± 0.006 | 0.650 ± 0.004 |
 | a blurred start | filters a little coarser (0.28 against 0.30 cycles per pixel) and more coloured | 0.620 ± 0.005 | 0.659 ± 0.005 |
-| a second stage that learns from the eye's drift (one seed) | the same picture two pixels aside looks more alike: 0.80 → 0.83 | 0.631 | 0.640 |
+| a second stage of filters | the same picture two pixels aside looks less alike: 0.85 → 0.80 | 0.638 ± 0.012 | 0.645 ± 0.010 |
+| the same stage, learning from the eye's drift | about half of that tolerance comes back: 0.83 | 0.634 ± 0.010 | 0.644 ± 0.007 |
 | a wide sparse layer after the relay (ten times the cells, seven inputs each) | two different pictures look less than half as alike; a picture seen once is remembered better | 0.578 ± 0.009 | 0.606 ± 0.006 |
 | the same layer, a hundred inputs each | two different pictures a quarter as alike | 0.609 ± 0.005 | 0.616 ± 0.003 |
 
@@ -363,10 +364,15 @@ is the eye's own and costs nothing, so it stays for a deeper cortex, with no gai
 over the retina by a few receptors, so a cortex gets, for nothing, several slightly shifted views of the same
 thing, and a rule that asks a cell to answer the next view as it answered the last one (Földiák 1991; Halvagal
 & Zenke 2023) should make it tolerant of the shift. We added a second stage of filters above the first, let it
-develop only after the first had settled, and gave it four drifting views of each fixation. On the one seed read so far, tolerance to
-a two-pixel shift rises from 0.80 to 0.83 with the rule, and the stage helps the word cells (0.613 for the first
-stage alone on that seed, 0.631 with it). But the same stage without the rule helps them more (0.646). A code
-that tells neighbouring views apart less also tells pictures apart less. **[pending: seeds 1 and 2.]**
+develop only after the first had settled, and gave it four drifting views of each fixation. The rule does
+what it says, on every seed: the first stage answers a picture and the same picture two pixels aside 0.85
+alike, a second stage developed without the rule only 0.80, and one developed with it 0.83. The rule gives back
+about half of the tolerance that stacking a stage costs, and no more than the first stage had to begin with.
+On the stream it changes nothing. The second stage itself helps the word cells a little on every seed (0.638
+and 0.634 against 0.620 for one stage) and costs the ridge two points, and the two second stages cannot be told
+apart (on the first seed the plain one looked better by a point and a half; the next two seeds took that
+back). A two-pixel shift is simply not what makes one picture of a ship hard to recognise from another. The
+rule stays, for the ground it stands on and for the day the eye moves over larger things.
 
 *A wide sparse layer.* The fly's mushroom body, the cerebellum's granule layer and the dentate gyrus all put
 the same thing in front of cells that learn associations: many more cells than inputs, each wired to a few

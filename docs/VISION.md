@@ -1987,3 +1987,72 @@ associations were made in a code that has since moved.
 larger step (normalised, or the fixed gain) the eye moves on "is there" pages fall to 0.00 at the end, where
 the baselines have 0.07–0.08.
 
+
+### 2026-11-25 00:10: the drift stage on three seeds; the reward's error on three seeds; the reward lives at 75,000
+**The drift stage, three seeds** (trace_probe.log, trace_probe_s{1,2}.log, stream_l2{plain,trace}10k_s{0,1,2}.log;
+10,000 pictures; seeds 0 / 1 / 2, mean ± sd):
+
+| | one stage (norm0) | a second stage, plain | a second stage, with the trace |
+|---|---|---|---|
+| a picture and itself two pixels aside, alike | 0.847 / 0.849 / 0.849 (0.848) | 0.799 / 0.811 / 0.804 (0.805) | 0.826 / 0.837 / 0.825 (0.829) |
+| word cells + relay | 0.613 / 0.616 / 0.631 (0.620 ± 0.010) | 0.646 / 0.624 / 0.644 (0.638 ± 0.012) | 0.631 / 0.626 / 0.646 (0.634 ± 0.010) |
+| word cells, no relay | 0.502 / 0.522 / 0.524 | 0.513 / 0.519 / 0.551 | 0.509 / 0.523 / 0.554 |
+| ridge + relay | 0.659 / 0.662 / 0.672 (0.664 ± 0.007) | 0.655 / 0.635 / 0.645 (0.645 ± 0.010) | 0.640 / 0.639 / 0.652 (0.644 ± 0.007) |
+| ridge, no relay | 0.646 / 0.644 / 0.655 | 0.638 / 0.620 / 0.643 | 0.630 / 0.626 / 0.638 |
+| a picture seen once, asked 20 later (cells + relay) | 0.890 / 0.860 / 0.797 | 0.887 / 0.860 / 0.850 | 0.890 / 0.873 / 0.830 |
+
+What holds on every seed: (1) a second stage developed plainly is less tolerant of a two-pixel shift than the
+first stage was (0.805 against 0.848), and the trace gives back about half of that (0.829), never more than the
+first stage had; (2) the trace changes nothing on the stream (word cells 0.634 against 0.638, ridge 0.644
+against 0.645); seed 0's point and a half for the plain stage was one seed's noise; (3) a second stage of
+either kind gives the word cells one to three points on every seed (+0.033 / +0.008 / +0.013 plain,
++0.018 / +0.010 / +0.015 trace: under the 0.02 we read as a difference, but of one sign six times in six) and
+costs the ridge about two (−0.004 / −0.027 / −0.027 and −0.019 / −0.023 / −0.020).
+**Decision.** The trace rule is kept as the rule of any second stage: its ground is the eye's own drift and a
+well-established learning rule, it does to the code what it should, and it costs nothing on the stream. No
+gain is claimed for it. The second stage itself is not put into the lives' cortex on this evidence: what it
+gives the word cells is small and what it costs a second-order reader is as large; it waits for 29c (critical
+periods in sequence) and for a test where views differ by more than two pixels (the serial gaze's successive
+looks), which is where tolerance should matter. The paper's row and paragraph are filled with the three seeds.
+
+**The reward's error against its usual size, three seeds, with the control** (rpe_s{0,1,2}.log,
+rpe_gain_s{0,1,2}.log; baselines: the "all" arms of gaze1.log, gaze4.log, gaze4_s2all.log; 6,000 moments; seeds
+0 / 1 / 2):
+
+| at 6,000 moments | baseline | error against its usual size | raw error, step larger by the same factor |
+|---|---|---|---|
+| first words | 0.35 / 0.25 / 0.34 | 0.31 / 0.28 / 0.33 | 0.31 / 0.32 / [running] |
+| pages | 0.56 / 0.51 / 0.59 | 0.61 / 0.50 / 0.60 | 0.57 / 0.57 / [running] |
+| "is there" on a page | 0.67 / 0.74 / 0.69 | 0.70 / 0.71 / 0.69 | 0.71 / 0.71 / [running] |
+| the eye moves on such a page | 0.08 / 0.07 / 0.07 | 0.00 / 0.00 / 0.02 | 0.00 / 0.01 / [running] |
+| ticks before answering, living | 5.1 / 5.0 / 5.0 | 5.0 / 4.9 / 5.3 | 4.9 / 5.0 / [running] |
+
+(the factor: 1.59 / 1.70 / 1.62.) Grades as the baseline on three seeds, as stated before the probe. The raw
+error grows on every seed as the learner starts to earn (to 0.37 / 0.33 / 0.35 at 6,000) while the normalised
+one stays at 0.45–0.46: the step is largest when little is known and falls by itself. One thing does move, on
+every seed and in the control too: the eye stops moving on "is there" pages (0.07–0.08 → 0.00–0.02) with the
+share right unchanged. It is the larger step that does it, not the normalisation: the policy learns sooner that
+a move there costs time and pays nothing.
+**Decision (rule 8).** Adaptive coding of the reward's error is among the best established facts about dopamine
+cells, it takes a number of the world's designer (the size of a reward) out of the learner's rate, and nothing
+breaks: **adopted for lives born from now on** (`-E RPE=normalised`). The lives running and the ramp lives
+queued behind them stay as they are (they are one comparison). To be watched in the first life that has both
+this and the serial gaze: whether the eye, which the same policy moves, is taught to stay still too soon.
+
+**The reward lives (lenient all life) at 75,000 moments.** All three are now in pages (seed 1 left first words at
+70,000 lived, 60,000 there). Above blind answering, by time in pages: after 10,000 there 0.27 / – / 0.24, after
+20,000 there 0.28 / – / 0.29; seed 1 has 0.18 after its first 5,000. The plateau lives at the same times in
+pages: 0.32 / 0.26 / 0.27 and 0.30 / 0.29 / 0.33. First words at 75,000: 0.45 / 0.48 / 0.49. **Still no
+difference from a kinder reward**, in the time a stage takes or in where it levels off.
+
+**The relay by a local rule, first numbers** (relay_local_smoke.log, relay_local_s0.log; seed 0). The circuit's
+resting point, computed at once, against the batch relay: two pictures alike 0.038 against 0.035, directions
+used 316 against 350, pairs of cells that go together 0.027 against 0.024; word cells 0.609 against 0.613 at
+10,000 (0.305 against 0.344 at 500), a picture seen once 0.883 against 0.890. **The floor at the mean variance,
+which nobody set, costs nothing we can read against the hand-set one.** The circuit after only 1,000 pictures
+(smoke test): directions used 201–207, pairs that go together 0.060–0.064; word cells at 1,000 pictures 0.440
+held still and 0.444 learning along (the batch relay: 0.473). The arms on 10,000 pictures are running.
+**The flaw named last night is being mended:** `experiments/bench_dev_codes.py` codes, with the same cortex, the
+very 6,000 unlabelled pictures the batch relay was settled on and 14,000 more of the same kind
+(out/bench/cifar100_norm0_s{seed}_dev.npy), so that the resting point and the developed circuit can be given
+the relay's own pictures and never the stream's.
