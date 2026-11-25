@@ -55,15 +55,15 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-sh2`** (out/tmp/softhebb_stream_queue.sh): queue E 27, the stream on the soft rule's codes, seed 0 →
-  out/bench/stream_{sh,shr,sh96,shr96}10k_s0.log (the probe itself is read: out/bench/softhebb_probe_s0.log).
-- **`organic-relay3`** (out/tmp/relay3_queue.sh; waits for sh2): queue E 26/28, the relay circuit's six arms at
-  rate 1e-4 on the batch relay's own unlabelled pictures, seeds 0–2 → out/bench/relay_local_r1e-4_s{0,1,2}.log
-  (about 50 minutes a seed).
-- **`organic-sh3`** (out/tmp/softhebb_seeds_queue.sh; waits for relay3): the soft rule on seeds 1 and 2 →
-  out/bench/softhebb_probe_s{1,2}.log, stream_{sh,shr,sh96,shr96}10k_s{1,2}.log.
-- Finished and read tonight: relay1 (first run, wrong step), relay2 (the direction-by-direction reading),
-  devcodes1 (out/bench/cifar100_norm0_s{0,1,2}_dev.npy), rpe1, trace2.
+- **`organic-relay3`** (out/tmp/relay3_queue.sh): queue E 26/28, the relay circuit's six arms at rate 1e-4 on the
+  batch relay's own unlabelled pictures → out/bench/relay_local_r1e-4_s{0,1,2}.log (seed 0 read; about 50 minutes
+  a seed).
+- **`organic-sh4`** (out/tmp/softhebb_seeds2_queue.sh): queue E 27, the published soft rule on seeds 1 and 2 →
+  out/bench/softhebb_probe_s{1,2}.log, then stream_{sh,shr,sh96,shr96}10k_s{1,2}.log (seed 0 read).
+- **`organic-sh5`** (out/tmp/softhebb_dissect_queue.sh; waits for sh4): which part of the soft rule does the work,
+  seed 0 → out/bench/softhebb_dissect_s0.log, then stream_{shh,shp,shc}10k_s0.log.
+- Finished and read tonight: sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
+  direction-by-direction reading), devcodes1, rpe1, trace2.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
   preschool, one at a time and only with 5.7 GB available (so it waits behind the reward lives): `tagn_s*`
@@ -797,3 +797,15 @@ Still Kris's own:
   file fault of mine, mended); seeds 1–2 queued (`organic-sh3`). PUBLISH.md brought up to date.
   Next: read sh2 (our measure); if the soft rule is ahead there too, rewrite the paper's section and write the
   organic check for the rule on our decorrelated windows; relay3 as seeds come; reward lives at 85,000.
+- 2026-11-25 02:23 All healthy, 3.4–3.7 GB free. **The published soft rule in our measure, seed 0: word cells 0.689 at
+  10,000 pictures against 0.549 for the same layer as born and 0.613 for our cortex (ridge 0.700 / 0.603 /
+  0.659). My stated expectation (under 0.02) was wrong.** The paper's paragraph carries the seed-0 numbers with a
+  pending mark; seeds 1–2 started at once (`organic-sh4`); the dissection (hard / no unlearning / no layer-wide
+  division) is queued on seed 0 (`organic-sh5`). **The relay circuit at a step of 0.03, seed 0:** every arm
+  within 0.013 of the batch relay; developed on the relay's pictures and then learning on along the stream:
+  0.613, the batch relay's own number. Seeds 1–2 running (`organic-relay3`). Reward lives at 85,000: nothing new.
+  Next: sh4 and relay3 as seeds come; then, if three seeds agree: the paper's section, abstract and the
+  like-for-like baselines redone on the soft layer (streaming LDA on its code at once; backprop of its shape
+  needs `bench_backprop.py` given the layer's shape); the dissection; then the rule in our cortex's place (the
+  eye's 64 × 64 pictures, decorrelated windows) after its organic check. Draft 8 by email when the three seeds
+  are in.

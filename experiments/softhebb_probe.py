@@ -29,6 +29,12 @@ A check that the rule is theirs and not again mine (REPLICATE=1, 96 kinds): thei
 small. A ridge on the whole map (24,576 numbers a picture, as their classifier reads it) from 5,000 labelled
 pictures, tested on 2,000: developed against as born. They report 71.1 against 63.9 with 50,000 pictures.
     SEEDS=0 KINDS=256,96 python experiments/softhebb_probe.py
+Which part of the rule does the work (DISSECT=1; 256 kinds; one part taken out at a time, nothing tuned):
+    shh   hard: only the strongest kind learns, by 1 (the authors' own hard winner-take-all baseline)
+    shp   plus: the soft competition, but the losers learn with the winner's sign (no unlearning)
+    shc   const: the published rule without its one step that no synapse could take (the division of every
+          change by the largest in the layer); that factor is held at its median over the published run
+    DISSECT=1 SEEDS=0 python experiments/softhebb_probe.py
 """
 import os, pickle, sys, time, types
 import numpy as np
@@ -41,6 +47,7 @@ SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 KINDS = [int(x) for x in os.environ.get("KINDS", "256,96").split(",")]
 SIGHTS = int(os.environ.get("SIGHTS", 50000))  # unlabelled pictures seen, once each
 REPLICATE = os.environ.get("REPLICATE", "1") == "1"
+DISSECT = os.environ.get("DISSECT", "0") == "1"
 RATE, POWER, RADIUS, T_INV, TRIANGLE, BATCH = 0.08, 0.5, 25.0, 1.0, 0.7, 10  # the authors' (presets.json)
 GRID, SHRINK, NRELAY = 4, 0.0005, 6000  # the benchmark's (experiments/cortex_norm_probe.py)
 
@@ -71,10 +78,14 @@ def windows(X):
     return sliding_window_view(P, (5, 5), axis=(1, 2)).reshape(len(X), 32, 32, 75)
 
 
-def develop(kinds, pictures, rng):
-    """The rule, one sight of each picture. Returns the weights as born, as developed, and the standardiser."""
+def develop(kinds, pictures, rng, rule="published", step=None):
+    """The rule, one sight of each picture. Returns the weights as born, as developed, the standardiser, and the
+    factor every change of a batch was multiplied by (1 / the largest absolute change in the layer). `rule`:
+    published; hard (the authors' hard winner-take-all: only the strongest kind learns, by 1 and not by y); plus
+    (soft, but the losers learn with the same sign as the winner: no unlearning); const (the published rule with
+    that factor held at `step` for the whole development: no quantity shared by the layer)."""
     W = (RADIUS / np.sqrt(75) * rng.standard_normal((kinds, 75))).astype(np.float32)
-    born, standard, t0 = W.copy(), Standard(), time.time()
+    born, standard, t0, factors = W.copy(), Standard(), time.time(), []
     order = rng.permutation(len(pictures))[:SIGHTS]
     for b, a in enumerate(range(0, len(order), BATCH)):
         X = windows(standard.developing(pictures[order[a: a + BATCH]] / np.float32(255))).reshape(-1, 75)
@@ -82,17 +93,25 @@ def develop(kinds, pictures, rng):
         Y = np.exp(T_INV * (U - U.max(axis=1, keepdims=True)))
         Y /= Y.sum(axis=1, keepdims=True)
         rows, first = np.arange(len(U)), U.argmax(axis=1)
-        S = -Y
-        S[rows, first] = Y[rows, first]
+        if rule == "hard":
+            S = np.zeros_like(Y)
+            S[rows, first] = 1.0
+        elif rule == "plus":
+            S = Y
+        else:
+            S = -Y
+            S[rows, first] = Y[rows, first]
         dW = S.T @ X - (S * U).sum(axis=0)[:, None] * W
-        dW /= np.abs(dW).max() + 1e-30
+        factor = 1.0 / (float(np.abs(dW).max()) + 1e-30)
+        factors.append(factor)
+        dW *= step if rule == "const" else factor
         r = np.linalg.norm(W, axis=1)
         W += (RATE * (np.abs(r - 1) + 1e-10) ** POWER)[:, None] * dW
         if b in (0, 99, 999) or a + BATCH >= len(order):
             wins = np.bincount(first, minlength=kinds) / len(first)
             print(f"   {kinds} kinds after {a + len(X) // 1024} pictures: weight lengths {r.min():.2f} / {r.mean():.2f} / {r.max():.2f} (least, mean, most) | "
                   f"the strongest kind's share of a place's activity {Y.max(axis=1).mean():.2f} | a kind is the strongest at {wins.min():.4f} to {wins.max():.4f} of places ({time.time() - t0:.0f}s)", flush=True)
-    return born, W, standard
+    return born, W, standard, np.array(factors)
 
 
 def respond(W, standard, X):
@@ -146,11 +165,35 @@ if __name__ == "__main__":
     unlabelled = load(f"{DATA}/cifar-100-python/train")
     Xtr, Xte = load(f"{DATA}/cifar-10-batches-py/data_batch_1"), load(f"{DATA}/cifar-10-batches-py/test_batch")[:2000]
     ytr, yte = np.load("out/bench/cifar10_train_labels.npy")[: len(Xtr)], np.load("out/bench/cifar10_test_labels.npy")[:2000]
-    for seed in SEEDS:
+    for seed in SEEDS if DISSECT else []:  # which part of the rule does the work (256 kinds; files shh, shp, shc)
+        settle = np.random.default_rng(seed + 7).choice(len(unlabelled), NRELAY, replace=False)
+        _, W, standard, factors = develop(256, unlabelled, np.random.default_rng(3000 + seed))
+        q = np.quantile(factors, [0, 0.25, 0.5, 0.75, 1])
+        print(f"seed {seed} published: the factor shared by the layer, over the batches: least {q[0]:.3g}, quartiles {q[1]:.3g} / {q[2]:.3g} / {q[3]:.3g}, most {q[4]:.3g}; "
+              f"in the first 100 batches {np.median(factors[:100]):.3g}, in the last 100 {np.median(factors[-100:]):.3g}", flush=True)
+        for name, rule in (("shh", "hard"), ("shp", "plus"), ("shc", "const")):
+            t0 = time.time()
+            with np.errstate(all="ignore"):
+                _, W, standard, _ = develop(256, unlabelled, np.random.default_rng(3000 + seed), rule, float(q[2]))
+            if not np.isfinite(W).all():
+                print(f"seed {seed} {name} ({rule}): the weights ran away (not finite); no code kept", flush=True)
+                continue
+            C = W / np.linalg.norm(W, axis=1, keepdims=True)
+            alike = np.abs(C @ C.T)[~np.eye(256, dtype=bool)]
+            relay = Relay(SHRINK).settle(coded(W, standard, unlabelled[settle]))
+            for part, X in (("train", Xtr), ("test", Xte)):
+                S = coded(W, standard, X)
+                np.save(f"out/bench/cifar10_{name}_s{seed}_{part}.npy", S.astype(np.float16))
+            through = (S - relay.mu) @ relay.Z
+            print(f"seed {seed} {name} ({rule}; {time.time() - t0:.0f}s): two kinds' weights alike {alike.mean():.3f}, pairs above 0.9: {int((alike > 0.9).sum() // 2)} | "
+                  + read_code("summary", S[:1500], yte[:1500]) + " | " + read_code("through the relay", through[:1500], yte[:1500]), flush=True)
+            pickle.dump(types.SimpleNamespace(relay=relay, W=W, standard=(standard.mean, standard.var)), open(f"out/bench/cortex_{name}_s{seed}.pkl", "wb"))
+            del relay, through, S
+    for seed in [] if DISSECT else SEEDS:
         settle = np.random.default_rng(seed + 7).choice(len(unlabelled), NRELAY, replace=False)
         for kinds in KINDS:
             t0 = time.time()
-            born, W, standard = develop(kinds, unlabelled, np.random.default_rng(3000 + seed))
+            born, W, standard, _ = develop(kinds, unlabelled, np.random.default_rng(3000 + seed))
             C = W / np.linalg.norm(W, axis=1, keepdims=True)
             alike = np.abs(C @ C.T)[~np.eye(kinds, dtype=bool)]
             print(f"seed {seed} {kinds} kinds developed ({time.time() - t0:.0f}s) | two kinds' weights alike {alike.mean():.3f} on average, pairs above 0.9: {int((alike > 0.9).sum() // 2)}", flush=True)

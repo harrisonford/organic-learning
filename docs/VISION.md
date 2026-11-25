@@ -2227,3 +2227,21 @@ under them.** Seeds 1 and 2 are running.
 **The reward lives at 85,000 moments:** pages above blind answering 0.31 / 0.23 / 0.31 (after 30,000 / 15,000 /
 30,000 moments there; the plateau lives after as long: 0.33 / 0.28 / 0.35). First words 0.45 / 0.46 / 0.46.
 Nothing new.
+
+### 2026-11-25 02:23: which part of the soft rule does the work: the check and the probe
+Three arms on seed 0, 256 kinds, each the published layer with one part taken out and nothing tuned
+(`DISSECT=1` in experiments/softhebb_probe.py; `organic-sh5`, behind the seeds):
+- **hard**: only the strongest kind learns, by 1 (the authors' own hard baseline in their pipeline). If it is
+  near the layer as born, as they report, the soft layer's gain is not the pipeline's.
+- **no unlearning**: the soft competition, the losers learning with the winner's sign. Is it the softness or
+  the unlearning?
+- **no layer-wide division**: the one step no synapse could take. Every change of a batch is divided by the
+  largest change in the layer, which is the same as one rate shared by all synapses that moves with time. In
+  this arm it is held at its median over the published run. If the layer develops as well, the division was
+  only a rate and the rule is local as it stands; if the weights run away or the code is worse, the moving
+  rate is doing work and needs a counterpart in biology (a broadcast gain on plasticity) before anything is
+  adopted. Not tuned: one value, from the published run itself.
+**Stated before:** hard near as born; no unlearning clearly worse than published (kinds pile onto the same
+windows); the constant factor: I do not know. The weights are born long (25) and the first changes are a
+hundred times the later ones, so a constant may be too large at the start; a smoke test showed the factor
+between 9e-7 and 1e-4 within the first 1,500 pictures.
