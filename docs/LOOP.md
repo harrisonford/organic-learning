@@ -55,21 +55,16 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-relay3`** (out/tmp/relay3_queue.sh): queue E 26/28, the relay circuit's six arms at rate 1e-4 on the
-  batch relay's own unlabelled pictures → out/bench/relay_local_r1e-4_s{0,1,2}.log (seeds 0 and 1 read; seed 2
-  ends about 04:05).
-- **`organic-sh4`** (out/tmp/softhebb_seeds2_queue.sh): queue E 27, the published soft rule on seeds 1 and 2 →
-  out/bench/softhebb_probe_s{1,2}.log, then stream_{sh,shr,sh96,shr96}10k_s{1,2}.log (seeds 0 and 1 read; seed
-  2's streams end about 04:05).
 - **`organic-sh5`** (out/tmp/softhebb_dissect_queue.sh; waits for sh4): which part of the soft rule does the work,
-  seed 0 → out/bench/softhebb_dissect_s0.log, then stream_{shh,shp,shc}10k_s0.log (about 75 minutes).
-- **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; waits for relay3, sh4 and sh5; MemoryMax 1800M; about
+  seed 0 → out/bench/softhebb_dissect_s0.log, then stream_{shh,shp,shc}10k_s0.log (started 03:50; about 75 minutes;
+  the hard arm's code is read, VISION.md 04:10).
+- **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; waits for sh5; MemoryMax 1800M; about
   eight hours): the references for the soft layer. In order: the whole stream coded (soft_codes.log; variants
   `shfull`, `shrfull`); the way back through the relay checked (backprop_soft_check.log: READ IT FIRST, the two
   columns must agree); backprop of the layer's shape tuned on seed 0 (backprop_soft_tune_s0.log); per seed the
   whole stream on the developed code (stream_shfull_s{0,1,2}.log: word cells, ridge, streaming LDA, with and
   without relay) and backprop at its best settings (backprop_soft_full.log); then stream_shrfull_s{0,1,2}.log.
-- Finished and read tonight: sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
+- Finished and read tonight: relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
   direction-by-direction reading), devcodes1, rpe1, trace2.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
@@ -829,3 +824,14 @@ Still Kris's own:
   about our hard rule, draft 8 by email; relay3 seed 2 and the decision on the batch relay; the dissection (sh5);
   then softbase1's numbers into the paper's comparison with backprop as they come (read
   backprop_soft_check.log first).
+- 2026-11-25 04:11 All healthy, 3.4 GB free. **Three seeds, the soft rule:** word cells + relay 0.689 ± 0.005 developed,
+  0.548 ± 0.002 as born, 0.620 ± 0.010 our cortex (ridge 0.700 / 0.605 / 0.664). "Developed filters do no better
+  than random" is about our hard rule. Nothing adopted before the dissection (its hard arm already shows the
+  near-copy collapse ours had: 916 pairs above 0.9). **Three seeds, the relay circuit:** developed then learning
+  on 0.614 ± 0.007 against the batch relay's 0.620 ± 0.010 (0.000 / 0.008 / 0.010 under). **Decision (rule 8):**
+  the circuit is the relay's form for the next lives if a life-scale test shows no harm; first the circuit in
+  `organic/cortex2.py` behind a switch (digest c52819a8c3a93a7b must hold), then a probe on a grown learner's
+  level, then lives. **Paper:** abstract and two sections updated, Lipshutz 2022 added unopened, **draft 8 (18
+  pages) emailed to Kris.** Next: the dissection's other arms and streams (sh5, about 05:10); the relay circuit
+  behind a switch in the cortex; softbase1 as it comes (backprop_soft_check.log first); then the organic check
+  for the soft rule in our cortex's place.

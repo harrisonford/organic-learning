@@ -192,3 +192,18 @@ organic learner behaves and what each part does, measured honestly, not a score.
   2005 and Louie & Glimcher (the reward's error against its usual size).
 - **Still owed before sending**: as on 2026-11-24, less the drift stage's seeds.
 - **arXiv and Zenodo**: as on 2026-11-23; nothing uploaded.
+
+### Update, 2026-11-25 04:11
+- **Draft 8 (18 pages) sent to Kris.** Both items of the last update changed the paper:
+  (1) the soft rule on three seeds: the abstract has a sentence, and the section is now "Our Hebbian development
+  did nothing for the learner" with the three seeds at 10,000 pictures; (2) the relay circuit on three seeds:
+  the abstract's sentence on the batch steps and the section "The relay, learned locally: two attempts".
+- **New pending mark:** the whole stream on the soft layer with backprop of that layer's shape
+  (`organic-softbase1`, about eight hours). When it is in: the benchmark table gains the soft layer's rows, and
+  the headline comparison (abstract, "The local learner beats one-pass backpropagation", "What we cannot claim")
+  is rewritten on whichever layer is the paper's learner. **Until then the headline is on our cortex and says so.**
+- **Reference added, unopened:** Lipshutz, Pehlevan & Chklovskii 2022 (title and venue to be checked on the
+  page). Journé 2023, Moraitis 2022 and Duong 2023a/b were already in the list. Not yet cited, so not yet added:
+  Tobler, Fiorillo & Schultz 2005; Louie & Glimcher.
+- **A caution for the reader of the draft:** the circuit's numbers are from blocks of 50 pictures and a matrix
+  solve for the settled activity; the paper says both.

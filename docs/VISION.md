@@ -2295,3 +2295,66 @@ the filters we developed" becomes a statement about our hard rule, and the compa
 made on the better layer. I do not know which way that comparison goes: the soft layer gives the word cells
 0.07 more than our cortex does, but backprop of the soft layer's shape may gain as much or more from the same
 way in (raw colours and a softer response in place of our decorrelated windows).
+
+### 2026-11-25 04:11: three seeds: the soft rule develops filters that help; the relay circuit does the relay's work
+**The published soft rule, three seeds** (softhebb_probe_s{0,1,2}.log, stream_{sh,shr,sh96,shr96}10k_s{0,1,2}.log;
+10,000 pictures of the stream; mean ± spread over seeds; our cortex is the norm0 code of the same seeds).
+
+| | word cells + relay | word cells | ridge + relay | ridge |
+|---|---|---|---|---|
+| soft rule, 256 kinds developed | **0.689 ± 0.005** (0.689 / 0.684 / 0.693) | 0.591 ± 0.013 | 0.700 ± 0.001 | 0.693 ± 0.004 |
+| the same layer as born | 0.548 ± 0.002 (0.549 / 0.546 / 0.549) | 0.419 ± 0.013 | 0.605 ± 0.002 | 0.598 ± 0.001 |
+| soft rule, 96 kinds developed | 0.659 ± 0.004 | 0.598 ± 0.009 | 0.667 ± 0.003 | 0.668 ± 0.006 |
+| 96 kinds as born | 0.539 ± 0.004 | 0.421 ± 0.013 | 0.570 ± 0.008 | 0.561 ± 0.004 |
+| our cortex (hard rule, decorrelated windows) | 0.620 ± 0.010 | 0.516 ± 0.012 | 0.664 ± 0.007 | 0.648 ± 0.006 |
+
+Their measure in small (a ridge on the whole map, 96 kinds, 5,000 pictures): 0.616 / 0.613 / 0.613 developed
+against 0.515 / 0.515 / 0.521 as born.
+- **Development by the soft rule is worth 0.14 to the word cells and 0.10 to ridge, on every seed.** "Developed
+  filters do no better than random" is a finding about our hard rule, not about Hebbian development. My stated
+  expectation (under 0.02 in our measure) was wrong on all three.
+- The soft layer is 0.07 above our cortex for the word cells and 0.04 for ridge, with raw standardised colours
+  in and no decorrelation of the windows. With 96 kinds it is still 0.04 above our 256.
+- The relay still earns its place on the better layer for the word cells (0.591 → 0.689) and hardly matters to
+  ridge (0.693 → 0.700).
+- Not known yet: the whole stream, and backprop of this layer's shape (`organic-softbase1`).
+**Decision:** nothing is adopted before the dissection says which part does the work and whether the layer-wide
+division is needed. The paper says what is measured: the abstract and the section (now "Our Hebbian development
+did nothing for the learner") carry the three seeds; the headline comparison stays on our cortex until the
+like-for-like numbers on the soft layer are in. Draft 8 sent to Kris.
+
+**The dissection, first arm (seed 0, softhebb_dissect_s0.log):** with the competition made hard (only the
+strongest kind learns), two kinds' weights are alike 0.402 on average and 916 pairs are above 0.9 (published
+soft rule: 0.09 and 2–4 pairs); the summary uses 7 directions (27), 144 through the relay (577). All weights
+come to length 1 within 10,000 pictures. The hard rule in their pipeline fails the way ours failed in our
+pipeline (658 near-copy pairs among our developed filters): kinds pile onto the same windows. The streams and
+the other two arms are running.
+
+**The relay circuit at a step of 0.03, three seeds** (relay_local_r1e-4_s{0,1,2}.log; word cells).
+
+| | at 1,000 pictures | at 10,000 | seen once, 20 later |
+|---|---|---|---|
+| the batch relay | 0.473 / 0.463 / 0.508 | 0.613 / 0.616 / 0.631 (0.620 ± 0.010) | 0.890 / 0.860 / 0.797 |
+| the circuit's resting point | 0.469 / 0.464 / 0.505 | 0.608 / 0.601 / 0.618 (0.609 ± 0.009) | 0.883 / 0.860 / 0.780 |
+| developed on the relay's 6,000 pictures, held | 0.470 / 0.457 / 0.498 | 0.600 / 0.590 / 0.615 (0.602 ± 0.013) | 0.883 / 0.853 / 0.777 |
+| developed on 20,000, held | 0.468 / 0.465 / 0.503 | 0.601 / 0.598 / 0.622 (0.607 ± 0.013) | 0.880 / 0.853 / 0.783 |
+| from nothing, learning along the stream | 0.441 / 0.443 / 0.476 | 0.603 / 0.606 / 0.616 (0.608 ± 0.007) | 0.890 / 0.837 / 0.783 |
+| developed on 6,000, then learning on | 0.476 / 0.459 / 0.506 | 0.613 / 0.608 / 0.621 (0.614 ± 0.007) | 0.887 / 0.853 / 0.770 |
+
+- Every arm of the circuit is under the batch relay on every seed but one (seed 0, developed then learning on:
+  equal). The arm a brain would have is 0.000 / 0.008 / 0.010 under: 0.006 on average, inside the spread
+  between seeds (0.010) but always on the same side. The resting point itself is 0.011 under, so most of what
+  is lost is the resting point's (it leaves 3,900 directions alone that the batch relay also flattens), not the
+  learning's.
+- From nothing, the circuit costs 0.02–0.03 at 1,000 pictures and 0.012 at 10,000: a relay can be learned along
+  the lessons, but one that developed before them is better early. That is the order a brain has.
+- A picture seen once is named 20 later as often (0.84 against 0.85 on average; 0.027 under on seed 2).
+**Decision (rule 8: biology decides, and the score is reported).** The circuit is the relay's biological form:
+interneurons, a local rule, no eigendecomposition, no constant set by hand. It costs 0.006 ± 0.005 on the
+benchmark. It is taken as the relay for the next lives **if a life-scale test shows it does no harm there**,
+which is not known: in a life the store's keys and the word cells' inputs are in the relay's code and that code
+would keep moving for 100,000 moments, not 10,000. The work, in order: the circuit in `organic/cortex2.py`
+behind a switch that leaves today's lives untouched (the digest must stay c52819a8c3a93a7b); a probe on a grown
+learner's level (as the gaze probes); then lives. The paper has the three seeds in "The relay, learned locally:
+two attempts" with three cautions (a fifth of the stream; the settled activity by a matrix solve, not by running
+the dynamics; the rate lowered tenfold and why).

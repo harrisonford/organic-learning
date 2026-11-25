@@ -20,8 +20,12 @@ learner apart to see which part had earned the win, and the credit went somewher
 to the code and not to the rule. Two fixed decorrelation steps, one before the feature layer and one after it, do
 the work: a gradient-trained readout on the same code does exactly as well as our local one, random filters do as
 well as the Hebbian filters we had carefully developed, and without the second decorrelation backpropagation wins.
+The filters' failure was our rule's and not Hebbian learning's: the soft winner-take-all rule of Journé et al.
+(2023), built from its authors' code and read the same way, develops filters that take the learner from 55% to
+69% after 10,000 pictures, where our cortex gives it 62%.
 Both steps are computed in batch before learning starts, which is the one place where "local rules only" is not
-yet true; a local Hebbian and anti-Hebbian network recovers about four fifths of the effect in a first test. A
+yet true; on a fifth of the stream, a published circuit of inhibitory interneurons that learns by a local rule
+does the second step's work to within a point. A
 small episodic store gives the learner one-shot memory of a picture but not of a category. We also raised the
 learner through a staged childhood of photographs and adult speech, and we report what each part did there, what
 did nothing, and three mistaken assumptions that had made earlier versions look better than they were.
@@ -267,20 +271,23 @@ inverts them itself, so it should not care whether somebody whitened the code be
 without the relay and 0.741 with it on the seed where we ran both. The relay adds no information. It conditions
 the code for a reader too simple to condition it for itself.
 
-### Hebbian development did nothing for the learner
+### Our Hebbian development did nothing for the learner
 
 We spent weeks on the visual cortex. With random filters, never trained at all, the learner scores 0.693; with
 the developed ones, 0.687. Random whitened patches have been known to be hard to beat for a long time (Coates, Lee
 & Ng 2011; Saxe et al. 2011; Thiry et al. 2021), and we rediscovered it the expensive way. The result is about
 our rule, hard winner-take-all, and not about Hebbian learning in general: Journé et al. (2023) report the same
 thing for hard winner-take-all on one layer (62.7% against 63.9% for random weights) and then a clear gain from a
-soft version of the competition (71.1%). We have now built their layer from their own code, changing nothing,
-and read it as we read everything else. Their finding holds in their measure (on the first seed, a linear
-readout of the whole layer from 5,000 labelled pictures names 0.616 against 0.515 for the same layer never
-developed), and it holds in ours: after 10,000 pictures of the stream the word cells name 0.689 on the soft
-layer, 0.549 on the same layer as born, and 0.613 on our hard-rule cortex. A competition in which the losers
-unlearn develops filters worth having; ours did not. **[pending: seeds 1 and 2; then this section, the
-abstract and the comparison with backpropagation are redone on the soft layer.]** The developed filters are not worthless:
+soft version of the competition (71.1%). We built their layer from their own code, changing nothing, and read
+it as we read everything else, on three seeds. Their finding holds in their measure (a linear readout of the
+whole layer from 5,000 labelled pictures names 0.614 ± 0.002 against 0.517 ± 0.003 for the same layer never
+developed), and it holds in ours: after 10,000 pictures of the stream the word cells name 0.689 ± 0.005 on the
+soft layer, 0.548 ± 0.002 on the same layer as born, and 0.620 ± 0.010 on our hard-rule cortex; ridge regression
+on the same three codes reaches 0.700 ± 0.001, 0.605 ± 0.002 and 0.664 ± 0.007. A competition in which the
+losers unlearn develops filters worth having; ours did not. The relay still earns its place on the better
+layer: without it the word cells fall from 0.689 to 0.591 ± 0.013. **[pending: the whole stream on the soft
+layer, with backpropagation of that layer's shape tuned as the first reference was; until then the headline
+comparison in this paper is the one on our cortex.]** The developed filters are not worthless:
 the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in
 them is better. Our reader cannot use it. When we looked inside, the developed filters were more selective than
 random ones but 658 pairs among them were near copies of each other; random filters had none.
@@ -292,7 +299,7 @@ matrix and invert it; the word cells are an online, first-order approximation of
 are not the best gradient-free learner on our own features, and a reader who only wants accuracy from a single
 pass should use a streaming discriminant.
 
-### The relay, learned locally: a first attempt
+### The relay, learned locally: two attempts
 
 Because the relay earns the result, its batch computation is the most uncomfortable fact in the paper. As a first
 step towards a local form we trained the Hebbian and anti-Hebbian network of Pehlevan & Chklovskii (2014), using
@@ -303,6 +310,25 @@ local, online rule therefore recovers roughly four fifths of what the batch step
 (0.66–0.67 either way), which is what one expects if the network conditions the code without adding to it. This
 is a fifth of the stream, the patch whitening is still computed in batch, and our own first formulation of
 lateral inhibition ran away and had to be thrown out. **[pending: the full stream.]**
+
+The second attempt replaces the relay itself. Lipshutz, Pehlevan & Chklovskii (2022) describe a circuit in which
+every principal cell excites interneurons that inhibit it back, and the synapse between a cell and an interneuron
+grows with the product of their two activities and decays. With the principal cells' own leak (Duong et al.
+2023b), the circuit comes to rest where every direction of the code that varies more than average has been
+brought down to the average and the others are left alone. Nothing in that resting point is set by hand, where
+our batch relay has its constant $\epsilon$. We gave the circuit as many interneurons as the code has numbers
+(4,096) and let it learn from the same 6,000 unlabelled pictures the batch relay was computed from, in blocks of
+50. After 10,000 pictures of the stream, over three seeds, the word cells name 0.620 ± 0.010 behind the batch
+relay; 0.609 ± 0.009 behind the rule's resting point computed directly; 0.602 ± 0.013 behind the circuit
+developed on the unlabelled pictures and then held still; and 0.614 ± 0.007 behind the circuit developed the
+same way and then left learning as the stream goes by (0.000, 0.008 and 0.010 under the batch relay, seed by
+seed). A circuit that starts from nothing and learns only along the stream ends at 0.608 ± 0.007. So a local
+rule does the relay's work to within about a point, and the word cells are not hurt by a code that keeps moving
+slowly under them. Three cautions. This is a fifth of the stream. We compute the circuit's settled activity
+with a matrix solve and do not run its dynamics. And the published learning rate did not carry over: a picture
+changes the synapses along its own activity in proportion to the rate times the squared length of that
+activity, which is about 350 for our 4,096 cells and far smaller in the papers' small examples. At their rate
+the circuit never came to rest, and we lowered it tenfold. The circuit is not yet in the lives.
 
 ### A fast store remembers a picture, not a category
 
