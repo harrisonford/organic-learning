@@ -973,4 +973,15 @@ Still Kris's own:
   110,000–115,000, nothing new. PUBLISH.md brought up to date.
   Next: the remaining streams; softbase1 seeds 1–2 → the paper's table, headline, draft 9; lives' end and the
   ramp lives' start (check memory then); photo log after midnight.
+- 2026-11-25 11:42 Health: the photo alert (until midnight) and "kind_s1 stopped without a verdict": **kind_s1 ended as planned
+  at 120,000 moments (11:10), still in pages** (W2 0.32, first words 0.44; no kill: 3.8 GB peak, a clean
+  exit). The alert is the health check's wording for a life that ends by TOTAL inside a stage. **`organic-tag1`
+  started its first arm, `tagn_s1`, at 11:38** when kind_s1 freed its memory (MemoryMax 3800M, dies before a
+  life; 2.4 GB at start); the ramp lives start when kind_s0 and s2 end (about 12:30): **watch memory then**
+  (three young lives + tagn + softbase1; tagn is the one the kernel takes first). **BCM and SAILnet-on-raw
+  streams read** (table in VISION.md): every BCM state under its birth (0.443 / 0.371 / 0.471 against 0.566);
+  SAILnet on raw windows 0.213. sailc2 is coding; its streams in about 30 minutes. **softbase1 seed 1:** word
+  cells + relay 0.734, ridge + relay 0.751, streaming LDA + relay 0.753, backprop (random, no relay) 0.572.
+  Next: sailc streams; tagn_s1's first checkpoint (the smoke test of continuing from a level); the kind lives
+  read together into JUDGING.md when s0 and s2 end; softbase1 → paper.
 

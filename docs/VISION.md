@@ -2806,3 +2806,26 @@ Seeds 1 and 2 follow; nothing in the paper's table until they are in.
   relay used 0.7. So 0.623 is not the soft code read by a gradient readout, and only the relay row (0.737) is
   like for like with the word cells.
 
+
+### 2026-11-25 11:42: the BCM layer and SAILnet on raw windows in the stream, seed 0
+Word cells + relay / ridge + relay at 10,000 pictures (`stream_{bcm,bcm_2500000,bcm_10000000,bcmr,sail,sailr}10k_s0.log`):
+| layer (the soft layer's pipeline) | word cells + relay | ridge + relay |
+|---|---|---|
+| BCM cells as born | 0.566 | 0.611 |
+| BCM after 250,000 presentations (the simulator's number) | 0.443 | 0.506 |
+| BCM after 2,500,000 | 0.371 | 0.468 |
+| BCM after 10,000,000 (ten different filters) | 0.471 | 0.537 |
+| SAILnet's cells as born | 0.551 | 0.620 |
+| SAILnet developed on raw windows (one filter) | 0.213 | 0.351 |
+| for comparison: the soft layer as born / published rule | 0.549 / 0.689 | 0.603 / 0.700 |
+- **BCM:** every state is under its own birth (0.566). I had said "at or under the layer as born, 0.45 to
+  0.55": right in direction; the two earlier states are lower than my range. The layer is worst in the
+  middle of its development (2,500,000: 90 cells developed, 79 of them two blobs) and recovers a little when
+  all cells have settled into ten filters, since ten different filters is more than two.
+- **SAILnet on raw windows:** one filter's worth, as the weights said.
+- **Both controls agree with the soft layer as born** (0.566 and 0.551 against 0.549): random filters of any
+  birth give about 0.55 in this pipeline, so each arm's loss is its rule's.
+**Where queue E 27 stands.** Three published local rules have now been put where the soft rule stands: BCM
+without interaction (copies), SAILnet on raw windows (one filter), and SAILnet on our cortex's windows (98
+filters; stream pending). The only rule that has made filters worth having is still the one with a non-local
+step.
