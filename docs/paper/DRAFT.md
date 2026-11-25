@@ -298,12 +298,56 @@ birth and the code is destroyed (0.238 ± 0.017). If the factor is held at its e
 and held at its median over the run the weights overflow. We did not design a third. So the best Hebbian
 filters we measured come from a rule that is local except for one shared step, and a fully local rule that
 does as well is, for us, still open. The relay still earns its place on the better
-layer: without it the word cells fall from 0.689 to 0.591 ± 0.013. **[pending: the whole stream on the soft
-layer, with backpropagation of that layer's shape tuned as the first reference was; until then the headline
-comparison in this paper is the one on our cortex.]** The developed filters are not worthless:
+layer: without it the word cells fall from 0.689 to 0.591 ± 0.013. The whole stream on the soft layer, beside
+backpropagation of that layer's shape, is in the next section. Our own developed filters are not worthless:
 the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in
 them is better. Our reader cannot use it. When we looked inside, the developed filters were more selective than
 random ones but 658 pairs among them were near copies of each other; random filters had none.
+
+### The same contest on the better layer
+
+Everything above compares learners on our cortex, whose development did nothing. So we ran the whole stream
+again on the soft layer, and built for it the reference we had built for ours: a network of the soft layer's
+shape (the same standardised colours go in, 256 filters on 5 × 5 windows, the same response and pooling, a linear
+layer read by a softmax), trained end to end with Adam from a random start. Its learning rate, its batch size and
+the exponent of its response were tuned on the first 10,000 pictures of seed 0: twelve settings without the relay
+(0.38 to 0.48 there) and twelve with it (0.45 to 0.53). Where it has the relay, the relay is settled once on the
+layer as it is born and kept. Every row is three seeds.
+
+| learner, on the soft layer | 500 | 5,000 | 50,000 pictures |
+|---|---|---|---|
+| streaming LDA + relay | 0.439 ± 0.014 | 0.617 ± 0.008 | 0.748 ± 0.005 |
+| streaming LDA, no relay | 0.455 ± 0.013 | 0.666 ± 0.006 | 0.747 ± 0.006 |
+| ridge + relay | 0.456 ± 0.005 | 0.663 ± 0.006 | 0.744 ± 0.006 |
+| ridge, no relay | 0.471 ± 0.001 | 0.662 ± 0.005 | 0.744 ± 0.003 |
+| gradient softmax readout + relay, soft filters frozen | 0.432 ± 0.001 | 0.635 ± 0.001 | 0.739 ± 0.003 |
+| **word cells + relay** | 0.416 ± 0.055 | 0.654 ± 0.010 | **0.730 ± 0.004** |
+| word cells, no relay | 0.384 ± 0.041 | 0.574 ± 0.003 | 0.671 ± 0.005 |
+| gradient softmax readout, no relay, soft filters frozen | 0.292 ± 0.036 | 0.478 ± 0.045 | 0.619 ± 0.016 |
+| backprop + relay, one pass | 0.304 ± 0.009 | 0.475 ± 0.007 | 0.606 ± 0.008 |
+| **backprop, one pass** | 0.271 ± 0.007 | 0.419 ± 0.026 | **0.562 ± 0.013** |
+
+**[pending: the word cells on the same layer as born, on the whole stream; backpropagation started from the soft
+filters, with and without the relay; the gradient readout without the relay at the layer's own exponent.]**
+
+On the better layer the word cells end at 0.730, four points above where our cortex leaves them, and seventeen
+above backpropagation of the same shape. The order no longer flips when the relay is taken away: 0.671 against
+0.562. It would be easy to stop here and call it the headline. It is not a like-for-like contest, though. The
+soft layer developed its filters on 50,000 other pictures, without labels, before the stream began, so the local
+learner has seen twice the pictures the backpropagation network has. Using pictures nobody labelled is what a
+local rule is for, and we think that is a fair thing for it to be good at; but the number cannot tell better
+filters from more pictures. The row that can is backpropagation started from the soft filters, and it is
+running.
+
+Three things do not wait for that row. First, the reader: a softmax readout trained by gradient on the frozen
+soft filters, behind the same relay, reaches 0.739 against 0.730 for the word cells, a difference we do not
+interpret. As on our cortex, the local reader is as good as the gradient one and no better. Without the relay
+the gradient readout falls to 0.619 and the word cells to 0.671; that readout ran at the exponent tuned for the
+end-to-end network and not at the layer's own, so the pair is not yet like for like. Second, ridge regression
+and the streaming discriminant are ahead again, at 0.744 and 0.748, and the relay is worth nothing to them where
+it is worth six points to the word cells. Third, backpropagation of this shape does worse than backpropagation
+of ours (0.562 against 0.616). Our shape whitens each patch before the filters and the soft layer's does not.
+That fits the account of the last section, and it is not a test of it.
 
 ### Second-order readers stay ahead
 

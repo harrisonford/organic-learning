@@ -82,6 +82,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   columns must agree); backprop of the layer's shape tuned on seed 0 (backprop_soft_tune_s0.log); per seed the
   whole stream on the developed code (stream_shfull_s{0,1,2}.log: word cells, ridge, streaming LDA, with and
   without relay) and backprop at its best settings (backprop_soft_full.log); then stream_shrfull_s{0,1,2}.log.
+  **State 14:55: everything done and in the paper but the last part** (the layer as born on the whole stream,
+  stream_shrfull_s{0,1,2}.log, about an hour a seed, ends about 17:45). When it is in: the as-born row into the
+  paper's second table, build, email draft 9.
 - Finished and read tonight: sh6 (own / early, seed 0), sh5 (the dissection, seed 0), mkcircuit1 (the circuit for a life), relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
   direction-by-direction reading), devcodes1, rpe1, trace2.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
@@ -1034,4 +1037,14 @@ Still Kris's own:
   after 5,000 moments (first words 0.45 against 0.40, pages 0.25 against 0.18). Ramp lives at 5,000 (babbling).
   Next: softbase1 seed 2's last three rows (about 15:40) → the soft layer's rows into the paper's table as a
   second table with the pending row marked; native4 when memory opens; photo log after midnight.
+- 2026-11-25 14:55 Health: photo alert (until midnight), the three planned endings; 2.7 GB free, native4 still waits. **softbase1's
+  backprop rows complete on three seeds:** backprop of the soft shape 0.562 ± 0.013, with the fixed relay
+  0.606 ± 0.008; frozen soft filters with a gradient readout 0.619 ± 0.016 (no relay, power 1) and 0.739 ± 0.003
+  (relay), against the word cells' 0.730 ± 0.004. **Into the paper:** new section "The same contest on the better
+  layer" (ten rows, the caveat about the 50,000 unlabelled pictures beside the number, one pending mark for the
+  three rows still running); the old pending mark removed; abstract unchanged until softbase2. Builds, 19
+  pages. tagn_s1 at 100,000: 0.42 / 0.23 / 0.00 against plat_s1's 0.46 / 0.23 / 0.01 (the two lives cross:
+  test noise). King et al. 2013 could not be fetched (journal blocks, no preprint): not opened.
+  Next: shrfull's three seeds (about 17:45) → as-born row, **email draft 9**; native4 when memory opens
+  (softbase1's end frees about 0.9 GB); softbase2 behind both; photo log after midnight.
 

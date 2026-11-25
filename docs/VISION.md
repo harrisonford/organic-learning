@@ -2924,3 +2924,39 @@ sentence about our development was about the blown-up input and has to say so.
 level at 90,000 with nothing changed): at 95,000, first words 0.45, pages 0.25, preschool 0.01; the plateau
 life itself at that age: 0.40, 0.18, 0.02. Continuing from a level works with today's code, and **two lives
 from one level differ by 0.05 to 0.07 after 5,000 moments**: that is the size an arm of this test has to beat.
+
+### 2026-11-25 14:55, the soft layer's references, all three seeds
+
+`out/bench/backprop_soft_full.log` is complete (softbase1's backprop part). Right on the 2,000 test pictures,
+mean ± deviation over the three seeds:
+
+| reference, on the soft layer's shape | 500 | 5,000 | 10,000 | 50,000 |
+|---|---|---|---|---|
+| backprop, filters from random, no relay (power 1, rate 0.001, batch 8) | 0.271 ± 0.007 | 0.419 ± 0.026 | 0.479 ± 0.008 | 0.562 ± 0.013 |
+| backprop, filters from random, fixed relay (power 0.7, rate 0.001, batch 32) | 0.304 ± 0.009 | 0.475 ± 0.007 | 0.518 ± 0.011 | 0.606 ± 0.008 |
+| soft filters frozen, gradient readout, no relay (power 1: not the layer's own) | 0.292 ± 0.036 | 0.478 ± 0.045 | 0.553 ± 0.012 | 0.619 ± 0.016 |
+| soft filters frozen, gradient readout, fixed relay | 0.432 ± 0.001 | 0.635 ± 0.001 | 0.673 ± 0.005 | 0.739 ± 0.003 |
+
+(The two-seed numbers of the last entry, 0.604 and 0.737, become 0.606 and 0.739.) The tuning on the first
+10,000 pictures of seed 0 covered twelve settings for each kind of relay: 0.380–0.477 without, 0.446–0.528 with.
+The best rate (0.001) is the middle of the three; batch 8 is the smaller of the two tried, without the relay.
+
+- **The reader.** Gradient readout on the frozen soft filters behind the relay: 0.739 ± 0.003; word cells there:
+  0.730 ± 0.004. Under the 0.02 we interpret. The same finding as on our cortex (0.694 against 0.687): the
+  local reader equals the gradient reader on the same code.
+- **Backprop of this shape is below backprop of ours** (0.562 against 0.616 on the whole stream). The soft
+  layer's shape has no whitening of the window before the filters; ours has. It fits what the paper says about
+  one-pass learning and correlated input; it was not run as a test of it (the two shapes differ in more).
+- **In the paper** (docs/paper/DRAFT.md, new section "The same contest on the better layer"): the table of ten
+  rows on three seeds, the caveat about the 50,000 unlabelled pictures in the text beside the number, and one
+  pending mark naming the three rows still running (the layer as born on the whole stream: softbase1's last
+  part, first seed at 0.609 after 20,000; backprop started from the soft filters and the frozen readout at
+  power 0.7: softbase2). The abstract is not changed until those rows are in: its headline stays the one on
+  our cortex.
+
+**tagn_s1 at 100,000:** first words 0.42, pages 0.23, preschool 0.00 (plat_s1 at that age: 0.46, 0.23, 0.01).
+The two lives from one level cross each other from one test to the next; the 0.05–0.07 of the first reading
+is the noise of a single test and not a drift apart.
+
+**Not opened:** King, Zylberberg & DeWeese (2013, J. Neurosci. 33:5475), the interneuron form of SAILnet: the
+journal refuses automated readers and there is no preprint. It stays on the list for Kris's hand or a library.

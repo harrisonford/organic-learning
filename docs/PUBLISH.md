@@ -239,3 +239,11 @@ organic learner behaves and what each part does, measured honestly, not a score.
   pictures are enlarged to the eye's size. **A decision for Kris then:** whether the paper's benchmark stays
   "the learner as it lives" (64-pixel eye, CIFAR enlarged) or moves to the pictures' own size.
 
+- **2026-11-25 14:55: the soft layer's table is in the draft** (new section "The same contest on the better layer",
+  ten rows, three seeds each: word cells + relay 0.730 ± 0.004; backprop of the layer's shape 0.562 ± 0.013, with
+  the relay 0.606 ± 0.008; gradient readout on the frozen soft filters + relay 0.739 ± 0.003). The old pending
+  mark is gone; a new one names three rows still running (the layer as born on the whole stream; backprop
+  started from the soft filters; the frozen readout without relay at the layer's own exponent). **The abstract
+  and the title sentence are unchanged**: the caveat (the soft layer developed on 50,000 other unlabelled
+  pictures) cannot be resolved before the row "backprop started from the soft filters" is in. Draft 9 goes to
+  Kris when the as-born rows are in (this evening); the abstract is reworded after softbase2.
