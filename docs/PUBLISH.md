@@ -247,3 +247,6 @@ organic learner behaves and what each part does, measured honestly, not a score.
   and the title sentence are unchanged**: the caveat (the soft layer developed on 50,000 other unlabelled
   pictures) cannot be resolved before the row "backprop started from the soft filters" is in. Draft 9 goes to
   Kris when the as-born rows are in (this evening); the abstract is reworded after softbase2.
+- **2026-11-25 15:55:** the Setup of Experiment 1 now states that the eye is 64 pixels across and CIFAR pictures are
+  enlarged to it by bilinear interpolation (item 3 of the 12:59 caution; it was true whatever the native-size
+  seeds say, and the draft had not said it).

@@ -1047,4 +1047,12 @@ Still Kris's own:
   test noise). King et al. 2013 could not be fetched (journal blocks, no preprint): not opened.
   Next: shrfull's three seeds (about 17:45) → as-born row, **email draft 9**; native4 when memory opens
   (softbase1's end frees about 0.9 GB); softbase2 behind both; photo log after midnight.
+- 2026-11-25 15:55 Health unchanged (photo alert until midnight; the three planned endings); 2.6 GB free, native4 waits. **The soft
+  layer as born, whole stream, seed 0** (stream_shrfull_s0.log): word cells + relay 0.633, without relay 0.493;
+  ridge 0.658 / 0.640; streaming LDA 0.663 / 0.655. One seed: with the relay the word cells on never-developed
+  filters are above backprop with the relay (0.597 on that seed), and without it they are below backprop
+  (0.547): the order our cortex showed. Seeds 1–2 about 17:40. Ramp lives at 15,000, in first words (0.27,
+  0.25, 0.35). **Paper, a methods omission closed:** the Setup now says the eye is 64 pixels and CIFAR is enlarged
+  to it (and that the soft layer sees the pictures at their own size); 20 pages.
+  Next: shrfull seeds 1–2 → the as-born rows into the second table, email draft 9; native4; softbase2.
 

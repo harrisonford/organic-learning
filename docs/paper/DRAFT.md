@@ -200,7 +200,10 @@ view. Whether anything useful happens in the pause is an open question. These ti
 ### Setup
 
 The cortex develops its filters on the CIFAR-100 training pictures, without their labels, and the relay is fitted
-on 6,000 of them. Then every CIFAR-10 training picture is shown exactly once, in random order. The learner is
+on 6,000 of them. The learner's eye is 64 pixels across, as it is in the world of Experiment 2, so every 32-pixel
+CIFAR picture is enlarged to 64 by bilinear interpolation before the cortex sees it; the backpropagation baseline
+of our shape sees the same enlarged pictures. (The soft layer of Journé et al., below, sees the pictures at their
+own size, as its authors' code does.) Then every CIFAR-10 training picture is shown exactly once, in random order. The learner is
 asked "what is this?" and is told the class name. At fixed points along the stream we test on 2,000 held-out
 pictures. There are three seeds; a seed changes the filters, the order of the stream, and every learner's initial
 state. With 2,000 test pictures the sampling error of an accuracy is about 0.010, so we do not interpret
