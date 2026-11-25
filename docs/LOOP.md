@@ -58,6 +58,11 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
+- **`organic-bcm4`** (started 07:38; MemoryMax 700M; about 30 minutes): the BCM layer's development read on to
+  10,000,000 presentations → out/bench/bcm_develop_10000000_s0.log, bcm_weights_10000000_s0.npz.
+  **`organic-bcm3`** (out/tmp/bcm_queue.sh; MemoryMax 1500M; waits for sh7 and bcm4): codes and streams of the
+  BCM layer at 250,000 / 2,500,000 / 10,000,000 presentations and as born → bcm_code_s0.log,
+  stream_{bcm,bcm_2500000,bcm_10000000,bcmr}10k_s0.log.
 - **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; started 04:45; MemoryMax 1800M; about
   eight hours): the references for the soft layer. In order: the whole stream coded (soft_codes.log; variants
   `shfull`, `shrfull`); the way back through the relay checked (backprop_soft_check.log: READ IT FIRST, the two
@@ -887,3 +892,23 @@ Still Kris's own:
   **Next for queue E 27:** find the constants in a readable source (Law & Cooper 1994, PNAS 91:7797, PMC44489
   asks for a browser check; the authors' simulator; Cooper & Scofield 1988), then `rule="bcm"` in
   `softhebb_probe.py`'s pipeline, seed 0, stated expectation written first.
+- 2026-11-25 07:18 All healthy, 3.1–3.7 GB free. **BCM's numbers found** in its authors' simulator (source read: eta 8e-6,
+  tau 1000, births, sigmoid −1 / 50, 250,000 presentations, one cell, no lateral connections by default; the
+  1997 NIPS paper opened, no numbers in it). **`experiments/bcm_probe.py`: a layer of 256 BCM cells that do
+  not interact, in the soft layer's pipeline, seed 0.** Stable as stated. At the simulator's 250,000
+  presentations it has hardly begun; at 2,500,000, 90 cells have developed and 79 of them are one
+  colour-opponent blob or its opposite, two an oriented bar (2,034 near-copy pairs and rising;
+  docs/img/bcm_filters_2500000_s0.png). **Running:** `organic-bcm4` (development to 10,000,000 →
+  out/bench/bcm_develop_10000000_s0.log, MemoryMax 700M, about 30 minutes); `organic-bcm3`
+  (out/tmp/bcm_queue.sh, MemoryMax 1500M, behind sh7 and bcm4: codes and streams of the layer at 250,000 /
+  2,500,000 / 10,000,000 presentations and as born → bcm_code_s0.log, stream_{bcm,bcm_2500000,bcm_10000000,bcmr}10k_s0.log).
+  **Dissection seed 1** agrees with seed 0 in structure (hard 930 near-copy pairs and 0.496; no unlearning
+  19,033 pairs; const ran away; early 0 pairs; own 31,376 pairs, weights 72,000 long); its other streams and
+  seed 2 run. **softbase1:** relay tuning at 19 of 24 (best with relay so far 0.528 at 10,000: power 0.7,
+  rate 0.001, batch 32; without relay 0.477). Reward lives at 100,000 / 105,000: seeds 0 and 2 in preschool
+  (P 0.01 / 0.00), seed 1 in pages 0.32; nothing new.
+  **Next for queue E 27:** the stream readings (bcm3); then the reading for an inhibition whose strength is
+  learned locally (Földiák 1990; the similarity-matching circuits) with BCM on the feed-forward synapses, and
+  for the centre-surround input the BCM work used; nothing built before its source is read. softbase1's whole
+  stream when it comes; sh7 seeds 1–2 into one sentence of the paper.
+

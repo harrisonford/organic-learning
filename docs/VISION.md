@@ -2553,3 +2553,77 @@ Intrator & Cooper (1992), *Neural Networks* 5, 3–17 (the authors' copy, read t
 filters on raw standardised windows; the natural-image work reads oriented fields from whitened or
 centre-surround input, one cell at a time. If the first reading shows near copies (the hard rule's failure),
 the inhibition is not doing the unlearning's work and the arm is reported as it is.
+
+### 2026-11-25 07:30: BCM's numbers found in its authors' simulator; the first arm, and what I expect of it
+**Where the numbers are.** The papers read so far give none (Intrator & Cooper 1992; Blais et al. 1998; and,
+opened this morning, Blais, Intrator, Shouval & Cooper 1997, *NIPS* 10, 423–429, "Receptive Field Formation in
+Natural Scene Environments: Comparison of Single Cell Learning Rules": the same rules, 13 × 13 round patches
+from 12 natural images after a centre-surround filter or whitening, and no rate or time constant). They are
+in the authors' simulator (B. Blais, *Plasticity*, a public repository; `plasticity/train.pyx`,
+`plasticity/utils.py` and `run_sim.py` read in the source this morning, not run):
+- **The rule in code:** `phi = eta*y*(y-th)`; `w += phi*x`; then `th += (y*y-th)/tau`. The derivative of the
+  sigmoid is off by default. Weight decay is zero by default: the rule has no other stabiliser.
+- **Its defaults:** `eta = 8e-6`, `tau = 1000`, weights born uniform in [−0.05, 0.05], thresholds born uniform
+  in [0.01, 0.02], the sigmoid `tanh(u)` below zero and `50 tanh(u/50)` above, 500 × 500 presentations, one
+  cell.
+- **Between cells:** nothing by default. Two lateral forms exist. One takes a matrix that the user supplies
+  (no default). One is a uniform strength that learns (`y_i = σ(σ(w_i·x) + L_i ȳ)`, `L_i += eta*(−phi_i ȳ − L_i)`
+  with ȳ the cells' mean activity); `phi` already carries `eta`, so at the defaults that strength sits near
+  `eta` times a product of activities, about 1e-5: no interaction to speak of.
+- A search result names a table of a later paper of the group with a rate of 1e-6, a first threshold of 0.7
+  and a memory constant of 300–1000; the page asks for a browser check and was **not opened**, so those
+  numbers are not used.
+- **Not opened:** Udeigwe, Munro & Ermentrout 2017 (*J. Math. Neurosci.*; when the threshold's time scale keeps
+  the rule stable): the publisher redirects to a login. Law & Cooper 1994 and Cooper & Scofield 1988 as before.
+
+**So the inhibition between BCM cells still has no published number that I can read**, and equation 11's
+strength η stays unknown. What can be built with nothing of mine in the rule is the simulator's default: **a
+layer of BCM cells that do not interact**, which differ only by how they were born.
+
+**Organic check.** Local in every part: a cell's activity, its own running average of its squared activity,
+its input. No normalisation, no step shared by the layer, no winner chosen by anyone. The biology is among the
+best supported we have (the sliding threshold: Kirkwood, Rioult & Bear 1996 is the usual citation; **not
+opened by me**, so it is not cited for readers yet). What is ours is the input (the soft layer's standardised
+5 × 5 colour windows where theirs is a 13 × 13 centre-surround patch); the 1997 paper says of this rule that
+it "produce[s] oriented RFs even when the data is not whitened". The rate's units: both inputs have unit
+variance at each point and the cell's own threshold sets the scale of its activity, so the rate is taken as
+it stands; whether 250,000 presentations are enough on our input is read from how far the weights still turn.
+
+**Stated before it is run** (`experiments/bcm_probe.py`, seed 0): the cells will be stable (lengths bounded,
+no run-away) because that is what the rule's threshold is for. Shown the same windows with nothing between
+them, most cells will end as copies of a few filters: **I expect fewer than 40 different filters among 256**
+(grouping at 0.9) and, in the stream, word cells + relay **at or under the layer as born (0.549), between 0.45
+and 0.55**, the hard rule's kind of failure. If so, the reading says what inhibition would have to do and
+that its strength is the missing number. If instead the cells stay different on their own, that is news and
+the arm goes to three seeds.
+
+### 2026-11-25 07:40: independent BCM cells, seed 0: stable, slow, and most of them the same two filters
+`experiments/bcm_probe.py` (the single window checked against the soft layer's: equal). Logs:
+`out/bench/bcm_develop_s0.log`, `bcm_develop_2500000_s0.log`.
+- **At the simulator's 250,000 presentations the layer has hardly begun.** Weight lengths 0.202 / 0.289 /
+  0.725 (least, mean, most; born near 0.25), one cell of 256 longer than twice its birth, 256 different
+  filters, and the turning between readings still growing (0.043 since 100,000). The simulator's number is for
+  one cell on its own input; on ours it is not enough, so the same run was read on to 2,500,000 (nothing else
+  changed; said in the file).
+- **At 2,500,000 presentations:** lengths 0.218 / 1.867 / 8.935, thresholds up to 13.5, largest activity 42.7
+  (the sigmoid's top is 50): **stable, as I said**. 90 cells have developed; the others still sit near birth.
+  Near copies: 43 pairs above 0.9 at 500,000, 900 at 1,000,000, **2,034 at 2,500,000; 134 different filters of
+  256 and falling**; the weights still turn (0.186 since 1,000,000).
+- **What the developed cells are** (`docs/img/bcm_filters_2500000_s0.png`, sorted by length): of the 90 developed cells 55 are one
+  colour-opponent blob (red and blue against green in the middle of the window), 24 its opposite (green
+  against red and blue), **two are an oriented grey bar**, and the other nine fall in six small groups
+  (grouping at 0.9, signed). So the rule does find what the
+  retina's cells find in colour, and nearly every cell finds the same thing.
+- **Against what I said:** the direction is as stated (copies of a few filters; fewer than 40 different ones
+  is where it is heading, not yet where it is: 134 at 2,500,000, with the developed 90 in nine groups, 79 of them in two).
+  The stream reading is owed (`organic-bcm3`, behind the dissection: the layer at 250,000, 2,500,000 and
+  10,000,000 presentations and as born); `organic-bcm4` reads the development on to 10,000,000.
+- **What it says about the missing part:** with nothing between the cells, what decides a cell's filter is the
+  input's strongest non-Gaussian direction, the same for all. Inhibition between the cells (or the soft rule's
+  unlearning by the losers, which is inhibition's effect written into the rule) is what has to make them
+  different, and its strength is the number no source I could open gives. Two honest ways on, neither a
+  constant of mine: (a) an inhibition whose strength is learned by a published local rule (the anti-Hebbian
+  lateral weights of Földiák 1990, and of the similarity-matching circuits already read for the relay:
+  Pehlevan & Chklovskii), with BCM on the feed-forward synapses; (b) the centre-surround or decorrelated input
+  the BCM work used, which removes the direction all cells now share. Each needs its reading first (Földiák
+  1990 has **not been opened**). Nothing built until then.

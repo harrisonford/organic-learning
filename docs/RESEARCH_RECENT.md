@@ -111,3 +111,17 @@ converge to a sphere of radius 1"). ✓ Bienenstock, Cooper & Munro 1982, *J. Ne
 quadratic BCM rule c(c − θ)σ′d with θ = E[c²], stable without normalisation; one cell only. Not opened (server
 asks for a browser check): Bienenstock, Cooper & Munro 1982; Law & Cooper 1994 (*PNAS* 91, 7797–7801). To find:
 Intrator & Cooper 1992 (the network form with lateral inhibition).
+
+### 2026-11-25 07:40: where BCM's simulation constants are
+- Blais, Intrator, Shouval & Cooper (1997), "Receptive Field Formation in Natural Scene Environments: Comparison
+  of Single Cell Learning Rules", *NIPS* 10, 423–429: opened (the proceedings' PDF, read locally). Rules and
+  input (13 × 13 round patches, 12 natural images, centre-surround or whitened); quadratic BCM "produce[s]
+  oriented RFs even when the data is not whitened"; no rate, no time constant.
+- B. Blais, *Plasticity* (the authors' simulator, public repository): `plasticity/train.pyx`,
+  `plasticity/utils.py`, `plasticity/run_sim.py` read in the source. Defaults: eta 8e-6, tau 1000, weights born
+  in [−0.05, 0.05], thresholds in [0.01, 0.02], sigmoid −1 / 50, 500 × 500 presentations, one cell, no lateral
+  connections; lateral forms without default strengths. A program's defaults, not a paper's numbers: to be
+  cited as the software, with the date read.
+- Not opened: Udeigwe, Munro & Ermentrout 2017 (login redirect); a later table of the group (rate 1e-6, first
+  threshold 0.7, memory constant 300–1000 in a search result only); Kirkwood, Rioult & Bear 1996; Földiák
+  1990; Law & Cooper 1994; Cooper & Scofield 1988.
