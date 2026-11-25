@@ -347,3 +347,9 @@ Seeds 0 and 2 left first words after 45,000 moments there (the plateau lives: 70
 0.46 / 0.50, and after 10,000 moments of pages are at 0.27 / 0.24 (the plateau lives after 10,000 there: 0.32 / 0.26 / 0.27).
 Seed 1 is still in first words at 0.49. Nothing so far tells a kinder reward from a strict one.
 
+
+**2026-11-25 00:10: the reward lives at 75,000 moments.** All three are in pages; seed 1 left first words after
+60,000 moments there (seeds 0 and 2: 45,000; the plateau lives: 70,000 / 45,000 / 50,000). Pages above blind
+answering after 10,000 moments there: 0.27 / – / 0.24 (plateau: 0.32 / 0.26 / 0.27); after 20,000: 0.28 / – / 0.29
+(plateau: 0.30 / 0.29 / 0.33). First words at 75,000: 0.45 / 0.48 / 0.49. A reward that counts a good try in
+full has changed neither how long a stage takes nor where it levels off.

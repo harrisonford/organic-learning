@@ -164,7 +164,8 @@ Still Kris's own:
 - **Queued behind the plateau lives: `organic-reward-queue`** (lives `kind_s0..2`, then `ramp_s0..2`; JUDGING.md
   2026-11-23). Lives in world 5 with the keyed store come after it.
 - **Launch line for new lives** (when the plateau lives end):
-  `TAG=... SEEDS="0 1 2" ARM=routes WORLD=5 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau -E KEY=looked" experiments/conv_pipeline.sh`
+  `TAG=... SEEDS="0 1 2" ARM=routes WORLD=5 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau -E KEY=looked -E RPE=normalised" experiments/conv_pipeline.sh`
+  (`RPE=normalised` since 2026-11-25: the reward's error against its usual size, three seeds with control, VISION.md)
 
 ## Log
 - 2026-11-19 22:30 Loop opened. Done this evening: judge audit and the strict judge; recast in teaching; blind

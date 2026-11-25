@@ -20,10 +20,16 @@ it); the average and the scale are running averages over everything seen.
 Read first on the code (how alike two pictures look, how many directions it uses, what share of the neurons'
 pairs is still correlated), then on the stream with the word cells. Arms:
     relay       the batch relay (the reference)
-    settled     where the circuit's rule comes to rest, computed at once from the same pictures (its fixed point)
-    developed   the circuit after it has seen the stream's pictures once, without their names, then held still
+    settled     where the circuit's rule comes to rest, computed at once (its fixed point)
+    developed   the circuit after one sight of unlabelled pictures, then held still
+    developed20 the same after 20,000 unlabelled pictures (does more sight close what is left?)
     plastic     the circuit learning from nothing along the stream, while the word cells learn from what it sends
-    SEEDS=0 VARIANT=norm0 ARMS=relay,settled,developed,plastic python experiments/relay_local_probe.py
+    lifelong    developed as above, then learning on along the stream (what a brain's relay would do)
+The unlabelled pictures (experiments/bench_dev_codes.py; out/bench/cifar100_norm0_s{seed}_dev.npy): the first 6,000
+are the very pictures the batch relay was settled on, so `settled`, `developed` and `lifelong` have the relay's
+own data and none of the stream's. If that file is missing the stream's own pictures are used, without their
+names, and the label says so (the first run of seed 0, 2026-11-24, was such a run).
+    SEEDS=0 VARIANT=norm0 ARMS=relay,settled,developed,developed20,plastic,lifelong python experiments/relay_local_probe.py
 """
 import collections, os, pickle, sys, time
 import numpy as np
@@ -32,7 +38,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 VARIANT = os.environ.get("VARIANT", "norm0")
-ARMS = os.environ.get("ARMS", "relay,settled,developed,plastic").split(",")
+ARMS = os.environ.get("ARMS", "relay,settled,developed,developed20,plastic,lifelong").split(",")
 RATE, BLOCK = float(os.environ.get("RATE", 1e-3)), int(os.environ.get("BLOCK", 50))  # the rate: the papers' (1e-3 a picture)
 N = int(os.environ.get("N", 10000))
 AT = [n for n in (500, 1000, 2000, 5000, 10000) if n <= N]
@@ -96,7 +102,7 @@ def read_code(label, X, y, seed):
     s = np.maximum(np.linalg.eigvalsh(L), 0)
     cells = np.random.default_rng(3).permutation(X.shape[1])[:512]
     R = np.corrcoef((X[:, cells] + 1e-9 * np.random.default_rng(4).standard_normal((len(X), 512))).T)
-    print(f"seed {seed} {label:10} two pictures alike {np.abs(L[off]).mean():.3f} (same class {L[off & same].mean():+.4f}, different {L[off & ~same].mean():+.4f}) | "
+    print(f"seed {seed} {label:11} two pictures alike {np.abs(L[off]).mean():.3f} (same class {L[off & same].mean():+.4f}, different {L[off & ~same].mean():+.4f}) | "
           f"directions used {s.sum() ** 2 / (s * s).sum():.0f} | pairs of cells that go together {float((np.abs(R[~np.eye(512, dtype=bool)]) > 0.1).mean()):.3f}", flush=True)
 
 
@@ -139,7 +145,7 @@ def stream(code, learn, Vtr, Vte, order, tests, seed, label):
                 row[n] = float(np.mean([cells.name(v) == int(yte[j]) for v, j in zip(te, tests)]))
         if learn is not None:
             learn(Vtr[block])
-    print(f"seed {seed} {label:10} cells " + " | ".join(f"{n} {a:.3f}" for n, a in row.items())
+    print(f"seed {seed} {label:11} cells " + " | ".join(f"{n} {a:.3f}" for n, a in row.items())
           + (f" | seen once, 20 later: {np.mean(shots):.3f}" if shots else "") + f" ({time.time() - t0:.0f}s)", flush=True)
 
 
@@ -150,25 +156,30 @@ for seed in SEEDS:
     order = np.random.default_rng(seed).permutation(len(Vtr))[:N]
     tests = np.random.default_rng(99).permutation(len(Vte))[:2000]
     sample = tests[:1500]
+    dev = f"out/bench/cifar100_{VARIANT}_s{seed}_dev.npy"
+    own = os.path.exists(dev)  # the unlabelled pictures the batch relay had; else the stream's own
+    Vdev = np.load(dev, mmap_mode="r") if own else Vtr
+    print(f"seed {seed} development on " + ("the unlabelled pictures the batch relay was settled on" if own else "THE STREAM'S OWN PICTURES (no names)"), flush=True)
     for arm in ARMS:
         learn = None
         if arm == "relay":
             code = lambda V: (np.asarray(V, np.float32) - relay.mu) @ relay.Z  # noqa: E731
         elif arm == "settled":
-            code, above = fixed_point(Vtr)
+            code, above = fixed_point(np.asarray(Vdev[:6000] if own else Vdev, np.float32))
             print(f"seed {seed} settled    directions above the floor {above} of {Vtr.shape[1]}", flush=True)
         else:
             t0, c = time.time(), Circuit(Vtr.shape[1], np.random.default_rng(2000 + seed))
             code = c.code
-            if arm == "developed":
-                first = np.random.default_rng(500 + seed).permutation(len(Vtr))
+            if arm != "plastic":
+                sights = len(Vdev) if arm == "developed20" or not own else 6000
+                first = np.arange(sights) if own else np.random.default_rng(500 + seed).permutation(len(Vdev))
                 for a in range(0, len(first), BLOCK):
-                    c.learn(Vtr[first[a: a + BLOCK]])
-                print(f"seed {seed} developed  on {len(first)} pictures ({time.time() - t0:.0f}s)", flush=True)
-            else:
+                    c.learn(np.asarray(Vdev[first[a: a + BLOCK]], np.float32))
+                print(f"seed {seed} {arm:10} developed on {len(first)} pictures ({time.time() - t0:.0f}s)", flush=True)
+            if arm in ("plastic", "lifelong"):
                 learn = c.learn
-        if arm != "plastic":
+        if learn is None:
             read_code(arm, code(Vte[sample]), yte[sample], seed)
         stream(code, learn, Vtr, Vte, order, tests, seed, arm)
-        if arm == "plastic":
+        if learn is not None:
             read_code(arm, code(Vte[sample]), yte[sample], seed)

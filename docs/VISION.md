@@ -2021,11 +2021,11 @@ rpe_gain_s{0,1,2}.log; baselines: the "all" arms of gaze1.log, gaze4.log, gaze4_
 
 | at 6,000 moments | baseline | error against its usual size | raw error, step larger by the same factor |
 |---|---|---|---|
-| first words | 0.35 / 0.25 / 0.34 | 0.31 / 0.28 / 0.33 | 0.31 / 0.32 / [running] |
-| pages | 0.56 / 0.51 / 0.59 | 0.61 / 0.50 / 0.60 | 0.57 / 0.57 / [running] |
-| "is there" on a page | 0.67 / 0.74 / 0.69 | 0.70 / 0.71 / 0.69 | 0.71 / 0.71 / [running] |
-| the eye moves on such a page | 0.08 / 0.07 / 0.07 | 0.00 / 0.00 / 0.02 | 0.00 / 0.01 / [running] |
-| ticks before answering, living | 5.1 / 5.0 / 5.0 | 5.0 / 4.9 / 5.3 | 4.9 / 5.0 / [running] |
+| first words | 0.35 / 0.25 / 0.34 | 0.31 / 0.28 / 0.33 | 0.31 / 0.32 / 0.27 |
+| pages | 0.56 / 0.51 / 0.59 | 0.61 / 0.50 / 0.60 | 0.57 / 0.57 / 0.60 |
+| "is there" on a page | 0.67 / 0.74 / 0.69 | 0.70 / 0.71 / 0.69 | 0.71 / 0.71 / 0.68 |
+| the eye moves on such a page | 0.08 / 0.07 / 0.07 | 0.00 / 0.00 / 0.02 | 0.00 / 0.01 / 0.02 |
+| ticks before answering, living | 5.1 / 5.0 / 5.0 | 5.0 / 4.9 / 5.3 | 4.9 / 5.0 / 5.0 |
 
 (the factor: 1.59 / 1.70 / 1.62.) Grades as the baseline on three seeds, as stated before the probe. The raw
 error grows on every seed as the learner starts to earn (to 0.37 / 0.33 / 0.35 at 6,000) while the normalised
@@ -2056,3 +2056,43 @@ held still and 0.444 learning along (the batch relay: 0.473). The arms on 10,000
 very 6,000 unlabelled pictures the batch relay was settled on and 14,000 more of the same kind
 (out/bench/cifar100_norm0_s{seed}_dev.npy), so that the resting point and the developed circuit can be given
 the relay's own pictures and never the stream's.
+
+### 2026-11-25 00:25: the published soft winner-take-all rule, unchanged (queue E 27): the organic check and the probe
+**Why.** The paper says that filters developed without labels do no better than filters never developed. Our
+development is a *hard* winner-take-all with a conscience. Journé, Garcia Rodriguez, Guo & Moraitis (ICLR 2023)
+report for one convolutional layer under a trained linear classifier: hard winner-take-all 62.7, random weights
+63.9, their soft rule 71.1. If that holds in our measure, our sentence is about one rule and must say so; and
+my soft attempt of 2026-11-17 ("my version", worse than the hard rule) proves nothing about theirs.
+**The rule, read tonight from the paper and from the authors' code** (the two differ in places that matter, so
+the code decides): the drive of a kind at a place is u = w · x on the standardised window, weights neither
+normalised nor biased; the kinds at a place compete by a softmax of the drives (inverse temperature 1); the kind
+with the largest drive changes by +y (x − u w), every other kind by −y (x − u w); the changes of a batch of 10
+pictures are summed, **divided by the largest absolute change in the whole layer** (in the code, not in the
+paper), and applied at 0.08 × |length of the neuron's weights − 1|^0.5; the weights are born with length about
+25 and learning dies away by itself as each neuron's length comes to 1; every picture is seen once. The
+response sent on is (u − the kinds' mean at the place)+ raised to 0.7, averaged over 4 × 4 at stride 2. Each
+colour is standardised first (batch norm with no learned weights). No whitening of windows anywhere.
+**Organic check.** What is local: each change needs the window, the neuron's own activity and drive and its
+own weights; the rate needs the neuron's own weight length; the competition is the canonical one (divisive,
+among neighbours at a place); a cell that is driven but not the strongest unlearns, which is the sign rule of
+BCM in other clothes. What is not: the division of every change by the largest in the layer is a number no
+synapse has; the weights are shared over places (as ours are); the batch statistics of the standardiser. No
+number in it is mine. It is built as published **to be measured**, not adopted: if it earns a place, the
+non-local division is the first thing to replace.
+**The probe** (`experiments/softhebb_probe.py`, `organic-sh1`, seed 0 first). The layer as published at
+32 × 32, developed on the 50,000 unlabelled pictures (CIFAR-100's: the stream's own are never seen before the
+stream; the authors develop on CIFAR-10's), with 256 kinds as our cortex has and with 96 as published. Arms:
+developed and as born (their "random weights"). Read first on the code, then as every code of ours is read:
+the map summarised in 4 × 4 regions, the relay settled on 6,000 unlabelled pictures, the stream of 10,000
+pictures with the word cells and the ridge. **The control that it is their rule and not again mine:** their
+finding in their own measure, in small: a ridge on the layer's whole map (24,576 numbers a picture, as their
+classifier reads it) from 5,000 labelled pictures, developed against as born.
+Smoke test (2,000 unlabelled pictures only, seed 9; not a result): the weights' lengths fall as published
+(25 → 6 on average, the first neurons at 1), no two kinds alike above 0.9, the whole-map ridge 0.529 developed
+against 0.517 as born.
+**Stated before:** in their measure in small the developed layer will be ahead by a few points (less than their
+seven: 5,000 labelled pictures, a ridge). In ours I expect less than 0.02 between developed and as born once
+the relay has decorrelated the summary, because on 2026-11-17 most of what a first layer gave was in the
+decorrelation, the graded response and the number of kinds; and both under our cortex (0.620 word cells, 0.664
+ridge), whose windows are decorrelated before the filters see them. If the developed layer is clearly ahead in
+our measure too, the paper's sentence is rewritten and the rule is tried on our decorrelated windows next.
