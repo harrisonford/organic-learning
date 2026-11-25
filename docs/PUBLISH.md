@@ -229,3 +229,13 @@ organic learner behaves and what each part does, measured honestly, not a score.
   paper depends on it, but the lives of the next generation will start in a world whose photo questions are
   partly written by a different adult: one more reason for the frozen-world question put to Kris.
 - **arXiv and Zenodo:** nothing uploaded.
+- **2026-11-25 12:59: a caution on two of the paper's sentences, pending three seeds.** The benchmark shows the cortex
+  CIFAR blown up from 32 to 64 pixels, and a 5 × 5 window of a blown-up picture holds 22 directions where a
+  real picture's holds 47–48 (`experiments/upsample_probe.py`). On seed 0, at CIFAR's own size, our hard rule's
+  development is worth three points (0.656 against 0.627), where the paper says it "did nothing". If seeds 1–2
+  agree: (1) that section says the finding was on blown-up pictures and gives the native-size rows; (2) the
+  sentence comparing our cortex (0.620) with the soft layer (0.689) says the two looked at different sizes,
+  or gives our cortex's native-size number beside it; (3) the methods say plainly that the benchmark's
+  pictures are enlarged to the eye's size. **A decision for Kris then:** whether the paper's benchmark stays
+  "the learner as it lives" (64-pixel eye, CIFAR enlarged) or moves to the pictures' own size.
+

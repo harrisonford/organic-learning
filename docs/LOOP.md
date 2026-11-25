@@ -58,9 +58,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
-- **`organic-native1`** (out/tmp/native_queue.sh; started 12:16; MemoryMax 1800M; about 50 minutes): the benchmark's
-  cortex on CIFAR at its own 32 × 32, filters as born and developed by our hard rule, seed 0 →
-  out/bench/native_code_s0.log, stream_{nat_r,nat_d}10k_s0.log.
+- **`organic-native4`** (out/tmp/native_queue4.sh; MemoryMax 1500M; every step waits for 3.3 GB available): the
+  native-size control on seeds 1 and 2 (native_code_s{1,2}.log, stream_{nat_r,nat_d}10k_s{1,2}.log), then the same
+  script on blown-up pictures, three seeds (big_code_s*.log, stream_{big_r,big_d}10k_s*.log). It may wait for
+  hours behind softbase1 and tagn_s1.
+- **Lives `ramp_s0..2`** started 12:20 (REWARD=ramp; 120,000 moments, about 26 hours). **`organic-tagn-s1`** (the
+  first arm of tag1) started 11:38; no checkpoint yet at 13:00.
 - **`organic-sailc1`** (started 09:19; MemoryMax 900M; about 45 minutes): SAILnet in our cortex's place, seed 0 →
   out/bench/sailc_develop_s0.log, sailc_weights_s0.npz. **`organic-sailc2`** (out/tmp/sailc_queue.sh; MemoryMax
   1500M; waits for sailc1 and sail2): codes and streams → sailc_code_s0.log, stream_{sailc,sailcu}10k_s0.log.
@@ -162,6 +165,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     0.81–0.85; any form free of the raw sizes 0.79–0.86). Survey running on how the brain combines them.
 
 ## Decisions waiting for Kris
+- **(2026-11-25) Which size is the paper's benchmark?** The benchmark shows CIFAR enlarged from 32 to 64 pixels
+  because the learner's eye is 64 × 64; a 5 × 5 window then holds less than half of what a window of a real
+  picture holds, and on seed 0 our own development helps at the pictures' own size where it did nothing
+  enlarged. If three seeds agree, either the paper keeps "the learner as it lives" and says what the
+  enlargement costs, or its benchmark moves to 32 pixels (a cortex the lives do not use). Until you say: both
+  are measured and the paper keeps the enlarged benchmark with the caution.
 - **(2026-11-25) Should lives that are compared between generations run in a frozen world?** A world is read as
   it is when a life starts, and the text and curriculum files grow while the daemons run, so the plateau, reward
   and ramp lives each started in a slightly larger world. A frozen copy can be given with `WORLD_DIR`. Until you
@@ -1000,4 +1009,16 @@ Still Kris's own:
   Next: native1's two streams; if as-born moves as stated, three seeds and the paper's benchmark has to be
   thought again (which input is the learner's); sailcu's stream; kind_s0's end and the three reward lives read
   together into JUDGING.md; the ramp lives' start (memory); softbase1.
+- 2026-11-25 12:59 Health: photo alert (until midnight); the three "without a verdict" alerts are the reward lives ending as
+  planned at 120,000 (12:20). **Reward lives read into JUDGING.md: a kinder reward changed nothing we can
+  see**; preschool unlearned (0.04). Ramp lives started 12:20. **Native-size control, seed 0:** developed by our
+  hard rule 0.656 against as born 0.627 (ridge + relay 0.667 / 0.633): development helps at native size, on
+  one seed; I had said within 0.01. The blown-up as-born row on the same pictures was missing: added to the
+  script (`SIZE=64`) and queued. **Memory:** with native2 running, available fell to 1.8 GB (my start of it
+  left less than the rule allows); stopped native2 and native3 by name and replaced them with the gated
+  `organic-native4`. 3.0 GB free now. `sailcu` 0.588. softbase1 seed 1 complete (frozen + relay 0.737), seed 2
+  running.
+  Next: native4's rows as memory allows → if three seeds agree, the paper's section on our development and
+  the comparison with the soft layer are reworded (and which size is the learner's benchmark is a question
+  for Kris); softbase1 seed 2 → table, headline, draft 9; tagn_s1's first checkpoint; ramp lives at 5,000.
 

@@ -8,6 +8,7 @@ and stream, nothing new, the pictures at 32 x 32: the windows' decorrelation set
 on 6,000 unlabelled pictures; codes of 10,000 CIFAR-10 training pictures and 2,000 test pictures for
 experiments/bench_stream.py (VARIANT=nat_r N=10000).
     SEEDS=0 VARIANTS=nat_r,nat_d python experiments/cortex_native_probe.py
+    SIZE=64 SEEDS=0 VARIANTS=big_r,big_d ...   the control of the control: the same script, the pictures blown up
 """
 import os, pickle, sys, time
 import numpy as np
@@ -23,7 +24,12 @@ GRID, SHRINK = 4, 0.0005
 unlabelled = P.load(f"{P.DATA}/cifar-100-python/train")
 Xtr, Xte = P.load(f"{P.DATA}/cifar-10-batches-py/data_batch_1"), P.load(f"{P.DATA}/cifar-10-batches-py/test_batch")[:2000]
 yte = np.load("out/bench/cifar10_test_labels.npy")[:2000]
-small = lambda x: x.astype(np.float32) / 255  # noqa: E731
+SIZE = int(os.environ.get("SIZE", 32))  # 64: the same script on the pictures blown up, as the benchmark shows them (variants big_r, big_d)
+if SIZE == 32:
+    small = lambda x: x.astype(np.float32) / 255  # noqa: E731
+else:
+    from PIL import Image
+    small = lambda x: np.asarray(Image.fromarray(x).resize((SIZE, SIZE), Image.BILINEAR), np.float32) / 255  # noqa: E731
 
 
 class Pictures:
@@ -39,7 +45,7 @@ for seed in SEEDS:
         t0, rng = time.time(), np.random.default_rng(seed)
         cortex = VisualCortex2(seed=seed, kinds=(256,), scaled=False)
         pics = Pictures()
-        if variant == "nat_d":
+        if variant.endswith("_d"):
             cortex.develop(pics, rng, log=lambda s: print("   " + s, flush=True))
         else:
             cortex.layers[0].settle((pics[i] for i in rng.choice(len(pics), 800, replace=False)), rng)

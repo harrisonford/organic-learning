@@ -2873,7 +2873,7 @@ sentence about our development was about the blown-up input and has to say so.
 `out/bench/native_code_s0.log`, `stream_{nat_r,nat_d}10k_s0.log` (word cells + relay / ridge + relay at 10,000):
 | our cortex, seed 0 | word cells + relay | ridge + relay | near-copy pairs among the filters |
 |---|---|---|---|
-| blown up to 64 (the benchmark), filters as born or developed | 0.613 | 0.659 | 0 as born; 658 developed |
+| blown up to 64 (the benchmark), developed by our hard rule (`norm0`) | 0.613 | 0.659 | 658 |
 | at 32, filters as born | 0.627 | 0.633 | 0 |
 | **at 32, developed by our hard rule** | **0.656** | **0.667** | 100 (194 different filters) |
 | SAILnet's filters at unit length, blown up (`sailcu`) | 0.588 | 0.635 | 5,592 |
@@ -2888,3 +2888,11 @@ sentence about our development was about the blown-up input and has to say so.
 - `sailcu`: SAILnet's filters at unit length give 0.588 on the blown-up benchmark, under our cortex's 0.613;
   with a hundred cells alike it could hardly do otherwise. Its test on real-sized pictures is the one that
   counts now, after the three seeds of the control.
+- **A hole in this table, seen after writing it:** there is no reading of the blown-up cortex *as born* on
+  these same 10,000 pictures (0.613 is the developed one; the whole-stream runs, on other pictures, gave
+  0.636 as born and 0.623 developed at 10,000). So "as born 0.627 against 0.613" compared unlike things, and
+  the clean rows are owed: the same script with the pictures blown up (`SIZE=64`, variants `big_r`, `big_d`),
+  three seeds, queued with seeds 1 and 2 of the native size (`organic-native4`, each step only when 3.3 GB
+  are free). What stands from seed 0 without that hole: at native size, developed beats as born by 0.029
+  (same script, same pictures, same seed).
+
