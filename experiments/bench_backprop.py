@@ -18,8 +18,13 @@ bench_stream.py for the seed. What is varied, because a reviewer will ask:
               tracked   the same, settled again every REFIT pictures (default 5,000) on 2,000 unlabelled pictures
                         seen through the filters as they are then (the filters move; a fixed relay goes stale)
     SEEDS=0 FILTERS=random RATE=0.001 BATCH=8 REPLAY=0 N=50000 python experiments/bench_backprop.py
+    SET=photos   (2026-11-25) the same network on the photo stream of experiments/bench_photos.py: its pictures (real
+                 at 64 x 64, so nothing is enlarged), its labels and order, as many outputs as it has words; the
+                 cortex whose first step and developed filters are used is cortex_{CORTEX}_s{seed}.pkl (CORTEX=ph_d),
+                 the relay's unlabelled pictures are 6,000 of the photographs that cortex developed on. The default,
+                 cifar10, is as it was.
 """
-import os, pickle, sys, time
+import json, os, pickle, sys, time
 import numpy as np
 from PIL import Image
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -31,7 +36,8 @@ RATE, BATCH, REPLAY = float(os.environ.get("RATE", 1e-3)), int(os.environ.get("B
 N, TESTS = int(os.environ.get("N", 50000)), int(os.environ.get("TESTS", 2000))
 RELAY, REFIT, SHRINK = os.environ.get("RELAY", ""), int(os.environ.get("REFIT", 5000)), float(os.environ.get("SHRINK", 0.0005))
 AT = [n for n in (500, 1000, 2000, 5000, 10000, 20000, 50000) if n <= N]
-cortex = pickle.load(open(f"out/bench/cortex_developed_s{CORTEX_SEED}.pkl", "rb"))
+SET = os.environ.get("SET", "cifar10")
+cortex = pickle.load(open(f"out/bench/cortex_{'developed' if SET == 'cifar10' else os.environ.get('CORTEX', 'ph_d')}_s{CORTEX_SEED}.pkl", "rb"))
 layer = cortex.layers[0]
 K, G, C = layer.kinds, 4, 10
 
@@ -41,13 +47,41 @@ def load(path):
     return d[b"data"].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1), np.array(d[b"labels"])
 
 
-train = [load(f"{DATA}/cifar-10-batches-py/data_batch_{i}") for i in range(1, 6)]
-Xtr, ytr = np.concatenate([a for a, _ in train]), np.concatenate([b for _, b in train])
-Xte, yte = load(f"{DATA}/cifar-10-batches-py/test_batch")
+class Photos:
+    """The photo stream's pictures by their place in it (64 x 64, as stored)."""
+    _coco = _commons = None
+
+    def __init__(self, part):
+        self.rows = np.load(f"out/bench/{SET}_{part}_rows.npy")
+        if Photos._coco is None:
+            Photos._coco = np.load(f"{DATA}/cococrops/pictures_64.npy", mmap_mode="r")
+            many = sum(1 for _ in open(f"{DATA}/commons/pictures.jsonl"))
+            Photos._commons = np.memmap(f"{DATA}/commons/pictures_64.u8", np.uint8, "r", shape=(many, 64, 64, 3))
+
+    def __len__(self):
+        return len(self.rows)
+
+    def __getitem__(self, i):
+        source, row = self.rows[int(i)]
+        return np.asarray((Photos._coco, Photos._commons)[source][row])
+
+
+if SET == "cifar10":
+    train = [load(f"{DATA}/cifar-10-batches-py/data_batch_{i}") for i in range(1, 6)]
+    Xtr, ytr = np.concatenate([a for a, _ in train]), np.concatenate([b for _, b in train])
+    Xte, yte = load(f"{DATA}/cifar-10-batches-py/test_batch")
+else:
+    Xtr, Xte = Photos("train"), Photos("test")
+    ytr, yte = np.load(f"out/bench/{SET}_train_labels.npy"), np.load(f"out/bench/{SET}_test_labels.npy")
+    C = len(json.load(open(f"out/bench/{SET}_names.json")))
 if RELAY:
     from organic.cortex2 import Relay
-    _u = pickle.load(open(f"{DATA}/cifar-100-python/train", "rb"), encoding="bytes")[b"data"].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
-    UNLABELLED = _u[np.random.default_rng(7).choice(len(_u), 6000, replace=False)]
+    if SET == "cifar10":
+        _u = pickle.load(open(f"{DATA}/cifar-100-python/train", "rb"), encoding="bytes")[b"data"].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
+        UNLABELLED = _u[np.random.default_rng(7).choice(len(_u), 6000, replace=False)]
+    else:
+        _u, _dev = np.load(f"{DATA}/coco_thumbs/train2017_64.npy", mmap_mode="r"), np.load(f"out/bench/{SET}_dev_rows.npy")
+        UNLABELLED = np.stack([_u[i] for i in np.sort(np.random.default_rng(7).choice(_dev, 6000, replace=False))])
 
 
 def windows(x):

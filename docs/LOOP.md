@@ -60,6 +60,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-photos-bp1`** (out/tmp/photos_backprop_queue.sh; started 20:50; MemoryMax 1400M; gated at 3.3 GB a run;
+  waits for cortex_ph_d_s0.pkl from photos1): backprop of the same shape on the photo stream, seed 0
+  (`SET=photos` in bench_backprop.py, default unchanged; the code path has not run yet: READ
+  backprop_photos_tune_s0.log FIRST for a traceback). Tuning on the first 10,000 (rate 0.0003 / 0.001 / 0.003 ×
+  batch 8 / 32, no relay and fixed relay: twelve runs) → out/bench/backprop_photos_tune_s0.log; then the whole
+  stream at the best of each → backprop_photos_full.log.
 - **`organic-photos1`** (out/tmp/photos_queue.sh; started 20:35; MemoryMax 1800M; gated at 3.3 GB a stage; about
   three hours): the photo benchmark, seed 0 → out/bench/photos_code_{ph_r,ph_d}_s0.log (near copies, the code's
   reading), stream_photos_{ph_r,ph_d}_s0.log (50,000 pictures seen once, 4,000 tests, 33 words; word cells,
@@ -1126,4 +1132,11 @@ Still Kris's own:
   developed 0.619 / 0.662. Health unchanged; 3.5 GB free with native4, sailn2 and photos1 gated.
   Next: photos1's code logs (about 21:30) and streams; sailn2 and native4's last seeds → three-seed tables;
   the paper's section on our development with both sizes, and a place for the photo stream; softbase2.
+- 2026-11-25 20:55 Health unchanged; 3.9 GB free. photos1 is coding the stream (ph_r). **SAILnet native, seed 1:** 201 different
+  filters; unit length 0.636 / 0.652 (word cells + relay / ridge + relay) beside as born 0.627 / 0.628 and the
+  hard rule 0.640 / 0.666: above born on both seeds for ridge (+0.028, +0.024), under the hard rule by 0.006
+  and 0.014. **The photo stream's reference queued** (`organic-photos-bp1`): `SET=photos` added to
+  bench_backprop.py (pictures, labels, order and unlabelled pictures of the photo stream; default unchanged).
+  Next: photos1's logs; the tuning log's first line (traceback?); sailn seed 2, big seed 2 → three-seed tables
+  and the paper's section; softbase2 after native4.
 
