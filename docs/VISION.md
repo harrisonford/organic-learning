@@ -2358,3 +2358,32 @@ behind a switch that leaves today's lives untouched (the digest must stay c52819
 learner's level (as the gaze probes); then lives. The paper has the three seeds in "The relay, learned locally:
 two attempts" with three cautions (a fifth of the stream; the settled activity by a matrix solve, not by running
 the dynamics; the rate lowered tenfold and why).
+
+### 2026-11-25 04:20: the relay circuit in the cortex's code, behind nothing that changes today's lives
+- **`organic.cortex2.RelayCircuit`**: the circuit of experiments/relay_local_probe.py as a class that stands
+  where `Relay` stands (called with a summary, returns the code at unit length). It learns from the views it
+  carries, once every 50 views, as in the probe; its rate is the probe's (1e-4, for 4,096 cells: the rate has
+  units, and the docstring says so). No new mechanism.
+- **A relay that learns does not learn from a test.** One hook in `organic/speech.py` (where the look fetches
+  the relay): if the relay has a `plastic` flag it is set to the brain's own `learning` flag, the one that
+  already stops the eye's adaptation during a test. The batch relay has no such flag, so nothing changes for
+  it. This follows the code's existing convention (an instrument does not change what it measures); a brain's
+  interneurons would not know a test from a lesson, and the views of a test carry no names, so either choice
+  is defensible. I chose the one that keeps measures clean.
+- **`experiments/make_cortex2_circuit.py`**: a life's cortex with the circuit in the batch relay's place,
+  developed before any lesson on the very 6,000 pictures of the lived side the batch relay was settled on (the
+  same draw), then saved as data/visual_cortex2_circuit.pkl (git-ignored). A life takes it with
+  `CORTEX=data/visual_cortex2_circuit.pkl`; nothing else changes. Running now (`organic-mkcircuit1`).
+- **The default path is unchanged, checked side by side:** the committed code and the edited code give the same
+  digest of 150 moments (2baf9589ac5900bc) when run at the same time with the same data.
+- **What the check showed about itself.** The digest written down on 2026-11-24 (c52819a8c3a93a7b) is no longer
+  what either code gives. The likely reason, not verified: the world's files (data/world/text_qa.jsonl and
+  curriculum.jsonl, last written tonight) grow while the daemons run, and a world is read as it is when a life
+  starts. So (1) a digest is only good against another run at the same time: the check from now on is the
+  committed code (`git archive HEAD organic` into out/tmp/, with data/ linked beside it) against the working
+  code; (2) **each generation of lives starts in a slightly larger world than the last** (the plateau lives,
+  the reward lives, the ramp lives at 09:00). The comparisons between generations in JUDGING.md carry that
+  caution; how much the world grew between them is not measured yet. A frozen copy exists for controlled lives
+  (`WORLD_DIR`, data/world_ctl) and was not used for these. Put to Kris in LOOP.md.
+- **Not done:** the life-scale test. Three lives fill the memory until the ramp lives end; the circuit's first
+  life-scale reading waits for a slot (a probe on a grown learner's level, as the gaze probes, needs 5 GB).

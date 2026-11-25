@@ -137,6 +137,67 @@ class Relay:
         return w / (np.linalg.norm(w) + 1e-8)
 
 
+class RelayCircuit:
+    """The relay as a circuit of inhibitory interneurons that learns by a local rule, for as long as it is used
+    (docs/VISION.md, 2026-11-25; measured in experiments/relay_local_probe.py). In place of `Relay`, whose matrix
+    is computed at once from 6,000 summaries with a constant set by hand.
+
+    The circuit is published and its rules are unchanged (Lipshutz, Pehlevan & Chklovskii 2022, Algorithm 2; the
+    principal cells' leak as in Duong, Simoncelli, Chklovskii & Lipshutz 2023, equation 6):
+        interneurons     z = W^T y
+        principal cells  y settles where  x - W z - y = 0, that is  y = (I + W W^T)^-1 x
+        synapses         W += rate (y z^T - W)      (between the two cells at its ends)
+    with x the summary less each cell's running average, in units of the cells' average variance. It comes to rest
+    where every direction that varies more than average is brought down to the average and the others are left.
+    Where this departs from the papers: the settled state is computed in closed form, and the synapses change
+    once every `block` views with what those views gave (the views of a block settle with the synapses as they
+    were when it began).
+
+    `rate` has units: one view changes the synapses along its own activity by rate x |y|^2. 1e-4 is for 4,096
+    cells (|y|^2 about 350, a step of 0.03); the papers' 1e-3 is for tens of cells. `plastic` False: it carries
+    views without learning from them (a test)."""
+
+    def __init__(self, D, rate=1e-4, block=50, seed=0):
+        rng = np.random.default_rng(seed)
+        self.W = (rng.standard_normal((D, D)) / np.sqrt(D)).astype(np.float32)  # born random, W W^T about 1
+        self.mu, self.var, self.n = np.zeros(D, np.float32), 1.0, 0
+        self.rate, self.block, self.plastic = rate, block, True
+        self._A, self._seen = None, []
+
+    def __getstate__(self):
+        return {k: (None if k == "_A" else v) for k, v in self.__dict__.items()}  # the factor is worked out again
+
+    def code(self, V):
+        """What the principal cells send for each row of V, with the synapses as they are (not at unit length)."""
+        import scipy.linalg as sl
+        if self._A is None:
+            M = self.W @ self.W.T
+            M[np.diag_indices_from(M)] += 1.0
+            self._A = sl.cho_factor(M, lower=True, overwrite_a=True)
+        X = (np.asarray(V, np.float32) - self.mu) / np.float32(np.sqrt(self.var))
+        return sl.cho_solve(self._A, X.T).T
+
+    def learn(self, V):
+        """A block of views: every cell's running average and the scale, then every synapse by its own two cells."""
+        V = np.asarray(V, np.float32)
+        Y = self.code(V)
+        self.W += self.rate * (Y.T @ (Y @ self.W) - len(V) * self.W)
+        self._A = None
+        n = self.n + len(V)
+        self.mu += (V - self.mu).sum(axis=0) / n
+        self.var += (float(((V - self.mu) ** 2).mean(axis=1).sum()) - len(V) * self.var) / n  # born at 1: the first block sets it
+        self.n = n
+
+    def __call__(self, v):
+        w = self.code(np.asarray(v, np.float32)[None])[0]
+        if self.plastic:
+            self._seen.append(np.asarray(v, np.float32))
+            if len(self._seen) >= self.block:
+                self.learn(np.array(self._seen))
+                self._seen = []
+        return w / (np.linalg.norm(w) + 1e-8)
+
+
 class VisualCortex2:
     relay = None  # set by settle_relay: the summary decorrelated on its way to the word cells
 

@@ -6,3 +6,4 @@ data/world_ctl/
 .memoize-token
 docs/paper/paper.pdf
 docs/paper/paper.tex
+data/visual_cortex2*.pkl

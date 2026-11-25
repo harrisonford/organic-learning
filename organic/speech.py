@@ -376,6 +376,8 @@ class SpeakingBrain(LoopBrain2):
                 return self.cortex.code(view, grid=self.cortex_grid)
 
             relay = getattr(self.cortex, "relay", None)  # a cortex whose summary is decorrelated on its way to the word cells
+            if hasattr(relay, "plastic"):  # a relay that learns (cortex2.RelayCircuit) does not learn from a test
+                relay.plastic = self.learning
             unit = lambda codes: (lambda v: relay(v) if relay is not None else v)((lambda v: v / (np.linalg.norm(v) + 1e-8))(np.concatenate(codes)))  # noqa: E731
             whole = self._coarse(scene)
             self._allc = code(whole)

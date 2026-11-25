@@ -150,6 +150,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     0.81–0.85; any form free of the raw sizes 0.79–0.86). Survey running on how the brain combines them.
 
 ## Decisions waiting for Kris
+- **(2026-11-25) Should lives that are compared between generations run in a frozen world?** A world is read as
+  it is when a life starts, and the text and curriculum files grow while the daemons run, so the plateau, reward
+  and ramp lives each started in a slightly larger world. A frozen copy can be given with `WORLD_DIR`. Until you
+  say, the lives stay as they are and the comparisons carry the caution.
 Kris, 2026-11-23 17:10: "on your questions i follow your decision you can decide for me". Decided by the loop:
 - **The store keyed by what the eye is on: adopted for new lives** (`-E KEY=looked` in the life script; running
   lives stay as they are). Reason: three seeds, takes the store's harm on pages away and lets it keep a name heard
@@ -835,3 +839,15 @@ Still Kris's own:
   pages) emailed to Kris.** Next: the dissection's other arms and streams (sh5, about 05:10); the relay circuit
   behind a switch in the cortex; softbase1 as it comes (backprop_soft_check.log first); then the organic check
   for the soft rule in our cortex's place.
+- 2026-11-25 04:20 All healthy, 3.5 GB free. **The relay circuit is in the cortex's code** (`organic.cortex2.RelayCircuit`,
+  a drop-in for `Relay`; one hook in speech.py so that it does not learn from a test; the batch relay
+  untouched). Default path unchanged, checked side by side (committed and edited code both 2baf9589ac5900bc).
+  **The digest check itself:** its absolute value drifts (c52819a8c3a93a7b on 2026-11-24) because the world's
+  files grow; from now on the check is committed against working code at the same time
+  (`git archive HEAD organic | tar -x -C out/tmp/head_root`, `ln -s $PWD/data out/tmp/head_root/data`,
+  `ROOT=out/tmp/head_root`). The same growth means each generation of lives starts in a slightly larger world
+  (put to Kris above). `organic-mkcircuit1` develops the circuit for a life's cortex →
+  data/visual_cortex2_circuit.pkl, log out/tmp/make_circuit.log (MemoryMax 1300M; if it was killed for memory,
+  run it again with 1800M when softbase1 is not at its peak). Next: sh5's arms and streams (about 05:10); the
+  circuit's reading in make_circuit.log; softbase1 as it comes (backprop_soft_check.log first); the organic
+  check for the soft rule in our cortex's place; a life-scale test of the circuit when memory allows.
