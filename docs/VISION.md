@@ -2519,3 +2519,37 @@ without the relay the best of 12 settings is 0.477 (the usual rectifier, rate 0.
 layer's own power 0.7 gives at most 0.446. The way back through the relay is exact at power 1 (six decimals;
 run tonight as `organic-bpcheck2`) and within 3% at power 0.7 but for one tiny weight (the guard at zero). The
 relay arms and the whole stream are running.
+
+### 2026-11-25 06:07: the BCM network form, read in the paper
+Intrator & Cooper (1992), *Neural Networks* 5, 3–17 (the authors' copy, read tonight; equation numbers theirs).
+- **One cell** (their 4.1–4.2): activity c = σ(x·m), σ a smooth sigmoid; threshold θ = E[c²] (in the 1982
+  form it was a power of the average activity; they give the difference: "The original BCM form requires that
+  a history of activity ... be stored and then via a non-linear process produce the modification threshold.
+  The present form ... requires that the non-linear process occur first"; "Either form seems consistent with
+  presently available experimental results"); change of the synapses: μ φ(c, θ) σ′ x with φ(c, θ) = c(c − θ)
+  (equation 5). The threshold "will always move itself to a position such that the distribution will never be
+  concentrated at only one of its sides": that is the rule's own stability. The rate "has to decay in time".
+- **Many cells, inhibition fed forward** (4.3): c̃_k = σ(c_k − η Σ_{l≠k} c_l), θ̃_k = E[c̃_k²], and
+  ṁ_k = μ { E[φ(c̃_k, θ̃_k) σ′(c̃_k) x] − η Σ_{j≠k} E[φ(c̃_j, θ̃_j) σ′(c̃_j) x] } (equation 11).
+- **Many cells, lateral inhibition** (2.3, 4.5; Scofield & Cooper 1985, Cooper & Scofield 1988): c = M d + L c,
+  that is c = (I − L)⁻¹ M d; the fed-forward form is its first-order approximation and "generates the same
+  synaptic modification equations ... within a scaling factor" in the mean-field approximation.
+- **What the paper does not give:** numbers. No strength of inhibition, no rate, no time constant for the
+  threshold's average, no particular sigmoid.
+**The organic check for a BCM layer, as far as tonight's reading goes.**
+- The rule on a cell's own inhibited activity (the first term of equation 11) is local: the cell's activity,
+  its own running average, its input.
+- **The second term of equation 11 is not obviously local**: a cell's synapses change by the *modification
+  signals* of the other cells (their φ σ′), carried with the inhibition's weight. It comes from descending one
+  objective for the whole network. Whether the lateral network of Cooper & Scofield has it has to be read
+  there (1988, *PNAS*; not opened). Two arms follow from the reading, not from me: with the term (the
+  objective's rule) and without (each cell by itself).
+- **The constants have to come from a source** (Law & Cooper 1994 or the 2004 book's simulations, or the
+  authors' published simulator and its defaults), read, not chosen by me. If none can be opened, the arm is
+  run at the values of whatever published simulation can be read and that is said; no search over them.
+- The way in and out stays the soft layer's (standardised colours, 5 × 5 windows, the same response and
+  averages), so that only the rule differs from the published soft rule and from the layer as born.
+**Stated before anything is built:** I do not know whether BCM cells with inhibition develop 256 different
+filters on raw standardised windows; the natural-image work reads oriented fields from whitened or
+centre-surround input, one cell at a time. If the first reading shows near copies (the hard rule's failure),
+the inhibition is not doing the unlearning's work and the arm is reported as it is.

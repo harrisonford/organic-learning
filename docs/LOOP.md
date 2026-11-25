@@ -881,3 +881,9 @@ Still Kris's own:
   (equal to the kept codes); backprop of the soft shape without relay tuned (best 0.477 at 10,000: power 1,
   rate 0.001, batch 8); relay arms running; way back through the relay exact at power 1. Next: find and read
   the BCM network form; softbase1's relay tuning and seed 0's whole stream; sh7.
+- 2026-11-25 06:07 **The BCM network form read in the paper** (Intrator & Cooper 1992; equations in VISION.md): the cell's own
+  rule is local and stable by its sliding threshold; the network rule has a second term that carries other
+  cells' modification signals (not obviously local: two arms, with and without); the paper gives no constants.
+  **Next for queue E 27:** find the constants in a readable source (Law & Cooper 1994, PNAS 91:7797, PMC44489
+  asks for a browser check; the authors' simulator; Cooper & Scofield 1988), then `rule="bcm"` in
+  `softhebb_probe.py`'s pipeline, seed 0, stated expectation written first.
