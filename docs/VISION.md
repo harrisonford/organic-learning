@@ -2896,3 +2896,31 @@ sentence about our development was about the blown-up input and has to say so.
   are free). What stands from seed 0 without that hole: at native size, developed beats as born by 0.029
   (same script, same pictures, same seed).
 
+
+### 2026-11-25 13:52: the soft layer on the whole stream, three seeds of the local readers; the replay test's first reading
+**The soft layer, 50,000 pictures once** (`stream_shfull_s{0,1,2}.log`; mean ± deviation over three seeds):
+| reader on the soft layer's code | 500 | 5,000 | 10,000 | 50,000 |
+|---|---|---|---|---|
+| word cells + relay | 0.416 ± 0.055 | 0.654 ± 0.010 | 0.687 ± 0.011 | 0.730 ± 0.004 |
+| word cells, no relay | 0.384 ± 0.041 | 0.574 ± 0.003 | 0.602 ± 0.014 | 0.671 ± 0.005 |
+| ridge + relay | 0.456 ± 0.005 | 0.663 ± 0.006 | 0.699 ± 0.007 | 0.744 ± 0.006 |
+| ridge, no relay | 0.471 ± 0.001 | 0.662 ± 0.005 | 0.691 ± 0.002 | 0.744 ± 0.003 |
+| streaming LDA + relay | 0.439 ± 0.014 | 0.617 ± 0.008 | 0.681 ± 0.006 | 0.748 ± 0.005 |
+| streaming LDA, no relay | 0.455 ± 0.013 | 0.666 ± 0.006 | 0.700 ± 0.004 | 0.747 ± 0.006 |
+| backprop of the layer's shape, filters from random, no relay (three seeds) | 0.271 ± 0.007 | 0.419 ± 0.026 | 0.479 ± 0.008 | 0.562 ± 0.013 |
+| the same with the fixed relay (seeds 0, 1) | 0.309 | 0.479 | 0.524 | 0.604 |
+| soft filters frozen, gradient softmax readout, relay (seeds 0, 1) | 0.431 | 0.635 | 0.673 | 0.737 |
+- The word cells on the soft layer end at 0.730 where they end at 0.687 on our cortex; the relay is worth six
+  points to them here (0.671 without) and nothing to ridge or streaming LDA, as on our cortex.
+- **What this comparison is and is not.** Backprop learns its filters from the stream's 50,000 labelled
+  pictures, once; the soft layer developed its filters beforehand on 50,000 other pictures without labels.
+  The local learner has seen twice the pictures. That is the setting the paper states (development on
+  unlabelled pictures, then the stream), but it has to be said beside the number. The row that tells the two
+  apart is backprop *started from* the developed soft filters, which the first queue did not have:
+  **`organic-softbase2`** (out/tmp/soft_baselines2_queue.sh → backprop_soft_full2.log; behind softbase1 and
+  native4, memory-gated; about six hours): filters developed then learned on, with and without the relay,
+  and the frozen filters without relay at the layer's own response (the first queue's row used power 1).
+**The replay test's first arm, first checkpoint** (`tagn_s1`: the plateau life of seed 1 lived again from its
+level at 90,000 with nothing changed): at 95,000, first words 0.45, pages 0.25, preschool 0.01; the plateau
+life itself at that age: 0.40, 0.18, 0.02. Continuing from a level works with today's code, and **two lives
+from one level differ by 0.05 to 0.07 after 5,000 moments**: that is the size an arm of this test has to beat.
