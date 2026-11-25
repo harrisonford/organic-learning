@@ -964,4 +964,13 @@ Still Kris's own:
   filters + gradient readout 0.623, against word cells + relay 0.729 and streaming LDA 0.743.
   Next: bcm3 / sail2 / sailc2 streams (about 11:40 for the last); softbase1 seeds 1–2 (about 16:00), then the
   paper's table and headline on the soft layer, draft 9 by email; the lives' end at 120,000.
+- 2026-11-25 10:51 Photo alert stands until midnight; 3.5 GB free. **BCM in the stream, seed 0:** 0.443 (250,000 presentations) and
+  0.371 (2,500,000) for word cells + relay, under the layer as born; the rest of bcm3 runs. **SAILnet in our
+  cortex's place, final:** targets held, 98 different filters of 256; stream queued (sailc2, behind bcm3 and
+  sail2, about 12:00). **softbase1 seed 0 complete:** frozen soft filters + gradient softmax readout + relay
+  0.737, over word cells + relay 0.729 (PUBLISH.md says what that does to the headline; the frozen no-relay
+  row used power 1, a caution in VISION.md); seed 1 whole stream: word cells + relay 0.734. Lives at
+  110,000–115,000, nothing new. PUBLISH.md brought up to date.
+  Next: the remaining streams; softbase1 seeds 1–2 → the paper's table, headline, draft 9; lives' end and the
+  ramp lives' start (check memory then); photo log after midnight.
 

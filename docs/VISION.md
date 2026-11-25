@@ -2801,3 +2801,8 @@ Seeds 1 and 2 follow; nothing in the paper's table until they are in.
   streaming LDA (0.743). A softmax readout's gradient is a delta rule on one layer of synapses, so this is not
   backprop through anything; it says our reader leaves about a point on the table on this code, where on our
   cortex the two were level. Seed 1 of the whole stream: word cells + relay 0.734 (no relay 0.671).
+- **A caution on one row:** the frozen-filters run without the relay (0.623) used the response tuned for
+  backprop without relay (the plain rectifier, power 1), not the layer's own (power 0.7); the run with the
+  relay used 0.7. So 0.623 is not the soft code read by a gradient readout, and only the relay row (0.737) is
+  like for like with the word cells.
+
