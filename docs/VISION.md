@@ -2712,3 +2712,37 @@ under inhibition, would be a second and much dearer reading.
 pictures: **over the layer as born (0.549) and under the published soft rule (0.689); my guess 0.58 to 0.66.**
 What could make it fail: the weights were learned for spiking cells under inhibition and are read here
 without either; and raw colour windows may give mostly colour blobs.
+
+### 2026-11-25 09:18: SAILnet on the soft layer's raw windows: one filter. My expectation was wrong; the reason is the input
+`out/bench/sail_develop_s0.log` (seed 0; 25,000 batches at the code's rates, 10,000 at the paper's last):
+- **All 256 cells end as the same filter** (two cells' weights alike 0.997; every one of the 32,640 pairs
+  above 0.9). I had said fewer than 10 pairs. The collapse is there after 1,000 batches (7 different filters)
+  and never undone.
+- The layer never reaches its own targets: a cell fires 0.068 times an image (target 0.05), two cells fire to
+  the same image 0.034 (target 0.0025, fourteen times over); inhibition has grown to 1,300 on average and
+  thresholds to 140 (born at 2) and both were still rising when the rates were lowered.
+- **Why (read from the numbers, not yet tested):** the rule's constants are in the units of its input, a
+  whitened patch with its mean removed and at unit deviation, where a cell's drive is about ±1 and a
+  threshold of 2 is rarely crossed. The soft layer's window keeps its mean and its correlations: one direction
+  (brightness) carries most of the variance, the drive along it is in the tens, every cell fires many times to
+  the same windows, and Oja's term with squared counts pulls all of them onto that direction faster than
+  inhibition, capped at stopping a cell, can part them. I named this risk beforehand as "ours, and said" and
+  still guessed 0.58–0.66; the stream reading (`organic-sail2`) will give the number, and it will be one
+  filter's worth.
+- **A lesson already on the list, met again:** a published rule's numbers hold for its input. The soft rule
+  brings its own input normalisation; this one expects the retina's (centre-surround, contrast) to be done.
+
+**The arm that follows: the same layer in our cortex's place.** Our cortex's first layer already gives its
+filters the published kind of input: each 5 × 5 colour window with its mean removed, decorrelated (the settled
+Z), at unit length (`Layer2._drive`). So: SAILnet, unchanged, develops 256 cells on those windows (times
+√75, so that a component has unit deviation as in the code: a change of units, said), taken as our own
+development takes them (windows of 64 × 64 unlabelled CIFAR-100 pictures with contrast above 0.3 of the
+picture's largest); its Q then stands where our hard rule's filters stand, and the benchmark's own pipeline
+codes the pictures (`experiments/sailnet_cortex_probe.py`; variants `sailc` as developed, `sailcu` the same
+at unit length as every filter of our cortex is). Beside it, already measured: our cortex with filters as born
+or developed by our hard rule, word cells + relay 0.620 ± 0.010 at 10,000 pictures (seed 0: 0.613).
+**Stated before it is run:** on this input the layer will hold its targets (rate within a fifth of 0.05, the
+pair rate within a factor of two of 0.0025) and its cells will stay different (fewer than 10 pairs above
+0.9). In the stream: **over our cortex's 0.613 on seed 0, my guess 0.63 to 0.67**; under the soft rule in its
+own pipeline (0.689). If the cells stay different and the stream does not move, then different filters are
+not what our cortex lacks, and that is worth as much.

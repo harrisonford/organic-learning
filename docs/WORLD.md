@@ -115,3 +115,22 @@ contributors), used for research:
 
 The test split of picture-naming items is decided by the picture, not the wording, so
 the CIFAR split is the same as when every item was "what is this?".
+
+## 2026-11-25: an adult withdrawn by its provider
+`dots-studio/dots-3-note-preview:free` is no longer in the provider's public list of models; every request to it
+has answered 404 since the night of 2026-11-25 (on 2026-11-24 it still wrote and judged: 201 photo requests, the
+last batch 20 questions, 20 judged right). The photo daemon (`experiments/world/annotate.py`) has only two adults,
+one writes and the other checks, so every batch failed and it wrote nothing for 31 hours (the health check's
+alert at 09:00); the text and curriculum daemons lost the batches where it was the writer or the checker. The
+failed requests were counted against the day's allowance (459 of 500 used by 09:20, a good part of it on 404s).
+- **Done:** removed from the text and curriculum daemons' lists (three adults left; writer and checker still
+  differ), both restarted.
+- **The photo daemon** needs a second adult that can look. It is left as it is until one has passed the scan
+  (`experiments/world/model_scan.py`: ten toddler items written, one 64-pixel photo named). Free models that take
+  pictures today: inclusionai/ling-3.2-flash, particle-ai/particle-1, google/gemma-4-31b-it and 26b,
+  nvidia/nemotron-3-nano-omni. The first scan of the two gemma models and ling gave no reply in ten minutes
+  (busy upstream, as on 2026-11-04); ling alone is being tried again (`organic-scan1` → out/model_scan.log).
+  One adult writing and checking its own questions is not agreement between two adults, so that is not done.
+- The one-shot frame scripts (naming, observation, echo frames) still name the withdrawn model; to be changed
+  when they are next run.
+

@@ -58,8 +58,11 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
   dissection's five arms on seeds 1 and 2 → out/bench/softhebb_dissect_s{1,2}.log, then
   stream_{shh,shp,shc,she,sho}10k_s{1,2}.log.
-- **`organic-sail1`** (started 08:33; MemoryMax 700M; about 30 minutes): the SAILnet layer's development, seed 0 →
-  out/bench/sail_develop_s0.log, sail_weights_s0.npz. **`organic-sail2`** (out/tmp/sail_queue.sh; MemoryMax
+- **`organic-sailc1`** (started 09:19; MemoryMax 900M; about 45 minutes): SAILnet in our cortex's place, seed 0 →
+  out/bench/sailc_develop_s0.log, sailc_weights_s0.npz. **`organic-sailc2`** (out/tmp/sailc_queue.sh; MemoryMax
+  1500M; waits for sailc1 and sail2): codes and streams → sailc_code_s0.log, stream_{sailc,sailcu}10k_s0.log.
+  **`organic-scan1`**: one free vision model tried as the photo world's second adult → out/model_scan.log.
+- **`organic-sail2`** (out/tmp/sail_queue.sh; MemoryMax
   1500M; waits for sail1 and bcm3): its codes and streams → sail_code_s0.log, stream_{sail,sailr}10k_s0.log.
 - **`organic-bcm3`** (out/tmp/bcm_queue.sh; MemoryMax 1500M; waits for sh7 and bcm4): codes and streams of the
   BCM layer at 250,000 / 2,500,000 / 10,000,000 presentations and as born → bcm_code_s0.log,
@@ -934,4 +937,20 @@ Still Kris's own:
   theirs is whitened and brought to unit deviation patch by patch; that input, in small, is then the second
   arm, with the response given the same input); bcm3 and sail2 streams; softbase1 seed 0 complete, then the
   paper's table; the lives' end at 120,000 (about 09:00) and the ramp lives' start.
+- 2026-11-25 09:20 **ALERT read and mended in part:** the photo daemon wrote nothing for 31 hours because one of its two adults
+  (`dots-studio/dots-3-note-preview:free`) was withdrawn by the provider (404 on every request since last
+  night); removed from the text and curriculum daemons (restarted); the photo daemon waits for a second adult
+  that passes the scan (WORLD.md; `organic-scan1`). The health alert stays until the photo world writes again.
+  **SAILnet on the soft layer's raw windows: all 256 cells one filter** (my "fewer than 10 near-copy pairs" was
+  wrong; the layer never reaches its targets; the rule's numbers are in the units of a whitened, mean-free
+  patch). **Next arm, stated and running:** SAILnet in our cortex's place, on the cortex's own decorrelated
+  windows (`experiments/sailnet_cortex_probe.py`, `organic-sailc1`/`sailc2`; smoke test at 1,000 batches: rates
+  near target, but 1,265 near-copy pairs already). **Soft layer, whole stream, seed 0 complete for the local
+  readers:** word cells + relay 0.729, ridge + relay 0.740, ridge 0.745, streaming LDA + relay 0.743, LDA
+  0.741; **backprop of the layer's shape, no relay, filters learned from random: 0.547** at 50,000; the frozen
+  and relay runs follow. Dissection seed 2 through its arms (same picture: hard 903 pairs, no unlearning
+  19,610, const ran away, early 0 pairs, own weights 100,000 long); its streams run. Lives at 105,000–110,000:
+  nothing new (seed 1 pages 0.34; seeds 0 and 2 preschool 0.02).
+  Next: the scan's row (then the photo daemon's second adult, or the question to Kris); sailc1's reading; bcm3,
+  sail2, sailc2 streams; softbase1's backprop rows for seed 0, then seeds 1–2 and the paper's table.
 
