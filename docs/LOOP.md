@@ -786,3 +786,14 @@ Still Kris's own:
   Next: read relay2 (then fix the rate's meaning, run the arms on three seeds on the relay's own pictures);
   read sh1 seed 0 (then seeds 1–2, or the paper's sentence); reward lives at 85,000; tag1 waits for memory;
   email draft 8 when the relay or the soft rule changes what the paper says.
+- 2026-11-25 01:15 All healthy, 4.3 GB free. **Read:** the relay circuit direction by direction at full size: at the papers'
+  rate one picture's step is 0.38 and the circuit stops 10–40% above the floor and wanders; at a tenth of it
+  (step 0.03) it goes on approaching its resting point over 20,000 pictures (strong directions within 13%).
+  The rule is kept unchanged with the rate said in this size's units; no scaling mechanism of mine added. The
+  six arms run on three seeds on the batch relay's own unlabelled pictures (`organic-relay3`). **The published
+  soft rule, seed 0:** in its authors' measure in small the developed layer names 0.616 against 0.515 as born:
+  it replicates, and my stated expectation was too low; the summaries of two pictures are half as alike and
+  use three times the directions. Its reading in our measure runs (`organic-sh2`; the first queue stopped on a
+  file fault of mine, mended); seeds 1–2 queued (`organic-sh3`). PUBLISH.md brought up to date.
+  Next: read sh2 (our measure); if the soft rule is ahead there too, rewrite the paper's section and write the
+  organic check for the rule on our decorrelated windows; relay3 as seeds come; reward lives at 85,000.

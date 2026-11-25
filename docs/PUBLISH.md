@@ -174,3 +174,21 @@ organic learner behaves and what each part does, measured honestly, not a score.
   picture licences for the examples figure; every reference opened by hand (docs/paper/REFERENCES.md, six more
   rows since yesterday, none opened); the author line and the AI-use statement in Kris's words.
 - **arXiv and Zenodo**: as on 2026-11-23; nothing uploaded.
+
+## Update, 2026-11-25: where publishing stands
+
+- **The paper**: the drift stage's row and paragraph are filled with three seeds (the rule gives back half of the
+  tolerance a second stage loses and changes nothing on the stream); its pending mark is gone. Draft 7 is the
+  last one sent; draft 8 goes when one of the two items below changes what the paper says.
+- **Two items that may change the paper's words** (both running, VISION.md 2026-11-25):
+  (1) *the relay by a local circuit* (a published interneuron rule): its resting point is as good as the batch
+  relay with no hand-set constant; whether the online rule gets there in a stream is being read on three seeds.
+  If it does, "two batch stand-ins" becomes one. (2) *the published soft winner-take-all rule, unchanged*: in its
+  authors' measure in small it replicates (0.616 developed against 0.515 as born); its reading in our measure is
+  running. **The paper's sentence "developed filters do no better than random" is about our hard rule and must
+  say so**, whatever the stream shows; if the soft rule is ahead in our measure too, the section is rewritten.
+- **References to add as unopened when cited**: Lipshutz, Pehlevan & Chklovskii 2022; Duong et al. 2023a, 2023b
+  (the relay circuit); Journé et al. 2023 and Moraitis et al. 2022 (the soft rule); Tobler, Fiorillo & Schultz
+  2005 and Louie & Glimcher (the reward's error against its usual size).
+- **Still owed before sending**: as on 2026-11-24, less the drift stage's seeds.
+- **arXiv and Zenodo**: as on 2026-11-23; nothing uploaded.
