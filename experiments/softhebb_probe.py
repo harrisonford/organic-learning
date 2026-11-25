@@ -83,7 +83,9 @@ def develop(kinds, pictures, rng, rule="published", step=None):
     factor every change of a batch was multiplied by (1 / the largest absolute change in the layer). `rule`:
     published; hard (the authors' hard winner-take-all: only the strongest kind learns, by 1 and not by y); plus
     (soft, but the losers learn with the same sign as the winner: no unlearning); const (the published rule with
-    that factor held at `step` for the whole development: no quantity shared by the layer)."""
+    that factor held at `step` for the whole development: no quantity shared by the layer); own (the published rule
+    with the division made by each kind for itself: the largest change among its own synapses, a quantity a cell
+    has, in place of the largest in the layer)."""
     W = (RADIUS / np.sqrt(75) * rng.standard_normal((kinds, 75))).astype(np.float32)
     born, standard, t0, factors = W.copy(), Standard(), time.time(), []
     order = rng.permutation(len(pictures))[:SIGHTS]
@@ -104,7 +106,10 @@ def develop(kinds, pictures, rng, rule="published", step=None):
         dW = S.T @ X - (S * U).sum(axis=0)[:, None] * W
         factor = 1.0 / (float(np.abs(dW).max()) + 1e-30)
         factors.append(factor)
-        dW *= step if rule == "const" else factor
+        if rule == "own":  # each kind divides by the largest change among its OWN synapses
+            dW /= np.abs(dW).max(axis=1, keepdims=True) + 1e-30
+        else:
+            dW *= step if rule == "const" else factor
         r = np.linalg.norm(W, axis=1)
         W += (RATE * (np.abs(r - 1) + 1e-10) ** POWER)[:, None] * dW
         if b in (0, 99, 999) or a + BATCH >= len(order):
@@ -171,12 +176,15 @@ if __name__ == "__main__":
         q = np.quantile(factors, [0, 0.25, 0.5, 0.75, 1])
         print(f"seed {seed} published: the factor shared by the layer, over the batches: least {q[0]:.3g}, quartiles {q[1]:.3g} / {q[2]:.3g} / {q[3]:.3g}, most {q[4]:.3g}; "
               f"in the first 100 batches {np.median(factors[:100]):.3g}, in the last 100 {np.median(factors[-100:]):.3g}", flush=True)
-        for name, rule in (("shh", "hard"), ("shp", "plus"), ("shc", "const")):
+        early = float(np.median(factors[:100]))
+        arms = {"shh": ("hard", None), "shp": ("plus", None), "shc": ("const", float(q[2])), "she": ("const", early), "sho": ("own", None)}
+        for name in os.environ.get("ARMS", "shh,shp,shc").split(","):
+            rule, step = arms[name]
             t0 = time.time()
             with np.errstate(all="ignore"):
-                _, W, standard, _ = develop(256, unlabelled, np.random.default_rng(3000 + seed), rule, float(q[2]))
+                _, W, standard, _ = develop(256, unlabelled, np.random.default_rng(3000 + seed), rule, step)
             if not np.isfinite(W).all():
-                print(f"seed {seed} {name} ({rule}): the weights ran away (not finite); no code kept", flush=True)
+                print(f"seed {seed} {name} ({rule}{'' if step is None else f' at {step:.3g}'}): the weights ran away (not finite); no code kept", flush=True)
                 continue
             C = W / np.linalg.norm(W, axis=1, keepdims=True)
             alike = np.abs(C @ C.T)[~np.eye(256, dtype=bool)]
@@ -185,7 +193,7 @@ if __name__ == "__main__":
                 S = coded(W, standard, X)
                 np.save(f"out/bench/cifar10_{name}_s{seed}_{part}.npy", S.astype(np.float16))
             through = (S - relay.mu) @ relay.Z
-            print(f"seed {seed} {name} ({rule}; {time.time() - t0:.0f}s): two kinds' weights alike {alike.mean():.3f}, pairs above 0.9: {int((alike > 0.9).sum() // 2)} | "
+            print(f"seed {seed} {name} ({rule}{'' if step is None else f' at {step:.3g}'}; {time.time() - t0:.0f}s): weight lengths {np.linalg.norm(W, axis=1).min():.2f} / {np.linalg.norm(W, axis=1).mean():.2f} / {np.linalg.norm(W, axis=1).max():.2f} | two kinds' weights alike {alike.mean():.3f}, pairs above 0.9: {int((alike > 0.9).sum() // 2)} | "
                   + read_code("summary", S[:1500], yte[:1500]) + " | " + read_code("through the relay", through[:1500], yte[:1500]), flush=True)
             pickle.dump(types.SimpleNamespace(relay=relay, W=W, standard=(standard.mean, standard.var)), open(f"out/bench/cortex_{name}_s{seed}.pkl", "wb"))
             del relay, through, S

@@ -55,16 +55,15 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 ## Running
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
-- **`organic-sh5`** (out/tmp/softhebb_dissect_queue.sh; waits for sh4): which part of the soft rule does the work,
-  seed 0 → out/bench/softhebb_dissect_s0.log, then stream_{shh,shp,shc}10k_s0.log (started 03:50; about 75 minutes;
-  the hard arm's code is read, VISION.md 04:10).
-- **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; waits for sh5; MemoryMax 1800M; about
+- **`organic-sh6`** (out/tmp/softhebb_dissect2_queue.sh; started 05:10, about 45 minutes): the dissection's second
+  step, seed 0 → out/bench/softhebb_dissect2_s0.log, then stream_{sho,she}10k_s0.log.
+- **`organic-softbase1`** (out/tmp/soft_baselines_queue.sh; started 04:45; MemoryMax 1800M; about
   eight hours): the references for the soft layer. In order: the whole stream coded (soft_codes.log; variants
   `shfull`, `shrfull`); the way back through the relay checked (backprop_soft_check.log: READ IT FIRST, the two
   columns must agree); backprop of the layer's shape tuned on seed 0 (backprop_soft_tune_s0.log); per seed the
   whole stream on the developed code (stream_shfull_s{0,1,2}.log: word cells, ridge, streaming LDA, with and
   without relay) and backprop at its best settings (backprop_soft_full.log); then stream_shrfull_s{0,1,2}.log.
-- Finished and read tonight: relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
+- Finished and read tonight: sh5 (the dissection, seed 0), mkcircuit1 (the circuit for a life), relay3 (the relay circuit, three seeds), sh4 (the soft rule, seeds 1–2), sh1/sh2 (the soft rule, seed 0), relay1 (first run, wrong step), relay2 (the
   direction-by-direction reading), devcodes1, rpe1, trace2.
 - **`organic-tag1`** (out/tmp/tag_queue.sh; never edit while it runs): queue E 29e, the life-scale test of replay
   marked by reward. Lives continued from the plateau lives' levels as they left pages, 20,000 moments of
@@ -851,3 +850,16 @@ Still Kris's own:
   run it again with 1800M when softbase1 is not at its peak). Next: sh5's arms and streams (about 05:10); the
   circuit's reading in make_circuit.log; softbase1 as it comes (backprop_soft_check.log first); the organic
   check for the soft rule in our cortex's place; a life-scale test of the circuit when memory allows.
+- 2026-11-25 05:07 All healthy, 3.5–3.9 GB free. **The dissection (seed 0):** hard 0.512 and soft-without-unlearning 0.444
+  against published 0.689 and as born 0.549: the losers' unlearning does the work (without it the kinds pile
+  onto the same windows, as ours did); with the layer-wide factor held at its median the weights ran away.
+  Organic check part by part in VISION.md: everything is local but the division by the largest change in the
+  layer. **`organic-sh6`** (out/tmp/softhebb_dissect2_queue.sh, MemoryMax 1500M, about 45 minutes): two more
+  arms, own (each kind divides by its own largest change) and early (the factor held at its early value) →
+  softhebb_dissect2_s0.log, stream_{sho,she}10k_s0.log. **The circuit for a life** is made
+  (data/visual_cortex2_circuit.pkl; 208 directions against the batch relay's 271 on 500 lived pictures).
+  `organic-softbase1` started 04:45: seed 0's whole stream coded (equal to the kept codes), seeds 1–2 in work.
+  Reward lives at 95,000: seeds 0 and 2 in preschool. Next: sh6; softbase1 (backprop_soft_check.log first, then
+  the tuning); if own holds: the soft rule in our cortex's place (the eye's 64 × 64 pictures; raw standardised
+  windows and decorrelated windows as two arms) after reading BCM / ABS in the papers; the dissection on seeds
+  1–2 for whatever goes into the paper.

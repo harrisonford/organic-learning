@@ -2387,3 +2387,61 @@ the dynamics; the rate lowered tenfold and why).
   (`WORLD_DIR`, data/world_ctl) and was not used for these. Put to Kris in LOOP.md.
 - **Not done:** the life-scale test. Three lives fill the memory until the ramp lives end; the circuit's first
   life-scale reading waits for a slot (a probe on a grown learner's level, as the gaze probes, needs 5 GB).
+
+### 2026-11-25 05:07: the dissection of the soft rule (seed 0); its organic check part by part; the circuit for a life
+**The dissection** (softhebb_dissect_s0.log, stream_{shh,shp}10k_s0.log; 256 kinds, 50,000 unlabelled pictures,
+one part taken out at a time, nothing tuned; 10,000 pictures of the stream).
+
+| | near-copy pairs of kinds (of 32,640) | directions, summary / through relay | word cells + relay | ridge + relay |
+|---|---|---|---|---|
+| published (soft, losers unlearn) | 2 | 27 / 577 | **0.689** | 0.700 |
+| the layer as born | – | 8 / 236 | 0.549 | 0.603 |
+| hard: only the strongest kind learns | 916 | 7 / 144 | 0.512 | 0.577 |
+| soft, no unlearning (losers learn with the winner's sign) | 19,031 | 6 / 81 | 0.444 | 0.508 |
+| no layer-wide division (factor held at its median, 0.00086) | the weights ran away | | | |
+
+Against what I stated: hard near as born (it is under: 0.512 against 0.549); no unlearning clearly worse than
+published (yes, and worse than hard); the constant factor: I did not know, and it diverged.
+- **The unlearning does the work.** Take it away and development is worse than no development: the kinds pile
+  onto the same windows (916 near copies when hard, 19,031 of 32,640 pairs when soft without unlearning). This
+  is the failure our own hard rule had (658 near-copy pairs), and our conscience term did not prevent it.
+  Softness alone does not help; softness is what gives the losers something to unlearn by.
+- **The division by the largest change in the layer is not only a rate.** Held at its median the weights
+  diverge. But that test is blunt: the factor is 1e-5 in the first 100 batches and 1.3e-3 in the last, so the
+  median is eighty times too large at the start (as I wrote beforehand it might be). What the test shows is
+  that the published rule needs a step that follows the size of the changes, not that the step has to be
+  shared by the layer.
+**The rule's parts against the organic philosophy** (what a cell could do; one seed, so this guides the next
+probe and adopts nothing).
+| part | in a brain | verdict |
+|---|---|---|
+| each colour standardised by running averages | adaptation in the retina | local |
+| a soft competition among the kinds at a place | lateral inhibition, divisive normalisation | local, canonical |
+| the winner strengthens, active losers weaken | plasticity whose sign depends on how strongly the cell fired (weak firing depresses, strong firing potentiates: Bienenstock, Cooper & Munro 1982; Artola, Bröcher & Singer 1990) | local; **to be read in the papers, cited from memory here** |
+| the decay in proportion to the cell's own response | Oja's term, synaptic scaling | local |
+| a rate that falls as the cell's weights near length 1 | a cell knows its own total synaptic weight | local to the cell |
+| every change divided by the largest change in the layer | no cell has this number | **not local** |
+| one filter for all places | none (ours shares them too) | a shortcut, as in our cortex |
+**The next arms** (`organic-sh6`, out/tmp/softhebb_dissect2_queue.sh → softhebb_dissect2_s0.log,
+stream_{sho,she}10k_s0.log), both without tuning:
+- **own**: each kind divides by the largest change among its own synapses. A quantity one cell has, in the
+  layer-wide one's place; the largest change of any synapse of a cell is then its rate, as in the published
+  rule it is for the one cell with the largest change.
+- **early**: the factor held at its early value (the median of the first 100 batches, about 1e-5), where a
+  constant is safe.
+**Stated before:** own: I do not know. Every kind then moves at its full rate where in the published rule most
+move far slower than the fastest, so it may be too fast; my guess is within 0.03 of the published 0.689.
+early: stable, and too slow to finish in 50,000 pictures; between as born and developed (0.60–0.65).
+If own holds, the rule is local as a cell could run it and goes to its test in our cortex's place.
+
+**The relay circuit for a life** (out/tmp/make_circuit.log): developed on the 6,000 pictures of the lived side
+the batch relay was settled on (401 s); the average it keeps equals the batch relay's (6.5e-8). On 500 further
+pictures: two views alike 0.221 with no relay, 0.031 through the batch relay, 0.040 through the circuit;
+directions used 13 / 271 / 208. The same picture as on the benchmark's developed arm (350 against 236):
+the circuit after 6,000 pictures has not flattened as many directions as the batch relay; on the benchmark it
+closed most of that while learning on. Saved as data/visual_cortex2_circuit.pkl; waits for a life.
+
+**The reward lives at 95,000 moments.** Seeds 0 and 2 have left pages for preschool (seed 1 is still in
+pages: 0.29 above blind answering). In preschool: 0.04 / 0.01; pages now 0.23 / 0.18 and first words 0.41 /
+0.37, both under where they were at 90,000 (pages 0.31 / 0.33, first words 0.45 / 0.46). Earlier stages give way
+when a new one starts, as in the plateau lives.
