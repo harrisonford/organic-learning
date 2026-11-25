@@ -53,7 +53,10 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-sailn1`** (out/tmp/sailn_queue.sh; started 18:52; MemoryMax 1400M; about 1.5 hours; gated at 3.3 GB a
+- **`organic-sailn2`** (out/tmp/sailn_queue2.sh; started 19:47; MemoryMax 1400M; gated at 3.3 GB a stage; about
+  50 minutes a seed): SAILnet at native size on seeds 1 and 2 → sailn_develop_s{1,2}.log, sailn_code_s{1,2}.log,
+  stream_{sailn,sailnu}10k_s{1,2}.log. Beside them: nat_r / nat_d of the same seed.
+- **`organic-sailn1`** ENDED 19:38, read (VISION.md 19:50). (out/tmp/sailn_queue.sh; started 18:52; MemoryMax 1400M; about 1.5 hours; gated at 3.3 GB a
   stage): SAILnet in our cortex's place at CIFAR's own size, seed 0 → out/bench/sailn_develop_s0.log (about
   55 minutes; different filters, rates), sailn_code_s0.log, stream_{sailn,sailnu}10k_s0.log. Beside: nat_r
   0.626, nat_d 0.649. What I said before it ran is in VISION.md 18:50.
@@ -1090,4 +1093,13 @@ Still Kris's own:
   0.39 / 0.39 / 0.43.
   Next: sailn's development log (about 19:50) and streams; big rows → the paper's section on our development
   reworded with both sizes; softbase2 after native4; photo log after midnight.
+- 2026-11-25 19:55 Health unchanged (photo alert until midnight; the three planned endings); 4.1 GB free. **SAILnet at native
+  size, seed 0: the collapse is gone** (197 different filters of 256, rates on target; 98 on enlarged pictures)
+  and its filters read 0.641 / 0.661 (word cells + relay / ridge + relay, unit length) beside as born 0.627 /
+  0.633 and our hard rule 0.656 / 0.667. What I said before held, for once. Seeds 1–2 started
+  (`organic-sailn2`). New `experiments/filters_picture.py`; three pictures in docs/img. Enlarged rows, seed 0:
+  development −0.014 (word cells) / +0.012 (ridge): the paper's "did nothing" holds on enlarged pictures.
+  Next: sailn seeds 1–2 (about 21:30) → three-seed row; big rows seeds 1–2 (about 21:15) → the paper's section
+  with both sizes; if SAILnet holds on three seeds: its own answer (spikes under inhibition) as the layer's
+  response, and whether it belongs in the paper beside the hard rule; softbase2; photo log after midnight.
 

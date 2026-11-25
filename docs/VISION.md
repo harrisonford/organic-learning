@@ -3038,3 +3038,47 @@ against the hard rule's 0.613. A window at native size holds 47 directions where
 **Said before:** more different filters than 98 (I expect 150–220); `sailnu` between 0.62 and 0.65, that is
 at the level of the layer as born (0.626) and not above our hard rule (0.649). I have been wrong on five of
 five such statements in this thread; it is said so that it can be wrong again.
+
+### 2026-11-25 19:50, SAILnet at native size, seed 0: a fully local rule that develops filters worth having
+
+`sailn_develop_s0.log`, `sailn_code_s0.log`, `stream_{sailn,sailnu}10k_s0.log` (10,000 pictures, 2,000 tests;
+seed 0; the same base cortex as `nat_r`, only the 256 filters differ):
+
+| our cortex at 32, seed 0 | word cells + relay | word cells | ridge + relay | ridge | near-copy pairs / different filters |
+|---|---|---|---|---|---|
+| as born (`nat_r`) | 0.627 | 0.551 | 0.633 | 0.639 | 0 / 256 |
+| our hard rule (`nat_d`) | 0.656 | 0.558 | 0.667 | 0.655 | 100 / 194 |
+| SAILnet, as developed (`sailn`) | 0.633 | 0.522 | 0.658 | 0.642 | 258 / 197 |
+| SAILnet, filters at unit length (`sailnu`) | 0.641 | 0.550 | 0.661 | 0.647 | the same |
+
+- **The layer does what its paper says, on this input.** Every cell fires at its target (0.027 / 0.050 / 0.085
+  spikes an image: least, mean, most), two cells fire together less often than chance would have it (0.0016
+  against the target 0.0025), thresholds and inhibition settle (unchanged between 25,000 and 35,000 batches),
+  weights stay near unit length (0.63–1.97). **197 different filters of 256**, where the same layer on pictures
+  blown up to 64 ended with 98. On the input the rule was written for, with nothing else changed, the collapse
+  is gone.
+- **In the stream:** behind the relay, ridge reads 0.661 from these filters, 0.633 from the filters as born and
+  0.667 from our hard rule's; the word cells 0.641, 0.627 and 0.656. So on one seed SAILnet's filters are worth
+  about what our hard rule's are to ridge (a difference of 0.006), and they sit between born and hard rule for
+  the word cells, with both gaps (0.014, 0.015) under what we interpret. Seeds 1 and 2 are running
+  (`organic-sailn2`).
+- **What I said before:** 150–220 different filters (197), `sailnu` between 0.62 and 0.65 (0.641), not above
+  the hard rule (it is not). The first of six such statements in this thread to hold.
+- **What this is, if the seeds agree:** every step of this layer is local (a cell's own rate, its own input,
+  the firing of the two cells an inhibitory weight joins), nothing is divided by a number from elsewhere in
+  the layer, and its constants are its authors'. It would be the fully local filter rule that queue E 27 asked
+  for, at our hard rule's level, not at the soft rule's (0.689 on its own pipeline). The hard rule's conscience
+  (a count of wins kept per kind) is local too; what SAILnet adds is that the competition itself is learned
+  inhibition between cells and not a maximum taken over the layer by nobody.
+- **Not read yet:** the layer's own answer (spike counts under its inhibition) in place of our response; here
+  only its feed-forward weights stand in our cortex.
+
+**The filters** (`experiments/filters_picture.py`, new: each filter as the raw 5 × 5 colour window it prefers,
+W @ Z): docs/img/sailn_filters_s0.png, nat_d_filters_s0.png, nat_r_filters_s0.png. Both developed layers are
+oriented black-and-white edges and bars at many angles and colour-opponent edges (blue/orange, green/magenta);
+SAILnet's forty or so longest filters are the least clean (mixed colour blobs).
+
+**The enlarged like-for-like rows, seed 0** (`big_r`, `big_d`; the same script at `SIZE=64`): as born 0.631 /
+0.647 (word cells + relay / ridge + relay), developed 0.617 / 0.659; 277 near-copy pairs, 167 different
+filters. On enlarged pictures development moves the word cells by −0.014 and ridge by +0.012: the paper's
+"did nothing", on these 10,000 pictures. Seeds 1–2 running.
