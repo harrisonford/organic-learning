@@ -1854,3 +1854,27 @@ a step larger by exactly the factor measured in the first arm ("all+gain") tells
 larger step. Baseline: the "all" arm of the gaze probes (same seeds and moments). Read: grades, ticks before
 answering, eye moves, patience. Expectation, stated before: little moves at this age; the ground is the
 mechanism, and what is watched is whether anything breaks.
+
+### 2026-11-24 21:05: the sparse layer with a hundred inputs a cell, three seeds
+expand_probe_fan100_s{0,1,2}.log; 10,000 pictures; seeds 0 / 1 / 2 (mean):
+
+| | the relay's code | 4 × the cells | 10 × the cells | 4 ×, no inhibition |
+|---|---|---|---|---|
+| two different pictures alike | 0.035 | 0.010 | 0.008 | 0.139 |
+| directions used | 375 / 380 / 383 | 1,480 / 1,489 / 1,489 | 1,574 / 1,580 / 1,585 | 28 |
+| word cells name a new picture | 0.613 / 0.616 / 0.631 (0.620) | 0.590 / 0.580 / 0.602 (0.591) | 0.612 / 0.603 / 0.612 (0.609) | 0.602 / 0.599 / – |
+| after 500 pictures | 0.344 / 0.398 / 0.434 (0.392) | 0.190 / 0.266 / 0.326 (0.261) | 0.185 / 0.273 / 0.331 (0.263) | 0.258 / 0.360 / – |
+| ridge on everything seen | 0.659 / 0.662 / 0.672 (0.664) | 0.569 / 0.571 / 0.567 (0.569) | 0.617 / 0.618 / 0.612 (0.616) | 0.656 / 0.657 / – |
+| a picture seen once, asked 20 later | 0.890 / 0.860 / 0.797 (0.849) | 0.967 / 0.970 / 0.957 (0.965) | 0.983 / 0.980 / 0.963 (0.975) | 0.897 / 0.873 / – |
+
+Seed 0's reading holds on three: at ten times the cells the word cells name new pictures at 0.609 against
+0.620 (not a difference we read; down on two seeds, level on one) and the memory of one picture is 0.975
+against 0.849. What it costs: a slow start (0.26 against 0.39 after 500 pictures) and what a second-order
+reader could have used (the ridge 0.616 against 0.664). With no inhibition and a hundred inputs of one sign
+the cells all carry the inputs' common sum (28 directions): the inhibition is what makes the layer a code.
+**Decision.** Not put in front of the word cells: in a life a word is heard a few times, which is the stream's
+first 500 pictures and not its 10,000th, and the layer is slowest exactly there; and the learner already has a
+memory of single moments (the store). Not adopted as the store's key either until a test can tell keys apart
+(pages of one scene, in a learner). Kept as measured: the mechanism does what biology says it does (a memory
+of moments out of slow cells), and the cost of a thin wiring is known. No further wirings are tried (that
+would be a search).

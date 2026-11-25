@@ -163,8 +163,9 @@ organic learner behaves and what each part does, measured honestly, not a score.
   that tracks the stream and a wider search of its settings found nothing better); a subsection on looking one
   place at a time (three seeds: a learner that looks where the heard words pull answers as well as one handed
   every place at once); a fourth mistaken assumption (that reward could teach the eye what to trust; the
-  shuffled control undid a result we had already written down). Draft 6 (15 pages) is with Kris by email; draft 7
-  follows when the section on the cortex from biology is in.
+  shuffled control undid a result we had already written down). **Draft 7 (17 pages) sent to Kris by email on 2026-11-24 21:06**, with the section
+  "Giving the cortex what a cortex has" (normalisation, blurred start and the sparse layer on three seeds; the
+  drift stage on one, marked pending).
 - **Owed for that section**: three seeds each of divisive normalisation, of a second stage that learns from the
   eye's drift, and of a blurred start (seed 0 of each is read, VISION.md 2026-11-24; seeds 1–2 running); each
   beside the same-shape backprop and the streaming baselines; then the sparse expansion (queue E 29f, running).

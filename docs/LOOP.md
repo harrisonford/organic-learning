@@ -59,12 +59,6 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   out/bench/stream_{norm0,divnorm,divnorm_s}10k_s{1,2}.log (codes read: out/bench/norm_probe_s12.log).
 - **`organic-diet2`** (out/bench/diet2_queue.sh): the blurred start on seeds 1 and 2 →
   out/bench/diet_probe_s{1,2}.log, stream_{diet,dietb,norm0b}10k_s{1,2}.log (last stream running).
-- **`organic-expand1`** (out/bench/expand_queue.sh; waits for diet2): queue E 29f, `experiments/expand_probe.py`
-  on seeds 0–2 (4,096 relay numbers onto 1, 4 and 10 times as many cells, 7 inputs each, 5% on; a control with
-  no inhibition) → out/bench/expand_probe_s{0,1,2}.log; then 100 inputs a cell on seed 0 →
-  expand_probe_fan100_s0.log.
-- **`organic-expand2`** (out/bench/expand2_queue.sh): the sparse layer wired with 100 inputs a cell on seeds 1 and
-  2 → out/bench/expand_probe_fan100_s{1,2}.log.
 - **`organic-rpe1`** (out/tmp/rpe_queue.sh; waits for expand2): queue E 29d in the small learner, three seeds: arm
   `all+rpe` → out/tmp/rpe_s{0,1,2}.log, then its fixed-gain control `all+gain` → out/tmp/rpe_gain_s{0,1,2}.log
   (the gain used: out/tmp/rpe_gain.log); about an hour a run. Baseline: the "all" arms in out/tmp/gaze1.log,
@@ -731,3 +725,12 @@ Still Kris's own:
   fixed-gain control runs with it. Trace2: seed 1's plain arm developed (0.811 alike under a two-pixel shift;
   first stage 0.849).
   Next: expand2's two seeds into the paper, then draft 7 by email; rpe1; trace2.
+- 2026-11-24 21:06 **The sparse layer with a hundred inputs a cell, three seeds** (VISION.md, same time): at ten times the
+  cells the word cells name new pictures at 0.609 against 0.620 and remember a picture seen once 0.975 against
+  0.849; slower at 500 pictures (0.26 against 0.39); the ridge 0.616 against 0.664. Decided: not put into the
+  learner (a life's words are the stream's first 500 pictures; the store is the learner's memory of moments);
+  kept as measured; no further wirings (that would be a search). **Draft 7 (17 pages) emailed to Kris.**
+  Running: `organic-rpe1` (seed 0, first arm), `organic-trace2` (seed 1: trace arm 0.837 alike under a
+  two-pixel shift, plain 0.811, first stage 0.849; streams next), the reward lives.
+  Next: read rpe1 and trace2 as they come; reward lives at 75,000; then the serial gaze from a grown learner's
+  checkpoint when 1.6 GB is free; queue E 29e (what comes back in sleep is tagged at the moment): organic check.

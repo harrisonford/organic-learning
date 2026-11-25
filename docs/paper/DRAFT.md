@@ -336,6 +336,7 @@ or 0.604 ± 0.005 when it is given the relay, and the streaming discriminant has
 | a blurred start | filters a little coarser (0.28 against 0.30 cycles per pixel) and more coloured | 0.620 ± 0.005 | 0.659 ± 0.005 |
 | a second stage that learns from the eye's drift (one seed) | the same picture two pixels aside looks more alike: 0.80 → 0.83 | 0.631 | 0.640 |
 | a wide sparse layer after the relay (ten times the cells, seven inputs each) | two different pictures look less than half as alike; a picture seen once is remembered better | 0.578 ± 0.009 | 0.606 ± 0.006 |
+| the same layer, a hundred inputs each | two different pictures a quarter as alike | 0.609 ± 0.005 | 0.616 ± 0.003 |
 
 *Divisive normalisation.* In cortex a neuron's response is divided by the pooled activity of its neighbours
 (Carandini & Heeger 2012). Our filters' responses were only thresholded. With each response divided by the
@@ -380,18 +381,20 @@ the relay's code and 95% on the wide one, on every seed. The same wiring without
 nothing, as a linear map should.
 
 Seven inputs is the fly's number, but a fly's cell samples a seventh of its 50 input channels and ours a
-six-hundredth of 4,096. With a hundred inputs a cell, which we had planned as a second wiring and have so far
-run on one seed, the price all but disappears: at ten times the cells the word cells name new pictures as well
-as on the relay's code (0.612 against 0.613) and remember a picture seen once 98% of the time against 89%. The
-wide code is slower at the very start (0.19 against 0.34 after 500 pictures). **[pending: two more seeds of
-the second wiring.]** Biology puts these layers in front of memories, the hippocampus's among them, and the
-plainest reading of our numbers agrees: the layer makes a memory of single moments out of slow cells. A first
-direct test of it as the key of the episodic store was too easy to say more, since with either code the store
-found a stored picture from a blurred view of it every time.
+six-hundredth of 4,096. With a hundred inputs a cell, which we had planned as a second wiring before seeing any
+result, most of the price disappears. At ten times the cells the word cells name new pictures at 0.609 ± 0.005
+against 0.620 ± 0.010 on the relay's code, a difference we do not read, and they remember a picture seen once
+98% of the time against 85%. Two costs remain. The wide code starts slowly (0.26 against 0.39 after 500
+pictures), and the ridge, which could use everything the relay's code held, loses five points on it. So the
+layer buys a memory for single moments out of slow cells, at the price of a slow start and of information a
+better reader could have used. Biology puts these layers in front of memories, the hippocampus's among them,
+and our numbers agree that memory is what they are good for. A first direct test of the layer as the key of
+the episodic store was too easy to say more, since with either code the store found a stored picture from a
+blurred view of it every time. We have not put the layer into the learner.
 
 None of the four makes the learner a better namer of pictures by an amount we would defend, and one, wired
-as the fly wires it, makes it worse. That is what working this way costs, and we would rather pay it than tune.
-The gap to the baselines is where it was.
+as thinly as the fly wires it, makes it worse. That is what working this way costs, and we would rather pay it
+than tune. The gap to the baselines is where it was.
 
 ## Experiment 2: raising it
 
