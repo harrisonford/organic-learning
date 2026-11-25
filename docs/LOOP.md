@@ -53,6 +53,10 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-sailn1`** (out/tmp/sailn_queue.sh; started 18:52; MemoryMax 1400M; about 1.5 hours; gated at 3.3 GB a
+  stage): SAILnet in our cortex's place at CIFAR's own size, seed 0 → out/bench/sailn_develop_s0.log (about
+  55 minutes; different filters, rates), sailn_code_s0.log, stream_{sailn,sailnu}10k_s0.log. Beside: nat_r
+  0.626, nat_d 0.649. What I said before it ran is in VISION.md 18:50.
 - **Lives `kind_s0..2`** (organic-kind-s0/1/2; started by `organic-reward-queue` when the plateau lives ended,
   2026-11-24): the reward lives (JUDGING.md, 2026-11-23); `ramp_s0..2` follow from the same queue.
 - **`organic-sh7`** (out/tmp/softhebb_dissect3_queue.sh; started 06:05, about 3.5 hours; MemoryMax 1500M): the
@@ -171,6 +175,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     0.81–0.85; any form free of the raw sizes 0.79–0.86). Survey running on how the brain combines them.
 
 ## Decisions waiting for Kris
+- **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
+  relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
+  nothing" was on enlarged pictures. I will put both sizes side by side in that section when the enlarged
+  rows on the same pictures are in; which one is the headline is the question below.
 - **(2026-11-25) Which size is the paper's benchmark?** The benchmark shows CIFAR enlarged from 32 to 64 pixels
   because the learner's eye is 64 × 64; a 5 × 5 window then holds less than half of what a window of a real
   picture holds, and on seed 0 our own development helps at the pictures' own size where it did nothing
@@ -1073,4 +1081,13 @@ Still Kris's own:
   four tests; under about 0.03 says nothing. Ramp lives at 25,000 (seed 1 at 20,000): first words 0.36 / 0.31 / 0.42.
   Next: native4's seeds 1–2 (about 45 minutes a step) → three-seed native table → the paper's section on our
   development and the question for Kris; then softbase2; photo log after midnight.
+- 2026-11-25 18:55 Health unchanged (photo alert until midnight; the three planned endings); 4.5 GB free. **Native-size control,
+  three seeds: our hard rule's development helps** (word cells + relay 0.649 ± 0.008 against 0.626 ± 0.002;
+  ridge + relay 0.666 ± 0.001 against 0.632 ± 0.003; all twelve differences positive; I had said within 0.01).
+  native4 is on the enlarged like-for-like rows (`big_r`, `big_d`, three seeds, about 21:15). **Started
+  `organic-sailn1`:** SAILnet in the cortex's place at native size (switch `SIZE=32` in
+  sailnet_cortex_probe.py, default unchanged), expectation written first. Ramp lives at 30,000: first words
+  0.39 / 0.39 / 0.43.
+  Next: sailn's development log (about 19:50) and streams; big rows → the paper's section on our development
+  reworded with both sizes; softbase2 after native4; photo log after midnight.
 

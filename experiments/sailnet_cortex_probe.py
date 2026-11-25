@@ -16,6 +16,9 @@ our hard rule's filters stand; the benchmark's own pipeline codes the pictures.
     sailc / sailcu   Q as developed / the same at unit length (as every filter of our cortex is)
 The base is out/bench/cortex_random_s{seed}.pkl (filters as born, the decorrelation settled); the codes, the relay
 (6,000 unlabelled pictures) and the stream are the benchmark's (experiments/cortex_norm_probe.py, bench_stream.py).
+    SIZE=32      (2026-11-25 18:50) the same on CIFAR at its own size, where a window holds 47 directions and not
+                 the 22 of a blown-up picture (experiments/upsample_probe.py): the base is cortex_nat_r_s{seed}.pkl
+                 (experiments/cortex_native_probe.py), the names sailn / sailnu, the weights sailn_weights_s{seed}.npz
     STAGE=develop SEEDS=0 python experiments/sailnet_cortex_probe.py   -> out/bench/sailc_weights_s{seed}.npz
     STAGE=code    SEEDS=0 python experiments/sailnet_cortex_probe.py   -> out/bench/cifar10_{sailc,sailcu}_s{seed}_*.npy,
                                                                          cortex_{sailc,sailcu}_s{seed}.pkl
@@ -32,7 +35,13 @@ from organic.cortex2 import _windows, _contrast  # noqa: E402
 
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 STAGE, GRID, SHRINK, NRELAY = os.environ.get("STAGE", "develop"), 4, 0.0005, 6000
-big = lambda x: np.asarray(Image.fromarray(x).resize((64, 64), Image.BILINEAR), np.float32) / 255  # noqa: E731
+SIZE = int(os.environ.get("SIZE", 64))
+NAME, BASE = ("sailc", "random") if SIZE == 64 else ("sailn", "nat_r")
+if SIZE == 64:
+    big = lambda x: np.asarray(Image.fromarray(x).resize((64, 64), Image.BILINEAR), np.float32) / 255  # noqa: E731
+else:
+    assert SIZE == 32
+    big = lambda x: x.astype(np.float32) / 255  # noqa: E731  (the picture as it is)
 
 
 def strong_windows(layer, x, rng, k):
@@ -81,20 +90,20 @@ def develop(layer, pictures, rng):
 if __name__ == "__main__":
     unlabelled = P.load(f"{P.DATA}/cifar-100-python/train")
     for seed in SEEDS:
-        base = pickle.load(open(f"out/bench/cortex_random_s{seed}.pkl", "rb"))
+        base = pickle.load(open(f"out/bench/cortex_{BASE}_s{seed}.pkl", "rb"))
         base.relay = None
         if STAGE == "develop":
             born, Q, W, theta = develop(base.layers[0], unlabelled, np.random.default_rng(7000 + seed))
-            np.savez(f"out/bench/sailc_weights_s{seed}.npz", born=born, W=Q, lateral=W, theta=theta)
+            np.savez(f"out/bench/{NAME}_weights_s{seed}.npz", born=born, W=Q, lateral=W, theta=theta)
             alike, pairs, groups = near_copies(Q)
             a0, p0, g0 = near_copies(base.layers[0].W[0])
-            print(f"seed {seed} sailc: two cells' weights alike {alike:.3f}, pairs above 0.9: {pairs}, different filters {groups} of {KINDS} (the cortex's filters as born: {a0:.3f}, {p0}, {g0})", flush=True)
+            print(f"seed {seed} {NAME}: two cells' weights alike {alike:.3f}, pairs above 0.9: {pairs}, different filters {groups} of {KINDS} (the cortex's filters as born: {a0:.3f}, {p0}, {g0})", flush=True)
             continue
         Xtr, Xte = P.load(f"{P.DATA}/cifar-10-batches-py/data_batch_1"), P.load(f"{P.DATA}/cifar-10-batches-py/test_batch")[:2000]
         yte = np.load("out/bench/cifar10_test_labels.npy")[:2000]
-        Q = np.load(f"out/bench/sailc_weights_s{seed}.npz")["W"]
+        Q = np.load(f"out/bench/{NAME}_weights_s{seed}.npz")["W"]
         settle = [big(unlabelled[i]) for i in np.random.default_rng(seed + 7).choice(len(unlabelled), NRELAY, replace=False)]
-        for name, weights in (("sailc", Q), ("sailcu", Q / np.linalg.norm(Q, axis=1, keepdims=True))):
+        for name, weights in ((NAME, Q), (NAME + "u", Q / np.linalg.norm(Q, axis=1, keepdims=True))):
             t0, cortex = time.time(), copy.deepcopy(base)
             cortex.layers[0].W[0] = weights.astype(np.float32)
             cortex.settle_relay(settle, GRID, SHRINK)

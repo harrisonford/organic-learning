@@ -3005,3 +3005,36 @@ Two lives from one level, same code: at one test they differ by up to 0.07, over
 agree to 0.01. **So an arm of the replay test is read on its mean over the four tests,** and with one pair as
 the only measure of the noise, a difference under about 0.03 on that mean says nothing. (The babbling stage's
 number jumps between 0.03 and 0.41 from test to test in both lives: not a measure to read here.)
+
+### 2026-11-25 18:50, the native-size control on three seeds; SAILnet at native size, said before it runs
+
+**Our cortex on CIFAR at its own size (32), three seeds** (`native_code_s{0,1,2}.log`,
+`stream_{nat_r,nat_d}10k_s*.log`; 10,000 pictures, 2,000 tests):
+
+| our cortex at 32 | word cells + relay | word cells | ridge + relay | ridge | near-copy pairs / different filters |
+|---|---|---|---|---|---|
+| as born (`nat_r`) | 0.626 ± 0.002 | 0.556 ± 0.005 | 0.632 ± 0.003 | 0.633 ± 0.006 | 0 / 256 |
+| developed by our hard rule (`nat_d`) | 0.649 ± 0.008 | 0.580 ± 0.021 | 0.666 ± 0.001 | 0.657 ± 0.002 | 100, 111, 96 / 194, 195, 194 |
+| developed minus born, by seed | +0.029, +0.013, +0.028 | +0.007, +0.026, +0.039 | +0.034, +0.038, +0.031 | +0.016, +0.031, +0.026 | |
+
+- **Three seeds agree: at the pictures' own size our development helps.** Every one of the twelve differences is
+  positive. For ridge behind the relay it is 0.034 and the same on every seed; for the word cells behind the
+  relay 0.023, with one seed at 0.013 (the sampling error of one number is 0.010). I had said "within 0.01".
+- The paper's sentence "our Hebbian development did nothing for the learner" was measured on pictures blown up to
+  twice their size. Whether it still holds there on these same 10,000 pictures is the three `big_r` / `big_d`
+  steps now running (about 21:15); the section is reworded when they are in, with both sizes side by side.
+- Beside the soft layer at the same size and the same 10,000 pictures (word cells + relay): ours as born 0.626,
+  ours developed 0.649, soft as born 0.548, soft developed 0.689. Our cortex is born better (it decorrelates
+  each window before the filters; the soft layer does not) and develops less (0.023 against 0.141).
+- A question this opens for the lives, not answered: their cortex (`data/visual_cortex2.pkl`) developed on the
+  world's pictures at 64, some of them CIFAR-100 blown up and some photographs with real detail at that size.
+
+**SAILnet in our cortex's place, at native size** (the same published layer and numbers as 09:45; only the
+pictures at 32 and the base `cortex_nat_r_s0.pkl`; `SIZE=32`, names `sailn` / `sailnu`). The organic check is
+the one of 08:40: Földiák's three local rules on spiking cells, every constant the authors', inhibition that
+learns its own strength; nothing of ours but the input's units (× √75, said). On blown-up pictures it reached
+its rates but ended with 98 different filters of 256 and read 0.484 / 0.588 (as developed / at unit length)
+against the hard rule's 0.613. A window at native size holds 47 directions where the blown-up one holds 22.
+**Said before:** more different filters than 98 (I expect 150–220); `sailnu` between 0.62 and 0.65, that is
+at the level of the layer as born (0.626) and not above our hard rule (0.649). I have been wrong on five of
+five such statements in this thread; it is said so that it can be wrong again.

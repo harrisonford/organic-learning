@@ -254,3 +254,9 @@ organic learner behaves and what each part does, measured honestly, not a score.
   seeds: word cells + relay 0.630 ± 0.004, without 0.503 ± 0.010), the three-seed dissection, the eye's size in
   the Setup. Pending in it: backprop started from the soft filters; frozen readout at the layer's exponent
   (softbase2). Abstract to be reworded after softbase2 and the native-size control.
+- **2026-11-25 18:55: the native-size control has three seeds and they agree** (development by our hard rule: +0.023
+  for the word cells behind the relay, +0.034 for ridge, at CIFAR's own size, 10,000 pictures). The section
+  "Our Hebbian development did nothing for the learner" is true only of enlarged pictures and will be reworded
+  with both sizes side by side when the enlarged rows on the same 10,000 pictures are in (tonight). The
+  abstract's "random filters do as well as the Hebbian filters we had carefully developed" needs the same
+  qualification. Draft 9 (sent 16:55) still has the old wording; the email said so.
