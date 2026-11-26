@@ -3642,3 +3642,12 @@ kinds hardly ever repeat, and the byte ear's rule needs repetition. Two changes,
    kind of such windows. Repetition is then likeness, not identity.
 And a softer reading beside the strict one: for each kind, the written word it lifts most (how much more often that
 word is in its utterances than in all), against the same with the kinds shuffled.
+
+**Two senses, seed 0, the word test** (`av_probe_s0_what.log`, from the cached codes after the OOM): videos fetched
+under 15 words, 114 held-out videos (cat 47, tree 12, dog 10, train 10, the others 1–7), 2,281 moments; the word by
+the nearest class mean, balanced over words (chance 0.067): **sight 0.239; hearing developed 0.201, as born 0.191, the
+cochlea alone 0.164; sight and hearing together 0.264; the sound that sight predicts 0.164.** What I said before:
+sight above hearing (yes), both together above sight by a point or more (yes, 2.5), the sound sight predicts below
+sight (yes). The order developed > as born > cochlea holds here too. The first hint in this project for Kris's view
+that interconnected streams make a more reliable brain: two senses name a video better than either. One seed and few
+videos a word; seeds 1 and 2 running (`organic-av2`).
