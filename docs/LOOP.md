@@ -60,6 +60,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-video-audio`** (permanent service since 2026-11-26 09:50; `experiments/world/video_audio.py`; log
+  out/video_audio.log): the kept Commons videos' sound through `organic/cochlea.py`, aligned ten frames to one
+  picture frame → `~/datasets/commons_video/audio_64.f16`, `audio.jsonl`. Looks for new videos every hour.
 - **`organic-relayshrink1`** (out/tmp/relay_shrink_queue.sh; queued 09:10, waits for relaymore1; gated): the relay with
   its floor at 0.0001 (not 0.0005) for ph_d and ph_r of seed 0 → relay_shrink_{ph_d,ph_r}_s0.log,
   stream_photos_{ph_dz1,ph_rz1}_s0.log. What I said before: VISION.md 09:10. A diagnosis, not a setting.
@@ -1288,4 +1291,12 @@ Still Kris's own:
   106,510 frames; CORe50: 0.97 of 5.9 GB.
   Next: relaymore1's ph_r arm and relayshrink1; bp2's last three runs; backprop on photographs, seeds 1–2 (queue
   when bp2 ends); photo daemon's log after midnight; ramp lives at 120,000 (evening).
+- 2026-11-26 09:55 Health: the three planned endings; 3.8 GB free. Relay on 20,000 pictures: nothing moves for the as-born
+  code either. Spectrum at a five-times-lower floor predicts the developed photo code spreads like CIFAR-at-32's
+  (1,000 directions) → relayshrink1 (running after relaymore1) is the test. **New organ: a cochlea** (64 ERB-spaced
+  bands, 10 ms frames, power 0.3; tones checked) and the service that hears the Commons videos through it. Backprop's
+  widened tuning: no wider setting wins (one run left). `experiments/growth_census.py` (numbers each organ holds,
+  stage by stage) running on plat_s0's levels. Commons video: 758 videos, 409,157 frames; CORe50 2.2 of 5.9 GB.
+  Next: relayshrink1; the census into GROWTH.md; bp2's end → backprop on photographs, seeds 1–2; then E 32's first
+  probe (audio and video teaching each other by a local rule) once a few thousand videos with sound are in.
 

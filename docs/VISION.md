@@ -3404,3 +3404,28 @@ cells still gain nothing, the floor is not the reason and the reader itself is (
 thousands of nearly equal directions). Either way this is a diagnosis, not a setting to adopt: the floor is a
 hand-set constant, and if it matters, the answer is a relay that sets its own (the local circuit of queue E 28),
 not a better number.
+
+### 2026-11-26 09:55, a cochlea; the relay's sample size ruled out on both codes; the floor's prediction
+
+**A cochlea** (queue E 32; `organic/cochlea.py`, a new organ not used by any life yet). The organic check: before any
+learning, the inner ear splits sound by frequency along the basilar membrane, with bands that widen with frequency
+(equivalent rectangular bandwidths, Glasberg & Moore 1990) and a compressive loudness (outer hair cells; Stevens'
+exponent). So: 64 bands evenly spaced on the ERB-rate scale from 80 Hz to 7,600 Hz, a frame every 10 ms from 25 ms
+of sound, each band's energy to the power 0.3. A fixed front end, as the retina's whitening is. Checked: tones of
+200 / 1,000 / 4,000 Hz land in the bands centred at 187 / 1,014 / 4,081 Hz; silence gives 0.
+**The videos' sound** (`experiments/world/video_audio.py`, service `organic-video-audio`): the same 120 seconds of
+each kept Commons video, through the cochlea, ten sound frames under every picture frame →
+`~/datasets/commons_video/audio_64.f16` and `audio.jsonl` (videos without sound marked). Of the first five raw
+files, three had a sound track. This is the data for the first test of senses teaching each other.
+
+**The relay on 20,000 pictures, the as-born code too:** 597 directions after it (585 with 6,000), word cells 0.439
+(0.439). Sample size ruled out on both codes.
+
+**The relay's floor, predicted by the spectrum before the run** (`spectrum_shrink1e-4_s0.log`): with the floor at
+0.0001 of the largest variance, the developed photo code spreads over 1,000 directions after the relay (593 at the
+benchmark's 0.0005), more than the developed CIFAR-at-32 code does at 0.0005 (917), where the word cells gained.
+So if the reading of 09:10 is right, `organic-relayshrink1` should show the word cells gaining from development on
+photographs.
+
+**Backprop's widened search on photographs** (5 of 6 runs): every wider setting is worse than the chosen ones
+(no relay: 0.262, 0.221, 0.204 against 0.316; relay, batch 128: 0.379 against 0.406). The chosen settings stand.
