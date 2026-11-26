@@ -71,7 +71,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   among our COCO thumbnails (its val images are not). PART=train when the download is whole.
   **`experiments/sound_units_probe.py`** (hearing cortex → prediction → units from sound; measured by the
   transcripts only at the end): first design failed its smoke test, redesigned in three levels (VISION.md 14:45);
-  **`organic-sunits1`** (out/tmp/sunits_queue.sh, the shared gate at 2.8 GB) runs the val part → sound_units_val_s0.log.
+  `organic-sunits1` ENDED, read (VISION.md 16:30: syllable scale right, nothing recurs). **`organic-sunits2`**
+  (out/tmp/sunits_queue2.sh, queued 16:40): speaker adaptation, 8 band stretches, two- and three-syllable window kinds,
+  the lift reading → sound_units_val2_s0.log (about 80 minutes).
 - **`organic-gaze-lives`** (out/tmp/gaze_queue.sh; queued 13:30; one life at a time at 5.7 GB available, so after the
   ramp lives): queue E 34 (a), the serial gaze in grown lives: gazs_s1/s2/s0 continued from plat_s*_W2 for 20,000
   moments of preschool (`GAZE=serial`, otherwise the tag queue's line); control: tagn_s* (tagn_s1 done 11-25).

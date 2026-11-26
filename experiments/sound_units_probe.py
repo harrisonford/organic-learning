@@ -8,7 +8,7 @@ Three levels, each the rule the brain already uses one level down:
   1 hearing cortex  the eye's layer (organic/cortex2.Layer2) on the cochlea's output read as a picture: windows of 8
                     rows (80 ms) x 8 bands, decorrelated, 128 kinds, winner-take-all Hebbian with a conscience,
                     developed on DEV one-second clips with the eye's schedule. A frame's code: each kind's answer
-                    averaged over 4 stretches of the bands (512 numbers), through its own relay, at unit length.
+                    averaged over BANDS stretches of the bands (8: 1,024 numbers; 4 in the first reading), through its own relay, at unit length.
   2 syllables       auditory cortex follows speech's slow loudness rhythm (4-8 a second: the syllables; Giraud &
                     Poeppel 2012): a stretch ends at a trough of the loudness (smoothed over 50 ms; the lowest within
                     50 ms either side) and at silence (under a tenth of the utterance's loudest). A stretch's code is
@@ -37,7 +37,8 @@ from organic.cortex2 import Layer2, Relay  # noqa: E402
 DIR = os.path.expanduser("~/datasets/spokencoco")
 PART, DEV, SEED = os.environ.get("PART", "val"), int(os.environ.get("DEV", 16000)), int(os.environ.get("SEED", 0))
 HELD, KINDS2 = 0.2, int(os.environ.get("KINDS2", 512))
-KINDS, WINDOW, BANDS4, HALF, SMOOTH = 128, 8, 4, 5, 5
+KINDS, WINDOW, HALF, SMOOTH = 128, 8, 5, 5
+BANDS4 = int(os.environ.get("BANDS", 8))  # stretches of the bands a frame's code keeps apart (4 in the first reading: it blurs the formants)
 t0 = time.time()
 
 
@@ -56,7 +57,22 @@ utts = [utts[i] for i in rng.permutation(len(utts))][: int(os.environ.get("MAXU"
 cut = int(len(utts) * (1 - HELD))
 learn_u, test_u = utts[:cut], utts[cut:]
 say(f"{len(utts)} utterances ({len(learn_u)} to learn from, {len(test_u)} held out), {len({u['speaker'] for u in utts})} speakers")
-gram = lambda u: np.asarray(grams[u["start"]: u["start"] + u["rows"]], np.float32)  # noqa: E731
+ADAPT = os.environ.get("ADAPT", "1") == "1"
+
+
+def raw(u):
+    return np.asarray(grams[u["start"]: u["start"] + u["rows"]], np.float32)
+
+
+def gram(u):
+    """The utterance's cochleagram; with ADAPT each band taken relative to its own level and spread over the utterance
+    (the ear adapts to the voice: Ladefoged & Broadbent 1957; Dean, Harper & McAlpine 2005)."""
+    g = raw(u)
+    if ADAPT:
+        g = (g - g.mean(0)) / (g.std(0) + 1e-3)
+    return g
+
+
 
 # 1 hearing cortex
 layer = Layer2(1, KINDS, WINDOW, 1, seed=SEED)
@@ -80,7 +96,7 @@ def frames(u):
     r = layer.respond(g[..., None], pooled=False)  # (time, bands, kinds)
     b = r.shape[1] // BANDS4
     codes = r[:, : BANDS4 * b].reshape(r.shape[0], BANDS4, b, KINDS).mean(axis=2).reshape(r.shape[0], -1)
-    loud = np.convolve(g.sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
+    loud = np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]  # loudness from the cochlea itself
     return codes, loud
 
 
@@ -108,6 +124,39 @@ def stretches(u):
 
 
 U, wins, founded = np.zeros((KINDS2, 2 * KINDS * BANDS4), np.float32), np.zeros(KINDS2), 0
+
+
+class Kinds:
+    """Kinds by the eye's rule (winner-take-all with a conscience, step 1 / (1 + wins / 5)); the first n inputs found them."""
+
+    def __init__(self, n, dim):
+        self.U, self.wins, self.founded = np.zeros((n, dim), np.float32), np.zeros(n), 0
+
+    def __call__(self, s, learning):
+        if learning and self.founded < len(self.U):
+            self.U[self.founded], self.wins[self.founded] = s, 1
+            self.founded += 1
+            return self.founded - 1
+        f = self.founded
+        c = int(np.argmax(self.U[:f] @ s - (0.3 * (self.wins[:f] / (self.wins[:f].mean() + 1e-8) - 1) if learning else 0)))
+        if learning:
+            self.wins[c] += 1
+            w = self.U[c] + (1.0 / (1 + self.wins[c] / 5)) * (s - self.U[c])
+            self.U[c] = w / (np.linalg.norm(w) + 1e-8)
+        return c
+
+
+WIN = int(os.environ.get("KINDS3", 1024))
+pairs, triples = Kinds(WIN, 2 * 2 * KINDS * BANDS4), Kinds(WIN, 3 * 2 * KINDS * BANDS4)
+
+
+def windows(ss, learning):
+    """Level 3 by likeness: kinds of two- and three-stretch windows (neighbouring syllables side by side), never across a silence."""
+    v = [s for s, _ in ss]
+    gap = [g for _, g in ss]
+    p2 = [pairs(np.concatenate(v[i: i + 2]) / np.sqrt(2), learning) for i in range(len(v) - 1) if not gap[i]]
+    p3 = [triples(np.concatenate(v[i: i + 3]) / np.sqrt(3), learning) for i in range(len(v) - 2) if not (gap[i] or gap[i + 1])]
+    return p2, p3
 counts1, counts2 = {}, {}  # level 3: next kind after one kind, after two
 
 
@@ -160,17 +209,21 @@ for i, u in enumerate(learn_u):
     ss = stretches(u)
     ks = [kind(s, True) for s, _ in ss]
     words(ks, [g for _, g in ss], True)
+    windows(ss, True)
     if (i + 1) % 5000 == 0:
         say(f"{i + 1} utterances heard; {founded} syllable kinds, wins min/max {int(wins[:founded].min())}/{int(wins[:founded].max())}")
 
 # measured on the held-out utterances, nothing learning
 syll = lambda w: max(1, len(re.findall(r"[aeiouy]+", w)))  # noqa: E731
-W, K, WD = [], [], []
+W, K, WD, K2, K3 = [], [], [], [], []
 n_str = n_wd = n_words = n_syl = 0
 for u in test_u:
     ss = stretches(u)
     ks = [kind(s, False) for s, _ in ss]
     wd = words(ks, [g for _, g in ss], False)
+    p2, p3 = windows(ss, False)
+    K2.append(p2)
+    K3.append(p3)
     written = re.findall(r"[a-z']+", u["text"].lower())
     W.append(set(written))
     K.append(ks)
@@ -213,6 +266,31 @@ def shuffled(per_utt):
     return out
 
 
-for name, per_utt, least in (("syllable kinds", K, 20), ("words found", WD, 10)):
+def lifted(per_utt, least=20):
+    """For each kind heard in `least`+ utterances: the written word it lifts most (its share in the kind's utterances
+    over its share in all), counted when that word comes with the kind 5+ times. Returns the kinds' top lifts."""
+    occ = {}
+    for j, us in enumerate(per_utt):
+        for k in set(us):
+            occ.setdefault(k, []).append(j)
+    out = []
+    for k, js in occ.items():
+        if len(js) < least:
+            continue
+        c = {}
+        for j in js:
+            for w in W[j]:
+                c[w] = c.get(w, 0) + 1
+        best = max((w for w in c if c[w] >= 5), key=lambda w: (c[w] / len(js)) / (base[w] / len(W)), default=None)
+        if best:
+            out.append(((c[best] / len(js)) / (base[best] / len(W)), best, c[best] / len(js), len(js)))
+    return sorted(out, reverse=True)
+
+
+for name, per_utt, least in (("syllable kinds", K, 20), ("words found (byte-ear rule)", WD, 10), ("two-syllable kinds", K2, 20), ("three-syllable kinds", K3, 20)):
     found, chance = wordlike(per_utt, least), wordlike(shuffled(per_utt), least)
     say(f"{name}: word-like {len(found)} (shuffled: {len(chance)}): " + "; ".join(f"{w} {p:.2f} (base {b:.2f}, {n}x)" for w, p, b, n in found[:30]))
+    lf, lc = lifted(per_utt), lifted(shuffled(per_utt))
+    if lf:
+        say(f"   {name}: {len(lf)} kinds heard in 20+ utterances; lift of their best word: median {np.median([x[0] for x in lf]):.2f} (shuffled {np.median([x[0] for x in lc]) if lc else 0:.2f}); "
+            f"lift 3 or more: {sum(x[0] >= 3 for x in lf)} (shuffled {sum(x[0] >= 3 for x in lc)}); top: " + "; ".join(f"{w} x{l:.1f} ({p:.2f}, {n})" for l, w, p, n in lf[:20]))
