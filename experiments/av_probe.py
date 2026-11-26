@@ -184,7 +184,10 @@ def which(X, M, Y, negatives):
 
 
 results = {}
-for name, A in list(H.items()):
+if os.environ.get("WHAT_ONLY") == "1":  # the codes are cached: only Hebb's map for the developed hearing, then the word test
+    YX = sum(H["developed"][order[c: c + 2048]].T @ V[order[c: c + 2048]] for c in range(0, len(order), 2048)) / len(order)
+    H["developed from sight"] = np.vstack([unit(V[c: c + 4096] @ YX.T) for c in range(0, len(V), 4096)])
+for name, A in ([] if os.environ.get("WHAT_ONLY") == "1" else list(H.items())):
     for direction, (X, Y) in (("sight->sound", (V, A)), ("sound->sight", (A, V))):
         maps = readers(X, Y)
         ridge = max((k for k in maps if k.startswith("ridge")), key=lambda k: which(X, maps[k], Y, other))
@@ -202,15 +205,20 @@ words = sorted(w for w in set(word) if w and len({k for k in moments[word == w, 
 mask_tr, mask_te = ~test & np.isin(word, words), test & np.isin(word, words)
 
 
-def what(X):
-    M = unit(np.stack([X[mask_tr & (word == w)].mean(0) for w in words]))
-    guess = np.array(words)[np.argmax(X[mask_te] @ M.T, axis=1)]
-    truth = word[mask_te]
+def what(rows):
+    """Nearest class mean, balanced over words; `rows(idx)` gives the codes of those moments (a block at a time: memory)."""
+    def mean(idx):
+        return sum(rows(idx[c: c + 4096]).sum(0) for c in range(0, len(idx), 4096)) / len(idx)
+    M = unit(np.stack([mean(np.nonzero(mask_tr & (word == w))[0]) for w in words]))
+    te_idx = np.nonzero(mask_te)[0]
+    guess = np.array(words)[np.concatenate([np.argmax(rows(te_idx[c: c + 4096]) @ M.T, axis=1) for c in range(0, len(te_idx), 4096)])]
+    truth = word[te_idx]
     return float(np.mean([np.mean(guess[truth == w] == w) for w in words]))
 
 
-arms = {"sight": V, "hearing (developed)": H["developed"], "hearing (born)": H["born"], "hearing (cochlea)": H["cochlea"],
-        "sight + hearing": unit(np.hstack([V, H["developed"]])), "the sound sight predicts (hebb, developed)": H["developed from sight"]}
+arms = {"sight": lambda i: V[i], "hearing (developed)": lambda i: H["developed"][i], "hearing (born)": lambda i: H["born"][i],
+        "hearing (cochlea)": lambda i: H["cochlea"][i], "sight + hearing": lambda i: np.hstack([V[i], H["developed"][i]]) / np.sqrt(2),
+        "the sound sight predicts (hebb, developed)": lambda i: H["developed from sight"][i]}
 if not words:
     say("what: no word has videos on both sides of the split")
     sys.exit(0)

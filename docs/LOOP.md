@@ -85,9 +85,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   in the order assumed, objects turning in the hand, other floors and light in other sessions).
 - **`organic-spokencoco-fetch`** (started 12:50; ~/datasets/spokencoco/fetch.sh; 3 MB/s, resumable, 64 GB, about six
   hours): spoken COCO captions for the sound ear (queue E 32; docs/WORLD.md). Ends with `tar` in fetch.done.
-- **`organic-av1`** (out/tmp/av_queue.sh; queued 11:20; MemoryMax 1800M; each seed waits for 3.3 GB (re-queued 12:20 after an OOM at its own cap at 11:53, now leaner); about an hour
-  a seed): two senses teaching each other, first probe (queue E 32; `experiments/av_probe.py`), seeds 0–2 →
-  out/bench/av_probe_s{0,1,2}.log. What I said before: VISION.md 11:10.
+- **`organic-av2`** (out/tmp/av_queue2.sh; queued 16:20; shared gate): two senses. Seed 0's which-sound is read
+  (VISION.md 15:45); its word test was killed at the cap at 15:19 (a 900 MB array joined twice), now block-wise and
+  run from the cached codes (av_probe_s0_what.log, WHAT_ONLY=1); then seeds 1 and 2 in full (av_probe_s{1,2}.log).
 - **`organic-photos-bp3`** (out/tmp/photos_backprop_seeds.sh; queued 10:50; waits for relayshrink1, then 3.3 GB a
   run): backprop on photographs, seeds 1–2, relay and no relay, at seed 0's settings → backprop_photos_full.log.
   Fills the paper's pending mark.
