@@ -78,7 +78,7 @@ def places(img, side=None):
 
 
 class StreamBrain:
-    def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0):
+    def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0, echo_tau=None, heard_habit=0.0):
         self.rng = np.random.default_rng(seed)
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
@@ -102,6 +102,11 @@ class StreamBrain:
         self.saying, self.said_codes = None, []  # the gesture being said and the hearing codes while it sounds
         self.amap, self.amap_n = None, np.zeros(motor_units)  # what each gesture sounds like (Hebb: the running mean of the hearing while it is said)
         self.imitate = tract is not None  # what is heard drives the gestures whose learned sound matches it (covert imitation)
+        # an echo of what was heard, fading over echo_tau seconds (echoic memory lasts a second or more; to verify: Cowan
+        # 1984), not updated while the mouth sounds (speaking-induced suppression: Houde et al. 2002, to verify); with it,
+        # imitation reads the echo, not the 50 ms hearing population. None: as before.
+        self.echo_tau, self.echo = echo_tau, None
+        self.heard_habit = heard_habit  # habits from what is heard: a heard sound strengthens the habits of the gestures it matches
         self.assoc = None  # sight <-> sound, Hebb's rule while both stream (experiments/av_probe.py)
         self.n_assoc = 0
         self.log = []
@@ -178,13 +183,21 @@ class StreamBrain:
                 self.amap[u0] += (np.mean(self.said_codes, 0) - self.amap[u0]) / self.amap_n[u0]
                 self.saying, self.said_codes = None, []
         drive = self.habit / self.habit.max()
+        if self.echo_tau and self.sound is not None:
+            if self.echo is None:
+                self.echo = Leaky(len(self.sound.x), tau=self.echo_tau)
+            if self.saying is None:  # suppressed while the mouth sounds
+                self.echo.step(self.sound.x)
         if self.imitate and self.amap is not None and self.sound is not None and self.saying is None:
-            heard_now = self.sound.x / (np.linalg.norm(self.sound.x) + 1e-8)
+            src = self.echo.x if self.echo is not None else self.sound.x
+            heard_now = src / (np.linalg.norm(src) + 1e-8)
             c = self.amap @ heard_now / (np.linalg.norm(self.amap, axis=1) + 1e-8)
             known = self.amap_n > 0
             m = np.maximum(c - c[known].mean(), 0) * known  # above the average gesture, as the filters answer above the average kind
             if m.max() > 0:
                 drive = drive + m / m.max()  # each source taken relative to its own strongest, then together
+                if self.heard_habit and np.linalg.norm(self.sound.x) > 1e-6:
+                    self.habit += self.heard_habit * m / m.max()  # covert imitation leaves habits
         u = self.mouth.step(drive) if self.saying is None else None
         if u is not None:
             self.habit[u] += self.habit_step  # a gesture made becomes a little more likely (habit)

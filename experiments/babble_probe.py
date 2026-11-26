@@ -10,6 +10,7 @@ gestures; 1 is the nearest; chance 16.5), against the same brain with imitation 
 The hearing cortex is the eye's rule developed on speech (SpokenCOCO's validation recordings), 8 band stretches.
 
     BABBLE=300 TRIALS=64 python experiments/babble_probe.py
+    ECHO=1.0 ...   imitation reads an echo of what was heard fading over a second (suppressed while the mouth sounds)
 """
 import json, os, pickle, sys, time
 import numpy as np
@@ -47,7 +48,8 @@ for voice in VOICES:
   adult = VocalTract(f0=voice, seed=SEED + 1)
   for imitate in (True, False):
     t0 = time.process_time()
-    brain = StreamBrain(cortex, hearing, seed=SEED, tract=VocalTract(f0=280.0, seed=SEED), bands=8, habit_step=0.0)
+    brain = StreamBrain(cortex, hearing, seed=SEED, tract=VocalTract(f0=280.0, seed=SEED), bands=8, habit_step=0.0,
+                        echo_tau=float(os.environ.get("ECHO", 0)) or None)
     made = 0
     for _ in range(int(BABBLE * 100)):
         made += len(brain.step(None, silence))
@@ -88,6 +90,6 @@ for voice in VOICES:
             d = np.hypot(*(np.log(brain.gestures) - np.log([f1, f2])).T)
             ranks.append(int((d < d[first]).sum()) + 1)
     ranks = np.array(ranks)
-    print(f"voice {voice:.0f} Hz, imitation {'on ' if imitate else 'off'}: babbled {made} gestures in {BABBLE:.0f} s ({coverage} of 32 heard at least once); "
+    print(f"echo {os.environ.get('ECHO', 'none')}: voice {voice:.0f} Hz, imitation {'on ' if imitate else 'off'}: babbled {made} gestures in {BABBLE:.0f} s ({coverage} of 32 heard at least once); "
           f"{len(ranks)} of {TRIALS} heard vowels answered within a second; rank of the gesture made among 32 by nearness to the vowel heard: "
           f"mean {ranks.mean():.1f} (chance 16.5), nearest three {np.mean(ranks <= 3):.2f} (chance 0.09) | CPU {time.process_time() - t0:.0f}s", flush=True)
