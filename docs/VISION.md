@@ -3187,3 +3187,42 @@ commonest word is 5.1%): word cells + relay 0.179 / 0.359 / 0.391 / 0.439 after 
 without the relay 0.134 / 0.272 / 0.308 / 0.379. A picture seen once is named right twenty pictures later
 0.893 of the time behind the relay. Backprop of the same shape, first tuning run (rate 0.001, batch 8, no
 relay): 0.301 at 10,000. What I said: word cells between 0.30 and 0.40 after 50,000; it is 0.439 as born.
+
+### 2026-11-25 23:35, the photo stream, seed 0: as born whole, developed for the word cells
+
+`stream_photos_ph_r_s0.log` (complete), `stream_photos_ph_d_s0.log` (word cells done, the rest running); 33
+words, 4,000 held-out photographs, after 10,000 / 50,000 pictures seen once:
+
+| photo stream, seed 0 | as born (`ph_r`) | developed by our hard rule (`ph_d`) |
+|---|---|---|
+| word cells + relay | 0.391 / 0.439 | 0.381 / 0.443 |
+| word cells, no relay | 0.308 / 0.379 | 0.306 / 0.369 |
+| ridge + relay | 0.412 / 0.459 | running |
+| ridge | 0.407 / 0.452 | |
+| streaming LDA + relay | 0.395 / 0.476 | |
+| streaming LDA | 0.419 / 0.475 | |
+
+- **What I said before it ran was wrong for the word cells:** developed above born by 0.01–0.03; it is +0.004
+  after 50,000 and −0.010 after 10,000, on one seed. On real photographs at the eye's size our development
+  gives the word cells nothing, as on enlarged CIFAR and unlike CIFAR at 32 (+0.023 at 10,000). So "the
+  enlargement hid the development's worth" does not carry over as a general statement: the gain at CIFAR's own
+  size may belong to CIFAR at 32 and not to "pictures with real detail". Ridge's rows and two more seeds
+  before anything is concluded; the paper's new paragraph says only what was measured on CIFAR, and stays.
+- Checked, because it would have explained it: the COCO crops are not enlarged (an outline of at least 80
+  pixels on its shorter side, the square around it cut at the photograph's resolution and reduced to 64;
+  `experiments/world/coco_crops.py`). The developed filters here: 177 different of 256, 180 near-copy pairs
+  (CIFAR at 32: 194 and about 100; CIFAR enlarged: about 170 and 270). They develop on whole photographs and
+  read cut-out things; that difference is in the design and is a candidate, not a finding.
+- The relay is worth six points to the word cells here (0.439 against 0.379), one to ridge, nothing to streaming
+  LDA: the same order as on CIFAR. A picture seen once is named right twenty pictures later 0.893 of the time
+  (0.843 on the developed filters).
+- **Backprop of the same shape, tuning so far** (first 10,000, no relay, batch 8): 0.301 / 0.231 / 0.302 at rates
+  0.001 / 0.0003 / 0.003; the word cells without the relay are at 0.308 there, with it at 0.391.
+
+**softbase2, seed 1** (soft shape, whole stream): backprop started from the soft filters with the relay 0.708
+(seed 0: 0.701), without relay 0.615 (0.606); frozen without relay at power 0.7: 0.583 (0.616). Two seeds agree
+on the first look of 22:35: started from the soft filters backprop ends 0.70, under the same filters frozen
+(0.737) and under the word cells (0.729, 0.734).
+
+**Ramp lives at 50,000:** still in first words (0.43 / 0.48 / 0.49; pages 0.15 / 0.13 / 0.13).
+`organic-commons`: 1,432 photographs in its first hour.

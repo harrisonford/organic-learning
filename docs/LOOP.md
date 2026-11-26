@@ -1168,4 +1168,11 @@ Still Kris's own:
   stream as born: 0.439 after 50,000. `organic-commons` at 74 pictures.
   Next: photo streams ph_r's second-order rows and ph_d; the tuning; softbase2 seeds 1–2 (about 01:30) → the
   pending row of the paper's second table and the abstract; the photo daemon's log after midnight.
+- 2026-11-25 23:35 Health unchanged; 3.8 GB free. **Photo stream seed 0:** as born 0.439 (word cells + relay), 0.459 ridge, 0.476
+  streaming LDA; **developed 0.443: development gives the word cells nothing on real photographs** (I had said
+  +0.01–0.03); the crops are not enlarged (checked), so the CIFAR-at-32 gain does not generalise as I framed
+  it; ridge and seeds to come. Tuning of backprop on photos: 0.30 at 10,000 so far. softbase2 seed 1: 0.708 /
+  0.615 / 0.583. Ramp lives at 50,000, in first words. Commons: 1,432 pictures.
+  Next: photo daemon's log after 00:05; ph_d's ridge rows; tuning; softbase2 seed 2 (about 00:15) → the paper's
+  pending row on three seeds and the abstract; then photos seeds 1–2 (queue after photos1).
 
