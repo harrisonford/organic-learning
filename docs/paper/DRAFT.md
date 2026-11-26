@@ -19,7 +19,9 @@ held-out pictures; a network of the same shape trained end to end by backpropaga
 learner apart to see which part had earned the win, and the credit went somewhere we had not expected. It belongs
 to the code and not to the rule. Two fixed decorrelation steps, one before the feature layer and one after it, do
 the work: a gradient-trained readout on the same code does exactly as well as our local one, random filters do as
-well as the Hebbian filters we had carefully developed, and without the second decorrelation backpropagation wins.
+well as the Hebbian filters we had carefully developed (on pictures enlarged to fit the learner's eye; at the
+pictures' own size the developed filters are two to three points better), and without the second decorrelation
+backpropagation wins.
 The filters' failure was our rule's and not Hebbian learning's: the soft winner-take-all rule of Journé et al.
 (2023), built from its authors' code and read the same way, develops filters that take the learner from 55% to
 69% after 10,000 pictures, where our cortex gives it 62%.
@@ -288,6 +290,27 @@ developed), and it holds in ours: after 10,000 pictures of the stream the word c
 soft layer, 0.548 ± 0.002 on the same layer as born, and 0.620 ± 0.010 on our hard-rule cortex; ridge regression
 on the same three codes reaches 0.700 ± 0.001, 0.605 ± 0.002 and 0.664 ± 0.007. A competition in which the
 losers unlearn develops filters worth having; ours did not.
+
+That verdict has a condition we found late, and it is about the pictures and not the rule. The learner's eye is
+64 pixels across, and CIFAR's pictures, at 32, were enlarged to fit it. Enlarging adds pixels and no detail: of
+the 75 directions in which a 5 × 5 colour window can vary, an enlarged CIFAR picture uses 22 above the floor of
+our decorrelation, where the same picture at its own size uses 47 and a photograph that really is 64 pixels
+across uses 48. So we ran the same cortex, the same code and the same stream at CIFAR's own size, on three
+seeds and 10,000 pictures:
+
+| our cortex, after 10,000 pictures | word cells + relay | ridge + relay | near-copy pairs among the 256 filters |
+|---|---|---|---|
+| enlarged to 64, filters as born | 0.643 ± 0.010 | 0.656 ± 0.008 | 0 |
+| enlarged to 64, developed | 0.621 ± 0.005 | 0.665 ± 0.007 | 257 to 282 |
+| own size, filters as born | 0.626 ± 0.002 | 0.632 ± 0.003 | 0 |
+| own size, developed | 0.649 ± 0.008 | 0.666 ± 0.001 | 96 to 111 |
+
+On enlarged pictures development costs the word cells two points and gives ridge one. At the pictures' own size
+it gives the word cells two points and ridge three, on every seed, and the same rule ends with a third as many
+near copies. "Did nothing" is true of our rule on pictures with half their detail missing. It also means the
+comparison with the soft layer just above is not like for like: the soft layer saw the pictures at their own
+size (0.689) and our cortex, in that sentence, saw them enlarged (0.620). At their own size ours reaches 0.649.
+The soft rule is still ahead, by four points and not by seven.
 
 We then took their rule apart, one part at a time, on the same three seeds (word cells with the relay after
 10,000 pictures; 0.689 for the rule as published, 0.548 for the layer as born). If only the winner learns, the

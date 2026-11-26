@@ -3117,3 +3117,34 @@ labels. No download was needed.
 I expect our development to help here as it does there: developed above born by 0.02–0.04 for ridge behind the
 relay and 0.01–0.03 for the word cells. Level: cut-out objects in 33 classes are harder than CIFAR's ten; I
 expect the word cells behind the relay between 0.30 and 0.40 after 50,000, ridge a few points above.
+
+### 2026-11-25 21:35, both sizes on the same 10,000 pictures, three seeds (native4 ended)
+
+`big_code_s{0,1,2}.log`, `stream_{big_r,big_d}10k_s*.log` beside the native rows of 18:50 (word cells + relay /
+ridge + relay after 10,000 pictures; ± over three seeds):
+
+| our cortex | as born | developed by our hard rule | developed minus born, by seed | near-copy pairs / different filters |
+|---|---|---|---|---|
+| CIFAR enlarged to 64 | 0.643 ± 0.010 / 0.656 ± 0.008 | 0.621 ± 0.005 / 0.665 ± 0.007 | −0.014, −0.032, −0.019 / +0.012, +0.001, +0.014 | 277, 282, 257 / 167, 172, 173 |
+| CIFAR at its own 32 | 0.626 ± 0.002 / 0.632 ± 0.003 | 0.649 ± 0.008 / 0.666 ± 0.001 | +0.029, +0.013, +0.028 / +0.034, +0.038, +0.031 | 100, 111, 96 / 194, 195, 194 |
+
+- **On enlarged pictures development costs the word cells two points** (negative on every seed) and gives ridge
+  one; at the pictures' own size it gives two and three. The paper's "did nothing" was kind to the enlarged
+  case at this point of the stream (at 50,000 the paper's table has 0.687 against 0.693).
+- As born, the enlarged picture is the better input for the word cells (0.643 against 0.626): there are four
+  times the windows to average over. Developed, the picture at its own size is better (0.649 against 0.621).
+- **Into the paper:** a paragraph and this table in "Our Hebbian development did nothing for the learner"; the
+  comparison with the soft layer corrected (0.689 against our 0.649 at the same size, not 0.620); the abstract's
+  sentence qualified. 21 pages. Not sent: draft 10 goes when the photo stream has numbers.
+- **Not explained:** the paper says 658 near-copy pairs among the benchmark cortex's developed filters; the same
+  rule through `cortex_native_probe.py` at 64 ends with 257–282. Same accuracy (0.620 / 0.621), different count:
+  the two developments are not the same run (pictures drawn, how long). To look at before the 658 stays in the
+  paper.
+
+**SAILnet at native size, seeds 1 and 2 so far:** different filters 201 and 192 (seed 0: 197); word cells +
+relay as developed 0.633, 0.625, 0.645 (0.634 ± 0.010); at unit length 0.641, 0.636, seed 2 running. Against
+as born on the same seeds, ridge + relay at unit length: +0.028, +0.024; against our hard rule: −0.006, −0.014.
+
+**The photo stream, first log** (`photos_code_ph_r_s0.log`): the cortex as born coded 50,000 + 4,884 photographs
+in 35 minutes; its code reads same class +0.0854, different −0.0006 (the as-born cortex on CIFAR at 32: +0.0747
+/ −0.0075). `ph_d` is being coded; the streams follow; `organic-softbase2` started at 21:04 when native4 ended.

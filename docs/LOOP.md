@@ -1139,4 +1139,15 @@ Still Kris's own:
   bench_backprop.py (pictures, labels, order and unlabelled pictures of the photo stream; default unchanged).
   Next: photos1's logs; the tuning log's first line (traceback?); sailn seed 2, big seed 2 → three-seed tables
   and the paper's section; softbase2 after native4.
+- 2026-11-25 21:35 Health unchanged; 3.5 GB free. `organic-native4` ended 21:00; `organic-softbase2` started 21:04. **Both sizes,
+  three seeds, same 10,000 pictures:** enlarged, development −0.022 for the word cells (every seed) and +0.009
+  for ridge; own size, +0.023 and +0.034. **Into the paper** (two-size table and paragraph; the soft-layer
+  comparison corrected to 0.689 against 0.649; abstract qualified; 21 pages). Open: 658 near-copy pairs in the
+  paper against 257–282 here. SAILnet native: 197 / 201 / 192 different filters; seed 2's unit-length stream
+  running. Photo stream: ph_r coded, ph_d in work, then the streams and the backprop tuning.
+  **Beside the loop (private, not in this repository):** Kris asked about ANID's Startup CTCI 2027 and a pilot
+  of the learner in his startup; notes are in ~/franky-anid/NOTES.md, to be taken up when he says.
+  Next: photo streams (first numbers about 23:00) and backprop_photos_tune_s0.log's first line; sailn seed 2 →
+  three-seed row in VISION and, if it holds, a sentence in the paper; softbase2's rows (about 03:00); photo
+  daemon's log after midnight; draft 10 when the photo stream has its table.
 

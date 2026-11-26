@@ -260,3 +260,10 @@ organic learner behaves and what each part does, measured honestly, not a score.
   with both sizes side by side when the enlarged rows on the same 10,000 pictures are in (tonight). The
   abstract's "random filters do as well as the Hebbian filters we had carefully developed" needs the same
   qualification. Draft 9 (sent 16:55) still has the old wording; the email said so.
+- **2026-11-25 21:35: the paper's section on our development now shows both sizes** (three seeds: enlarged −0.022 /
+  +0.009, own size +0.023 / +0.034 for word cells / ridge behind the relay), the soft-layer comparison is
+  corrected (0.689 against 0.649 at the same size) and the abstract's sentence is qualified. **Still to do,
+  following Kris's rule 10 (real pictures of all kinds):** the photo stream becomes the vision evidence beside
+  CIFAR-10 when its table and its backprop reference are in; the title of the section ("did nothing") and the
+  list of mistaken assumptions (the enlargement is a fourth) are reworked then; the "658 near-copy pairs"
+  sentence is checked against the 257–282 measured today. Draft 10 after that.
