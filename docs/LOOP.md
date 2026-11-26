@@ -1441,4 +1441,8 @@ Still Kris's own:
   ramp lives queued (`organic-census3`). CORe50 seed 0 running (first stage: same object elsewhere 0.117).
   Next: gazs_s1's first record (about 21:00); av seed 2; CORe50 arms; sunits2 (about midnight); photo daemon's log
   after midnight.
+- 2026-11-26 20:50 Health: all healthy. **Stream brain: babbling drifts toward the language heard** (exploratory, three
+  seeds, 6 of 6; VISION.md 20:45), after gating habits off one's own voice. CORe50 seed 0: first stage alone same
+  object elsewhere 0.117, the second stage in order with the trace 0.116 (shuffled and plain running). Ramp census
+  in (same turnover pattern). gazs_s1: no record yet at 85 minutes (first due at 95,000).
 

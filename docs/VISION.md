@@ -3714,7 +3714,7 @@ born 0.117, cochlea 0.101, **sight and hearing together 0.206**, the sound sight
 both senses together name a video better than sight alone (+0.025, +0.020), and on both the hearing's own development
 is worth something (word test +0.010, +0.019 over hearing as born; which sound +0.011, +0.004). Seed 2 running.
 
-### 2026-11-26 21:00, babbling drifts toward the language heard (stream brain; exploratory, three seeds)
+### 2026-11-26 20:45, babbling drifts toward the language heard (stream brain; exploratory, three seeds)
 
 Infants' babbling comes to resemble the sounds of the language around them before they speak (de Boysson-Bardies
 and colleagues, 1980s; to verify). `experiments/babble_drift_probe.py`: the stream brain with its vocal tract babbles
