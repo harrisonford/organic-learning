@@ -108,7 +108,7 @@ while i < len(todo):
         if isinstance(check, list):  # some replies are a bare list of lists, one per photo
             check = {str(j + 1): v for j, v in enumerate(check)}
     except Exception as e:  # noqa: BLE001 - keep the daemon alive
-        log(f"batch {batch[0]} failed: {e}")
+        log(f"batch {batch[0]} failed ({writer} writes, {checker} checks): {e}")
         time.sleep(60)
         if "budget" in str(e):
             continue

@@ -3291,3 +3291,73 @@ and streams follow.
 **Backprop on the photo stream, tuning** (first 10,000 of seed 0; no relay): batch 8: 0.301 / 0.231 / 0.302 at
 rates 0.001 / 0.0003 / 0.003; batch 32: 0.267 / 0.165 / 0.316. Fixed relay, first run (0.001, batch 8): 0.403.
 The word cells at that point: 0.308 without the relay, 0.391 with it. Five runs to go.
+
+### 2026-11-26 08:00, the photo stream on three seeds; SAILnet on photographs; a hypothesis about the word cells
+
+(The loop was idle from 02:28 to 07:37: the session's model allowance ran out; Kris switched the model and the loop
+went on. Every queue ran meanwhile.)
+
+**The photo stream, three seeds** (`stream_photos_{ph_r,ph_d}_s{0,1,2}.log`; streaming LDA on the developed code has
+two seeds, the third running; 33 words; 4,000 held-out photographs; after 50,000):
+
+| photo stream | as born | developed by our hard rule | developed minus born, by seed |
+|---|---|---|---|
+| word cells + relay | 0.446 ± 0.006 | 0.445 ± 0.002 | +0.004, −0.004, −0.004 |
+| word cells, no relay | 0.389 ± 0.009 | 0.373 ± 0.004 | −0.010, −0.020, −0.017 |
+| ridge + relay | 0.461 ± 0.004 | 0.486 ± 0.003 | +0.023, +0.029, +0.022 |
+| ridge, no relay | 0.457 ± 0.006 | 0.467 ± 0.004 | +0.010, +0.013, +0.006 |
+| streaming LDA + relay | 0.476 ± 0.007 | 0.501 (0.499, 0.503) | +0.023, +0.034 |
+| streaming LDA, no relay | 0.476 ± 0.005 | 0.497 (0.495, 0.499) | +0.020, +0.027 |
+
+Three seeds agree with seed 0: on real photographs development is worth 2.5 points to ridge and streaming LDA behind
+the relay and nothing to the word cells (without the relay it costs them 1.6). A photograph seen once is named
+right twenty pictures later 0.89–0.93 of the time on the filters as born, 0.84–0.89 on the developed ones.
+
+**Backprop of the same shape on photographs, seed 0** (`backprop_photos_full.log`): without the relay, at the best
+of twelve settings on the first 10,000 (rate 0.003, batch 32: 0.316 there), 0.387 after 50,000; the word cells
+without the relay 0.389 ± 0.009, with it 0.446 ± 0.006. Level, like for like without the relay; with the relay
+the run is in work. **The best setting was the largest rate and the largest batch of the search, an edge**, so
+the search goes on past it (`organic-photos-bp2`: rate 0.01 / batch 128 without the relay, batch 128 with it),
+as the CIFAR reference's search went on past its smallest rate; the whole stream is run again if a wider setting wins.
+
+**SAILnet on photographs, seed 0** (`sailp_code_s0.log`, `stream_photos_{sailp,sailpu}_s0.log`): 145 different
+filters of 256. At unit length, after 50,000: word cells + relay 0.427, without 0.350; ridge + relay 0.474;
+streaming LDA + relay 0.498 (as born on that seed 0.439 / 0.379 / 0.459 / 0.476; our hard rule 0.443 / 0.369 /
+0.482 / 0.499). What I said: at least 180 different filters (wrong: 145); ridge and streaming LDA about 0.02
+above as born (+0.015, +0.022: held); word cells within 0.01 of as born (−0.012: just outside). As developed (not
+at unit length) it is worse everywhere (0.386 word cells + relay). The same pattern as our rule's: development
+helps the second-order readers and not ours.
+
+**A hypothesis, from five codes** (developed minus born, behind the relay; and how many directions the developed
+code spreads over after the relay, the participation ratio read on 1,500 test pictures):
+
+| code | directions after the relay, as born → developed | word cells + relay | ridge + relay |
+|---|---|---|---|
+| CIFAR at 32, our hard rule | ~790 → ~535 | +0.023 | +0.034 |
+| CIFAR at 32, SAILnet at unit length | ~790 → ~497 | +0.017 | +0.025 |
+| photographs, our hard rule | ~603 → ~393 | −0.001 | +0.025 |
+| CIFAR enlarged, our hard rule | ~575 → ~354 | −0.022 | +0.009 |
+| photographs, SAILnet at unit length (one seed) | 585 → 307 | −0.012 | +0.015 |
+
+Ridge gains every time. The word cells gain only where the developed code still spreads over about 500 directions
+after the relay, and the order of the five follows the count but for one pair. This is what the paper's account
+of the relay predicts for a one-pass first-order reader: it learns along the strong directions and hardly along
+the weak, and a developed code (its near copies) puts its variance into fewer directions than the relay, settled
+on 6,000 pictures for 4,096 numbers, takes back out. It is a reading of five points, not a finding. **The test,
+queued** (`organic-relaymore1`, `experiments/relay_more_probe.py`): the same codes of seed 0 with the relay settled
+on 20,000 unlabelled photographs in place of 6,000, for the developed and the as-born cortex; nothing else changes.
+**Said before:** if the hypothesis holds, the developed code spreads over clearly more directions after the new
+relay and the word cells gain from development (developed above born by 0.01 or more); if neither moves, the
+relay's estimate is not the reason and the next candidate is the reader itself (a first-order rule seeing each
+picture once).
+
+**The photo daemon** wasted most of its day: since midnight 6 batches written and 27 failed ("no reply after
+retries", with no reason given), and since every attempt counts against the allowance, the day's share was gone at
+04:02. Which adult fails, and why, was not in the log: `organic/adults.py` now says the model and the reason (the
+HTTP code, or a timeout and after how long) in the failure, and annotate.py names the writer and the checker. A
+logging change only; the photo daemon restarted (it sleeps until midnight); the text and curriculum daemons pick it
+up when they next restart. Tonight's log will say which adult to look at.
+
+**Ramp lives at 80,000** (first words / pages): 0.42 / 0.30, 0.35 / 0.25, 0.41 / 0.28. Reward lives at that age
+0.45 / 0.33, 0.49 / 0.20, 0.48 / 0.28; plateau lives 0.53 / 0.14, 0.47 / 0.32, 0.49 / 0.33. No visible effect so
+far; read whole at 120,000. `organic-commons`: 11,807 photographs in nine hours.

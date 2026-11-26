@@ -60,6 +60,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-relaymore1`** (out/tmp/relay_more_queue.sh; queued 07:55, waits for photos2; MemoryMax 1800M; gated;
+  about 1.5 hours): the relay settled on 20,000 photographs for ph_d and ph_r of seed 0 → relay_more_{ph_d,ph_r}_s0.log,
+  stream_photos_{ph_dm20k,ph_rm20k}_s0.log. The hypothesis and what I said before: VISION.md 08:00. (Smoke test on
+  300 photographs: 386 directions through the relay of 6,000, 198 through one of 300: the count moves as expected.)
+- **`organic-photos-bp2`** (out/tmp/photos_backprop_wide.sh; queued 07:50, waits for photos-bp1): the photo
+  reference's tuning widened past its edge; the whole stream again if a wider setting wins.
 - **`organic-sailp1`** (out/tmp/sailp_queue.sh; started 00:42; MemoryMax 1500M; gated; about five hours): SAILnet in
   the cortex's place on the photo stream, seed 0 → out/bench/sailp_develop_s0.log, sailp_code_s0.log,
   stream_photos_{sailpu,sailp}_s0.log. Beside: ph_r / ph_d of seed 0 (VISION.md 00:40, with what I said before).
@@ -204,6 +210,22 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     Measured: the word's pull is 0.06 at the named place against a reflex term that varies by 0.19, so
     "0.5 × standing-out + pull" drowns the word (first look on the named thing 0.50–0.53; by pull alone
     0.81–0.85; any form free of the raw sizes 0.79–0.86). Survey running on how the brain combines them.
+
+31. **Video: real dynamics for the eye** (Kris, 2026-11-26 08:05: "how good would this architecture be for video
+    processing? because images are static but reality is more dynamic ... would videos give our visual layer the
+    dynamism that images lack? and maybe find out some insights and blind spots we miss with simple images?").
+    Organic check: passes on the strongest ground in this queue; temporal contiguity is how the ventral stream is
+    thought to learn what goes together (Földiák 1991; Wallis & Rolls 1997; Li & DiCarlo 2008 changed IT cells by
+    swapping objects across saccades; newborn chicks reared with only jerky object motion fail to build
+    view-invariant recognition; Halvagal & Zenke 2023 the local rule). What we had: every temporal attempt so far
+    (LPL in VISION.md Attempt 1, the slow-views layer, the trace-rule second stage of 29a) learned from views made
+    out of a still (zooms, gaze points, a picture sliding one pixel): such sequences can only teach tolerance to
+    shift and scale, never to rotation in depth, deformation, light or occlusion. Steps: (a) find real video we may
+    use (licence and size checked before any download): a continual-learning set of handheld objects filmed as
+    sequences, Wikimedia Commons videos through the polite fetcher, and, needing an agreement Kris would sign, a
+    toddler's head-camera recordings; (b) the clean probe: the same frames developed in their order and shuffled
+    (time is the only difference), read as the stream and as tolerance (the same object in another session);
+    (c) only then the lives. Words: verbs and events have no still picture; video is where they could be grounded.
 
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
@@ -1197,4 +1219,16 @@ Still Kris's own:
   Next: photos2 (seed 1's streams about 03:30), sailp1's codes and streams, the tuning's end and the two whole
   streams → the photo stream's table (three seeds of ours, one of backprop) → a section in the paper → draft 10
   to Kris in the morning; ramp lives into JUDGING.md; the tag queue's arm opens when memory does.
+- 2026-11-26 07:40–08:10 (the loop was idle 02:28–07:37: the model allowance ran out; Kris switched the model). Health: the three
+  planned endings; 3.4 GB free. **Photo stream, three seeds:** development +0.025 for ridge behind the relay on
+  every seed, −0.001 for the word cells (−0.016 without the relay). Backprop on photographs, seed 0, no relay:
+  0.387 (its best setting at the search's edge → `organic-photos-bp2` widens it). **SAILnet on photographs:**
+  145 filters; 0.427 / 0.474 / 0.498 (word cells / ridge / streaming LDA, relay). **Hypothesis from five codes:**
+  the word cells gain from development only where the developed code spreads over about 500 directions after the
+  relay → `organic-relaymore1` (relay settled on 20,000 photographs). **Photo daemon:** 27 of 33 batches failed
+  since midnight, every retry counted → its share gone at 04:02; failures now name the model and the reason
+  (organic/adults.py, logging only; photo daemon restarted, asleep till midnight). Ramp lives at 80,000: no
+  visible effect. Commons: 11,807. **Kris asked about video** → queue E 31 (above).
+  Next: photos-bp1's relay row → the paper's photo section → draft 10; relaymore1; bp2; photo log after midnight;
+  E 31 (a): licences and sizes of real video.
 

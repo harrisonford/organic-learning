@@ -132,12 +132,14 @@ class Adults:
                 return reply
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504):
+                    self.last_error = f"HTTP {e.code}"  # said in the failure, so a log tells which model and why (2026-11-26)
                     time.sleep(20 * (attempt + 1))
                     continue
                 raise
-            except (urllib.error.URLError, TimeoutError):
+            except (urllib.error.URLError, TimeoutError) as e:
+                self.last_error = f"{type(e).__name__} after {time.time() - t0:.0f}s"
                 time.sleep(20 * (attempt + 1))
-        raise RuntimeError("no reply after retries: " + getattr(self, "last_error", ""))
+        raise RuntimeError(f"no reply after retries from {model}: " + getattr(self, "last_error", ""))
 
 
 def image_part(img, size=64, show=256):
