@@ -60,6 +60,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-commons`** (permanent service since 2026-11-25 22:26; `experiments/world/commons_depicts.py`; log
+  out/commons_depicts.log): Wikimedia Commons photographs by what they depict, one every two seconds, into
+  `~/datasets/commons_more/` (never into `~/datasets/commons`: world 4). Kris asked for it ("slow polite
+  download constantly"). To do with it: a contact sheet and a count by word after a day; decide how its
+  pictures enter the photo stream (labels are noisy: "depicts" is not "is a picture of"); giraffe's item.
 - **`organic-photos-bp1`** (out/tmp/photos_backprop_queue.sh; started 20:50; MemoryMax 1400M; gated at 3.3 GB a run;
   waits for cortex_ph_d_s0.pkl from photos1): backprop of the same shape on the photo stream, seed 0
   (`SET=photos` in bench_backprop.py, default unchanged; the code path has not run yet: READ
@@ -1150,4 +1155,10 @@ Still Kris's own:
   Next: photo streams (first numbers about 23:00) and backprop_photos_tune_s0.log's first line; sailn seed 2 →
   three-seed row in VISION and, if it holds, a sentence in the paper; softbase2's rows (about 03:00); photo
   daemon's log after midnight; draft 10 when the photo stream has its table.
+- 2026-11-25 22:30 **Kris: "yes slow polite download constantly"** → `organic-commons` installed and running (WORLD.md). Photo
+  stream, seed 0, as born: word cells + relay 0.439 after 50,000 (0.391 at 10,000), without relay 0.379;
+  ph_d coded (177 different filters, 180 near-copy pairs); backprop's first tuning run on photos 0.301 at
+  10,000 (the code path works). Kris also asked whether the enlargement needed reporting: in the paper it
+  shrinks to a sentence and a table once the photo stream is the vision evidence.
+  Next: as before (photo streams and tuning; sailn seed 2; softbase2; photo daemon after midnight).
 

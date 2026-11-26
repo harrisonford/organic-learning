@@ -142,3 +142,26 @@ failed requests were counted against the day's allowance (459 of 500 used by 09:
   withdrawn model's; if it is slow the photo world will make fewer than its 200 requests a day. The scan cost
   23 requests of the reserve (retries while the models were busy).
 
+
+## 2026-11-25: more Wikimedia Commons photographs, fetched constantly (not part of world 4)
+
+Kris, 22:20: "yes slow polite download constantly", after "we should have also wiki pics". New service
+`organic-commons` (`experiments/world/commons_depicts.py`, unit file in ~/.config/systemd/user, enabled, restarts
+by itself): Commons files that the site's editors have marked as depicting a thing (structured data, P180),
+found through the site's search a page of 25 at a time, word after word.
+
+- **Kept:** JPEG or PNG whose 120-pixel thumbnail is at least 64 pixels on its short side; the middle square at
+  64 × 64 (never enlarged); the word, the file's title, its page id. The title is what a licence and an author
+  are looked up by; the pictures are not passed on to anyone.
+- **Politeness:** one request at a time, a picture every two seconds (about 40,000 a day at most), the earlier
+  fetcher's user agent, `maxlag` on the API, five minutes' wait (or what the server says) on a refusal.
+- **Where:** `~/datasets/commons_more/`. **Not** `~/datasets/commons`, which the lives' world reads and which
+  must not change while lives are in it. Nothing reads the new directory yet.
+- **Words:** 39 (the photo benchmark's and the picture book's, plus flower, tree, house). Each word's Wikidata
+  item is checked against its English label first; giraffe was left out (the item I had is the northern
+  giraffe). The search gives at most 10,000 files a word.
+- **What "depicts" means, seen in the first three:** the thing is somewhere in the picture, not always its
+  subject, and paintings count (one of the first three dogs is in a painting of 1899, one is small in a
+  courtyard). Good for "all kinds of pictures" and for development without labels; as labelled pictures they
+  are noisier than COCO's crops, to be measured before they are used as tests.
+- Log: out/commons_depicts.log. Not in health.py's list yet.
