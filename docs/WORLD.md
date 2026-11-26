@@ -191,3 +191,16 @@ itself; log out/commons_video.log). Commons has about 420,000 videos (search, 20
 
 Beside it, `organic-core50-fetch`: the handheld-object videos (CC BY 4.0, 5.9 GB) at the server's pace, about 180 KB/s
 (about nine hours).
+
+### SpokenCOCO: people reading the COCO captions aloud (2026-11-26)
+
+For the ear that hears sound and is never given text (Kris, 2026-11-26 12:50; queue E 32 in docs/LOOP.md).
+SpokenCOCO (Hsu, Harwath, Song & Glass, NeurIPS 2020 workshop on self-supervised learning for speech): about
+600,000 recordings of people reading the MSCOCO captions out loud, each caption once; audio only, the images are
+COCO's own (we hold the 2017 train images as 64 × 64 thumbnails). Licence: Creative Commons Attribution-ShareAlike,
+as stated for all the corpora on https://sls.csail.mit.edu/downloads/placesaudio/ (checked 2026-11-26). Anything made
+public from it must attribute and share alike; the speakers' voices are theirs: never published by us.
+`~/datasets/spokencoco/fetch.sh` (unit `organic-spokencoco-fetch`; curl limited to 3 MB/s, resumable, generic
+user agent; 64 GB, about six hours) → `SpokenCOCO.tar.gz`; done when `tar` is in `fetch.done`. Downloaded data:
+read with `python -I`, never run. The captions' text, if the archive holds it, is for measuring only (which word was
+said where): the brain never gets it.

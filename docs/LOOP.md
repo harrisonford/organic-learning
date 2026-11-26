@@ -60,6 +60,8 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-spokencoco-fetch`** (started 12:50; ~/datasets/spokencoco/fetch.sh; 3 MB/s, resumable, 64 GB, about six
+  hours): spoken COCO captions for the sound ear (queue E 32; docs/WORLD.md). Ends with `tar` in fetch.done.
 - **`organic-av1`** (out/tmp/av_queue.sh; queued 11:20; MemoryMax 1800M; each seed waits for 3.3 GB (re-queued 12:20 after an OOM at its own cap at 11:53, now leaner); about an hour
   a seed): two senses teaching each other, first probe (queue E 32; `experiments/av_probe.py`), seeds 0–2 →
   out/bench/av_probe_s{0,1,2}.log. What I said before: VISION.md 11:10.
@@ -277,6 +279,17 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     text chat, like a video call: he talks to it, and it keeps the conversation going, more dynamic than current
     models. Performance is pushed but organic first. Far off (a proof of concept, then an MVP); on this CPU the tick
     may be slowed down; real time comes with a GPU or the cloud.
+    **Kris, 2026-11-26 12:50: "for audio what i want is not to transcribe to text then work on text similar to how
+    words are just bytes audio can be fed in the ear develop it's own cortex with interconnectivity and just work".**
+    So: no transcription anywhere inside the brain. Sound enters as sound: the cochlea (fixed, like the retina) → an
+    auditory cortex developed by the eye's own local rule (as in experiments/av_probe.py) → its own relay → the same
+    word cells, store and gate, and links to sight by local rules. The ear's units come from the sound itself, by the
+    byte ear's principle (a unit starts where the next frame stops being predictable; recurring stretches become
+    units; Saffran et al. 1996). Needs speech heard with what it is about: spoken captions of the COCO photographs
+    (licence to check before any download); comparison: visually grounded speech learned by backprop (Harwath and
+    colleagues). Later: a vocal tract the mouth learns to drive by babbling (until then it hears sound, speaks units);
+    the judge hears the reply on the world's side (a caregiver listening, not the brain transcribing). The lives'
+    text ear stays as it is; the sound ear comes behind a switch, probe first.
 33. **How the brain grows, stage by stage** (Kris, same message: "progressive learning and evolution of the brain
     reporting size complexity and behaviour on different development stages"). `experiments/growth_report.py` →
     docs/GROWTH.md and out/growth/{tag}.json from the lives' own records. **First reading (nine lives), corrected the
