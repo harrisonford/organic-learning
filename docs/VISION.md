@@ -3713,3 +3713,27 @@ at chance again. The word test (19 words, 128 held-out videos, chance 0.053): si
 born 0.117, cochlea 0.101, **sight and hearing together 0.206**, the sound sight predicts 0.155. **Two seeds now:**
 both senses together name a video better than sight alone (+0.025, +0.020), and on both the hearing's own development
 is worth something (word test +0.010, +0.019 over hearing as born; which sound +0.011, +0.004). Seed 2 running.
+
+### 2026-11-26 21:00, babbling drifts toward the language heard (stream brain; exploratory, three seeds)
+
+Infants' babbling comes to resemble the sounds of the language around them before they speak (de Boysson-Bardies
+and colleagues, 1980s; to verify). `experiments/babble_drift_probe.py`: the stream brain with its vocal tract babbles
+for 600 s while an adult (140 Hz) says vowels of one small language about every 1.5 s; habits grow only from what is
+heard (`heard_habit` 0.01: a heard sound strengthens the habits of the gestures whose learned sound matches it), not
+from the mouth's own repetition. Two languages of three vowels ("i a u", "e o y"), a brain on each, and one in
+silence; measured in the last 200 s: the babbled gestures' mean distance (log formants) to each language's nearest
+vowel. **No prediction was written before the first run: this is exploratory.**
+
+| raised on (seeds 0 / 1 / 2) | to "i a u" | to "e o y" |
+|---|---|---|
+| silence (habits stay flat: top gesture 0.031 = 1/32) | 0.301 / 0.378 / 0.371 | 0.291 / 0.282 / 0.257 |
+| "i a u" | **0.301 / 0.315 / 0.341** | 0.281 / 0.286 / 0.263 |
+| "e o y" | 0.317 / 0.426 / 0.386 | **0.250 / 0.188 / 0.213** |
+
+Each brain babbles nearer its own language than the other brain does on every seed (6 of 6); against silence the
+drift is −0.060 toward "e o y" and −0.031 toward "i a u" (whose vowels sit at the corners of the vowel space, where
+few of the 32 random gestures lie). Two leaks of mine on the way, both of the same kind: the habits fed on the
+mouth's own voice (while the hearing population still held its tail), so the silent brain drifted at random too;
+fixed by taking habits only while sound comes in from the world and not within 100 ms of one's own gesture (the
+suppression of one's own voice). The 32 gestures are random places in the vowel space; nothing about vowels was
+given but the tract's physics.

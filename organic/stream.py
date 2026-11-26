@@ -175,6 +175,7 @@ class StreamBrain:
                     self.steps_since_link = 0
                     self.n_assoc += 1
                     self.assoc += (np.outer(self.sound.x, self.sight.x) - self.assoc) / self.n_assoc
+        self.since_said = 0 if (self.saying is not None or self.own) else getattr(self, "since_said", 10 ** 6) + 1
         if self.saying is not None and self.sound is not None:  # while a gesture sounds, what is heard is kept for its map
             self.said_codes.append(self.sound.x.copy())
             if not self.own:  # the gesture has ended: Hebb's rule, the running mean of what was heard while it sounded
@@ -207,8 +208,12 @@ class StreamBrain:
             m = np.maximum(c - c[known].mean(), 0) * known  # above the average gesture, as the filters answer above the average kind
             if m.max() > 0:
                 drive = drive + strength * m / m.max()  # each source taken relative to its own strongest, then together
-                if self.heard_habit and np.linalg.norm(self.sound.x) > 1e-6:
-                    self.habit += self.heard_habit * m / m.max()  # covert imitation leaves habits
+                world_loud = sound_row is not None and float(np.sum(sound_row)) > 1e-3
+                if self.heard_habit and world_loud and self.since_said >= 10:
+                    # covert imitation leaves habits, while sound comes in and not from one's own voice: the suppression
+                    # lasts while the hearing population still holds it (100 ms, twice its time constant). Tried without
+                    # both (2026-11-26): the habits fed on the mouth's own echo, even its faint tail.
+                    self.habit += self.heard_habit * m / m.max()
         u = self.mouth.step(drive) if self.saying is None else None
         if u is not None:
             self.habit[u] += self.habit_step  # a gesture made becomes a little more likely (habit)
