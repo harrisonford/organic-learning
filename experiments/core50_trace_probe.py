@@ -1,5 +1,5 @@
 """Real time for the eye: a second stage that learns from video in its order, against the same frames shuffled
-(queue E 31 (b); docs/VISION.md 2026-11-26 13:40, with what I said before it ran).
+(queue E 31 (b); docs/VISION.md 2026-11-26 13:20, with what I said before it ran).
 
 Every temporal attempt so far learned from views made out of a still (a picture sliding a pixel, a zoom): such
 sequences can teach tolerance to position and size, never to an object turning, the hand moving it, the light.

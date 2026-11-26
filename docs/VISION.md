@@ -3538,7 +3538,7 @@ frequent words ("a", "of", "the", and object words said often, "dog", "pizza") w
 them in most captions that contain them; picture-to-caption retrieval by local rules will sit well under backprop's
 numbers. The point is that the ear gets there without ever being given a letter.
 
-### 2026-11-26 13:40, the reader's verdict, first seed; real video for the eye, said before it runs
+### 2026-11-26 13:20, the reader's verdict, first seed; real video for the eye, said before it runs
 
 **Nearest class mean through the relay on the photo stream, seed 0** (`organic-ncm1`): as born 0.419, developed
 **0.401**. Development costs the purest Hebbian reader two points, while ridge and streaming LDA gain two (0.459 →
