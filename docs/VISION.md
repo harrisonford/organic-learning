@@ -3651,3 +3651,10 @@ sight above hearing (yes), both together above sight by a point or more (yes, 2.
 sight (yes). The order developed > as born > cochlea holds here too. The first hint in this project for Kris's view
 that interconnected streams make a more reliable brain: two senses name a video better than either. One seed and few
 videos a word; seeds 1 and 2 running (`organic-av2`).
+
+**The reader's verdict, three seeds** (`organic-ncm1` complete): nearest class mean through the relay on the photo
+stream, as born 0.419 / 0.422 / 0.421 (0.421 ± 0.002), developed 0.401 / 0.401 / 0.407 (0.403 ± 0.003). Development
+costs the purest first-order reader two points on every seed, where ridge and LDA gain two and the word cells
+nothing. Written into the paper's photo section with the two explanations ruled out (the relay's sample; its floor).
+What follows for the learner (not done yet; each needs its organic check): a reader of second moments that is local,
+or a delta rule that keeps learning along the faint directions longer.

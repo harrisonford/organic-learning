@@ -424,9 +424,11 @@ saying the commonest word would be right 5.1% of the time.
 | word cells, no relay, filters as born | 0.132 ± 0.006 | 0.276 ± 0.004 | 0.389 ± 0.009 |
 | backprop, no relay, one pass (one seed) | 0.078 | 0.213 | 0.387 |
 | word cells, no relay, developed filters | 0.144 ± 0.011 | 0.264 ± 0.002 | 0.373 ± 0.004 |
+| nearest class mean + relay, filters as born | | | 0.421 ± 0.002 |
+| nearest class mean + relay, developed filters | | | 0.403 ± 0.003 |
 
-**[pending: backpropagation on seeds 1 and 2; its learning rate and batch were the largest of the first search, so
-the search is being widened past them.]**
+**[pending: backpropagation on seeds 1 and 2 (seed 1 with the relay: 0.464). A search widened past the first one's
+largest rate and batch found nothing better, so the settings stand.]**
 
 Three things carry over from CIFAR and one does not. Without the relay the word cells and backpropagation are
 level (0.389 against 0.387), as on CIFAR they nearly were. The second-order readers lead again. And the word cells
@@ -436,7 +438,14 @@ photographs our rule's filters are worth two and a half points to ridge regressi
 behind the relay, on every seed, and nothing to the word cells. That is the same split as on enlarged CIFAR, where
 the streaming discriminant also gained two points and the word cells none, and unlike CIFAR at its own size, where
 both gained. So across three kinds of picture the developed filters hold something that a reader keeping second
-moments can use and our one-pass first-order reader, on the whole, cannot.
+moments can use and our one-pass first-order reader, on the whole, cannot. The purest first-order reader makes the point
+from the other side: the nearest class mean through the relay, which keeps one running mean per word and nothing
+else, loses two points from development (0.421 ± 0.002 as born, 0.403 ± 0.003 developed, on every seed). The
+developed filters bring the words' mean codes closer together; what they add lies in how the code varies within and
+between words, and only a reader that keeps second moments can use it. Two other explanations did not survive: a
+relay settled on 20,000 pictures instead of 6,000 changes nothing, and a relay that flattens five times more of the
+faint directions lifts the word cells by about a point on both codes alike (one seed), so it adds nothing to what
+development is worth to them.
 
 ### Second-order readers stay ahead
 
