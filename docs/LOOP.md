@@ -60,10 +60,19 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-av1`** (out/tmp/av_queue.sh; queued 11:20; MemoryMax 1800M; each seed waits for 2.5 GB; about an hour
+  a seed): two senses teaching each other, first probe (queue E 32; `experiments/av_probe.py`), seeds 0–2 →
+  out/bench/av_probe_s{0,1,2}.log. What I said before: VISION.md 11:10.
+- **`organic-photos-bp3`** (out/tmp/photos_backprop_seeds.sh; queued 10:50; waits for relayshrink1, then 3.3 GB a
+  run): backprop on photographs, seeds 1–2, relay and no relay, at seed 0's settings → backprop_photos_full.log.
+  Fills the paper's pending mark.
+- **`organic-census1`** (out/tmp/census_queue.sh; queued 11:25; waits for av1, then 3.3 GB a life): the census of
+  kind_s0..2, plat_s1..2 (now with word-cell turnover from the cells' birth moments), then docs/GROWTH.md again.
+  plat_s0's census predates the turnover columns: run it again after.
 - **`organic-video-audio`** (permanent service since 2026-11-26 09:50; `experiments/world/video_audio.py`; log
   out/video_audio.log): the kept Commons videos' sound through `organic/cochlea.py`, aligned ten frames to one
   picture frame → `~/datasets/commons_video/audio_64.f16`, `audio.jsonl`. Looks for new videos every hour.
-- **`organic-relayshrink1`** (out/tmp/relay_shrink_queue.sh; queued 09:10, waits for relaymore1; gated): the relay with
+- **`organic-relayshrink1`** (ph_d half read, VISION.md 11:10; ph_r stream running) (out/tmp/relay_shrink_queue.sh; queued 09:10, waits for relaymore1; gated): the relay with
   its floor at 0.0001 (not 0.0005) for ph_d and ph_r of seed 0 → relay_shrink_{ph_d,ph_r}_s0.log,
   stream_photos_{ph_dz1,ph_rz1}_s0.log. What I said before: VISION.md 09:10. A diagnosis, not a setting.
 - **`organic-commons-video`** (permanent service since 2026-11-26 08:15; `experiments/world/commons_video.py`; log
@@ -72,11 +81,11 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   before use.
 - **`organic-core50-fetch`** (started 08:20; ~/datasets/core50/fetch.sh; curl limited to 2 MB/s, resumable): the video
   set for queue E 31; ends with `zip` in ~/datasets/core50/fetch.done.
-- **`organic-relaymore1`** (out/tmp/relay_more_queue.sh; queued 07:55, waits for photos2; MemoryMax 1800M; gated;
+- **`organic-relaymore1`** ENDED, read (VISION.md 09:10, 09:55, 11:10). (out/tmp/relay_more_queue.sh; queued 07:55, waits for photos2; MemoryMax 1800M; gated;
   about 1.5 hours): the relay settled on 20,000 photographs for ph_d and ph_r of seed 0 → relay_more_{ph_d,ph_r}_s0.log,
   stream_photos_{ph_dm20k,ph_rm20k}_s0.log. The hypothesis and what I said before: VISION.md 08:00. (Smoke test on
   300 photographs: 386 directions through the relay of 6,000, 198 through one of 300: the count moves as expected.)
-- **`organic-photos-bp2`** (out/tmp/photos_backprop_wide.sh; queued 07:50, waits for photos-bp1): the photo
+- **`organic-photos-bp2`** ENDED, read (VISION.md 11:10: nothing wider wins). (out/tmp/photos_backprop_wide.sh; queued 07:50, waits for photos-bp1): the photo
   reference's tuning widened past its edge; the whole stream again if a wider setting wins.
 - **`organic-sailp1`** (out/tmp/sailp_queue.sh; started 00:42; MemoryMax 1500M; gated; about five hours): SAILnet in
   the cortex's place on the photo stream, seed 0 → out/bench/sailp_develop_s0.log, sailp_code_s0.log,

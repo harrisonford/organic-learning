@@ -47,7 +47,15 @@ if __name__ == "__main__":
                     parts[k] = {"numbers_m": round(n / 1e6, 2), "mb": round(b / 1e6, 1)}
             rows.append({"stage": st, "age": int(getattr(brain, "age", 0)), "file_gb": round(os.path.getsize(p) / 1e9, 2), "parts": parts,
                          "numbers_m": round(sum(x["numbers_m"] for x in parts.values()), 1)})
-            print(f"{tag} {st} age {rows[-1]['age']}: {rows[-1]['numbers_m']} million numbers | " + ", ".join(f"{k} {v['numbers_m']}" for k, v in sorted(parts.items(), key=lambda kv: -kv[1]['numbers_m'])[:8]), flush=True)
+            w = getattr(brain, "words", None)
+            if w is not None and getattr(w, "born", None) is not None:  # turnover: the word cells carry the moment they were born
+                n, now = len(w.units), int(w.moments)
+                born = np.asarray(w.born[:n], np.float64)
+                before = rows[-2]["word_cells"] if len(rows) > 1 and "word_cells" in rows[-2] else {"n": 0, "moments": 0}
+                new = int((born > before["moments"]).sum())
+                rows[-1]["word_cells"] = {"n": n, "moments": now, "born_since": new, "forgotten_since": int(before["n"] + new - n),
+                                          "median_age": int(np.median(now - born)), "cues": len(getattr(w, "cues", []))}
+            print(f"{tag} {st} age {rows[-1]['age']}: {rows[-1]['numbers_m']} million numbers | {rows[-1].get('word_cells')} | " + ", ".join(f"{k} {v['numbers_m']}" for k, v in sorted(parts.items(), key=lambda kv: -kv[1]['numbers_m'])[:8]), flush=True)
             del brain
         os.makedirs("out/growth", exist_ok=True)
         json.dump(rows, open(f"out/growth/{tag}_census.json", "w"))

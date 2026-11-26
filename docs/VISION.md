@@ -3429,3 +3429,47 @@ photographs.
 
 **Backprop's widened search on photographs** (5 of 6 runs): every wider setting is worse than the chosen ones
 (no relay: 0.262, 0.221, 0.204 against 0.316; relay, batch 128: 0.379 against 0.406). The chosen settings stand.
+
+### 2026-11-26 11:10, the relay's floor (first half); two senses teaching each other, said before it runs
+
+**The relay's floor, the developed photo code** (`organic-relayshrink1`, seed 0; relay settled on 20,000 photographs
+at 0.0001 of the largest variance instead of 0.0005): the code spreads over 572 directions after it (386 at the
+benchmark's relay; the spectrum had predicted about 1,000, so the levelled spectrum overstates the spread of the
+codes themselves). Word cells + relay **0.452** against 0.443 (0.441 with 20,000 at the old floor); ridge + relay
+0.481 against 0.482. So the word cells move by about a point and ridge does not move. Whether that makes a gain
+from development waits for the as-born half (ph_rz1, running): as born at the old floor, word cells 0.439. One seed.
+**The relay on 20,000 pictures, as born:** ridge + relay 0.460 against 0.459. Nothing moves, on both codes.
+**Backprop's widened search on photographs, complete:** the last run (relay, rate 0.003, batch 128: 0.401) is also
+below the chosen one (0.406). The chosen settings stand; seeds 1 and 2 at them are queued (`organic-photos-bp3`).
+
+**Two senses teaching each other: the first probe** (queue E 32; `experiments/av_probe.py`). Kris's hypothesis is
+that streams interconnected make a more reliable brain. Before any brain hears real sound, the question this can
+answer on its own: does what the eye sees in a video carry what the ear hears at that moment, on videos never seen,
+and can the senses learn that from each other by the local rules the brain already has?
+
+The organic check. (1) Multisensory association is learned from what occurs together: neurons of the superior
+colliculus in cats reared in the dark, or with sight and sound paired at random, do not come to integrate the two,
+and come to integrate whatever pairing they were reared with (Wallace & Stein 2007; Xu et al. 2012; to verify).
+(2) The two senses can be each other's teacher without labels: de Sa (1994), "learning classification with
+unlabeled data", let each modality's units label the other's. (3) The hearing uses the eye's own rule:
+winner-take-all Hebbian learning with a conscience on windows of the cochlea's output read as a picture (80 ms ×
+8 bands), with its decorrelation; efficient codes of natural sounds give filters like the auditory system's (Smith
+& Lewicki 2006; Carlson, Ming & DeWeese 2012). (4) The association is Hebb's rule (the running mean of the product
+of the two codes) and the word cells' delta rule; after the relays decorrelate both codes, Hebb's rule comes close
+to regression, which is one more reason the relay is there. Least squares on everything at once is the
+reference. What the paradigm does here is learn both encoders by backprop on "do these belong together"
+(Arandjelović & Zisserman 2017, "Look, Listen and Learn"); that reference is for later.
+
+The material: 597 of the first 768 Commons videos have sound; titles naming an animation, a render, a time-lapse,
+a game, an interview or a lecture are left out (47 of 1,356 kept videos have such titles; a rough count, the
+deep categories hold more talking heads). A fifth of the videos is held out whole. One frame every two seconds and
+the second of sound around it.
+
+**What I expect, before it runs.** Which sound (the true second against another held-out video's, chance 0.5),
+from sight: Hebb about 0.70 (0.62–0.80), the delta rule within 0.03 of Hebb, least squares at most 0.05 above.
+When (the same video's sound 5 s or more away, chance 0.5): about 0.55; Commons sound is mostly steady within a
+video (music, wind, an engine). Developed hearing above hearing as born by 0.02 or more; the cochlea's band means
+alone below both. What (the word a video was fetched under, nearest class mean, balanced): sight above hearing;
+sight and hearing together above sight by a point or more; the sound that sight predicts below sight. If "which
+sound" sits near 0.5, Commons videos are the wrong material (music laid over pictures) and CORe50 has no sound:
+then the next material is filmed sound with its picture, not a different rule.

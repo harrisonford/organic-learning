@@ -77,5 +77,14 @@ if __name__ == "__main__":
             for c in cs:
                 parts.append(f"| {STAGES.get(c['stage'], c['stage'])} | {c['age']:,} | " + " | ".join(str(c["parts"].get(k, {}).get("numbers_m", "")) for k in organs) + f" | {c['numbers_m']} |")
             parts.append("")
+            if any("word_cells" in c for c in cs):  # turnover between the stage checkpoints (growth_census.py)
+                parts.append(f"Word cells between the stage checkpoints ({tag}): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age in moments:\n")
+                parts.append("| stage | moments | word cells | born since | forgotten since | median age | cues |")
+                parts.append("|---|---|---|---|---|---|---|")
+                for c in cs:
+                    w = c.get("word_cells")
+                    if w:
+                        parts.append(f"| {STAGES.get(c['stage'], c['stage'])} | {c['age']:,} | {w['n']:,} | {w['born_since']:,} | {w['forgotten_since']:,} | {w['median_age']:,} | {w['cues']:,} |")
+                parts.append("")
     open("docs/GROWTH.md", "w").write("\n".join(parts))
     print("docs/GROWTH.md:", ", ".join(t for t in tags if os.path.exists(f"out/{t}.jsonl")))

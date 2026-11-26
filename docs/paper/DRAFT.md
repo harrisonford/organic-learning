@@ -344,7 +344,8 @@ layer: without it the word cells fall from 0.689 to 0.591 ± 0.013. The whole st
 backpropagation of that layer's shape, is in the next section. Our own developed filters are not worthless:
 the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in
 them is better. Our reader cannot use it. When we looked inside, the developed filters were more selective than
-random ones but 658 pairs among them were near copies of each other; random filters had none.
+random ones but 658 pairs among them were alike above a cosine of 0.8 (the table above counts the closer pairs,
+above 0.9); random filters had none.
 
 ### The same contest on the better layer
 
