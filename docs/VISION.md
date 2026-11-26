@@ -3537,3 +3537,32 @@ spoken caption among 1,000 for a picture), our reference row.
 frequent words ("a", "of", "the", and object words said often, "dog", "pizza") will each have a unit that comes with
 them in most captions that contain them; picture-to-caption retrieval by local rules will sit well under backprop's
 numbers. The point is that the ear gets there without ever being given a letter.
+
+### 2026-11-26 13:40, the reader's verdict, first seed; real video for the eye, said before it runs
+
+**Nearest class mean through the relay on the photo stream, seed 0** (`organic-ncm1`): as born 0.419, developed
+**0.401**. Development costs the purest Hebbian reader two points, while ridge and streaming LDA gain two (0.459 →
+0.482, 0.476 → 0.499) and the word cells sit between (0.439 → 0.443). Of the two readings I wrote at 11:40 this is
+the second: what development adds on photographs is not in the words' mean codes (those come closer together)
+but in the code's second moments, which only readers that use them can take. The word cells' delta rule uses them
+partly (a delta rule tends to least squares, slowly, one picture at a time), which fits their place between. Seeds 1
+and 2 running. What follows if they agree: the reader, not the cortex and not the relay, is where the photo stream's
+missing two points are; the candidates are a delta rule that keeps its step longer on the faint directions, or a
+local reader of second moments (the streaming discriminant's form, as dendritic or interneuron circuits), each to
+pass its organic check first.
+
+**Real video for the eye: CORe50 in order against shuffled** (queue E 31 (b); `experiments/core50_trace_probe.py`).
+CORe50 is downloaded (5.9 GB, CC BY 4.0) and being turned into 64 × 64 frames in order
+(`experiments/world/core50_frames.py`). The probe is the one written into the queue on 2026-11-26 08:05: the same
+frames developed in their order and shuffled, time the only difference. The first stage is the photo cortex as it
+is; a second stage (the one of 2026-11-24's drift probe) develops on 4,000 fixations of four frames 100 ms apart from
+the eight training sessions, in three arms: in order with the trace, shuffled with the trace, in order without it.
+Read on the three held-out sessions (other backgrounds, other light): the nearest frame from another session, is it
+the same object (chance 0.02) and the same kind (0.10); and the stream of 10 kinds (word cells, ridge, through
+relays settled on COCO, never on CORe50).
+**What I expect.** Same object elsewhere: the trace in order above the same stage without it by 0.02 or more, and
+above the shuffled trace by more (the shuffled trace binds unrelated frames, so it should be the worst of the
+three); the first stage alone between. The stream of kinds: within 0.01 for all; the drift probe's cost of the trace
+(0.015 on stills) should not appear on video, where tolerance is what the test asks for. If the order makes no
+difference, the trace at this level (3 × 3 places of the first stage) is too local for what video teaches, and the
+next place for it is a stage that sees the whole view (as IT does).
