@@ -6,7 +6,7 @@ Memory is the whole life process, the closest measure of the brain's size the re
 
 ### plat_s0
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 2.22 | 1871 | 3706 |  | 135 | 2000 |  |  |  | san |  |
 | 10,000 | echo | 2.84 | 1969 | 7120 | 1963 | 292 | 2000 | 0.01 |  |  | sa ayour toloEted7=all | baby, called?, look! what's, look the ca |
@@ -33,9 +33,18 @@ Memory is the whole life process, the closest measure of the brain's size the re
 | 115,000 | preschool | 2.75 | 1916 | 7932 | 1853 | 338 | 2000 | 0.46 | 0.31 | 0.01 | seefish'sn | baby, lion, bus, elephant |
 | 120,000 | preschool | 2.85 | 1920 | 8004 | 1806 | 338 | 2000 | 0.42 | 0.27 | 0.01 | chairdoes, elep meapplee abe | baby, lion, bus, elephant |
 
+Millions of numbers each organ holds, at the checkpoint that ends each stage (plat_s0; orch: the orchestrator, the gate and its contexts):
+
+| stage | moments | orch | words | ear | cortex | mouth | all |
+|---|---|---|---|---|---|---|---|
+| babble | 5,000 |  | 32.59 | 16.15 | 16.81 |  | 65.5 |
+| echo | 10,000 | 121.82 | 40.65 | 21.65 | 16.81 |  | 200.9 |
+| first words | 80,000 | 123.18 | 57.58 | 45.52 | 16.81 | 0.15 | 243.2 |
+| two words, pages | 110,000 | 122.99 | 60.35 | 52.05 | 16.81 | 0.15 | 252.3 |
+
 ### plat_s1
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 2.22 | 1901 | 3784 |  | 135 | 2000 |  |  |  | birs&r%4Gy! |  |
 | 10,000 | echo | 2.84 | 1986 | 7230 | 1888 | 296 | 2000 | 0.00 |  |  | that | this?, called?, look!, this? |
@@ -65,7 +74,7 @@ be  | baby, lion, bus, elephant |
 
 ### plat_s2
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 2.23 | 1802 | 3629 |  | 135 | 2000 |  |  |  | he pinean |  |
 | 10,000 | echo | 2.88 | 1841 | 7185 | 1944 | 290 | 2000 | 0.00 |  |  | cr, w | this?, called?, look! what's, this? |
@@ -94,7 +103,7 @@ be  | baby, lion, bus, elephant |
 
 ### kind_s0
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 1.59 | 1895 | 3711 |  | 135 | 2000 |  |  |  | t ist dowe |  |
 | 10,000 | echo | 2.23 | 1979 | 7105 | 1879 | 291 | 2000 | 0.04 |  |  | lohe? | this?, called?, bus, this? |
@@ -123,7 +132,7 @@ be  | baby, lion, bus, elephant |
 
 ### kind_s1
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 1.59 | 1875 | 3794 |  | 135 | 2000 |  |  |  | eay incat d whe mirethee g a |  |
 | 10,000 | babble | 1.81 | 1921 | 6174 |  | 135 | 2000 |  |  |  | metheat'san |  |
@@ -152,7 +161,7 @@ be  | baby, lion, bus, elephant |
 
 ### kind_s2
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 1.59 | 1864 | 3892 |  | 135 | 2000 |  |  |  | ou'rshepllayo isayocathew ys |  |
 | 10,000 | echo | 2.29 | 1929 | 7499 | 1896 | 289 | 2000 | 0.09 |  |  | letr theneilloopl you lik, y | big baby, big the lion, look!, cat |
@@ -181,7 +190,7 @@ be  | baby, lion, bus, elephant |
 
 ### ramp_s0
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 1.57 | 1872 | 3698 |  | 135 | 2000 |  |  |  | on tha bbad at's ck, y con b |  |
 | 10,000 | echo | 2.17 | 1984 | 7096 | 1917 | 297 | 2000 | 0.00 |  |  | t aga y lleayesatereleanithe | baby, called?, than's, this? |
@@ -200,10 +209,11 @@ be  | baby, lion, bus, elephant |
 | 75,000 | two words, pages | 2.67 | 1992 | 7957 | 1982 | 338 | 2000 | 0.46 | 0.29 | 0.01 | buVlane, theple's busatereat | baby, lion, bus, elephant |
 | 80,000 | two words, pages | 2.75 | 1999 | 7813 | 1868 | 338 | 2000 | 0.42 | 0.30 | 0.00 | thandraain tobanboat,fish'ba | baby, lion, bus, elephant |
 | 85,000 | two words, pages | 2.75 | 1949 | 7632 | 1801 | 338 | 2000 | 0.46 | 0.29 | 0.01 | led sbanapplese bear? | baby, lion, bus, elepbant |
+| 90,000 | preschool | 2.7 | 1973 | 7849 | 1921 | 338 | 2000 | 0.43 | 0.32 | 0.00 | bookbathisdoort? | bany, boy, bus, elephant |
 
 ### ramp_s1
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 1.54 | 1877 | 3730 |  | 135 | 2000 |  |  |  | wh d? |  |
 | 10,000 | echo | 2.1 | 1988 | 7186 | 1929 | 299 | 2000 | 0.00 |  |  | let'sple is s | this?, called?, bus, cat |
@@ -225,7 +235,7 @@ be  | baby, lion, bus, elephant |
 
 ### ramp_s2
 
-| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |
+| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5,000 | babble | 1.56 | 1853 | 3719 |  | 135 | 2000 |  |  |  | hatere s d at athe atlou'rai |  |
 | 10,000 | echo | 2.14 | 1891 | 7258 | 1977 | 289 | 2000 | 0.07 |  |  | wing likedL*si_eymodee | baby, ple ap, bus, big cat |

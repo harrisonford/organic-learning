@@ -3,8 +3,9 @@
 Kris: "i still interested in making progressive learning and evolution of the brain reporting size complexity and
 behaviour on different development stages". Every life writes a record every 5,000 moments (out/{tag}.jsonl); this
 reads those records only (no brain is loaded) and reports, at every checkpoint:
-    size         memory the life process held (GB), word cells, cues the cells listen to, the ear's clusters,
-                 the mouth's outputs, moments held in the store
+    size         memory the life process held (GB), word cells, cues the cells listen to, the orchestrator's
+                 clusters (the contexts the gate learns about), its output neurons (eye, gain and speech commands),
+                 moments held in the store
     complexity   the cells' own error (content, context dendrites), how far each organ moved since the last record
     behaviour    the stage it is in, the score above the blind floor at each stage's test, one thing it babbled and
                  what it named on the first pictures of the test
@@ -31,7 +32,7 @@ def rows_of(tag):
         out.append({
             "age": r["age"], "stage": r["stage"], "memory_gb": r.get("memory_gb"),
             "word_cells": (r.get("words") or {}).get("unit cells"), "cues": (r.get("words") or {}).get("cues"),
-            "ear_clusters": r.get("clusters"), "mouth_outputs": r.get("outputs"),
+            "orchestrator_clusters": r.get("clusters"), "output_neurons": r.get("outputs"),
             "store_held": (r.get("episodes") or {}).get("held"),
             "own_error": (r.get("words") or {}).get("own error (content, context)"),
             "drift": r.get("drift") or {},
@@ -42,13 +43,13 @@ def rows_of(tag):
 
 
 def table(tag, rows):
-    lines = [f"### {tag}", "", "| moments | stage | memory GB | word cells | cues | ear clusters | mouth outputs | store | first words | pages | preschool | babbled | named |",
+    lines = [f"### {tag}", "", "| moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |",
              "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         a = r["above"]
         f = lambda k: f"{a[k]:.2f}" if k in a else ""  # noqa: E731
         lines.append(f"| {r['age']:,} | {STAGES.get(r['stage'], r['stage'])} | {r['memory_gb'] or ''} | {r['word_cells'] or ''} | {r['cues'] or ''} | "
-                     f"{r['ear_clusters'] or ''} | {r['mouth_outputs'] or ''} | {r['store_held'] or ''} | {f('W1')} | {f('W2')} | {f('P')} | "
+                     f"{r['orchestrator_clusters'] or ''} | {r['output_neurons'] or ''} | {r['store_held'] or ''} | {f('W1')} | {f('W2')} | {f('P')} | "
                      f"{(r['babble'] or '').replace('|', '/')[:28]} | {', '.join(r['named'])[:40]} |")
     return "\n".join(lines) + "\n"
 
@@ -66,5 +67,15 @@ if __name__ == "__main__":
         rows = rows_of(tag)
         json.dump(rows, open(f"out/growth/{tag}.json", "w"))
         parts.append(table(tag, rows))
+        census = f"out/growth/{tag}_census.json"
+        if os.path.exists(census):  # numbers each organ holds at each stage's checkpoint (experiments/growth_census.py)
+            cs = json.load(open(census))
+            organs = sorted({k for c in cs for k in c["parts"]}, key=lambda k: -max(c["parts"].get(k, {}).get("numbers_m", 0) for c in cs))
+            parts.append(f"Millions of numbers each organ holds, at the checkpoint that ends each stage ({tag}; orch: the orchestrator, the gate and its contexts):\n")
+            parts.append("| stage | moments | " + " | ".join(organs) + " | all |")
+            parts.append("|---|---|" + "---|" * (len(organs) + 1))
+            for c in cs:
+                parts.append(f"| {STAGES.get(c['stage'], c['stage'])} | {c['age']:,} | " + " | ".join(str(c["parts"].get(k, {}).get("numbers_m", "")) for k in organs) + f" | {c['numbers_m']} |")
+            parts.append("")
     open("docs/GROWTH.md", "w").write("\n".join(parts))
     print("docs/GROWTH.md:", ", ".join(t for t in tags if os.path.exists(f"out/{t}.jsonl")))

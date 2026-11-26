@@ -266,11 +266,16 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     may be slowed down; real time comes with a GPU or the cloud.
 33. **How the brain grows, stage by stage** (Kris, same message: "progressive learning and evolution of the brain
     reporting size complexity and behaviour on different development stages"). `experiments/growth_report.py` →
-    docs/GROWTH.md and out/growth/{tag}.json from the lives' own records. **First reading (nine lives):** the brain
-    does not grow. Word cells, the ear's clusters and the store are at their fixed limits (about 1,800–2,000 cells and
-    clusters, 2,000 moments) by 5,000–10,000 moments, the mouth's outputs by 15,000 (338); after that a life
-    reshapes inside "a skull of fixed size" (organic/words.py: the least heard, longest unheard cells are forgotten,
-    a tenth at a time). A child's brain grows for years and prunes later. Owed: per-organ sizes and the turnover
+    docs/GROWTH.md and out/growth/{tag}.json from the lives' own records. **First reading (nine lives), corrected the
+    same morning by the census:** the *counts* are capped early: word cells and the orchestrator's clusters sit at
+    about 1,800–2,000 from 5,000–10,000 moments, the store is full (2,000) from 5,000, the output neurons at 338 from
+    15,000; a life then turns its cells over inside "a skull of fixed size" (organic/words.py: the least heard,
+    longest unheard cells go, a tenth at a time). But the *numbers held* grow: `experiments/growth_census.py` on
+    plat_s0's stage checkpoints gives 65.5 million at the end of babbling, 200.9 at the end of echo (the orchestrator
+    appears whole, 121.8), 243.2 at the end of first words, 252.3 at the end of pages; the ear grows from 16.2 to
+    52.1 million and the word cells from 32.6 to 60.4 (more cues on each cell), the visual cortex stays at 16.8. I had
+    told Kris "the brain does not grow" from the counts alone: half true. A child's brain grows for years and
+    prunes later; ours grows its synapses, not its cells, and switches a whole organ on at once. Owed: per-organ sizes and the turnover
     (cells forgotten and born per 5,000 moments) in the report, read from checkpoints or added to the records
     behind a switch; then the organic check of a capacity that grows with age.
 
