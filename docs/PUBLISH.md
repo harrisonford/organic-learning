@@ -278,3 +278,16 @@ organic learner behaves and what each part does, measured honestly, not a score.
   level without the relay, 0.389 against 0.387; development helps ridge and streaming LDA by 2.5 points and the word
   cells by nothing). Pending in it: backprop's seeds 1–2 and its widened tuning. Draft 10 after those, with the
   development section's title and the list of mistaken assumptions revisited.
+- **2026-11-26 19:20: the photo section has its explanation and most of its reference.** The nearest class mean
+  (three seeds) loses two points from development where ridge and streaming LDA gain two: the developed filters'
+  worth lies in the code's second moments, which a first-order one-pass reader cannot take (written into the
+  section, with the two explanations ruled out: the relay's sample size and its floor). Backprop's widened tuning
+  found nothing better; seed 1: 0.464 with the relay, 0.390 without (seed 0: 0.462 / 0.387); seed 2 running. The
+  658-pairs sentence now names its threshold (0.8; the table counts 0.9). Draft 10 when backprop's seed 2 is in,
+  with the "did nothing" section's title and the list of mistaken assumptions revisited.
+- **Not for this paper** (a second paper, or a later version, if they hold): the two senses linked by Hebb's rule on
+  Commons video (true sound 61–63% against another video's; sight and hearing together name a video better than
+  either; one seed so far), the ear that hears sound (no units recur yet), the stream brain with a vocal tract
+  (babbling learns an auditory-motor map; heard vowels draw near imitations, three seeds) and the order-vs-shuffled
+  video probe on CORe50 (running). Kris may present the work to neuroscientists in about two weeks; the artifact
+  (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
