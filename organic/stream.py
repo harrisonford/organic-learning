@@ -145,7 +145,11 @@ class StreamBrain:
                     self.sound = Leaky(len(h), tau=0.05)
                     self.assoc = np.zeros((len(h), len(self.sight.x)), np.float32)
                 heard = self.sound.step(h)
-                if (heard or moved) and self.frame is not None:  # Hebb's rule while both stream: the running mean of their product
+                self.steps_since_link = getattr(self, "steps_since_link", 0) + 1
+                # Hebb's rule while both stream (the running mean of their product), at the pace the two populations
+                # change (their 50 ms time constant), not every 10 ms
+                if (heard or moved) and self.frame is not None and self.steps_since_link >= 5:
+                    self.steps_since_link = 0
                     self.n_assoc += 1
                     self.assoc += (np.outer(self.sound.x, self.sight.x) - self.assoc) / self.n_assoc
         u = self.mouth.step(self.habit)

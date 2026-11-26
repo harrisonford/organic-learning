@@ -3623,3 +3623,22 @@ hardly moves); least squares *under* Hebb (the relays decorrelate both codes, so
 and regression overfits); developed hearing one point above born, born one point above the cochlea alone. So: sight and
 sound on Commons video share something real but small, Hebb's rule finds it best, and the hearing's development adds
 a little. One seed; seeds 1–2 queued; the word test of this seed still running.
+
+### 2026-11-26 16:30, the ear that hears sound, first reading: the right scale, nothing recurs
+
+`experiments/sound_units_probe.py` on SpokenCOCO's validation part (20,028 recordings heard, 5,007 held out, 1,793
+speakers; 512 syllable kinds): **0.90 stretches a syllable**, words found 0.65 a written word, two stretches long on
+average; but **18,877 different "words" in 5,007 utterances**: nearly every one found once. No syllable kind and no
+word found comes with one written word in half its utterances (0 word-like, shuffled 0). What I said at 12:50:
+syllable-sized pieces, yes; a few frequent words with their own unit, no.
+**Why, as far as I can tell:** the same syllable said by different people lands in different kinds, so sequences of
+kinds hardly ever repeat, and the byte ear's rule needs repetition. Two changes, each on biological ground:
+1. **The ear adapts to the speaker.** Listeners hear a vowel relative to the voice it comes in (Ladefoged & Broadbent
+   1957, to verify); auditory neurons adapt their range to the recent statistics of the sound (Dean, Harper & McAlpine
+   2005, to verify). Each band of the cochlea is taken relative to its own running level over the utterance (its mean
+   and spread), before the hearing cortex.
+2. **Words by the eye's rule, not by exact sequences.** Kinds of two- and three-stretch windows (the codes of
+   neighbouring syllables side by side), winner-take-all with a conscience, as the syllable kinds are; a word is a
+   kind of such windows. Repetition is then likeness, not identity.
+And a softer reading beside the strict one: for each kind, the written word it lifts most (how much more often that
+word is in its utterances than in all), against the same with the kinds shuffled.
