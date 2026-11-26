@@ -267,3 +267,9 @@ organic learner behaves and what each part does, measured honestly, not a score.
   CIFAR-10 when its table and its backprop reference are in; the title of the section ("did nothing") and the
   list of mistaken assumptions (the enlargement is a fourth) are reworked then; the "658 near-copy pairs"
   sentence is checked against the 257–282 measured today. Draft 10 after that.
+- **2026-11-26 01:40: the soft layer's section is complete** (14 rows on three seeds; backprop handed the developed
+  filters 0.703 ± 0.004 against the word cells' 0.730 ± 0.004 and 0.739 with the filters frozen; the abstract
+  says 73% / 56% / 70% and that most of the lead was bought with unlabelled pictures). Also in since draft 9:
+  the two-size table, the SAILnet paragraph (three seeds), the Setup's sentence on the eye. **To come before
+  draft 10:** a section for the photo stream (rule 10), with its backprop reference; then the title of "did
+  nothing", the list of mistaken assumptions and the 658-pairs sentence are revisited together.

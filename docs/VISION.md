@@ -3260,3 +3260,34 @@ word cells within 0.01 of as born (0.439).
 **The photo daemon is back** (00:02 new day; `inclusionai/ling-3.2-flash:free` in the withdrawn adult's place):
 20 questions written, 15 judged right, 13 requests; two batches got no reply after retries. The health alert
 for it is gone.
+
+### 2026-11-26 01:35, softbase2 complete: backprop handed the soft filters; SAILnet's filters on photographs
+
+**`backprop_soft_full2.log`, three seeds** (the soft layer's shape, whole stream; 500 / 5,000 / 10,000 / 50,000):
+
+| reference | 500 | 5,000 | 10,000 | 50,000 |
+|---|---|---|---|---|
+| backprop started from the soft filters, fixed relay | 0.276 ± 0.013 | 0.544 ± 0.003 | 0.609 ± 0.007 | 0.703 ± 0.004 (0.701, 0.708, 0.701) |
+| backprop started from the soft filters, no relay (power 1) | 0.297 ± 0.045 | 0.471 ± 0.049 | 0.551 ± 0.009 | 0.620 ± 0.017 (0.606, 0.615, 0.638) |
+| soft filters frozen, gradient readout, no relay, power 0.7 | 0.270 ± 0.026 | 0.429 ± 0.057 | 0.525 ± 0.016 | 0.607 ± 0.021 (0.616, 0.583, 0.621) |
+
+- **Better filters or more pictures: mostly the filters.** From a random start backprop behind the relay ends at
+  0.606; handed the soft filters, at 0.703. The word cells on those filters: 0.730 ± 0.004, ahead on every seed
+  (0.729 / 0.701, 0.734 / 0.708, 0.727 / 0.701), by 0.027.
+- **One pass of backprop through good filters makes them worse than leaving them:** 0.703 against 0.739 ± 0.003
+  with the filters frozen and only the readout trained. Without the relay: 0.620 learned on, 0.607 frozen
+  (power 0.7), the word cells 0.671.
+- Not done for this row: its settings are those tuned from a random start; its relay is settled on the soft
+  filters and not again as they move.
+- **Into the paper:** the second table is complete (14 rows, no pending mark), the reading rewritten around the
+  two rows that separate filters from pictures, the abstract has the sentence (73% / 56% / 70%). 21 pages.
+
+**SAILnet on real photographs, its development** (`sailp_develop_s0.log`): rates on target (0.030 / 0.050 /
+0.091), two cells together 0.0021 (target 0.0025), **145 different filters of 256** (1,712 near-copy pairs),
+weights 0.65–5.68 long. I had said at least 180. Between CIFAR at 32 (197) and enlarged CIFAR (98); the
+"directions in a window" count (48 for these photographs, as for CIFAR at 32) does not predict it. The codes
+and streams follow.
+
+**Backprop on the photo stream, tuning** (first 10,000 of seed 0; no relay): batch 8: 0.301 / 0.231 / 0.302 at
+rates 0.001 / 0.0003 / 0.003; batch 32: 0.267 / 0.165 / 0.316. Fixed relay, first run (0.001, batch 8): 0.403.
+The word cells at that point: 0.308 without the relay, 0.391 with it. Five runs to go.

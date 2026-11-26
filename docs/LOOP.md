@@ -1188,4 +1188,13 @@ Still Kris's own:
   batch 32 worse than 8 so far (0.267, 0.165). Commons: 2,690.
   Next: softbase2's end → the paper's pending row, the abstract; photos2 and sailp1 as they come; the tuning's
   fixed-relay half; the ramp lives into JUDGING.md at 60,000.
+- 2026-11-26 01:40 Health: the three planned endings only; 3.3 GB free (photos2, sailp1, photos-bp1 gated). **softbase2 ended,
+  three seeds:** backprop handed the soft filters 0.703 ± 0.004 with the relay (random start 0.606; frozen
+  0.739; word cells 0.730), 0.620 ± 0.017 without. **The paper's second table is complete, its reading and the
+  abstract rewritten; no pending mark left in that section** (21 pages). SAILnet on photographs developed 145
+  different filters (I had said at least 180). Photo tuning: 7 of 12 runs; with the relay backprop reaches
+  0.403 at 10,000 (word cells 0.391). Photo daemon: 69 requests, last batch 20 of 20 judged right. Commons: 4,014.
+  Next: photos2 (seed 1's streams about 03:30), sailp1's codes and streams, the tuning's end and the two whole
+  streams → the photo stream's table (three seeds of ours, one of backprop) → a section in the paper → draft 10
+  to Kris in the morning; ramp lives into JUDGING.md; the tag queue's arm opens when memory does.
 
