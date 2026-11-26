@@ -50,6 +50,11 @@ The loop's wakeups fire only while the session is alive: nothing a life needs ma
    for the 64-pixel eye fed real pictures.
 
 ## Keeping the loop alive (2026-11-24)
+- **Queues share one memory gate (2026-11-26):** several queue scripts gating on "3.3 GB available" can all pass in the
+  same minute when a job ends and start together (four were waiting at once on 2026-11-26). New queue scripts
+  `source out/tmp/gate.sh` and start each job with `gated CMD`: a lock all queues share, the room check, the job,
+  five minutes holding the lock while its memory grows. Older queues still running keep their own gate; chain a new
+  queue behind them (`while systemctl --user is-active -q <unit>; do sleep 120; done`) instead of beside them.
 The probes and lives are systemd user units with lingering on: they run without any terminal. The loop itself is
 the Claude Code process, and it dies with the terminal it was started from (a dropped SSH connection stopped it
 from 01:42 to 10:08 on 2026-11-24). So Claude Code runs inside `tmux` on the desktop (`tmux new -s organic`;
@@ -65,7 +70,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   moments of preschool (`GAZE=serial`, otherwise the tag queue's line); control: tagn_s* (tagn_s1 done 11-25).
   Records out/gazs_s*.jsonl; notes out/tmp/gaze_queue.log. READ THE FIRST LIFE'S LOG when it starts (first
   continuation from a level with the serial gaze switched on).
-- **`organic-core50-1`** (out/tmp/core50_queue.sh; queued 13:55; MemoryMax 1500M; each step at 3.3 GB available):
+- **`organic-core50-1`** (out/tmp/core50_queue.sh; queued 13:55, behind organic-ncm1; MemoryMax 1500M; each step at 3.3 GB available):
   queue E 31 (b), real video for the eye: smoke test (stops the queue if it fails) → per seed core50_trace_s{S}.log
   (second stage in order / shuffled / plain, first stage alone: same object from another session) →
   stream_core50_c50{first,order,shuffled,plain}_s{S}.log (10 kinds, word cells and ridge). About 3.5 hours a seed.
