@@ -66,13 +66,17 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-photos-bp3`** (out/tmp/photos_backprop_seeds.sh; queued 10:50; waits for relayshrink1, then 3.3 GB a
   run): backprop on photographs, seeds 1–2, relay and no relay, at seed 0's settings → backprop_photos_full.log.
   Fills the paper's pending mark.
+- **`organic-ncm1`** (out/tmp/ncm_queue.sh; queued 11:50; waits for census2, then 3.3 GB a run): nearest class mean
+  through the relay on the photo stream, ph_r and ph_d, seeds 0–2 → stream_photos_{ph_r,ph_d}_ncm_s{0,1,2}.log.
+  The reader's diagnosis (VISION.md 11:40).
+- **`organic-census2`** (out/tmp/census_queue2.sh; waits for census1): plat_s0's census again with turnover.
 - **`organic-census1`** (out/tmp/census_queue.sh; queued 11:25; waits for av1, then 3.3 GB a life): the census of
   kind_s0..2, plat_s1..2 (now with word-cell turnover from the cells' birth moments), then docs/GROWTH.md again.
   plat_s0's census predates the turnover columns: run it again after.
 - **`organic-video-audio`** (permanent service since 2026-11-26 09:50; `experiments/world/video_audio.py`; log
   out/video_audio.log): the kept Commons videos' sound through `organic/cochlea.py`, aligned ten frames to one
   picture frame → `~/datasets/commons_video/audio_64.f16`, `audio.jsonl`. Looks for new videos every hour.
-- **`organic-relayshrink1`** (ph_d half read, VISION.md 11:10; ph_r stream running) (out/tmp/relay_shrink_queue.sh; queued 09:10, waits for relaymore1; gated): the relay with
+- **`organic-relayshrink1`** ENDED, read (VISION.md 11:40: the floor is not the reason). (out/tmp/relay_shrink_queue.sh; queued 09:10, waits for relaymore1; gated): the relay with
   its floor at 0.0001 (not 0.0005) for ph_d and ph_r of seed 0 → relay_shrink_{ph_d,ph_r}_s0.log,
   stream_photos_{ph_dz1,ph_rz1}_s0.log. What I said before: VISION.md 09:10. A diagnosis, not a setting.
 - **`organic-commons-video`** (permanent service since 2026-11-26 08:15; `experiments/world/commons_video.py`; log
@@ -1313,4 +1317,12 @@ Still Kris's own:
   stage by stage) running on plat_s0's levels. Commons video: 758 videos, 409,157 frames; CORe50 2.2 of 5.9 GB.
   Next: relayshrink1; the census into GROWTH.md; bp2's end → backprop on photographs, seeds 1–2; then E 32's first
   probe (audio and video teaching each other by a local rule) once a few thousand videos with sound are in.
-
+- 2026-11-26 11:45 Health: all healthy (the reward lives' planned endings are now in out/monitor/ended.json). **The relay's
+  floor is not the reason** the word cells take nothing from development on photographs (VISION.md 11:40): a five
+  times lower floor lifts both codes by a point and leaves development's gain at +0.004 (ridge +0.021); my
+  prediction was wrong. Next suspect: the reader → `organic-ncm1` (nearest class mean, three seeds). Backprop's wider
+  search: nothing wins; seeds 1–2 queued (`organic-photos-bp3`). **E 32's first probe running** (`organic-av1`,
+  experiments/av_probe.py: does a frame predict its own sound on held-out videos; prediction in VISION.md 11:10).
+  Census with word-cell turnover queued for six lives. CORe50 frames converter written (zip half fetched). Paper:
+  the 658-pairs sentence names its threshold.
+  Next: av_probe seed 0 → read against the prediction; bp3; ncm1; census; CORe50 frames when the zip is whole.

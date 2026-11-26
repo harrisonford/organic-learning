@@ -3473,3 +3473,35 @@ alone below both. What (the word a video was fetched under, nearest class mean, 
 sight and hearing together above sight by a point or more; the sound that sight predicts below sight. If "which
 sound" sits near 0.5, Commons videos are the wrong material (music laid over pictures) and CORe50 has no sound:
 then the next material is filmed sound with its picture, not a different rule.
+
+### 2026-11-26 11:40, the relay's floor is not why the word cells miss development's worth
+
+`organic-relayshrink1` complete (seed 0; relay settled on 20,000 photographs; photo stream, 50,000 pictures seen once,
+4,000 tests):
+
+| photo code, seed 0 | directions after the relay | word cells + relay | ridge + relay | seen once, 20 later |
+|---|---|---|---|---|
+| as born, floor 0.0005 (the benchmark) | 585 | 0.439 | 0.459 | 0.893 |
+| developed, floor 0.0005 | 386 | 0.443 | 0.482 | 0.843 |
+| as born, floor 0.0001 | 816 | 0.448 | 0.460 | 0.917 |
+| developed, floor 0.0001 | 572 | 0.452 | 0.481 | 0.863 |
+
+A lower floor lifts the word cells by about a point on both codes alike, and ridge not at all; the gain from
+development stays where it was for both readers (word cells +0.004, ridge +0.021). **What I said before was wrong:**
+I expected the word cells to gain a point or more from development once the developed code spread like CIFAR's
+did. It now spreads over more directions (572) than the as-born code did at the old floor (585), and the word cells
+still take nothing from development. So the spread after the relay is not the reason; the reading of 08:00 and 09:10
+(the word cells gain only where the developed code stays spread) fits five codes and fails the sixth. One seed, but
+the difference it was looking for is not there.
+
+What is left is the reader. Ridge and streaming LDA gain two points from development on photographs and the word
+cells gain nothing; on CIFAR at its own size all three gained. Ridge and LDA use the second moments of the code;
+the word cells learn by the delta rule with a step that shrinks with use. The clean next step costs nothing new:
+the nearest class mean through the relay (Hebbian running means of each word's code, no error, no second moments),
+on both codes and three seeds (`organic-ncm1`, queued after the census). If it gains from development like ridge,
+the delta rule's step is why the word cells do not; if it gains nothing too, what development adds on photographs
+lives in the code's covariance, which only readers with second moments use.
+
+A side reading worth keeping: the lower floor is better for the word cells on both codes (+0.009) and for how well
+they keep a picture seen once (0.917 against 0.893 as born). The floor is a hand-set constant; a relay that sets its
+own floor (the local circuit of queue E 28) is where that point belongs, not a new number.
