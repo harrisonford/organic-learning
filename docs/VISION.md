@@ -3566,3 +3566,23 @@ three); the first stage alone between. The stream of kinds: within 0.01 for all;
 (0.015 on stills) should not appear on video, where tolerance is what the test asks for. If the order makes no
 difference, the trace at this level (3 × 3 places of the first stage) is too local for what video teaches, and the
 next place for it is a stage that sees the whole view (as IT does).
+
+### 2026-11-26 15:00, an ear that hears sound: the first design failed its smoke test; three levels instead
+
+Smoke test of `experiments/sound_units_probe.py` as first written (600 SpokenCOCO recordings): units cut at peaks
+of a next-frame predictor's error came 1.9 to a syllable (the "largest within 50 ms" rule fires at the window's own
+pace, not the speech's), and a lexicon that founds a new unit below a vigilance filled its 2,000 places within 480
+utterances at every vigilance tried (0.65, 0.75, 0.85): every stretch was new, nothing recurred. Two of my own
+choices, two failures; rewritten closer to biology and to the byte ear, each level the rule one level down:
+- **syllables by rhythm**: auditory cortex follows the slow loudness rhythm of speech, 4 to 8 a second (Giraud &
+  Poeppel 2012, to verify); a stretch ends at a trough of the loudness and at silence;
+- **syllable kinds by the eye's own rule**: 512 kinds, winner-take-all with a conscience, the step falling with a
+  kind's wins (no vigilance);
+- **words by the byte ear's rule**: counts of which kind follows the last one or two; a word starts where the next
+  kind's uncertainty jumps up, and at silence (Saffran, Aslin & Newport 1996).
+Smoke test of the new design (600 recordings, 64 kinds): **0.89 stretches a syllable**, words found 0.63 a written
+word, two stretches long on average: the scales are right; too few held-out utterances to read word-likeness.
+Running: the whole validation part (25,035 recordings: 20,028 to learn from, 5,007 held out; 512 kinds) →
+out/bench/sound_units_val_s0.log. What I expect is as written at 12:50: syllable-sized kinds, some of them coming
+with one frequent word ("a", "of", and object words said often); word-like words found well above the shuffled
+count but most found "words" not words.

@@ -1,29 +1,33 @@
-"""An ear that hears sound and finds its own units (queue E 32; docs/VISION.md 2026-11-26 12:50 and 14:40).
+"""An ear that hears sound and finds its own units (queue E 32; docs/VISION.md 2026-11-26 12:50 and 15:00).
 
 Kris, 2026-11-26: no transcription inside the brain; the ear develops its own cortex. Material: people reading COCO
 captions aloud (SpokenCOCO, CC BY-SA), through organic/cochlea.py (experiments/world/spokencoco_cochlea.py). The
 transcripts are read only at the end, to measure.
 
+Three levels, each the rule the brain already uses one level down:
   1 hearing cortex  the eye's layer (organic/cortex2.Layer2) on the cochlea's output read as a picture: windows of 8
                     rows (80 ms) x 8 bands, decorrelated, 128 kinds, winner-take-all Hebbian with a conscience,
                     developed on DEV one-second clips with the eye's schedule. A frame's code: each kind's answer
                     averaged over 4 stretches of the bands (512 numbers), through its own relay, at unit length.
-  2 prediction      a linear predictor of the next frame's code from the last three, learned online by the delta
-                    rule (its change averaged over an utterance's frames; the step 1 / (1 + n / 5) with n the
-                    utterances heard, the word cells' law); its error is one minus the cosine.
-  3 units           silence (a frame under a tenth of the utterance's loudest) ends a unit, and so does a peak of the
-                    prediction's error (the largest within 50 ms either side: a syllable lasts 100 ms or more). A
-                    stretch's code is its two halves' mean codes (order kept). It goes to the unit it matches best
-                    if the match passes the vigilance, which then moves towards it (step 1 / (1 + uses / 5)); else it
-                    founds a new unit (at the cap, the least used unit makes room). Three vigilances side by side:
-                    the number is ours, so its effect is shown.
-Measured on utterances never heard while learning, by their transcripts:
-    stretches per word and per syllable (syllables counted as vowel groups in the written words)
-    word-like units: a unit heard 20+ times whose commonest word comes with it in half its utterances or more,
-                     where that word is in a fifth of the utterances or fewer; the same count with the units'
-                     utterances shuffled is the chance level
+  2 syllables       auditory cortex follows speech's slow loudness rhythm (4-8 a second: the syllables; Giraud &
+                    Poeppel 2012): a stretch ends at a trough of the loudness (smoothed over 50 ms; the lowest within
+                    50 ms either side) and at silence (under a tenth of the utterance's loudest). A stretch's code is
+                    its two halves' mean codes (order kept). The stretches go to KINDS2 syllable kinds by the eye's
+                    own rule: the kind that matches best, handicapped by a conscience, moves towards the stretch,
+                    its step 1 / (1 + wins / 5) (the consolidation law of the orchestrator's clusters). The first
+                    KINDS2 stretches found the kinds.
+  3 words           the byte ear's rule one level up (organic/ear.py; Saffran, Aslin & Newport 1996): counts of which
+                    kind follows the last one and two kinds (back-off to one when two are new); a word starts where
+                    the uncertainty (entropy) of the next kind jumps up, and at every silence. The ear's words are the
+                    kind sequences so found.
+Measured on utterances never heard while learning (nothing learns then), by their transcripts:
+    stretches per syllable (syllables counted as vowel groups in the written words) and words found per word
+    word-like syllable kinds and word-like words: heard in 20+ held-out utterances (10+ for words), whose commonest
+    written word comes with them in half their utterances or more, where that word is in a fifth of the utterances
+    or fewer; the same count with the units shuffled among the utterances is the chance level
 
-    PART=val DEV=16000 python experiments/sound_units_probe.py      -> printed; out/bench/sound_units_*.log by the queue
+    PART=val DEV=16000 python experiments/sound_units_probe.py
+    PART=val MAXU=600 DEV=200 python experiments/sound_units_probe.py    (a smoke test)
 """
 import json, os, re, sys, time
 import numpy as np
@@ -32,8 +36,8 @@ from organic.cortex2 import Layer2, Relay  # noqa: E402
 
 DIR = os.path.expanduser("~/datasets/spokencoco")
 PART, DEV, SEED = os.environ.get("PART", "val"), int(os.environ.get("DEV", 16000)), int(os.environ.get("SEED", 0))
-HELD, CAP, VIG = 0.2, 2000, [float(v) for v in os.environ.get("VIGILANCE", "0.65,0.75,0.85").split(",")]
-KINDS, WINDOW, BANDS4, CONTEXT, HALF = 128, 8, 4, 3, 5
+HELD, KINDS2 = 0.2, int(os.environ.get("KINDS2", 512))
+KINDS, WINDOW, BANDS4, HALF, SMOOTH = 128, 8, 4, 5, 5
 t0 = time.time()
 
 
@@ -48,7 +52,7 @@ def unit(X):
 utts = [u for u in map(json.loads, open(os.path.join(DIR, "cochlea.jsonl"))) if u["split"] == PART and u["rows"] >= 50]
 grams = np.memmap(os.path.join(DIR, "cochlea_64.f16"), np.float16, "r").reshape(-1, 64)
 rng = np.random.default_rng(SEED)
-utts = [utts[i] for i in rng.permutation(len(utts))][: int(os.environ.get("MAXU", 0)) or None]  # MAXU: a smoke test
+utts = [utts[i] for i in rng.permutation(len(utts))][: int(os.environ.get("MAXU", 0)) or None]
 cut = int(len(utts) * (1 - HELD))
 learn_u, test_u = utts[:cut], utts[cut:]
 say(f"{len(utts)} utterances ({len(learn_u)} to learn from, {len(test_u)} held out), {len({u['speaker'] for u in utts})} speakers")
@@ -71,106 +75,123 @@ say(f"hearing cortex developed on {DEV} one-second clips; wins min/max {int(laye
 
 
 def frames(u):
-    """The utterance's frame codes (before the relay) and each frame's loudness."""
+    """The utterance's frame codes (before the relay) and each frame's loudness (over the same 80 ms)."""
     g = gram(u)
     r = layer.respond(g[..., None], pooled=False)  # (time, bands, kinds)
     b = r.shape[1] // BANDS4
     codes = r[:, : BANDS4 * b].reshape(r.shape[0], BANDS4, b, KINDS).mean(axis=2).reshape(r.shape[0], -1)
-    loud = g.sum(axis=1)[: len(codes)]
+    loud = np.convolve(g.sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
     return codes, loud
 
 
 relay = Relay(0.0005).settle(np.concatenate([unit(frames(learn_u[i])[0])[::5] for i in rng.choice(len(learn_u), min(400, len(learn_u)), replace=False)]))
-code = lambda u: (lambda c, l: (unit((unit(c) - relay.mu) @ relay.Z), l))(*frames(u))  # noqa: E731
 say("relay settled")
 
-# 2 prediction and 3 units, learned online over the utterances in order
-D = KINDS * BANDS4
-P = np.zeros((D, CONTEXT * D), np.float32)
-seen = 0
-lexicons = {v: {"U": np.zeros((CAP, 2 * D), np.float32), "uses": np.zeros(CAP), "n": 0} for v in VIG}
 
-
-def stretches(C, loud):
-    """Prediction errors, then the stretches between silences and error peaks."""
-    global P, seen
-    err = np.zeros(len(C))
-    if len(C) > CONTEXT:
-        X = np.stack([C[t - CONTEXT: t].ravel() for t in range(CONTEXT, len(C))])
-        Y, Q = C[CONTEXT:], X @ P.T
-        err[CONTEXT:] = 1 - (Q * Y).sum(1) / (np.linalg.norm(Q, axis=1) + 1e-8)
-        if learning:  # the delta rule, its change averaged over the utterance's frames; the step falls with utterances heard
-            seen += 1
-            P += (1.0 / (1 + seen / 5)) * ((Y - Q).T @ X) / (len(X) * CONTEXT)
-    quiet = loud < 0.1 * loud.max()
-    peaks = [t for t in range(CONTEXT + 1, len(C) - 1) if err[t] == err[max(0, t - HALF): t + HALF + 1].max() and err[t] > err[t - 1]]
-    cuts = sorted(set(peaks) | {t for t in range(1, len(C)) if quiet[t] != quiet[t - 1]} | {0, len(C)})
+def stretches(u):
+    """Level 2: the utterance cut at loudness troughs and silences; each stretch's code and whether a silence follows."""
+    c, loud = frames(u)
+    C = unit((unit(c) - relay.mu) @ relay.Z)
+    env = np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
+    quiet = env < 0.1 * env.max()
+    troughs = [t for t in range(1, len(env) - 1) if env[t] == env[max(0, t - HALF): t + HALF + 1].min()]
+    cuts = sorted(set(troughs) | {t for t in range(1, len(env)) if quiet[t] != quiet[t - 1]} | {0, len(env)})
     out = []
     for a, b in zip(cuts[:-1], cuts[1:]):
-        if b - a >= 3 and not quiet[a:b].mean() > 0.5:
-            h = (a + b) // 2
-            out.append(np.concatenate([unit(C[a:h].mean(0)), unit(C[h:b].mean(0))]) / np.sqrt(2))
+        if b - a < 5 or quiet[a:b].mean() > 0.5:
+            if out:
+                out[-1][1] = True  # a silence follows the last stretch
+            continue
+        h = (a + b) // 2
+        out.append([np.concatenate([unit(C[a:h].mean(0)), unit(C[h:b].mean(0))]) / np.sqrt(2), False])
     return out
 
 
-def assign(lex, s, vig, grow):
-    n = lex["n"]
-    if n:
-        m = lex["U"][:n] @ s
-        k = int(np.argmax(m))
-        if m[k] >= vig or not grow:
-            if grow:
-                lex["uses"][k] += 1
-                w = lex["U"][k] + (1.0 / (1 + lex["uses"][k] / 5)) * (s - lex["U"][k])
-                lex["U"][k] = w / (np.linalg.norm(w) + 1e-8)
-            return k
-    if n < CAP:
-        k = n
-        lex["n"] += 1
-    else:
-        k = int(np.argmin(lex["uses"]))
-    lex["U"][k], lex["uses"][k] = s, 1
-    return k
+U, wins, founded = np.zeros((KINDS2, 2 * KINDS * BANDS4), np.float32), np.zeros(KINDS2), 0
+counts1, counts2 = {}, {}  # level 3: next kind after one kind, after two
 
 
-learning = True
+def kind(s, learning):
+    global founded
+    if learning and founded < KINDS2:
+        U[founded], wins[founded] = s, 1
+        founded += 1
+        return founded - 1
+    c = int(np.argmax(U[:founded] @ s - (0.3 * (wins[:founded] / (wins[:founded].mean() + 1e-8) - 1) if learning else 0)))
+    if learning:
+        wins[c] += 1
+        w = U[c] + (1.0 / (1 + wins[c] / 5)) * (s - U[c])
+        U[c] = w / (np.linalg.norm(w) + 1e-8)
+    return c
+
+
+def entropy(d):
+    if not d:
+        return np.log(KINDS2)
+    p = np.array(list(d.values()), float)
+    p /= p.sum()
+    return float(-(p * np.log(p)).sum())
+
+
+def words(ks, gaps, learning):
+    """Level 3: the kind sequence cut where the next kind's uncertainty jumps up, and at silences."""
+    out, cur, prev_h = [], [], None
+    for i, k in enumerate(ks):
+        a = ks[i - 1] if i else None
+        b = (ks[i - 2], ks[i - 1]) if i > 1 else None
+        d = counts2.get(b) if b in counts2 else counts1.get(a, {})
+        h = entropy(d)
+        if cur and (prev_h is not None and h > prev_h or gaps[i - 1]):
+            out.append(tuple(cur))
+            cur = []
+        cur.append(k)
+        prev_h = h
+        if learning:
+            if a is not None:
+                counts1.setdefault(a, {})[k] = counts1.get(a, {}).get(k, 0) + 1
+            if b is not None:
+                counts2.setdefault(b, {})[k] = counts2.get(b, {}).get(k, 0) + 1
+    if cur:
+        out.append(tuple(cur))
+    return out
+
+
 for i, u in enumerate(learn_u):
-    for s in stretches(*code(u)):
-        for v, lex in lexicons.items():
-            assign(lex, s, v, True)
+    ss = stretches(u)
+    ks = [kind(s, True) for s, _ in ss]
+    words(ks, [g for _, g in ss], True)
     if (i + 1) % 5000 == 0:
-        say(f"{i + 1} utterances heard; units: " + ", ".join(f"vigilance {v}: {lex['n']}" for v, lex in lexicons.items()))
+        say(f"{i + 1} utterances heard; {founded} syllable kinds, wins min/max {int(wins[:founded].min())}/{int(wins[:founded].max())}")
 
-# measured on the held-out utterances
-learning = False
-words_of = lambda u: set(re.findall(r"[a-z']+", u["text"].lower()))  # noqa: E731
+# measured on the held-out utterances, nothing learning
 syll = lambda w: max(1, len(re.findall(r"[aeiouy]+", w)))  # noqa: E731
-heard = {v: [] for v in VIG}
-n_str = n_words = n_syl = 0
+W, K, WD = [], [], []
+n_str = n_wd = n_words = n_syl = 0
 for u in test_u:
-    ss = stretches(*code(u))
-    n_str += len(ss)
-    ws = re.findall(r"[a-z']+", u["text"].lower())
-    n_words += len(ws)
-    n_syl += sum(syll(w) for w in ws)
-    for v, lex in lexicons.items():
-        heard[v].append([assign(lex, s, v, False) for s in ss])
-say(f"held out: {n_str / len(test_u):.1f} stretches an utterance; {n_str / n_words:.2f} a word, {n_str / n_syl:.2f} a syllable")
-W = [words_of(u) for u in test_u]
+    ss = stretches(u)
+    ks = [kind(s, False) for s, _ in ss]
+    wd = words(ks, [g for _, g in ss], False)
+    written = re.findall(r"[a-z']+", u["text"].lower())
+    W.append(set(written))
+    K.append(ks)
+    WD.append(wd)
+    n_str, n_wd, n_words, n_syl = n_str + len(ss), n_wd + len(wd), n_words + len(written), n_syl + sum(syll(w) for w in written)
+say(f"held out: {n_str / n_syl:.2f} stretches a syllable ({n_str / len(test_u):.1f} an utterance); {n_wd / n_words:.2f} words found a word; "
+    f"words found {len({w for wd in WD for w in wd})} different, mean length {np.mean([len(w) for wd in WD for w in wd]):.2f} stretches")
 base = {}
 for ws in W:
     for w in ws:
         base[w] = base.get(w, 0) + 1
 
 
-def wordlike(units_per_utt):
+def wordlike(per_utt, least):
     occ = {}
-    for j, us in enumerate(units_per_utt):
+    for j, us in enumerate(per_utt):
         for k in set(us):
             occ.setdefault(k, []).append(j)
     found = []
     for k, js in occ.items():
-        if len(js) < 20:
+        if len(js) < least:
             continue
         c = {}
         for j in js:
@@ -179,17 +200,19 @@ def wordlike(units_per_utt):
         w = max(c, key=lambda x: c[x] / len(js) - base[x] / len(W))
         if c[w] / len(js) >= 0.5 and base[w] / len(W) <= 0.2:
             found.append((w, c[w] / len(js), base[w] / len(W), len(js)))
-    return found
+    return sorted(found, key=lambda f: -f[1])
 
 
-for v in VIG:
-    found = wordlike(heard[v])
-    shuf = [list(rng.permutation(np.concatenate([np.array(us, int) for us in heard[v] if us]))) for _ in range(1)][0]
-    sizes, it, sh = [len(us) for us in heard[v]], 0, []
-    for s_ in sizes:
-        sh.append(shuf[it: it + s_])
-        it += s_
-    chance = wordlike(sh)
-    found.sort(key=lambda f: -f[1])
-    say(f"vigilance {v}: {lexicons[v]['n']} units; word-like {len(found)} (shuffled: {len(chance)}): "
-        + "; ".join(f"{w} {p:.2f} (base {b:.2f}, {n}x)" for w, p, b, n in found[:25]))
+def shuffled(per_utt):
+    flat = [x for us in per_utt for x in us]
+    order = rng.permutation(len(flat))
+    out, i = [], 0
+    for us in per_utt:
+        out.append([flat[j] for j in order[i: i + len(us)]])
+        i += len(us)
+    return out
+
+
+for name, per_utt, least in (("syllable kinds", K, 20), ("words found", WD, 10)):
+    found, chance = wordlike(per_utt, least), wordlike(shuffled(per_utt), least)
+    say(f"{name}: word-like {len(found)} (shuffled: {len(chance)}): " + "; ".join(f"{w} {p:.2f} (base {b:.2f}, {n}x)" for w, p, b, n in found[:30]))

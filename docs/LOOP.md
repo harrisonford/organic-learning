@@ -70,7 +70,8 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   cochlea_64.f16 + cochlea.jsonl (transcripts kept for measuring only). All 118,287 training images of SpokenCOCO are
   among our COCO thumbnails (its val images are not). PART=train when the download is whole.
   **`experiments/sound_units_probe.py`** (hearing cortex → prediction → units from sound; measured by the
-  transcripts only at the end): smoke test running (`organic-sunits-smoke`), then the val part in full.
+  transcripts only at the end): first design failed its smoke test, redesigned in three levels (VISION.md 15:00);
+  **`organic-sunits1`** (out/tmp/sunits_queue.sh, the shared gate at 2.8 GB) runs the val part → sound_units_val_s0.log.
 - **`organic-gaze-lives`** (out/tmp/gaze_queue.sh; queued 13:30; one life at a time at 5.7 GB available, so after the
   ramp lives): queue E 34 (a), the serial gaze in grown lives: gazs_s1/s2/s0 continued from plat_s*_W2 for 20,000
   moments of preschool (`GAZE=serial`, otherwise the tag queue's line); control: tagn_s* (tagn_s1 done 11-25).
