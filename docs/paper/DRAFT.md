@@ -323,7 +323,21 @@ neither works. If each filter divides by its own largest change, the weights gro
 birth and the code is destroyed (0.238 ± 0.017). If the factor is held at its early value the layer hardly develops (0.578 ± 0.020),
 and held at its median over the run the weights overflow. We did not design a third. So the best Hebbian
 filters we measured come from a rule that is local except for one shared step, and a fully local rule that
-does as well is, for us, still open. The relay still earns its place on the better
+does as well is, for us, still open.
+
+The nearest we came uses another published layer. SAILnet (Zylberberg, Murphy & DeWeese 2011) is Földiák's
+three local rules on spiking cells: a Hebbian rule for the weights into a cell, a threshold that holds the
+cell to its rate, and inhibition between two cells that grows when they fire together. No step needs a number
+from elsewhere in the layer. We built it from its authors' code, with their constants, and let it develop the
+256 filters of our own cortex on CIFAR at its own size; only its feed-forward weights stand in for ours,
+brought to unit length as ours are, and the layer's own spikes are not read. Its cells settle at their target
+rate, between 192 and 201 of the 256 filters end different from one another, and after 10,000 pictures the
+word cells read 0.643 ± 0.008 from them behind the relay, against 0.626 ± 0.002 from the filters as born and
+0.649 ± 0.008 from our hard rule (ridge: 0.657, 0.632 and 0.666). A fully local rule, then, develops filters as
+good as our winner-take-all's. It does not reach the soft rule's. On pictures enlarged to twice their size the
+same layer had collapsed to 98 different filters, which is how we came to look at the enlargement at all.
+
+The relay still earns its place on the better
 layer: without it the word cells fall from 0.689 to 0.591 ± 0.013. The whole stream on the soft layer, beside
 backpropagation of that layer's shape, is in the next section. Our own developed filters are not worthless:
 the streaming discriminant gains two points from them (0.739 against 0.719 with random filters), so something in

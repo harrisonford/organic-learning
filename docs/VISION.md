@@ -3148,3 +3148,42 @@ as born on the same seeds, ridge + relay at unit length: +0.028, +0.024; against
 **The photo stream, first log** (`photos_code_ph_r_s0.log`): the cortex as born coded 50,000 + 4,884 photographs
 in 35 minutes; its code reads same class +0.0854, different −0.0006 (the as-born cortex on CIFAR at 32: +0.0747
 / −0.0075). `ph_d` is being coded; the streams follow; `organic-softbase2` started at 21:04 when native4 ended.
+
+### 2026-11-25 22:35, SAILnet at native size on three seeds; softbase2's first seed; the photo stream's first rows
+
+**SAILnet in our cortex's place, CIFAR at 32, three seeds** (`stream_{sailn,sailnu}10k_s{0,1,2}.log`; 10,000
+pictures; word cells + relay / ridge + relay):
+
+| filters | seed 0 | seed 1 | seed 2 | mean |
+|---|---|---|---|---|
+| as born (`nat_r`) | 0.627 / 0.633 | 0.627 / 0.628 | 0.624 / 0.634 | 0.626 ± 0.002 / 0.632 ± 0.003 |
+| our hard rule (`nat_d`) | 0.656 / 0.667 | 0.640 / 0.666 | 0.652 / 0.665 | 0.649 ± 0.008 / 0.666 ± 0.001 |
+| SAILnet at unit length (`sailnu`) | 0.641 / 0.661 | 0.636 / 0.652 | 0.651 / 0.658 | 0.643 ± 0.008 / 0.657 ± 0.005 |
+| SAILnet as developed (`sailn`) | 0.633 / 0.658 | 0.625 / 0.647 | 0.645 / — | 0.634 ± 0.010 / — |
+
+Different filters of 256: 197, 201, 192. Against as born, by seed: word cells +0.014, +0.009, +0.027; ridge
++0.028, +0.024, +0.024. Against our hard rule: word cells −0.015, −0.004, −0.001; ridge −0.006, −0.014, −0.007.
+**Three seeds agree: a fully local published rule develops filters worth about what our hard rule's are**
+(ridge clearly above as born on every seed; under the hard rule by less than we interpret). Queue E 27's
+question, "a fully local filter rule", has an answer at the hard rule's level and none at the soft rule's.
+Into the paper (a paragraph after the dissection). Still not read: the layer's own spikes as the response.
+
+**softbase2, seed 0** (`backprop_soft_full2.log`; the soft layer's shape, whole stream):
+
+| backprop on the soft shape, seed 0 | 10,000 | 50,000 | beside it (seed 0) |
+|---|---|---|---|
+| started from the developed soft filters, fixed relay | 0.616 | 0.701 | from random 0.597; filters frozen 0.737; word cells 0.729 |
+| started from the developed soft filters, no relay (power 1) | 0.541 | 0.606 | from random 0.547; frozen (power 1) 0.623; word cells 0.675 |
+| soft filters frozen, no relay, power 0.7 | 0.511 | 0.616 | at power 1: 0.623 |
+
+One seed, so only as a first look: (1) most of backprop's gap was the filters, that is the unlabelled
+pictures: started from the soft filters it goes from 0.597 to 0.701; (2) letting one-pass backprop change
+those filters is worse than freezing them (0.701 against 0.737); (3) the word cells (0.729) stay above backprop
+started from the same filters; (4) the frozen readout without the relay is the same at the layer's own
+exponent (0.616) as at 1 (0.623). Seeds 1 and 2 follow (about 90 minutes a seed).
+
+**The photo stream, seed 0, filters as born** (`stream_photos_ph_r_s0.log`; 33 words, 4,000 tests; the
+commonest word is 5.1%): word cells + relay 0.179 / 0.359 / 0.391 / 0.439 after 500 / 5,000 / 10,000 / 50,000;
+without the relay 0.134 / 0.272 / 0.308 / 0.379. A picture seen once is named right twenty pictures later
+0.893 of the time behind the relay. Backprop of the same shape, first tuning run (rate 0.001, batch 8, no
+relay): 0.301 at 10,000. What I said: word cells between 0.30 and 0.40 after 50,000; it is 0.439 as born.
