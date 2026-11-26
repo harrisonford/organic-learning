@@ -1420,4 +1420,12 @@ Still Kris's own:
   val part (10,000 of 20,028 heard at 15:45). docs/ASYNC.md design. CORe50 probe queued behind ncm1.
   Next: av seed 0's word test, then seeds 1–2; sound units' first reading; ncm seeds; bp3; ramp lives' end (~19:00)
   → gaze and tag lives; stream brain: cheaper link, sound pulling the eye, babbling heard.
+- 2026-11-26 17:10 Health: all healthy. **Reader verdict, three seeds**: nearest class mean loses two points from
+  development on photos (0.421 → 0.403) → paper's photo section updated (second-moment reading; relay explanations
+  ruled out). **Two senses, seed 0, word test**: sight 0.239, hearing 0.201, both 0.264 (VISION.md); seeds 1–2 running
+  (`organic-av2`). **Sound ear, first reading**: syllable scale right, nothing recurs → second reading running
+  (adaptation, 8 bands, window kinds, lift). **Stream brain**: a vocal tract; babbling learns an auditory-motor map
+  (29/32 own voice; neighbours in another); heard vowels draw near imitations 0.22 vs 0.06 (VISION.md 17:05).
+  Next: sunits2; av seeds; CORe50 probe; ramp lives' end (~19:00) → JUDGING.md, gaze/tag lives start; stream brain:
+  echoic trace for imitation, habits from what is heard.
 

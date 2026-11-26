@@ -3659,7 +3659,7 @@ nothing. Written into the paper's photo section with the two explanations ruled 
 What follows for the learner (not done yet; each needs its organic check): a reader of second moments that is local,
 or a delta rule that keeps learning along the faint directions longer.
 
-### 2026-11-26 17:50, the stream brain babbles with a vocal tract and begins to imitate
+### 2026-11-26 17:05, the stream brain babbles with a vocal tract and begins to imitate
 
 `organic/vocal.py`: a source-filter vocal tract (glottal pulses at the voice's pitch; F1, F2 and a fixed F3 as
 two-pole resonators in cascade, as in Klatt's 1980 synthesizer, much simplified; the lips' radiation). Checked: /i/
