@@ -4,6 +4,28 @@ Kris, 2026-11-26: "the final brain architecture i expect it to be async in gener
 steer that direction as human brains process things". The test it is built toward is his: an app with camera,
 microphone, screen and text chat, a conversation that keeps going (queue E 32).
 
+## Kris's clarification (2026-11-26 15:15): neurons, not turns
+
+"yes i want neurons and regions everything to be very async like the brain works like that right? is streams of
+stimuli enter and streams of output also go out it can be lets say stream of image the brain moves fixates as it
+feels driven to do and talks at the same time everything just happens so it shouldnt really be "turn" every neuron
+ticks and send info that oculd be turn but that's the level of stream in stream out we want to achieve".
+
+So the granularity is the neuron's, not the moment's: a small fixed step (10 ms) at which every population updates
+its state (leaky integration with its own time constant) and sends on what changed; streams in (sound frames,
+video frames, text) and streams out (eye movements, speech) at the same time; every output a population racing to
+its own threshold (a saccade starts when its movement population crosses threshold: Hanes & Schall 1996, to verify),
+so the eye moves when its drive wins and the mouth speaks when its drive wins, while perception goes on.
+Turn-taking is not built in; it has to be learned from what speaking over someone brings. Rhythms (the syllable
+rate, three or four fixations a second) coordinate loosely; nothing waits for anything else.
+Cost: every synapse every 10 ms is out of reach on this CPU (the brain's 250 million numbers would be 25 billion
+operations a simulated second); a brain has 1–2% of its neurons active and only activity travels, so only changes
+propagate here too (as spikes do, and as neuromorphic chips work). Slower than real time on the CPU (Kris accepts).
+**This replaces the migration below as the main road:** a small stream brain on a 10 ms clock, its organs as
+populations from the start (eye, hearing, mouth, word cells), first shown to look, hear and vocalise at once on a
+stream of Commons video with sound, before any claim about learning; then the learned pieces moved into it one by
+one, each checked. The migration of the turn-based brain stays useful for comparison.
+
 ## What is synchronous today
 
 A life is a sequence of moments, and a moment is a closed turn (`organic/speech.py`, `SpeakingBrain.live`):

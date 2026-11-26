@@ -356,6 +356,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     stream measured by taking it away, and by how soon an answer comes when sight and sound agree.
     Design written (docs/ASYNC.md, 2026-11-26 15:15): what is synchronous today, one timeline in milliseconds,
     rates and time constants from biology (to verify), five switched steps; step 1 is hearing in time within a moment.
+    **Kris, 15:15: neurons, not turns** ("every neuron ticks and send info ... stream in stream out"): the main road is
+    now a small stream brain on a 10 ms clock (organs as populations with their own time constants; outputs as
+    populations racing to threshold; only changes propagate), first shown to look, hear and vocalise at once on
+    Commons video with sound, then the learned pieces moved in one by one (docs/ASYNC.md).
 
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
