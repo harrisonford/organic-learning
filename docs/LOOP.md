@@ -60,7 +60,7 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-av1`** (out/tmp/av_queue.sh; queued 11:20; MemoryMax 1800M; each seed waits for 2.5 GB; about an hour
+- **`organic-av1`** (out/tmp/av_queue.sh; queued 11:20; MemoryMax 1800M; each seed waits for 3.3 GB (re-queued 12:20 after an OOM at its own cap at 11:53, now leaner); about an hour
   a seed): two senses teaching each other, first probe (queue E 32; `experiments/av_probe.py`), seeds 0–2 →
   out/bench/av_probe_s{0,1,2}.log. What I said before: VISION.md 11:10.
 - **`organic-photos-bp3`** (out/tmp/photos_backprop_seeds.sh; queued 10:50; waits for relayshrink1, then 3.3 GB a
@@ -291,7 +291,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     prunes later; ours grows its synapses, not its cells, and switches a whole organ on at once. Owed: per-organ sizes and the turnover
     (cells forgotten and born per 5,000 moments) in the report, read from checkpoints or added to the records
     behind a switch; then the organic check of a capacity that grows with age.
-    **Turnover, six lives (2026-11-26 12:40; census of plat_s0..2, kind_s0..2 from the cells' birth moments):**
+    **Turnover, six lives (2026-11-26 12:15; census of plat_s0..2, kind_s0..2 from the cells' birth moments):**
     between the end of babbling and the end of echo (5,000 moments) about 1,000 of the ~1,900 word cells are born and
     as many forgotten, half the population; from echo to the end of first words (45,000–70,000 moments) about 1,050
     more, and in pages about 500–650 in 30,000–40,000 moments: turnover falls more than tenfold after echo and then
@@ -1334,3 +1334,11 @@ Still Kris's own:
   Census with word-cell turnover queued for six lives. CORe50 frames converter written (zip half fetched). Paper:
   the 658-pairs sentence names its threshold.
   Next: av_probe seed 0 → read against the prediction; bp3; ncm1; census; CORe50 frames when the zip is whole.
+- 2026-11-26 12:25 Health: all healthy. **av_probe seed 0 killed at its own cap (1.7 GB of 1.8) at 11:53** in the readers;
+  made lean (blocks in place, no copy of the training set, the cortex freed, codes cached in out/bench/av_codes_*.npz,
+  the video set frozen in out/bench/av_pages.json for all seeds; smoke test reproduces the numbers from the cache) and
+  re-queued behind a 3.3 GB gate. **Growth: word-cell turnover on six lives** (queue E 33 above; docs/GROWTH.md): half
+  the cells replaced between babbling and echo, then turnover falls tenfold and a stable old core forms. ncm1 running
+  (census was quick); bp3's first run running.
+  Next: ncm1 → the reader's verdict; av1 when there is room; bp3; CORe50 frames when the zip is whole.
+
