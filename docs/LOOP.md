@@ -60,6 +60,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-sailp1`** (out/tmp/sailp_queue.sh; started 00:42; MemoryMax 1500M; gated; about five hours): SAILnet in
+  the cortex's place on the photo stream, seed 0 → out/bench/sailp_develop_s0.log, sailp_code_s0.log,
+  stream_photos_{sailpu,sailp}_s0.log. Beside: ph_r / ph_d of seed 0 (VISION.md 00:40, with what I said before).
+- **`organic-photos2`** (out/tmp/photos_queue2.sh; started 00:30; MemoryMax 1800M; gated; about 2.5 hours a seed):
+  the photo benchmark's seeds 1 and 2 → photos_code_{ph_r,ph_d}_s{1,2}.log, stream_photos_{ph_r,ph_d}_s{1,2}.log.
 - **`organic-commons`** (permanent service since 2026-11-25 22:26; `experiments/world/commons_depicts.py`; log
   out/commons_depicts.log): Wikimedia Commons photographs by what they depict, one every two seconds, into
   `~/datasets/commons_more/` (never into `~/datasets/commons`: world 4). Kris asked for it ("slow polite
@@ -1175,4 +1180,12 @@ Still Kris's own:
   0.615 / 0.583. Ramp lives at 50,000, in first words. Commons: 1,432 pictures.
   Next: photo daemon's log after 00:05; ph_d's ridge rows; tuning; softbase2 seed 2 (about 00:15) → the paper's
   pending row on three seeds and the abstract; then photos seeds 1–2 (queue after photos1).
+- 2026-11-26 00:45 Health: only the three planned endings now; **the photo daemon writes again** (15 of 20 judged right; two
+  batches without a reply). 4.1 GB free. **Photo stream seed 0 whole:** development +0.023 for ridge and
+  streaming LDA behind the relay, +0.004 for the word cells: the second-order readers gain, ours does not, as
+  on enlarged CIFAR. photos1 ended; **photos2 (seeds 1–2) and sailp1 (SAILnet on photographs) started.**
+  softbase2 seed 2: 0.701 with the relay (three seeds 0.701, 0.708, 0.701); two rows to go. Tuning on photos:
+  batch 32 worse than 8 so far (0.267, 0.165). Commons: 2,690.
+  Next: softbase2's end → the paper's pending row, the abstract; photos2 and sailp1 as they come; the tuning's
+  fixed-relay half; the ramp lives into JUDGING.md at 60,000.
 

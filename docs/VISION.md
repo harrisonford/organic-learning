@@ -3226,3 +3226,37 @@ on the first look of 22:35: started from the soft filters backprop ends 0.70, un
 
 **Ramp lives at 50,000:** still in first words (0.43 / 0.48 / 0.49; pages 0.15 / 0.13 / 0.13).
 `organic-commons`: 1,432 photographs in its first hour.
+
+### 2026-11-26 00:40, the photo stream, seed 0, whole; SAILnet on real photographs, said before it runs
+
+`stream_photos_ph_d_s0.log` is complete. After 50,000 photographs seen once (33 words; 4,000 tests):
+
+| photo stream, seed 0 | as born | developed by our hard rule | difference |
+|---|---|---|---|
+| word cells + relay | 0.439 | 0.443 | +0.004 |
+| word cells, no relay | 0.379 | 0.369 | −0.010 |
+| ridge + relay | 0.459 | 0.482 | +0.023 |
+| ridge | 0.452 | 0.462 | +0.010 |
+| streaming LDA + relay | 0.476 | 0.499 | +0.023 |
+| streaming LDA | 0.475 | 0.495 | +0.020 |
+
+- **The entry of 23:35 was half the picture.** On real photographs development is worth two points to the readers
+  that keep second moments and nothing to the word cells. That is what the paper's first table already shows on
+  enlarged CIFAR (streaming LDA 0.739 against 0.719 with random filters; the word cells 0.687 against 0.693),
+  and it is what I had said for ridge here (+0.02–0.04; +0.023) and not for the word cells (+0.01–0.03; +0.004).
+  One seed. CIFAR at 32 remains the one place where the word cells gained too.
+- So across three kinds of picture the developed filters hold something a first-order reader does not get
+  out. What that is (the near copies make the code's directions unequal again after the relay? the gain sits
+  in directions with little variance?) is a question about our reader, and a better one than "which size".
+- Seeds 1 and 2 queued (`organic-photos2`).
+
+**SAILnet on real photographs** (`organic-sailp1`: `SET=photos` in sailnet_cortex_probe.py, checked against the
+kept codes: the as-born cortex's code of a stream picture is reproduced exactly; the layer develops on the
+unlabelled photographs, 64 pixels, nothing enlarged; base `cortex_ph_r_s0.pkl`; `sailp` / `sailpu`). **Said
+before:** it keeps its filters apart as on CIFAR at 32 (at least 180 different of 256; on enlarged CIFAR 98);
+at unit length ridge and streaming LDA behind the relay read about 0.02 above as born (0.459, 0.476), the
+word cells within 0.01 of as born (0.439).
+
+**The photo daemon is back** (00:02 new day; `inclusionai/ling-3.2-flash:free` in the withdrawn adult's place):
+20 questions written, 15 judged right, 13 requests; two batches got no reply after retries. The health alert
+for it is gone.

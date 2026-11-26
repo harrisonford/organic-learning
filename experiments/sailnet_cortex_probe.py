@@ -19,6 +19,10 @@ The base is out/bench/cortex_random_s{seed}.pkl (filters as born, the decorrelat
     SIZE=32      (2026-11-25 18:50) the same on CIFAR at its own size, where a window holds 47 directions and not
                  the 22 of a blown-up picture (experiments/upsample_probe.py): the base is cortex_nat_r_s{seed}.pkl
                  (experiments/cortex_native_probe.py), the names sailn / sailnu, the weights sailn_weights_s{seed}.npz
+    SET=photos   (2026-11-26 00:35) the same on the photo stream of experiments/bench_photos.py: real photographs at
+                 64 x 64, nothing enlarged. The layer develops on the unlabelled photographs the benchmark's cortex
+                 develops on, the base is cortex_ph_r_s{seed}.pkl, the names sailp / sailpu, the weights
+                 sailp_weights_s{seed}.npz, the codes photos_{sailp,sailpu}_s{seed}_{train,test}.npy
     STAGE=develop SEEDS=0 python experiments/sailnet_cortex_probe.py   -> out/bench/sailc_weights_s{seed}.npz
     STAGE=code    SEEDS=0 python experiments/sailnet_cortex_probe.py   -> out/bench/cifar10_{sailc,sailcu}_s{seed}_*.npy,
                                                                          cortex_{sailc,sailcu}_s{seed}.pkl
@@ -35,8 +39,8 @@ from organic.cortex2 import _windows, _contrast  # noqa: E402
 
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 STAGE, GRID, SHRINK, NRELAY = os.environ.get("STAGE", "develop"), 4, 0.0005, 6000
-SIZE = int(os.environ.get("SIZE", 64))
-NAME, BASE = ("sailc", "random") if SIZE == 64 else ("sailn", "nat_r")
+SIZE, SET = int(os.environ.get("SIZE", 64)), os.environ.get("SET", "cifar10")
+NAME, BASE = ("sailp", "ph_r") if SET == "photos" else ("sailc", "random") if SIZE == 64 else ("sailn", "nat_r")
 if SIZE == 64:
     big = lambda x: np.asarray(Image.fromarray(x).resize((64, 64), Image.BILINEAR), np.float32) / 255  # noqa: E731
 else:
@@ -87,8 +91,37 @@ def develop(layer, pictures, rng):
     return born.astype(np.float32), Q.astype(np.float32), W.astype(np.float32), theta
 
 
+def photos():
+    """The photo stream's unlabelled photographs, its pictures in order and its tests' labels (already 64 x 64)."""
+    import json
+    assert SIZE == 64
+    thumbs, dev = np.load(f"{P.DATA}/coco_thumbs/train2017_64.npy", mmap_mode="r"), np.load("out/bench/photos_dev_rows.npy")
+    coco = np.load(f"{P.DATA}/cococrops/pictures_64.npy", mmap_mode="r")
+    many = sum(1 for _ in open(f"{P.DATA}/commons/pictures.jsonl"))
+    commons = np.memmap(f"{P.DATA}/commons/pictures_64.u8", np.uint8, "r", shape=(many, 64, 64, 3))
+
+    class Rows:
+        def __init__(self, source, rows):
+            self.source, self.rows = source, rows
+
+        def __len__(self):
+            return len(self.rows)
+
+        def __getitem__(self, i):
+            if self.source is not None:
+                return np.asarray(self.source[self.rows[int(i)]])
+            which, row = self.rows[int(i)]
+            return np.asarray((coco, commons)[which][row])
+
+    return (Rows(thumbs, dev), Rows(None, np.load("out/bench/photos_train_rows.npy")), Rows(None, np.load("out/bench/photos_test_rows.npy")),
+            np.load("out/bench/photos_test_labels.npy"))
+
+
 if __name__ == "__main__":
-    unlabelled = P.load(f"{P.DATA}/cifar-100-python/train")
+    if SET == "photos":
+        unlabelled, Xtr, Xte, yte = photos()
+    else:
+        unlabelled = P.load(f"{P.DATA}/cifar-100-python/train")
     for seed in SEEDS:
         base = pickle.load(open(f"out/bench/cortex_{BASE}_s{seed}.pkl", "rb"))
         base.relay = None
@@ -99,8 +132,9 @@ if __name__ == "__main__":
             a0, p0, g0 = near_copies(base.layers[0].W[0])
             print(f"seed {seed} {NAME}: two cells' weights alike {alike:.3f}, pairs above 0.9: {pairs}, different filters {groups} of {KINDS} (the cortex's filters as born: {a0:.3f}, {p0}, {g0})", flush=True)
             continue
-        Xtr, Xte = P.load(f"{P.DATA}/cifar-10-batches-py/data_batch_1"), P.load(f"{P.DATA}/cifar-10-batches-py/test_batch")[:2000]
-        yte = np.load("out/bench/cifar10_test_labels.npy")[:2000]
+        if SET != "photos":
+            Xtr, Xte = P.load(f"{P.DATA}/cifar-10-batches-py/data_batch_1"), P.load(f"{P.DATA}/cifar-10-batches-py/test_batch")[:2000]
+            yte = np.load("out/bench/cifar10_test_labels.npy")[:2000]
         Q = np.load(f"out/bench/{NAME}_weights_s{seed}.npz")["W"]
         settle = [big(unlabelled[i]) for i in np.random.default_rng(seed + 7).choice(len(unlabelled), NRELAY, replace=False)]
         for name, weights in ((NAME, Q), (NAME + "u", Q / np.linalg.norm(Q, axis=1, keepdims=True))):
@@ -109,13 +143,13 @@ if __name__ == "__main__":
             cortex.settle_relay(settle, GRID, SHRINK)
             relay, cortex.relay = cortex.relay, None
             for part, X in (("train", Xtr), ("test", Xte)):
-                S = np.zeros((len(X), GRID * GRID * KINDS), np.float16)
-                for i, x in enumerate(X):
-                    S[i] = cortex.whole(big(x), GRID)
-                np.save(f"out/bench/cifar10_{name}_s{seed}_{part}.npy", S)
-            S = S.astype(np.float32)
+                S = np.lib.format.open_memmap(f"out/bench/{SET}_{name}_s{seed}_{part}.npy", "w+", np.float16, (len(X), GRID * GRID * KINDS))
+                for i in range(len(X)):
+                    S[i] = cortex.whole(big(X[i]), GRID)
+                S.flush()
+            S = np.asarray(S[:1500], np.float32)
             through = (S - relay.mu) @ relay.Z
-            print(f"seed {seed} " + P.read_code(f"{name:6} summary", S[:1500], yte[:1500]) + " | " + P.read_code("through the relay", through[:1500], yte[:1500]) + f" ({time.time() - t0:.0f}s)", flush=True)
+            print(f"seed {seed} " + P.read_code(f"{name:6} summary", S, yte[:1500]) + " | " + P.read_code("through the relay", through, yte[:1500]) + f" ({time.time() - t0:.0f}s)", flush=True)
             cortex.relay = relay
             pickle.dump(cortex, open(f"out/bench/cortex_{name}_s{seed}.pkl", "wb"))
             del relay, through, S, cortex
