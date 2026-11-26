@@ -1428,4 +1428,10 @@ Still Kris's own:
   (29/32 own voice; neighbours in another); heard vowels draw near imitations 0.22 vs 0.06 (VISION.md 17:05).
   Next: sunits2; av seeds; CORe50 probe; ramp lives' end (~19:00) → JUDGING.md, gaze/tag lives start; stream brain:
   echoic trace for imitation, habits from what is heard.
+- 2026-11-26 18:25 Health: all healthy; memory at the floor (2.2 GB) until the ramp lives end. **Stream brain imitation,
+  three seeds:** real and modest (rank 13.1 against 16.3; nearest three 0.18 against 0.09); the echoic trace adds
+  nothing (two forms tried; off). `experiments/reward_table.py` reproduces the kind lives' table (ready for the ramp
+  lives). Backprop on photographs, seed 1: 0.464 with the relay, 0.390 without. The sound ear's second reading runs
+  about seven times slower than the first on this crowded machine (ends near midnight).
+  Next: the ramp lives at 120,000 → JUDGING.md (reward_table.py) and the census; then the gaze and tag lives start.
 
