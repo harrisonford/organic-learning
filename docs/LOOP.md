@@ -245,6 +245,19 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     later (ffmpeg is installed). Next for (b): frames to 64 × 64 in order; the probe: develop on the sessions'
     frames in order and shuffled (the trace term and our rule), read by the stream on held-out sessions.
 
+32. **Live streams, all senses at once** (Kris, 2026-11-26 09:30, after the step-by-step artifact: can the brain take
+    a live stream and respond constantly; add real audio and video beside images and text; "interconnectivity of
+    data streams should make a more reliable brain"; his hypothesis: human capability needs all the pieces together,
+    interconnected, "but it must be nuanced"; movement later, since a human brain moves first, then babbles).
+    My reading, given to him: the prerequisite is already true (everything learns online, nothing frozen, the gate
+    decides when to speak); what is missing is (a) time: the world comes as turns (moments), not as a clock; (b) real
+    sound: the ear hears text bytes, not audio; (c) streams teaching each other: only the heard word teaches the
+    picture today. Order I proposed: a cochlea-like front end and audio-visual video (the Commons videos we keep
+    have sound tracks) → every stream's cells predicting the others' by the same local rule → the world as a clock
+    where every stream delivers its frame each tick → measure what each stream adds by taking it away. All pieces
+    present early but each simple, maturing in an order (hearing before sight is sharp; movement before babbling),
+    and every piece measurable by removal; movement for now is the eye's and the mouth's, a body later.
+
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
