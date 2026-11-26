@@ -257,6 +257,19 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     where every stream delivers its frame each tick → measure what each stream adds by taking it away. All pieces
     present early but each simple, maturing in an order (hearing before sight is sharp; movement before babbling),
     and every piece measurable by removal; movement for now is the eye's and the mouth's, a body later.
+    **Kris, 2026-11-26 09:45: the test it is built toward.** An app of his own with camera, microphone, screen and a
+    text chat, like a video call: he talks to it, and it keeps the conversation going, more dynamic than current
+    models. Performance is pushed but organic first. Far off (a proof of concept, then an MVP); on this CPU the tick
+    may be slowed down; real time comes with a GPU or the cloud.
+33. **How the brain grows, stage by stage** (Kris, same message: "progressive learning and evolution of the brain
+    reporting size complexity and behaviour on different development stages"). `experiments/growth_report.py` →
+    docs/GROWTH.md and out/growth/{tag}.json from the lives' own records. **First reading (nine lives):** the brain
+    does not grow. Word cells, the ear's clusters and the store are at their fixed limits (about 1,800–2,000 cells and
+    clusters, 2,000 moments) by 5,000–10,000 moments, the mouth's outputs by 15,000 (338); after that a life
+    reshapes inside "a skull of fixed size" (organic/words.py: the least heard, longest unheard cells are forgotten,
+    a tenth at a time). A child's brain grows for years and prunes later. Owed: per-organ sizes and the turnover
+    (cells forgotten and born per 5,000 moments) in the report, read from checkpoints or added to the records
+    behind a switch; then the organic check of a capacity that grows with age.
 
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
