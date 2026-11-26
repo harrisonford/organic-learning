@@ -60,6 +60,10 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-commons-video`** (permanent service since 2026-11-26 08:15; `experiments/world/commons_video.py`; log
+  out/commons_video.log): Commons videos as 64 × 64 frames in order into `~/datasets/commons_video/` (raw files kept).
+  Kris asked for it ("download in parallel wikimedia"). To do: count real footage against animation by category
+  before use.
 - **`organic-core50-fetch`** (started 08:20; ~/datasets/core50/fetch.sh; curl limited to 2 MB/s, resumable): the video
   set for queue E 31; ends with `zip` in ~/datasets/core50/fetch.done.
 - **`organic-relaymore1`** (out/tmp/relay_more_queue.sh; queued 07:55, waits for photos2; MemoryMax 1800M; gated;
@@ -1242,4 +1246,7 @@ Still Kris's own:
   visible effect. Commons: 11,807. **Kris asked about video** → queue E 31 (above).
   Next: photos-bp1's relay row → the paper's photo section → draft 10; relaymore1; bp2; photo log after midnight;
   E 31 (a): licences and sizes of real video.
+- 2026-11-26 08:20 **Kris: include video; the future use is streaming data; download Wikimedia video in parallel; 1 TB of disk,
+  the machine is ours alone.** CORe50 fetching (about nine hours at the server's pace); `organic-commons-video`
+  installed and running (WORLD.md). Memory and memoize written.
 

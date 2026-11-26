@@ -165,3 +165,29 @@ found through the site's search a page of 25 at a time, word after word.
   courtyard). Good for "all kinds of pictures" and for development without labels; as labelled pictures they
   are noisier than COCO's crops, to be measured before they are used as tests.
 - Log: out/commons_depicts.log. Not in health.py's list yet.
+
+## 2026-11-26: Wikimedia Commons video, fetched constantly (queue E 31; not part of world 4)
+
+Kris, 08:30: "we can also download in parallel wikimedia then, this pc has 1 TB disk". New service
+`organic-commons-video` (`experiments/world/commons_video.py`; unit in ~/.config/systemd/user, enabled, restarts by
+itself; log out/commons_video.log). Commons has about 420,000 videos (search, 2026-11-26): about 21,000 under
+"Videos of animals", 7,700 vehicles, 35,500 people, 140,000 nature (with subcategories).
+
+- **Searches, in turn:** videos marked as depicting one of 39 picture-book words (few: 67 for dog), then videos under
+  the four subject categories (no word, the category kept). The search reaches at most 10,000 results each.
+- **Kept:** the smallest served version at least 160 pixels on its short side (usually a 240p VP9 transcode, about
+  3 MB a minute), stored whole in `raw/` so other sizes and rates can be taken later; and its first 120 seconds at 10
+  frames a second, the middle square at 64 × 64, appended in order to `frames_64.u8` with one line per video in
+  `videos.jsonl` (first frame, count, title for the licence and author, page id, word or category, duration).
+  Skipped: under 2 s or over 20 minutes; no small version and the original over 50 MB.
+- **Politeness:** one request at a time, 3 s between requests, the same user agent, `maxlag`, five minutes' wait on
+  a refusal. It runs beside the picture fetcher (one picture every 2 s); together about one request a second.
+- **Where:** `~/datasets/commons_video/` (its own directory; ffmpeg decodes from there).
+- **Seen in the check:** one of the first two "dog" videos is a CGI cartoon (a dog in an animated short): Commons'
+  "depicts" includes animation. Kept, and to be counted before the frames are used: real footage and animation
+  will be told apart by category when the set is read.
+- **Rates:** a frame changes by 1.5 grey levels on average from one tenth of a second to the next in the beach
+  video and by 10.6 over five seconds; 6.2 and 44.7 in the cartoon (cuts).
+
+Beside it, `organic-core50-fetch`: the handheld-object videos (CC BY 4.0, 5.9 GB) at the server's pace, about 180 KB/s
+(about nine hours).
