@@ -172,23 +172,27 @@ def readers(X, Y):
     return out
 
 
-def which(P, Y, negatives):
-    """Share of held-out moments whose own target is nearer (cosine) to the prediction than the negative's."""
-    ok = negatives >= 0
-    P, Yt, Yn = unit(P[ok]), Y[te[ok]], Y[negatives[ok]]
-    return float(np.mean((P * Yt).sum(1) > (P * Yn).sum(1)))
+def which(X, M, Y, negatives):
+    """Share of held-out moments whose own target is nearer (cosine) to the prediction X M^T than the negative's
+    (a block at a time: memory)."""
+    ok, hits = np.nonzero(negatives >= 0)[0], 0
+    for c in range(0, len(ok), 2048):
+        k = ok[c: c + 2048]
+        P = unit(X[te[k]] @ M.T)
+        hits += int(((P * Y[te[k]]).sum(1) > (P * Y[negatives[k]]).sum(1)).sum())
+    return hits / max(len(ok), 1)
 
 
 results = {}
 for name, A in list(H.items()):
     for direction, (X, Y) in (("sight->sound", (V, A)), ("sound->sight", (A, V))):
         maps = readers(X, Y)
-        ridge = max((k for k in maps if k.startswith("ridge")), key=lambda k: which(X[te] @ maps[k].T, Y, other))
+        ridge = max((k for k in maps if k.startswith("ridge")), key=lambda k: which(X, maps[k], Y, other))
         for r in ("hebb", "delta", ridge):
-            P = X[te] @ maps[r].T
-            results[(name, direction, r.split()[0])] = (which(P, Y, other), which(P, Y, later))
-        if direction == "sight->sound":
-            H[name + " from sight"] = unit(V @ maps["hebb"].T)
+            results[(name, direction, r.split()[0])] = (which(X, maps[r], Y, other), which(X, maps[r], Y, later))
+        if direction == "sight->sound" and name == "developed":  # only this one is read by word below
+            H[name + " from sight"] = np.vstack([unit(V[c: c + 4096] @ maps["hebb"].T) for c in range(0, len(V), 4096)])
+        del maps
         say(f"hearing {name:9s} {direction}: " + " | ".join(f"{r.split()[0]}{' (' + r.split()[1] + ')' if ' ' in r else ''} which {results[(name, direction, r.split()[0])][0]:.3f} when {results[(name, direction, r.split()[0])][1]:.3f}" for r in ("hebb", "delta", ridge)))
 
 # what: the word of the videos fetched under a word
