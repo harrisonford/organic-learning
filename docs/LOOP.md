@@ -65,8 +65,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   moments of preschool (`GAZE=serial`, otherwise the tag queue's line); control: tagn_s* (tagn_s1 done 11-25).
   Records out/gazs_s*.jsonl; notes out/tmp/gaze_queue.log. READ THE FIRST LIFE'S LOG when it starts (first
   continuation from a level with the serial gaze switched on).
-- **`organic-core50-frames`** (started 13:20; about 45 minutes): CORe50 to 64 × 64 frames in order. Then
-  `experiments/core50_trace_probe.py` (smoke test first; prediction in VISION.md 13:20).
+- **`organic-core50-1`** (out/tmp/core50_queue.sh; queued 13:55; MemoryMax 1500M; each step at 3.3 GB available):
+  queue E 31 (b), real video for the eye: smoke test (stops the queue if it fails) → per seed core50_trace_s{S}.log
+  (second stage in order / shuffled / plain, first stage alone: same object from another session) →
+  stream_core50_c50{first,order,shuffled,plain}_s{S}.log (10 kinds, word cells and ridge). About 3.5 hours a seed.
+  Prediction: VISION.md 13:20. CORe50 frames done 13:29 (164,866, the dataset's count; contact sheet checked: kinds
+  in the order assumed, objects turning in the hand, other floors and light in other sessions).
 - **`organic-spokencoco-fetch`** (started 12:50; ~/datasets/spokencoco/fetch.sh; 3 MB/s, resumable, 64 GB, about six
   hours): spoken COCO captions for the sound ear (queue E 32; docs/WORLD.md). Ends with `tar` in fetch.done.
 - **`organic-av1`** (out/tmp/av_queue.sh; queued 11:20; MemoryMax 1800M; each seed waits for 3.3 GB (re-queued 12:20 after an OOM at its own cap at 11:53, now leaner); about an hour
