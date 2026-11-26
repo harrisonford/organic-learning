@@ -65,6 +65,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **SpokenCOCO through the cochlea** (`experiments/world/spokencoco_cochlea.py`, python -I, streams the archive): the
+  validation part done 14:30 (25,035 recordings, 10.8 M rows: about 30 hours of speech) → ~/datasets/spokencoco/
+  cochlea_64.f16 + cochlea.jsonl (transcripts kept for measuring only). All 118,287 training images of SpokenCOCO are
+  among our COCO thumbnails (its val images are not). PART=train when the download is whole.
+  **`experiments/sound_units_probe.py`** (hearing cortex → prediction → units from sound; measured by the
+  transcripts only at the end): smoke test running (`organic-sunits-smoke`), then the val part in full.
 - **`organic-gaze-lives`** (out/tmp/gaze_queue.sh; queued 13:30; one life at a time at 5.7 GB available, so after the
   ramp lives): queue E 34 (a), the serial gaze in grown lives: gazs_s1/s2/s0 continued from plat_s*_W2 for 20,000
   moments of preschool (`GAZE=serial`, otherwise the tag queue's line); control: tagn_s* (tagn_s1 done 11-25).
