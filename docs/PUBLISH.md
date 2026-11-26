@@ -273,3 +273,8 @@ organic learner behaves and what each part does, measured honestly, not a score.
   the two-size table, the SAILnet paragraph (three seeds), the Setup's sentence on the eye. **To come before
   draft 10:** a section for the photo stream (rule 10), with its backprop reference; then the title of "did
   nothing", the list of mistaken assumptions and the 658-pairs sentence are revisited together.
+- **2026-11-26 09:15: a section on real photographs is in the draft** (33 words, COCO crops and Commons at the eye's
+  size; three seeds of ours, one seed of backprop: word cells + relay 0.446 ± 0.006 against backprop + relay 0.462;
+  level without the relay, 0.389 against 0.387; development helps ridge and streaming LDA by 2.5 points and the word
+  cells by nothing). Pending in it: backprop's seeds 1–2 and its widened tuning. Draft 10 after those, with the
+  development section's title and the list of mistaken assumptions revisited.

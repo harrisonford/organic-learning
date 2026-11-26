@@ -3361,3 +3361,46 @@ up when they next restart. Tonight's log will say which adult to look at.
 **Ramp lives at 80,000** (first words / pages): 0.42 / 0.30, 0.35 / 0.25, 0.41 / 0.28. Reward lives at that age
 0.45 / 0.33, 0.49 / 0.20, 0.48 / 0.28; plateau lives 0.53 / 0.14, 0.47 / 0.32, 0.49 / 0.33. No visible effect so
 far; read whole at 120,000. `organic-commons`: 11,807 photographs in nine hours.
+
+### 2026-11-26 09:10, backprop on photographs; the relay's sample size ruled out; the relay's floor as the next candidate
+
+**Backprop of the same shape on photographs, seed 0** (`backprop_photos_full.log`): with the fixed relay (rate 0.001,
+batch 32, the best of six with the relay on the first 10,000) **0.462** after 50,000 (0.146 / 0.344 / 0.395 at
+500 / 5,000 / 10,000). The word cells behind the relay, filters as born: 0.446 ± 0.006 (seed 0: 0.439); ridge +
+relay 0.461. So on photographs backprop with the relay is ahead of the word cells by two points at the end (one
+seed) and behind early (500: 0.146 against 0.170; 5,000: 0.344 against 0.363). Without the relay the two are level
+(0.387 against 0.389). The widened search (`organic-photos-bp2`): rate 0.01 / batch 32 → 0.262, rate 0.003 / batch
+128 → 0.221 (both under the chosen 0.316); three runs to go.
+
+**The photo stream is complete on three seeds** (seed 2's streaming LDA in): developed, streaming LDA + relay 0.499
+± 0.004, without 0.495 ± 0.005.
+
+**The relay on 20,000 photographs in place of 6,000** (`relay_more_ph_d_s0.log`, `stream_photos_ph_dm20k_s0.log`):
+the developed code spreads over 396 directions after it (386 with 6,000), and the word cells read 0.441 (0.443
+with the relay of 6,000). **What I said: if neither moves, the relay's estimate is not the reason. Neither moved.**
+The number of pictures the relay settles on is ruled out.
+
+**The spectrum of the codes themselves** (`experiments/spectrum_probe.py`, `spectrum_s0.log`; 4,000 codes of each,
+seed 0). The relay levels a direction only if its variance is not far below 0.0005 of the largest; the
+participation ratio of the levelled spectrum says over how many directions the code is spread once the relay has
+done what it can:
+
+| code | spread after the relay, as born → developed | directions above the relay's floor | word cells + relay, developed minus born |
+|---|---|---|---|
+| CIFAR at 32 | 1,597 → 917 | 594 → 423 | +0.023 |
+| photographs | 1,103 → 593 | 360 → 280 | −0.001 |
+| CIFAR enlarged to 64 | 933 → 518 | 323 → 238 | −0.022 |
+
+Development roughly halves the spread in all three (×0.57, ×0.54, ×0.56): the developed filters put more of the
+code's variance into its largest directions (the top ten hold 0.50 against 0.46, 0.58 against 0.57, 0.62 against
+0.59). The word cells gain from development where the developed code still spreads over about 900 directions, and
+not where it spreads over 500–600. Three points, one seed: a reading. Its mechanism is the relay's floor, which is
+set relative to the largest variance: a developed code, whose largest direction is larger, has more of its
+directions left under the floor. **The test, queued** (`organic-relayshrink1`): the same relay with a floor five
+times lower (0.0001), for the developed and the as-born photo cortex. **Said before:** if the floor is what hides
+the development from the word cells, the developed photo code spreads over clearly more directions with it and the
+word cells gain from development (developed above born by 0.01 or more); ridge should change little. If the word
+cells still gain nothing, the floor is not the reason and the reader itself is (the delta rule's step on
+thousands of nearly equal directions). Either way this is a diagnosis, not a setting to adopt: the floor is a
+hand-set constant, and if it matters, the answer is a relay that sets its own (the local circuit of queue E 28),
+not a better number.

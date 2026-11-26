@@ -401,6 +401,42 @@ backpropagation of this shape from a random start does worse than backpropagatio
 Our shape whitens each patch before the filters and the soft layer's does not. That fits the account of the last
 section, and it is not a test of it.
 
+### Real photographs at the eye's size
+
+CIFAR's pictures are 32 pixels across and the learner's eye is 64, so every picture above was enlarged before the
+learner saw it. To see whether the findings belong to the learner or to tiny pictures, we built a second stream from
+photographs that really are 64 pixels across: 95,249 things cut from COCO training photographs and 3,482 Wikimedia
+Commons photographs, each named with one of 33 words (every word with at least 1,000 COCO crops). A twentieth of
+the COCO photographs, with every crop cut from them, and a twentieth of the Commons pictures are held out: 4,884
+tests, 4,000 of them read at each point. The stream is 50,000 of the rest, each seen once. The cortex develops,
+and the relay settles, on 115,475 whole COCO photographs with no labels, none of them a test photograph. Always
+saying the commonest word would be right 5.1% of the time.
+
+| learner, on real photographs | 500 | 5,000 | 50,000 pictures |
+|---|---|---|---|
+| streaming LDA + relay, developed filters | 0.172 ± 0.008 | 0.370 ± 0.006 | 0.499 ± 0.004 |
+| ridge + relay, developed filters | 0.189 ± 0.002 | 0.374 ± 0.003 | 0.486 ± 0.003 |
+| backprop + relay, one pass (one seed) | 0.146 | 0.344 | 0.462 |
+| ridge + relay, filters as born | 0.194 ± 0.003 | 0.365 ± 0.006 | 0.461 ± 0.004 |
+| **word cells + relay, filters as born** | 0.170 ± 0.023 | 0.363 ± 0.007 | **0.446 ± 0.006** |
+| word cells + relay, developed filters | 0.182 ± 0.029 | 0.355 ± 0.009 | 0.445 ± 0.002 |
+| word cells, no relay, filters as born | 0.132 ± 0.006 | 0.276 ± 0.004 | 0.389 ± 0.009 |
+| backprop, no relay, one pass (one seed) | 0.078 | 0.213 | 0.387 |
+| word cells, no relay, developed filters | 0.144 ± 0.011 | 0.264 ± 0.002 | 0.373 ± 0.004 |
+
+**[pending: backpropagation on seeds 1 and 2; its learning rate and batch were the largest of the first search, so
+the search is being widened past them.]**
+
+Three things carry over from CIFAR and one does not. Without the relay the word cells and backpropagation are
+level (0.389 against 0.387), as on CIFAR they nearly were. The second-order readers lead again. And the word cells
+are ahead early in the stream and not at the end: after 500 pictures 0.170 against 0.146, after 50,000 0.446
+against 0.462, on the one seed of backpropagation we have. What does not carry over is the development. On real
+photographs our rule's filters are worth two and a half points to ridge regression and the streaming discriminant
+behind the relay, on every seed, and nothing to the word cells. That is the same split as on enlarged CIFAR, where
+the streaming discriminant also gained two points and the word cells none, and unlike CIFAR at its own size, where
+both gained. So across three kinds of picture the developed filters hold something that a reader keeping second
+moments can use and our one-pass first-order reader, on the whole, cannot.
+
 ### Second-order readers stay ahead
 
 The streaming discriminant and the ridge regression finish five points above the learner. They keep a covariance

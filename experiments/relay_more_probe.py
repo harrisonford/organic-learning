@@ -21,13 +21,13 @@ from organic.cortex2 import Relay  # noqa: E402
 
 SET, VARIANT = os.environ.get("SET", "photos"), os.environ.get("VARIANT", "ph_d")
 SEEDS, MANY = [int(x) for x in os.environ.get("SEEDS", "0").split(",")], int(os.environ.get("MANY", 20000))
-GRID, SHRINK = 4, 0.0005
+GRID, SHRINK = 4, float(os.environ.get("SHRINK", 0.0005))  # 0.0005: the benchmark's relay
 assert SET == "photos", "only the photo stream so far"
 thumbs, dev = np.load(f"{P.DATA}/coco_thumbs/train2017_64.npy", mmap_mode="r"), np.load("out/bench/photos_dev_rows.npy")
 yte = np.load("out/bench/photos_test_labels.npy")
 
 for seed in SEEDS:
-    t0, name = time.time(), f"{VARIANT}m{MANY // 1000}k"
+    t0, name = time.time(), os.environ.get("NAME", f"{VARIANT}m{MANY // 1000}k")
     cortex = pickle.load(open(f"out/bench/cortex_{VARIANT}_s{seed}.pkl", "rb"))
     old, cortex.relay = cortex.relay, None
     picks = np.sort(np.random.default_rng(seed + 11).choice(dev, MANY, replace=False))
@@ -45,4 +45,4 @@ for seed in SEEDS:
         os.symlink(f"{SET}_{VARIANT}_s{seed}_{part}.npy", link)
     T = np.asarray(np.load(f"out/bench/{SET}_{VARIANT}_s{seed}_test.npy", mmap_mode="r")[:1500], np.float32)
     print(f"seed {seed} {name}: " + P.read_code("through the relay of 6,000", (T - old.mu) @ old.Z, yte[:1500])
-          + " | " + P.read_code(f"through the relay of {MANY:,}", (T - relay.mu) @ relay.Z, yte[:1500]) + f" ({time.time() - t0:.0f}s)", flush=True)
+          + " | " + P.read_code(f"through the relay of {MANY:,} (shrink {SHRINK:g})", (T - relay.mu) @ relay.Z, yte[:1500]) + f" ({time.time() - t0:.0f}s)", flush=True)

@@ -60,6 +60,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-relayshrink1`** (out/tmp/relay_shrink_queue.sh; queued 09:10, waits for relaymore1; gated): the relay with
+  its floor at 0.0001 (not 0.0005) for ph_d and ph_r of seed 0 → relay_shrink_{ph_d,ph_r}_s0.log,
+  stream_photos_{ph_dz1,ph_rz1}_s0.log. What I said before: VISION.md 09:10. A diagnosis, not a setting.
 - **`organic-commons-video`** (permanent service since 2026-11-26 08:15; `experiments/world/commons_video.py`; log
   out/commons_video.log): Commons videos as 64 × 64 frames in order into `~/datasets/commons_video/` (raw files kept).
   Kris asked for it ("download in parallel wikimedia"). To do: count real footage against animation by category
@@ -1249,4 +1252,14 @@ Still Kris's own:
 - 2026-11-26 08:20 **Kris: include video; the future use is streaming data; download Wikimedia video in parallel; 1 TB of disk,
   the machine is ours alone.** CORe50 fetching (about nine hours at the server's pace); `organic-commons-video`
   installed and running (WORLD.md). Memory and memoize written.
+- 2026-11-26 09:15 Health: the three planned endings; 3.6 GB free. **Backprop on photographs with the relay: 0.462** (seed 0;
+  word cells 0.446 ± 0.006; ahead early, behind by two at the end). Photo stream complete on three seeds. **The paper
+  has a section "Real photographs at the eye's size"** (nine rows; backprop's seeds 1–2 pending). **Relay on 20,000
+  pictures: nothing moves** (396 directions, word cells 0.441): sample size ruled out. **Spectrum probe:**
+  development halves the code's spread after the relay everywhere; the word cells gain only where it stays near 900
+  → the relay's floor (relative to the largest variance) queued as the next diagnosis. Artifact for Kris: the two
+  architectures step by step (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL). Commons video: 234 videos,
+  106,510 frames; CORe50: 0.97 of 5.9 GB.
+  Next: relaymore1's ph_r arm and relayshrink1; bp2's last three runs; backprop on photographs, seeds 1–2 (queue
+  when bp2 ends); photo daemon's log after midnight; ramp lives at 120,000 (evening).
 
