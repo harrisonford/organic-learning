@@ -3586,3 +3586,40 @@ Running: the whole validation part (25,035 recordings: 20,028 to learn from, 5,0
 out/bench/sound_units_val_s0.log. What I expect is as written at 12:50: syllable-sized kinds, some of them coming
 with one frequent word ("a", "of", and object words said often); word-like words found well above the shuffled
 count but most found "words" not words.
+
+### 2026-11-26 15:45, the stream brain runs; two senses on 1,399 videos (seed 0, which sound)
+
+**Kris, 15:15: "every neuron ticks and send info ... stream in stream out"** (docs/ASYNC.md). The first stream brain
+(`organic/stream.py`): a 10 ms clock; populations that follow their input with their own time constants and pass on
+only what changed; outputs as races to a threshold (the strongest drive crosses in about 1 / rate seconds, the rate
+taken from what the act is known to do; noise lets a weaker one win). The eye: nine places of the current frame,
+their centre-surround salience as drive, inhibition of return fading over a second, 30 ms blind in a saccade, the
+fixated half of the frame through the photo cortex. Hearing: the cochlea's rows every 10 ms through the eye's own
+layer developed on other videos' sound. A babbling mouth (habits, nothing linking it to the ear yet). One plastic
+link: sight and sound by Hebb's rule while both stream.
+**First run** (`experiments/stream_probe.py`, 3 Commons videos, 85 simulated seconds): 3.31 saccades a second,
+fixations median 290 ms (quartiles 250–340; people's are about 200–400 and more skewed); 0.54 of saccades away from
+the 50 ms after a new frame (chance 0.50: the eye moves by its own race, not on the world's clock); 2.21 sounds a
+second, 0.53 of them while the world was loud (chance 0.50: the mouth ignores the world, as built); CPU 6.5 s a
+simulated second on a crowded machine, most of it the sight–sound link updated every 10 ms. The rhythm's mean is
+set (the fixation rate); its spread and its independence from the frames are the mechanics. Nothing learned yet but
+the link. Next for it: the link updated at its own pace (cheaper), sound and sight driving the eye's race (a sound
+pulls the eye: the audio-visual orienting of the colliculus), the mouth linked to the ear (babbling heard), then the
+word cells as a population.
+
+**Two senses, seed 0, which sound** (`experiments/av_probe.py`; 1,399 videos with sound, a fifth held out whole;
+42,938 moments): the true second against another video's (chance 0.5):
+
+| hearing | sight → sound: Hebb / delta / least squares | sound → sight: Hebb / delta / least squares |
+|---|---|---|
+| as born (random kinds) | 0.611 / 0.530 / 0.586 | 0.626 / 0.534 / 0.600 |
+| developed (the eye's rule on sound) | 0.622 / 0.527 / 0.584 | 0.631 / 0.532 / 0.619 |
+| the cochlea's band means alone | 0.600 / 0.527 / 0.579 | 0.607 / 0.534 / 0.591 |
+
+Against the same video 5 s away: 0.50–0.51 everywhere (chance). **What I said before: Hebb about 0.70; delta within
+0.03 of Hebb; least squares at most 0.05 above; developed above born by 0.02.** Measured: Hebb 0.61–0.63, below; the
+delta rule far under Hebb (0.53: a step that falls with use, on 34,000 moments of two 4,096- and 1,024-number codes,
+hardly moves); least squares *under* Hebb (the relays decorrelate both codes, so Hebb is already close to regression,
+and regression overfits); developed hearing one point above born, born one point above the cochlea alone. So: sight and
+sound on Commons video share something real but small, Hebb's rule finds it best, and the hearing's development adds
+a little. One seed; seeds 1–2 queued; the word test of this seed still running.
