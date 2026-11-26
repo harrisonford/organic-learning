@@ -3686,3 +3686,22 @@ the imitation drive lasts as long as the hearing population's 50 ms, and a gestu
 often wins first. Next: the drive from a slower trace of what was heard (echoic memory lasts seconds; the copy route
 of organic/speech.py does this for text), and habits that come from what is heard (covert imitation), not from the
 mouth's own repetition. One seed.
+
+**Imitation, three seeds, and the echo** (`out/bench/babble_seeds.log` and the seed-0 runs above; 64 heard vowels a
+seed and voice, both voices pooled):
+
+| | imitation on | off |
+|---|---|---|
+| plain (the 50 ms hearing population): mean rank of the next sound among 32 (chance 16.5) | **13.1** | 16.3 |
+| plain: the next sound among the three nearest gestures (chance 0.09) | **0.18** | 0.09 |
+| with an echo (the last whole stretch heard, fading over 1 s): mean rank | 14.4 | 16.9 |
+| with the echo: among the three nearest | 0.14 | 0.05 |
+
+The map, every seed: 27–30 of 32 gestures recognised by their sound in the child's own voice, 10–13 in an adult's
+(their picks at rank 2.4–3.3: neighbours). **Imitation is real on every seed and in both voices** (the next sound
+three ranks nearer the heard vowel, twice as often among the three nearest), and smaller than seed 0 alone said (0.22
+was the lucky end). **The echo adds nothing.** Two echoes tried: a fading average (the old sound mixes with the new:
+imitation at chance) and the last whole stretch (as good as the plain version or a little worse). The echo stays
+behind its switch, off. What limits imitation is then not how long the heard sound lasts; the next guesses are the
+race (a gesture already half-way to threshold wins first) and the map across voices (the adult's vowels land on
+neighbours). Habits from what is heard (`heard_habit`) are built and not yet tried.

@@ -102,10 +102,12 @@ class StreamBrain:
         self.saying, self.said_codes = None, []  # the gesture being said and the hearing codes while it sounds
         self.amap, self.amap_n = None, np.zeros(motor_units)  # what each gesture sounds like (Hebb: the running mean of the hearing while it is said)
         self.imitate = tract is not None  # what is heard drives the gestures whose learned sound matches it (covert imitation)
-        # an echo of what was heard, fading over echo_tau seconds (echoic memory lasts a second or more; to verify: Cowan
-        # 1984), not updated while the mouth sounds (speaking-induced suppression: Houde et al. 2002, to verify); with it,
-        # imitation reads the echo, not the 50 ms hearing population. None: as before.
-        self.echo_tau, self.echo = echo_tau, None
+        # an echo of what was heard (echoic memory lasts a second or more; to verify: Cowan 1984): the last stretch of
+        # sound, from its onset to the silence after it, held as a whole and fading over echo_tau seconds until the next
+        # stretch replaces it (a fading average mixed each sound with the one before: tried 2026-11-26, imitation fell to
+        # chance). Not taken in while the mouth sounds (speaking-induced suppression: Houde et al. 2002, to verify).
+        # Imitation reads the stretch being heard, or else the echo. None: the 50 ms hearing population, as before.
+        self.echo_tau, self.echo, self.echo_strength, self.stretch, self.stretch_n = echo_tau, None, 0.0, None, 0
         self.heard_habit = heard_habit  # habits from what is heard: a heard sound strengthens the habits of the gestures it matches
         self.assoc = None  # sight <-> sound, Hebb's rule while both stream (experiments/av_probe.py)
         self.n_assoc = 0
@@ -183,19 +185,28 @@ class StreamBrain:
                 self.amap[u0] += (np.mean(self.said_codes, 0) - self.amap[u0]) / self.amap_n[u0]
                 self.saying, self.said_codes = None, []
         drive = self.habit / self.habit.max()
+        strength = 1.0
         if self.echo_tau and self.sound is not None:
-            if self.echo is None:
-                self.echo = Leaky(len(self.sound.x), tau=self.echo_tau)
-            if self.saying is None:  # suppressed while the mouth sounds
-                self.echo.step(self.sound.x)
+            self.echo_strength *= np.exp(-DT / self.echo_tau)
+            loud = sound_row is not None and float(np.sum(sound_row)) > 1e-3
+            if loud and self.saying is None:  # a stretch of sound goes on (not one's own: suppressed while saying)
+                self.stretch = self.sound.x.copy() if self.stretch is None else self.stretch + self.sound.x
+                self.stretch_n += 1
+            elif self.stretch is not None and not loud:  # it ended: it becomes the echo, whole
+                self.echo, self.echo_strength, self.stretch, self.stretch_n = self.stretch / self.stretch_n, 1.0, None, 0
         if self.imitate and self.amap is not None and self.sound is not None and self.saying is None:
-            src = self.echo.x if self.echo is not None else self.sound.x
+            if self.echo_tau:
+                src = self.stretch / self.stretch_n if self.stretch is not None else self.echo
+                strength = 1.0 if self.stretch is not None else self.echo_strength
+            else:
+                src = self.sound.x
+            src = src if src is not None else 0 * self.sound.x
             heard_now = src / (np.linalg.norm(src) + 1e-8)
             c = self.amap @ heard_now / (np.linalg.norm(self.amap, axis=1) + 1e-8)
             known = self.amap_n > 0
             m = np.maximum(c - c[known].mean(), 0) * known  # above the average gesture, as the filters answer above the average kind
             if m.max() > 0:
-                drive = drive + m / m.max()  # each source taken relative to its own strongest, then together
+                drive = drive + strength * m / m.max()  # each source taken relative to its own strongest, then together
                 if self.heard_habit and np.linalg.norm(self.sound.x) > 1e-6:
                     self.habit += self.heard_habit * m / m.max()  # covert imitation leaves habits
         u = self.mouth.step(drive) if self.saying is None else None
