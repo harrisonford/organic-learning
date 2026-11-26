@@ -1163,7 +1163,7 @@ Still Kris's own:
   Next: as before (photo streams and tuning; sailn seed 2; softbase2; photo daemon after midnight).
 - 2026-11-25 22:40 Health unchanged; 3.8 GB free. **SAILnet native, three seeds:** 0.643 ± 0.008 / 0.657 ± 0.005 at unit length
   (as born 0.626 / 0.632; hard rule 0.649 / 0.666): a fully local rule at the hard rule's level → a paragraph
-  in the paper (22 pages built). `organic-sailn2` ended. **softbase2 seed 0:** backprop started from the soft
+  in the paper (21 pages built). `organic-sailn2` ended. **softbase2 seed 0:** backprop started from the soft
   filters 0.701 with the relay (frozen 0.737, word cells 0.729, from random 0.597) and 0.606 without. Photo
   stream as born: 0.439 after 50,000. `organic-commons` at 74 pictures.
   Next: photo streams ph_r's second-order rows and ph_d; the tuning; softbase2 seeds 1–2 (about 01:30) → the
