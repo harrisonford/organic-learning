@@ -60,6 +60,8 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-core50-fetch`** (started 08:20; ~/datasets/core50/fetch.sh; curl limited to 2 MB/s, resumable): the video
+  set for queue E 31; ends with `zip` in ~/datasets/core50/fetch.done.
 - **`organic-relaymore1`** (out/tmp/relay_more_queue.sh; queued 07:55, waits for photos2; MemoryMax 1800M; gated;
   about 1.5 hours): the relay settled on 20,000 photographs for ph_d and ph_r of seed 0 → relay_more_{ph_d,ph_r}_s0.log,
   stream_photos_{ph_dm20k,ph_rm20k}_s0.log. The hypothesis and what I said before: VISION.md 08:00. (Smoke test on
@@ -226,6 +228,15 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     toddler's head-camera recordings; (b) the clean probe: the same frames developed in their order and shuffled
     (time is the only difference), read as the stream and as tolerance (the same object in another session);
     (c) only then the lives. Words: verbs and events have no still picture; video is where they could be grounded.
+    **Kris, 2026-11-26 08:20: "yes lets include video then in the future ai can be used this model with streaming of
+    data".** (a) done: **CORe50** (Lomonaco & Maltoni 2017; CC BY 4.0, checked in its repository and on its page):
+    50 handheld objects in 10 categories, 11 sessions (8 indoor, 3 outdoor) with different backgrounds and light, a
+    15-second video of each object in each session from the operator's eyes, 164,866 frames cropped to 128 × 128;
+    5.9 GB, fetching slowly into ~/datasets/core50 (`organic-core50-fetch`, resumable, a few hours). Not taken:
+    Toybox (110 GB, no licence found); SAYCam and BabyView (a toddler's head camera; Databrary's agreement and an
+    institution's ethics approval: possible through the science partners, Kris's call). Wikimedia Commons video
+    later (ffmpeg is installed). Next for (b): frames to 64 × 64 in order; the probe: develop on the sessions'
+    frames in order and shuffled (the trace term and our rule), read by the stream on held-out sessions.
 
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
