@@ -383,3 +383,32 @@ Above blind answering, as the table of 2026-11-24, with the plateau lives (stric
    world to the last file; the world's text and photo questions grew between them.
 The ramp lives (`ramp_s0..2`: in full up to first words, half in pages, strict after) started at 12:20 on
 2026-11-25 and are read against both at the same ages.
+
+## 2026-11-26: the ramp lives, read (ramp_s0..2: a good try counts in full up to first words, half in pages, not after; 120,000 moments each)
+
+`experiments/reward_table.py` (it reproduces the tables above from the lives' records); above blind answering, the
+kind lives (a good try in full all life long) in brackets:
+
+| | ramp_s0 | ramp_s1 | ramp_s2 |
+|---|---|---|---|
+| moments in first words | 45,000 (45,000) | 55,000 (55,000) | 40,000 (45,000) |
+| first words, last test in the stage | 0.45 (0.46) | 0.45 (0.45) | 0.49 (0.50) |
+| moments in pages | 30,000 (35,000) | 30,000 (50,000) | 30,000 (35,000) |
+| pages, last test in the stage | 0.29 (0.31) | 0.32 (0.32) | 0.28 (0.33) |
+| moments in preschool | 35,000 (30,000) | 25,000 (–) | 40,000 (30,000) |
+| preschool at the end | 0.04 (0.04) | 0.02 (0.00) | 0.02 (0.04) |
+| first words at the end | 0.36 (0.37) | 0.39 (0.44) | 0.33 (0.31) |
+| pages at the end | 0.26 (0.30) | 0.20 (0.32) | 0.19 (0.21) |
+
+The plateau lives (strict all life long) for the same rows: 70,000 / 45,000 / 50,000 moments in first words, leaving
+at 0.53 / 0.49 / 0.49; pages left at 0.33 / 0.31 / 0.36; preschool 0.00–0.02; first words at the end 0.42 / 0.39 /
+0.39, pages 0.27 / 0.25 / 0.30.
+1. **Three schedules of reward, nine lives, one picture.** Kind all along, strict all along, or kind early and strict
+   later: how long first words takes, where it levels off, where pages levels off, and preschool's wall are all
+   inside the spread between seeds. Kris's question of 2026-11-23 (how strict the reward should be, as a matter of
+   upbringing) has, on this learner and this world, the answer that it does not matter yet.
+2. **A hint, not a finding:** pages at the end are lower in the ramp lives (0.19–0.26) than in the kind (0.21–0.32)
+   and plateau lives (0.25–0.30); the ramp lives spent the most moments in preschool under a strict reward. With
+   three seeds a life and this spread, it is the thing to watch in the next lives, not a result.
+3. **Preschool stays unlearned under every schedule** (0.02–0.04): the wall is the stage's (queue 8: its test is
+   mostly answerable blind and its sources need rebuilding).

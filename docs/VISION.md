@@ -3705,3 +3705,11 @@ imitation at chance) and the last whole stretch (as good as the plain version or
 behind its switch, off. What limits imitation is then not how long the heard sound lasts; the next guesses are the
 race (a gesture already half-way to threshold wins first) and the map across voices (the adult's vowels land on
 neighbours). Habits from what is heard (`heard_habit`) are built and not yet tried.
+
+**Two senses, seed 1** (`av_probe_s1.log`; another fifth of the videos held out, another hearing development): the
+true sound against another video's, Hebb, sight → sound / sound → sight: as born 0.602 / 0.606, developed 0.607 /
+0.608, the cochlea alone 0.582 / 0.582 (seed 0: 0.611 / 0.626, 0.622 / 0.631, 0.600 / 0.607); the same video 5 s away
+at chance again. The word test (19 words, 128 held-out videos, chance 0.053): sight 0.186, hearing developed 0.136, as
+born 0.117, cochlea 0.101, **sight and hearing together 0.206**, the sound sight predicts 0.155. **Two seeds now:**
+both senses together name a video better than sight alone (+0.025, +0.020), and on both the hearing's own development
+is worth something (word test +0.010, +0.019 over hearing as born; which sound +0.011, +0.004). Seed 2 running.
