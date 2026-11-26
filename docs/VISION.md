@@ -3658,3 +3658,31 @@ costs the purest first-order reader two points on every seed, where ridge and LD
 nothing. Written into the paper's photo section with the two explanations ruled out (the relay's sample; its floor).
 What follows for the learner (not done yet; each needs its organic check): a reader of second moments that is local,
 or a delta rule that keeps learning along the faint directions longer.
+
+### 2026-11-26 17:50, the stream brain babbles with a vocal tract and begins to imitate
+
+`organic/vocal.py`: a source-filter vocal tract (glottal pulses at the voice's pitch; F1, F2 and a fixed F3 as
+two-pole resonators in cascade, as in Klatt's 1980 synthesizer, much simplified; the lips' radiation). Checked: /i/
+above /u/ at 2,265 Hz, /u/ above /i/ at 790–841 Hz (their second formants), 0.4 ms a vowel. In the stream brain
+(`organic/stream.py`, switches `tract`, `habit_step`): each of 32 motor units is a gesture, a random place in the vowel
+space; when the mouth's race fires, the gesture's sound joins what the ear hears; Hebb's rule keeps, for each gesture,
+the mean hearing code while it sounded (the auditory–motor map; DIVA: Guenther, Ghosh & Tourville 2006); what is heard
+drives the gestures whose learned sound matches it above the average gesture (covert imitation). Hearing: the eye's
+rule on speech (SpokenCOCO), 8 band stretches. `experiments/babble_probe.py`, 300 s of babbling in silence (about two a
+second, all 32 gestures heard), then 64 vowels at random places of the vowel space:
+
+| | same voice (280 Hz, the child's) | another voice (140 Hz, an adult's) |
+|---|---|---|
+| the map, given a vowel at each gesture's place: picks that gesture | 29 of 32 (rank 1.1) | 13 of 32 (rank 2.4: its neighbours) |
+| the next sound made, among the three gestures nearest the heard vowel | **0.22** (imitation off 0.06; chance 0.09) | **0.22** (off 0.06) |
+| its rank among 32 by nearness | 14.1 (off 16.7; chance 16.5) | 11.7 (off 16.7) |
+
+Two failures on the way, both mine: habit that grows with every gesture made let 14 of 32 gestures take all the
+babbling (so the map covered half the space); and imitation taken relative to the best match alone was flat, since
+every gesture's learned sound is much alike: taken above the average gesture (the filters' own response) it works.
+**Reading:** babbling teaches the mouth what its gestures sound like, well within its own voice and partly across
+another; a heard vowel triples the chance that the next sound is a near imitation. The bottleneck is now the race:
+the imitation drive lasts as long as the hearing population's 50 ms, and a gesture already half-way to threshold
+often wins first. Next: the drive from a slower trace of what was heard (echoic memory lasts seconds; the copy route
+of organic/speech.py does this for text), and habits that come from what is heard (covert imitation), not from the
+mouth's own repetition. One seed.

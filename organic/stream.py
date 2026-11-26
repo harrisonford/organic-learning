@@ -78,7 +78,7 @@ def places(img, side=None):
 
 
 class StreamBrain:
-    def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0):
+    def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0):
         self.rng = np.random.default_rng(seed)
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
@@ -90,6 +90,18 @@ class StreamBrain:
         self.sound = None  # the hearing population, sized at the first sound
         self.mouth = Race(motor_units, babble_rate, 0.5, self.rng)  # spontaneous babble, a few a second
         self.habit = np.ones(motor_units, np.float32)
+        self.habit_step = habit_step  # how much a gesture made becomes more likely (0: babbling explores evenly)
+        self.bands = bands  # stretches of the bands the hearing code keeps apart
+        # a vocal tract (organic/vocal.py): each motor unit a gesture, a place in the vowel space; what it sounds like is
+        # heard, not known. None: the mouth makes symbols, as in the first version.
+        self.tract, self.gestures, self.own = tract, None, []
+        if tract is not None:
+            f1 = self.rng.uniform(250, 850, motor_units)
+            f2 = np.maximum(self.rng.uniform(700, 2500, motor_units), f1 + 300)
+            self.gestures = np.stack([f1, f2], 1)
+        self.saying, self.said_codes = None, []  # the gesture being said and the hearing codes while it sounds
+        self.amap, self.amap_n = None, np.zeros(motor_units)  # what each gesture sounds like (Hebb: the running mean of the hearing while it is said)
+        self.imitate = tract is not None  # what is heard drives the gestures whose learned sound matches it (covert imitation)
         self.assoc = None  # sight <-> sound, Hebb's rule while both stream (experiments/av_probe.py)
         self.n_assoc = 0
         self.log = []
@@ -110,8 +122,9 @@ class StreamBrain:
         if len(self.sound_rows) < 8:
             return None
         r = self.hearing.respond(np.stack(self.sound_rows)[..., None], pooled=False)  # (1, bands, kinds)
-        b = r.shape[1] // 4
-        v = r[0, : 4 * b].reshape(4, b, -1).mean(axis=1).ravel()
+        n = self.bands
+        b = r.shape[1] // n
+        v = r[0, : n * b].reshape(n, b, -1).mean(axis=1).ravel()
         return v / (np.linalg.norm(v) + 1e-8)
 
     def step(self, frame=None, sound_row=None):
@@ -138,6 +151,9 @@ class StreamBrain:
             moved = self.sight.step(self.view if self.blind <= 0 else 0 * self.view)
         else:
             moved = False
+        if self.own:  # the mouth's own sound reaches the ear with the world's (energies add; the cochlea compresses by 0.3)
+            own = self.own.pop(0)
+            sound_row = own if sound_row is None else (np.asarray(sound_row, np.float32) ** (1 / 0.3) + own ** (1 / 0.3)) ** 0.3
         if sound_row is not None:
             h = self._hear(sound_row)
             if h is not None:
@@ -152,10 +168,32 @@ class StreamBrain:
                     self.steps_since_link = 0
                     self.n_assoc += 1
                     self.assoc += (np.outer(self.sound.x, self.sight.x) - self.assoc) / self.n_assoc
-        u = self.mouth.step(self.habit)
+        if self.saying is not None and self.sound is not None:  # while a gesture sounds, what is heard is kept for its map
+            self.said_codes.append(self.sound.x.copy())
+            if not self.own:  # the gesture has ended: Hebb's rule, the running mean of what was heard while it sounded
+                u0 = self.saying
+                if self.amap is None:
+                    self.amap = np.zeros((len(self.habit), len(self.sound.x)), np.float32)
+                self.amap_n[u0] += 1
+                self.amap[u0] += (np.mean(self.said_codes, 0) - self.amap[u0]) / self.amap_n[u0]
+                self.saying, self.said_codes = None, []
+        drive = self.habit / self.habit.max()
+        if self.imitate and self.amap is not None and self.sound is not None and self.saying is None:
+            heard_now = self.sound.x / (np.linalg.norm(self.sound.x) + 1e-8)
+            c = self.amap @ heard_now / (np.linalg.norm(self.amap, axis=1) + 1e-8)
+            known = self.amap_n > 0
+            m = np.maximum(c - c[known].mean(), 0) * known  # above the average gesture, as the filters answer above the average kind
+            if m.max() > 0:
+                drive = drive + m / m.max()  # each source taken relative to its own strongest, then together
+        u = self.mouth.step(drive) if self.saying is None else None
         if u is not None:
-            self.habit[u] += 1  # a gesture made becomes a little more likely (habit)
+            self.habit[u] += self.habit_step  # a gesture made becomes a little more likely (habit)
             events.append(("sound", u))
+            if self.tract is not None:
+                from .cochlea import Cochlea
+                self._ear = getattr(self, "_ear", None) or Cochlea()
+                self.own = list(self._ear.hear(self.tract.say(*self.gestures[u], ms=200)))
+                self.saying, self.said_codes = u, []
         for e in events:
             self.log.append((round(self.t, 3),) + e)
         return events
