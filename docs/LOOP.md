@@ -1410,4 +1410,12 @@ Still Kris's own:
   queued (`organic-gaze-lives`). **CORe50 frames done** (164,866, checked by eye) → `organic-core50-1` queued behind
   ncm1 with a smoke test first. Shared memory gate for new queues (out/tmp/gate.sh).
   Next: av_probe seed 0's readers; ncm seeds; bp3; CORe50 probe; ramp lives' end tonight → gaze and tag lives.
+- 2026-11-26 15:50 Health: all healthy. **Kris: neurons, not turns** → docs/ASYNC.md rewritten around a stream brain on a
+  10 ms clock; **`organic/stream.py` runs** (eye race 3.3 saccades/s, fixations median 290 ms, own rhythm; mouth
+  babbling concurrently; 6.5 CPU-s per simulated second). **Two senses, seed 0:** Hebb 0.61–0.63 picks the true sound
+  (chance 0.5), above delta and least squares; developed hearing +1 point over born (VISION.md 15:45). **Sound ear:**
+  first design failed its smoke test; three levels (rhythm syllables, eye-rule kinds, byte-ear words) running on the
+  val part (10,000 of 20,028 heard at 15:45). docs/ASYNC.md design. CORe50 probe queued behind ncm1.
+  Next: av seed 0's word test, then seeds 1–2; sound units' first reading; ncm seeds; bp3; ramp lives' end (~19:00)
+  → gaze and tag lives; stream brain: cheaper link, sound pulling the eye, babbling heard.
 
