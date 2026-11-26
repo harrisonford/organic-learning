@@ -51,7 +51,7 @@ if __name__ == "__main__":
             if w is not None and getattr(w, "born", None) is not None:  # turnover: the word cells carry the moment they were born
                 n, now = len(w.units), int(w.moments)
                 born = np.asarray(w.born[:n], np.float64)
-                before = rows[-2]["word_cells"] if len(rows) > 1 and "word_cells" in rows[-2] else {"n": 0, "moments": 0}
+                before = rows[-2]["word_cells"] if len(rows) > 1 and "word_cells" in rows[-2] else {"n": 0, "moments": -1}
                 new = int((born > before["moments"]).sum())
                 rows[-1]["word_cells"] = {"n": n, "moments": now, "born_since": new, "forgotten_since": int(before["n"] + new - n),
                                           "median_age": int(np.median(now - born)), "cues": len(getattr(w, "cues", []))}

@@ -291,6 +291,14 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     prunes later; ours grows its synapses, not its cells, and switches a whole organ on at once. Owed: per-organ sizes and the turnover
     (cells forgotten and born per 5,000 moments) in the report, read from checkpoints or added to the records
     behind a switch; then the organic check of a capacity that grows with age.
+    **Turnover, six lives (2026-11-26 12:40; census of plat_s0..2, kind_s0..2 from the cells' birth moments):**
+    between the end of babbling and the end of echo (5,000 moments) about 1,000 of the ~1,900 word cells are born and
+    as many forgotten, half the population; from echo to the end of first words (45,000–70,000 moments) about 1,050
+    more, and in pages about 500–650 in 30,000–40,000 moments: turnover falls more than tenfold after echo and then
+    holds at about 1.5 cells per 100 moments. The median cell's age goes from 58% of the cells' own time at echo to
+    87–89% after first words: a stable core of old cells and a fringe that churns. The same on all six lives. The
+    parallel to check: dendritic spines turn over fast in the young and are mostly stable in the adult cortex
+    (Grutzendler, Kasthuri & Gan 2002; Holtmaat et al. 2005; to verify). In docs/GROWTH.md, a table per life.
 
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +

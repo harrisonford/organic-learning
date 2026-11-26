@@ -59,6 +59,13 @@ def unit(X):
 heard = {e["page"]: e for e in map(json.loads, open(os.path.join(DIR, "audio.jsonl"))) if e["sound"]}
 videos = [v for v in map(json.loads, open(os.path.join(DIR, "videos.jsonl")))
           if v["page"] in heard and not NOT_REAL.search(v["title"]) and v["frames"] >= 30]
+PAGES = "out/bench/av_pages.json"  # the videos of the first full run, so that every seed hears the same material
+if not MAXV:
+    if os.path.exists(PAGES):
+        keep = set(json.load(open(PAGES)))
+        videos = [v for v in videos if v["page"] in keep]
+    else:
+        json.dump([v["page"] for v in videos], open(PAGES, "w"))
 rng = np.random.default_rng(SEED)
 videos = [videos[i] for i in rng.permutation(len(videos))][: MAXV or None]
 held = set(range(int(len(videos) * (1 - HELD)), len(videos)))
@@ -91,37 +98,48 @@ def cochlea_code(x):
     return x[:, :, 0].reshape(2, SPAN // 2, 64).mean(axis=1).ravel()
 
 
-train_idx = np.nonzero(~test)[0]
-born = Layer2(1, KINDS, WINDOW, 1, seed=SEED)
-born.settle((clip(moments[i]) for i in rng.choice(train_idx, min(800, len(train_idx)), replace=False)), rng)
-developed = pickle.loads(pickle.dumps(born))
-N = int(os.environ.get("DEV", 16000))  # seconds of sound the hearing develops on (the eye's 16,000 pictures)
-for n in range(N):
-    developed.learn(clip(moments[rng.choice(train_idx)]), rng, rate=0.05 * (1 - n / N) + 0.005)
-wins = developed.wins[0]
-say(f"hearing developed on {N} seconds of the training videos' sound; wins min/max {int(wins.min())}/{int(wins.max())}")
+CODES = f"out/bench/av_codes_s{SEED}{'_' + str(MAXV) if MAXV else ''}_{EVERY}.npz"  # the coded moments, kept so the readers can run again
+if os.path.exists(CODES):
+    z = np.load(CODES)
+    H, V = {k: z[k] for k in ("born", "developed", "cochlea")}, z["V"]
+    say(f"codes read from {CODES}")
+else:
+    train_idx = np.nonzero(~test)[0]
+    born = Layer2(1, KINDS, WINDOW, 1, seed=SEED)
+    born.settle((clip(moments[i]) for i in rng.choice(train_idx, min(800, len(train_idx)), replace=False)), rng)
+    developed = pickle.loads(pickle.dumps(born))
+    N = int(os.environ.get("DEV", 16000))  # seconds of sound the hearing develops on (the eye's 16,000 pictures)
+    for n in range(N):
+        developed.learn(clip(moments[rng.choice(train_idx)]), rng, rate=0.05 * (1 - n / N) + 0.005)
+    wins = developed.wins[0]
+    say(f"hearing developed on {N} seconds of the training videos' sound; wins min/max {int(wins.min())}/{int(wins.max())}")
 
-H = {"born": np.zeros((len(moments), 8 * KINDS), np.float32), "developed": np.zeros((len(moments), 8 * KINDS), np.float32),
-     "cochlea": np.zeros((len(moments), 128), np.float32)}
-for j, m in enumerate(moments):
-    x = clip(m)
-    H["born"][j], H["developed"][j], H["cochlea"][j] = hearing_code(born, x), hearing_code(developed, x), cochlea_code(x)
-for k in H:
-    U = unit(H[k])
-    relay = Relay(SHRINK).settle(U[~test])
-    H[k] = unit((U - relay.mu) @ relay.Z)
-say("hearing coded")
+    H = {"born": np.zeros((len(moments), 8 * KINDS), np.float32), "developed": np.zeros((len(moments), 8 * KINDS), np.float32),
+         "cochlea": np.zeros((len(moments), 128), np.float32)}
+    for j, m in enumerate(moments):
+        x = clip(m)
+        H["born"][j], H["developed"][j], H["cochlea"][j] = hearing_code(born, x), hearing_code(developed, x), cochlea_code(x)
+    for k in H:
+        H[k] = unit(H[k])
+        relay = Relay(SHRINK).settle(H[k][~test])
+        for c in range(0, len(H[k]), 4096):  # in place, a block at a time (memory)
+            H[k][c: c + 4096] = unit((H[k][c: c + 4096] - relay.mu) @ relay.Z)
+    say("hearing coded")
 
-# ---- sight: the photo benchmark's developed cortex and its relay ----
-cortex = pickle.load(open(f"out/bench/cortex_{os.environ.get('CORTEX', 'ph_d')}_s{SEED}.pkl", "rb"))
-relay, cortex.relay = cortex.relay, None
-V = np.zeros((len(moments), cortex.layers[0].kinds * 16), np.float32)
-for j, m in enumerate(moments):
-    V[j] = cortex.whole(np.asarray(frames[m[2]], np.float32) / 255, 4)
-V = unit((V - relay.mu) @ relay.Z)
-say(f"sight coded ({V.shape[1]} numbers)")
+    # ---- sight: the photo benchmark's developed cortex and its relay ----
+    cortex = pickle.load(open(f"out/bench/cortex_{os.environ.get('CORTEX', 'ph_d')}_s{SEED}.pkl", "rb"))
+    relay, cortex.relay = cortex.relay, None
+    V = np.zeros((len(moments), cortex.layers[0].kinds * 16), np.float32)
+    for j, m in enumerate(moments):
+        V[j] = cortex.whole(np.asarray(frames[m[2]], np.float32) / 255, 4)
+    for c in range(0, len(V), 4096):
+        V[c: c + 4096] = unit((V[c: c + 4096] - relay.mu) @ relay.Z)
+    del cortex, relay
+    say(f"sight coded ({V.shape[1]} numbers)")
+    np.savez(CODES, V=V, **H)
 
 # ---- teaching, and the tests ----
+rng = np.random.default_rng(SEED + 100)  # the order and the negatives, the same whether the codes were made or read
 order = np.array([i for k in rng.permutation(len(videos)) if k not in held for i in np.nonzero(moments[:, 0] == k)[0]])
 te = np.nonzero(test)[0]
 other = np.array([rng.choice(te[moments[te, 0] != moments[i, 0]]) for i in te])
@@ -134,15 +152,23 @@ later = np.array(later)
 
 def readers(X, Y):
     """Maps predicting Y from X, learned on the training moments in order: hebb, delta, ridge (three strengths)."""
-    Xt, Yt = X[order], Y[order]
-    out = {"hebb": Yt.T @ Xt / len(order)}
+    YX = np.zeros((Y.shape[1], X.shape[1]), np.float32)
+    G = np.zeros((X.shape[1], X.shape[1]), np.float32)
+    for c in range(0, len(order), 2048):  # a block at a time, no copy of the whole training set (memory)
+        Xc, Yc = X[order[c: c + 2048]], Y[order[c: c + 2048]]
+        YX += Yc.T @ Xc
+        G += Xc.T @ Xc
+    out = {"hebb": YX / len(order)}
     W = np.zeros((Y.shape[1], X.shape[1]), np.float32)
-    for n, (x, y) in enumerate(zip(Xt, Yt)):
+    for n, i in enumerate(order):
+        x, y = X[i], Y[i]
         W += (1.0 / (1 + n / 5)) * np.outer(y - W @ x, x)
     out["delta"] = W
-    G = Xt.T @ Xt
+    before = 0.0
     for lam in (0.01, 0.1, 1.0):
-        out[f"ridge {lam:g}"] = np.linalg.solve(G + lam * np.eye(len(G), dtype=np.float32), Xt.T @ Yt).T
+        G[np.diag_indices_from(G)] += lam - before  # G + lam I, raised in place
+        before = lam
+        out[f"ridge {lam:g}"] = np.linalg.solve(G, YX.T).T
     return out
 
 
@@ -181,6 +207,9 @@ def what(X):
 
 arms = {"sight": V, "hearing (developed)": H["developed"], "hearing (born)": H["born"], "hearing (cochlea)": H["cochlea"],
         "sight + hearing": unit(np.hstack([V, H["developed"]])), "the sound sight predicts (hebb, developed)": H["developed from sight"]}
+if not words:
+    say("what: no word has videos on both sides of the split")
+    sys.exit(0)
 held_videos = {w: len({k for k in moments[mask_te & (word == w), 0]}) for w in words}
 say(f"what: {len(words)} words with held-out videos ({sum(held_videos.values())} videos, {mask_te.sum()} moments; chance {1 / len(words):.3f}): "
     + ", ".join(f"{w} {n}" for w, n in held_videos.items()))

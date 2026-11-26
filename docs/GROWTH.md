@@ -42,6 +42,15 @@ Millions of numbers each organ holds, at the checkpoint that ends each stage (pl
 | first words | 80,000 | 123.18 | 57.58 | 45.52 | 16.81 | 0.15 | 243.2 |
 | two words, pages | 110,000 | 122.99 | 60.35 | 52.05 | 16.81 | 0.15 | 252.3 |
 
+Word cells between the stage checkpoints (plat_s0): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age as a share of the word cells' own clock (they count their own moments, about twice the life's):
+
+| stage | moments | word cells | born since | forgotten since | median age (share of the cells' time) | cues |
+|---|---|---|---|---|---|---|
+| babble | 5,000 | 1,871 | 1,871 | 0 | 66% | 3,706 |
+| echo | 10,000 | 1,969 | 1,068 | 970 | 58% | 7,120 |
+| first words | 80,000 | 1,897 | 1,049 | 1,121 | 87% | 8,186 |
+| two words, pages | 110,000 | 1,883 | 477 | 491 | 89% | 7,608 |
+
 ### plat_s1
 
 | moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
@@ -72,6 +81,24 @@ be  | baby, lion, bus, elephant |
 | 115,000 | preschool | 2.83 | 1941 | 7826 | 1957 | 338 | 2000 | 0.39 | 0.23 | 0.02 | those you ay | girlbaby, lion, bus, horse |
 | 120,000 | preschool | 2.91 | 1808 | 7601 | 1900 | 338 | 2000 | 0.39 | 0.25 | 0.02 | we | baby, lion, bus, elephantbear |
 
+Millions of numbers each organ holds, at the checkpoint that ends each stage (plat_s1; orch: the orchestrator, the gate and its contexts):
+
+| stage | moments | orch | words | ear | cortex | mouth | all |
+|---|---|---|---|---|---|---|---|
+| babble | 5,000 |  | 32.57 | 15.97 | 16.81 |  | 65.3 |
+| echo | 10,000 | 117.16 | 40.61 | 21.04 | 16.81 |  | 195.6 |
+| first words | 55,000 | 114.87 | 57.57 | 40.22 | 16.81 | 0.15 | 229.6 |
+| two words, pages | 90,000 | 122.06 | 60.55 | 49.02 | 16.81 | 0.15 | 248.6 |
+
+Word cells between the stage checkpoints (plat_s1): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age as a share of the word cells' own clock (they count their own moments, about twice the life's):
+
+| stage | moments | word cells | born since | forgotten since | median age (share of the cells' time) | cues |
+|---|---|---|---|---|---|---|
+| babble | 5,000 | 1,901 | 1,901 | 0 | 67% | 3,784 |
+| echo | 10,000 | 1,986 | 1,060 | 975 | 62% | 7,230 |
+| first words | 55,000 | 1,967 | 1,027 | 1,046 | 84% | 8,158 |
+| two words, pages | 90,000 | 1,951 | 637 | 653 | 88% | 7,610 |
+
 ### plat_s2
 
 | moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
@@ -100,6 +127,24 @@ be  | baby, lion, bus, elephant |
 | 110,000 | preschool | 2.67 | 1988 | 7419 | 1855 | 338 | 2000 | 0.40 | 0.28 | 0.00 | isicycled colee the'baththan | baby, lion, bus, elephant |
 | 115,000 | preschool | 2.82 | 1922 | 8090 | 1884 | 338 | 2000 | 0.44 | 0.30 | 0.01 | shoemeow s cup! | baby, lion, bus, train |
 | 120,000 | preschool | 2.9 | 1987 | 7920 | 1937 | 338 | 2000 | 0.39 | 0.30 | 0.02 | bookbathis? | gggggggggggggggg, lion, bus, couch |
+
+Millions of numbers each organ holds, at the checkpoint that ends each stage (plat_s2; orch: the orchestrator, the gate and its contexts):
+
+| stage | moments | orch | words | ear | cortex | mouth | all |
+|---|---|---|---|---|---|---|---|
+| babble | 5,000 |  | 32.59 | 16.31 | 16.81 |  | 65.7 |
+| echo | 10,000 | 120.64 | 40.62 | 22.64 | 16.81 |  | 200.7 |
+| first words | 60,000 | 122.56 | 57.68 | 42.01 | 16.81 | 0.15 | 239.2 |
+| two words, pages | 100,000 | 118.09 | 60.3 | 51.19 | 16.81 | 0.15 | 246.5 |
+
+Word cells between the stage checkpoints (plat_s2): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age as a share of the word cells' own clock (they count their own moments, about twice the life's):
+
+| stage | moments | word cells | born since | forgotten since | median age (share of the cells' time) | cues |
+|---|---|---|---|---|---|---|
+| babble | 5,000 | 1,802 | 1,802 | 0 | 67% | 3,629 |
+| echo | 10,000 | 1,841 | 948 | 909 | 64% | 7,185 |
+| first words | 60,000 | 1,980 | 1,119 | 980 | 82% | 7,906 |
+| two words, pages | 100,000 | 1,963 | 662 | 679 | 84% | 7,898 |
 
 ### kind_s0
 
@@ -130,6 +175,26 @@ be  | baby, lion, bus, elephant |
 | 115,000 | preschool | 2.52 | 1925 | 8054 | 1985 | 338 | 2000 | 0.41 | 0.25 | 0.03 | the | baby, lion, bus, houch |
 | 120,000 | preschool | 2.48 | 1969 | 7936 | 1936 | 338 | 2000 | 0.37 | 0.30 | 0.04 | m bananapeyeshorsbed weetime | baby, lion, bus, couch |
 
+Millions of numbers each organ holds, at the checkpoint that ends each stage (kind_s0; orch: the orchestrator, the gate and its contexts):
+
+| stage | moments | orch | words | ear | cortex | mouth | all |
+|---|---|---|---|---|---|---|---|
+| babble | 5,000 |  | 32.59 | 16.19 | 16.81 |  | 65.6 |
+| echo | 10,000 | 116.6 | 40.61 | 21.68 | 16.81 |  | 195.7 |
+| first words | 55,000 | 114.18 | 57.56 | 39.64 | 16.81 | 0.15 | 228.3 |
+| two words, pages | 90,000 | 115.49 | 60.39 | 48.43 | 16.81 | 0.15 | 241.3 |
+| preschool | 120,000 | 120.14 | 58.38 | 60.01 | 16.81 | 0.15 | 255.5 |
+
+Word cells between the stage checkpoints (kind_s0): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age as a share of the word cells' own clock (they count their own moments, about twice the life's):
+
+| stage | moments | word cells | born since | forgotten since | median age (share of the cells' time) | cues |
+|---|---|---|---|---|---|---|
+| babble | 5,000 | 1,895 | 1,895 | 0 | 68% | 3,711 |
+| echo | 10,000 | 1,979 | 1,068 | 984 | 58% | 7,105 |
+| first words | 55,000 | 1,915 | 1,033 | 1,097 | 83% | 8,035 |
+| two words, pages | 90,000 | 1,893 | 600 | 622 | 85% | 7,674 |
+| preschool | 120,000 | 1,969 | 512 | 436 | 82% | 7,936 |
+
 ### kind_s1
 
 | moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
@@ -158,6 +223,24 @@ be  | baby, lion, bus, elephant |
 | 110,000 | two words, pages | 2.59 | 1897 | 7673 | 1834 | 338 | 2000 | 0.45 | 0.34 | 0.00 | cookwapbanapplehantt soonohc | baby, lion, bus, elephantbanana |
 | 115,000 | two words, pages | 2.54 | 1801 | 8190 | 1878 | 338 | 2000 | 0.46 | 0.32 | 0.00 | chairsbananaby? | baby, lion, bus, elephant |
 | 120,000 | two words, pages | 2.59 | 1936 | 7971 | 1810 | 338 | 2000 | 0.44 | 0.32 | 0.00 | a blet'swiaingainsteasee you | baby, lion, bus, elephant |
+
+Millions of numbers each organ holds, at the checkpoint that ends each stage (kind_s1; orch: the orchestrator, the gate and its contexts):
+
+| stage | moments | orch | words | ear | cortex | mouth | all |
+|---|---|---|---|---|---|---|---|
+| babble | 10,000 |  | 40.97 | 21.64 | 16.81 |  | 79.4 |
+| echo | 15,000 | 113.69 | 57.43 | 26.55 | 16.81 |  | 214.5 |
+| first words | 70,000 | 122.87 | 57.54 | 45.73 | 16.81 | 0.15 | 243.1 |
+| two words, pages | 120,000 | 112.32 | 60.58 | 56.1 | 16.81 | 0.15 | 246.0 |
+
+Word cells between the stage checkpoints (kind_s1): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age as a share of the word cells' own clock (they count their own moments, about twice the life's):
+
+| stage | moments | word cells | born since | forgotten since | median age (share of the cells' time) | cues |
+|---|---|---|---|---|---|---|
+| babble | 10,000 | 1,921 | 1,921 | 0 | 56% | 6,174 |
+| echo | 15,000 | 1,885 | 700 | 736 | 78% | 7,864 |
+| first words | 70,000 | 1,907 | 925 | 903 | 87% | 7,554 |
+| two words, pages | 120,000 | 1,936 | 587 | 558 | 89% | 7,971 |
 
 ### kind_s2
 
@@ -188,6 +271,24 @@ be  | baby, lion, bus, elephant |
 | 115,000 | preschool | 2.56 | 1846 | 7881 | 1950 | 338 | 2000 | 0.37 | 0.17 | 0.04 | woo person? | girlbaby, lion, bus, couch |
 | 120,000 | preschool | 2.51 | 1961 | 7509 | 1853 | 338 | 2000 | 0.32 | 0.21 | 0.04 | boat's? | girlbaby, lion, bus, couch |
 
+Millions of numbers each organ holds, at the checkpoint that ends each stage (kind_s2; orch: the orchestrator, the gate and its contexts):
+
+| stage | moments | orch | words | ear | cortex | mouth | all |
+|---|---|---|---|---|---|---|---|
+| babble | 5,000 |  | 32.59 | 16.49 | 16.81 |  | 65.9 |
+| echo | 10,000 | 117.66 | 40.59 | 22.82 | 16.81 |  | 197.9 |
+| first words | 55,000 | 123.86 | 57.6 | 40.97 | 16.81 | 0.15 | 239.4 |
+| two words, pages | 90,000 | 115.73 | 60.66 | 49.44 | 16.81 | 0.15 | 242.8 |
+
+Word cells between the stage checkpoints (kind_s2): how many there are, how many were born and how many forgotten since the previous checkpoint, and the median cell's age as a share of the word cells' own clock (they count their own moments, about twice the life's):
+
+| stage | moments | word cells | born since | forgotten since | median age (share of the cells' time) | cues |
+|---|---|---|---|---|---|---|
+| babble | 5,000 | 1,864 | 1,864 | 0 | 66% | 3,892 |
+| echo | 10,000 | 1,929 | 1,027 | 962 | 60% | 7,499 |
+| first words | 55,000 | 1,987 | 1,122 | 1,064 | 80% | 7,651 |
+| two words, pages | 90,000 | 1,924 | 602 | 665 | 84% | 7,938 |
+
 ### ramp_s0
 
 | moments | stage | memory GB | word cells | cues | orchestrator clusters | output neurons | store | first words | pages | preschool | babbled | named |
@@ -210,6 +311,8 @@ be  | baby, lion, bus, elephant |
 | 80,000 | two words, pages | 2.75 | 1999 | 7813 | 1868 | 338 | 2000 | 0.42 | 0.30 | 0.00 | thandraain tobanboat,fish'ba | baby, lion, bus, elephant |
 | 85,000 | two words, pages | 2.75 | 1949 | 7632 | 1801 | 338 | 2000 | 0.46 | 0.29 | 0.01 | led sbanapplese bear? | baby, lion, bus, elepbant |
 | 90,000 | preschool | 2.7 | 1973 | 7849 | 1921 | 338 | 2000 | 0.43 | 0.32 | 0.00 | bookbathisdoort? | bany, boy, bus, elephant |
+| 95,000 | preschool | 2.52 | 1804 | 8043 | 1835 | 338 | 2000 | 0.45 | 0.35 | 0.01 | seerra ddoortr | baby, lion, bus, elephant |
+| 100,000 | preschool | 2.42 | 1961 | 8020 | 1935 | 338 | 2000 | 0.29 | 0.30 | 0.01 | re ayo | bee, lion, bus, elephantcake |
 
 ### ramp_s1
 
@@ -232,6 +335,8 @@ be  | baby, lion, bus, elephant |
 | 75,000 | two words, pages | 2.63 | 1806 | 7674 | 1932 | 338 | 2000 | 0.45 | 0.32 | 0.00 | thanfish(oops dada thing s | baby, lion, bus, elephantapple |
 | 80,000 | two words, pages | 2.75 | 1985 | 7617 | 1955 | 338 | 2000 | 0.35 | 0.25 | 0.00 | than beark you'bathhh that,  | baby, lion, bus, this? |
 | 85,000 | two words, pages | 2.7 | 1987 | 7514 | 1972 | 338 | 2000 | 0.43 | 0.27 | 0.00 | cans kittty clovemeow | baby, lion, bus, elephantbear |
+| 90,000 | two words, pages | 2.56 | 1959 | 7378 | 1956 | 338 | 2000 | 0.46 | 0.29 | 0.00 | we dog | baby, lion, bus, elephantbear |
+| 95,000 | two words, pages | 2.49 | 1919 | 8060 | 1917 | 338 | 2000 | 0.41 | 0.32 | 0.00 | the co feetige? | baby, lion, bus, bicycle |
 
 ### ramp_s2
 
@@ -254,3 +359,6 @@ be  | baby, lion, bus, elephant |
 | 75,000 | two words, pages | 2.64 | 1973 | 7651 | 1859 | 338 | 2000 | 0.36 | 0.21 | 0.00 | boat'airplaanebear | baby, cow, bear, elephant |
 | 80,000 | two words, pages | 2.73 | 1923 | 7437 | 1816 | 338 | 2000 | 0.41 | 0.28 | 0.00 | boat co | baby, lion, bus, elephant |
 | 85,000 | preschool | 2.67 | 1996 | 7814 | 1854 | 338 | 2000 | 0.43 | 0.26 | 0.01 | the? | baby, lion, bus, bear |
+| 90,000 | preschool | 2.45 | 1855 | 8025 | 1930 | 338 | 2000 | 0.40 | 0.26 | 0.01 | see're is ftere you do?
+ar | rabb, lion, bus, bear |
+| 95,000 | preschool | 2.41 | 1980 | 8018 | 1923 | 338 | 2000 | 0.34 | 0.26 | 0.01 | car youbearu it de | baby, lion, bus, elephant |
