@@ -313,6 +313,25 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     parallel to check: dendritic spines turn over fast in the young and are mostly stable in the adult cortex
     (Grutzendler, Kasthuri & Gan 2002; Holtmaat et al. 2005; to verify). In docs/GROWTH.md, a table per life.
 
+34. **An asynchronous brain, many stimuli at once** (Kris, 2026-11-26 13:00: "also fixations how are they moving do they
+    move at all? so the final brain architecture i expect it to be async in general with multi stimuli i hope we can
+    steer that direction as human brains process things"). What I told him: in the running lives the eyes do not
+    move in time (on a page the reflex finds up to four places that stand out and the word cells get them all at
+    once, with the whole page coarsely; a single picture is seen whole); the serial gaze (one fixation a tick, the
+    reflex's pull fading within a quarter second, then where the heard words pull, eye commands learned from
+    reward; VISION.md 2026-11-23 to 11-24) is built, behind a switch, level with "all at once" on three seeds of
+    a small learner (pages 0.57 against 0.55; first look on the named thing 0.68–0.70 against the reflex's 0.49),
+    and in no life yet; its eye commands die out after the first look, it never moves within one object, and it
+    has no pursuit (that needs video). Why the architecture suits asynchrony: local rules need no global forward
+    and backward pass, so every organ can update when its own input arrives; a brain has no global clock and its
+    areas integrate over a hierarchy of time scales (Murray et al. 2014; Hasson et al. 2008; to verify). Order:
+    (a) the serial gaze in grown lives (continued from the plateau lives' levels, against a continuation without
+    it) when the ramp lives end; (b) a clock-driven world: time in milliseconds, every stream at its own rate
+    (sound 10 ms, video frames 100 ms, fixations 200–300 ms, speech as it is said), the gate free to speak at any
+    time, the world not waiting for the reply; on this CPU a discrete-event queue ordered by time (asynchronous
+    in meaning, slowed down); (c) organs on their own time scales, each updated only by its own events; (d) every
+    stream measured by taking it away, and by how soon an answer comes when sight and sound agree.
+
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
