@@ -3567,7 +3567,7 @@ three); the first stage alone between. The stream of kinds: within 0.01 for all;
 difference, the trace at this level (3 × 3 places of the first stage) is too local for what video teaches, and the
 next place for it is a stage that sees the whole view (as IT does).
 
-### 2026-11-26 15:00, an ear that hears sound: the first design failed its smoke test; three levels instead
+### 2026-11-26 14:45, an ear that hears sound: the first design failed its smoke test; three levels instead
 
 Smoke test of `experiments/sound_units_probe.py` as first written (600 SpokenCOCO recordings): units cut at peaks
 of a next-frame predictor's error came 1.9 to a syllable (the "largest within 50 ms" rule fires at the window's own

@@ -1,4 +1,4 @@
-"""An ear that hears sound and finds its own units (queue E 32; docs/VISION.md 2026-11-26 12:50 and 15:00).
+"""An ear that hears sound and finds its own units (queue E 32; docs/VISION.md 2026-11-26 12:50 and 14:45).
 
 Kris, 2026-11-26: no transcription inside the brain; the ear develops its own cortex. Material: people reading COCO
 captions aloud (SpokenCOCO, CC BY-SA), through organic/cochlea.py (experiments/world/spokencoco_cochlea.py). The
