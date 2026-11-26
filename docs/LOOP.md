@@ -1434,4 +1434,11 @@ Still Kris's own:
   lives). Backprop on photographs, seed 1: 0.464 with the relay, 0.390 without. The sound ear's second reading runs
   about seven times slower than the first on this crowded machine (ends near midnight).
   Next: the ramp lives at 120,000 → JUDGING.md (reward_table.py) and the census; then the gaze and tag lives start.
+- 2026-11-26 19:55 **Ramp lives ended and read** (JUDGING.md: three reward schedules, nine lives, no difference; a
+  hint that pages erode more under the ramp). Ended lives marked (out/monitor/ended.json). **gazs_s1 started 19:25**
+  (the first serial-gaze life, continued from plat_s1_W2; running normally, no records yet); the tag queue now waits
+  behind the gaze lives (`organic-tag2`). Two senses seed 1 agrees with seed 0 (together > sight). Census of the
+  ramp lives queued (`organic-census3`). CORe50 seed 0 running (first stage: same object elsewhere 0.117).
+  Next: gazs_s1's first record (about 21:00); av seed 2; CORe50 arms; sunits2 (about midnight); photo daemon's log
+  after midnight.
 
