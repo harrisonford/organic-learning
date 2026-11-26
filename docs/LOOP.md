@@ -1389,4 +1389,12 @@ Still Kris's own:
   the cells replaced between babbling and echo, then turnover falls tenfold and a stable old core forms. ncm1 running
   (census was quick); bp3's first run running.
   Next: ncm1 → the reader's verdict; av1 when there is room; bp3; CORe50 frames when the zip is whole.
+- 2026-11-26 14:00 Health: all healthy; 2.6 GB free (three probes and the ramp lives). **Reader verdict, seed 0:** the
+  nearest class mean loses two points from development on photographs (0.419 → 0.401) while ridge and LDA gain two:
+  development's worth is in the code's second moments (VISION.md 13:20); seed 1's as-born 0.422. **Artifact v2** for
+  Kris's talk (per-part details, stand-ins, 77 checked references). **Kris: sound without transcription; an
+  asynchronous brain** → SpokenCOCO fetching (CC BY-SA), queue E 32 and E 34 written; serial-gaze continuation lives
+  queued (`organic-gaze-lives`). **CORe50 frames done** (164,866, checked by eye) → `organic-core50-1` queued behind
+  ncm1 with a smoke test first. Shared memory gate for new queues (out/tmp/gate.sh).
+  Next: av_probe seed 0's readers; ncm seeds; bp3; CORe50 probe; ramp lives' end tonight → gaze and tag lives.
 
