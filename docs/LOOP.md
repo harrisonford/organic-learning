@@ -354,6 +354,8 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     time, the world not waiting for the reply; on this CPU a discrete-event queue ordered by time (asynchronous
     in meaning, slowed down); (c) organs on their own time scales, each updated only by its own events; (d) every
     stream measured by taking it away, and by how soon an answer comes when sight and sound agree.
+    Design written (docs/ASYNC.md, 2026-11-26 15:15): what is synchronous today, one timeline in milliseconds,
+    rates and time constants from biology (to verify), five switched steps; step 1 is hearing in time within a moment.
 
 ## Decisions waiting for Kris
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
