@@ -3505,3 +3505,35 @@ lives in the code's covariance, which only readers with second moments use.
 A side reading worth keeping: the lower floor is better for the word cells on both codes (+0.009) and for how well
 they keep a picture seen once (0.917 against 0.893 as born). The floor is a hand-set constant; a relay that sets its
 own floor (the local circuit of queue E 28) is where that point belongs, not a new number.
+
+### 2026-11-26 12:50, an ear that hears sound: the plan (Kris: no transcription, the ear develops its own cortex)
+
+Kris, 12:50: "for audio what i want is not to transcribe to text then work on text similar to how words are just
+bytes audio can be fed in the ear develop it's own cortex with interconnectivity and just work". The organic check
+is easy here: it is how hearing works and how infants come to words. The cochlea splits sound by frequency before
+any learning (organic/cochlea.py); auditory cortex develops its receptive fields from the sounds an animal grows up
+with (rat pups reared with one tone over-represent it in A1: Zhang, Bao & Merzenich 2001, to verify); infants find
+word forms in continuous speech by its statistics (Saffran, Aslin & Newport 1996) and come to their language's sound
+categories by the distribution of what they hear (Maye, Werker & Gerken 2002, to verify). Nothing in that chain is
+text. The same three steps, with rules the brain already has:
+
+1. **Hearing cortex**: the eye's layer on the cochlea's output read as a picture (80 ms × 8 bands windows,
+   decorrelated, winner-take-all Hebbian with a conscience), developed on unlabelled speech; then its own relay.
+   Running already on Commons video sound (`experiments/av_probe.py`).
+2. **Units from sound**: the byte ear's principle on the hearing cortex's stream: a predictor of the next 10 ms from
+   the last few (a delta rule); a unit starts where its error jumps; each stretch's code goes to the unit that
+   matches it, or makes a new unit when none matches well enough (as the gate's clusters are born). The ear's
+   lexicon grows by use.
+3. **Grounding**: the units heard in a spoken caption are the word cells' cues and the picture is their content, as
+   today; the store and the gate unchanged.
+
+Material: SpokenCOCO (people reading the COCO captions aloud; CC BY-SA; fetching, docs/WORLD.md), heard with the COCO
+photographs we hold. The captions' text is used only to measure: which sound unit comes with which word, and how
+well a caption is found from its picture and back. The paradigm's answer to the same question is visually grounded
+speech learned by backpropagation (Harwath, Torralba & Glass 2016; Harwath et al. 2018: retrieval of the right
+spoken caption among 1,000 for a picture), our reference row.
+
+**What I expect, before building:** units found in sound will mostly be syllable-sized pieces, not words; a few
+frequent words ("a", "of", "the", and object words said often, "dog", "pizza") will each have a unit that comes with
+them in most captions that contain them; picture-to-caption retrieval by local rules will sit well under backprop's
+numbers. The point is that the ear gets there without ever being given a letter.

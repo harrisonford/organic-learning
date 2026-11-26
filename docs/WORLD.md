@@ -192,7 +192,7 @@ itself; log out/commons_video.log). Commons has about 420,000 videos (search, 20
 Beside it, `organic-core50-fetch`: the handheld-object videos (CC BY 4.0, 5.9 GB) at the server's pace, about 180 KB/s
 (about nine hours).
 
-### SpokenCOCO: people reading the COCO captions aloud (2026-11-26)
+## 2026-11-26: SpokenCOCO, people reading the COCO captions aloud (queue E 32; not part of world 4)
 
 For the ear that hears sound and is never given text (Kris, 2026-11-26 12:50; queue E 32 in docs/LOOP.md).
 SpokenCOCO (Hsu, Harwath, Song & Glass, NeurIPS 2020 workshop on self-supervised learning for speech): about
