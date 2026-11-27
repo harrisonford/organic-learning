@@ -4673,3 +4673,47 @@ of 15:38 is set aside, not refuted (the shift was applied to the cochlea's bands
 shift a caption, 120 anchors, one seed). What remains for other voices is the third route, tokens from several
 voices held together by what they are said about, and it needs matches less thin than today's. The one-voice
 run will say what a lexicon is worth when the voice is taken out of the question.
+
+### 2026-11-27 16:41, an ear that grows up in one voice hears the rare words and finds the photographs (one reader)
+
+`out/bench/grounded_onevoice_s0.log`, `grounded_diag_onevoice_s0.log` (the reader with most captions: the ear
+develops on 4,670 of hers or his, 5,000 more heard each with its photograph, 1,000 test pairs never heard or seen;
+the same ear, the same 1,024 + 1,024 kinds, no text) beside `grounded_diag_sub5000_s0.log` (the many-voices run of
+14:24 with its link cut to 5,000 captions: the fair row; its ear had heard 20,000 captions, four times more).
+
+| | many voices (2,352 readers) | one voice |
+|---|---|---|
+| **photograph → its caption among 1,000, from the ear's bags, Hebb** R@1 / R@5 / R@10 | 0.000 / 0.005 / 0.015 | **0.009 / 0.029 / 0.048** |
+| caption → its photograph | 0.002 / 0.005 / 0.013 | 0.011 / 0.029 / 0.053 |
+| median rank (chance 500) | 492 | **318** |
+| the same with captions shuffled, R@10 | 0.015 | 0.005 |
+| from the ear's bags by ridge, R@10 | 0.017 | 0.049 |
+| written words in the ear's place (a measure only): Hebb / Hebb relayed / ridge, R@10 | 0.065 / 0.071 / 0.097 | 0.067 / 0.077 / 0.099 |
+| the caption's own written words among 1,000 from its bag (ridge; a measure): R@1 / R@10, median rank | 0.057 / 0.170, 158 | **0.366 / 0.641, 3** |
+| words heard, correlation median: said in 30+ / 15–29 / 8–14 / 4–7 of the 1,000 test captions | 0.20 / 0.07 / 0.05 / 0.03 | **0.49 / 0.42 / 0.22 / 0.10** |
+| … words heard above 0.3 in those bands | 14 / 5 / 2 / 0 | 26 / 39 / 46 / 28 |
+
+In one voice the best-heard words are no longer only the common ones: "fire" 0.90, "baseball" 0.87, "laptop" 0.84,
+"pizza" 0.83, "kitchen", "bathroom", "motorcycle" 0.83, "hydrant" 0.91, "computer" 0.81, "frisbee" 0.73,
+"vegetables" 0.81.
+
+**Read.** What I said at 15:19 was right in direction and too low nearly everywhere: rarer words "about twice as
+well" (15–29: said 0.22–0.30, got 0.42, six times the fair row; 8–14: said 0.15–0.22, got 0.22; commonest: said
+0.30–0.40, got 0.49), photographs "a little, R@10 0.02–0.04" (got 0.048 / 0.053, shuffled 0.005). **With the voice
+taken out of the question, the same text-free ear with the same short lexicon finds a caption's photograph five
+times above chance by Hebb's rule alone, 70% of what the written words give through the same link (0.048 against
+0.067), and gives back a caption's own words at rank 3 of 1,000.** So the lexicon's size and rule were not the
+first limit: the voice was. The 14:36 reading ("the ear's lexicon is short") was true of an ear fed 2,352 voices;
+most of that shortness was kinds spent on, and blurred by, voices. This is how an infant's ear starts (most words
+from one talker, 14:49).
+**Caveats.** One reader, one seed: the second and third readers by captions read are running (`organic-onevoice-
+top2`, `-top3`), three readers being the three seeds here. The test captions are in the same voice as the ones
+learned from (that is the claim: within a voice; nothing is said yet about a new voice). The reader's recordings
+may share a room and a microphone, which a many-voices ear cannot use; the shuffled row (0.005) shows the link is
+about the captions, not the recording. A relay on the bags hurts here (0.022 against 0.048): 5,000 bags are too
+few to even 2,048 directions out, not a finding about relays.
+**What follows, to be said before each is run:** (1) three readers; (2) how far a one-voice lexicon carries to a
+voice never heard (a reader's ear, another reader's test captions: I expect little, as at 7.5 months); (3) the
+second voice: a lexicon grown in one voice that then hears others say the same things about the same photographs
+(the third route of 15:38, with the photograph as the cue that the forms are the same); (4) the fast store for
+rare forms within the voice.

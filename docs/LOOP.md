@@ -71,7 +71,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   out/bench/ear_again_{norelay,bands4,onemean}_s0.log. Then `MODE=voice PHOTOS=300 K=5` (the same reader against
   another reader; said before: VISION.md 14:58) → ear_again_voice_s0.log. ALL ENDED and read (VISION.md 15:10,
   15:19): the variants change a point at most; the same reader 0.335, another reader 0.229 (chance 0.167).
-- **`organic-onevoice`** (out/tmp/one_voice_queue.sh; 2026-11-27 15:23; MemoryMax 2600M; about 80 minutes): an ear
+- **`organic-onevoice-top2`, `-top3`** (out/tmp/one_voice_queue2.sh; 2026-11-27 16:40; MemoryMax 2600M each; about
+  40 minutes): the one-voice ear in the second and third readers by captions read (`READER=top2`, `top3`; their
+  ears develop on 4,046 and 3,158 captions, link 5,000, test 1,000) → out/bench/grounded_onevoice_top{2,3}_s0.log
+  and grounded_diag_onevoice_top{2,3}_s0.log. Three readers are the three seeds of the one-voice claim.
+- **`organic-onevoice`** ENDED 16:01, read (VISION.md 16:41: in one voice the ear finds the photographs and hears
+  the rare words). Was: (out/tmp/one_voice_queue.sh; 2026-11-27 15:23; MemoryMax 2600M; about 80 minutes): an ear
   that grows up in one voice (`READER=top`: the reader with 11,054 captions; ear on 4,670, link on 5,000, test
   1,000) → out/bench/grounded_onevoice_s0.log, then the diagnostic on its bags → grounded_diag_onevoice_s0.log and
   the many-voices run cut to 5,000 captions → grounded_diag_sub5000_s0.log (the fair row). Said before: VISION.md
@@ -105,6 +110,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   ended.json. The controls run in `organic-tag2` (tag_queue2.sh: tagn then tagr for seeds 1, 2, 0, then tagb):
   tagr_s1 ended at 110,000 about 12:06 (first words 0.48, two words 0.48, pages 0.15; tagn_s1 there: 0.46, 0.40, 0.18); tagn_s2 running since about 12:10 (added to lives.json by hand; the queue does not add them: add each as it starts and move the ended ones to ended.json, or health raises an alert). All three now in out/monitor/lives.json; the ended ones in ended.json. The controls tagn_s2, tagn_s0
   run in `organic-tag2` after this queue.
+  **16:40:** tagn_s2 ended at 120,000 about 15:54 (first words 0.46, two words 0.49, pages 0.18; gazs_s2 there:
+  0.45, 0.46, 0.20); moved to ended.json; **tagr_s2 running since 15:59** (added to lives.json). The gaze on pages
+  against its control so far: seed 1 0.159 against 0.183, seed 2 0.199 against 0.183: no direction on two seeds.
+  Seed 0's control (tagn_s0) comes after tagr_s2 in the queue.
 - **SpokenCOCO through the cochlea** (`experiments/world/spokencoco_cochlea.py`, python -I, streams the archive): the
   validation part done 14:30 (25,035 recordings, 10.8 M rows: about 30 hours of speech) → ~/datasets/spokencoco/
   cochlea_64.f16 + cochlea.jsonl (transcripts kept for measuring only). All 118,287 training images of SpokenCOCO are
@@ -1739,3 +1748,12 @@ Still Kris's own:
   out/monitor; 278 GiB free). **Kris's question, a live page on SpacetimeDB:** the stream brain timed against the
   clock (1.8 / 1.4 / 1.1 × real time: today's eye, with both reflexes, with hearing), answered and written in
   docs/ASYNC.md; nothing built or installed until he says. `organic-onevoice` still running.
+- 2026-11-27 16:44 Health: an alert (tagn_s2 ended normally at 120,000 and the queue does not move it: moved to
+  ended.json, tagr_s2 added to lives.json; all healthy after; 8.3 GB available, 298 GB free). **An ear that grows
+  up in one voice** (VISION.md 16:41; memoize): from its own sound kinds it finds a caption's photograph at R@10
+  0.048 / 0.053, median rank 318 (shuffled 0.005; the many-voices ear at the same 5,000 pairs 0.015, rank 492;
+  written words through the same Hebb link 0.067), gives back the caption's own words at rank 3 of 1,000 (158),
+  and hears rare words (correlation median by how often a word is said: 0.49 / 0.42 / 0.22 / 0.10 against
+  0.20 / 0.07 / 0.05 / 0.03). I had said about half of that. The voice was the first limit, not the lexicon's
+  size. One reader: readers 2 and 3 started (`organic-onevoice-top2`, `-top3`). The gaze lives against their
+  controls on two seeds: no direction on pages (Running). Artifact v10 (the ear card).

@@ -41,7 +41,7 @@ if READER:
     count = {}
     for u in utts:
         count[u["speaker"]] = count.get(u["speaker"], 0) + 1
-    who = max(count, key=count.get) if READER == "top" else READER
+    who = sorted(count, key=count.get, reverse=True)[int(READER[3:] or 1) - 1] if READER.startswith("top") else READER  # top, top2, top3: by captions read
     utts = [u for u in utts if u["speaker"] == who]
 grams = np.memmap(os.path.join(DIR, "cochlea_64.f16"), np.float16, "r").reshape(-1, 64)
 row_of = {i: r for r, i in enumerate(json.load(open(os.path.expanduser("~/datasets/coco_thumbs/train2017_ids.json"))))}

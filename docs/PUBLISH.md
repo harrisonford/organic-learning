@@ -302,7 +302,11 @@ organic learner behaves and what each part does, measured honestly, not a score.
   before it ran, 2026-11-27 15:19). **A negative to keep on record for that later paper** (2026-11-27 14:24–15:19,
   seed 0): the text-free ear's units do not find a caption's photograph (recall at chance); the eye's code and the
   Hebb link do from written words (R@10 0.11–0.15, a measure only); the ear holds the common words only, and two
-  thirds of a word's trace is lost between voices; an ear growing up in one voice is being run. Kris may present the work to neuroscientists in about two weeks; the artifact
+  thirds of a word's trace is lost between voices. **And its other half** (16:41, one reader, two more running): an
+  ear that grows up in one voice finds the photographs from its own sound kinds (R@10 0.048 against 0.067 from
+  written words through the same Hebb link, shuffled 0.005) and hears rare words. If three readers agree, this is
+  the opening result of the second paper (speech grounded in sight with no text and no backprop, starting as an
+  infant does, in one voice), with the paradigm's visually grounded speech as its reference row. Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
 - **2026-11-27 15:26: draft 11 emailed to Kris** (22 pages). One change: a paragraph at the end of "The relay,
   learned locally" (a batch relay fitted on photographs does not hold on CORe50's videos: 131–137 effective
