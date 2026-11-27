@@ -233,7 +233,10 @@ if OTHER:
         if u["speaker"] == who2 and u["image"] not in known and u["image"] not in picked:
             other_u.append(u)
             picked.add(u["image"])
-    other_u = [other_u[i] for i in rng.permutation(len(other_u))[:TEST]]
+    order = rng.permutation(len(other_u))
+    LINK2 = int(os.environ.get("OTHER_LINK", 0))  # (17:40) this ear, its link learned again in the other voice from LINK2 pairs
+    link_u = [other_u[i] for i in order[TEST: TEST + LINK2]]
+    other_u = [other_u[i] for i in order[:TEST]]
     B_other, V_other = np.stack([bag(u, False) for u in other_u]), see([u["image"] for u in other_u])
     M = Bc.T @ V_assoc / len(Bc)
     vocab = {}
@@ -266,3 +269,14 @@ if OTHER:
         cor = lambda lo, hi: np.median([np.corrcoef(P[:, k], Wt[:, k] > 0)[0, 1] for k in np.nonzero((n >= lo) & (n < hi))[0]])  # noqa: E731
         say(f"{name}: photograph -> its caption among {len(us)}: {rec(r_img)}, median rank {np.median(r_img) + 1:.0f} | the caption's own written words from its bag: {rec(r_w)}, median rank {np.median(r_w) + 1:.0f}; "
             f"words heard (correlation median), said in 30+ / 15-29 / 8-14 of the test captions: {cor(30, 10**6):.2f} / {cor(15, 30):.2f} / {cor(8, 15):.2f}")
+    if LINK2:
+        B2 = np.stack([bag(u, False) for u in link_u])
+        V2 = see([u["image"] for u in link_u])
+        mu2 = B2.mean(0)
+        Bo = unit(B_other - mu2)
+        for n in sorted({min(k, len(B2)) for k in (1000, 2500, LINK2)}):
+            M2 = unit(B2[:n] - mu2).T @ V2[:n] / n
+            for name, Mx, Bx in (("the link learned in the other voice only", M2, Bo), ("that link added to its own voice's", M2 * n + M * len(Bc), Bo)):
+                S = unit(Bx @ Mx) @ V_other.T
+                r_img, r_cap = (S > np.diag(S)[None, :]).sum(0), (S > np.diag(S)[:, None]).sum(1)
+                say(f"this ear, {n} pairs heard in the other voice ({OTHER}), {name}: photograph -> its caption among {len(other_u)}: {rec(r_img)}; caption -> its photograph: {rec(r_cap)}; median rank {np.median(r_img) + 1:.0f} / {np.median(r_cap) + 1:.0f}")

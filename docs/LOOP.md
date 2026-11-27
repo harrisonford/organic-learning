@@ -65,6 +65,10 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-otherlink`** (out/tmp/other_link_queue.sh; queued 2026-11-27 17:38 behind `organic-othervoice`;
+  MemoryMax 2800M; about 20 minutes once it starts): the first reader's ear, its link learned again from 1,000
+  and 2,500 of the second reader's pairs → out/bench/grounded_otherlink_top_top2_s0.log. Said before: VISION.md
+  17:38 (about half of the second reader's own ear).
 - **`organic-othervoice`** (out/tmp/other_voice_queue.sh; queued 2026-11-27 16:45, waits for the two readers' runs;
   MemoryMax 2800M; about 50 minutes once it starts): the top reader's ear on voices it never heard (`OTHER=top2`,
   then `top3` on the kept ear) → out/bench/grounded_othervoice_top_top{2,3}_s0.log. Said before: VISION.md 16:45.
@@ -1770,3 +1774,6 @@ Still Kris's own:
   0.012; the many-voices ear on as many pairs 0.015), 72–92% of what written words give through the same Hebb
   link; the caption's own words at rank 3 / 1 / 1 of 1,000. `organic-othervoice` started 17:33 (a voice never
   heard; about 50 minutes). tagr_s2 at 110,000. Artifact v11; PUBLISH.md.
+- 2026-11-27 17:38 **The one-voice link's curve** (VISION.md 17:36; three readers; said before): R@10 0.029–0.037
+  at 1,000 pairs, 0.036–0.050 at 2,500, 0.048–0.065 at 5,000, still rising, beside the written words all the way.
+  Queued: the lexicon's reach into a second voice with the link learned again (`organic-otherlink`, said before).

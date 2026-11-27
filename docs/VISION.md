@@ -4776,3 +4776,13 @@ As said (0.02–0.03 at 1,000: got 0.029–0.037, the top of it or above; 0.035�
 link is still rising at 5,000 pairs on every reader, and the ear's bags stay beside the written words all the
 way (equal to them at 1,000 pairs on two readers). The one-voice ear is short of pairs, not at its ceiling; a
 reader has at most 10,670 photographs, so twice this is the most this data can give in one voice.
+
+**17:38, is the lexicon bound to its voice, or only the link? said before it runs** (`OTHER=top2 OTHER_LINK=2500`,
+after the other-voice run): the first reader's ear as it is (its kinds never heard the second reader), and the Hebb
+link learned again from 1,000 and 2,500 of the second reader's captions with their photographs, heard through
+that ear; tested on the second reader's 1,000 held-out pairs. Beside it stands the second reader's own ear with a
+link of as many pairs (17:36's curve: 0.037 at 1,000, 0.049 at 2,500). I say: about half of that (R@10 0.02–0.03
+at 2,500 pairs, median rank 380–430): the first reader's kinds cut the second reader's speech up consistently
+enough for a link to find something, but they were shaped on another voice's stretches and blur this one's. If it
+comes near the own ear's 0.049, the kinds are sound categories any voice can use and only the link is bound to a
+voice; then a second voice costs a few thousand pairs and no new lexicon.
