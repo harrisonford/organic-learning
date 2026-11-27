@@ -65,13 +65,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-views-together`** (experiments/core50_views_together_check.py; 2026-11-27 12:41; MemoryMax 4000M; about
-  half an hour): the whole frame alone, with the eye's fixation beside it, with the middle fixation beside it; delta
-  and ridge, relays as settled and settled again; three seeds → out/bench/core50_views_together.log. Said before:
-  VISION.md 12:41.
-- **`organic-eye-naming`** (out/tmp/eye_naming_queue.sh; 2026-11-27 11:21): the eye's codes kept as VARIANT=c50eyeboth
-  on three seeds; read (VISION.md 12:41: naming from the eye's fixations alone is under the whole frame). Still
-  running: the word cells and ridge streams of seeds 1–2 (stream_core50_c50eyeboth_s{1,2}.log; fill the table's "…").
+- **`organic-relaylearn-eye-s0`, `-s1`, `-s2`** (experiments/core50_relay_learns_probe.py with
+  `VIEWS=c50first+c50eyeboth`; 2026-11-27 13:22; MemoryMax 2500M each; about two hours): the whole frame and the
+  stream brain's own fixation side by side, a relay circuit for each learning along the stream, the delta reader
+  learning from the pair → out/bench/core50_relay_learns_eye_s{0,1,2}.log. Said before: VISION.md 13:18.
+- **`organic-views-together`** and **`organic-eye-naming`** ENDED, read (VISION.md 12:41, 13:18).
 - **`organic-relaysrc`** ENDED 11:04, read (VISION.md 11:20: the lives' relay is at home in all three sources).
 - **`organic-relaylearn-s1`, `-s2`** ENDED about 11:40, read (VISION.md 11:53: what I said held on three seeds).
 - **`organic-grounded2`** (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
@@ -1646,3 +1644,9 @@ Still Kris's own:
   finding repeats on this code (settled again: +0.031 to +0.043 for the delta reader). **Started:** the fixation
   beside the whole view, as an eye has it (`organic-views-together`; said before it runs). The grounding run:
   10,000 of 21,000 bags made.
+- 2026-11-27 13:22 Health: all healthy. **The fixation beside the whole view** (VISION.md 13:18; memoize; three
+  seeds): the stream brain's own eye adds to the whole frame: ridge +0.019 to +0.026 (0.392 / 0.387 / 0.396), the
+  delta reader with each relay settled again 0.404 / 0.404 / 0.414 against the whole frame's 0.356 / 0.364 / 0.360
+  (the middle fixation beside it: 0.421 / 0.425 / 0.432). I had said less on every count. **Started:** the same with
+  nothing batch, a relay circuit for each code learning along the stream (`organic-relaylearn-eye-s*`; said before
+  it runs). tagn_s2 at 105,000. The grounding run: 15,000 of 21,000 bags.

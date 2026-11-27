@@ -12,6 +12,8 @@ reader (bench_stream.py's, the word cells' rule without the words) learns from w
 test frames are then read with the circuit as it ended (held still). Beside it, the same reader on the relay alone.
 
     SEEDS=0,1,2 python experiments/core50_relay_learns_probe.py
+    VIEWS=c50first+c50eyeboth ...   the whole frame and the stream brain's own fixation side by side, a circuit for each
+                                    (VISION.md 2026-11-27 13:18)
 """
 import os, pickle, sys, time
 import numpy as np
@@ -20,6 +22,7 @@ from organic.cortex2 import RelayCircuit  # noqa: E402
 
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 N = int(os.environ.get("N", 10000))  # (a smoke test: fewer)
+VIEWS = os.environ.get("VIEWS", "c50first,c50centre").split(",")  # (2026-11-27 13:18: several codes side by side, "a+b")
 ytr, yte = np.load("out/bench/core50_train_labels.npy"), np.load("out/bench/core50_test_labels.npy")
 C = int(ytr.max()) + 1
 ear = pickle.load(open(os.environ.get("EAR", "out/tmp/ear_first.pkl"), "rb"))
@@ -60,21 +63,27 @@ class Delta:
 for seed in SEEDS:
     order = np.random.default_rng(seed).permutation(len(ytr))[:N]
     y = ytr[order]
-    for v in ("first", "centre"):
+    for view in VIEWS:  # a view is one code or several side by side ("c50first+c50eyeboth"): a circuit for each code
         t0 = time.time()
-        relay = pickle.load(open(f"out/bench/cortex_c50{v}_s{seed}.pkl", "rb")).relay
-        X = unit((np.asarray(np.load(f"out/bench/core50_c50{v}_s{seed}_train.npy", mmap_mode="r")[order], np.float32) - relay.mu) @ relay.Z)
-        Xt = unit((np.asarray(np.load(f"out/bench/core50_c50{v}_s{seed}_test.npy"), np.float32) - relay.mu) @ relay.Z)
-        alone, learns, circuit = Delta(X.shape[1]), Delta(X.shape[1]), RelayCircuit(X.shape[1], rate=1e-4, block=50, seed=seed)
+        parts = []
+        for v in view.split("+"):
+            relay = pickle.load(open(f"out/bench/cortex_{v}_s{seed}.pkl", "rb")).relay
+            X = unit((np.asarray(np.load(f"out/bench/core50_{v}_s{seed}_train.npy", mmap_mode="r")[np.sort(order)][np.argsort(np.argsort(order))], np.float32) - relay.mu) @ relay.Z)
+            Xt = unit((np.asarray(np.load(f"out/bench/core50_{v}_s{seed}_test.npy"), np.float32) - relay.mu) @ relay.Z)
+            parts.append((X, Xt, RelayCircuit(X.shape[1], rate=1e-4, block=50, seed=seed)))
+        D = sum(X.shape[1] for X, _, _ in parts)
+        alone, learns = Delta(D), Delta(D)
+        Xt_alone = unit(np.concatenate([Xt for _, Xt, _ in parts], axis=1))
         at = {}
-        for n, (x, c) in enumerate(zip(X, y), 1):
-            alone.learn(x, c)
-            learns.learn(circuit(x), c)
+        for n in range(1, N + 1):
+            c = y[n - 1]
+            alone.learn(unit(np.concatenate([X[n - 1] for X, _, _ in parts])), c)
+            learns.learn(unit(np.concatenate([circuit(X[n - 1]) for X, _, circuit in parts])), c)
             if n in (1000, 5000, N):
-                circuit.plastic = False
-                at[n] = (alone.names(Xt, yte), learns.names(unit(circuit.code(Xt)), yte))
-                circuit.plastic = True
-        circuit.plastic = False
-        d = np.clip(np.linalg.eigvalsh(np.cov(unit(circuit.code(X)).T.astype(np.float64))), 0, None)
-        print(f"seed {seed} {v:6}: delta on the relay alone / with the circuit learning on: " + " | ".join(f"{n} {a:.3f} / {b:.3f}" for n, (a, b) in at.items())
-              + f" | the circuit's code on the stream: participation ratio {d.sum() ** 2 / (d * d).sum():.0f} ({time.time() - t0:.0f}s)", flush=True)
+                for _, _, circuit in parts:
+                    circuit.plastic = False
+                at[n] = (alone.names(Xt_alone, yte), learns.names(unit(np.concatenate([unit(circuit.code(Xt)) for _, Xt, circuit in parts], axis=1)), yte))
+                for _, _, circuit in parts:
+                    circuit.plastic = True
+        print(f"seed {seed} {view:22}: delta on the relay alone / with the circuit learning on: " + " | ".join(f"{n} {a:.3f} / {b:.3f}" for n, (a, b) in at.items())
+              + f" ({time.time() - t0:.0f}s)", flush=True)

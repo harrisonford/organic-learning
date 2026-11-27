@@ -4284,7 +4284,7 @@ the eye with both reflexes, within 8 px of the middle in 38% of the training fra
 | ridge | 0.373 / 0.368 / 0.370 | **0.318 / 0.333 / 0.338** | 0.398 / 0.396 / 0.406 |
 | delta, relay as settled | 0.360 / 0.348 / 0.359 | 0.289 / 0.293 / 0.296 | 0.348 / 0.336 / 0.347 |
 | delta, relay settled again | 0.356 / 0.364 / 0.360 | 0.320 / 0.328 / 0.339 | 0.398 / 0.400 / 0.409 |
-| word cells | 0.363 / 0.347 / 0.349 | 0.287 / 0.286 / … | 0.348 / 0.332 / 0.344 |
+| word cells | 0.363 / 0.347 / 0.349 | 0.287 / 0.286 / 0.292 | 0.348 / 0.332 / 0.344 |
 
 Against 11:21: I said the ridge on the eye's code would be above the whole frame (0.375–0.39). It is 0.03–0.05
 *below* it on every seed. The outcome I named as the one thing that could turn it happened: in two frames of
@@ -4304,3 +4304,33 @@ what the middle alone did, to 0.40–0.42; for the delta reader with the relays 
 0.01 of the whole frame, and with each part settled again 0.36–0.375. If whole + eye is *under* the whole frame
 for the ridge, the eye's wandering code is noise that even a ridge pays for, and the fixations should be weighted
 by something the brain has (where motion was, how surprised the cells are) before they are worth reading.
+
+### 2026-11-27 13:18, the fixation beside the whole view: the brain's own eye adds, on three seeds
+
+`core50_views_together.log` (10 kinds after 10,000 frames; seeds 0 / 1 / 2):
+
+| reader | whole frame | whole + the eye's fixation | whole + middle fixation |
+|---|---|---|---|
+| ridge, relays as settled | 0.373 / 0.368 / 0.370 | 0.392 / 0.387 / 0.396 | 0.399 / 0.406 / 0.409 |
+| delta, relays as settled | 0.360 / 0.348 / 0.359 | 0.368 / 0.375 / 0.366 | 0.381 / 0.372 / 0.375 |
+| delta, each relay settled again | 0.356 / 0.364 / 0.360 | **0.404 / 0.404 / 0.414** | 0.421 / 0.425 / 0.432 |
+| ridge, each relay settled again | 0.355 / 0.358 / 0.345 | 0.379 / 0.393 / 0.384 | 0.403 / 0.407 / 0.414 |
+
+Against 12:41: whole + eye is at least the whole frame for the ridge (yes), gaining +0.00 to +0.015 (**no: more,
++0.019, +0.019, +0.026**); whole + middle to 0.40–0.42 (0.399, 0.406, 0.409: yes, at its lower edge); the delta
+reader with the relays as settled within 0.01 of the whole frame (+0.008, +0.027, +0.007: two seeds of three); with
+each part settled again 0.36–0.375 (**no: 0.404–0.414**, +0.040 to +0.054 over the whole frame). I was too low on
+every count: the eye's wandering code, worse than the whole frame when read alone, adds to it when read beside it.
+- **The stream brain's own eye, which follows what moves and knows nothing of the dataset, is worth +0.02 to the
+  ridge and +0.04–0.05 to the word cells' rule once the relays are at home**, about two thirds of what an eye
+  placed on the object by the dataset's crop gives (+0.065 to +0.072).
+- With the relays settled again the delta reader is *above* the ridge on both pairs (0.40–0.43 against 0.38–0.41):
+  the best naming on this stream so far, by the one-pass rule.
+- What is still a stand-in in the bold row: the second settling is a batch on the stream's own frames (no labels);
+  the delta reader stands for the word cells; the two codes are side by side for one reader, where the lives' word
+  cells take, each for itself, the view that drives it most.
+**Said before it runs (13:18): the same with nothing batch.** `core50_relay_learns_probe.py` with
+`VIEWS=c50first+c50eyeboth`: a relay circuit for each code, learning along the stream, the delta reader learning
+from the pair. On the middle fixation alone the circuit gave half of the batch's gain (11:53). **What I say:**
+whole + eye with the circuits reaches 0.38–0.395 on all three seeds (the relays alone: 0.366–0.375), above the
+whole frame with its circuit (0.352–0.361) by 0.02 or more.
