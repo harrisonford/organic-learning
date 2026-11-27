@@ -4726,3 +4726,33 @@ in its own voice), and the caption's own words at a median rank of 100–250 (3 
 words still heard a little (correlation median 0.10–0.20 for words in 30+ test captions). That would be the infant
 at 7.5 months, and the measure of what the second voice has to add. The run hears the top reader again (the ear
 was not kept at 15:23; it is kept from now on) and must first repeat 0.048 / 0.053: a check that the run repeats.
+
+### 2026-11-27 17:33, the one-voice ear on three readers: it holds
+
+`out/bench/grounded_onevoice{,_top2,_top3}_s0.log` and their diagnostics (the three readers with most captions,
+each an ear of its own grown in that voice alone: the ear develops on 4,670 / 4,046 / 3,158 captions, the Hebb link
+on 5,000 caption-photograph pairs, 1,000 test pairs never heard or seen; no text; readers 1 / 2 / 3):
+
+| | reader 1 | reader 2 | reader 3 | many voices, same 5,000 pairs |
+|---|---|---|---|---|
+| photograph → its caption, R@10 (chance 0.010) | 0.048 | 0.065 | 0.065 | 0.015 |
+| caption → its photograph, R@10 | 0.053 | 0.064 | 0.062 | 0.013 |
+| median rank (chance 500) | 318 | 240 | 250 | 492 |
+| captions shuffled, R@10 | 0.005 | 0.007 | 0.012 | 0.015 |
+| written words through the same Hebb link, R@10 (a measure only) | 0.067 | 0.071 | 0.076 | 0.065 |
+| written words by ridge, R@10 | 0.099 | 0.106 | 0.108 | 0.097 |
+| the caption's own written words from its bag: R@1, median rank of 1,000 | 0.37, 3 | 0.57, 1 | 0.55, 1 | 0.06, 158 |
+| words heard (correlation median), said in 30+ / 15–29 / 8–14 / 4–7 of 1,000 test captions | 0.49 / 0.42 / 0.22 / 0.10 | 0.68 / 0.58 / 0.42 / 0.21 | 0.62 / 0.61 / 0.45 / 0.21 | 0.20 / 0.07 / 0.05 / 0.03 |
+
+**Read.** Three readers, three ears, the same answer: grown in one voice, the ear's own sound kinds find a
+caption's photograph five to six times above chance by Hebb's rule (shuffled: chance), at 72% / 92% / 86% of what
+the written words give through the same link, and give back the caption's own words at rank 1 to 3 of 1,000. The
+first reader was the weakest of the three. The readers' ears heard fewer captions than the many-voices ear
+(3,158–4,670 against 20,000), and the lexicon is the same 1,024 + 1,024 kinds: **for an ear with no text, one
+voice with four thousand captions is worth far more than two thousand voices with twenty thousand.** That is the
+order an infant gets (14:49, 15:38), found here by measuring why a run failed, not built in.
+**What is claimed:** within a voice, on photographs and captions never met. **What is not:** anything about a
+voice not heard (running: `organic-othervoice`); that this matches the paradigm's numbers (visually grounded speech
+by backprop is far above on its own benchmarks, with networks trained on all the pairs and all the voices; our
+ceiling here is the eye's 64 × 64 code, 0.10 by ridge even from written words); more than one seed of the ear's
+own randomness for each reader (the readers are the three samples).

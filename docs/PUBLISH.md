@@ -302,7 +302,7 @@ organic learner behaves and what each part does, measured honestly, not a score.
   before it ran, 2026-11-27 15:19). **A negative to keep on record for that later paper** (2026-11-27 14:24–15:19,
   seed 0): the text-free ear's units do not find a caption's photograph (recall at chance); the eye's code and the
   Hebb link do from written words (R@10 0.11–0.15, a measure only); the ear holds the common words only, and two
-  thirds of a word's trace is lost between voices. **And its other half** (16:41, one reader, two more running): an
+  thirds of a word's trace is lost between voices. **And its other half** (16:41; **three readers agree, 17:33:** R@10 0.048 / 0.065 / 0.065, 72–92% of written words through the same link): an
   ear that grows up in one voice finds the photographs from its own sound kinds (R@10 0.048 against 0.067 from
   written words through the same Hebb link, shuffled 0.005) and hears rare words. If three readers agree, this is
   the opening result of the second paper (speech grounded in sight with no text and no backprop, starting as an
