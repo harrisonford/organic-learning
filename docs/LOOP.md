@@ -65,6 +65,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-ear-a`** (readers top, then top3) and **`organic-online-ear-b`** (top2)
+  (out/tmp/online_ear_queue.sh; 2026-11-27 18:41; MemoryMax 2600M each; about 100 minutes a reader): the one-voice
+  ear in one pass, kinds and link learning together (`experiments/grounded_online_probe.py`) →
+  out/bench/grounded_online_{top,top2,top3}_s0.log; the ears kept in out/bench/grounded_online_ear_s0_r*.pkl.
+  Said before: VISION.md 18:40.
 - **`organic-othervoice`, `organic-otherlink`, `organic-otherrelay`** ALL ENDED, read (VISION.md 18:30, 18:34): a
   one-voice ear hears almost nothing in another voice; a new link does not mend it; the talker's own relay helps a
   little. `experiments/voices_through_sight_check.py` (seconds; VISION.md 18:37). Was: (out/tmp/other_link_queue.sh; queued 2026-11-27 17:38 behind `organic-othervoice`;
@@ -1794,3 +1799,5 @@ Still Kris's own:
   another reader with the most alike sight side carries the same written word 20–30% of the time (chance 2%),
   with no sound passing between the ears. Next: the ear and its link learning together in one pass (said before
   it runs), the form a live ear would have.
+- 2026-11-27 18:41 `experiments/grounded_online_probe.py` written and smoke-tested; two readers started, the third
+  behind the first (said before: VISION.md 18:40).

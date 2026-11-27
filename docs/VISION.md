@@ -4880,3 +4880,18 @@ whatever was heard with it. A word cell would take cues from kinds of several vo
 "cat" and "pizza" and cannot join "of" or "next"; the kinds' labels are their commonest word, and a kind may hold
 more. Also seen: an ear in one voice has 374–597 word-like kinds of 2,048, where the many-voices ear of 11-26
 had 111 (another count, on other captions: an indication only).
+
+### 2026-11-27 18:40, the one-voice ear in one pass, said before it runs
+
+So far the one-voice ear grew in two stages (the kinds on some captions; then, kinds held still, the link on
+others). `experiments/grounded_online_probe.py` lets a reader's captions come once, each with its photograph: the
+caption's stretches go to the kinds as they are and move them, and the bag so made is tied to the photograph by
+Hebb's rule at once. Only the hearing cortex below the kinds is developed first (on the first 1,000 captions'
+sound). About 9,670 captions a reader instead of 4,670 + 5,000; read at 1,000, 2,500, 5,000, 7,500 and the end on
+1,000 held-out pairs; a control link (each bag tied to another photograph) beside it. This is the form a live ear
+would have (docs/ASYNC.md).
+**What I say:** early bags are made by kinds that are still moving, so at as many pairs the one-pass ear is under
+the two-stage one (at 5,000: R@10 0.035–0.045 for the first reader against 0.048; 0.045–0.06 for the other two
+against 0.065), and by the end, with twice the pairs, it is level with it or above (0.05–0.07 and 0.065–0.085),
+the control at chance. If it ends well under the two-stage ear, moving kinds spoil the link and the link needs to
+forget (a decay), or the kinds need to settle before pairs count.
