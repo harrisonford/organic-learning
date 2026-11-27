@@ -1558,3 +1558,7 @@ Still Kris's own:
   the lives (corrections scaled by their own error) on both codes (`organic-cells-err`). The stream brain's eye, seed
   0, today's eye: 0.071 (21% within 8 px of the middle). gazs_s0 at 120,000: first words 0.47, two words 0.47, pages
   0.17 against plat_s0's 0.49, 0.46, 0.15 (level).
+- 2026-11-27 06:10 **Artifact v4 for Kris's talk** (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL): a new card "An eye on
+  the held thing" (3 seeds: 0.165 against the whole view's 0.118, with the crop caveat, the reflexes' misses and the
+  word cells' miss), "Time in video" now on 3 seeds with both second stages, and three references added from Crossref
+  (Yu & Smith 2012, Lisberger 2010, Wiskott & Sejnowski 2002; one-line summaries from memory, for Kris to open).
