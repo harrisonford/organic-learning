@@ -4160,3 +4160,9 @@ frames, so it flatters; the accuracies are on the held-out sessions and stand. T
 one now running: a circuit that learns along the stream sees each frame once, as the reader does. It is slower than
 I thought (about an hour for a code and seed; the probe prints only at the end of each); seeds 1 and 2 were started
 beside seed 0 at 09:22 (`organic-relaylearn-s1`, `-s2` → core50_relay_learns_s{1,2}.log).
+References for it, found on Crossref at 09:24 (content from memory, to be opened before use): Benucci, Saleem &
+Carandini 2013, "Adaptation maintains population homeostasis in primary visual cortex", Nature Neuroscience 16(6),
+724–729, doi:10.1038/nn.3382 (as I remember it: shown a biased set of orientations, cat V1 adapts so that the
+population's responses stay equal and decorrelated: the cortex evens itself out in the world it is shown); Sharpee et
+al. 2006, "Adaptive filtering enhances information transmission in visual cortex", Nature 439, 936–942,
+doi:10.1038/nature04519 (V1 filters change with the statistics of the stimulus set, over minutes).
