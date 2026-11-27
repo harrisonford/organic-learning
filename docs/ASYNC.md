@@ -90,3 +90,36 @@ association cortex; speech is parsed at its syllable rhythm; the eyes sample a s
 people plan their reply while still listening. Nothing in the design is a new learning rule: it changes when the
 existing rules are applied, and makes time itself something the learner lives through. What is ours and not a
 finding: the rates in the table until each is checked, and the slow-down factor on this CPU.
+
+## References for the stream brain, checked against Crossref (2026-11-26)
+
+Title, authors, year and venue confirmed by DOI lookup; what each is cited for is our reading and is to be checked
+in the paper itself before it is quoted.
+- de Boysson-Bardies, Hallé, Sagart & Durand (1989). A crosslinguistic investigation of vowel formants in babbling.
+  *J. Child Language* 16, 1–17. doi:10.1017/S0305000900013404 — babbling vowels drift toward the ambient language.
+- Hanes & Schall (1996). Neural control of voluntary movement initiation. *Science* 274, 427–430.
+  doi:10.1126/science.274.5286.427 — a saccade starts when movement-related activity reaches a threshold.
+- Rayner (1998). Eye movements in reading and information processing: 20 years of research. *Psychol. Bull.* 124,
+  372–422. doi:10.1037/0033-2909.124.3.372 — fixation durations.
+- Houde, Nagarajan, Sekihara & Merzenich (2002). Modulation of the auditory cortex during speech: an MEG study.
+  *J. Cogn. Neurosci.* 14, 1125–1138. doi:10.1162/089892902760807140 — one's own speech is suppressed in auditory cortex.
+- Klatt (1980). Software for a cascade/parallel formant synthesizer. *JASA* 67, 971–995. doi:10.1121/1.383940 — the
+  vocal tract's resonators.
+- Giraud & Poeppel (2012). Cortical oscillations and speech processing. *Nat. Neurosci.* 15, 511–517.
+  doi:10.1038/nn.3063 — the syllable rhythm in auditory cortex.
+- Murray et al. (2014). A hierarchy of intrinsic timescales across primate cortex. *Nat. Neurosci.* 17, 1661–1663.
+  doi:10.1038/nn.3862; Hasson, Yang, Vallines, Heeger & Rubin (2008). A hierarchy of temporal receptive windows in
+  human cortex. *J. Neurosci.* 28, 2539–2550. doi:10.1523/JNEUROSCI.5487-07.2008 — areas on their own time scales.
+- Ladefoged & Broadbent (1957). Information conveyed by vowels. *JASA* 29, 98–104. doi:10.1121/1.1908694; Dean,
+  Harper & McAlpine (2005). Neural population coding of sound level adapts to stimulus statistics. *Nat. Neurosci.* 8,
+  1684–1689. doi:10.1038/nn1541 — hearing adapts to the voice and to the sound's statistics.
+- Cowan (1984). On short and long auditory stores. *Psychol. Bull.* 96, 341–370. doi:10.1037/0033-2909.96.2.341 —
+  echoic memory.
+- Miller (1982). Divided attention: evidence for coactivation with redundant signals. *Cogn. Psychol.* 14, 247–279.
+  doi:10.1016/0010-0285(82)90010-X — answers come sooner when two senses agree.
+- Levinson (2016). Turn-taking in human communication. *Trends Cogn. Sci.* 20, 6–14. doi:10.1016/j.tics.2015.10.010 —
+  replies about 200 ms after the turn ends, planned while listening.
+- Zhang, Bao & Merzenich (2001). Persistent and specific influences of early acoustic environments on primary auditory
+  cortex. *Nat. Neurosci.* 4, 1123–1130. doi:10.1038/nn745; Maye, Werker & Gerken (2002). Infant sensitivity to
+  distributional information can affect phonetic discrimination. *Cognition* 82, B101–B111.
+  doi:10.1016/S0010-0277(01)00157-3 — hearing develops from the sounds heard.
