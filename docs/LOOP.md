@@ -1485,4 +1485,9 @@ Still Kris's own:
   (`organic-grounded1`, seed 0, 20,000 + 20,000 captions, 1,000 test pairs) is running: some ten hours. CORe50 seed 1
   read (VISION.md): the order does not help the 3 × 3 stage on two seeds. Photo daemon: ling still answers 429; the
   cool-down retries every 30 minutes (two requests a try, no photos dropped).
+- 2026-11-27 01:50 **Artifact v3 for Kris's talk** (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL): a "Being built now"
+  section (a 1.5 s timeline of the stream brain; five result cards with seeds and status: babbling imitation (3 seeds),
+  babbling drift (3 seeds, exploratory), the text-free ear's word-like units (1 seed), sight and sound (3 seeds, the
+  combination claim marked not established), time in video (2 seeds, negative); Crossref-checked references), and
+  the photo row of the chart on three seeds of backprop. Li & DiCarlo 2008 checked on Crossref.
 
