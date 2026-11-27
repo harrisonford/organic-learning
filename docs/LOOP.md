@@ -1481,4 +1481,8 @@ Still Kris's own:
   the limit and drop the batch: now it cools down 30 minutes and tries the same photos again (annotate.py; restarted).
   **`organic-grounded1`** queued (smoke test, then seed 0: the ear's sound kinds against the photographs, R@1/5/10).
   CORe50 seed 1: first 0.120, order 0.109, shuffled 0.102 (plain running).
+- 2026-11-27 01:20 Health: all healthy. Grounding smoke test passed (chance at 600 captions, as expected); the full run
+  (`organic-grounded1`, seed 0, 20,000 + 20,000 captions, 1,000 test pairs) is running: some ten hours. CORe50 seed 1
+  read (VISION.md): the order does not help the 3 × 3 stage on two seeds. Photo daemon: ling still answers 429; the
+  cool-down retries every 30 minutes (two requests a try, no photos dropped).
 

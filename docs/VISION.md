@@ -3826,3 +3826,8 @@ photo cortex as content), against the paradigm's visually grounded speech.
 chance 0.10): word cells + relay / ridge + relay: first stage 0.363 / 0.373, second stage in order with the trace
 0.374 / 0.383, shuffled 0.371 / 0.376, in order without it 0.365 / 0.374. The order is a point above shuffled for both
 readers, inside a seed's noise; the same verdict as the nearest-frame reading. Seeds 1–2 queued.
+
+**CORe50 seed 1** (`core50_trace_s1.log`): same object from another session: first stage 0.120, in order with the trace
+0.109, shuffled 0.102, in order without it 0.106 (same kind 0.231 / 0.202 / 0.189 / 0.201). Two seeds agree: no arm of
+the 3 × 3 second stage is above the first stage, and the order adds a point at most (0.109 against 0.102 here,
+0.116 against 0.119 on seed 0). Seed 2 and the streams follow in the queue.
