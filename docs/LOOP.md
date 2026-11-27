@@ -1445,4 +1445,11 @@ Still Kris's own:
   seeds, 6 of 6; VISION.md 20:45), after gating habits off one's own voice. CORe50 seed 0: first stage alone same
   object elsewhere 0.117, the second stage in order with the trace 0.116 (shuffled and plain running). Ramp census
   in (same turnover pattern). gazs_s1: no record yet at 85 minutes (first due at 95,000).
+- 2026-11-26 21:25 Health: all healthy. **gazs_s1's first record (95,000, 5,000 moments of serial gaze after a life of
+  looking all at once)** against its control tagn_s1 at the same age: naming on pages 0.263 against 0.285 (6.6 ticks
+  against 5.2), "is there" on pages 0.250 against 0.243 (3.5 against 2.4 ticks), first words 0.439 against 0.454,
+  pages 0.231 against 0.247: level within a few points, a tick slower, as on the small learners. One seed, early.
+  Backprop on photographs with the relay, three seeds: 0.462 / 0.464 / 0.462 (no relay: 0.387 / 0.390 / seed 2 running).
+  Owed for Kris's talk: the artifact gets a short "being built now" part (two senses, the stream brain, babbling)
+  once tonight's seeds are in.
 
