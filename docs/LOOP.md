@@ -72,9 +72,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   (stream_core50_c50eyeboth_s{0,1,2}.log). Said before: VISION.md 11:21. Check first that seed 0's line repeats
   0.140 (the probe was refactored).
 - **`organic-relaysrc`** ENDED 11:04, read (VISION.md 11:20: the lives' relay is at home in all three sources).
-- **`organic-relaylearn-s1`, `-s2`** (experiments/core50_relay_learns_probe.py; 2026-11-27 09:22; MemoryMax 2000M): the
-  relay circuit learning along CORe50's stream, seeds 1 and 2 → core50_relay_learns_s{1,2}.log (middle fixation due
-  about 11:40). Seed 0 read (VISION.md 10:49; `organic-relaylearn` stopped at 10:43 after it).
+- **`organic-relaylearn-s1`, `-s2`** ENDED about 11:40, read (VISION.md 11:53: what I said held on three seeds).
 - **`organic-grounded2`** (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
   grounding run again (the first, `organic-grounded1`, was killed for memory at 07:49 after seven hours, coding the
   photographs in one stack). The probe now keeps the captions' bags in out/bench/grounded_bags_*.npz and codes the
@@ -1633,3 +1631,10 @@ Still Kris's own:
   **Started: naming from the stream brain's own eye** (`organic-eye-naming`; said before it runs): the eye with
   both reflexes watches the training videos too, and the readers learn from where it looked. The grounding run:
   15,000 of 20,000 captions heard. tagr_s1 at 105,000.
+- 2026-11-27 11:54 Health: all healthy. **The relay circuit learning along the stream, three seeds** (VISION.md
+  11:53; memoize): middle fixation 0.371 / 0.370 / 0.372 against the relay alone 0.348 / 0.336 / 0.347 and the whole
+  frame with the circuit 0.357 / 0.352 / 0.361; about half of the batch's gain, still growing at 10,000 frames; every
+  point of what I said at 08:28 held. **Artifact v6** (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL): the relay
+  box and the held-thing card carry it; two references added (Benucci, Saleem & Carandini 2013; Sharpee et al.
+  2006; on Crossref, summaries from memory). The eye-naming queue: seed 0 repeats 0.140 after the refactor; seeds
+  1–2 of the eye's codes are being made. The grounding run has heard its 20,000 captions and is making the bags.

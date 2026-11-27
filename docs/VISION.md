@@ -4252,3 +4252,24 @@ less: the same miss); the delta reader settled again 0.37–0.39, above the whol
 thing could turn it the other way: the eye is elsewhere than on the object in two frames of three, and those frames
 (a fixated corner of the room, enlarged) may teach the readers less than the whole frame does; if the ridge is
 under 0.37, that is what happened.
+
+### 2026-11-27 11:53, the relay circuit learning along the stream, three seeds: what I said held
+
+`core50_relay_learns{,_s1,_s2}.log` (the delta reader after 10,000 frames; seeds 0 / 1 / 2):
+
+| | whole frame | middle fixation |
+|---|---|---|
+| the relay settled on COCO, alone | 0.360 / 0.348 / 0.359 | 0.348 / 0.336 / 0.347 |
+| with the circuit learning along the stream | 0.357 / 0.352 / 0.361 | **0.371 / 0.370 / 0.372** |
+| (the relay settled again in one batch, 08:28) | 0.356 / 0.364 / 0.360 | 0.398 / 0.400 / 0.409 |
+
+Against 08:28, on three seeds: the middle fixation rises to within 0.36–0.39 (yes, all three: +0.023, +0.034,
++0.025); it is above the whole frame with the circuit (yes: +0.014, +0.018, +0.011); the whole frame changes by
+under 0.015 (yes: −0.003, +0.004, +0.002). The circuit gives about half of what the batch gives, with each frame
+seen once and nothing but its published local rule, and its gain was still growing at the end of the stream
+(seed 0: +0.009, +0.014, +0.023 at 1,000, 5,000, 10,000 frames; seed 1: +0.010, +0.029, +0.034; seed 2: −0.008,
++0.022, +0.025). **With a relay that keeps learning, the fixation's gain reaches the word cells' rule: the
+sign of the fixation's effect turns from −0.012 to +0.011–0.018.** What is not done: the word cells themselves
+(the delta reader stands for them; it followed them within 0.004 on every code so far), more frames (CORe50 has
+ten times these), and the circuit in place of the batch relay and not on top of it. The refactored eye probe
+repeats seed 0's 0.140 exactly; the eye on the training videos is within 8 px of the middle in 38% of frames.
