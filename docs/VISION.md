@@ -3951,3 +3951,36 @@ once, 4,500 tests from the held-out sessions, 10 kinds, chance 0.10; `stream_cor
 **Not what the nearest frame said.** The middle fixation lifts the linear readout of kinds by +0.025 / +0.028 (the
 ridge, the reference), but the word cells name kinds *worse* on it (−0.015 on both seeds), and a frame seen once is
 remembered less well 20 frames later (0.83 against 0.90). Why is not known yet. (A first reading, that the cells follow the last frames and neighbouring frames of a video are more alike on the whole frame, is wrong: the stream is shuffled, bench_stream.py permutes the training frames.) Two readings left, told apart by a cheap check: if nearest class mean (running means, no gradient, no covariance) also gains on the fixation, the word cells' delta rule (one full-size correction a frame) is what fails to take the gain; if it loses too, the gain needs a readout that weighs directions by how much they vary within a kind (the ridge does, means alone do not). Queued: `ARMS=ncm+relay` on the whole frame and the middle fixation, seeds 0–1 (`stream_core50_ncm_*`). Seed 2 and the reflex's pick on seeds 1–2 are running (`organic-fovea-q`).
+
+**References of tonight's CORe50 entries, found on Crossref (2026-11-27 04:56; that they exist and where, not their
+content: what I say they show is from memory until Kris or I read them):** Yu & Smith 2012, Embodied attention and word
+learning by toddlers, Cognition, 10.1016/j.cognition.2012.06.016 (held objects fill the toddler's view); Lisberger 2010,
+Visual guidance of smooth-pursuit eye movements: sensation, action, and what happens in between, Neuron,
+10.1016/j.neuron.2010.03.027 (pursuit driven by image motion near the fovea); Wiskott & Sejnowski 2002, Slow feature
+analysis: unsupervised learning of invariances, Neural Computation, 10.1162/089976602317318938; Sprekeler, Michaelis &
+Wiskott 2007, Slowness: an objective for spike-timing-dependent plasticity?, PLoS Computational Biology,
+10.1371/journal.pcbi.0030112 (Hebb on a trace of whitened input as slow feature analysis).
+
+### 2026-11-27 04:57, the stream brain's eye drawn by motion and following it (two reflexes), said before it runs
+
+Kris asked (2026-11-26) how fixations move and whether they move at all. In the stream brain (`organic/stream.py`)
+the eye jumps three or four times a second among nine places, drawn only by how much a place stands out from its
+surround, and stays still between jumps. Tonight's probes on CORe50 said what that costs: contrast alone lands on
+clutter (0.075 on the same object elsewhere, against the whole frame's 0.117 and an eye on the held thing's 0.164),
+and an eye that follows motion against the view's own flow is near the thing in 45% of frames against 26% for
+jumps. **Two reflexes move into the stream brain, behind switches (default unchanged, checked by digest):**
+- `motion_drive`: what moves draws the saccade too. The superior colliculus's map of where to look takes in motion
+  and onsets as well as contrast (a priority map: Fecteau & Munoz 2006; to verify). The two sources are each taken
+  relative to their own strongest and then added, the convention of the mouth's drives (no weight between them).
+  Motion is the change against the view's own flow (the best whole-pixel shift of the frame before, within 3 px:
+  the self-motion the optokinetic system and MST discount; to verify).
+- `pursuit_tau`: between saccades the eye drifts toward the centre of that motion within its own field (the fixated
+  half and a quarter around it), with time constant 100 ms, every 10 ms step; the view is coded again when the eye
+  has moved 2 px. Pursuit is driven by image motion on and near the fovea (Lisberger 2010) and develops in the
+  first months of life (to verify). A saccade puts the eye on a place; pursuit holds it there if the thing moves.
+Nothing here is learned: both are reflexes, given as the retina is. **Measured** on CORe50's held-out sessions (all
+frames at 20 a second, the brain's clock at 10 ms, three seeds of cortex and noise): where the eye is at each
+coded frame (within 8 px of the middle, where the crop puts the object) and the code of what it is on, read as
+before (the same object in another session, chance 0.02; the same relay for every eye). **What I say before:**
+today's eye near the salient pick (0.07–0.08); with both reflexes above today's eye by 0.02 or more and within 8 px
+of the middle in at least 35% of frames; reaching the whole frame's 0.117 I give even odds; the middle's 0.164 not.

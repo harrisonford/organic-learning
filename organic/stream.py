@@ -77,9 +77,33 @@ def places(img, side=None):
     return out
 
 
+def motion(img, before, reach=3):
+    """What changed between two frames against the view's own flow: the frame before is shifted by the whole-pixel
+    step (up to `reach` each way) that matches it best, and what still changes moved by itself (the self-motion of
+    head and camera discounted, as the optokinetic system and MST do; to verify). Each place's change less the
+    frame's median change; zero at the edge the shift cannot reach (2026-11-27, experiments/core50_pursuit_probe.py)."""
+    a, b = np.asarray(img, np.float32), np.asarray(before, np.float32)
+    H, W = a.shape[:2]
+    best, m = None, None
+    for dy in range(-reach, reach + 1):
+        for dx in range(-reach, reach + 1):
+            d = np.abs(a[reach: H - reach, reach: W - reach] - b[reach - dy: H - reach - dy, reach - dx: W - reach - dx]).mean(axis=2)
+            if best is None or d.mean() < best:
+                best, m = d.mean(), d
+    m = np.pad(m, reach)
+    return np.maximum(m - np.median(m), 0)
+
+
 class StreamBrain:
-    def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0, echo_tau=None, heard_habit=0.0):
+    def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0, echo_tau=None, heard_habit=0.0,
+                 motion_drive=False, pursuit_tau=None):
         self.rng = np.random.default_rng(seed)
+        # Two reflexes of the eye, off by default (2026-11-27, docs/VISION.md 04:57): `motion_drive`, what moves against
+        # the view's own flow draws saccades as well as what stands out (each relative to its own strongest, then
+        # added: the colliculus's priority map; to verify); `pursuit_tau` (seconds), between saccades the eye drifts
+        # toward the centre of that motion within its own field (smooth pursuit: Lisberger 2010).
+        self.motion_drive, self.pursuit_tau = motion_drive, pursuit_tau
+        self.before, self.moving, self.pos, self.pos_seen, self.target = None, None, None, None, None
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
         self.ior = np.zeros(9, np.float32)  # inhibition of return, fading over about a second
@@ -117,10 +141,30 @@ class StreamBrain:
         """The code of what the eye is on: the fixated half of the frame, enlarged to fill the view."""
         from PIL import Image
         r, c, _ = self.places[self.where]
+        if self.pursuit_tau:  # the eye is where pursuit has carried it, not only on one of the nine places
+            r, c = int(round(self.pos[0])), int(round(self.pos[1]))
+            self.pos_seen = self.pos.copy()
         side = self.frame.shape[0] // 2
         w = self.frame[r: r + side, c: c + side]
         w = np.asarray(Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).resize(self.frame.shape[:2][::-1], Image.BILINEAR), np.float32) / 255
         return self.cortex.whole(w, 4)
+
+    def _pursuit_target(self):
+        """Where pursuit carries the eye: the fixated half centred on the centre of the motion within the eye's own
+        field (the half it is on and a quarter of it around), or None when nothing there moves."""
+        if self.moving is None:
+            return None
+        H, W = self.frame.shape[:2]
+        side = H // 2
+        margin = side // 4
+        r0, c0 = int(max(self.pos[0] - margin, 0)), int(max(self.pos[1] - margin, 0))
+        r1, c1 = int(min(self.pos[0] + side + margin, H)), int(min(self.pos[1] + side + margin, W))
+        field = self.moving[r0:r1, c0:c1]
+        if field.sum() <= 1e-6:
+            return None
+        rr, cc = np.mgrid[r0:r1, c0:c1]
+        centre = np.array([(rr * field).sum(), (cc * field).sum()], np.float32) / field.sum()
+        return np.clip(centre - side / 2, 0, H - side).astype(np.float32)
 
     def _hear(self, row):
         self.sound_rows.append(np.asarray(row, np.float32))
@@ -141,19 +185,39 @@ class StreamBrain:
         if frame is not None:  # a new picture: the places that stand out are measured again
             self.frame = np.asarray(frame, np.float32)
             self.places = places(self.frame)
+            if self.motion_drive or self.pursuit_tau:  # what moved since the frame before, against the view's own flow
+                self.moving = motion(self.frame, self.before) if self.before is not None else None
+                self.before = self.frame
+                if self.moving is not None:
+                    self.moving_places = np.array([s for _, _, s in places(np.repeat(self.moving[..., None], 3, axis=2))], np.float32)
+                if self.pursuit_tau:
+                    if self.pos is None:
+                        self.pos = np.array(self.places[self.where][:2], np.float32)
+                    self.target = self._pursuit_target()
             self.view = self._see()
         if self.frame is not None:
             self.ior *= np.exp(-DT / 1.0)
             sal = np.array([s for _, _, s in self.places], np.float32)
-            drive = sal / (sal.sum() + 1e-8) * (1 - self.ior)
+            if self.motion_drive and self.moving is not None:  # each source relative to its own strongest, then added
+                mot = self.moving_places
+                drive = (sal / (sal.max() + 1e-8) + mot / (mot.max() + 1e-8)) * (1 - self.ior)
+            else:
+                drive = sal / (sal.sum() + 1e-8) * (1 - self.ior)
             drive[self.where] = 0.0  # a saccade goes elsewhere
             k = self.eye.step(drive) if self.blind <= 0 else None
             if k is not None:
                 self.ior[self.where] = 1.0
                 self.where, self.blind = k, 0.03
                 events.append(("saccade", k))
+                if self.pursuit_tau:
+                    self.pos = np.array(self.places[k][:2], np.float32)
+                    self.target = self._pursuit_target()
             self.blind -= DT
-            if self.blind <= 0 and (k is not None or frame is not None):
+            drifted = False
+            if self.pursuit_tau and self.target is not None and self.blind <= 0:  # pursuit: the eye drifts after the motion
+                self.pos += (DT / self.pursuit_tau) * (self.target - self.pos)
+                drifted = np.abs(self.pos - self.pos_seen).max() >= 2 if self.pos_seen is not None else True
+            if self.blind <= 0 and (k is not None or frame is not None or drifted):
                 self.view = self._see()
             moved = self.sight.step(self.view if self.blind <= 0 else 0 * self.view)
         else:

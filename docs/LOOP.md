@@ -65,6 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-stream-eye1`** (out/tmp/stream_eye_queue.sh; 2026-11-27 05:01; shared gate; about 1.6 hours): the stream
+  brain's own eye on CORe50 with its two new reflexes (`motion_drive`, `pursuit_tau` in organic/stream.py; default
+  unchanged by digest), three seeds → out/bench/core50_stream_eye.log. What I said before: VISION.md 04:57.
 - **`organic-ncm-c50`** (out/tmp/ncm_c50_queue.sh; 2026-11-27 04:50; shared gate): why the word cells do not take the
   middle fixation's gain (VISION.md 04:48): nearest class mean and streaming LDA on the whole frame's and the middle
   fixation's codes, seeds 0–1 → stream_core50_c50{first,centre}_ncm_s{0,1}.log.
@@ -1536,3 +1539,10 @@ Still Kris's own:
   has heard all 20,000 captions; the bags next. Commons video: no restart since the fix (its 800 MB is mostly page
   cache, 69 MB its own). **Photo daemon: nothing added for 25 hours** (ling 429 all night); scan of two more free
   models that look; particle-1 taken as a spare that stands in for a rate-limited adult (WORLD.md 04:52).
+- 2026-11-27 05:03 **Photo daemon flowing again:** with particle-1 standing in while ling rests, the first two batches
+  were judged 19 / 20 and 20 / 20 right. **Two reflexes for the stream brain's eye** (E 34; Kris's "do they move at
+  all?"): what moves against the view's own flow draws saccades (`motion_drive`), and between saccades the eye
+  follows it (`pursuit_tau`, 100 ms); both off by default (digest of 3 s of the default eye identical before and
+  after). Said before it runs (VISION.md 04:57); `organic-stream-eye1` measures where the eye lands and what it then
+  recognises across sessions, three seeds. Tonight's four references (Yu & Smith 2012, Lisberger 2010, Wiskott &
+  Sejnowski 2002, Sprekeler et al. 2007) found on Crossref with their DOIs (content still from memory).

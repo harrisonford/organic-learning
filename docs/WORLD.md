@@ -147,7 +147,8 @@ failed requests were counted against the day's allowance (459 of 500 used by 09:
   and names the 64-pixel apple; `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` too (17 s). particle-1 is
   taken as a **spare**: a rate-limited model rests 30 minutes and the spare takes its place in the pair meanwhile,
   so two different adults still write and check (another maker than the nemotron adult, so the check is not a
-  model family agreeing with itself). With both adults answering, nothing changes (`annotate.py`, `SPARE`).
+  model family agreeing with itself). With both adults answering, nothing changes (`annotate.py`, `SPARE`). First
+  batches with the spare checking (05:00, 05:01): 19 of 20 and 20 of 20 questions judged right; photos flowing again.
 
 
 ## 2026-11-25: more Wikimedia Commons photographs, fetched constantly (not part of world 4)

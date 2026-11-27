@@ -289,7 +289,10 @@ organic learner behaves and what each part does, measured honestly, not a score.
   Commons video (true sound 60–64% against another video's on three seeds; the claim that sight and hearing together
   name a video better than sight did not hold on the third seed), the ear that hears sound (no units recur yet), the stream brain with a vocal tract
   (babbling learns an auditory-motor map; heard vowels draw near imitations, three seeds) and the order-vs-shuffled
-  video probe on CORe50 (running). Kris may present the work to neuroscientists in about two weeks; the artifact
+  video probe on CORe50 (done 2026-11-27: order teaches neither second stage anything, three seeds; the whole-frame
+  code is ruled by the scene; an eye on the held object lifts the same object across sessions from 0.12 to 0.165 on
+  three seeds, but the word cells do not take the gain where the ridge does: perhaps the photo section's
+  first-order reader again, being checked). Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
 - **2026-11-26 21:55: draft 10 emailed to Kris.** The photo section is complete on three seeds (backprop + relay 0.463
   ± 0.001 against the word cells' 0.446 ± 0.006; level without the relay, 0.392 against 0.389; the word cells ahead
