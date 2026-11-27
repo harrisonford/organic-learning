@@ -443,6 +443,18 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   let it grow again: remove that file, `systemctl --user daemon-reload`, restart `organic-commons-video`. Whether
   the downloaded files (69 GB; the frames and sound are made from them and are what the probes read) may go is
   still yours.
+  **16:03, on Kris's word ("borra también los zips de COCO y los modelos sin uso"):** the three COCO zips (20.4 GB:
+  train2017, val2017, annotations) and the three chat models nothing loads (7.9 GB: Laya, d1-3B, Kev-4B in the
+  Hugging Face cache) deleted; list in out/monitor/deleted_2026-11-27_coco_models.txt. Kept: the extracted
+  annotations, the 64 × 64 thumbnails of all of train2017, the crops; the judge's and the parent's models (both
+  answer 200 after). Free: 251 → 278 GiB. Cost: COCO at more than 64 pixels, or new crops, needs the zip fetched
+  again (19 GB); `experiments/local_judge_compare.py` would fetch its models again. Still yours: SpokenCOCO's
+  archive (68 GB), the Commons videos' downloaded files (69 GB), the ended lives' brains since the review.
+- **(2026-11-27 16:00) A live page for kid-a on SpacetimeDB** (camera, text and sound streamed in real time, the
+  brain doing what it wants; "hints of something forming"). Kris asked whether it is possible from where we are.
+  Answered yes for camera and sound (the stream brain runs at 1.1–1.8 × real time on this machine: docs/ASYNC.md,
+  the last section), not yet for text. **Waiting for your word to build**, and for two choices only you can make:
+  where the brain runs, and whether to install SpacetimeDB's tools on this server.
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
   nothing" was on enlarged pictures. I will put both sizes side by side in that section when the enlarged
@@ -1723,3 +1735,7 @@ Still Kris's own:
   lexicon in one voice, to about 16:45); tagn_s2 (115,000 of 120,000; then tagr_s2: ADD IT to lives.json when
   it starts and move tagn_s2 to ended.json). Next for the ear, after the one-voice reading: a fast store within
   one voice or across the five readers of a photograph, whichever the reading supports; say it before building.
+- 2026-11-27 16:05 **On Kris's word:** COCO zips and the three unused chat models deleted (28 GB; list in
+  out/monitor; 278 GiB free). **Kris's question, a live page on SpacetimeDB:** the stream brain timed against the
+  clock (1.8 / 1.4 / 1.1 × real time: today's eye, with both reflexes, with hearing), answered and written in
+  docs/ASYNC.md; nothing built or installed until he says. `organic-onevoice` still running.

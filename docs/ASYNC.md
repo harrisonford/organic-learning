@@ -123,3 +123,28 @@ in the paper itself before it is quoted.
   cortex. *Nat. Neurosci.* 4, 1123–1130. doi:10.1038/nn745; Maye, Werker & Gerken (2002). Infant sensitivity to
   distributional information can affect phonetic discrimination. *Cognition* 82, B101–B111.
   doi:10.1016/S0010-0277(01)00157-3 — hearing develops from the sounds heard.
+
+## Measured 2026-11-27 16:04: the stream brain keeps up with the clock; Kris's idea of a live page
+
+**Speed** (CORe50 video at 20 frames a second, 10 s of life, two threads at Nice 15 beside a life and a probe; the
+sight population coding every fixated window with the photo cortex and its relay): a 10 ms step takes 5.6 ms with
+today's eye (1.8 × real time), 6.9 ms with the motion and pursuit reflexes (1.4 ×), 9.1 ms with hearing running too
+(1.1 ×). So step 5 of the way above (wall-clock time, camera and microphone as streams) needs no slow-down factor on
+this machine for what the stream brain has today. Not measured: with a vocal tract sounding, on another machine.
+
+**Kris, 2026-11-27 16:00** (a question, not yet an order): could a small app on SpacetimeDB stream a camera, text and
+sound to kid-a's brain in real time and let it do whatever it wants, "it doesn't matter if it's bad, I just want to
+see hints of something forming"; SpacetimeDB so the page reacts well; hosting open. **Answered: yes for camera and
+sound with the stream brain as it is; text has no place in the stream brain yet.** What a first page would show,
+all of it already in `organic/stream.py`: where the eye is on the camera's picture (three or four saccades a second,
+drawn by what stands out and what moves, following a moving thing between saccades), the babble through the vocal
+tract (heard back through its own cochlea), the gestures drifting toward vowels it hears, the sight-and-sound link
+filling in. What would form over a session: the map from gesture to sound, the babble's drift, the link. What it
+would not do: name, answer, read. **Shape:** the page (TypeScript client) puts 64 × 64 frames at 10-20 a second and
+50 ms pieces of sound into tables through reducers and subscribes to the brain's events (gaze, saccade, gesture,
+sound out); the brain is a headless client beside the database. Open before building: no Python client was found in
+a first search (C#, TypeScript and Rust were), so the brain needs a thin bridge process or a small port; whether
+tables are the right carrier for sound at 100 frames a second; where the brain runs (it needs one or two cores and
+about 1 GB, no GPU); a camera page must be private at first (kid-a's public page has no login). Nothing is
+installed or built until Kris says. The steps that would make it worth watching are already in the queue: sounds
+pulling the eye, the stream brain naming what it fixates, a byte ear for typed text as a third stream.
