@@ -3863,7 +3863,7 @@ changes, so the slowest thing in every video is the scene, and a slowness rule (
 learning from time with a still camera and a whole-frame eye, not of the trace: a child's eyes fixate the thing in the
 hand, and the fovea gives it most of the cortex.
 
-### 2026-11-27 03:30, the eye on the thing (CORe50 through a fixation), said before it runs
+### 2026-11-27 02:55, the eye on the thing (CORe50 through a fixation), said before it runs
 
 `experiments/core50_fovea_probe.py`: the same cortex (the photo benchmark's, unchanged) reads the fixated half of each
 frame enlarged to fill the view (as the stream brain's eye does), with a relay settled on COCO thumbnails seen the
@@ -3897,3 +3897,15 @@ middle fixation's code** (seed 0): in order 0.137, shuffled 0.130, no trace 0.13
 gone the trace still adds nothing the same cells learn without it, and 256 slow directions keep less than the 4,096
 they read. The finding of the night is the fixation, not the trace. Queued (`organic-fovea-q`): the fixations of seeds
 1 and 2, the stream of 10 kinds on them (word cells and ridge), the slow stage on the middle fixation, seeds 1–2.
+
+**The eye drawn by what moves, seed 0** (`core50_fovea_moving_s0.log`): same object elsewhere **0.093** (same kind
+0.194), its next frame alike 0.158 (it jumps: the operator's hand moves as much as the object), side by side with the
+whole frame 0.107. Better than the salient pick (0.075), worse than the whole frame (0.117), far under the middle
+(0.164). **So the night's result splits in two.** An eye on the held thing makes recognition across scenes much
+better (one seed so far; seeds 1–2 queued); neither reflex we have finds the thing (contrast lands on clutter, motion on
+the hand, both jump every frame). What the middle stands for, honestly: CORe50's frames are cropped to 128 × 128
+around the object, so the middle is where the dataset's crop puts it, not where an eye of ours went. A child's eyes get
+there by holding the thing before them (in toddlers' head-camera views held objects fill the middle: Yu & Smith 2012;
+to verify) and by pursuit, which keeps a fixation on a moving thing and does not jump to every change; a learned value
+of places (queue E 23) is the other road. Next for the eye (E 34): a fixation that persists and follows (pursuit),
+measured by how often it lands on the dataset's middle, before any reading of recognition.

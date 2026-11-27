@@ -65,8 +65,8 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-fovea-q`** (out/tmp/fovea_queue.sh; queued 2026-11-27 03:55; shared gate): the eye on the thing (VISION.md
-  03:30): CORe50 through a fixation, seeds 1–2 (core50_fovea_s{1,2}.log; codes core50_c50{centre,salient}_s*), the
+- **`organic-fovea-q`** (out/tmp/fovea_queue.sh; queued 2026-11-27 03:19; shared gate): the eye on the thing (VISION.md
+  02:55): CORe50 through a fixation, seeds 1–2 (core50_fovea_s{1,2}.log; codes core50_c50{centre,salient}_s*), the
   stream of 10 kinds on them (stream_core50_c50{centre,salient}_s{0,1,2}.log), the slow stage on the middle
   fixation, seeds 1–2 (core50_slow_centre_s12.log). **`organic-fovea-mv0`**: the eye drawn by what moves, seed 0
   (core50_fovea_moving_s0.log; VIEWS=moving): if it matches the middle, queue it on seeds 1–2 and its streams.
@@ -1499,15 +1499,21 @@ Still Kris's own:
   combination claim marked not established), time in video (2 seeds, negative); Crossref-checked references), and
   the photo row of the chart on three seeds of backprop. Li & DiCarlo 2008 checked on Crossref.
 
-- 2026-11-27 04:00 Health: all healthy. **Commons video daemon was killed at its 800 MB cap every ~12 minutes since
+- 2026-11-27 03:25 Health: all healthy. **Commons video daemon was killed at its 800 MB cap every ~12 minutes since
   00:32** (nine times): it read each video whole into memory and one was too long, fetched again at every restart. Now
   streamed to disk a megabyte at a time, files over 300 MB skipped (the largest kept so far 244 MB); restarted 02:22,
   past the file (peak 640 MB). **gazs_s2 ended at 120,000:** first words 0.449 and pages 0.199 against plat_s2's own
   0.481 and 0.186 at that age, never the collapse of gazs_s1 at 105,000 (control tagn_s2 still to come); gazs_s0
-  started 02:39. **CORe50, two probes (VISION.md 02:25, 03:30):** the slow stage (Hebb on a trace, subspace rule)
+  started 02:39. **CORe50, two probes (VISION.md 02:25, 02:55):** the slow stage (Hebb on a trace, subspace rule)
   learns nothing from order on three seeds (prediction failed); the reason measured: the whole-frame code is ruled
   by the scene (another kind in the same session 0.15 alike, the same object elsewhere 0.03). **The eye on the thing,
   seed 0: the middle fixation lifts the same object elsewhere from 0.117 to 0.164** (the scene's share down by two
   thirds); the reflex's salient pick does worse (0.075). Queued seeds 1–2 and streams (`organic-fovea-q`); the eye
   drawn by motion on seed 0 running. Photo daemon: ling still 429 since midnight (cool-down working; no photos lost).
   Grounding run: the ear has heard 15,000 of 20,000 captions (about three more hours).
+- 2026-11-27 03:40 **The eye drawn by motion, seed 0: 0.093** (between the salient pick's 0.075 and the whole frame's
+  0.117; it jumps to the hand); the middle fixation seed 1: **0.164** against the whole frame's 0.120 (two seeds now,
+  +0.047 and +0.044). Reading (VISION.md 02:55): an eye on the held thing helps a lot, but neither reflex finds the
+  thing; the middle is where CORe50's crop puts the object. Next for E 34: pursuit (a fixation that persists and
+  follows), measured first by how often it lands on the middle. Timestamps written ahead of the clock tonight
+  (03:30, 03:55, 04:00) corrected to the real times.

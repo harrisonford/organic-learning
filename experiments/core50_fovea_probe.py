@@ -1,5 +1,5 @@
 """The eye on the thing: CORe50 seen through a fixation, not the whole frame (queue E 31 and E 34; docs/VISION.md
-2026-11-27 03:30).
+2026-11-27 02:55).
 
 core50_slow_probe.py found the first stage's whole-view code ruled by the scene: a frame of another kind of object
 filmed in the same session is more alike (cosine 0.15) than the same object filmed in another session (0.03). Within a
@@ -9,7 +9,7 @@ the seed, unchanged) reads the fixated half of each frame enlarged to fill the v
 with a relay settled on COCO thumbnails seen the same way (as the trace probe settles its own):
     centre    the middle place (the operator holds the object before the camera; it stands in for pursuit)
     salient   the place that stands out most from its surround (organic/stream.py's places(): the reflex's pick)
-    moving    the place that changed most in the last 100 ms (VIEWS=moving; added 03:55 when the salient pick missed)
+    moving    the place that changed most in the last 100 ms (VIEWS=moving; added 03:20 when the salient pick missed)
     w+...     the whole frame's code and a fixation's, side by side (the periphery and the fovea)
 Read on the held-out sessions as before: the nearest frame from another session (same object, chance 0.02; same kind,
 chance 0.10) and how alike a frame's code is to its video's next frame, to the same object elsewhere, and to another
