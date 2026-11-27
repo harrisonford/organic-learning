@@ -3821,3 +3821,8 @@ utterances a speaker); the measure is at the utterance, not where in the utteran
 Next: SpokenCOCO's training part through the cochlea (running, about an hour; every training image is among our COCO
 thumbnails) → do these sound units go with what the pictures show (the word cells with sound units as cues and the
 photo cortex as content), against the paradigm's visually grounded speech.
+
+**CORe50 seed 0, the stream of 10 kinds** (12,000 training frames seen once; 4,500 frames of the held-out sessions;
+chance 0.10): word cells + relay / ridge + relay: first stage 0.363 / 0.373, second stage in order with the trace
+0.374 / 0.383, shuffled 0.371 / 0.376, in order without it 0.365 / 0.374. The order is a point above shuffled for both
+readers, inside a seed's noise; the same verdict as the nearest-frame reading. Seeds 1–2 queued.
