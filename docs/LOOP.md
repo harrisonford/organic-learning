@@ -1475,4 +1475,10 @@ Still Kris's own:
   among 1,000 held-out pairs, with a shuffled control; no transcripts read at all); smoke test when the pass ends.
   gazs_s1 at 110,000: first words 0.297 (control 0.352), pages 0.184 (0.201): partly back. CORe50 seed 1: first stage
   0.120, in order 0.109 (shuffled and plain running).
+- 2026-11-27 00:40 Health: all healthy. **SpokenCOCO through the cochlea, complete** (617,222 recordings, 267 M rows).
+  **Photo daemon, read after midnight:** both failures tonight are inclusionai/ling-3.2-flash:free answering HTTP 429
+  (the free provider's rate limit; ling does take pictures: the scan of 2026-11-25); the daemon used to retry into
+  the limit and drop the batch: now it cools down 30 minutes and tries the same photos again (annotate.py; restarted).
+  **`organic-grounded1`** queued (smoke test, then seed 0: the ear's sound kinds against the photographs, R@1/5/10).
+  CORe50 seed 1: first 0.120, order 0.109, shuffled 0.102 (plain running).
 

@@ -109,6 +109,10 @@ while i < len(todo):
             check = {str(j + 1): v for j, v in enumerate(check)}
     except Exception as e:  # noqa: BLE001 - keep the daemon alive
         log(f"batch {batch[0]} failed ({writer} writes, {checker} checks): {e}")
+        if "HTTP 429" in str(e):  # the provider's rate limit: cool down and try the same photos again (2026-11-27; every
+            log("rate-limited upstream: cooling down 30 minutes, the same photos next")  # retry into a 429 spent our budget)
+            time.sleep(1800)
+            continue
         time.sleep(60)
         if "budget" in str(e):
             continue
