@@ -1715,3 +1715,11 @@ Still Kris's own:
   stand-in in a second sense: fitted in one world it does not hold in another; one paragraph, three seeds, the
   photo benchmark as control; PUBLISH.md). The numbers in it were read again from the logs before the build
   (core50_spectrum.log, photos_spectrum.log, VISION.md 06:03, 11:53).
+- 2026-11-27 15:42 **How brains deal with another voice** (VISION.md 15:38; second literature search): context
+  adaptation (partial; ours approximates it), a shift-tolerant code, tokens from several voices held together by a
+  cue that they are the same form (the first learned route in infants), the lexicon teaching the ear (later).
+  **The shift measured and set aside** (VISION.md 15:41; memoize): another reader's caption with its bands moved
+  to fit 0.218, unshifted 0.238, the same reader 0.372 (chance 0.167). Running: `organic-onevoice` (the ear's
+  lexicon in one voice, to about 16:45); tagn_s2 (115,000 of 120,000; then tagr_s2: ADD IT to lives.json when
+  it starts and move tagn_s2 to ended.json). Next for the ear, after the one-voice reading: a fast store within
+  one voice or across the five readers of a photograph, whichever the reading supports; say it before building.

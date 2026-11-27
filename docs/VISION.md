@@ -4663,3 +4663,13 @@ photograph are. So the two halves of today meet: the photograph in view is the c
 may be the same form, and the form that results has several voices in it from its first day. What stands in the
 way was measured at 14:57: across voices the best match is right one time in eight to ten, too thin to found
 kinds on. One voice first (running), or a code that tolerates the shift (being measured), may thicken it.
+
+**15:41, the voice is not a shift of the bands** (`ear_again_shift_s0.log`, 120 anchors, chance 0.167; windows of
+one / two / three stretches): the same reader 0.334 / 0.372 / 0.397; another reader 0.208 / 0.238 / 0.229; another
+reader with its bands moved to fit 0.218 / 0.218 / 0.217. Moving the bands gains nothing (the captions that share
+nothing gain as much from their own best shift). I said "little, 0.23–0.25": it is none, 0.218. So a
+shift-tolerant code is not where the two thirds are, at least not on top of this hearing layer; the second route
+of 15:38 is set aside, not refuted (the shift was applied to the cochlea's bands after the ear's adaptation, one
+shift a caption, 120 anchors, one seed). What remains for other voices is the third route, tokens from several
+voices held together by what they are said about, and it needs matches less thin than today's. The one-voice
+run will say what a lexicon is worth when the voice is taken out of the question.
