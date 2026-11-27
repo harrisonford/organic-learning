@@ -32,7 +32,7 @@ yet true; on a fifth of the stream, a published circuit of inhibitory interneuro
 does the second step's work to within a point. A
 small episodic store gives the learner one-shot memory of a picture but not of a category. We also raised the
 learner through a staged childhood of photographs and adult speech, and we report what each part did there, what
-did nothing, and three mistaken assumptions that had made earlier versions look better than they were.
+did nothing, and five mistaken assumptions, four of which had made earlier versions look better than they were.
 
 ## Introduction
 
@@ -278,7 +278,7 @@ inverts them itself, so it should not care whether somebody whitened the code be
 without the relay and 0.741 with it on the seed where we ran both. The relay adds no information. It conditions
 the code for a reader too simple to condition it for itself.
 
-### Our Hebbian development did nothing for the learner
+### What our Hebbian development is worth
 
 We spent weeks on the visual cortex. With random filters, never trained at all, the learner scores 0.693; with
 the developed ones, 0.687. Random whitened patches have been known to be hard to beat for a long time (Coates, Lee
@@ -752,13 +752,14 @@ for everything and so could choose nothing, and old stages made up 3% of what ca
 added 0.01. Dendritic branches on the word cells added nothing. We looked for the bias children show towards
 giving a new word to a thing that has no name yet, and found 0.51 where chance is 0.50. Our first visual cortex
 did worse after Hebbian development than before it; the second, as reported above, does no better than random
-filters. And no learner got through the stage after pages. Earlier stages slid while it tried, and when we looked,
+filters on enlarged pictures, is worth two to three points at the pictures' own size, and on photographs is worth
+two points to the readers that keep second moments and nothing to the word cells. And no learner got through the stage after pages. Earlier stages slid while it tried, and when we looked,
 the lost answers had not been erased so much as displaced by that stage's larger vocabulary for the same pictures
 ("couch" for a bed). The stage's test also turned out to be answerable blind more than half the time, and we have
 since rebuilt it.
 
-Then there are the things we got wrong. Four of our assumptions were mistaken, and each of them made the learner
-look better, or at least busier, than it was.
+Then there are the things we got wrong. Five of our assumptions were mistaken. Four of them made the learner look
+better, or at least busier, than it was; one made a part of it look worse.
 
 *We turned a behaviour into a target.* Echoing was a gate: a learner had to keep 80% of its echo score to move
 on. Learners that had begun to use words echoed less, as children do, and we held them back for 20,000 to 90,000
@@ -784,6 +785,13 @@ region and then credited whatever had scored it. With that bias removed and a ra
 signal, the real weight reached 0.010 in 10,000 moments and the shuffled one 0.006. Where the first look lands
 changes too few answers for reward to teach it in any span we could run. The answer was in the literature we had
 already collected (the timing described above), and we had passed over it because it needed a clock.
+
+*We assumed enlarging a picture was harmless.* CIFAR's pictures are 32 pixels across and the learner's eye is 64,
+so we enlarged them, as one does. Enlarging adds pixels and no detail: half the directions a small colour window can
+vary in are gone. On enlarged pictures our development cost the word cells two points and we wrote, in earlier
+drafts and in a section title, that it did nothing for the learner; at the pictures' own size it is worth two to
+three points on every seed. This one made our own work look worse than it was, and we only found it because a
+published layer collapsed on the enlarged pictures and we went to see why.
 
 Two smaller confessions belong here. The relay's regulariser was chosen from four values by looking at held-out
 naming in the learner's world, so one number in this paper was tuned. And the pass marks that moved the first

@@ -1452,4 +1452,10 @@ Still Kris's own:
   Backprop on photographs with the relay, three seeds: 0.462 / 0.464 / 0.462 (no relay: 0.387 / 0.390 / seed 2 running).
   Owed for Kris's talk: the artifact gets a short "being built now" part (two senses, the stream brain, babbling)
   once tonight's seeds are in.
+- 2026-11-26 21:55 **Two senses, three seeds: together-beats-sight does not hold** (seed 2: 0.218 against sight 0.254;
+  corrected in VISION.md, memoize, PUBLISH.md; told Kris at 19:55 too early). What holds: Hebb 0.60–0.64 on the true
+  sound; any hearing cortex above the cochlea; its development about a point. **Backprop on photographs, three seeds**
+  (0.463 ± 0.001 with the relay, 0.392 ± 0.005 without) → paper; **draft 10 built and emailed** (five mistaken
+  assumptions, the development section retitled). CORe50 seed 0: order 0.116, shuffled 0.119, first stage 0.117 (plain
+  running): time makes no difference to this second stage so far.
 

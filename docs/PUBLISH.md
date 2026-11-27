@@ -286,8 +286,14 @@ organic learner behaves and what each part does, measured honestly, not a score.
   658-pairs sentence now names its threshold (0.8; the table counts 0.9). Draft 10 when backprop's seed 2 is in,
   with the "did nothing" section's title and the list of mistaken assumptions revisited.
 - **Not for this paper** (a second paper, or a later version, if they hold): the two senses linked by Hebb's rule on
-  Commons video (true sound 61–63% against another video's; sight and hearing together name a video better than
-  either; one seed so far), the ear that hears sound (no units recur yet), the stream brain with a vocal tract
+  Commons video (true sound 60–64% against another video's on three seeds; the claim that sight and hearing together
+  name a video better than sight did not hold on the third seed), the ear that hears sound (no units recur yet), the stream brain with a vocal tract
   (babbling learns an auditory-motor map; heard vowels draw near imitations, three seeds) and the order-vs-shuffled
   video probe on CORe50 (running). Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
+- **2026-11-26 21:55: draft 10 emailed to Kris.** The photo section is complete on three seeds (backprop + relay 0.463
+  ± 0.001 against the word cells' 0.446 ± 0.006; level without the relay, 0.392 against 0.389; the word cells ahead
+  early), with the nearest-class-mean rows and the second-moment reading; the development section retitled "What our
+  Hebbian development is worth" with both sizes; "What we got wrong" now has five assumptions (the enlargement added;
+  the abstract had said three while the section listed four).
+
