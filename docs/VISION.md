@@ -3758,3 +3758,25 @@ sight → sound (+0.011, +0.005, +0.010) and nothing clear the other way. The wo
 one word (cat) holds a third to a half of the held-out videos and most words have one to six. Joining the two codes
 side by side for a nearest class mean is also the crudest of combinations; a learner that weighs each sense by how
 much it carries is the fair test, with more videos a word (the Commons fetcher keeps adding them).
+
+### 2026-11-26 22:25, real video for the eye, seed 0: time teaches this second stage nothing
+
+`experiments/core50_trace_probe.py`, seed 0 (`out/bench/core50_trace_s0.log`); CORe50's three held-out sessions (other
+backgrounds and light), the nearest frame from another session:
+
+| code | same object (chance 0.02) | same kind (chance 0.10) |
+|---|---|---|
+| the first stage alone (the photo cortex) | 0.117 | 0.226 |
+| second stage, frames in their order, with the trace | 0.116 | 0.203 |
+| second stage, the same frames shuffled, with the trace | 0.119 | 0.210 |
+| second stage, in order, no trace | 0.113 | 0.205 |
+
+**What I said before (13:20): the trace in order above the stage without it by 0.02 or more, and above the shuffled
+trace by more. Wrong:** the three arms are level (0.113–0.119) and none is above the first stage alone. Real time,
+with objects turning in the hand, teaches this second stage nothing it does not learn from the same frames in any
+order. The reading written before the run applies: a stage that looks at 3 × 3 places of the first is too local
+for what video teaches (a turning object changes the whole view, not a 3 × 3 patch of it); the place for the trace
+is a stage that sees the whole view, as inferotemporal cortex does (Li & DiCarlo 2008 changed IT cells by swapping
+objects across saccades; Wallis & Rolls 1997 put the trace at the top of the hierarchy). Next for E 31: the trace in
+a whole-view stage (on the relay's code: a population that sees the whole picture, learning by the same rule with
+the trace), in order against shuffled. Seeds 1–2 of this probe and its streams are queued as they were. One seed.
