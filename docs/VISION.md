@@ -4906,7 +4906,9 @@ circuit exists.) A live ear has only the past. `experiments/ear_causal_check.py`
 stream and does both steps from what was heard so far: a running mean and spread a band and a running loudest
 moment, fading with one time constant. No cortex, seconds. Read at 0.5, 2, 8 and 32 s, to see how much the choice
 matters, not to pick the best score: adaptation to the level of sound is measured in the midbrain and cortex from
-a few hundred milliseconds to seconds (Dean, Harper & McAlpine 2005; Rabinowitz et al. 2011; both to verify), and
+a few hundred milliseconds to seconds (Dean, Harper & McAlpine 2005, doi 10.1038/nn1541; Dean, Robinson, Harper &
+McAlpine 2008, doi 10.1523/jneurosci.0470-08.2008; Rabinowitz, Willmore, Schnupp & King 2011, doi
+10.1016/j.neuron.2011.04.030: all three found in Crossref 19:53, the time constants still to be read in the papers), and
 a listener sets a voice's vowels against the sentence before (Ladefoged & Broadbent 1957), which is seconds.
 **What I say:** a caption lasts 4.3 s, so fading over 2–8 s gives the cortex nearly the same bands (correlation
 above 0.9) and 80–90% of the same cuts within 30 ms; at 0.5 s the ear adapts within a syllable and both fall

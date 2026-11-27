@@ -65,8 +65,15 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-live`** (out/tmp/online_live_queue.sh; queued 2026-11-27 19:52 behind `organic-online-ear-b`;
+  MemoryMax 2600M; about 140 minutes once it starts, so it ends about 23:20): the one-pass ear with nothing known
+  of a caption before it is heard (`LIVE=2`: every band against the sound so far, fading over 2 s), reader top2 →
+  out/bench/grounded_online_top2_live2_s0.log; to be read beside grounded_online_top2_s0.log. Said before:
+  VISION.md 19:52 (within a fifth at every checkpoint). If it holds: readers top and top3, then the ear's relay as
+  a circuit (docs/ASYNC.md, "The ear's way onto the clock").
 - **`organic-online-ear-a`** (readers top, then top3) and **`organic-online-ear-b`** (top2)
-  (out/tmp/online_ear_queue.sh; 2026-11-27 18:41; MemoryMax 2600M each; about 100 minutes a reader): the one-voice
+  (out/tmp/online_ear_queue.sh; 2026-11-27 18:41; MemoryMax 2600M each; about 140 minutes a reader, 0.87 s a caption, not the 100 first written: top and top2 end about
+  21:00, top3 about 23:25): the one-voice
   ear in one pass, kinds and link learning together (`experiments/grounded_online_probe.py`) →
   out/bench/grounded_online_{top,top2,top3}_s0.log; the ears kept in out/bench/grounded_online_ear_s0_r*.pkl.
   Said before: VISION.md 18:40.
@@ -1801,3 +1808,14 @@ Still Kris's own:
   it runs), the form a live ear would have.
 - 2026-11-27 18:41 `experiments/grounded_online_probe.py` written and smoke-tested; two readers started, the third
   behind the first (said before: VISION.md 18:40).
+- 2026-11-27 19:53 Health at 19:40: all healthy (6.3 GB available, 296 GB free; tagn_s0 at 115,000). The talk
+  artifact went to version 12 at 18:45 (other voices; joined through sight), after the last commit. **The
+  one-pass ear, first checkpoints** (two readers; the runs are slower than written, 140 minutes a reader): R@10
+  0.025 / 0.022 at 1,000 captions and 0.034 / 0.042 at 2,500 (the two-stage ear at as many pairs: 0.029–0.037 and
+  0.036–0.050): a little under, as said; the rest at the next check. **What the ear knows ahead of time**
+  (VISION.md 19:42, 19:52; memoize; `experiments/ear_causal_check.py`, seconds): the cuts were live already (the
+  quiet rule is idle on read speech: 0.2% of frames), the bands against a running mean and spread fading over 2 s
+  are 0.945 like the whole-caption bands. Of what I said: the bands held, the fall at 0.5 s and the cuts did not
+  (both better than said). `LIVE` switch in the one-pass probe (off: the same lines as before, checked); the run is
+  queued for the second reader. docs/ASYNC.md has the ear's way onto the clock, piece by piece. Three references
+  on adaptation to sound level found in Crossref (Dean 2005, Dean 2008, Rabinowitz 2011), to be read.
