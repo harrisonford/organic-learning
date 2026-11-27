@@ -4151,3 +4151,12 @@ works (+0.050 on average); motion drawing the saccades adds +0.010 alone and +0.
 The eye still makes three saccades a second with pursuit; it follows the moving thing between them. **Adopted?** Not
 yet into the lives: the stream brain is not the lives' brain. The reflexes stay behind their switches
 (`motion_drive`, `pursuit_tau`; the default eye unchanged, by digest) until the stream brain names what it sees.
+
+**09:22, two notes on the entry of 08:28.** (1) The word cells say one of the ten names every time (no kind's name
+in 0.000 of 4,500 answers on both codes, seed 0; the rerun repeats 0.363 and 0.348 exactly): nothing is lost in
+saying the name. (2) A caveat I did not write: the relay "evened again" was settled on the same 10,000 frames the
+reader then learns from (without their labels), and the evenness I gave for it (2,265–2,493) is measured on those
+frames, so it flatters; the accuracies are on the held-out sessions and stand. The honest form of the test is the
+one now running: a circuit that learns along the stream sees each frame once, as the reader does. It is slower than
+I thought (about an hour for a code and seed; the probe prints only at the end of each); seeds 1 and 2 were started
+beside seed 0 at 09:22 (`organic-relaylearn-s1`, `-s2` → core50_relay_learns_s{1,2}.log).

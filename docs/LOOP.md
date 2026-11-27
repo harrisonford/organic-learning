@@ -128,7 +128,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   its floor at 0.0001 (not 0.0005) for ph_d and ph_r of seed 0 → relay_shrink_{ph_d,ph_r}_s0.log,
   stream_photos_{ph_dz1,ph_rz1}_s0.log. What I said before: VISION.md 09:10. A diagnosis, not a setting.
 - **`organic-commons-video`** (permanent service since 2026-11-26 08:15; `experiments/world/commons_video.py`; log
-  out/commons_video.log): Commons videos as 64 × 64 frames in order into `~/datasets/commons_video/` (raw files kept).
+  out/commons_video.log): Commons videos as 64 × 64 frames in order into `~/datasets/commons_video/` (raw files kept). **Since 2026-11-27 09:22 it waits while the disk has less than 100 GB free** (see the decisions).
   Kris asked for it ("download in parallel wikimedia"). To do: count real footage against animation by category
   before use.
 - **`organic-core50-fetch`** (started 08:20; ~/datasets/core50/fetch.sh; curl limited to 2 MB/s, resumable): the video
@@ -385,6 +385,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     Commons video with sound, then the learned pieces moved in one by one (docs/ASYNC.md).
 
 ## Decisions waiting for Kris
+- **(2026-11-27 09:22) The Commons videos and the disk.** `~/datasets/commons_video` is 144 GB after one day (13,427
+  videos, 7.07 million frames: 87 GB of frames, 7 GB of sound, **57 GB of the downloaded files** kept "so other sizes
+  and rates can be taken later") and grows about 6 GB an hour; the disk had 139 GB free of 915. The service now waits
+  while less than 100 GB is free (`FLOOR_GB` in commons_video.py; nothing is deleted), which it will reach in about
+  seven hours. Yours to decide: delete the downloaded files (the frames and the sound stay; other sizes would mean
+  fetching again), stop at what we have (the one probe on them so far used 1,399 videos with sound), or move the set to another disk.
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
   nothing" was on enlarged pictures. I will put both sizes side by side in that section when the enlarged

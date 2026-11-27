@@ -22,6 +22,7 @@ video at a time, for as long as the service runs:
 """
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -37,6 +38,7 @@ PAUSE, MAX = float(os.environ.get("PAUSE", 3.0)), int(os.environ.get("MAX", 0))
 FPS, SECONDS, SIDE = int(os.environ.get("FPS", 10)), int(os.environ.get("SECONDS", 120)), 64
 LIMIT = int(os.environ.get("LIMIT", 300 * 10**6))  # bytes: the largest file kept by 2026-11-27 was 244 MB, the median 1.3 MB
 API, PAGE, DEEPEST ="https://commons.wikimedia.org/w/api.php", 20, 9980
+FLOOR = int(float(os.environ.get("FLOOR_GB", 100)) * 10**9)  # fetching waits while the disk has less free than this
 SUBJECTS = ["Videos_of_animals", "Videos_of_vehicles", "Videos_of_people", "Videos_of_nature"]
 
 
@@ -118,6 +120,12 @@ def main():
             at = offsets.get(label, 0)
             if at is None or at >= DEEPEST:
                 continue
+            waited = False
+            while shutil.disk_usage(OUT).free < FLOOR:  # (2026-11-27) the disk is shared with the lives: wait, delete nothing
+                if not waited:
+                    say(f"less than {FLOOR // 10**9} GB free on the disk: waiting (nothing is deleted)")
+                    waited = True
+                time.sleep(600)
             time.sleep(PAUSE)
             d = api(action="query", generator="search", gsrsearch=search, gsrnamespace=6, gsrlimit=PAGE, gsroffset=at,
                     prop="videoinfo", viprop="url|size|mime|derivatives")
