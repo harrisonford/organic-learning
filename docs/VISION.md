@@ -3909,3 +3909,26 @@ there by holding the thing before them (in toddlers' head-camera views held obje
 to verify) and by pursuit, which keeps a fixation on a moving thing and does not jump to every change; a learned value
 of places (queue E 23) is the other road. Next for the eye (E 34): a fixation that persists and follows (pursuit),
 measured by how often it lands on the dataset's middle, before any reading of recognition.
+
+**Seed 1 agrees** (`core50_fovea_s1.log`): the middle fixation 0.164 against the whole frame's 0.120 (+0.044; seed 0
++0.047), the scene's share again down by two thirds (0.051 against 0.153); the salient pick 0.077; **the whole frame
+beside the middle fixation adds nothing** (0.162): the periphery's code carries the scene, not the thing.
+
+**Where an eye that follows lands** (`experiments/core50_pursuit_probe.py`, held-out sessions, all 44,972 frames at 20 a
+second; measured before any code is read: how far the fixated half is from the middle, where the crop put the object):
+
+| eye | within 8 px of the middle | mean distance | moves a frame |
+|---|---|---|---|
+| jumps to the place that changed most | 0.26 | 13.8 px | 9.1 px |
+| pursuit (follows the motion in its own field, τ 100 ms) | 0.34 | 10.9 px | 1.5 px |
+| jumps, motion against the view's own flow | 0.29 | 13.1 px | 10.5 px |
+| **pursuit, motion against the view's own flow** | **0.45** | 8.8 px | 1.6 px |
+
+Why plain motion misleads: the camera is hand-held, so the whole background moves (38% of all change falls in the
+middle quarter of the frame, against 25% by area; the whole-frame centre of change is within 8 px of the frame's centre
+59% of the time). Taking out the view's own flow (the best whole-pixel shift between frames, the job of the optokinetic
+system and MST; to verify) and following instead of jumping brings the eye near the thing in 45% of frames. The
+catch-up saccade (when the eye's own half moves less than the average place for 300 ms) never fired. **Reading:** the
+eye on the thing is worth +0.045 on recognition across scenes (two seeds); reflexes alone (contrast, motion, motion
+against flow, pursuit) get the eye there at best half the time. The other half is for a gaze that learns where looking
+pays (queue E 23: a learned value of places), which is also the stream brain's road. Not pursued further tonight.
