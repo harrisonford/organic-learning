@@ -66,9 +66,10 @@ def raw(u):
     return np.asarray(grams[u["start"]: u["start"] + u["rows"]], np.float32)
 
 
-def gram(u):
+def gram(u, shift=0):
     g = raw(u)
-    return (g - g.mean(0)) / (g.std(0) + 1e-3)  # adapted to the voice
+    g = (g - g.mean(0)) / (g.std(0) + 1e-3)  # adapted to the voice
+    return g[:, np.clip(np.arange(g.shape[1]) + shift, 0, g.shape[1] - 1)] if shift else g  # (SHIFTS: the bands moved up or down)
 
 
 def clip(u):
@@ -83,8 +84,8 @@ for n in range(DEV):
     layer.learn(clip(ear_pool[rng.integers(len(ear_pool))]), rng, rate=0.05 * (1 - n / DEV) + 0.005)
 
 
-def frames(u):
-    r = layer.respond(gram(u)[..., None], pooled=False)
+def frames(u, shift=0):
+    r = layer.respond(gram(u, shift)[..., None], pooled=False)
     b = r.shape[1] // BANDS
     codes = r[:, : BANDS * b].reshape(r.shape[0], BANDS, b, KINDS).mean(axis=2).reshape(r.shape[0], -1)
     return codes, np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
@@ -94,8 +95,8 @@ relay = Relay(0.0005).settle(np.concatenate([unit(frames(ear_pool[i])[0])[::5] f
 say(f"BANDS {BANDS}, relay {RELAY}, halves {HALVES}: hearing cortex and its relay; {len(pairs)} photographs, two captions each by two readers")
 
 
-def stretches(u):  # as grounded_speech_probe.py
-    c, loud = frames(u)
+def stretches(u, shift=0):  # as grounded_speech_probe.py
+    c, loud = frames(u, shift)
     C = unit((unit(c) - relay.mu) @ relay.Z) if RELAY else unit(c)
     env = np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
     quiet = env < 0.1 * env.max()
@@ -112,9 +113,9 @@ def stretches(u):  # as grounded_speech_probe.py
     return out
 
 
-def windows(u):
+def windows(u, shift=0):
     """The caption's windows of 1, 2 and 3 stretches in a row (none across a silence), each at unit length."""
-    ss = stretches(u)
+    ss = stretches(u, shift)
     v, gap = [s for s, _ in ss], [g for _, g in ss]
     D = len(v[0]) if v else 2 * KINDS * BANDS
     out = {}
@@ -198,7 +199,21 @@ if MODE == "voice":
         if len(anchors) >= PHOTOS:
             break
     say(f"{len(anchors)} anchor captions; content words shared with the sharing captions: mean {np.mean([x[5] for x in anchors]):.1f}")
-    res = {(n, c): [] for n in (1, 2, 3) for c in ("same reader", "another reader")}
+    SHIFTS = [int(x) for x in os.environ.get("SHIFTS", "").split(",") if x]  # e.g. -3,-2,-1,0,1,2,3 (VISION.md 15:28)
+    conds = ("same reader", "another reader") + (("another reader, its bands moved to fit",) if SHIFTS else ())
+    res = {(n, c): [] for n in (1, 2, 3) for c in conds}
+
+    def fitted(A, u):
+        """The caption heard with its bands moved up or down by the shift that makes its two-stretch windows match
+        the anchor's best (every caption gets this freedom, the ones that share nothing too)."""
+        best = None
+        for k in SHIFTS:
+            W = windows(u, k)
+            m = (A[2] @ W[2].T).max(axis=1).mean() if len(A[2]) and len(W[2]) else -1.0
+            if best is None or m > best[0]:
+                best = (m, W)
+        return best[1]
+
     for k, (a, bs, zs, bo, zo, _) in enumerate(anchors):
         A = windows(a)
         for c, b, zz in (("same reader", bs, zs), ("another reader", bo, zo)):
@@ -206,8 +221,13 @@ if MODE == "voice":
             for n in (1, 2, 3):
                 if len(A[n]) and len(B[n]) and all(len(z[n]) for z in Z):
                     res[(n, c)].append((A[n] @ B[n].T).max(axis=1) > np.max([(A[n] @ z[n].T).max(axis=1) for z in Z], axis=0))
+        if SHIFTS:
+            B, Z = fitted(A, bo), [fitted(A, u) for u in zo]
+            for n in (1, 2, 3):
+                if len(A[n]) and len(B[n]) and all(len(z[n]) for z in Z):
+                    res[(n, conds[2])].append((A[n] @ B[n].T).max(axis=1) > np.max([(A[n] @ z[n].T).max(axis=1) for z in Z], axis=0))
         if (k + 1) % 100 == 0:
             say(f"{k + 1} anchors heard")
     for n in (1, 2, 3):
         say(f"windows of {n} stretch{'es' if n > 1 else ''}: the caption that shares content words holds the best match of {K + 1} (chance {1 / (K + 1):.3f}): "
-            + "; ".join(f"{c} {np.concatenate(res[(n, c)]).mean():.3f} ({len(np.concatenate(res[(n, c)]))} windows)" for c in ("same reader", "another reader")))
+            + "; ".join(f"{c} {np.concatenate(res[(n, c)]).mean():.3f} ({len(np.concatenate(res[(n, c)]))} windows)" for c in conds))

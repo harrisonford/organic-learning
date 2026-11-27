@@ -304,7 +304,7 @@ organic learner behaves and what each part does, measured honestly, not a score.
   Hebb link do from written words (R@10 0.11–0.15, a measure only); the ear holds the common words only, and two
   thirds of a word's trace is lost between voices; an ear growing up in one voice is being run. Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
-- **2026-11-27 15:27: draft 11 emailed to Kris** (22 pages). One change: a paragraph at the end of "The relay,
+- **2026-11-27 15:26: draft 11 emailed to Kris** (22 pages). One change: a paragraph at the end of "The relay,
   learned locally" (a batch relay fitted on photographs does not hold on CORe50's videos: 131–137 effective
   directions against 511–534 at home; the word cells miss a better code that ridge takes; fitted again the cells'
   rule takes the gain in full, the learning circuit half of it; the photo benchmark is the control; three seeds),

@@ -1711,7 +1711,7 @@ Still Kris's own:
   both too low; a stretch found again: too high where content words are shared). **Started:** an ear that grows up in
   one voice (`organic-onevoice`). Artifact v9 (the circuits' line; the ear's limit with three new references,
   titles checked against the registry). tagn_s2 at 115,000.
-- 2026-11-27 15:27 **Draft 11 built and emailed to Kris** (rule 9: the relay, the paper's central part, is a
+- 2026-11-27 15:26 **Draft 11 built and emailed to Kris** (rule 9: the relay, the paper's central part, is a
   stand-in in a second sense: fitted in one world it does not hold in another; one paragraph, three seeds, the
   photo benchmark as control; PUBLISH.md). The numbers in it were read again from the logs before the build
   (core50_spectrum.log, photos_spectrum.log, VISION.md 06:03, 11:53).

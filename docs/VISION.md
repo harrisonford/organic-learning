@@ -4617,3 +4617,49 @@ settled again on the stream's frames) had 0.404 / 0.404 / 0.414: the circuits ar
 10,000 frames, as they were for one code (11:53), and the gap to the relays alone is still there at 10,000.
 Still a stand-in: the delta reader for the word cells, the two codes side by side for one reader (in the lives a
 word cell picks the view that drives it most); 10,000 frames of ten kinds of object held in a hand.
+
+**15:28, is the voice a shift along the bands? said before it runs** (`MODE=voice SHIFTS=-3,...,3 PHOTOS=120`): a
+longer or shorter vocal tract moves the formants together, on the cochlea's scale a shift of a few bands (about
+three between a man and a woman, by my arithmetic on our 64 bands). For the other reader's caption, and equally
+for each of the five that share nothing, the bands are moved by the shift (−3 to +3) that makes its windows match
+the anchor's best; then scored as before. I say it helps little: another reader 0.229 → 0.23–0.25. A voice
+differs from another in more than a shift (pitch, tilt, rate, how a sound is made), and the hearing layer already
+averages over neighbouring bands. If it reaches 0.28 or more, a code that tolerates the shift is the route to
+other voices; if not, the brain's other ways are (the literature check on talkers is running).
+
+### 2026-11-27 15:38, how brains deal with another voice: what is known
+
+A second search by an agent (generic queries; DOIs checked against the registry; where it read the abstract and
+where it reports from memory is in its report, kept in this session; Kris opens each by hand before any is cited
+in a paper). Four routes, and what each needs:
+1. **The input adapted to the talker** (context): a vowel is heard against the long-term spectrum of the second or
+   two before it (Ladefoged & Broadbent 1957, doi:10.1121/1.1908694; also for non-speech: Stilp et al. 2010,
+   doi:10.3758/APP.72.2.470); in human auditory cortex (parabelt, superior temporal gyrus) a vowel's first formant
+   is coded relative to the talker's range (Sjerps, Fox, Johnson & Chang 2019, doi:10.1038/s41467-019-10365-z).
+   It needs no learning and it is partial. Our ear's band-by-band adaptation over the utterance is roughly this.
+2. **A code that tolerates the shift** (vocal-tract length as a shift on the log-frequency axis): vowels stay
+   recognisable far outside human sizes (Smith et al. 2005, doi:10.1121/1.1828637); the size is represented beside
+   the message in thalamus and non-primary cortex, not thrown away (von Kriegstein et al. 2007,
+   doi:10.1016/j.cub.2007.05.061); six-month-olds carry a vowel from a man's voice to a woman's and a child's at
+   once (Kuhl 1979, doi:10.1121/1.383639). No direct neural evidence of a shift-invariant code was found.
+3. **Many tokens kept with their voices** (exemplars): a word repeated in the same voice is recognised better at
+   every lag (Palmeri, Goldinger & Pisoni 1993, doi:10.1037/0278-7393.19.2.309; Goldinger 1998,
+   doi:10.1037/0033-295X.105.2.251); knowing a voice helps with new words in it (Nygaard & Pisoni 1998,
+   doi:10.3758/BF03206860). In infants the variety must come while the form is learned: varied tokens give forms
+   that carry over, uniform ones do not (Singh 2008, doi:10.1016/j.cognition.2007.05.002); eight alternating voices
+   allow segmentation and transfer to a new voice, two do not (Graf Estes & Lew-Williams 2015,
+   doi:10.1037/a0039725); many talkers let 14-month-olds learn similar-sounding words (Rost & McMurray 2009,
+   doi:10.1111/j.1467-7687.2008.00786.x). Contested at the edges: with fluent parental speech 7.5-month-olds do
+   carry a word from mother to father (van Heugten & Johnson 2012, doi:10.1044/1092-4388(2011/10-0347)), and
+   talker variety hurt 8-month-olds' linking of word and object (Bulgarelli & Bergelson 2022,
+   doi:10.1111/infa.12452).
+4. **The lexicon teaching the ear** (a known word with an odd sound retunes the sound: Norris, McQueen & Cutler
+   2003, doi:10.1016/S0010-0285(03)00006-9): needs a lexicon; seen from 18–20 months.
+The agent's reading, and mine: no study sets the four against each other; the first *learned* route in development
+is the third: several tokens of one form from differing voices, **plus a cue that they are the same form** (a
+shared referent, a repetition). Not found: any account built on the same word repeated across talkers in close
+succession, though that is what an infant's talk about one thing offers, and what our five captions of one
+photograph are. So the two halves of today meet: the photograph in view is the cue that the next reader's stretch
+may be the same form, and the form that results has several voices in it from its first day. What stands in the
+way was measured at 14:57: across voices the best match is right one time in eight to ten, too thin to found
+kinds on. One voice first (running), or a code that tolerates the shift (being measured), may thicken it.
