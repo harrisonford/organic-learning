@@ -4210,3 +4210,45 @@ even on CIFAR (enlarged small pictures are the furthest from what the relay was 
 trails the ridge most there; settled again, the delta reader gains 0.02 or more on CIFAR and nothing on COCO crops
 (±0.01). Commons has too few pictures (3,102 for 4,096 directions) to settle a relay on. If the three sources are
 equally even and nothing gains, the lives' relay is at home in all of them and CORe50's lesson does not reach them.
+
+### 2026-11-27 11:20, the lives' relay is at home in all three sources: what I said was mostly wrong
+
+`relay_by_source.log` (the lives' cortex and world 4; one random order; held-out pictures of each source):
+
+| source | lived / held-out pictures | relayed code's participation ratio on 3,000 (of 4,096) | delta | ridge | settled again: delta, ridge |
+|---|---|---|---|---|---|
+| COCO crops | 10,000 / 2,000 | 470 | 0.461 | 0.479 | 0.423, 0.428 |
+| CIFAR (enlarged) | 7,206 / 794 | 399 | 0.630 | 0.671 | 0.630, 0.622 |
+| Commons | 3,101 / 380 | 436 | 0.676 | 0.721 | (too few pictures) |
+
+Against 10:49: CIFAR is the least even (yes, but by little: 399 against 436 and 470; CORe50 under its relay was
+131–291); the delta reader trails the ridge most on CIFAR (no: 0.041 there, 0.045 on Commons, 0.018 on COCO crops,
+and on the two small sources part of that gap is the number of pictures); settled again the delta reader gains
+0.02 or more on CIFAR (**no: 0.000**) and nothing on COCO crops (**it loses 0.038**). The outcome I named as the
+other one: the lives' relay is at home in the pictures they name, and CORe50's lesson does not reach them. A relay
+settled a second time on a few thousand pictures costs more than it gives, as on the photo benchmark. Caveats: one
+order; 7,206 pictures for 4,096 directions is thin for settling a relay (the ridge fell 0.05 with it), so this
+does not rule out a gain from a relay that has seen far more of CIFAR; pages, the stage where the lives stop, are
+not measured here (a page is four pictures in one view: another kind of picture again). Nothing changes in the
+lives for this.
+
+### 2026-11-27 11:21, naming from the stream brain's own eye, said before it runs
+
+Two results of today meet here: the stream brain's eye with its two reflexes lands on the held thing often enough
+to recognise it across rooms better than the whole frame (08:29), and the word cells' rule takes a fixation's gain
+only when the relay is evened out on what that eye sees (08:28). So far the naming test used an eye that knew where
+CORe50's crop puts the object. Now the eye is the brain's own: `core50_stream_eye_probe.py` with `SAVE=both`
+watches the 400 training videos too (a new brain a video, as on the held-out ones), the frames the benchmark codes
+are coded where the eye is, and the codes are kept as `VARIANT=c50eyeboth` (the relay settled on COCO through the
+reflex's pick, as in that probe). Then the stream of 10 kinds (10,000 frames, shuffled as before): word cells,
+ridge; and the delta reader with the relay as settled and settled again on the stream's frames
+(`out/tmp/eye_naming_queue.sh` → core50_stream_eye_save.log, core50_spectrum_eye.log,
+stream_core50_c50eyeboth_s{0,1,2}.log).
+**What I say.** For reference, whole frame / middle: ridge 0.37 / 0.40; word cells 0.35–0.36 / 0.33–0.35; delta
+settled again 0.36 / 0.40. The eye's code recognised across rooms at 0.137, between the whole frame's 0.118 and the
+middle's 0.170, about a third of the way. So: ridge on the eye's code 0.375–0.39 (above the whole frame on all
+three seeds, below the middle); the word cells with the relay as settled at or under the whole frame's (0.36 or
+less: the same miss); the delta reader settled again 0.37–0.39, above the whole frame's on all three seeds. One
+thing could turn it the other way: the eye is elsewhere than on the object in two frames of three, and those frames
+(a fixated corner of the room, enlarged) may teach the readers less than the whole frame does; if the ridge is
+under 0.37, that is what happened.

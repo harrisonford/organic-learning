@@ -65,9 +65,13 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-relaysrc`** (experiments/relay_by_source_probe.py; 2026-11-27 10:50; MemoryMax 2500M; about 25 minutes):
-  how even the lives' own relay's code is on each source they name (COCO crops, CIFAR, Commons), the delta reader
-  against ridge, and the relay settled again → out/bench/relay_by_source.log. Said before: VISION.md 10:49.
+- **`organic-eye-naming`** (out/tmp/eye_naming_queue.sh; 2026-11-27 11:21; MemoryMax 2500M; not gated; about two
+  hours): the stream brain's eye (both reflexes) on the training and held-out videos, its codes kept as
+  VARIANT=c50eyeboth (`SAVE=both` in core50_stream_eye_probe.py), then the delta reader with the relay as settled
+  and settled again (core50_spectrum_eye.log) and the stream of 10 kinds for word cells and ridge
+  (stream_core50_c50eyeboth_s{0,1,2}.log). Said before: VISION.md 11:21. Check first that seed 0's line repeats
+  0.140 (the probe was refactored).
+- **`organic-relaysrc`** ENDED 11:04, read (VISION.md 11:20: the lives' relay is at home in all three sources).
 - **`organic-relaylearn-s1`, `-s2`** (experiments/core50_relay_learns_probe.py; 2026-11-27 09:22; MemoryMax 2000M): the
   relay circuit learning along CORe50's stream, seeds 1 and 2 → core50_relay_learns_s{1,2}.log (middle fixation due
   about 11:40). Seed 0 read (VISION.md 10:49; `organic-relaylearn` stopped at 10:43 after it).
@@ -1622,3 +1626,10 @@ Still Kris's own:
   0.348 → 0.371 (said 0.36–0.39), above the whole frame's 0.357; whole frame unchanged on three seeds. Still
   learning at 10,000 frames; about half of the batch's gain. Seeds 1–2 of the middle fixation due about 11:40.
   **Started:** the same question in the lives, source by source (`organic-relaysrc`; said before it runs).
+- 2026-11-27 11:22 Health: all healthy (6.2 GB of memory, 292 GB of disk free). **The lives' relay, source by
+  source** (VISION.md 11:20; memoize): about as even on COCO crops, CIFAR and Commons (470 / 399 / 436 of 4,096),
+  and settling it again gains nothing (CIFAR 0.630 → 0.630, COCO crops 0.461 → 0.423): what I said (a gain on CIFAR)
+  was wrong; CORe50's lesson does not reach the lives' first-words sources; nothing changes in the lives.
+  **Started: naming from the stream brain's own eye** (`organic-eye-naming`; said before it runs): the eye with
+  both reflexes watches the training videos too, and the readers learn from where it looked. The grounding run:
+  15,000 of 20,000 captions heard. tagr_s1 at 105,000.

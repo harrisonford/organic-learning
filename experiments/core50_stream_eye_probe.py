@@ -19,6 +19,8 @@ second; then the code read as before: the nearest frame from another session (sa
 session (the scene).
 
     SEEDS=0,1,2 python experiments/core50_stream_eye_probe.py
+    SEEDS=0,1,2 ARMS=both SAVE=both ...   also the eye on the training videos, and its codes kept as the benchmark's
+                                          VARIANT=c50eyeboth (2026-11-27 11:21; a new brain a video there too)
 """
 import gc, json, os, pickle, sys, time
 import numpy as np
@@ -36,6 +38,9 @@ videos = [json.loads(line) for line in open(os.path.join(DIR, "frames.jsonl"))]
 test_v = [v for v in videos if v["session"] in {3, 7, 10}]
 test_v = test_v[:: int(os.environ.get("THIN", 1))]  # a smoke test: every THIN-th video
 TE = np.array([(v["start"] + i, v["object"], (v["object"] - 1) // 5, v["session"], k) for k, v in enumerate(test_v) for i in range(0, v["frames"], EVERY)])
+train_v = [v for v in videos if v["session"] not in {3, 7, 10}][:: int(os.environ.get("THIN", 1))]
+TR = np.array([(v["start"] + i, v["object"], (v["object"] - 1) // 5, v["session"], k) for k, v in enumerate(train_v) for i in range(0, v["frames"], EVERY)])  # as core50_fovea_probe.py
+SAVE = [a for a in os.environ.get("SAVE", "").split(",") if a]  # arms whose codes are kept, training videos too
 SETTINGS = {"today": {}, "motion": {"motion_drive": True}, "pursuit": {"pursuit_tau": 0.1}, "both": {"motion_drive": True, "pursuit_tau": 0.1}}
 
 
@@ -80,41 +85,60 @@ def where_eye(brain):
     return float(r), float(c)
 
 
+def watch(vs, arm, cortex, relay, seed_base):
+    """The eye of `arm` on every video of vs: where it is at each coded frame, its saccades, the seconds watched."""
+    corners, saccades, seconds = [], 0, 0.0
+    for k, v in enumerate(vs):
+        f = np.asarray(frames[v["start"]: v["start"] + v["frames"]], np.float32) / 255
+        if arm == "middle":
+            corners += [(16.0, 16.0)] * len(range(0, v["frames"], EVERY))
+            continue
+        brain = StreamBrain(cortex, None, seed=seed_base + k, **SETTINGS[arm])
+        zero = np.zeros(relay.Z.shape[1], np.float32)
+
+        def no_code(b=brain, z=zero):  # where the eye is matters here, not the sight population's code
+            if b.pursuit_tau:
+                b.pos_seen = b.pos.copy()
+            return z
+        brain._see = no_code
+        for i in range(v["frames"]):
+            for s in range(STEPS_A_FRAME):
+                ev = brain.step(f[i] if s == 0 else None, None)
+                if s == 0 and i % EVERY == 0:
+                    corners.append(where_eye(brain))
+                saccades += sum(e[0] == "saccade" for e in ev)
+        seconds += v["frames"] * STEPS_A_FRAME * 0.010
+        del brain._see, no_code, brain  # the stub and the brain point at each other; free them now, not at the next sweep
+        gc.collect()
+    return np.array(corners), saccades, seconds
+
+
+def coded(rows, corners, cortex):
+    return np.stack([cortex.code(window(np.asarray(frames[r], np.float32) / 255, int(round(a)), int(round(b))), GRID)[0] for r, (a, b) in zip(rows, corners)])
+
+
 for seed in SEEDS:
     cortex = pickle.load(open(f"out/bench/cortex_c50salient_s{seed}.pkl", "rb"))
     relay = cortex.relay
     for arm in ARMS:
         t0 = time.time()
-        corners, saccades, seconds = [], 0, 0.0
-        for k, v in enumerate(test_v):
-            f = np.asarray(frames[v["start"]: v["start"] + v["frames"]], np.float32) / 255
-            if arm == "middle":
-                corners += [(16.0, 16.0)] * len(range(0, v["frames"], EVERY))
-                continue
-            brain = StreamBrain(cortex, None, seed=seed * 1000 + k, **SETTINGS[arm])
-            zero = np.zeros(relay.Z.shape[1], np.float32)
-
-            def no_code(b=brain, z=zero):  # where the eye is matters here, not the sight population's code
-                if b.pursuit_tau:
-                    b.pos_seen = b.pos.copy()
-                return z
-            brain._see = no_code
-            for i in range(v["frames"]):
-                for s in range(STEPS_A_FRAME):
-                    ev = brain.step(f[i] if s == 0 else None, None)
-                    if s == 0 and i % EVERY == 0:
-                        corners.append(where_eye(brain))
-                    saccades += sum(e[0] == "saccade" for e in ev)
-            seconds += v["frames"] * STEPS_A_FRAME * 0.010
-            del brain._see, no_code, brain  # the stub and the brain point at each other; free them now, not at the next sweep
-            gc.collect()
-        corners = np.array(corners)
+        corners, saccades, seconds = watch(test_v, arm, cortex, relay, seed * 1000)
         assert len(corners) == len(TE)
         d = np.hypot(*(corners - MID).T)
-        X = np.stack([cortex.code(window(np.asarray(frames[r], np.float32) / 255, int(round(a)), int(round(b))), GRID)[0] for r, (a, b) in zip(TE[:, 0], corners)])
+        X = coded(TE[:, 0], corners, cortex)
         Z = unit((X - relay.mu) @ relay.Z)
         o, kd = elsewhere(Z, TE)
         a = alike(Z, TE, np.random.default_rng(seed + 7))
         rate = f"{saccades / seconds:.1f} saccades a second; " if seconds else ""
         print(f"seed {seed} {arm:8}: {rate}from the middle {d.mean():4.1f} px, within 4 px {np.mean(d <= 4):.2f}, within 8 px {np.mean(d <= 8):.2f} | "
               f"elsewhere same object {o:.3f}, same kind {kd:.3f} | alike: " + ", ".join(f"{n} {x:.3f}" for n, x in a.items()) + f" ({time.time() - t0:.0f}s)", flush=True)
+        if arm in SAVE:  # the eye of this arm on the training videos too, and its codes kept for bench_stream.py (VARIANT=c50eye{arm})
+            t1 = time.time()
+            tc, _, _ = watch(train_v, arm, cortex, relay, seed * 1000 + 500)
+            assert len(tc) == len(TR)
+            np.save(f"out/bench/core50_c50eye{arm}_s{seed}_train.npy", coded(TR[:, 0], tc, cortex).astype(np.float16))
+            np.save(f"out/bench/core50_c50eye{arm}_s{seed}_test.npy", X.astype(np.float16))
+            np.save(f"out/bench/core50_c50eye{arm}_s{seed}_corners.npy", np.concatenate([tc, corners]).astype(np.float32))
+            pickle.dump(cortex, open(f"out/bench/cortex_c50eye{arm}_s{seed}.pkl", "wb"))  # the same cortex and relay as every arm here
+            dt = np.hypot(*(tc - MID).T)
+            print(f"   kept as c50eye{arm}: on the training videos from the middle {dt.mean():4.1f} px, within 8 px {np.mean(dt <= 8):.2f} ({time.time() - t1:.0f}s)", flush=True)
