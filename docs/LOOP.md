@@ -1765,7 +1765,7 @@ Still Kris's own:
 - 2026-11-27 16:46 The grounding probe keeps the ear from now on and can test it on another reader (`OTHER=`,
   smoke-tested fresh and on resume); `organic-othervoice` queued behind the readers' runs (said before: VISION.md
   16:45).
-- 2026-11-27 17:34 Health: all healthy (7.6 GB available, 298 GB free). **The one-voice ear holds on three
+- 2026-11-27 17:33 Health: all healthy (7.6 GB available, 298 GB free). **The one-voice ear holds on three
   readers** (VISION.md 17:33; memoize): photograph → caption R@10 0.048 / 0.065 / 0.065 (shuffled 0.005 / 0.007 /
   0.012; the many-voices ear on as many pairs 0.015), 72–92% of what written words give through the same Hebb
   link; the caption's own words at rank 3 / 1 / 1 of 1,000. `organic-othervoice` started 17:33 (a voice never

@@ -4756,3 +4756,23 @@ voice not heard (running: `organic-othervoice`); that this matches the paradigm'
 by backprop is far above on its own benchmarks, with networks trained on all the pairs and all the voices; our
 ceiling here is the eye's 64 × 64 code, 0.10 by ridge even from written words); more than one seed of the ear's
 own randomness for each reader (the readers are the three samples).
+
+**17:34, how the one-voice link grows with the pairs heard, said before it runs** (the three readers' saved bags,
+the link learned from the first 1,000 and 2,500 of the 5,000 pairs; `SUB=` in the diagnostic; seconds each): I say
+the ear's bags by Hebb reach R@10 0.02–0.03 at 1,000 pairs and 0.035–0.05 at 2,500, still rising at 5,000 with
+written words rising beside them at about the same ratio: the link is short of pairs, not at a ceiling of the
+ear's.
+
+**17:36, the curve** (`out/bench/grounded_onevoice_curve_s0.log`; photograph → caption R@10 from the link's first
+1,000 / 2,500 / 5,000 pairs; readers 1 / 2 / 3):
+
+| cue, Hebb link | 1,000 pairs | 2,500 | 5,000 |
+|---|---|---|---|
+| the ear's bags | 0.029 / 0.037 / 0.037 | 0.036 / 0.049 / 0.050 | 0.048 / 0.065 / 0.065 |
+| written words (a measure only) | 0.038 / 0.038 / 0.039 | 0.053 / 0.056 / 0.047 | 0.067 / 0.071 / 0.076 |
+| the ear's bags, median rank | 422 / 352 / 354 | 362 / 304 / 306 | 318 / 240 / 250 |
+
+As said (0.02–0.03 at 1,000: got 0.029–0.037, the top of it or above; 0.035–0.05 at 2,500: got 0.036–0.050): the
+link is still rising at 5,000 pairs on every reader, and the ear's bags stay beside the written words all the
+way (equal to them at 1,000 pairs on two readers). The one-voice ear is short of pairs, not at its ceiling; a
+reader has at most 10,670 photographs, so twice this is the most this data can give in one voice.
