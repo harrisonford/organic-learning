@@ -485,6 +485,23 @@ changes the synapses along its own activity in proportion to the rate times the 
 activity, which is about 350 for our 4,096 cells and far smaller in the papers' small examples. At their rate
 the circuit never came to rest, and we lowered it tenfold. The circuit is not yet in the lives.
 
+There is a second reason to want the learning form, and we found it by accident on a benchmark this paper does
+not otherwise report. A batch relay is fitted to one world. We took the photo section's cortex and relay, fitted
+on photographs, to short videos of objects held in a hand (CORe50; Lomonaco & Maltoni 2017): ten kinds of
+object, a stream of 10,000 frames seen once, sessions never seen held out, three seeds. There the relayed code is
+far from even: its variance is spread over the equivalent of 131 to 137 of its 4,096 directions (282 to 291
+when the cortex reads only the middle of the frame), against 511 to 534 on the photographs the relay was fitted
+to. The word cells paid for it. The middle of the frame, where the object is, is the better code; a ridge readout
+took the gain (0.37 to 0.40 on every seed) and the word cells lost a point instead (0.353 to 0.341 on average;
+0.356 to 0.344 for a plain reader with their learning rule, one cell a kind, which we use for the rest of this
+paragraph). Fitted again
+on the videos' own frames, with no labels, the same relay hands that reader the whole gain (0.402 on average), and the
+circuit of the previous paragraph, simply left learning as the video goes by, hands it half of it within the
+10,000 frames (0.371). The control is the photo benchmark itself: there, fitting the relay again on the stream's
+own pictures gains nothing (it loses 0.007 to 0.018). So the batch relay is a stand-in in a second sense. It is
+computed the quick way, and it also holds only in the world it was computed in; a relay that keeps learning is
+the one that would follow a learner out of that world.
+
 ### A fast store remembers a picture, not a category
 
 We held out one class at a time, trained on 5,000 pictures of the other nine, and then showed the held-out class
@@ -802,8 +819,8 @@ lives along were set with scores in view; we dropped them for that reason.
 We only tried one small benchmark, on one machine, with codes of 4,096 numbers. Nothing here says the division of
 credit holds at scale. We only compared against one backpropagation architecture, trained with plain Adam and no
 augmentation, tuned on a grid of 14 settings, and never given the whitening step that turns out to matter. Both
-whitening steps are computed in batch, and the local replacement has been tried on a fifth of the
-stream. We tested on 2,000 pictures, with three seeds where five would be better. In the staged world the stages
+whitening steps are computed in batch, the local replacement has been tried on a fifth of the
+stream, and a batch relay fitted to photographs did not carry over to video. We tested on 2,000 pictures, with three seeds where five would be better. In the staged world the stages
 and their order are ours, the adults and the judge are language models, pictures recur, and no human has yet
 labelled the judge's decisions. The staged world supports the benchmark's findings; it could not carry them alone.
 
