@@ -4717,3 +4717,12 @@ voice never heard (a reader's ear, another reader's test captions: I expect litt
 second voice: a lexicon grown in one voice that then hears others say the same things about the same photographs
 (the third route of 15:38, with the photograph as the cue that the forms are the same); (4) the fast store for
 rare forms within the voice.
+
+**16:45, how far a one-voice ear carries to a voice it never heard, said before it runs** (`OTHER=top2` in the
+grounding probe: the top reader's ear and link as they are, nothing learning, and 1,000 captions by the second
+reader about photographs the link never saw; the same retrieval, and the caption's written words from its bag as a
+measure). I say: next to nothing for the photographs (R@10 0.010–0.02, median rank 440–500, against 0.048 and 318
+in its own voice), and the caption's own words at a median rank of 100–250 (3 in its own voice), the commonest
+words still heard a little (correlation median 0.10–0.20 for words in 30+ test captions). That would be the infant
+at 7.5 months, and the measure of what the second voice has to add. The run hears the top reader again (the ear
+was not kept at 15:23; it is kept from now on) and must first repeat 0.048 / 0.053: a check that the run repeats.

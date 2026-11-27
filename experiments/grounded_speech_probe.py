@@ -36,6 +36,7 @@ def unit(X):
 
 rng = np.random.default_rng(SEED)
 utts = [u for u in map(json.loads, open(os.path.join(DIR, "cochlea.jsonl"))) if u["split"] == "train" and u["rows"] >= 50]
+all_utts = utts  # (kept for OTHER, below)
 READER = os.environ.get("READER", "")  # "top": the captions of the reader who read most, only (an ear that grows up in one voice; VISION.md 2026-11-27 15:19)
 if READER:
     count = {}
@@ -81,7 +82,7 @@ def clip(u):
 # coding the photographs, and lost them. A run that finds them (same sizes and seed) reads them back, with the random
 # state as it was, and goes straight to the photographs.
 BAGS = f"out/bench/grounded_bags_s{SEED}_e{EAR_U}_a{ASSOC_U}_t{TEST}_d{DEV}{'_r' + READER if READER else ''}.npz"
-RESUME = os.path.exists(BAGS)
+RESUME = os.path.exists(BAGS) and not os.environ.get("FRESH")  # FRESH=1: hear again (to keep the ear, which runs before 16:45 did not)
 if not RESUME:
     layer.settle((clip(ear_u[i]) for i in rng.choice(len(ear_u), min(800, len(ear_u)), replace=False)), rng)
     for n in range(DEV):
@@ -183,7 +184,10 @@ else:
     B_test = np.stack([bag(u, False) for u in test_u])
     np.savez(BAGS, assoc=B_assoc, test=B_test, rng=json.dumps(rng.bit_generator.state))
     say(f"the captions' bags of sound kinds (kept in {BAGS})")
-    del layer, relay, pairs, triples
+    EAR = BAGS.replace("grounded_bags", "grounded_ear").replace(".npz", ".pkl")  # (2026-11-27 16:45) the ear kept, for OTHER
+    pickle.dump({"layer": layer, "relay": relay, "pairs": (pairs.U, pairs.wins, pairs.founded), "triples": (triples.U, triples.wins, triples.founded)}, open(EAR, "wb"))
+    if not os.environ.get("OTHER"):
+        del layer, relay, pairs, triples
 
 cortex = pickle.load(open(f"out/bench/cortex_ph_d_s{SEED}.pkl", "rb"))
 vrelay, cortex.relay = cortex.relay, None
@@ -209,3 +213,56 @@ for name, Bl in (("own captions", Bc), ("captions shuffled among the photographs
     r_img = (S > np.diag(S)[None, :]).sum(0)  # for each photograph: captions scored above its own
     rec = lambda r: " ".join(f"R@{k} {np.mean(r < k):.3f}" for k in (1, 5, 10))  # noqa: E731
     say(f"{name}: photograph -> its caption among {TEST}: {rec(r_img)}; caption -> its photograph: {rec(r_cap)}; median rank {np.median(r_img) + 1:.0f} / {np.median(r_cap) + 1:.0f} (chance R@10 {10 / TEST:.3f}, median {TEST // 2})")
+
+# OTHER=top2 (VISION.md 2026-11-27 16:45, said before it runs): how far does a one-voice ear carry to a voice it never
+# heard? The ear and the link as they are (nothing learns), and 1,000 captions of another reader about photographs
+# the link never saw; the same test as above. Beside it, how well each voice's bags give the caption's written words
+# (a measure only: ridge from this reader's link captions' bags to their words, read on both test sets).
+OTHER = os.environ.get("OTHER", "")
+if OTHER:
+    if RESUME:
+        ear = pickle.load(open(BAGS.replace("grounded_bags", "grounded_ear").replace(".npz", ".pkl"), "rb"))
+        layer, relay = ear["layer"], ear["relay"]
+        (pairs.U, pairs.wins, pairs.founded), (triples.U, triples.wins, triples.founded) = ear["pairs"], ear["triples"]
+    count = {}
+    for u in all_utts:
+        count[u["speaker"]] = count.get(u["speaker"], 0) + 1
+    who2 = sorted(count, key=count.get, reverse=True)[int(OTHER[3:] or 1) - 1] if OTHER.startswith("top") else OTHER
+    known, picked, other_u = set(assoc_imgs) | set(test_imgs), set(), []
+    for u in all_utts:
+        if u["speaker"] == who2 and u["image"] not in known and u["image"] not in picked:
+            other_u.append(u)
+            picked.add(u["image"])
+    other_u = [other_u[i] for i in rng.permutation(len(other_u))[:TEST]]
+    B_other, V_other = np.stack([bag(u, False) for u in other_u]), see([u["image"] for u in other_u])
+    M = Bc.T @ V_assoc / len(Bc)
+    vocab = {}
+    for u in assoc_u:
+        for w in set(u["text"].split()):
+            vocab[w] = vocab.get(w, 0) + 1
+    vocab = {w: k for k, w in enumerate(sorted(w for w, n in vocab.items() if n >= 5))}
+
+    def words(us):
+        W = np.zeros((len(us), len(vocab)), np.float32)
+        for i, u in enumerate(us):
+            for w in u["text"].split():
+                if w in vocab:
+                    W[i, vocab[w]] += 1
+        return W
+    Wa = words(assoc_u)
+    mw = Wa.mean(0)
+    G = (Bc.T @ Bc).astype(np.float64)
+    R = np.linalg.solve(G + 1.0 * (np.trace(G) / len(G)) * np.eye(len(G)), Bc.T @ (Wa - mw)).astype(np.float32)
+    rec = lambda r: " ".join(f"R@{k} {np.mean(r < k):.3f}" for k in (1, 5, 10))  # noqa: E731
+    for name, B, V, us in (("its own voice", B_test, V_test, test_u), (f"a voice never heard ({OTHER})", B_other, V_other, other_u)):
+        Bn = unit(B - mu_b)
+        S = unit(Bn @ M) @ V.T
+        r_img = (S > np.diag(S)[None, :]).sum(0)
+        Wt = words(us)
+        P = Bn @ R
+        Sw = unit(P) @ unit(Wt - mw).T
+        r_w = (Sw > np.diag(Sw)[:, None]).sum(1)
+        n = (Wt > 0).sum(0)
+        cor = lambda lo, hi: np.median([np.corrcoef(P[:, k], Wt[:, k] > 0)[0, 1] for k in np.nonzero((n >= lo) & (n < hi))[0]])  # noqa: E731
+        say(f"{name}: photograph -> its caption among {len(us)}: {rec(r_img)}, median rank {np.median(r_img) + 1:.0f} | the caption's own written words from its bag: {rec(r_w)}, median rank {np.median(r_w) + 1:.0f}; "
+            f"words heard (correlation median), said in 30+ / 15-29 / 8-14 of the test captions: {cor(30, 10**6):.2f} / {cor(15, 30):.2f} / {cor(8, 15):.2f}")

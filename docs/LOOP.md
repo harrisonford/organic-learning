@@ -65,6 +65,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-othervoice`** (out/tmp/other_voice_queue.sh; queued 2026-11-27 16:45, waits for the two readers' runs;
+  MemoryMax 2800M; about 50 minutes once it starts): the top reader's ear on voices it never heard (`OTHER=top2`,
+  then `top3` on the kept ear) → out/bench/grounded_othervoice_top_top{2,3}_s0.log. Said before: VISION.md 16:45.
+  Its first line must repeat the one-voice result (0.048 / 0.053): if not, the run does not repeat and that comes
+  first.
 - **The ear's quick measure** (`experiments/ear_again_check.py`; four minutes a run, 1.8 GB cap, not gated): is a
   stretch found again in another reader's caption of the same photograph (VISION.md 14:57; seed 0: 0.13–0.14,
   chance 0.10). `organic-ear-again2` (out/tmp/ear_again_queue.sh, 14:57): no relay, 4 bands, one mean a stretch →
@@ -1748,7 +1753,7 @@ Still Kris's own:
   out/monitor; 278 GiB free). **Kris's question, a live page on SpacetimeDB:** the stream brain timed against the
   clock (1.8 / 1.4 / 1.1 × real time: today's eye, with both reflexes, with hearing), answered and written in
   docs/ASYNC.md; nothing built or installed until he says. `organic-onevoice` still running.
-- 2026-11-27 16:44 Health: an alert (tagn_s2 ended normally at 120,000 and the queue does not move it: moved to
+- 2026-11-27 16:42 Health: an alert (tagn_s2 ended normally at 120,000 and the queue does not move it: moved to
   ended.json, tagr_s2 added to lives.json; all healthy after; 8.3 GB available, 298 GB free). **An ear that grows
   up in one voice** (VISION.md 16:41; memoize): from its own sound kinds it finds a caption's photograph at R@10
   0.048 / 0.053, median rank 318 (shuffled 0.005; the many-voices ear at the same 5,000 pairs 0.015, rank 492;
@@ -1757,3 +1762,6 @@ Still Kris's own:
   0.20 / 0.07 / 0.05 / 0.03). I had said about half of that. The voice was the first limit, not the lexicon's
   size. One reader: readers 2 and 3 started (`organic-onevoice-top2`, `-top3`). The gaze lives against their
   controls on two seeds: no direction on pages (Running). Artifact v10 (the ear card).
+- 2026-11-27 16:46 The grounding probe keeps the ear from now on and can test it on another reader (`OTHER=`,
+  smoke-tested fresh and on resume); `organic-othervoice` queued behind the readers' runs (said before: VISION.md
+  16:45).
