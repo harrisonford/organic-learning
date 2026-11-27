@@ -13,6 +13,7 @@ photographs and one spoken caption each, never heard; for each photograph, the r
 bags shuffled among the photographs before the link is learned. The transcripts are not read at all.
 
     EAR_U=20000 ASSOC_U=20000 SEED=0 python experiments/grounded_speech_probe.py
+    READER=top EAR_U=4670 ASSOC_U=5000 ...   the same in one voice: the reader with most captions (2026-11-27 15:19)
 """
 import json, os, pickle, sys, time
 import numpy as np
@@ -35,6 +36,13 @@ def unit(X):
 
 rng = np.random.default_rng(SEED)
 utts = [u for u in map(json.loads, open(os.path.join(DIR, "cochlea.jsonl"))) if u["split"] == "train" and u["rows"] >= 50]
+READER = os.environ.get("READER", "")  # "top": the captions of the reader who read most, only (an ear that grows up in one voice; VISION.md 2026-11-27 15:19)
+if READER:
+    count = {}
+    for u in utts:
+        count[u["speaker"]] = count.get(u["speaker"], 0) + 1
+    who = max(count, key=count.get) if READER == "top" else READER
+    utts = [u for u in utts if u["speaker"] == who]
 grams = np.memmap(os.path.join(DIR, "cochlea_64.f16"), np.float16, "r").reshape(-1, 64)
 row_of = {i: r for r, i in enumerate(json.load(open(os.path.expanduser("~/datasets/coco_thumbs/train2017_ids.json"))))}
 thumbs = np.load(os.path.expanduser("~/datasets/coco_thumbs/train2017_64.npy"), mmap_mode="r")
@@ -72,7 +80,7 @@ def clip(u):
 # (2026-11-27) the captions' bags are kept on disk once made: the first run was killed for memory after seven hours,
 # coding the photographs, and lost them. A run that finds them (same sizes and seed) reads them back, with the random
 # state as it was, and goes straight to the photographs.
-BAGS = f"out/bench/grounded_bags_s{SEED}_e{EAR_U}_a{ASSOC_U}_t{TEST}_d{DEV}.npz"
+BAGS = f"out/bench/grounded_bags_s{SEED}_e{EAR_U}_a{ASSOC_U}_t{TEST}_d{DEV}{'_r' + READER if READER else ''}.npz"
 RESUME = os.path.exists(BAGS)
 if not RESUME:
     layer.settle((clip(ear_u[i]) for i in rng.choice(len(ear_u), min(800, len(ear_u)), replace=False)), rng)
@@ -127,6 +135,10 @@ class Kinds:
             self.U[c] = w / (np.linalg.norm(w) + 1e-8)
         return c
 
+    def many(self, S):
+        """Nothing learning: the winners of many stretches at once (the same as one at a time; 2026-11-27)."""
+        return np.argmax(self.U[: self.founded] @ S.T, axis=0)
+
 
 D = 2 * KINDS * BANDS
 pairs, triples = Kinds(K23, 2 * D), Kinds(K23, 3 * D)
@@ -136,6 +148,14 @@ def bag(u, learning):
     ss = stretches(u)
     v, gap = [s for s, _ in ss], [g for _, g in ss]
     out = np.zeros(2 * K23, np.float32)
+    if not learning and not os.environ.get("ONE_BY_ONE"):
+        P = [np.concatenate(v[i: i + 2]) / np.sqrt(2) for i in range(len(v) - 1) if not gap[i]]
+        T = [np.concatenate(v[i: i + 3]) / np.sqrt(3) for i in range(len(v) - 2) if not (gap[i] or gap[i + 1])]
+        if P:
+            np.add.at(out, pairs.many(np.stack(P)), 1)
+        if T:
+            np.add.at(out, K23 + triples.many(np.stack(T)), 1)
+        return out
     for i in range(len(v) - 1):
         if not gap[i]:
             out[pairs(np.concatenate(v[i: i + 2]) / np.sqrt(2), learning)] += 1

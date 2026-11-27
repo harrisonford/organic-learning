@@ -287,7 +287,7 @@ organic learner behaves and what each part does, measured honestly, not a score.
   with the "did nothing" section's title and the list of mistaken assumptions revisited.
 - **Not for this paper** (a second paper, or a later version, if they hold): the two senses linked by Hebb's rule on
   Commons video (true sound 60–64% against another video's on three seeds; the claim that sight and hearing together
-  name a video better than sight did not hold on the third seed), the ear that hears sound (no units recur yet), the stream brain with a vocal tract
+  name a video better than sight did not hold on the third seed), the ear that hears sound (111 word-like units on one seed since 2026-11-26 23:10, common words only), the stream brain with a vocal tract
   (babbling learns an auditory-motor map; heard vowels draw near imitations, three seeds) and the order-vs-shuffled
   video probe on CORe50 (done 2026-11-27: order teaches neither second stage anything, three seeds; the whole-frame
   code is ruled by the scene; an eye on the held object lifts the same object across sessions from 0.12 to 0.165 on
@@ -297,7 +297,12 @@ organic learner behaves and what each part does, measured honestly, not a score.
   keeps learning along the stream gives half of it. This bears on the paper's relay paragraph: the batch relay is a
   stand-in that only holds in the world it was settled in; one sentence there, citing the control on the photo
   benchmark, when the next draft is made. Also not for this paper: the stream brain's eye with pursuit, 0.137
-  against the whole frame's 0.118 on three seeds). Kris may present the work to neuroscientists in about two weeks; the artifact
+  against the whole frame's 0.118 on three seeds; read beside the whole view, that eye's fixation adds three points
+  of naming with relay circuits and nothing batch, 0.387 / 0.386 / 0.394 against 0.357 / 0.352 / 0.361, said
+  before it ran, 2026-11-27 15:19). **A negative to keep on record for that later paper** (2026-11-27 14:24–15:19,
+  seed 0): the text-free ear's units do not find a caption's photograph (recall at chance); the eye's code and the
+  Hebb link do from written words (R@10 0.11–0.15, a measure only); the ear holds the common words only, and two
+  thirds of a word's trace is lost between voices; an ear growing up in one voice is being run. Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
 - **2026-11-26 21:55: draft 10 emailed to Kris.** The photo section is complete on three seeds (backprop + relay 0.463
   ± 0.001 against the word cells' 0.446 ± 0.006; level without the relay, 0.392 against 0.389; the word cells ahead

@@ -23,7 +23,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from organic.cortex2 import Relay  # noqa: E402
 
 DIR = os.path.expanduser("~/datasets/spokencoco")
-EAR_U, ASSOC_U, TEST, SEED, DEV = 20000, 20000, 1000, int(os.environ.get("SEED", 0)), 16000
+EAR_U, ASSOC_U, TEST, SEED, DEV = int(os.environ.get("EAR_U", 20000)), int(os.environ.get("ASSOC_U", 20000)), int(os.environ.get("TEST", 1000)), int(os.environ.get("SEED", 0)), int(os.environ.get("DEV", 16000))
+READER, SUB = os.environ.get("READER", ""), int(os.environ.get("SUB", 0))  # the one-voice run's bags; only the first SUB captions for the link (15:19)
 t0 = time.time()
 
 
@@ -38,6 +39,12 @@ def unit(X):
 # the run's own choice of photographs and captions (the same calls on the same random state, in its order)
 rng = np.random.default_rng(SEED)
 utts = [u for u in map(json.loads, open(os.path.join(DIR, "cochlea.jsonl"))) if u["split"] == "train" and u["rows"] >= 50]
+if READER:
+    count = {}
+    for u in utts:
+        count[u["speaker"]] = count.get(u["speaker"], 0) + 1
+    who = max(count, key=count.get) if READER == "top" else READER
+    utts = [u for u in utts if u["speaker"] == who]
 row_of = {i: r for r, i in enumerate(json.load(open(os.path.expanduser("~/datasets/coco_thumbs/train2017_ids.json"))))}
 thumbs = np.load(os.path.expanduser("~/datasets/coco_thumbs/train2017_64.npy"), mmap_mode="r")
 images = sorted({u["image"] for u in utts})
@@ -50,8 +57,10 @@ test_u = [by_image[i][int(rng.integers(len(by_image[i])))] for i in test_imgs]
 assoc_u = [by_image[i][int(rng.integers(len(by_image[i])))] for i in assoc_imgs]
 del utts, by_image
 
-z = np.load(f"out/bench/grounded_bags_s{SEED}_e{EAR_U}_a{ASSOC_U}_t{TEST}_d{DEV}.npz")
-cues = {"sound": (z["assoc"], z["test"])}
+z = np.load(f"out/bench/grounded_bags_s{SEED}_e{EAR_U}_a{ASSOC_U}_t{TEST}_d{DEV}{'_r' + READER if READER else ''}.npz")
+if SUB:
+    assoc_u, assoc_imgs = assoc_u[:SUB], assoc_imgs[:SUB]
+cues = {"sound": (z["assoc"][:len(assoc_u)], z["test"])}
 count = {}
 for u in assoc_u:
     for w in set(u["text"].split()):
@@ -72,10 +81,10 @@ cues["words"] = (words(assoc_u), words(test_u))
 say(f"{len(assoc_u)} captions for the link, {len(test_u)} for the test; sound kinds {cues['sound'][0].shape[1]}, "
     f"written words heard in 5+ captions {len(vocab)}; kinds / words a caption: {cues['sound'][0].sum(1).mean():.1f} / {cues['words'][0].sum(1).mean():.1f}")
 
-CODES = f"out/bench/grounded_codes_s{SEED}_a{ASSOC_U}_t{TEST}.npz"
+CODES = f"out/bench/grounded_codes_s{SEED}_a{ASSOC_U}_t{TEST}{'_r' + READER if READER else ''}.npz"
 if os.path.exists(CODES):
     c = np.load(CODES)
-    V_assoc, V_test = c["assoc"].astype(np.float32), c["test"].astype(np.float32)
+    V_assoc, V_test = c["assoc"].astype(np.float32)[:len(assoc_u)], c["test"].astype(np.float32)
 else:
     cortex = pickle.load(open(f"out/bench/cortex_ph_d_s{SEED}.pkl", "rb"))
     vrelay, cortex.relay = cortex.relay, None
@@ -144,7 +153,7 @@ for lam in ((0.1, 10.0, 1.0) if PART == "all" else (1.0,)):  # (1.0 last: its re
 del P, Sc, Sa
 # (14:34) Are the words the ear hears enough to find a photograph? Measures only (text in every step).
 c = np.load(CODES)
-V_assoc, V_test = c["assoc"].astype(np.float32), c["test"].astype(np.float32)
+V_assoc, V_test = c["assoc"].astype(np.float32)[:len(assoc_u)], c["test"].astype(np.float32)
 mv = V_assoc.mean(0)
 
 

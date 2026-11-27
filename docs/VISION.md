@@ -4453,3 +4453,167 @@ constant by hand), no cap of 1,024, more captions heard, and the ear's code made
 now). Measured first without the eye and cheaply (the reading by how often a word is said, above), then against
 the photographs. Literature to check before building: how infants come to word forms (transitional probabilities
 between syllables, Saffran, Aslin & Newport 1996; words heard alone, Brent & Siskind 2001; to verify both).
+
+### 2026-11-27 14:49, how a learner comes to a rare word form: what is known, and what our captions offer
+
+**Literature** (a search by an agent with generic queries; every DOI below checked against its registry record,
+abstracts read where marked in the agent's report; Kris opens each by hand before any of it is cited in a paper).
+(1) Frequent sound sequences are stored first by infants too, words or not: 11-month-olds prefer frequent
+two-syllable sequences and do not tell frequent non-words from frequent words (Ngon et al. 2013,
+doi:10.1111/j.1467-7687.2012.01189.x). Our ear's fault is the infant's first state, not a bug of the rule.
+(2) Transitional probabilities between syllables (Saffran, Aslin & Newport 1996, doi:10.1126/science.274.5294.1926)
+hold in the laboratory but are fragile: infants fail when word lengths vary (Johnson & Tyler 2010,
+doi:10.1111/j.1467-7687.2009.00886.x). The other account is chunking: attention-sized chunks kept if they recur,
+lost otherwise, no statistics computed (PARSER: Perruchet & Vinter 1998, doi:10.1006/jmla.1998.2576; adults lose
+the parts as the whole strengthens: Giroux & Rey 2009, doi:10.1111/j.1551-6709.2009.01012.x). (3) What brings a
+word heard a few times: words said alone and **said again in close succession** (Brent & Siskind 2001,
+doi:10.1016/S0010-0277(01)00122-6; two-year-olds learn a label when it is repeated across successive sentences:
+Schwab & Lew-Williams 2016, doi:10.1037/dev0000125); utterance edges, which give one boundary for nothing (Seidl &
+Johnson 2006, doi:10.1111/j.1467-7687.2006.00534.x); known frequent words that mark off what stands beside them
+(Bortfeld et al. 2005, doi:10.1111/j.0956-7976.2005.01531.x); and a fast store beside the slow one: a new form is
+held at once by the hippocampus and enters the cortical lexicon slowly, with sleep (Davis & Gaskell 2009,
+doi:10.1098/rstb.2009.0111; adult evidence; contested in part: Kapnoula et al. 2015,
+doi:10.1016/j.cognition.2014.09.007). (4) Voices: 64% of the tokens of an infant's frequent words come from one
+talker (Bulgarelli, Mielke & Bergelson 2022, doi:10.1111/cogs.13075); at 7.5 months a form does not carry from a
+man's voice to a woman's, at 10.5 months it does (Houston & Jusczyk 2000, doi:10.1037/0096-1523.26.5.1570).
+Our ear hears 2,353 readers, never one twice in a row: harder than an infant's world. (5) That seeing the thing
+helps find the word form in the speech is weakly supported in infants (adults: Cunillera et al. 2010,
+doi:10.1080/17470210902888809; 8-month-olds not: Thiessen 2010, doi:10.1111/j.1551-6709.2010.01118.x).
+
+**What our captions offer** (a count on the written captions of 40,000 photographs, a measure only): each
+photograph has five captions by five readers, and a word said in one is said again in another of the same
+photograph far above what unrelated captions would give, the rare ones too:
+
+| the word is in … of all captions | words | said again for the same photograph (median) | if captions were unrelated |
+|---|---|---|---|
+| 3% or more | 41 | 0.64 | 0.19 |
+| 1.5–3% | 57 | 0.71 | 0.08 |
+| 0.8–1.5% | 92 | 0.64 | 0.04 |
+| 0.4–0.8% | 148 | 0.58 | 0.02 |
+| 0.1–0.4% | 500 | 0.36 | 0.007 |
+| 0.02–0.1% | 1,291 | 0.26 | 0.002 |
+
+("pizza" 0.98, "hydrant" 0.98, "scissors" 0.96, "panda" 0.96.) So the run of 14:24 threw away the one thing the
+literature says brings rare words: it heard 20,000 captions of 20,000 different photographs in a random order,
+nothing said twice within hours. A scene that is talked about for a while (its five captions in a row, the
+photograph in view) is the close-succession repetition, here across voices.
+
+**The design this points to (not built yet):** a fast store beside the slow kinds, as the lives already have for
+sight: the stretches of the last captions are kept as they were heard; a stretch that is matched by one heard a
+moment ago better than by anything the lexicon holds founds a kind from the two (chunks kept if they recur, lost
+otherwise), and the kinds consolidate with use as now. No count of kinds set by hand. **Before building, the
+premise on the sound side, said before it runs** (`experiments/ear_again_check.py`): for a two- or three-syllable
+stretch of one caption, the best match among the stretches of another caption of the same photograph (another
+voice) against the best matches in nine captions of other photographs: the same photograph's caption holds the
+best match more often than one time in ten. I say 0.14–0.20 (chance 0.10), higher (0.25 or more) for captions that
+share two or more written content words with it and at chance for those that share none. If it is at 0.10–0.12
+overall, the stretch code does not carry a word across voices and the fast store has nothing to find: then the
+code (voice, where a stretch is cut) comes first.
+
+### 2026-11-27 14:57, a stretch is barely found again in another voice (seed 0, 600 photographs)
+
+`out/bench/ear_again_s0.log`: for each window of one caption, how often the other caption of the same photograph
+(another reader) holds the best match among ten captions (chance 0.100):
+
+| window | windows | best match is in the same photograph's caption | no content word shared / one / two or more | best match, median (same / other) |
+|---|---|---|---|---|
+| one stretch | 8,055 | 0.130 | 0.118 / 0.126 / 0.144 | 0.108 / 0.102 |
+| two stretches | 6,567 | 0.141 | 0.134 / 0.126 / 0.163 | 0.076 / 0.070 |
+| three stretches | 5,497 | 0.133 | 0.120 / 0.129 / 0.148 | 0.060 / 0.056 |
+
+**Read.** Above chance, and thin. What I said: 0.14–0.20 overall (got 0.13–0.14, the bottom of it or under), 0.25
+or more where two content words are shared (got 0.15–0.16: wrong), chance where none is shared (got 0.12–0.13:
+wrong; such captions still share the commonest words, "a", "man", "on", which I had left out of the count). If the
+code carried a word across voices, captions that share two content words would have about a third of their
+windows found again; they have a sixth. And the matches themselves are small (0.06–0.11 between codes at unit
+length; the same photograph's best is a hundredth above another's): two readers saying the same word give
+stretch codes that are nearly unrelated. By the rule I set at 14:49 this sits between its two cases, nearer the
+second: **the stretch code across voices comes before a fast store**; a store that asks "was this heard a moment
+ago?" would get one right answer in eight tries. The lexicon's kinds got their common words by averaging over
+hundreds of voices, which a rare word never gets. One seed, one ear.
+**This check is now the ear's quick measure** (four minutes, no text needed for its main number, no kinds): a
+change to the stretch code is read here first.
+**Said before the next three runs** (one thing changed each: no relay on the frame code; 4 band stretches instead
+of 8; one mean code a stretch instead of its two halves): none reaches 0.20 on two-stretch windows; without the
+relay 0.12–0.14 (everything more alike, no better told apart), 4 bands 0.14–0.16, one mean 0.14–0.15. If I am
+right the loss is where these do not reach (how a voice shifts the spectrum; where a stretch is cut), and that is
+next, from what is known of how hearing takes the voice out.
+
+**14:58, is it the voice? said before it runs** (`MODE=voice`, after the three variants): 300 anchor captions; for
+each, a caption by the same reader about another photograph that shares two or more written content words with it
+(chosen by the text: a measure only), and one by another reader that shares as many; each against five captions
+that share none (by the same reader; by five other readers), chance 0.167. I say: the same reader 0.28–0.38 on
+two-stretch windows, another reader 0.19–0.22: most of what is lost is lost between voices. If the same reader is
+near 0.2 too, the loss is in the stretch itself (where it is cut, how a word changes with its neighbours) and the
+voice is not the first thing to mend.
+
+**15:10, the three variants** (`ear_again_{norelay,bands4,onemean}_s0.log`; best match in the same photograph's
+caption, windows of one / two / three stretches; two-stretch windows where two or more content words are shared):
+
+| the stretch code | 1 / 2 / 3 stretches | two or more shared (2 stretches) |
+|---|---|---|
+| as it is (relay, 8 bands, two halves) | 0.130 / 0.141 / 0.133 | 0.163 |
+| no relay on the frame code | 0.138 / 0.152 / 0.143 | 0.176 |
+| 4 band stretches | 0.130 / 0.144 / 0.138 | 0.171 |
+| one mean code a stretch | 0.130 / 0.135 / 0.123 | 0.152 |
+
+As said, none reaches 0.20 and none changes the picture (no relay 0.152, said 0.12–0.14: a little above; 4 bands
+0.144, said 0.14–0.16; one mean 0.135, said 0.14–0.15: a little under). Two small things: the ear's relay does not
+help a stretch be found again (without it a point more on every window: evening the frame code out does nothing
+for telling a word across voices, unlike for the eye); the two halves are worth a point. One seed: differences of
+a point are not findings. The loss is elsewhere; the voice measure runs.
+
+### 2026-11-27 15:19, it is mostly the voice (seed 0); and the top reader has ten hours of speech
+
+`out/bench/ear_again_voice_s0.log` (300 anchor captions; the captions that share content words share 2.3 on
+average; the sharing caption holds a window's best match of six captions, chance 0.167):
+
+| window | the same reader, another photograph | another reader |
+|---|---|---|
+| one stretch | 0.303 | 0.212 |
+| two stretches | 0.335 | 0.229 |
+| three stretches | 0.340 | 0.218 |
+
+**Read.** What I said held (the same reader 0.28–0.38: 0.335; another reader 0.19–0.22: 0.229, a little above).
+Above chance, a stretch is found again +0.17 in the same voice and +0.06 in another: **two thirds of what the
+stretch code carries of a word is lost between two voices.** The rest of the loss is within a voice (a third of
+the windows found again where two words in ten are shared: the cut of the stretches, a word's neighbours): not
+measured apart yet. One seed.
+**What biology does about the voice** (14:49's literature): it does not start by solving it. An infant's frequent
+words come 64% from one talker, and at 7.5 months a form learned in one voice is not known in a voice of the other
+sex; that comes at 10.5 months. Our ear was given 2,352 readers from its first caption, never the same one twice
+in a row. SpokenCOCO has the other world too (a count): the reader with most captions read 11,054 of them (9.9
+hours of speech, 10,670 photographs), the next two about 10,000 each; half of all captions are by 100 readers.
+**Next, said before it runs: an ear that grows up in one voice** (`READER=top` in
+`experiments/grounded_speech_probe.py`: the top reader's captions only; the ear develops on 4,670 of them, 5,000
+more are heard each with its photograph, 1,000 test pairs; everything else as the run of 14:24, the lexicon still
+1,024 + 1,024 kinds). Read by the diagnostic of 14:36 (how well a word is heard by how often it is said), beside
+the many-voices run cut down to the same 5,000 captions for its ridge (a fair row, to be made from its saved
+bags). I say: in one voice the rarer words are heard about twice as well (words in 15–29 of the 1,000 test
+captions: median 0.12 → 0.22–0.30; in 8–14: 0.09 → 0.15–0.22; the commonest about the same, 0.29 → 0.30–0.40),
+and the photographs are found a little (R@10 0.02–0.04 from the bags, against 0.011–0.014). If the rare words are
+no better in one voice, the lexicon's size and rule are the limit before the voice, and the fast store comes
+first after all.
+
+### 2026-11-27 15:19, the fixation beside the whole view with nothing batch: what I said held (three seeds)
+
+`out/bench/core50_relay_learns_eye_s{0,1,2}.log` (CORe50's stream of 10 kinds, 10,000 frames, one pass; the whole
+frame and the stream brain's own fixation side by side, each code through its relay as settled on COCO and then
+through a relay circuit that keeps learning along the video, Lipshutz, Pehlevan & Chklovskii's local rule; the
+delta reader learns from the pair as it comes; circuits held still for each reading):
+
+| frames seen | relays alone (seeds 0 / 1 / 2) | with the circuits learning |
+|---|---|---|
+| 1,000 | 0.253 / 0.268 / 0.266 | 0.269 / 0.293 / 0.281 |
+| 5,000 | 0.346 / 0.336 / 0.342 | 0.371 / 0.356 / 0.362 |
+| 10,000 | 0.368 / 0.375 / 0.366 | **0.387 / 0.386 / 0.394** |
+
+**Read.** Said at 13:18: 0.38–0.395 on all three seeds, and 0.02 or more above the whole frame with its own
+circuit (0.357 / 0.352 / 0.361, 11:53): got 0.387 / 0.386 / 0.394, above it by 0.030 / 0.034 / 0.033. Both held.
+So with nothing computed in a batch and nothing told about the dataset (an eye that follows what moves, relays
+that learn while used, a reader with the word cells' rule), the brain's own fixation is worth three points of
+naming beside the whole view, on every seed and at every point of the stream. The batch version (each relay
+settled again on the stream's frames) had 0.404 / 0.404 / 0.414: the circuits are at half of that gain after
+10,000 frames, as they were for one code (11:53), and the gap to the relays alone is still there at 10,000.
+Still a stand-in: the delta reader for the word cells, the two codes side by side for one reader (in the lives a
+word cell picks the view that drives it most); 10,000 frames of ten kinds of object held in a hand.

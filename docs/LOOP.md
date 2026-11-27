@@ -65,7 +65,19 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-relaylearn-eye-s0`, `-s1`, `-s2`** (experiments/core50_relay_learns_probe.py with
+- **The ear's quick measure** (`experiments/ear_again_check.py`; four minutes a run, 1.8 GB cap, not gated): is a
+  stretch found again in another reader's caption of the same photograph (VISION.md 14:57; seed 0: 0.13–0.14,
+  chance 0.10). `organic-ear-again2` (out/tmp/ear_again_queue.sh, 14:57): no relay, 4 bands, one mean a stretch →
+  out/bench/ear_again_{norelay,bands4,onemean}_s0.log. Then `MODE=voice PHOTOS=300 K=5` (the same reader against
+  another reader; said before: VISION.md 14:58) → ear_again_voice_s0.log. ALL ENDED and read (VISION.md 15:10,
+  15:19): the variants change a point at most; the same reader 0.335, another reader 0.229 (chance 0.167).
+- **`organic-onevoice`** (out/tmp/one_voice_queue.sh; 2026-11-27 15:23; MemoryMax 2600M; about 80 minutes): an ear
+  that grows up in one voice (`READER=top`: the reader with 11,054 captions; ear on 4,670, link on 5,000, test
+  1,000) → out/bench/grounded_onevoice_s0.log, then the diagnostic on its bags → grounded_diag_onevoice_s0.log and
+  the many-voices run cut to 5,000 captions → grounded_diag_sub5000_s0.log (the fair row). Said before: VISION.md
+  15:19 (rarer words heard about twice as well in one voice).
+- **`organic-relaylearn-eye-s0`, `-s1`, `-s2`** ENDED 15:18, read (VISION.md 15:19: what I said held on three
+  seeds). Was: (experiments/core50_relay_learns_probe.py with
   `VIEWS=c50first+c50eyeboth`; 2026-11-27 13:22; MemoryMax 2500M each; about two hours): the whole frame and the
   stream brain's own fixation side by side, a relay circuit for each learning along the stream, the delta reader
   learning from the pair → out/bench/core50_relay_learns_eye_s{0,1,2}.log. Said before: VISION.md 13:18.
@@ -346,7 +358,13 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     **32b (2026-11-27 14:36). The ear's lexicon is short** (VISION.md 14:24–14:36): the text-free ear's units do not
     find the photographs (recall at chance) because they hold the common words only, and photographs are told apart
     by the rare ones; the eye's code and the Hebb link are fine with written words as the cue (a measure only).
-    Next: (a) read how infants come to word forms before building (transitional probabilities, words heard alone);
+    **Done 14:49–15:23:** (a) the literature (VISION.md 14:49); (b) the time is in the kinds' matching, one
+    stretch at a time (the bags are now made a caption at once, the same bags, a third faster); the premise of a
+    fast store measured (`ear_again_check.py`: a stretch is barely found again in another voice, 0.14 against a
+    chance of 0.10; two thirds of the signal is lost between voices); so **first an ear in one voice**
+    (`organic-onevoice`, running), then (c) below within that voice, then voices added (how a form comes to carry
+    across voices: to read before building).
+    Was next: (a) read how infants come to word forms before building (transitional probabilities, words heard alone);
     (b) the ear's code made faster (0.5 s a caption now); (c) kinds that are founded by use (a stretch unlike every
     kind founds one; the match asked comes from the ear's own kinds, no constant by hand; no cap), more captions
     heard; (d) measured first without the eye (`grounded_diag_check.py`'s reading of the written words by how
@@ -1670,7 +1688,7 @@ Still Kris's own:
   (the middle fixation beside it: 0.421 / 0.425 / 0.432). I had said less on every count. **Started:** the same with
   nothing batch, a relay circuit for each code learning along the stream (`organic-relaylearn-eye-s*`; said before
   it runs). tagn_s2 at 105,000. The grounding run: 15,000 of 21,000 bags.
-- 2026-11-27 14:38 Health: all healthy (5.2 GB available, 271 GB free). **The grounding run ended: recall at chance**
+- 2026-11-27 14:37 Health: all healthy (5.2 GB available, 271 GB free). **The grounding run ended: recall at chance**
   (VISION.md 14:24; memoize; R@10 0.014 against 0.010, median rank 452 against 502 shuffled; seed 0). **Why, by a
   grid on its saved bags** (VISION.md 14:31, 14:36; memoize): with written words as the cue (a measure only) the same
   eye and Hebb link reach R@10 0.108, 0.121 with a relay on both sides, ridge 0.152; the ear's bags carry the common
@@ -1680,3 +1698,14 @@ Still Kris's own:
   this design are not run (six hours each for a design that changes); next is queue E 32b. **The Commons video
   collection is held** at 176 GB (it was adding 6.5 GB an hour after the clean-up; drop-in `FLOOR_GB=300`; Decisions
   waiting for Kris). The circuits' run (`organic-relaylearn-eye-s*`) is at its first hour; tagn_s2 at 110,000.
+- 2026-11-27 15:24 Health (14:22): all healthy. **The circuits beside the eye: what I said held on three seeds**
+  (VISION.md 15:19; memoize; whole + the brain's own fixation, each through a relay circuit learning along the
+  video: 0.387 / 0.386 / 0.394 against 0.357 / 0.352 / 0.361 for the whole frame with its circuit). **The ear:**
+  literature read (VISION.md 14:49; frequent forms first in infants too; rare forms by repetition in close
+  succession, edges, a fast store; one main talker); our captions have the repetition (a rare word is in another
+  caption of the same photograph 26–58% of the time, five readers); but a stretch is barely found again in
+  another voice (VISION.md 14:57, 15:10, 15:19; memoize): 0.14 against a chance of 0.10, three variants of the
+  code within a point, the same reader 0.335 against another reader's 0.229 (chance 0.167). Of nine things said
+  before these runs, six held or nearly and three were wrong (all recorded). **Started:** an ear that grows up in
+  one voice (`organic-onevoice`). Artifact v9 (the circuits' line; the ear's limit with three new references,
+  titles checked against the registry). tagn_s2 at 115,000.
