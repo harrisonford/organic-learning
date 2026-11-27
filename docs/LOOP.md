@@ -65,9 +65,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-relaylearn`** (experiments/core50_relay_learns_probe.py; 2026-11-27 08:28; not gated, MemoryMax 2000M;
-  about two hours): the relay circuit learning along CORe50's stream on top of the COCO-settled relay, the delta
-  reader learning from what it sends, three seeds → out/bench/core50_relay_learns.log. Said before: VISION.md 08:28.
+- **`organic-relaysrc`** (experiments/relay_by_source_probe.py; 2026-11-27 10:50; MemoryMax 2500M; about 25 minutes):
+  how even the lives' own relay's code is on each source they name (COCO crops, CIFAR, Commons), the delta reader
+  against ridge, and the relay settled again → out/bench/relay_by_source.log. Said before: VISION.md 10:49.
+- **`organic-relaylearn-s1`, `-s2`** (experiments/core50_relay_learns_probe.py; 2026-11-27 09:22; MemoryMax 2000M): the
+  relay circuit learning along CORe50's stream, seeds 1 and 2 → core50_relay_learns_s{1,2}.log (middle fixation due
+  about 11:40). Seed 0 read (VISION.md 10:49; `organic-relaylearn` stopped at 10:43 after it).
 - **`organic-grounded2`** (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
   grounding run again (the first, `organic-grounded1`, was killed for memory at 07:49 after seven hours, coding the
   photographs in one stack). The probe now keeps the captions' bags in out/bench/grounded_bags_*.npz and codes the
@@ -1614,3 +1617,8 @@ Still Kris's own:
   gain is only on CORe50's middle fixation. The relay circuit learning on, first line (seed 0 whole frame): 0.357
   against 0.360 alone; seeds 1–2 run beside it (`organic-relaylearn-s1`, `-s2`). The grounding run: 10,000 of
   20,000 captions heard. tagr_s1 at 100,000.
+- 2026-11-27 10:50 Health: all healthy (297 GB of disk free after the cleanup; ~/Downloads' partial files removed on
+  Kris's word at 10:19). **The relay circuit learning along the stream, seed 0** (VISION.md 10:49): middle fixation
+  0.348 → 0.371 (said 0.36–0.39), above the whole frame's 0.357; whole frame unchanged on three seeds. Still
+  learning at 10,000 frames; about half of the batch's gain. Seeds 1–2 of the middle fixation due about 11:40.
+  **Started:** the same question in the lives, source by source (`organic-relaysrc`; said before it runs).

@@ -4189,3 +4189,24 @@ tells kinds apart there lies along strong directions is a guess, not measured.)
 The relay circuit learning along CORe50's stream, first line (seed 0, whole frame): relay alone 0.360, with the
 circuit 0.357 (said: a change under 0.015); the circuit helps early (0.270 against 0.252 at 1,000 frames). The
 middle fixation is still running.
+
+### 2026-11-27 10:49, the relay circuit on seed 0; the lives' own relay on each source they name, said before it runs
+
+**The relay circuit learning along CORe50's stream, seed 0** (`core50_relay_learns.log`; delta on the relay alone /
+with the circuit, after 1,000, 5,000, 10,000 frames): whole frame 0.252 / 0.270, 0.338 / 0.342, 0.360 / 0.357;
+**middle fixation 0.251 / 0.260, 0.328 / 0.342, 0.348 / 0.371**. Against 08:28: the middle fixation rises to within
+0.36–0.39 (0.371: yes) and above the whole frame with the circuit (0.357: yes); the whole frame changes by under
+0.015 (−0.003; seeds 1 and 2: +0.004, +0.002: yes). The circuit's gain on the middle fixation grows along the
+stream (+0.009, +0.014, +0.023): it is still learning at 10,000 frames, and it gives a little under half of what
+the batch gives (+0.050). Seeds 1 and 2 of the middle fixation are running (the first unit was stopped after seed 0;
+`organic-relaylearn-s1`, `-s2`).
+
+**The same question in the lives** (`experiments/relay_by_source_probe.py`). The lives' cortex has one batch relay
+(shrink 0.0005), settled once, and at first words they name pictures from three sources: COCO crops, CIFAR pictures
+enlarged from 32 pixels, Commons photographs. For each: how even the relayed code is on 3,000 of its pictures; the
+delta reader and a ridge after one pass over its lived pictures (held-out pictures of the source); and both with
+the relay settled again on the source's own lived pictures where there are enough. **What I say:** the code is least
+even on CIFAR (enlarged small pictures are the furthest from what the relay was settled on) and the delta reader
+trails the ridge most there; settled again, the delta reader gains 0.02 or more on CIFAR and nothing on COCO crops
+(±0.01). Commons has too few pictures (3,102 for 4,096 directions) to settle a relay on. If the three sources are
+equally even and nothing gains, the lives' relay is at home in all of them and CORe50's lesson does not reach them.
