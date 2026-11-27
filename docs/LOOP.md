@@ -1458,4 +1458,9 @@ Still Kris's own:
   (0.463 ± 0.001 with the relay, 0.392 ± 0.005 without) → paper; **draft 10 built and emailed** (five mistaken
   assumptions, the development section retitled). CORe50 seed 0: order 0.116, shuffled 0.119, first stage 0.117 (plain
   running): time makes no difference to this second stage so far.
+- 2026-11-26 22:45 Health: all healthy. **CORe50 seed 0 read** (VISION.md 22:25): order, shuffled and no trace level in the
+  3 × 3 second stage (0.113–0.119; first stage 0.117); my prediction was wrong. A whole-view (IT-like) trace stage built
+  and run on three seeds: too weak to test (0.03–0.04 against its input's 0.117): inconclusive, left in the queue.
+  gazs_s1 at 100,000: pages 0.176 against its control's 0.232, first words level (one reading; both lose earlier
+  stages in preschool). Sound ear second reading: all 20,000 heard, held-out reading running.
 

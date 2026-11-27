@@ -3780,3 +3780,14 @@ is a stage that sees the whole view, as inferotemporal cortex does (Li & DiCarlo
 objects across saccades; Wallis & Rolls 1997 put the trace at the top of the hierarchy). Next for E 31: the trace in
 a whole-view stage (on the relay's code: a population that sees the whole picture, learning by the same rule with
 the trace), in order against shuffled. Seeds 1–2 of this probe and its streams are queued as they were. One seed.
+
+**The trace in a whole-view stage, first try** (`experiments/core50_it_probe.py`, three seeds; 256 cells on the first
+stage's relayed whole-view code of every tenth frame, half a second apart, one pass over 12,000 frames): same object
+from another session 0.033–0.041 in every arm (order 0.035 / 0.033 / 0.041, shuffled 0.039 / 0.038 / 0.038, plain
+0.034 / 0.034 / 0.033), same kind 0.134–0.146, against **0.117 and 0.226 for the code it reads**. The stage as built
+throws away most of what it is given (256 winner-take-all cells, about 47 frames each, one pass), so the comparison
+of orders says nothing either way: this is an inconclusive build, not a finding about time. What a fair test needs:
+a stage that keeps what it reads (graded answers of many more cells, or the trace on top of the full code, e.g. as a
+learned slow projection), and measures first what the trace is for (the same cells answering across a video's
+frames), then whether that carries to another session. Left in the queue (E 31); the 3 × 3 second stage's seeds 1–2
+and the streams keep running.
