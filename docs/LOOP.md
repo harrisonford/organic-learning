@@ -1715,7 +1715,7 @@ Still Kris's own:
   stand-in in a second sense: fitted in one world it does not hold in another; one paragraph, three seeds, the
   photo benchmark as control; PUBLISH.md). The numbers in it were read again from the logs before the build
   (core50_spectrum.log, photos_spectrum.log, VISION.md 06:03, 11:53).
-- 2026-11-27 15:42 **How brains deal with another voice** (VISION.md 15:38; second literature search): context
+- 2026-11-27 15:41 **How brains deal with another voice** (VISION.md 15:38; second literature search): context
   adaptation (partial; ours approximates it), a shift-tolerant code, tokens from several voices held together by a
   cue that they are the same form (the first learned route in infants), the lexicon teaching the ear (later).
   **The shift measured and set aside** (VISION.md 15:41; memoize): another reader's caption with its bands moved
