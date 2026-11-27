@@ -69,9 +69,15 @@ def clip(u):
     return g[s: s + 100][..., None]
 
 
-layer.settle((clip(ear_u[i]) for i in rng.choice(len(ear_u), min(800, len(ear_u)), replace=False)), rng)
-for n in range(DEV):
-    layer.learn(clip(ear_u[rng.integers(len(ear_u))]), rng, rate=0.05 * (1 - n / DEV) + 0.005)
+# (2026-11-27) the captions' bags are kept on disk once made: the first run was killed for memory after seven hours,
+# coding the photographs, and lost them. A run that finds them (same sizes and seed) reads them back, with the random
+# state as it was, and goes straight to the photographs.
+BAGS = f"out/bench/grounded_bags_s{SEED}_e{EAR_U}_a{ASSOC_U}_t{TEST}_d{DEV}.npz"
+RESUME = os.path.exists(BAGS)
+if not RESUME:
+    layer.settle((clip(ear_u[i]) for i in rng.choice(len(ear_u), min(800, len(ear_u)), replace=False)), rng)
+    for n in range(DEV):
+        layer.learn(clip(ear_u[rng.integers(len(ear_u))]), rng, rate=0.05 * (1 - n / DEV) + 0.005)
 
 
 def frames(u):
@@ -81,8 +87,9 @@ def frames(u):
     return codes, np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
 
 
-relay = Relay(0.0005).settle(np.concatenate([unit(frames(ear_u[i])[0])[::5] for i in rng.choice(len(ear_u), min(400, len(ear_u)), replace=False)]))
-say("hearing cortex and its relay")
+if not RESUME:
+    relay = Relay(0.0005).settle(np.concatenate([unit(frames(ear_u[i])[0])[::5] for i in rng.choice(len(ear_u), min(400, len(ear_u)), replace=False)]))
+    say("hearing cortex and its relay")
 
 
 def stretches(u):
@@ -138,17 +145,38 @@ def bag(u, learning):
     return out
 
 
-for i, u in enumerate(ear_u):
-    bag(u, True)
-    if (i + 1) % 5000 == 0:
-        say(f"ear: {i + 1} captions heard")
-B_assoc = np.stack([bag(u, False) for u in assoc_u])
-B_test = np.stack([bag(u, False) for u in test_u])
-say("the captions' bags of sound kinds")
+if RESUME:
+    z = np.load(BAGS)
+    B_assoc, B_test = z["assoc"], z["test"]
+    rng.bit_generator.state = json.loads(str(z["rng"]))
+    say(f"the captions' bags of sound kinds, read back from {BAGS}")
+else:
+    for i, u in enumerate(ear_u):
+        bag(u, True)
+        if (i + 1) % 5000 == 0:
+            say(f"ear: {i + 1} captions heard")
+    B_assoc = np.zeros((len(assoc_u), 2 * K23), np.float32)
+    for i, u in enumerate(assoc_u):
+        B_assoc[i] = bag(u, False)
+        if (i + 1) % 5000 == 0:
+            say(f"bags: {i + 1} captions")
+    B_test = np.stack([bag(u, False) for u in test_u])
+    np.savez(BAGS, assoc=B_assoc, test=B_test, rng=json.dumps(rng.bit_generator.state))
+    say(f"the captions' bags of sound kinds (kept in {BAGS})")
+    del layer, relay, pairs, triples
 
 cortex = pickle.load(open(f"out/bench/cortex_ph_d_s{SEED}.pkl", "rb"))
 vrelay, cortex.relay = cortex.relay, None
-see = lambda ids: unit((np.stack([cortex.whole(np.asarray(thumbs[row_of[i]], np.float32) / 255, 4) for i in ids]) - vrelay.mu) @ vrelay.Z)  # noqa: E731
+
+
+def see(ids):  # a few hundred photographs at a time (the whole stack at once took the first run past its memory)
+    out = np.empty((len(ids), vrelay.Z.shape[1]), np.float32)
+    for a in range(0, len(ids), 500):
+        X = np.stack([cortex.whole(np.asarray(thumbs[row_of[i]], np.float32) / 255, 4) for i in ids[a: a + 500]])
+        out[a: a + 500] = unit((X - vrelay.mu) @ vrelay.Z)
+    return out
+
+
 V_assoc, V_test = see(assoc_imgs), see(test_imgs)
 say("the photographs' codes")
 

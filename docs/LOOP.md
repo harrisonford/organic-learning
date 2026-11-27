@@ -65,22 +65,26 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-delta-c50`** (out/tmp/delta_c50_queue.sh; 2026-11-27 07:14; shared gate; about an hour): the diagnostic
-  delta reader (the word cells' content rule without the words; `ARMS=delta+relay` in bench_stream.py) on the whole
-  frame and the middle fixation, seeds 0–2 → stream_core50_c50{first,centre}_delta_s{0,1,2}.log; then the word cells
-  on seed 0 for how often they say no kind's name (…_noname_s0.log). Reading: VISION.md 07:11.
-- **`organic-stream-eye2`** (out/tmp/stream_eye_queue2.sh; 2026-11-27 07:08; MemoryMax 1600M; shared gate; hours): the
-  rest of the stream eye probe (seed 1's pursuit, both, middle; then seed 2), appended to core50_stream_eye.log.
-  `organic-stream-eye1` was killed for memory at 07:00 (each video's brain was not freed; fixed); seed 0 read
-  (VISION.md 07:11).
-- **`organic-cells-err`** ENDED 07:10, read (VISION.md 07:11). **`organic-ncm-c50`** ENDED 06:33, read (same entry).
+- **`organic-relaylearn`** (experiments/core50_relay_learns_probe.py; 2026-11-27 08:28; not gated, MemoryMax 2000M;
+  about two hours): the relay circuit learning along CORe50's stream on top of the COCO-settled relay, the delta
+  reader learning from what it sends, three seeds → out/bench/core50_relay_learns.log. Said before: VISION.md 08:28.
+- **`organic-grounded2`** (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
+  grounding run again (the first, `organic-grounded1`, was killed for memory at 07:49 after seven hours, coding the
+  photographs in one stack). The probe now keeps the captions' bags in out/bench/grounded_bags_*.npz and codes the
+  photographs 500 at a time; its resume was checked (a run that reads the bags back gives the same lines). → grounded_s0.log.
+- **`organic-delta-c50`** (out/tmp/delta_c50_queue.sh; 2026-11-27 07:14; shared gate): the delta reader done on three
+  seeds (read, VISION.md 08:28); the word cells' no-name count on seed 0 still to come (…_noname_s0.log).
+- **`organic-stream-eye2`** ENDED about 07:55; three seeds read (VISION.md 08:29). **`organic-cells-err`** and
+  **`organic-ncm-c50`** ENDED, read (VISION.md 07:11). Diagnostics run and read 08:15–08:28 (not gated, capped):
+  core50_reader_norm.log, core50_spectrum.log.
 - **`organic-fovea-q`** ENDED about 05:50, read (VISION.md 06:03). (out/tmp/fovea_queue.sh; queued 2026-11-27 03:19; shared gate): the eye on the thing (VISION.md
   02:55): CORe50 through a fixation, seeds 1–2 (core50_fovea_s{1,2}.log; codes core50_c50{centre,salient}_s*), the
   stream of 10 kinds on them (stream_core50_c50{centre,salient}_s{0,1,2}.log), the slow stage on the middle
   fixation, seeds 1–2 (core50_slow_centre_s12.log). **`organic-fovea-mv0`**: the eye drawn by what moves, seed 0
   (core50_fovea_moving_s0.log; VIEWS=moving): if it matches the middle, queue it on seeds 1–2 and its streams.
-- **Gaze lives:** gazs_s1 (ended 23:31) and gazs_s2 (ended 02:33) done; **gazs_s0** started 02:39 (to 130,000; about
-  five hours). All three now in out/monitor/lives.json; the ended ones in ended.json. The controls tagn_s2, tagn_s0
+- **Gaze lives:** all three ended (gazs_s0 at 130,000 about 08:20: first words 0.47, two words 0.48, pages 0.20); in
+  ended.json. The controls run in `organic-tag2` (tag_queue2.sh: tagn then tagr for seeds 1, 2, 0, then tagb):
+  tagr_s1 running since 08:10 (added to lives.json by hand at 08:30; the queue does not add them: add each as it starts). All three now in out/monitor/lives.json; the ended ones in ended.json. The controls tagn_s2, tagn_s0
   run in `organic-tag2` after this queue.
 - **SpokenCOCO through the cochlea** (`experiments/world/spokencoco_cochlea.py`, python -I, streams the archive): the
   validation part done 14:30 (25,035 recordings, 10.8 M rows: about 30 hours of speech) → ~/datasets/spokencoco/
@@ -1572,3 +1576,18 @@ Still Kris's own:
   0.082. What I said at 04:57 held but the within-8-px share (0.34 against 0.35). The probe was killed for memory in
   seed 1 (a reference cycle per video; fixed) and restarted as `organic-stream-eye2`. Seed 2 of the time-variant
   streams agrees (order 0.373, shuffled 0.370, no trace 0.374). gazs_s0 still at 120,000 (125,000 due).
+- 2026-11-27 08:30 Health: all healthy (load 3; 8.4 GB free). **Why the word cells miss the fixation's gain, by
+  elimination on three seeds** (VISION.md 08:28; memoize): a delta reader with the cells' rule and no words loses
+  as they do (−0.012 on every seed), so not naming by units; ridge on the cells' visual neurons' pattern is ridge
+  on the relayed code to the third decimal, so not the second normalisation; **the relay settled on COCO** is: on
+  CORe50 the relayed code is far from even (participation ratio 131–137 whole, 282–291 middle, of 4,096), and
+  evened again on the stream's own frames (no labels) the delta reader takes the gain in full (0.398 / 0.400 / 0.409
+  middle against 0.356 / 0.364 / 0.360 whole: ridge's level). Queued the brain's way of doing that, the relay
+  circuit learning along the stream (`organic-relaylearn`; said before it runs). **The stream brain's eye on three
+  seeds** (VISION.md 08:29): pursuit 0.123 / 0.126 / 0.125, both reflexes 0.140 / 0.126 / 0.145, above the whole
+  frame on every seed; within 8 px 34% (said 35%). **The grounding run was killed for memory** at 07:49 after
+  seven hours (memoize: save intermediate results); fixed and restarted (`organic-grounded2`). gazs_s0 ended at
+  130,000 (first words 0.47, two words 0.48, pages 0.20); its control tagn_s0 is still to come. **Artifact v5**
+  (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL): a card "An eye that follows what moves" (3 seeds), the
+  held-thing card's word-cells caveat now says why, two references checked on Crossref (Abrams & Christ 2003; von
+  Hofsten & Rosander 1997; one-line summaries from memory, for Kris to open).

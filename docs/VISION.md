@@ -4081,3 +4081,73 @@ moves is the held thing here; in a scene where the background moves the reflex w
 **The time-variant streams, seed 2** (10 kinds, the 3 × 3 second stage; word cells / ridge): in order 0.373 / 0.389,
 shuffled 0.370 / 0.389, no trace 0.374 / (running). Three seeds of the cells: order − shuffled +0.003, +0.001,
 +0.003; order − no trace +0.009, −0.009, −0.001. The verdict of 06:03 stands.
+
+### 2026-11-27 08:28, why the word cells miss the fixation's gain: the relay was evened out in another world
+
+Three diagnostics on CORe50's stream of 10 kinds (10,000 frames, seeds 0 / 1 / 2), none of them a learner of the brain:
+
+**1. A delta reader** (`delta+relay` in bench_stream.py: the word cells' content rule without the words: the same
+visual neurons, one cell for each kind, the same consolidation by use, the cell driven most answers). It behaves as the
+cells do, so naming by the ear's units is not the reason:
+
+| reader | whole frame | middle fixation | change | seen once, 20 later |
+|---|---|---|---|---|
+| delta | 0.360 / 0.348 / 0.359 | 0.348 / 0.336 / 0.347 | −0.012 / −0.012 / −0.012 | 0.890 / 0.907 / 0.893 (whole) |
+| word cells (06:03) | 0.363 / 0.347 / 0.349 | 0.348 / 0.332 / 0.344 | −0.015 / −0.015 / −0.005 | 0.897 / 0.900 / 0.887 (whole) |
+
+**2. The visual neurons' second normalisation** (`core50_reader_norm_check.py`, `core50_reader_norm.log`): ridge on
+the relayed code repeats the benchmark (0.373 / 0.368 / 0.370 whole, 0.398 / 0.396 / 0.406 middle), and ridge on what
+the cells' visual neurons pass on (centred, at unit length again) gives the same to the third decimal: after centring,
+frames differ in length by 1%. Not the reason.
+
+**3. How even the code is in this world** (`core50_spectrum_check.py`, `core50_spectrum.log`). The relay evens out
+the code's directions so that a delta rule seeing each moment once learns along the fine ones too (the reason it was
+made, 2026-11-17); for CORe50 it was settled on COCO thumbnails. On CORe50's frames the relayed code is far from even
+(participation ratio 131–137 of 4,096 on the whole frame, 282–291 on the middle fixation). Settled once more on the
+stream's own 10,000 frames (no labels):
+
+| | whole frame | middle fixation |
+|---|---|---|
+| delta, relay settled on COCO | 0.360 / 0.348 / 0.359 | 0.348 / 0.336 / 0.347 |
+| delta, evened again on CORe50 | 0.356 / 0.364 / 0.360 | **0.398 / 0.400 / 0.409** |
+| ridge, relay settled on COCO | 0.373 / 0.368 / 0.370 | 0.398 / 0.396 / 0.406 |
+| ridge, evened again | 0.355 / 0.358 / 0.345 | 0.402 / 0.400 / 0.409 |
+
+**On three seeds: with the code evened out in the world it reads, the word cells' rule takes the middle fixation's
+gain in full** (+0.042, +0.036, +0.049 over the whole frame, against −0.012 before) and reaches ridge's level; on the
+whole frame evening again changes nothing (what tells the kinds apart there lies along strong directions: the
+scenes). So the cells did not miss the gain for anything in themselves; the relay had been evened out on another
+world's pictures, and what tells held objects apart lies along directions that COCO's thumbnails leave weak.
+This is the 2026-11-17 finding again, in a new world: a delta rule needs its input evened out *where it is*.
+
+**Said before it runs (08:28): the relay as a brain would have it.** A brain has no second batch; its relay is a
+circuit of interneurons that keeps learning while it is used (RelayCircuit, Lipshutz, Pehlevan & Chklovskii 2022; on
+CIFAR it matched the batch relay, 2026-11-25). `experiments/core50_relay_learns_probe.py`: the circuit born random on
+top of the relay settled on COCO, learning along the stream (its published rule, our step 1e-4, a change every 50
+views, no labels), the delta reader learning from what it sends at each moment. The circuit only brings the
+directions that vary more than average down to the average; it does not raise the weak ones. **What I say:** on
+the middle fixation the delta reader with the circuit rises above the relay alone on all three seeds, to between
+0.36 and 0.39 (short of the batch's 0.40, since the weak directions stay weak), and above the whole frame with the
+circuit; on the whole frame the circuit changes it by less than 0.015. If the middle fixation does not rise, the
+circuit's partial evening is not enough, and the next question is a rule that also raises the weak directions.
+
+### 2026-11-27 08:29, the stream brain's eye on three seeds
+
+`core50_stream_eye.log`, all arms (the same object from another session, chance 0.02; seeds 0 / 1 / 2):
+
+| eye | within 8 px of the middle | same object elsewhere | next coded frame (0.5 s) alike |
+|---|---|---|---|
+| today's (salience) | 0.21 / 0.21 / 0.22 | 0.071 / 0.080 / 0.075 | 0.105 / 0.102 / 0.098 |
+| motion draws saccades | 0.23 / 0.23 / 0.22 | 0.082 / 0.089 / 0.084 | 0.076 / 0.075 / 0.075 |
+| pursuit between saccades | 0.34 / 0.34 / 0.36 | 0.123 / 0.126 / 0.125 | 0.151 / 0.149 / 0.147 |
+| both | 0.34 / 0.34 / 0.34 | **0.140 / 0.126 / 0.145** | 0.138 / 0.136 / 0.137 |
+| the middle always (reference) | 1 | 0.168 / 0.171 / 0.170 | 0.310 / 0.309 / 0.309 |
+| (the whole frame, fovea probe) | | 0.117 / 0.120 / 0.118 | |
+
+Against 04:57 on three seeds: today's eye in 0.07–0.08 (yes, all three); both reflexes +0.069, +0.046, +0.070 over it
+(said +0.02 or more: yes); within 8 px of the middle 34% on every seed (said at least 35%: no, by a point); above the
+whole frame on every seed (I gave even odds; seed 1 by 0.006 only); the middle not reached (yes). Pursuit is what
+works (+0.050 on average); motion drawing the saccades adds +0.010 alone and +0.012 on top of pursuit, not on seed 1.
+The eye still makes three saccades a second with pursuit; it follows the moving thing between them. **Adopted?** Not
+yet into the lives: the stream brain is not the lives' brain. The reflexes stay behind their switches
+(`motion_drive`, `pursuit_tau`; the default eye unchanged, by digest) until the stream brain names what it sees.
