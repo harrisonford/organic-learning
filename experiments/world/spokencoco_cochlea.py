@@ -31,6 +31,7 @@ ear, n, t0 = Cochlea(), 0, time.time()
 with tarfile.open(os.path.join(DIR, "SpokenCOCO.tar.gz"), "r|gz") as tar, open(store, "ab") as out, open(index, "a") as ix:
     try:
         for m in tar:
+            tar.members = []  # a streaming tar keeps every member it has passed; 617,000 of them filled 900 MB (2026-11-26)
             name = m.name[len("SpokenCOCO/"):] if m.name.startswith("SpokenCOCO/") else m.name
             if not m.isfile() or not name.endswith(".wav") or name not in meta:
                 continue
