@@ -1517,7 +1517,7 @@ Still Kris's own:
   thing; the middle is where CORe50's crop puts the object. Next for E 34: pursuit (a fixation that persists and
   follows), measured first by how often it lands on the middle. Timestamps written ahead of the clock tonight
   (03:30, 03:55, 04:00) corrected to the real times.
-- 2026-11-27 04:05 Seed 1 of the fixation: the middle 0.164 against the whole frame's 0.120 (two seeds); the whole frame
+- 2026-11-27 03:45 Seed 1 of the fixation: the middle 0.164 against the whole frame's 0.120 (two seeds); the whole frame
   beside it adds nothing (0.162). **Pursuit measured** (`experiments/core50_pursuit_probe.py`, where the eye lands, no
   code read): within 8 px of the object 0.26 jumping, 0.34 pursuing, **0.45 pursuing motion against the view's own flow**
   (the hand-held camera moves the whole background). Reading: reflexes get the eye on the thing half the time at best;
