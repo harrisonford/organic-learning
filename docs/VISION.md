@@ -4334,3 +4334,122 @@ every count: the eye's wandering code, worse than the whole frame when read alon
 from the pair. On the middle fixation alone the circuit gave half of the batch's gain (11:53). **What I say:**
 whole + eye with the circuits reaches 0.38–0.395 on all three seeds (the relays alone: 0.366–0.375), above the
 whole frame with its circuit (0.352–0.361) by 0.02 or more.
+
+### 2026-11-27 14:24, the ear's units against the photographs: chance, or almost (seed 0); why, said before it runs
+
+`experiments/grounded_speech_probe.py`, seed 0 (`out/bench/grounded_s0.log`; the second run, six hours): the ear
+developed on 20,000 spoken captions, 20,000 more heard each with its photograph (the bag of two- and three-syllable
+kinds against the photo cortex's relayed code, Hebb's rule), then 1,000 photographs never seen with one caption each
+never heard. No text anywhere.
+
+| | photograph → its caption, R@1 / R@5 / R@10 | caption → its photograph | median rank (of 1,000) |
+|---|---|---|---|
+| own captions | 0.001 / 0.005 / 0.014 | 0.001 / 0.004 / 0.014 | 452 / 454 |
+| captions shuffled among the photographs | 0.001 / 0.003 / 0.008 | 0.000 / 0.005 / 0.010 | 502 / 504 |
+| chance | 0.001 / 0.005 / 0.010 | | 500 |
+
+**A trace and no more.** The median rank moves from 500 to 452 both ways (the shuffled control stays at 502), so the
+link holds something real; recall is at chance. What I said on 11-26 12:50 ("picture-to-caption retrieval by local
+rules will sit well under backprop's numbers") was true and far too kind: this is not under the paradigm's numbers,
+it is next to nothing. One seed; the two other seeds wait until the reason is known (each is six hours).
+
+**Three things could be the limit**, and the run cannot tell them apart: (1) the cue: the ear's kinds (111 of 2,048
+were word-like on 11-26; a caption's bag has 20 kinds, most of them not words); (2) the content: the photo cortex's
+code of a whole 64 × 64 scene, which the caption describes by a few objects in it; (3) the link: Hebb's rule from
+bags that were centred but never decorrelated (the sight side goes through its relay; I wrote on 11-26 09:55 that
+Hebb comes close to ridge once both codes are decorrelated, and then built the link with one side only).
+`experiments/grounded_diag_check.py` reads the run's bags back and fills a grid on the same captions and photographs:
+the cue is the ear's bags or, as a measure only, the captions' written words as a bag (what an ear with perfect
+words would give; nothing of it enters any brain); the link is Hebb as run, Hebb after a relay on the bags too, or
+ridge (the reference, its regulariser chosen on the test pairs).
+
+**What I say before it runs** (R@10, photograph → caption): written words with Hebb as run 0.02–0.05; with the bags
+relayed 0.05–0.10, close to ridge (0.06–0.12); the ear's bags relayed or by ridge 0.012–0.025. So: the link gains
+from a relay on both sides, the whole-scene code caps even perfect words near 0.1, and the ear's units are the
+largest limit (sound well under words on every link). If words with ridge are also near chance, the content is the
+limit and the next step is on the sight side (the fixation, 13:18), not the ear.
+
+### 2026-11-27 14:31, the grid: the ear's units are the whole limit (seed 0)
+
+`out/bench/grounded_diag_s0.log` (the same 20,000 + 1,000 captions and photographs; R@1 / R@5 / R@10 and the median
+rank of 1,000; chance 0.001 / 0.005 / 0.010 and 500):
+
+| cue | link | photograph → caption | caption → photograph | median rank |
+|---|---|---|---|---|
+| the ear's bags | Hebb as run | 0.001 / 0.005 / 0.014 | 0.001 / 0.004 / 0.014 | 452 / 454 |
+| the ear's bags | Hebb, bags relayed | 0.001 / 0.005 / 0.008 | 0.001 / 0.004 / 0.009 | 478 / 480 |
+| the ear's bags | ridge | 0.001 / 0.006 / 0.011 | 0.000 / 0.006 / 0.013 | 458 / 462 |
+| written words (a measure only) | Hebb as run | 0.015 / 0.070 / 0.108 | 0.014 / 0.039 / 0.069 | 203 / 216 |
+| written words | Hebb, bags relayed | 0.030 / 0.081 / 0.121 | 0.029 / 0.078 / 0.123 | 131 / 133 |
+| written words | ridge | 0.026 / 0.090 / 0.152 | 0.021 / 0.084 / 0.141 | 90 / 102 |
+| written words | Hebb, relayed, captions shuffled | 0.000 / 0.002 / 0.010 | 0.002 / 0.002 / 0.008 | 478 / 476 |
+
+**Read.** With the captions' written words in the ear's place, the same photo code and the same Hebb link find the
+caption at R@10 0.11, 0.12 with the word bags relayed too, against 0.15 for the best linear map: the sight side and
+the local link are not what fails (a relay on both sides brings Hebb to four fifths of ridge and evens the two
+directions out). With the ear's own bags no link finds anything, ridge included: **the ear's units are the limit,
+all of it.** What I said: the ear as the largest limit, yes; the numbers for written words were too low on every
+link (said 0.02–0.05, 0.05–0.10, 0.06–0.12; got 0.108, 0.121, 0.152), so I underrated our eye's code of a whole
+scene and Hebb's rule; a relay on the ear's bags did nothing because there is nothing there to even out.
+Caveats: one seed; ridge's regulariser is chosen on the test pairs (generous to it); written words are an ear no
+one has, the paradigm's reference stays the spoken one.
+
+**Next, said before it runs:** how much of the captions' words the ear's bags carry with the eye left out (ridge
+from the sound bag to the bag of written words, a measure only). I say: the caption's own words among 1,000 at
+R@10 0.03–0.08, and the words heard best are the frequent ones, most of them without a picture ("a", "of", "on",
+"with"), with a few content words ("people", "sitting") among them.
+
+**14:33, the ear's bags do carry words** (same log): from the sound bag alone a ridge finds the caption's own
+written words among 1,000 at R@1 0.08–0.09, R@10 0.24–0.25 (median rank 86–88); of the 43 words in 30 or more test
+captions, 20 are heard with a correlation above 0.3, and the best are content words: people 0.70, next 0.62, person
+0.59, street 0.58, table 0.54, sitting 0.54, standing 0.53, baseball 0.52, group 0.51, small 0.49, woman 0.45,
+holding 0.44, man 0.41, tennis 0.36. What I said (R@10 0.03–0.08, mostly words without a picture) was wrong twice:
+the ear hears three times more than that, and what it hears best are things and what they do. So the words are in
+the bags, the pictures follow from words, and yet the bags do not find the pictures.
+**Said before the last measure:** (a) the bags' words sent on to the photographs (sound → predicted words by ridge
+→ the link learned from true written words; a measure only, text is in both steps) reach R@10 0.02–0.04, median
+rank near 350: above chance but far under true words, because (b) the frequent words the ear hears well do not
+tell photographs apart: written words cut down to those 43 give R@10 under 0.04 by ridge.
+
+### 2026-11-27 14:36, the ear hears the common words; the photographs are found by the rare ones (seed 0)
+
+`out/bench/grounded_diag_sight_s0.log` (`PART=sight`; measures only, text in every step):
+
+| cue for the photograph (ridge) | photograph → caption R@1 / R@5 / R@10 | median rank |
+|---|---|---|
+| written words, all 2,061 | 0.026 / 0.090 / 0.152 | 90 |
+| the ear's bag → the words it predicts → the same map | 0.006 / 0.025 / 0.036 | 340 |
+| the ear's bag, straight to the photograph (14:31) | 0.001 / 0.006 / 0.011 | 458 |
+| written words, only the 43 said in 30+ of the 1,000 test captions | 0.008 / 0.027 / 0.047 | 295 |
+| written words, only the 20 the ear hears best | 0.011 / 0.024 / 0.049 | 305 |
+| written words, all but those 43 | 0.030 / 0.097 / 0.150 | 92 |
+
+How well the ear's bag gives a word, by how often the word is said (correlation of predicted and true presence):
+
+| the word is in … of the 1,000 test captions | words | median | above 0.3 | heard best |
+|---|---|---|---|---|
+| 30 or more | 43 | 0.29 | 20 | people 0.70, next, person, street, table, sitting, standing, baseball |
+| 15–29 | 58 | 0.12 | 8 | top 0.58, walking, water, kitchen, bat, ball, couple, beach |
+| 8–14 | 108 | 0.09 | 7 | pizza 0.54, background, grassy, computer, motorcycle, skateboard |
+| 4–7 | 191 | 0.04 | 2 | racket 0.41, racquet 0.39 |
+
+**Read.** What I said held this time: the bags' words sent on reach R@10 0.036 and a median rank of 340 (said
+0.02–0.04, near 350), and the 43 common words alone give 0.047 (said under 0.04: a little more). The whole of the
+retrieval is in the other words (0.150 without the 43, 0.152 with them). So the failure has a shape: **the ear has
+units for the words said most, and a photograph is told from the others by the words said seldom** ("pizza",
+"racket", "giraffe"), which the ear hears less the rarer they are (median 0.29 → 0.12 → 0.09 → 0.04). Where it does
+hear a rare word (pizza 0.54, racket 0.41), it hears it as well as a common one: the ear's way works, its lexicon is
+short. Two things follow from how the ear is built (`sound_units_probe.py`, second reading): 1,024 two-syllable and
+1,024 three-syllable kinds for every stretch of running speech, most of them straddling two words, founded on the
+first 1,024 stretches heard and then moved by a winner-take-all rule with a conscience that shares the wins
+evenly: common stretches get the kinds, rare words share theirs. And a second, smaller thing: what the bags do
+carry reaches the photographs through the words (0.036) and not straight (0.011): 20,000 pairs are too few for a
+link from 2,048 noisy kinds to 4,096 directions; with cleaner kinds this should close by itself, to be measured.
+**Not concluded:** that hearing more alone would do it; that the link is fine for sound (it is fine for words).
+One seed; seeds 1–2 of this design are not worth six hours each: the design changes first.
+**Next (queue E 32b):** a lexicon that grows by use: a kind is founded when a stretch is unlike every kind the ear
+has (the word cells' own way of recruiting, with the match it asks set from what the ear's own kinds give, no
+constant by hand), no cap of 1,024, more captions heard, and the ear's code made faster first (0.5 s a caption
+now). Measured first without the eye and cheaply (the reading by how often a word is said, above), then against
+the photographs. Literature to check before building: how infants come to word forms (transitional probabilities
+between syllables, Saffran, Aslin & Newport 1996; words heard alone, Brent & Siskind 2001; to verify both).

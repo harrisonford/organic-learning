@@ -72,7 +72,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
 - **`organic-views-together`** and **`organic-eye-naming`** ENDED, read (VISION.md 12:41, 13:18).
 - **`organic-relaysrc`** ENDED 11:04, read (VISION.md 11:20: the lives' relay is at home in all three sources).
 - **`organic-relaylearn-s1`, `-s2`** ENDED about 11:40, read (VISION.md 11:53: what I said held on three seeds).
-- **`organic-grounded2`** (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
+- **`organic-grounded2`** ENDED 14:00, read (VISION.md 14:24: recall at chance), and its diagnostics
+  (`organic-grounded-diag*`, a minute each; `experiments/grounded_diag_check.py`, `PART=sight` for the last part
+  alone: the whole file at once passes a 2.8 GB cap) read (VISION.md 14:31, 14:36). The run's bags and the
+  photographs' codes are kept (out/bench/grounded_bags_s0_*.npz, grounded_codes_s0_*.npz). Was: (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
   grounding run again (the first, `organic-grounded1`, was killed for memory at 07:49 after seven hours, coding the
   photographs in one stack). The probe now keeps the captions' bags in out/bench/grounded_bags_*.npz and codes the
   photographs 500 at a time; its resume was checked (a run that reads the bags back gives the same lines). → grounded_s0.log.
@@ -340,6 +343,15 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     colleagues). Later: a vocal tract the mouth learns to drive by babbling (until then it hears sound, speaks units);
     the judge hears the reply on the world's side (a caregiver listening, not the brain transcribing). The lives'
     text ear stays as it is; the sound ear comes behind a switch, probe first.
+    **32b (2026-11-27 14:36). The ear's lexicon is short** (VISION.md 14:24–14:36): the text-free ear's units do not
+    find the photographs (recall at chance) because they hold the common words only, and photographs are told apart
+    by the rare ones; the eye's code and the Hebb link are fine with written words as the cue (a measure only).
+    Next: (a) read how infants come to word forms before building (transitional probabilities, words heard alone);
+    (b) the ear's code made faster (0.5 s a caption now); (c) kinds that are founded by use (a stretch unlike every
+    kind founds one; the match asked comes from the ear's own kinds, no constant by hand; no cap), more captions
+    heard; (d) measured first without the eye (`grounded_diag_check.py`'s reading of the written words by how
+    often a word is said: median 0.29 / 0.12 / 0.09 / 0.04 now), then against the photographs; seeds 1–2 only for
+    a design that passes seed 0.
 33. **How the brain grows, stage by stage** (Kris, same message: "progressive learning and evolution of the brain
     reporting size complexity and behaviour on different development stages"). `experiments/growth_report.py` →
     docs/GROWTH.md and out/growth/{tag}.json from the lives' own records. **First reading (nine lives), corrected the
@@ -405,6 +417,14 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   the whole film is in /srv/video, the album in /srv/music). **A correction:** I had listed "kid_s0–s2 levels dated
   November (about 14 GB)"; there were none: those levels were the October files already deleted (I counted them
   twice). Only kid_s0–s2's logs and score files remain, and they stay. Free: 286 GB.
+  **14:23, decided by the loop (yours to undo): the Commons video collection is held where it is.** It had grown to
+  176 GB in all (downloaded files 69 GB, the 64 × 64 frames 99 GB, sound 8 GB: 16,403 videos, 8.6 M frames) and was
+  adding about 6.5 GB an hour toward its 100 GB floor, an hour after the disk was cleaned (free was back to 271 GB);
+  probes have used 1,399 of the videos. Nothing deleted: a drop-in
+  (`~/.config/systemd/user/organic-commons-video.service.d/hold.conf`, `FLOOR_GB=300`) makes the service wait. To
+  let it grow again: remove that file, `systemctl --user daemon-reload`, restart `organic-commons-video`. Whether
+  the downloaded files (69 GB; the frames and sound are made from them and are what the probes read) may go is
+  still yours.
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
   nothing" was on enlarged pictures. I will put both sizes side by side in that section when the enlarged
@@ -1650,3 +1670,13 @@ Still Kris's own:
   (the middle fixation beside it: 0.421 / 0.425 / 0.432). I had said less on every count. **Started:** the same with
   nothing batch, a relay circuit for each code learning along the stream (`organic-relaylearn-eye-s*`; said before
   it runs). tagn_s2 at 105,000. The grounding run: 15,000 of 21,000 bags.
+- 2026-11-27 14:38 Health: all healthy (5.2 GB available, 271 GB free). **The grounding run ended: recall at chance**
+  (VISION.md 14:24; memoize; R@10 0.014 against 0.010, median rank 452 against 502 shuffled; seed 0). **Why, by a
+  grid on its saved bags** (VISION.md 14:31, 14:36; memoize): with written words as the cue (a measure only) the same
+  eye and Hebb link reach R@10 0.108, 0.121 with a relay on both sides, ridge 0.152; the ear's bags carry the common
+  words (their own written words among 1,000 at R@10 0.25; people 0.70, street 0.58, baseball 0.52) and hear a word
+  less the rarer it is (median 0.29 → 0.04), while the photographs are found entirely by the rarer words (0.150
+  without the 43 commonest). Of five things I said before these runs, three were too low and two held. Seeds 1–2 of
+  this design are not run (six hours each for a design that changes); next is queue E 32b. **The Commons video
+  collection is held** at 176 GB (it was adding 6.5 GB an hour after the clean-up; drop-in `FLOOR_GB=300`; Decisions
+  waiting for Kris). The circuits' run (`organic-relaylearn-eye-s*`) is at its first hour; tagn_s2 at 110,000.
