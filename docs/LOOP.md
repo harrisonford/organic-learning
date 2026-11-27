@@ -1463,4 +1463,10 @@ Still Kris's own:
   and run on three seeds: too weak to test (0.03–0.04 against its input's 0.117): inconclusive, left in the queue.
   gazs_s1 at 100,000: pages 0.176 against its control's 0.232, first words level (one reading; both lose earlier
   stages in preschool). Sound ear second reading: all 20,000 heard, held-out reading running.
+- 2026-11-26 23:10 **The text-free ear finds word-like units** (VISION.md 23:10: 111 kinds against 0 shuffled; "group",
+  "woman", "people", "computer"). SpokenCOCO download done (67.8 GB); its training part through the cochlea running
+  (`organic-scoco-train`, about an hour). **gazs_s1 at 105,000: first words fell to 0.244** (control 0.397), on every
+  source, text-only questions too (0.24 → 0.06), answers slower: the shared gate unsettled by the new eye commands?
+  One life; watch 110,000 and the other seeds; if it holds, the serial gaze belongs from birth, not switched on
+  mid-life. CORe50 streams of seed 0 done (to read).
 

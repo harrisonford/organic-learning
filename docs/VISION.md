@@ -3791,3 +3791,33 @@ a stage that keeps what it reads (graded answers of many more cells, or the trac
 learned slow projection), and measures first what the trace is for (the same cells answering across a video's
 frames), then whether that carries to another session. Left in the queue (E 31); the 3 × 3 second stage's seeds 1–2
 and the streams keep running.
+
+### 2026-11-26 23:10, the ear that hears sound finds word-like units (second reading)
+
+`experiments/sound_units_probe.py`, SpokenCOCO's validation part (20,028 recordings heard, 5,007 held out, 1,793
+speakers), with the three changes of 16:30: the ear adapted to each voice (each band relative to its level and
+spread over the utterance), 8 band stretches instead of 4, and words as kinds of two- and three-syllable windows by
+the eye's rule (1,024 kinds each). The transcripts are read only here, to measure. Held out, nothing learning:
+
+| level | kinds heard in 20+ utterances | word-like (shuffled) | lift of the best word, median (shuffled) |
+|---|---|---|---|
+| syllable kinds (512) | 512 | 8 (0) | 4.48 (3.73) |
+| words by the byte ear's rule | 353 | 5 (0) | 2.38 (2.09) |
+| two-syllable kinds | 1,006 | **50 (0)** | 3.73 (2.83) |
+| three-syllable kinds | 993 | **61 (0)** | 3.13 (2.53) |
+
+Word-like: the kind's commonest written word is in half its utterances or more, where that word is in a fifth or
+fewer. The strongest: "group" 0.94 of the kind's utterances (in 4% of all), "woman" 0.94, "people" 0.92, "person"
+0.88, "next" 0.89, "sitting" 0.88, "table" 0.86, "street" 0.83, "top" 0.78. By lift, rarer words: a three-syllable
+kind with "motorcycles" in 31% of its utterances (81 times its share), "computer" in 75% (48 times), "skateboard" 56%,
+"walking" 64%, "laptop" 48%; two-syllable kinds with "hydrant", "giraffe", "umbrella", "airplane", "keyboard".
+**From 0 word-like units in the first reading to 111**, with no text anywhere in the ear: a cochlea, the eye's own
+rule on its output, adaptation to the voice, and the eye's rule again on neighbouring syllables. What I said at 12:50
+("syllable-sized pieces; a few frequent words with a unit that comes with them in most captions that contain them"):
+the units' utterances mostly contain their word (measured), how many of a word's utterances contain its unit is not
+measured yet. Caveats: one seed; speakers are shared between the heard and the held-out utterances (a voice-kind
+would show here only if it followed one word, which the 20-utterance floor makes unlikely: about three held-out
+utterances a speaker); the measure is at the utterance, not where in the utterance the word is.
+Next: SpokenCOCO's training part through the cochlea (running, about an hour; every training image is among our COCO
+thumbnails) → do these sound units go with what the pictures show (the word cells with sound units as cues and the
+photo cortex as content), against the paradigm's visually grounded speech.
