@@ -35,15 +35,35 @@ from commons_depicts import WORDS, UA, checked, say  # noqa: E402
 OUT = os.path.expanduser("~/datasets/commons_video")
 PAUSE, MAX = float(os.environ.get("PAUSE", 3.0)), int(os.environ.get("MAX", 0))
 FPS, SECONDS, SIDE = int(os.environ.get("FPS", 10)), int(os.environ.get("SECONDS", 120)), 64
-API, PAGE, DEEPEST = "https://commons.wikimedia.org/w/api.php", 20, 9980
+LIMIT = int(os.environ.get("LIMIT", 300 * 10**6))  # bytes: the largest file kept by 2026-11-27 was 244 MB, the median 1.3 MB
+API, PAGE, DEEPEST ="https://commons.wikimedia.org/w/api.php", 20, 9980
 SUBJECTS = ["Videos_of_animals", "Videos_of_vehicles", "Videos_of_people", "Videos_of_nature"]
 
 
-def fetch(url, timeout=120):
-    """One request; on a refusal or an overloaded server, wait as told (or five minutes) and try again."""
+def fetch(url, timeout=120, to=None):
+    """One request; on a refusal or an overloaded server, wait as told (or five minutes) and try again.
+
+    With `to`, the body goes to that file a megabyte at a time and the answer is whether it was kept: a file longer
+    than LIMIT bytes is not (we use its first SECONDS only). Until 2026-11-27 a video was read whole into memory; one
+    filled the service's 800 MB, was killed, and was fetched again at every restart."""
     while True:
         try:
-            return urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=timeout).read()
+            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=timeout) as r:
+                if to is None:
+                    return r.read()
+                if int(r.headers.get("Content-Length") or 0) > LIMIT:
+                    return False
+                n = 0
+                with open(to, "wb") as f:
+                    while chunk := r.read(1 << 20):
+                        n += len(chunk)
+                        if n > LIMIT:
+                            break
+                        f.write(chunk)
+                if n > LIMIT:
+                    os.remove(to)
+                    return False
+                return True
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503, 504):
                 after = e.headers.get("Retry-After") or "300"
@@ -114,9 +134,9 @@ def main():
                 path = os.path.join(OUT, "raw", f"{p['pageid']}{os.path.splitext(urllib.parse.urlparse(src).path)[1] or '.webm'}")
                 time.sleep(PAUSE)
                 try:
-                    data = fetch(src, timeout=600)
-                    with open(path + ".part", "wb") as f:
-                        f.write(data)
+                    if not fetch(src, timeout=600, to=path + ".part"):
+                        say("skip", p["title"][:70], f"longer than {LIMIT // 10**6} MB")
+                        continue
                     os.replace(path + ".part", path)
                     raw = frames(path)
                 except Exception as e:  # noqa: BLE001 - a bad file is skipped, the service goes on

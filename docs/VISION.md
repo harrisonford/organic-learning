@@ -3831,3 +3831,69 @@ readers, inside a seed's noise; the same verdict as the nearest-frame reading. S
 0.109, shuffled 0.102, in order without it 0.106 (same kind 0.231 / 0.202 / 0.189 / 0.201). Two seeds agree: no arm of
 the 3 × 3 second stage is above the first stage, and the order adds a point at most (0.109 against 0.102 here,
 0.116 against 0.119 on seed 0). Seed 2 and the streams follow in the queue.
+
+### 2026-11-27 02:25, the trace on top of the whole code (slow directions), said before it runs
+
+The whole-view stage of 22:25 threw away what it read, so it could not test time. `experiments/core50_slow_probe.py`
+keeps it: 256 linear cells read the first stage's relayed code (whitened by the relay) and learn by Hebb's rule on a
+trace of their own answer (Földiák 1991), against what the cells together already give back (Oja's 1989 subspace
+rule: dW = rate · trace · (x − Wᵀy)ᵀ, local to each cell but for the shared feedback). On whitened input, Hebb on a
+trace finds the directions that change slowly (slow feature analysis, Wiskott & Sejnowski 2002; its derivation from
+spike-timing plasticity, Sprekeler, Michaelis & Wiskott 2007; to verify); shuffled frames have nothing slow in them.
+Three arms on the same frames, one pass (order, shuffled, no trace). Measured first what the trace is for (how alike a
+frame's answer is to the next frame of its video, 5 s later, the same object elsewhere, another object of its kind,
+another kind), then the nearest frame from another session.
+**What I say before it runs:** in order the cells' answers are more alike across a video's frames than shuffled (by
+construction if anything is learned at all); the test is the same object in another session: in order above shuffled
+by 0.01 or more on two of three seeds. Whether 256 slow directions beat the 4,096 they read (0.117): I guess not.
+Risk: 12,000 frames for 4,096 inputs is thin, and with one pass the cells may barely move (measured: how like their
+start they still are).
+
+**First reading (seeds 0 and 1, `out/bench/core50_slow_s012.log`; seed 2 running).** The slow stage learns (its cells
+end 0.33–0.70 like their random start, kept apart: overlap 0.005) and in order its answers are a little more alike
+across a video's frames than shuffled (0.5 s apart 0.623 / 0.618 against 0.615 / 0.609), but nothing carries to
+another session: same object elsewhere, in order 0.103 / 0.100, shuffled 0.098 / 0.100, no trace 0.104 / 0.105,
+against 0.117 / 0.120 for the code read. The prediction (order above shuffled by 0.01 on two seeds) fails on both.
+A relay adapted to CORe50's own training frames (seed 0) makes everything worse (code 0.072; arms 0.064–0.072).
+**What the measure of alikeness shows, and it is the finding:** in the first stage's code **another kind of object
+filmed in the same session is more alike (0.151 / 0.147) than the same object filmed in another session (0.033 /
+0.030).** The scene (background, light, the operator's hand) rules the whole-view code; within a video it never
+changes, so the slowest thing in every video is the scene, and a slowness rule (any trace) raises exactly that
+(same session, other kind: 0.177 in order, 0.172 shuffled, 0.157 without the trace). This is a blind spot of
+learning from time with a still camera and a whole-frame eye, not of the trace: a child's eyes fixate the thing in the
+hand, and the fovea gives it most of the cortex.
+
+### 2026-11-27 03:30, the eye on the thing (CORe50 through a fixation), said before it runs
+
+`experiments/core50_fovea_probe.py`: the same cortex (the photo benchmark's, unchanged) reads the fixated half of each
+frame enlarged to fill the view (as the stream brain's eye does), with a relay settled on COCO thumbnails seen the
+same way: the middle place (the object is held before the camera: a stand-in for pursuit), the place that stands out
+most (the reflex's own pick), and the whole frame and the salient fixation side by side. **What I say before:** the
+middle fixation lowers the scene's share (another kind in the same session less alike than now, relative to the same
+object elsewhere) and lifts the same object from another session above the whole frame's 0.117 by 0.02 or more; the
+salient pick less surely (it may land on clutter or the hand); the two side by side at least as good as the better.
+If the middle fixation helps, the slow stage is tried again on it (CODE=centre).
+
+**Seed 0** (`out/bench/core50_fovea_s0.log`; the slow stage on three seeds: `core50_slow_s012.log`):
+
+| code (seed 0) | same object elsewhere (chance 0.02) | same kind (0.10) | alike: next frame | same object, other session | other kind, same session (the scene) |
+|---|---|---|---|---|---|
+| the whole frame | 0.117 | 0.226 | 0.563 | 0.033 | 0.158 |
+| **the middle fixation** | **0.164** | **0.283** | 0.319 | 0.031 | **0.054** |
+| the reflex's pick (stands out most) | 0.075 | 0.171 | 0.232 | 0.019 | 0.065 |
+| whole and reflex's pick side by side | 0.102 | 0.204 | 0.397 | 0.026 | 0.112 |
+
+**The eye on the thing: +0.047** on the same object from another session (0.164 against 0.117), the scene's share down
+by two thirds (another kind in the same session 0.054 against 0.158). Prediction (+0.02 or more): held, one seed. The
+reflex's pick does worse than the whole frame: in a still, centre-surround contrast lands on clutter, edges and the
+hand, and jumps from frame to frame (next frame 0.232); the side-by-side code with it is worse than the whole frame
+alone (prediction "at least as good as the better": failed). The middle is a stand-in for an eye that follows the
+held object; the organic version is an eye drawn by what moves (the held object turns, the scene stays): `VIEWS=moving`
+(the place that changed most in the last 100 ms), running on seed 0.
+**The slow stage, three seeds, the whole frame** (the prediction of 02:25 fails): same object elsewhere in order
+0.103 / 0.100 / 0.107, shuffled 0.098 / 0.100 / 0.099, no trace 0.104 / 0.105 / 0.107, the code read 0.117 / 0.120 /
+0.118; order above shuffled by 0.005 / 0.000 / 0.008, never the 0.01 said, and level with no trace at all. **On the
+middle fixation's code** (seed 0): in order 0.137, shuffled 0.130, no trace 0.137, the code read 0.164. With the scene
+gone the trace still adds nothing the same cells learn without it, and 256 slow directions keep less than the 4,096
+they read. The finding of the night is the fixation, not the trace. Queued (`organic-fovea-q`): the fixations of seeds
+1 and 2, the stream of 10 kinds on them (word cells and ridge), the slow stage on the middle fixation, seeds 1–2.
