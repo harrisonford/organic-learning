@@ -395,8 +395,12 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   October brains and no longer run as they are (logic_ablation, ear_breaks, organ_view, raw_specialization,
   timed_analysis; their results are in the docs). **Still yours to decide:** the SpokenCOCO archive (68 GB), the
   Commons videos' downloaded files (57 GB; the service waits under 100 GB free and grows 6 GB an hour), the COCO
-  zips (20 GB), three chat models nothing uses (8 GB), the films and album twice in ~/Downloads (4.4 GB), the old
-  kid_s0–s2 levels dated November (about 14 GB), and the ended lives' brains since the review (about 160 GB).
+  zips (20 GB), three chat models nothing uses (8 GB), and the ended lives' brains since the review (about 160 GB).
+  **10:19, on Kris's word ("borra también los kid_s0–s2 y los duplicados de Downloads"):** ~/Downloads emptied (4.3 GB):
+  its film (twice) and album were abandoned partial downloads, mostly zeros and unplayable (checked block by block;
+  the whole film is in /srv/video, the album in /srv/music). **A correction:** I had listed "kid_s0–s2 levels dated
+  November (about 14 GB)"; there were none: those levels were the October files already deleted (I counted them
+  twice). Only kid_s0–s2's logs and score files remain, and they stay. Free: 286 GB.
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
   nothing" was on enlarged pictures. I will put both sizes side by side in that section when the enlarged
