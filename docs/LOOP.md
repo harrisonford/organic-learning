@@ -65,6 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-ncm-c50`** (out/tmp/ncm_c50_queue.sh; 2026-11-27 04:50; shared gate): why the word cells do not take the
+  middle fixation's gain (VISION.md 04:48): nearest class mean and streaming LDA on the whole frame's and the middle
+  fixation's codes, seeds 0–1 → stream_core50_c50{first,centre}_ncm_s{0,1}.log.
 - **`organic-fovea-q`** (out/tmp/fovea_queue.sh; queued 2026-11-27 03:19; shared gate): the eye on the thing (VISION.md
   02:55): CORe50 through a fixation, seeds 1–2 (core50_fovea_s{1,2}.log; codes core50_c50{centre,salient}_s*), the
   stream of 10 kinds on them (stream_core50_c50{centre,salient}_s{0,1,2}.log), the slow stage on the middle
@@ -1523,3 +1526,13 @@ Still Kris's own:
   (the hand-held camera moves the whole background). Reading: reflexes get the eye on the thing half the time at best;
   the rest is for a learned value of places (E 23). Line closed for tonight; the queue's streams on the fixated codes
   will say what the middle fixation is worth to the word cells.
+- 2026-11-27 04:53 Health: all healthy. **The fixation holds on three seeds:** the middle 0.164 / 0.164 / 0.168 against
+  the whole frame's 0.117 / 0.120 / 0.118 (memoize). **But the word cells do not take it** (VISION.md 04:48): on the
+  stream of 10 kinds the ridge gains +0.025 / +0.028 on the middle fixation and the word cells lose 0.015 on both
+  seeds so far; my first explanation (neighbouring frames) was wrong, the stream is shuffled; nearest class mean and
+  streaming LDA queued to tell the two remaining readings apart (`organic-ncm-c50`). CORe50 seed 2 of the 3 × 3
+  stage: first 0.118, order 0.113, shuffled 0.099 (plain running): the order does not help on three seeds. gazs_s0 at
+  115,000: first words 0.52, pages 0.17 against plat_s0's 0.53 and 0.13 at that age (no collapse). Grounding: the ear
+  has heard all 20,000 captions; the bags next. Commons video: no restart since the fix (its 800 MB is mostly page
+  cache, 69 MB its own). **Photo daemon: nothing added for 25 hours** (ling 429 all night); scan of two more free
+  models that look; particle-1 taken as a spare that stands in for a rate-limited adult (WORLD.md 04:52).

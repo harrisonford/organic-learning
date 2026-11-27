@@ -141,6 +141,13 @@ failed requests were counted against the day's allowance (459 of 500 used by 09:
   midnight). What to watch tomorrow: the share of its questions the other adult judges right, against the
   withdrawn model's; if it is slow the photo world will make fewer than its 200 requests a day. The scan cost
   23 requests of the reserve (retries while the models were busy).
+- **2026-11-27 04:52: a spare adult for the photo world.** ling has answered HTTP 429 (the free provider's rate limit)
+  to every request since midnight, so no photos were added for 25 hours (10,008 done). The scan today (four
+  requests, out/model_scan.log): `particle-ai/particle-1:free` writes 10 of 10 well-formed (dog: woof / bow-wow / arf)
+  and names the 64-pixel apple; `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` too (17 s). particle-1 is
+  taken as a **spare**: a rate-limited model rests 30 minutes and the spare takes its place in the pair meanwhile,
+  so two different adults still write and check (another maker than the nemotron adult, so the check is not a
+  model family agreeing with itself). With both adults answering, nothing changes (`annotate.py`, `SPARE`).
 
 
 ## 2026-11-25: more Wikimedia Commons photographs, fetched constantly (not part of world 4)

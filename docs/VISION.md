@@ -3932,3 +3932,22 @@ catch-up saccade (when the eye's own half moves less than the average place for 
 eye on the thing is worth +0.045 on recognition across scenes (two seeds); reflexes alone (contrast, motion, motion
 against flow, pursuit) get the eye there at best half the time. The other half is for a gaze that learns where looking
 pays (queue E 23: a learned value of places), which is also the stream brain's road. Not pursued further tonight.
+
+**Seed 2 agrees: three seeds now** (`core50_fovea_s2.log`): the middle fixation 0.168 against the whole frame's 0.118
+(+0.050; seeds 0 and 1 +0.047, +0.044), the scene's share down by two thirds again (0.051 against 0.150), the salient
+pick 0.077 (0.075, 0.077, 0.077), the whole frame beside the middle 0.162 (adds nothing, three seeds).
+
+### 2026-11-27 04:48, what the middle fixation is worth to the word cells (stream of 10 kinds, first two seeds)
+
+`bench_stream.py SET=core50` on the fixated codes, beside the whole frame's of 2026-11-26 (12,000 training frames seen
+once, 4,500 tests from the held-out sessions, 10 kinds, chance 0.10; `stream_core50_c50{first,centre,salient}_s*.log`):
+
+| code | word cells + relay, after 10,000 (s0 / s1) | ridge + relay (s0 / s1) | seen once, named 20 later (s0 / s1) |
+|---|---|---|---|
+| the whole frame | 0.363 / 0.347 | 0.373 / 0.368 | 0.897 / 0.900 |
+| the middle fixation | 0.348 / 0.332 | **0.398 / 0.396** | 0.827 / 0.837 |
+| the reflex's pick | 0.212 / … | 0.234 / … | 0.773 / … |
+
+**Not what the nearest frame said.** The middle fixation lifts the linear readout of kinds by +0.025 / +0.028 (the
+ridge, the reference), but the word cells name kinds *worse* on it (−0.015 on both seeds), and a frame seen once is
+remembered less well 20 frames later (0.83 against 0.90). Why is not known yet. (A first reading, that the cells follow the last frames and neighbouring frames of a video are more alike on the whole frame, is wrong: the stream is shuffled, bench_stream.py permutes the training frames.) Two readings left, told apart by a cheap check: if nearest class mean (running means, no gradient, no covariance) also gains on the fixation, the word cells' delta rule (one full-size correction a frame) is what fails to take the gain; if it loses too, the gain needs a readout that weighs directions by how much they vary within a kind (the ridge does, means alone do not). Queued: `ARMS=ncm+relay` on the whole frame and the middle fixation, seeds 0–1 (`stream_core50_ncm_*`). Seed 2 and the reflex's pick on seeds 1–2 are running (`organic-fovea-q`).

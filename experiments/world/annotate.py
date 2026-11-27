@@ -26,6 +26,8 @@ from organic.adults import PER_DAY, Adults, image_part, parse_json  # noqa: E402
 
 DAILY = 200  # photo share; text world 140, curriculum 100, reserve 60 (total 500 = half the allowance)
 MODELS = ["nvidia/nemotron-3.5-super-vl:free", "inclusionai/ling-3.2-flash:free"]  # ling in place of dots-studio/dots-3-note-preview:free (withdrawn; 404), after the scan of 2026-11-25 (out/model_scan.log, docs/WORLD.md)
+SPARE = ["particle-ai/particle-1:free"]  # 2026-11-27 (scan: writes and sees): takes the place of whichever of the two is rate-limited, only while it is
+COOL = 1800  # seconds a rate-limited model rests
 ANGLES = [
     "the people: what they are doing, wearing, holding, how many, how they might feel",
     "the objects: what they are, how many, what they are for",
@@ -60,6 +62,7 @@ if os.path.exists(out):
         done.add(json.loads(line)["file"])
 adults = Adults()
 rng = random.Random()
+cooling = {}  # model -> when it may be asked again
 
 
 def used_today():
@@ -90,7 +93,12 @@ while i < len(todo):
     batch = todo[i : i + 4]
     imgs = [photo(f) for f in batch]
     angles = rng.sample(ANGLES, 2)
-    writer, checker = MODELS[k % 2], MODELS[(k + 1) % 2]
+    now = time.time()
+    pair = [m for m in MODELS + SPARE if cooling.get(m, 0) <= now][:2]  # the two adults as before; the spare only for one that rests
+    if len(pair) < 2:
+        time.sleep(max(min(cooling.values()) - now, 60))
+        continue
+    writer, checker = pair[k % 2], pair[(k + 1) % 2]
     k += 1
     try:
         parts = [{"type": "text", "text": WRITE.format(n=len(batch), angles=" and ".join(angles))}]
@@ -109,9 +117,12 @@ while i < len(todo):
             check = {str(j + 1): v for j, v in enumerate(check)}
     except Exception as e:  # noqa: BLE001 - keep the daemon alive
         log(f"batch {batch[0]} failed ({writer} writes, {checker} checks): {e}")
-        if "HTTP 429" in str(e):  # the provider's rate limit: cool down and try the same photos again (2026-11-27; every
-            log("rate-limited upstream: cooling down 30 minutes, the same photos next")  # retry into a 429 spent our budget)
-            time.sleep(1800)
+        if "HTTP 429" in str(e):  # the provider's rate limit: that model rests and the same photos are tried again (2026-11-27;
+            hit = [m for m in (writer, checker) if m in str(e)] or [writer, checker]  # every retry into a 429 spent our budget)
+            for m in hit:
+                cooling[m] = time.time() + COOL
+            log(f"rate-limited upstream: {', '.join(hit)} rests 30 minutes, the same photos next")
+            time.sleep(60)
             continue
         time.sleep(60)
         if "budget" in str(e):
