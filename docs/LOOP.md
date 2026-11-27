@@ -1705,7 +1705,9 @@ Still Kris's own:
   succession, edges, a fast store; one main talker); our captions have the repetition (a rare word is in another
   caption of the same photograph 26–58% of the time, five readers); but a stretch is barely found again in
   another voice (VISION.md 14:57, 15:10, 15:19; memoize): 0.14 against a chance of 0.10, three variants of the
-  code within a point, the same reader 0.335 against another reader's 0.229 (chance 0.167). Of nine things said
-  before these runs, six held or nearly and three were wrong (all recorded). **Started:** an ear that grows up in
+  code within a point, the same reader 0.335 against another reader's 0.229 (chance 0.167). Of the seven things said
+  before runs since 14:24, four held (the heard words sent on to the photographs; the three variants; the voice;
+  the circuits) and three were wrong in their numbers (written words as the cue and what the bags carry of them:
+  both too low; a stretch found again: too high where content words are shared). **Started:** an ear that grows up in
   one voice (`organic-onevoice`). Artifact v9 (the circuits' line; the ear's limit with three new references,
   titles checked against the registry). tagn_s2 at 115,000.
