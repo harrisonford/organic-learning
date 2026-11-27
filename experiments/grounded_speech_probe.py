@@ -237,7 +237,20 @@ if OTHER:
     LINK2 = int(os.environ.get("OTHER_LINK", 0))  # (17:40) this ear, its link learned again in the other voice from LINK2 pairs
     link_u = [other_u[i] for i in order[TEST: TEST + LINK2]]
     other_u = [other_u[i] for i in order[:TEST]]
+    if os.environ.get("OTHER_RELAY") == "own":  # (18:30) the ear's relay settled again on the other voice's own frames (no labels), the kinds as they are
+        def evenness(us):
+            X = np.concatenate([unit((unit(frames(u)[0]) - relay.mu) @ relay.Z)[::5] for u in us])
+            d = np.clip(np.linalg.eigvalsh(np.cov(X.T.astype(np.float64))), 0, None)
+            return d.sum() ** 2 / (d * d).sum()
+        mine = [utts[i] for i in rng.choice(len(utts), 300, replace=False)]
+        pool2 = [u for u in all_utts if u["speaker"] == who2 and u["image"] not in {v["image"] for v in other_u}]
+        theirs = [pool2[i] for i in rng.choice(len(pool2), 400, replace=False)]
+        say(f"the hearing relay's code, participation ratio of {relay.Z.shape[0]}: its own voice {evenness(mine):.0f}, the other voice {evenness(theirs[:300]):.0f}")
+        relay = Relay(relay.shrink).settle(np.concatenate([unit(frames(u)[0])[::5] for u in theirs]))
+        say(f"   the other voice through a relay settled on its own frames: {evenness(theirs[:300]):.0f}")
     B_other, V_other = np.stack([bag(u, False) for u in other_u]), see([u["image"] for u in other_u])
+    hub = lambda B: (np.sort(B.sum(0))[::-1][:20].sum() / B.sum(), int((B.sum(0) > 0).sum()))  # noqa: E731
+    say("kinds used by the test captions (share of all stretches in the 20 most used kinds, kinds used at all): its own voice %.2f, %d; the other voice %.2f, %d" % (hub(B_test) + hub(B_other)))
     M = Bc.T @ V_assoc / len(Bc)
     vocab = {}
     for u in assoc_u:

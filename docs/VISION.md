@@ -4786,3 +4786,97 @@ at 2,500 pairs, median rank 380–430): the first reader's kinds cut the second 
 enough for a link to find something, but they were shaped on another voice's stretches and blur this one's. If it
 comes near the own ear's 0.049, the kinds are sound categories any voice can use and only the link is bound to a
 voice; then a second voice costs a few thousand pairs and no new lexicon.
+
+### 2026-11-27 18:30, a one-voice ear in a voice it never heard: almost nothing, and a new link does not mend it
+
+`out/bench/grounded_othervoice_top_top{2,3}_s0.log`, `grounded_otherlink_top_top2_s0.log`. The run repeats (the
+first reader heard again: 0.048 / 0.053, median rank 318, the same lines as at 16:41). The first reader's ear and
+link, nothing learning, on 1,000 captions of another reader about photographs the link never saw:
+
+| | its own voice | the second reader | the third reader |
+|---|---|---|---|
+| photograph → its caption, R@10; median rank | 0.048; 318 | 0.033; 440 | 0.013; 480 |
+| the caption's own written words from its bag: R@10; median rank | 0.626; 5 | 0.084; 300 | 0.060; 334 |
+| words heard (correlation median), said in 30+ / 15–29 / 8–14 test captions | 0.49 / 0.42 / 0.22 | 0.08 / 0.09 / 0.04 | 0.06 / 0.04 / 0.02 |
+
+And the link learned again in the second reader's voice through the first reader's ear: R@10 0.012 (median rank
+494) from 1,000 pairs, 0.013 (470) from 2,500; added to the first voice's link 0.015 and 0.017 (446, 448). The
+second reader's own ear has 0.037 and 0.049 from as many pairs.
+
+**Read.** What I said at 16:45 (photographs R@10 0.010–0.02, rank 440–500; the caption's words at rank 100–250;
+common words still heard at 0.10–0.20): the photographs about so (one reader above, 0.033), the words worse than I
+said (rank 300 and 334; common words at 0.06–0.08). What I said at 17:38 (a link learned again gets about half of
+the other reader's own ear) was wrong: it gets nothing, less than the old link applied as it is. **The lexicon is
+bound to its voice, not only the link**: the first reader's kinds do not cut another reader's speech into the
+same pieces twice. (Why a link learned from clean bags and applied to noisy ones beats a link learned from the
+noisy ones: the first is noise once, the second noise twice.) This is the infant at 7.5 months, and stronger: no
+transfer between two of our readers at all (whether they differ in sex is not known to us; the dataset's reader
+labels are only codes).
+**Next, said before it runs: is the other voice lost in the ear's relay?** This morning the eye's relay, settled
+in one world, left another world's code uneven and the word cells blind to it (08:28). The ear's relay was settled
+on the first reader's frames. `OTHER_RELAY=own`: the same ear and kinds, but the second reader's frames go through
+a relay settled on that reader's own frames (no labels; the batch stand-in for a population that adapts to the
+talker: the first route of 15:38, and Duong et al.'s fast gains). I say: the second reader's code is less even
+through the first reader's relay (participation ratio at most two thirds of the first reader's own), and with its
+own relay the first reader's kinds hear the second reader's words about twice as well (0.08 → 0.15–0.25 for the
+commonest; the caption's words at rank 80–200), the photographs a little better (R@10 0.035–0.05). Two symmetric
+whitenings need not land on the same axes, so it may also do nothing: then the voice is not a matter of the
+code's second-order statistics, and the kinds themselves must take the new voice in.
+
+**18:34, the other voice through a relay settled on its own frames** (`grounded_otherrelay_top_top{2,3}_s0.log`;
+the first reader's kinds and link as they are; second / third reader):
+
+| | the first reader's relay | the other reader's own relay | (its own voice) |
+|---|---|---|---|
+| the frame code's participation ratio (of 1,024) | 314 / 264 | 630 / 570 | 643–645 |
+| the caption's own written words: R@10; median rank | 0.084; 300 / 0.060; 334 | 0.163; 169 / 0.101; 240 | 0.626; 5 |
+| words heard, said in 30+ test captions | 0.08 / 0.06 | 0.13 / 0.11 | 0.49 |
+| photograph → its caption: R@10; median rank | 0.033; 440 / 0.013; 480 | 0.026; 398 / 0.012; 470 | 0.048; 318 |
+
+**Read.** The first part of what I said held: another voice's frames are half as even through a relay settled on
+the first voice (participation ratio 314 and 264 against 643), the same thing the eye's relay did to video this
+morning, and a relay settled on the talker's own frames puts that right (630, 570). What it buys is real and
+small: the caption's words about twice as findable (R@10 0.084 → 0.163, 0.060 → 0.101; I said the commonest words
+heard at 0.15–0.25, got 0.13 and 0.11), the photographs not at all (I said 0.035–0.05). So adapting to the talker
+(the first route of 15:38) is worth having and is not the answer: after it, a voice never heard still gives a
+quarter of the words at best and none of the pictures. The kinds are the first reader's. Two readers, one ear.
+(The other voice does not collapse onto a few kinds: its 20 most used kinds take 9% of its stretches, against 3%
+in the ear's own voice.)
+**What that leaves, said before it is measured:** the third route, forms from several voices held together by
+what they are said about. Each reader's own ear already has a link to the same sight. So two ears that never
+heard each other might be matched kind for kind through sight: a kind of the first reader and a kind of the
+second that go with the same photographs are the same word. `experiments/voices_through_sight_check.py` (the two
+readers' saved bags and photograph codes; the written words only to score): for each word-like kind of the first
+reader (its commonest written word in half its captions or more), the second reader's kind whose sight side
+(the Hebb link's row) is most like its own: does it carry the same written word? I say: for 10–20% of them
+(by chance about 1%), the concrete ones ("pizza", "train", "giraffe"); sight at 64 pixels is a weak go-between
+and most kinds have some sixty photographs each.
+
+### 2026-11-27 18:37, two voices' kinds are the same words through sight (three readers, six directions)
+
+`out/bench/voices_through_sight_*_s0.log`. Three ears that each grew up in one voice and never heard each other;
+each has its Hebb link to the photographs it was shown (the links of two readers share about 170 photographs of
+5,000). A kind's sight side is its row of the link. For each word-like kind of one reader (374 / 597 / 594 of
+2,048 kinds, 82 / 121 / 131 different written words), the other reader's kind whose sight side is most like it:
+
+| from → to | any kind of the other reader: same written word (chance) | in the five most alike | among the other's word-like kinds: same word (chance) | in the five most alike |
+|---|---|---|---|---|
+| reader 1 → 2 | 0.235 (0.017) | 0.465 | 0.262 (0.021) | 0.537 |
+| reader 1 → 3 | 0.262 (0.016) | 0.508 | 0.302 (0.020) | 0.521 |
+| reader 2 → 3 | 0.238 (0.015) | 0.414 | 0.265 (0.017) | 0.471 |
+| reader 2 → 1 | 0.233 (0.019) | 0.414 | 0.238 (0.021) | 0.429 |
+| reader 3 → 1 | 0.204 (0.019) | 0.411 | 0.237 (0.020) | 0.421 |
+| reader 3 → 2 | 0.219 (0.017) | 0.379 | 0.241 (0.018) | 0.418 |
+
+Matched words: "baseball", "bathroom", "beach", "building", "cat", "clock", "computer", "elephant", "motorcycle",
+"pizza", "skateboard", "snow", "street", "tennis", "train", and also "sitting", "holding", "walking", "white".
+**Read.** I said 10–20% (chance about 1%): it is 20–30% on every pair and direction, twelve to fifteen times
+chance, and the right word is among the five most alike for about half. **No sound passes between the two ears
+here**: the kinds of one voice hear nothing in the other (18:30); what joins them is that both go with the same
+kind of photograph. This is the third route of 15:38 in its plainest form, the referent as the cue that two forms
+are one word, and it is also what the lives' word cells are built as: a cell with content from sight and cues from
+whatever was heard with it. A word cell would take cues from kinds of several voices and be one word.
+**Limits.** The words are scored by text; a quarter matched is a hint, not a lexicon; sight at 64 pixels joins
+"cat" and "pizza" and cannot join "of" or "next"; the kinds' labels are their commonest word, and a kind may hold
+more. Also seen: an ear in one voice has 374–597 word-like kinds of 2,048, where the many-voices ear of 11-26
+had 111 (another count, on other captions: an indication only).

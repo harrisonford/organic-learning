@@ -65,7 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-otherlink`** (out/tmp/other_link_queue.sh; queued 2026-11-27 17:38 behind `organic-othervoice`;
+- **`organic-othervoice`, `organic-otherlink`, `organic-otherrelay`** ALL ENDED, read (VISION.md 18:30, 18:34): a
+  one-voice ear hears almost nothing in another voice; a new link does not mend it; the talker's own relay helps a
+  little. `experiments/voices_through_sight_check.py` (seconds; VISION.md 18:37). Was: (out/tmp/other_link_queue.sh; queued 2026-11-27 17:38 behind `organic-othervoice`;
   MemoryMax 2800M; about 20 minutes once it starts): the first reader's ear, its link learned again from 1,000
   and 2,500 of the second reader's pairs → out/bench/grounded_otherlink_top_top2_s0.log. Said before: VISION.md
   17:38 (about half of the second reader's own ear).
@@ -123,6 +125,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   0.45, 0.46, 0.20); moved to ended.json; **tagr_s2 running since 15:59** (added to lives.json). The gaze on pages
   against its control so far: seed 1 0.159 against 0.183, seed 2 0.199 against 0.183: no direction on two seeds.
   Seed 0's control (tagn_s0) comes after tagr_s2 in the queue.
+  **18:30:** tagr_s2 ended at 120,000 about 18:28 (first words 0.49, two words 0.50, pages 0.18; tagn_s2 there:
+  0.46, 0.49, 0.18) → ended.json; **tagn_s0 running since 18:33** (added to lives.json; to 130,000, then tagr_s0,
+  then the tagb arm). Replay of rewarded moments against its control on pages so far: seed 1 0.147 against 0.183,
+  seed 2 0.182 against 0.183: nothing.
 - **SpokenCOCO through the cochlea** (`experiments/world/spokencoco_cochlea.py`, python -I, streams the archive): the
   validation part done 14:30 (25,035 recordings, 10.8 M rows: about 30 hours of speech) → ~/datasets/spokencoco/
   cochlea_64.f16 + cochlea.jsonl (transcripts kept for measuring only). All 118,287 training images of SpokenCOCO are
@@ -1777,3 +1783,14 @@ Still Kris's own:
 - 2026-11-27 17:38 **The one-voice link's curve** (VISION.md 17:36; three readers; said before): R@10 0.029–0.037
   at 1,000 pairs, 0.036–0.050 at 2,500, 0.048–0.065 at 5,000, still rising, beside the written words all the way.
   Queued: the lexicon's reach into a second voice with the link learned again (`organic-otherlink`, said before).
+- 2026-11-27 18:38 Health: an alert (tagr_s2 ended normally at 120,000; lists put right; tagn_s0 started 18:33
+  and added; all healthy after; 8.5 GB available, 298 GB free). **A one-voice ear in a voice it never heard**
+  (VISION.md 18:30; memoize): photographs R@10 0.033 / 0.013 (median rank 440 / 480), the caption's words at rank
+  300 / 334 against 5 at home; the link learned again in that voice through the same ear: nothing (0.013 from 2,500
+  pairs; I had said half of the other reader's own ear). The lexicon is bound to its voice. **The talker's own
+  relay** (VISION.md 18:34): another voice's code is half as even through the first voice's relay (314 / 264
+  against 643), its own relay puts that right and doubles the words found, not the pictures. **Two voices' kinds
+  are the same words through sight** (VISION.md 18:37; memoize; three readers, six directions): the kind of
+  another reader with the most alike sight side carries the same written word 20–30% of the time (chance 2%),
+  with no sound passing between the ears. Next: the ear and its link learning together in one pass (said before
+  it runs), the form a live ear would have.
