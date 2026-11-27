@@ -65,13 +65,16 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-cells-err`** (out/tmp/cells_err_queue.sh; 2026-11-27 06:03; after organic-ncm-c50; shared gate): the word
+  cells as in the lives (`CELLS_PLASTIC=error`) on the whole frame's and the middle fixation's codes, seeds 0–1 →
+  stream_core50_c50{first,centre}_cellserr_s{0,1}.log (VISION.md 06:03).
 - **`organic-stream-eye1`** (out/tmp/stream_eye_queue.sh; 2026-11-27 05:01; shared gate; about 1.6 hours): the stream
   brain's own eye on CORe50 with its two new reflexes (`motion_drive`, `pursuit_tau` in organic/stream.py; default
   unchanged by digest), three seeds → out/bench/core50_stream_eye.log. What I said before: VISION.md 04:57.
 - **`organic-ncm-c50`** (out/tmp/ncm_c50_queue.sh; 2026-11-27 04:50; shared gate): why the word cells do not take the
   middle fixation's gain (VISION.md 04:48): nearest class mean and streaming LDA on the whole frame's and the middle
   fixation's codes, seeds 0–1 → stream_core50_c50{first,centre}_ncm_s{0,1}.log.
-- **`organic-fovea-q`** (out/tmp/fovea_queue.sh; queued 2026-11-27 03:19; shared gate): the eye on the thing (VISION.md
+- **`organic-fovea-q`** ENDED about 05:50, read (VISION.md 06:03). (out/tmp/fovea_queue.sh; queued 2026-11-27 03:19; shared gate): the eye on the thing (VISION.md
   02:55): CORe50 through a fixation, seeds 1–2 (core50_fovea_s{1,2}.log; codes core50_c50{centre,salient}_s*), the
   stream of 10 kinds on them (stream_core50_c50{centre,salient}_s{0,1,2}.log), the slow stage on the middle
   fixation, seeds 1–2 (core50_slow_centre_s12.log). **`organic-fovea-mv0`**: the eye drawn by what moves, seed 0
@@ -1539,10 +1542,19 @@ Still Kris's own:
   has heard all 20,000 captions; the bags next. Commons video: no restart since the fix (its 800 MB is mostly page
   cache, 69 MB its own). **Photo daemon: nothing added for 25 hours** (ling 429 all night); scan of two more free
   models that look; particle-1 taken as a spare that stands in for a rate-limited adult (WORLD.md 04:52).
-- 2026-11-27 05:03 **Photo daemon flowing again:** with particle-1 standing in while ling rests, the first two batches
+- 2026-11-27 05:02 **Photo daemon flowing again:** with particle-1 standing in while ling rests, the first two batches
   were judged 19 / 20 and 20 / 20 right. **Two reflexes for the stream brain's eye** (E 34; Kris's "do they move at
   all?"): what moves against the view's own flow draws saccades (`motion_drive`), and between saccades the eye
   follows it (`pursuit_tau`, 100 ms); both off by default (digest of 3 s of the default eye identical before and
   after). Said before it runs (VISION.md 04:57); `organic-stream-eye1` measures where the eye lands and what it then
   recognises across sessions, three seeds. Tonight's four references (Yu & Smith 2012, Lisberger 2010, Wiskott &
   Sejnowski 2002, Sprekeler et al. 2007) found on Crossref with their DOIs (content still from memory).
+- 2026-11-27 06:04 Health: all healthy (load 26 on 16 cores: the stream-eye probe runs at a tenth of its smoke-test
+  speed; seed 0's first arm took 35 minutes). **CORe50 on three seeds** (VISION.md 06:03; memoize): time order
+  teaches no recognition across scenes with either second stage; on the middle fixation order beats shuffled
+  (+0.007 every seed) but not plain Hebb (a trace over shuffled frames hurts). The word cells lose on the middle
+  fixation on three seeds (−0.015, −0.015, −0.005) where ridge gains (+0.025 to +0.028) and, on seed 0, the means too
+  (nearest class mean +0.022, streaming LDA +0.023): it is the cells, not first-order reading. Queued: the cells as in
+  the lives (corrections scaled by their own error) on both codes (`organic-cells-err`). The stream brain's eye, seed
+  0, today's eye: 0.071 (21% within 8 px of the middle). gazs_s0 at 120,000: first words 0.47, two words 0.47, pages
+  0.17 against plat_s0's 0.49, 0.46, 0.15 (level).

@@ -3984,3 +3984,51 @@ coded frame (within 8 px of the middle, where the crop puts the object) and the 
 before (the same object in another session, chance 0.02; the same relay for every eye). **What I say before:**
 today's eye near the salient pick (0.07–0.08); with both reflexes above today's eye by 0.02 or more and within 8 px
 of the middle in at least 35% of frames; reaching the whole frame's 0.117 I give even odds; the middle's 0.164 not.
+
+### 2026-11-27 06:03, CORe50 on three seeds: what time teaches, and who takes the fixation's gain
+
+**Time, three seeds, both second stages** (the same object from another session; the code each reads beside it):
+
+| second stage | seed 0 | seed 1 | seed 2 | the code it reads |
+|---|---|---|---|---|
+| 3 × 3 winner-take-all, trace, in order | 0.116 | 0.109 | 0.113 | whole frame 0.117 / 0.120 / 0.118 |
+| same, shuffled | 0.119 | 0.102 | 0.099 | |
+| same, no trace | 0.113 | 0.106 | 0.102 | |
+| slow directions on the middle fixation, in order | 0.137 | 0.142 | 0.138 | middle 0.164 / 0.164 / 0.168 |
+| same, shuffled | 0.130 | 0.136 | 0.131 | |
+| same, no trace | 0.137 | 0.138 | 0.143 | |
+
+On the middle fixation the order beats shuffled frames on every seed, by the same small step (+0.007, +0.006, +0.007),
+but **not plain Hebb with no trace at all** (0.000, +0.004, −0.005): what is consistent is that a trace over shuffled
+frames *hurts* (it mixes frames of unrelated objects into one answer), not that the order helps. The trace does what
+it is for inside a video: frames 5 s apart answer more alike in order (0.152 / 0.151 against no trace's 0.131 / 0.129,
+seeds 1–2), so the cells do become slow, but that slowness does not reach the same object in another scene. Every
+second stage keeps less than the code it reads. **Reading on three seeds:** with these rules and 12,000 frames, time
+in video teaches slowness within a video and no recognition across scenes; the scene was the first reason (whole
+frame), and with the scene gone (middle fixation) the trace still adds nothing a plain Hebbian stage does not.
+What is left untried: many more frames (CORe50 has 120,000 for training at 20 a second; these were every tenth),
+and the trace inside the cortex's own filters (Halvagal & Zenke 2023's rule, queue C 29a), not on top of them.
+
+**Who takes the fixation's gain** (10 kinds; after 10,000 frames; seeds 0 / 1 / 2):
+
+| reader | whole frame | middle fixation | the reflex's pick |
+|---|---|---|---|
+| word cells + relay | 0.363 / 0.347 / 0.349 | 0.348 / 0.332 / 0.344 | 0.212 / 0.204 / 0.217 |
+| ridge + relay | 0.373 / 0.368 / … | 0.398 / 0.396 / 0.406 | 0.234 / 0.250 / 0.252 |
+| nearest class mean + relay | 0.250 / … | 0.272 / … | |
+| streaming LDA + relay | 0.383 / … | 0.406 / … | |
+| word cells: seen once, named 20 later | 0.897 / 0.900 / 0.887 | 0.827 / 0.837 / 0.823 | 0.773 / 0.787 / 0.770 |
+
+**Seed 0's answer to the check of 04:48: the means take the gain too** (nearest class mean +0.022, streaming LDA
++0.023, ridge +0.025), so it is not that the gain lies in second moments a first-order reader cannot use (the photo
+section's story is not this one). **The word cells alone do not take it** (−0.015, −0.015, −0.005 on three seeds),
+and their memory of a frame seen once falls on the fixated code on every seed (0.83 against 0.89–0.90). The word
+cells learn by the delta rule with a full-size correction at each frame: strong recency, which is what gives them
+their one-shot memory; a reader that leans on the last frames is hurt more when frames of the same kind differ
+more from one another (the fixation's next frame is 0.32 alike against the whole frame's 0.56: the object turns and
+fills the view), where running means average the turning away. To be checked, not believed: the cells with a
+smaller correction (the plasticity-by-error switch they have) on both codes; seed 1 of the means is running.
+**Queued 06:03 (`organic-cells-err`):** the word cells as they are in the lives (each correction scaled by the cell's
+own recent error, `CELLS_PLASTIC=error`; the benchmark has used full-size corrections since 2026-11-19) on both codes,
+seeds 0–1. What I say before: if recency is why the cells miss the gain, the scaled cells lose less on the fixation
+than the full-size ones (or gain), and remember a frame seen once less well on both codes.

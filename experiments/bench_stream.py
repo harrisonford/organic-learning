@@ -45,7 +45,8 @@ class Cells:
         self.tidy = tidy
         ear = pickle.load(open(os.environ.get("EAR", "out/tmp/ear_first.pkl"), "rb"))
         self.words = Words(D, ear)
-        self.words.plastic_by_error = False
+        self.words.plastic_by_error = os.environ.get("CELLS_PLASTIC") == "error"  # default: every correction at full size;
+        # CELLS_PLASTIC=error: as in the lives, each correction scaled by the cell's own recent error (2026-11-27)
         if store:
             from organic.episodes import Episodes
             self.words.episodes = Episodes(D, ear.width)
