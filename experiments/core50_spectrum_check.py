@@ -10,6 +10,9 @@ For the whole frame's and the middle fixation's codes, on the first 10,000 frame
     ridge                                    on both (it should not change much)
 
     SEEDS=0,1,2 python experiments/core50_spectrum_check.py
+    SET=photos VARIANTS=ph_d ... the control (2026-11-27 10:06): the same on a benchmark whose relay was settled on its own
+    kind of pictures (photos: COCO thumbnails; SET=cifar10 VARIANTS=developed: CIFAR). If evening again helps the delta
+    reader as much there, "another world" is not the reason.
 """
 import os, pickle, sys
 import numpy as np
@@ -18,7 +21,8 @@ from organic.cortex2 import Relay  # noqa: E402
 
 SEEDS = [int(x) for x in os.environ.get("SEEDS", "0").split(",")]
 N = 10000
-ytr, yte = np.load("out/bench/core50_train_labels.npy"), np.load("out/bench/core50_test_labels.npy")
+SET, VARIANTS = os.environ.get("SET", "core50"), os.environ.get("VARIANTS", "c50first,c50centre").split(",")
+ytr, yte = np.load(f"out/bench/{SET}_train_labels.npy"), np.load(f"out/bench/{SET}_test_labels.npy")
 C = int(ytr.max()) + 1
 ear = pickle.load(open(os.environ.get("EAR", "out/tmp/ear_first.pkl"), "rb"))
 SHARE = 2.0 + len(set(ear.units("what is this?", learn=False)))
@@ -68,14 +72,14 @@ def evenness(X):
 for seed in SEEDS:
     order = np.random.default_rng(seed).permutation(len(ytr))[:N]
     y = ytr[order]
-    for v in ("first", "centre"):
-        relay = pickle.load(open(f"out/bench/cortex_c50{v}_s{seed}.pkl", "rb")).relay
-        X = unit((np.asarray(np.load(f"out/bench/core50_c50{v}_s{seed}_train.npy", mmap_mode="r")[order], np.float32) - relay.mu) @ relay.Z)
-        Xt = unit((np.asarray(np.load(f"out/bench/core50_c50{v}_s{seed}_test.npy"), np.float32) - relay.mu) @ relay.Z)
+    for v in VARIANTS:
+        relay = pickle.load(open(f"out/bench/cortex_{v}_s{seed}.pkl", "rb")).relay
+        X = unit((np.asarray(np.load(f"out/bench/{SET}_{v}_s{seed}_train.npy", mmap_mode="r")[np.sort(order)][np.argsort(np.argsort(order))], np.float32) - relay.mu) @ relay.Z)
+        Xt = unit((np.asarray(np.load(f"out/bench/{SET}_{v}_s{seed}_test.npy"), np.float32) - relay.mu) @ relay.Z)
         pr, t10, t100 = evenness(X)
         own = Relay(relay.shrink).settle(X)
         X2, Xt2 = unit((X - own.mu) @ own.Z), unit((Xt - own.mu) @ own.Z)
         pr2, _, _ = evenness(X2)
-        print(f"seed {seed} {v:6}: on CORe50 the relayed code's participation ratio {pr:.0f} of 4096 (strongest 10: {t10:.2f}, "
+        print(f"seed {seed} {SET} {v:9}: on these pictures the relayed code's participation ratio {pr:.0f} of 4096 (strongest 10: {t10:.2f}, "
               f"100: {t100:.2f}; evened again: {pr2:.0f}) | delta {delta(X, y, Xt, yte):.3f}, evened again {delta(X2, y, Xt2, yte):.3f} | "
               f"ridge {ridge(X, y, Xt, yte):.3f}, evened again {ridge(X2, y, Xt2, yte):.3f}", flush=True)

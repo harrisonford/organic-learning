@@ -385,12 +385,18 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     Commons video with sound, then the learned pieces moved in one by one (docs/ASYNC.md).
 
 ## Decisions waiting for Kris
-- **(2026-11-27 09:22) The Commons videos and the disk.** `~/datasets/commons_video` is 144 GB after one day (13,427
-  videos, 7.07 million frames: 87 GB of frames, 7 GB of sound, **57 GB of the downloaded files** kept "so other sizes
-  and rates can be taken later") and grows about 6 GB an hour; the disk had 139 GB free of 915. The service now waits
-  while less than 100 GB is free (`FLOOR_GB` in commons_video.py; nothing is deleted), which it will reach in about
-  seven hours. Yours to decide: delete the downloaded files (the frames and the sound stay; other sizes would mean
-  fetching again), stop at what we have (the one probe on them so far used 1,399 videos with sound), or move the set to another disk.
+- **(2026-11-27 10:10, partly answered) The disk.** Kris, 10:05: "limpia todo lo antiguo que no es usado en brains
+  definitivamente los october brains". **Deleted 10:08–10:10** (lists kept in out/monitor/deleted_2026-11-27_*.txt;
+  logs and score files kept; nothing had them open; kid-a serves from its own copies, answering 200 after): the 91
+  October brains in out/ (109 GB), the 8 October level files (14.5 GB), and the brains from before the review of
+  2026-11-10 that nothing refers to (csize, overheard, hub, fz, the smoke tests' levels and four smoke-test brains
+  in out/tmp: 67 files, about 29 GB). **Kept:** kid_s3 (the lineage kid-a publishes: 8.5 GB and 22.4 GB of levels),
+  every life since the review, the caches in out/tmp. Free: 133 GB → 277 GB. Five old analysis scripts default to
+  October brains and no longer run as they are (logic_ablation, ear_breaks, organ_view, raw_specialization,
+  timed_analysis; their results are in the docs). **Still yours to decide:** the SpokenCOCO archive (68 GB), the
+  Commons videos' downloaded files (57 GB; the service waits under 100 GB free and grows 6 GB an hour), the COCO
+  zips (20 GB), three chat models nothing uses (8 GB), the films and album twice in ~/Downloads (4.4 GB), the old
+  kid_s0–s2 levels dated November (about 14 GB), and the ended lives' brains since the review (about 160 GB).
 - **(2026-11-25 18:50, sharper) Our development helps at the pictures' own size, on three seeds** (word cells +
   relay 0.649 ± 0.008 against 0.626 ± 0.002 as born; ridge + relay 0.666 against 0.632). The paper's "did
   nothing" was on enlarged pictures. I will put both sizes side by side in that section when the enlarged
@@ -1597,3 +1603,10 @@ Still Kris's own:
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL): a card "An eye that follows what moves" (3 seeds), the
   held-thing card's word-cells caveat now says why, two references checked on Crossref (Abrams & Christ 2003; von
   Hofsten & Rosander 1997; one-line summaries from memory, for Kris to open).
+- 2026-11-27 10:11 Health: all healthy. **Disk cleaned on Kris's word** (10:05; see the decisions): October brains
+  and the unreferenced brains from before the 2026-11-10 review deleted, 133 GB → 277 GB free; the Commons video
+  service had been given a floor at 09:22 (waits under 100 GB free). **The control for the relay finding** (VISION.md
+  10:11; three seeds): at home (the photo benchmark) evening the relay again costs the delta reader 0.007–0.018; the
+  gain is only on CORe50's middle fixation. The relay circuit learning on, first line (seed 0 whole frame): 0.357
+  against 0.360 alone; seeds 1–2 run beside it (`organic-relaylearn-s1`, `-s2`). The grounding run: 10,000 of
+  20,000 captions heard. tagr_s1 at 100,000.

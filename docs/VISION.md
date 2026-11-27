@@ -4166,3 +4166,26 @@ Carandini 2013, "Adaptation maintains population homeostasis in primary visual c
 population's responses stay equal and decorrelated: the cortex evens itself out in the world it is shown); Sharpee et
 al. 2006, "Adaptive filtering enhances information transmission in visual cortex", Nature 439, 936–942,
 doi:10.1038/nature04519 (V1 filters change with the statistics of the stimulus set, over minutes).
+
+### 2026-11-27 10:11, the control for "another world": evening again at home does not help
+
+`core50_spectrum_check.py` with `SET=photos VARIANTS=ph_d` (`photos_spectrum.log`): the photo benchmark (33 kinds,
+COCO and Commons photographs), whose relay was settled on COCO thumbnails, the first 10,000 pictures of its stream,
+seeds 0 / 1 / 2:
+
+| | at home (photos) | CORe50 whole frame | CORe50 middle fixation |
+|---|---|---|---|
+| how even the relayed code is (participation ratio of 4,096) | 511 / 528 / 534 | 131 / 136 / 137 | 282 / 290 / 291 |
+| delta, the relay as settled | 0.386 / 0.395 / 0.391 | 0.360 / 0.348 / 0.359 | 0.348 / 0.336 / 0.347 |
+| delta, evened again on the stream's own pictures | 0.379 / 0.380 / 0.373 | 0.356 / 0.364 / 0.360 | 0.398 / 0.400 / 0.409 |
+| ridge, as settled → evened again | 0.407 → 0.374, 0.418 → 0.387, 0.411 → 0.373 | 0.373 → 0.355 … | 0.398 → 0.402 … |
+
+At home the relayed code is two to four times as even as on CORe50, and evening it again on 10,000 pictures of the
+stream costs the delta reader a little on every seed (−0.007, −0.015, −0.018) and the ridge more: a second evening
+on few pictures adds noise where the first already did the work. So the gain on the middle fixation (+0.050 to
++0.064) is not something a second evening gives everywhere; it appears where the relay reads a world it was not
+settled in. (Not explained: why the whole frame, the least even of the three, gains nothing. My reading that what
+tells kinds apart there lies along strong directions is a guess, not measured.)
+The relay circuit learning along CORe50's stream, first line (seed 0, whole frame): relay alone 0.360, with the
+circuit 0.357 (said: a change under 0.015); the circuit helps early (0.270 against 0.252 at 1,000 frames). The
+middle fixation is still running.
