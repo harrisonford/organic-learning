@@ -3737,3 +3737,24 @@ mouth's own voice (while the hearing population still held its tail), so the sil
 fixed by taking habits only while sound comes in from the world and not within 100 ms of one's own gesture (the
 suppression of one's own voice). The 32 gestures are random places in the vowel space; nothing about vowels was
 given but the tract's physics.
+
+### 2026-11-26 21:55, two senses on three seeds: a correction
+
+Seed 2 (`av_probe_s2.log`; 17 words, 125 held-out videos, chance 0.059): sight 0.254, hearing developed 0.114, as
+born 0.115, cochlea 0.109, **sight and hearing together 0.218**, the sound sight predicts 0.200. **Together is under
+sight alone on this seed.** Over three seeds the difference is +0.025, +0.020, −0.036: no gain established. I wrote at
+19:52 and told Kris that both senses together name a video better than either, "two seeds now"; that was early, and
+it does not hold. What holds on all three seeds:
+
+| (Hebb, seeds 0 / 1 / 2) | sight → sound | sound → sight |
+|---|---|---|
+| hearing as born | 0.611 / 0.602 / 0.619 | 0.626 / 0.606 / 0.642 |
+| hearing developed | 0.622 / 0.607 / 0.629 | 0.631 / 0.608 / 0.639 |
+| the cochlea alone | 0.600 / 0.582 / 0.610 | 0.607 / 0.582 / 0.618 |
+
+Sight and sound on Commons video share something real (0.60–0.64 against 0.5, the same video 5 s away at chance);
+any hearing cortex beats the cochlea's band means (+0.009 to +0.024), and its development adds about a point on
+sight → sound (+0.011, +0.005, +0.010) and nothing clear the other way. The word test is too thin to carry claims:
+one word (cat) holds a third to a half of the held-out videos and most words have one to six. Joining the two codes
+side by side for a nearest class mean is also the crudest of combinations; a learner that weighs each sense by how
+much it carries is the fair test, with more videos a word (the Commons fetcher keeps adding them).

@@ -417,23 +417,23 @@ saying the commonest word would be right 5.1% of the time.
 |---|---|---|---|
 | streaming LDA + relay, developed filters | 0.172 ± 0.008 | 0.370 ± 0.006 | 0.499 ± 0.004 |
 | ridge + relay, developed filters | 0.189 ± 0.002 | 0.374 ± 0.003 | 0.486 ± 0.003 |
-| backprop + relay, one pass (one seed) | 0.146 | 0.344 | 0.462 |
+| backprop + relay, one pass | 0.108 ± 0.027 | 0.336 ± 0.006 | 0.463 ± 0.001 |
 | ridge + relay, filters as born | 0.194 ± 0.003 | 0.365 ± 0.006 | 0.461 ± 0.004 |
 | **word cells + relay, filters as born** | 0.170 ± 0.023 | 0.363 ± 0.007 | **0.446 ± 0.006** |
 | word cells + relay, developed filters | 0.182 ± 0.029 | 0.355 ± 0.009 | 0.445 ± 0.002 |
 | word cells, no relay, filters as born | 0.132 ± 0.006 | 0.276 ± 0.004 | 0.389 ± 0.009 |
-| backprop, no relay, one pass (one seed) | 0.078 | 0.213 | 0.387 |
+| backprop, no relay, one pass | 0.080 ± 0.018 | 0.204 ± 0.006 | 0.392 ± 0.005 |
 | word cells, no relay, developed filters | 0.144 ± 0.011 | 0.264 ± 0.002 | 0.373 ± 0.004 |
 | nearest class mean + relay, filters as born | | | 0.421 ± 0.002 |
 | nearest class mean + relay, developed filters | | | 0.403 ± 0.003 |
 
-**[pending: backpropagation on seeds 1 and 2 (seed 1 with the relay: 0.464). A search widened past the first one's
-largest rate and batch found nothing better, so the settings stand.]**
+Backpropagation's rate and batch were tuned on the first 10,000 pictures of seed 0; a search widened past the
+largest of the first found nothing better.
 
 Three things carry over from CIFAR and one does not. Without the relay the word cells and backpropagation are
-level (0.389 against 0.387), as on CIFAR they nearly were. The second-order readers lead again. And the word cells
-are ahead early in the stream and not at the end: after 500 pictures 0.170 against 0.146, after 50,000 0.446
-against 0.462, on the one seed of backpropagation we have. What does not carry over is the development. On real
+level (0.389 ± 0.009 against 0.392 ± 0.005), as on CIFAR they nearly were. The second-order readers lead again. And the word cells
+are ahead early in the stream and not at the end: after 500 pictures 0.170 ± 0.023 against 0.108 ± 0.027, after
+50,000 0.446 ± 0.006 against 0.463 ± 0.001, three seeds of each. What does not carry over is the development. On real
 photographs our rule's filters are worth two and a half points to ridge regression and the streaming discriminant
 behind the relay, on every seed, and nothing to the word cells. That is the same split as on enlarged CIFAR, where
 the streaming discriminant also gained two points and the word cells none, and unlike CIFAR at its own size, where
