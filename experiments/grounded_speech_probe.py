@@ -1,0 +1,163 @@
+"""Do the ear's own units go with what the pictures show? Spoken captions and photographs, no text (queue E 32;
+docs/VISION.md 2026-11-26 23:10).
+
+The ear of experiments/sound_units_probe.py (second reading: adapted to the voice, 8 band stretches, syllables by the
+loudness rhythm, syllable kinds and two- and three-syllable kinds by the eye's rule) found kinds of sound that come
+with one written word. Here the same ear, developed on EAR_U spoken COCO captions, hears ASSOC_U more, each with its
+photograph (our 64 x 64 COCO thumbnails; SpokenCOCO's training images are all among them); a caption is the bag of
+two- and three-syllable kinds heard in it. The link between the photograph's code (the photo cortex with its relay)
+and the bag is Hebb's rule (the running mean of the product of the two, each centred and at unit length). Test, the
+paradigm's own (visually grounded speech: Harwath, Torralba & Glass 2016; Harwath et al. 2018): 1,000 held-out
+photographs and one spoken caption each, never heard; for each photograph, the rank of its own caption among the
+1,000 by the link, and the other way; recall at 1, 5 and 10 (chance 0.001, 0.005, 0.01); beside it the same with the
+bags shuffled among the photographs before the link is learned. The transcripts are not read at all.
+
+    EAR_U=20000 ASSOC_U=20000 SEED=0 python experiments/grounded_speech_probe.py
+"""
+import json, os, pickle, sys, time
+import numpy as np
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from organic.cortex2 import Layer2, Relay  # noqa: E402
+
+DIR = os.path.expanduser("~/datasets/spokencoco")
+EAR_U, ASSOC_U, TEST, SEED = int(os.environ.get("EAR_U", 20000)), int(os.environ.get("ASSOC_U", 20000)), int(os.environ.get("TEST", 1000)), int(os.environ.get("SEED", 0))
+DEV, KINDS, WINDOW, BANDS, HALF, SMOOTH, K1, K23 = int(os.environ.get("DEV", 16000)), 128, 8, 8, 5, 5, 512, 1024
+t0 = time.time()
+
+
+def say(*a):
+    print(f"[{time.time() - t0:6.0f}s]", *a, flush=True)
+
+
+def unit(X):
+    return X / (np.linalg.norm(X, axis=-1, keepdims=True) + 1e-8)
+
+
+rng = np.random.default_rng(SEED)
+utts = [u for u in map(json.loads, open(os.path.join(DIR, "cochlea.jsonl"))) if u["split"] == "train" and u["rows"] >= 50]
+grams = np.memmap(os.path.join(DIR, "cochlea_64.f16"), np.float16, "r").reshape(-1, 64)
+row_of = {i: r for r, i in enumerate(json.load(open(os.path.expanduser("~/datasets/coco_thumbs/train2017_ids.json"))))}
+thumbs = np.load(os.path.expanduser("~/datasets/coco_thumbs/train2017_64.npy"), mmap_mode="r")
+images = sorted({u["image"] for u in utts})
+images = [images[i] for i in rng.permutation(len(images))]
+test_imgs, assoc_imgs = images[:TEST], images[TEST: TEST + ASSOC_U]
+by_image = {}
+for u in utts:
+    by_image.setdefault(u["image"], []).append(u)
+test_u = [by_image[i][int(rng.integers(len(by_image[i])))] for i in test_imgs]
+assoc_u = [by_image[i][int(rng.integers(len(by_image[i])))] for i in assoc_imgs]
+ear_pool = [u for i in images[TEST + ASSOC_U:] for u in by_image[i]]
+ear_u = [ear_pool[i] for i in rng.choice(len(ear_pool), min(EAR_U, len(ear_pool)), replace=False)]
+say(f"{len(utts)} spoken captions of {len(images)} photographs; ear develops on {len(ear_u)}, the link on {len(assoc_u)}, test {len(test_u)} (photographs never seen or heard)")
+
+
+def raw(u):
+    return np.asarray(grams[u["start"]: u["start"] + u["rows"]], np.float32)
+
+
+def gram(u):
+    g = raw(u)
+    return (g - g.mean(0)) / (g.std(0) + 1e-3)  # adapted to the voice
+
+
+layer = Layer2(1, KINDS, WINDOW, 1, seed=SEED)
+
+
+def clip(u):
+    g = gram(u)
+    s = int(rng.integers(0, max(1, len(g) - 100)))
+    return g[s: s + 100][..., None]
+
+
+layer.settle((clip(ear_u[i]) for i in rng.choice(len(ear_u), min(800, len(ear_u)), replace=False)), rng)
+for n in range(DEV):
+    layer.learn(clip(ear_u[rng.integers(len(ear_u))]), rng, rate=0.05 * (1 - n / DEV) + 0.005)
+
+
+def frames(u):
+    r = layer.respond(gram(u)[..., None], pooled=False)
+    b = r.shape[1] // BANDS
+    codes = r[:, : BANDS * b].reshape(r.shape[0], BANDS, b, KINDS).mean(axis=2).reshape(r.shape[0], -1)
+    return codes, np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
+
+
+relay = Relay(0.0005).settle(np.concatenate([unit(frames(ear_u[i])[0])[::5] for i in rng.choice(len(ear_u), min(400, len(ear_u)), replace=False)]))
+say("hearing cortex and its relay")
+
+
+def stretches(u):
+    c, loud = frames(u)
+    C = unit((unit(c) - relay.mu) @ relay.Z)
+    env = np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
+    quiet = env < 0.1 * env.max()
+    troughs = [t for t in range(1, len(env) - 1) if env[t] == env[max(0, t - HALF): t + HALF + 1].min()]
+    cuts = sorted(set(troughs) | {t for t in range(1, len(env)) if quiet[t] != quiet[t - 1]} | {0, len(env)})
+    out = []
+    for a, b in zip(cuts[:-1], cuts[1:]):
+        if b - a < 5 or quiet[a:b].mean() > 0.5:
+            if out:
+                out[-1][1] = True
+            continue
+        h = (a + b) // 2
+        out.append([np.concatenate([unit(C[a:h].mean(0)), unit(C[h:b].mean(0))]) / np.sqrt(2), False])
+    return out
+
+
+class Kinds:
+    def __init__(self, n, dim):
+        self.U, self.wins, self.founded = np.zeros((n, dim), np.float32), np.zeros(n), 0
+
+    def __call__(self, s, learning):
+        if learning and self.founded < len(self.U):
+            self.U[self.founded], self.wins[self.founded] = s, 1
+            self.founded += 1
+            return self.founded - 1
+        f = self.founded
+        c = int(np.argmax(self.U[:f] @ s - (0.3 * (self.wins[:f] / (self.wins[:f].mean() + 1e-8) - 1) if learning else 0)))
+        if learning:
+            self.wins[c] += 1
+            w = self.U[c] + (1.0 / (1 + self.wins[c] / 5)) * (s - self.U[c])
+            self.U[c] = w / (np.linalg.norm(w) + 1e-8)
+        return c
+
+
+D = 2 * KINDS * BANDS
+pairs, triples = Kinds(K23, 2 * D), Kinds(K23, 3 * D)
+
+
+def bag(u, learning):
+    ss = stretches(u)
+    v, gap = [s for s, _ in ss], [g for _, g in ss]
+    out = np.zeros(2 * K23, np.float32)
+    for i in range(len(v) - 1):
+        if not gap[i]:
+            out[pairs(np.concatenate(v[i: i + 2]) / np.sqrt(2), learning)] += 1
+    for i in range(len(v) - 2):
+        if not (gap[i] or gap[i + 1]):
+            out[K23 + triples(np.concatenate(v[i: i + 3]) / np.sqrt(3), learning)] += 1
+    return out
+
+
+for i, u in enumerate(ear_u):
+    bag(u, True)
+    if (i + 1) % 5000 == 0:
+        say(f"ear: {i + 1} captions heard")
+B_assoc = np.stack([bag(u, False) for u in assoc_u])
+B_test = np.stack([bag(u, False) for u in test_u])
+say("the captions' bags of sound kinds")
+
+cortex = pickle.load(open(f"out/bench/cortex_ph_d_s{SEED}.pkl", "rb"))
+vrelay, cortex.relay = cortex.relay, None
+see = lambda ids: unit((np.stack([cortex.whole(np.asarray(thumbs[row_of[i]], np.float32) / 255, 4) for i in ids]) - vrelay.mu) @ vrelay.Z)  # noqa: E731
+V_assoc, V_test = see(assoc_imgs), see(test_imgs)
+say("the photographs' codes")
+
+mu_b = B_assoc.mean(0)
+Bc, Bt = unit(B_assoc - mu_b), unit(B_test - mu_b)
+for name, Bl in (("own captions", Bc), ("captions shuffled among the photographs", Bc[rng.permutation(len(Bc))])):
+    M = Bl.T @ V_assoc / len(Bl)  # Hebb: the running mean of the product
+    S = unit(Bt @ M) @ V_test.T  # caption i against photograph j
+    r_cap = (S > np.diag(S)[:, None]).sum(1)  # for each caption: photographs scored above its own
+    r_img = (S > np.diag(S)[None, :]).sum(0)  # for each photograph: captions scored above its own
+    rec = lambda r: " ".join(f"R@{k} {np.mean(r < k):.3f}" for k in (1, 5, 10))  # noqa: E731
+    say(f"{name}: photograph -> its caption among {TEST}: {rec(r_img)}; caption -> its photograph: {rec(r_cap)}; median rank {np.median(r_img) + 1:.0f} / {np.median(r_cap) + 1:.0f} (chance R@10 {10 / TEST:.3f}, median {TEST // 2})")

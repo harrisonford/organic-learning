@@ -1469,4 +1469,10 @@ Still Kris's own:
   source, text-only questions too (0.24 → 0.06), answers slower: the shared gate unsettled by the new eye commands?
   One life; watch 110,000 and the other seeds; if it holds, the serial gaze belongs from birth, not switched on
   mid-life. CORe50 streams of seed 0 done (to read).
+- 2026-11-27 00:00 SpokenCOCO's training part: the cochlea pass was killed at its cap at 559k of 617k (a streaming tar
+  keeps every member it passed); fixed, index and store reconciled, resumed. `experiments/grounded_speech_probe.py`
+  written (the ear's own sound kinds against the photographs by Hebb's rule; the paradigm's retrieval test, R@1/5/10
+  among 1,000 held-out pairs, with a shuffled control; no transcripts read at all); smoke test when the pass ends.
+  gazs_s1 at 110,000: first words 0.297 (control 0.352), pages 0.184 (0.201): partly back. CORe50 seed 1: first stage
+  0.120, in order 0.109 (shuffled and plain running).
 
