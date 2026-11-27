@@ -65,15 +65,15 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-cells-err`** (out/tmp/cells_err_queue.sh; 2026-11-27 06:03; after organic-ncm-c50; shared gate): the word
-  cells as in the lives (`CELLS_PLASTIC=error`) on the whole frame's and the middle fixation's codes, seeds 0–1 →
-  stream_core50_c50{first,centre}_cellserr_s{0,1}.log (VISION.md 06:03).
-- **`organic-stream-eye1`** (out/tmp/stream_eye_queue.sh; 2026-11-27 05:01; shared gate; about 1.6 hours): the stream
-  brain's own eye on CORe50 with its two new reflexes (`motion_drive`, `pursuit_tau` in organic/stream.py; default
-  unchanged by digest), three seeds → out/bench/core50_stream_eye.log. What I said before: VISION.md 04:57.
-- **`organic-ncm-c50`** (out/tmp/ncm_c50_queue.sh; 2026-11-27 04:50; shared gate): why the word cells do not take the
-  middle fixation's gain (VISION.md 04:48): nearest class mean and streaming LDA on the whole frame's and the middle
-  fixation's codes, seeds 0–1 → stream_core50_c50{first,centre}_ncm_s{0,1}.log.
+- **`organic-delta-c50`** (out/tmp/delta_c50_queue.sh; 2026-11-27 07:14; shared gate; about an hour): the diagnostic
+  delta reader (the word cells' content rule without the words; `ARMS=delta+relay` in bench_stream.py) on the whole
+  frame and the middle fixation, seeds 0–2 → stream_core50_c50{first,centre}_delta_s{0,1,2}.log; then the word cells
+  on seed 0 for how often they say no kind's name (…_noname_s0.log). Reading: VISION.md 07:11.
+- **`organic-stream-eye2`** (out/tmp/stream_eye_queue2.sh; 2026-11-27 07:08; MemoryMax 1600M; shared gate; hours): the
+  rest of the stream eye probe (seed 1's pursuit, both, middle; then seed 2), appended to core50_stream_eye.log.
+  `organic-stream-eye1` was killed for memory at 07:00 (each video's brain was not freed; fixed); seed 0 read
+  (VISION.md 07:11).
+- **`organic-cells-err`** ENDED 07:10, read (VISION.md 07:11). **`organic-ncm-c50`** ENDED 06:33, read (same entry).
 - **`organic-fovea-q`** ENDED about 05:50, read (VISION.md 06:03). (out/tmp/fovea_queue.sh; queued 2026-11-27 03:19; shared gate): the eye on the thing (VISION.md
   02:55): CORe50 through a fixation, seeds 1–2 (core50_fovea_s{1,2}.log; codes core50_c50{centre,salient}_s*), the
   stream of 10 kinds on them (stream_core50_c50{centre,salient}_s{0,1,2}.log), the slow stage on the middle
@@ -1562,3 +1562,13 @@ Still Kris's own:
   the held thing" (3 seeds: 0.165 against the whole view's 0.118, with the crop caveat, the reflexes' misses and the
   word cells' miss), "Time in video" now on 3 seeds with both second stages, and three references added from Crossref
   (Yu & Smith 2012, Lisberger 2010, Wiskott & Sejnowski 2002; one-line summaries from memory, for Kris to open).
+- 2026-11-27 07:11 Health: all healthy (load 11; 7.0 GB free). **The cells' corrections scaled by their own error**
+  (as in the lives; VISION.md 07:11; memoize): they lose as much on the middle fixation as full-size corrections
+  (−0.016, −0.012 against −0.015, −0.015) while their memory of a frame seen once falls by 0.13–0.17: recency is not
+  why the cells miss the gain. Seed 1 of the means agrees with seed 0 (both take the gain). Queued a diagnostic delta
+  reader, the cells' rule without naming by units (`organic-delta-c50`; smoke test: cells 0.190 as before, delta
+  0.192 at 500 frames). **The stream brain's eye, seed 0** (memoize): pursuit lifts what is recognised elsewhere from
+  0.071 to 0.123, both reflexes to 0.140 (above the whole frame's 0.117; the middle 0.168); motion-drawn saccades alone
+  0.082. What I said at 04:57 held but the within-8-px share (0.34 against 0.35). The probe was killed for memory in
+  seed 1 (a reference cycle per video; fixed) and restarted as `organic-stream-eye2`. Seed 2 of the time-variant
+  streams agrees (order 0.373, shuffled 0.370, no trace 0.374). gazs_s0 still at 120,000 (125,000 due).

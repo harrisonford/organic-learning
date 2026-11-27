@@ -4014,9 +4014,9 @@ and the trace inside the cortex's own filters (Halvagal & Zenke 2023's rule, que
 | reader | whole frame | middle fixation | the reflex's pick |
 |---|---|---|---|
 | word cells + relay | 0.363 / 0.347 / 0.349 | 0.348 / 0.332 / 0.344 | 0.212 / 0.204 / 0.217 |
-| ridge + relay | 0.373 / 0.368 / … | 0.398 / 0.396 / 0.406 | 0.234 / 0.250 / 0.252 |
-| nearest class mean + relay | 0.250 / … | 0.272 / … | |
-| streaming LDA + relay | 0.383 / … | 0.406 / … | |
+| ridge + relay | 0.373 / 0.368 / 0.370 | 0.398 / 0.396 / 0.406 | 0.234 / 0.250 / 0.252 |
+| nearest class mean + relay | 0.250 / 0.240 | 0.272 / 0.266 | |
+| streaming LDA + relay | 0.383 / 0.372 | 0.406 / 0.400 | |
 | word cells: seen once, named 20 later | 0.897 / 0.900 / 0.887 | 0.827 / 0.837 / 0.823 | 0.773 / 0.787 / 0.770 |
 
 **Seed 0's answer to the check of 04:48: the means take the gain too** (nearest class mean +0.022, streaming LDA
@@ -4032,3 +4032,52 @@ smaller correction (the plasticity-by-error switch they have) on both codes; see
 own recent error, `CELLS_PLASTIC=error`; the benchmark has used full-size corrections since 2026-11-19) on both codes,
 seeds 0–1. What I say before: if recency is why the cells miss the gain, the scaled cells lose less on the fixation
 than the full-size ones (or gain), and remember a frame seen once less well on both codes.
+
+### 2026-11-27 07:11, the word cells with corrections scaled by their own error; the stream brain's eye, first seed
+
+**The check of 06:03 answered on two seeds: recency at this scale is not why the cells miss the fixation's gain.**
+The word cells as they are in the lives (each correction scaled by the cell's own recent error, `CELLS_PLASTIC=error`)
+against the benchmark's full-size corrections, CORe50's 10 kinds after 10,000 frames (seeds 0 / 1):
+
+| word cells + relay | whole frame | middle fixation | the fixation's change | seen once, 20 later: whole / middle |
+|---|---|---|---|---|
+| full-size corrections (the benchmark) | 0.363 / 0.347 | 0.348 / 0.332 | −0.015 / −0.015 | 0.897 / 0.900, 0.827 / 0.837 |
+| scaled by the cell's own error (the lives) | 0.353 / 0.338 | 0.337 / 0.326 | −0.016 / −0.012 | 0.763 / 0.753, 0.687 / 0.670 |
+
+Half of what I said came true: the scaled cells remember a frame seen once much less well (−0.13 to −0.17 on both
+codes), so the switch does take away recency; but they lose as much on the fixation as before (−0.016 and −0.012
+against −0.015 and −0.015), and a point overall. So the reason is elsewhere. The seed-1 means agree with seed 0's
+(nearest class mean 0.240 → 0.266, streaming LDA 0.372 → 0.400; table of 06:03 filled in), so on two seeds every
+reader but the word cells takes the gain. What the cells have that the means do not: the delta rule's
+error-driven correction, and naming by the ear's units (a kind's name is said unit by unit and must come out whole).
+**Next (a diagnostic, not a learner of the brain):** `delta+relay` in `bench_stream.py`, the cells' content rule
+without the words (the same visual neurons, one cell for each kind, the same consolidation by use, answering with
+the cell driven most), and how often the word cells say no kind's name at all. If the delta reader takes the gain,
+the loss is in naming by units; if it loses as the cells do, it is the error-driven rule on this code.
+
+**The stream brain's eye with its two reflexes, seed 0** (`core50_stream_eye.log`; said at 04:57 before it ran):
+
+| eye | saccades a second | from the middle (px) | within 8 px | same object elsewhere | next coded frame (0.5 s) alike |
+|---|---|---|---|---|---|
+| today's (salience) | 3.1 | 14.9 | 0.21 | 0.071 | 0.105 |
+| motion draws saccades | 3.0 | 14.5 | 0.23 | 0.082 | 0.076 |
+| pursuit between saccades | 3.1 | 10.4 | 0.34 | 0.123 | 0.151 |
+| both | 3.0 | 10.4 | 0.34 | **0.140** | 0.138 |
+| the middle always (reference) | | 0 | 1.00 | 0.168 | 0.310 |
+
+Against what I said: today's eye 0.071 (said 0.07–0.08); both reflexes +0.069 over it (said +0.02 or more), within
+8 px of the middle in 34% of frames (said at least 35%: just short); above the whole frame's 0.117 (I gave even
+odds) and below the middle's 0.168 (said not reached). Seed 1 so far agrees (today 0.080, motion 0.089). What does
+the work is pursuit: motion alone moves the saccades little (within 8 px 0.21 → 0.23); following the moving thing
+between saccades keeps the eye on it (frames 0.5 s apart answer more alike, 0.151 against 0.105) and doubles what is
+recognised in another room. Both reflexes are old and well described (smooth pursuit, Lisberger 2010; saccades drawn
+by motion), nothing in them knows CORe50 or where its crop puts the object; the reference arm does. The middle here
+reads 0.168 rather than the fovea probe's 0.164 because every arm uses the relay settled through the salient pick.
+One seed: the probe was killed for memory at 07:00 in seed 1's pursuit arm (each video's brain and the probe's stub
+pointed at each other and were not freed; now freed at once, results unchanged); seeds 1–2 run in
+`organic-stream-eye2`. Caveat for the reading: CORe50's objects are held by a hand that moves, so the thing that
+moves is the held thing here; in a scene where the background moves the reflex would follow that.
+
+**The time-variant streams, seed 2** (10 kinds, the 3 × 3 second stage; word cells / ridge): in order 0.373 / 0.389,
+shuffled 0.370 / 0.389, no trace 0.374 / (running). Three seeds of the cells: order − shuffled +0.003, +0.001,
++0.003; order − no trace +0.009, −0.009, −0.001. The verdict of 06:03 stands.

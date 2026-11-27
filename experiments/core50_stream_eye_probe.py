@@ -20,7 +20,7 @@ session (the scene).
 
     SEEDS=0,1,2 python experiments/core50_stream_eye_probe.py
 """
-import json, os, pickle, sys, time
+import gc, json, os, pickle, sys, time
 import numpy as np
 from PIL import Image
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -106,6 +106,8 @@ for seed in SEEDS:
                         corners.append(where_eye(brain))
                     saccades += sum(e[0] == "saccade" for e in ev)
             seconds += v["frames"] * STEPS_A_FRAME * 0.010
+            del brain._see, no_code, brain  # the stub and the brain point at each other; free them now, not at the next sweep
+            gc.collect()
         corners = np.array(corners)
         assert len(corners) == len(TE)
         d = np.hypot(*(corners - MID).T)

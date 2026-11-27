@@ -123,9 +123,41 @@ class Moments(NCM):
         return max(accs), int(np.argmax(accs))
 
 
+class Delta:
+    """A diagnostic, not a learner of the brain (2026-11-27): the word cells' content rule without the words. The
+    same visual neurons (each one's deviation from its running average; the pattern brought to unit length), one cell
+    for each kind, the delta rule with the cells' consolidation by use and the correction shared among the inputs as
+    the cells share it (the view, the baseline, the question's cues); it answers with the cell driven most. Where the
+    word cells and this differ is in naming by the ear's units (and the cells' context dendrites, here the baseline)."""
+    def __init__(self):
+        ear = pickle.load(open(os.environ.get("EAR", "out/tmp/ear_first.pkl"), "rb"))
+        self.share = 2.0 + len(set(ear.units("what is this?", learn=False)))
+        self.W, self.base = np.zeros((C, D), np.float32), np.zeros(C, np.float32)
+        self.use, self.mean, self.seen = np.zeros(D, np.float32), np.zeros(D, np.float32), 0
+
+    def _x(self, v, learn):
+        if learn:
+            self.seen += 1
+            self.mean += (v - self.mean) / min(self.seen, 1000)
+        x = v - self.mean
+        return x / (np.linalg.norm(x) + 1e-8)
+
+    def learn(self, v, y):
+        x = self._x(v, True)
+        e = -(self.W @ x + self.base)
+        e[y] += 1.0
+        step = e / self.share
+        self.W += step[:, None] * (x / (1.0 + self.use / 5.0))[None, :]  # (Words.maturation)
+        self.use += x * x
+        self.base += step / (1.0 + self.seen / 5.0)
+
+    def name(self, v):
+        return int(np.argmax(self.W @ self._x(v, False) + self.base))
+
+
 def make(arm):
     kind = arm.split("+")[0]
-    return Cells("store" in arm) if kind == "cells" else NCM() if kind == "ncm" else Moments(kind)
+    return Cells("store" in arm) if kind == "cells" else Delta() if kind == "delta" else NCM() if kind == "ncm" else Moments(kind)
 
 
 for seed in SEEDS:
@@ -151,7 +183,10 @@ for seed in SEEDS:
                 else:
                     if isinstance(learner, NCM):
                         learner.ready()
-                    row[n] = float(np.mean([learner.name(seen(Xte, j, through)) == int(yte[j]) for j in tests]))
+                    said = np.array([learner.name(seen(Xte, j, through)) for j in tests])
+                    row[n] = float(np.mean(said == yte[tests]))
+                    if isinstance(learner, Cells) and n == AT[-1]:  # (2026-11-27) how often the cells say no kind's name at all
+                        print(f"   seed {seed} {arm:18} at {n:>6}: no kind's name in {np.mean(said < 0):.3f} of the answers", flush=True)
                 print(f"   seed {seed} {arm:18} after {n:>6}: {row[n]:.3f} ({time.time() - t0:.0f}s)", flush=True)
         print(f"seed {seed} {VARIANT} {arm:18} " + " | ".join(f"{n} {a:.3f}" for n, a in row.items())
               + (f" | seen once, 20 later: {np.mean(shots):.3f}" if shots else ""), flush=True)
