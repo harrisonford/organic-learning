@@ -4273,3 +4273,34 @@ sign of the fixation's effect turns from −0.012 to +0.011–0.018.** What is n
 (the delta reader stands for them; it followed them within 0.004 on every code so far), more frames (CORe50 has
 ten times these), and the circuit in place of the batch relay and not on top of it. The refactored eye probe
 repeats seed 0's 0.140 exactly; the eye on the training videos is within 8 px of the middle in 38% of frames.
+
+### 2026-11-27 12:41, naming from the stream brain's own fixations alone: worse than the whole frame (what I said was wrong); the fixation beside the whole view, said before it runs
+
+`core50_spectrum_eye.log`, `stream_core50_c50eyeboth_s*.log` (10 kinds after 10,000 frames; seeds 0 / 1 / 2;
+the eye with both reflexes, within 8 px of the middle in 38% of the training frames and 34% of the held-out ones):
+
+| reader | whole frame | the eye's own fixations | middle fixation |
+|---|---|---|---|
+| ridge | 0.373 / 0.368 / 0.370 | **0.318 / 0.333 / 0.338** | 0.398 / 0.396 / 0.406 |
+| delta, relay as settled | 0.360 / 0.348 / 0.359 | 0.289 / 0.293 / 0.296 | 0.348 / 0.336 / 0.347 |
+| delta, relay settled again | 0.356 / 0.364 / 0.360 | 0.320 / 0.328 / 0.339 | 0.398 / 0.400 / 0.409 |
+| word cells | 0.363 / 0.347 / 0.349 | 0.287 / 0.286 / … | 0.348 / 0.332 / 0.344 |
+
+Against 11:21: I said the ridge on the eye's code would be above the whole frame (0.375–0.39). It is 0.03–0.05
+*below* it on every seed. The outcome I named as the one thing that could turn it happened: in two frames of
+three the eye is on something else (the hand, the room), and that frame, a corner of the scene enlarged, says less
+about the kind than the whole frame does. The parts I had right are the small ones: the word cells miss as before
+(under the ridge by 0.03–0.05), and settling the relay again lifts the delta reader to the ridge's level here too
+(+0.031, +0.035, +0.043): the relay finding repeats on a third code.
+Why the nearest-frame measure said otherwise (0.137 against the whole frame's 0.118): it asks whether a frame has
+*one* near neighbour of the same object in another room, and the third of frames with the eye on the object find
+one; naming asks every held-out frame, and averages over the two thirds where the eye was elsewhere. Both are
+true; I read the first as a promise about the second.
+**Said before it runs (`experiments/core50_views_together_check.py`):** an eye does not lose the whole view when
+it fixates; the periphery stays and the fovea adds (in the lives the word cells already get the whole view and the
+fixations). The readers get both codes side by side at each frame. **What I say:** whole + eye is at least the
+whole frame for the ridge (it holds the whole frame) and gains little: +0.00 to +0.015; whole + middle gains about
+what the middle alone did, to 0.40–0.42; for the delta reader with the relays as settled, whole + eye is within
+0.01 of the whole frame, and with each part settled again 0.36–0.375. If whole + eye is *under* the whole frame
+for the ridge, the eye's wandering code is noise that even a ridge pays for, and the fixations should be weighted
+by something the brain has (where motion was, how surprised the cells are) before they are worth reading.

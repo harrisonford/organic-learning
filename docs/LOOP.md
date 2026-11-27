@@ -65,12 +65,13 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-eye-naming`** (out/tmp/eye_naming_queue.sh; 2026-11-27 11:21; MemoryMax 2500M; not gated; about two
-  hours): the stream brain's eye (both reflexes) on the training and held-out videos, its codes kept as
-  VARIANT=c50eyeboth (`SAVE=both` in core50_stream_eye_probe.py), then the delta reader with the relay as settled
-  and settled again (core50_spectrum_eye.log) and the stream of 10 kinds for word cells and ridge
-  (stream_core50_c50eyeboth_s{0,1,2}.log). Said before: VISION.md 11:21. Check first that seed 0's line repeats
-  0.140 (the probe was refactored).
+- **`organic-views-together`** (experiments/core50_views_together_check.py; 2026-11-27 12:41; MemoryMax 4000M; about
+  half an hour): the whole frame alone, with the eye's fixation beside it, with the middle fixation beside it; delta
+  and ridge, relays as settled and settled again; three seeds → out/bench/core50_views_together.log. Said before:
+  VISION.md 12:41.
+- **`organic-eye-naming`** (out/tmp/eye_naming_queue.sh; 2026-11-27 11:21): the eye's codes kept as VARIANT=c50eyeboth
+  on three seeds; read (VISION.md 12:41: naming from the eye's fixations alone is under the whole frame). Still
+  running: the word cells and ridge streams of seeds 1–2 (stream_core50_c50eyeboth_s{1,2}.log; fill the table's "…").
 - **`organic-relaysrc`** ENDED 11:04, read (VISION.md 11:20: the lives' relay is at home in all three sources).
 - **`organic-relaylearn-s1`, `-s2`** ENDED about 11:40, read (VISION.md 11:53: what I said held on three seeds).
 - **`organic-grounded2`** (out/tmp/grounded_queue2.sh; 2026-11-27 08:05; MemoryMax 2400M; about seven hours): the
@@ -89,7 +90,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   (core50_fovea_moving_s0.log; VIEWS=moving): if it matches the middle, queue it on seeds 1–2 and its streams.
 - **Gaze lives:** all three ended (gazs_s0 at 130,000 about 08:20: first words 0.47, two words 0.48, pages 0.20); in
   ended.json. The controls run in `organic-tag2` (tag_queue2.sh: tagn then tagr for seeds 1, 2, 0, then tagb):
-  tagr_s1 running since 08:10 (added to lives.json by hand at 08:30; the queue does not add them: add each as it starts). All three now in out/monitor/lives.json; the ended ones in ended.json. The controls tagn_s2, tagn_s0
+  tagr_s1 ended at 110,000 about 12:06 (first words 0.48, two words 0.48, pages 0.15; tagn_s1 there: 0.46, 0.40, 0.18); tagn_s2 running since about 12:10 (added to lives.json by hand; the queue does not add them: add each as it starts and move the ended ones to ended.json, or health raises an alert). All three now in out/monitor/lives.json; the ended ones in ended.json. The controls tagn_s2, tagn_s0
   run in `organic-tag2` after this queue.
 - **SpokenCOCO through the cochlea** (`experiments/world/spokencoco_cochlea.py`, python -I, streams the archive): the
   validation part done 14:30 (25,035 recordings, 10.8 M rows: about 30 hours of speech) → ~/datasets/spokencoco/
@@ -1638,3 +1639,10 @@ Still Kris's own:
   box and the held-thing card carry it; two references added (Benucci, Saleem & Carandini 2013; Sharpee et al.
   2006; on Crossref, summaries from memory). The eye-naming queue: seed 0 repeats 0.140 after the refactor; seeds
   1–2 of the eye's codes are being made. The grounding run has heard its 20,000 captions and is making the bags.
+- 2026-11-27 12:42 Health: an alert for tagr_s1, which had only ended at its planned 110,000 (now in ended.json;
+  tagn_s2 added to lives.json); all healthy after. **Naming from the stream brain's own fixations alone is worse
+  than the whole frame** on three seeds (VISION.md 12:41; memoize; ridge 0.318 / 0.333 / 0.338 against 0.37): what I
+  said at 11:21 was wrong, the turn I had named happened (the eye is elsewhere in two frames of three). The relay
+  finding repeats on this code (settled again: +0.031 to +0.043 for the delta reader). **Started:** the fixation
+  beside the whole view, as an eye has it (`organic-views-together`; said before it runs). The grounding run:
+  10,000 of 21,000 bags made.
