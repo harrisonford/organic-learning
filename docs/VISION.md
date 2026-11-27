@@ -4895,3 +4895,56 @@ the two-stage one (at 5,000: R@10 0.035–0.045 for the first reader against 0.0
 against 0.065), and by the end, with twice the pairs, it is level with it or above (0.05–0.07 and 0.065–0.085),
 the control at chance. If it ends well under the two-stage ear, moving kinds spoil the link and the link needs to
 forget (a decay), or the kinds need to settle before pairs count.
+
+### 2026-11-27 19:42 — Before the ear goes on the clock: what it knows ahead of time (said before measuring)
+
+The one-pass ear still knows each caption whole before hearing it, in two places: every band of the cochlea is set
+against the caption's own mean and spread, and a stretch is "quiet" under a tenth of the caption's loudest moment.
+(The cuts at troughs need 50 ms of what follows and a stretch's code needs its end: a delay, not foresight. The
+relay is settled in one batch and the hearing cortex develops on the first captions: separate steps, the relay
+circuit exists.) A live ear has only the past. `experiments/ear_causal_check.py` plays one reader's captions as one
+stream and does both steps from what was heard so far: a running mean and spread a band and a running loudest
+moment, fading with one time constant. No cortex, seconds. Read at 0.5, 2, 8 and 32 s, to see how much the choice
+matters, not to pick the best score: adaptation to the level of sound is measured in the midbrain and cortex from
+a few hundred milliseconds to seconds (Dean, Harper & McAlpine 2005; Rabinowitz et al. 2011; both to verify), and
+a listener sets a voice's vowels against the sentence before (Ladefoged & Broadbent 1957), which is seconds.
+**What I say:** a caption lasts 4.3 s, so fading over 2–8 s gives the cortex nearly the same bands (correlation
+above 0.9) and 80–90% of the same cuts within 30 ms; at 0.5 s the ear adapts within a syllable and both fall
+clearly (correlation under 0.8); at 32 s it is as good as 8 s within one voice (it would be slow to follow a new
+voice, not measured here). The first seconds of the stream are off and are left out (five captions).
+
+### 2026-11-27 19:52 — The ear from the past alone: the cuts were already live, the bands nearly (check read; a run said before it starts)
+
+`experiments/ear_causal_check.py`, the first reader, 300 captions as one stream of 16 minutes, measured after the
+first five (out/bench/ear_causal_top_s0.log):
+
+| fading over | the bands, correlation with the whole-caption ear (median; a tenth of the captions under) | its cuts found within 30 ms | the same stretch kept |
+|---|---|---|---|
+| 0.5 s | 0.907 (0.838) | 0.972 | 0.997 |
+| 2 s | 0.945 (0.913) | 0.977 | 0.998 |
+| 8 s | 0.941 (0.895) | 0.981 | 0.997 |
+| 32 s | 0.932 (0.874) | 0.985 | 0.995 |
+
+**Against what I said.** The bands: above 0.9 at 2–8 s, held (0.94); the fall at 0.5 s, wrong (0.91, not under
+0.8); 32 s as good as 8 s, about right. The cuts: I said 80–90% and got 97–98%, and for a reason I had not seen:
+**the quiet rule hardly ever acts on these recordings.** Read speech has no pauses that fall to a tenth of the
+loudest moment after the cochlea's compression: 0.2% of frames are "quiet", 22 of 866 pieces are dropped for it in
+60 captions. The stretches are cut at the troughs of loudness, which need 50 ms of what follows and nothing more,
+so the cutting was live all along. What this check cannot say: a microphone in a room has real silences and a
+noise floor, where the quiet rule and its reference will matter; that is for the live page's own sound, not
+SpokenCOCO.
+
+So one thing is left between the one-pass ear and a live one at this level: the bands set against the sound so far
+(0.94 like the whole-caption bands, not the same). Whether the kinds and the link can live on them is a question
+for the retrieval test, not for a correlation. `LIVE=2` in `experiments/grounded_online_probe.py` (seconds; off by
+default, and with it off the probe gives the same lines as before, checked on a small run): the life's captions
+are one stream in the order heard, every band against a running mean and spread fading over 2 s, the quiet rule
+against the loudest moment so far; a test caption is heard by an ear that has just heard the first 1,000
+captions. 2 s because it is inside the range measured for adaptation to sound level and nearest the whole-caption
+bands; not picked by a retrieval score. Queued for the second reader behind its whole-caption run
+(`organic-online-live`, out/bench/grounded_online_top2_live2_s0.log).
+**What I say:** the kinds are founded and moved on these bands from the start, so they need the bands to be
+steady for a word said twice, not equal to the old ones. A word's bands now depend on the two seconds before it
+instead of on its whole caption: no worse a reference. The live ear ends within a fifth of the same reader's
+whole-caption one-pass ear at every checkpoint, and the words heard by how often they are said within 0.05. If it
+loses half, a word's bands move too much with what came just before, and a slower fading (8 s and more) is next.

@@ -26,6 +26,11 @@ READER, SEED, TEST, FIRST = os.environ.get("READER", "top"), int(os.environ.get(
 MAXU, DEV = int(os.environ.get("MAXU", 0)), int(os.environ.get("DEV", 16000))
 KINDS, WINDOW, BANDS, HALF, SMOOTH, K23 = 128, 8, 8, 5, 5, 1024
 CHECKS = [int(x) for x in os.environ.get("CHECKS", "1000,2500,5000,7500").split(",")]
+# (2026-11-27 19:42) LIVE (seconds; 0: off, each caption known whole as before): nothing is known of a caption before it
+# is heard. Each band is set against a running mean and spread of what was heard so far, and "quiet" is under a
+# tenth of the loudest moment so far, all fading over LIVE seconds; the life's captions are one stream in the order
+# heard, and a test caption is heard by an ear that has just heard the first FIRST captions (VISION.md 19:42).
+LIVE = float(os.environ.get("LIVE", 0))
 t0 = time.time()
 
 
@@ -61,8 +66,50 @@ def raw(u):
     return np.asarray(grams[u["start"]: u["start"] + u["rows"]], np.float32)
 
 
+started = {}  # LIVE: what the ear holds of the sound so far when a caption begins (mean and spread a band, the loudest moment)
+
+
+def hear(g, state):
+    """The bands of g against what was heard before each frame and the frame itself; the state after."""
+    from scipy.signal import lfilter
+    k = 0.01 / LIVE
+    mu0, var0 = (g[0], np.ones(g.shape[1], np.float32)) if state is None else state[:2]
+    mu = lfilter([k], [1, k - 1], g, axis=0, zi=((1 - k) * mu0)[None])[0]
+    var = lfilter([k], [1, k - 1], (g - mu) ** 2, axis=0, zi=((1 - k) * var0)[None])[0]
+    return ((g - mu) / (np.sqrt(var) + 1e-3)).astype(np.float32), (mu[-1].astype(np.float32), var[-1].astype(np.float32))
+
+
+def loudest(env, top):
+    """The loudest moment so far at each frame of env, fading; the last."""
+    k, ref = 0.01 / LIVE, np.empty_like(env)
+    for t, e in enumerate(env):
+        top = max(float(e), top * (1 - k))
+        ref[t] = top
+    return ref, top
+
+
+def envelope(u):
+    loud = np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")
+    return np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
+
+
+if LIVE:
+    state, states = None, []
+    for u in life_u:
+        states.append(state)
+        started[u["uttid"]] = state
+        _, (mu, var) = hear(raw(u), state)
+        state = (mu, var, loudest(envelope(u), 0.0 if state is None else state[2])[1])
+    states.append(state)
+    for u in test_u:
+        started[u["uttid"]] = states[min(FIRST, len(life_u))]
+    say(f"live ear: every band against the sound so far, fading over {LIVE:g} s; nothing of a caption known before it is heard")
+
+
 def gram(u):
     g = raw(u)
+    if LIVE:
+        return hear(g, started[u["uttid"]])[0]
     return (g - g.mean(0)) / (g.std(0) + 1e-3)  # adapted to the voice
 
 
@@ -95,7 +142,7 @@ def stretches(u):
     c, loud = frames(u)
     C = unit((unit(c) - relay.mu) @ relay.Z)
     env = np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
-    quiet = env < 0.1 * env.max()
+    quiet = env < 0.1 * (loudest(env, 0.0 if started[u["uttid"]] is None else started[u["uttid"]][2])[0] if LIVE else env.max())
     troughs = [t for t in range(1, len(env) - 1) if env[t] == env[max(0, t - HALF): t + HALF + 1].min()]
     cuts = sorted(set(troughs) | {t for t in range(1, len(env)) if quiet[t] != quiet[t - 1]} | {0, len(env)})
     out = []
@@ -193,7 +240,7 @@ for n, u in enumerate(life_u, 1):
         read(M, mean, f"after {n} captions (kinds founded {pairs.founded} + {triples.founded})")
 Bt = read(M_other, mean, "the bags tied to other photographs (the control)")
 pickle.dump({"layer": layer, "relay": relay, "pairs": (pairs.U, pairs.wins, pairs.founded), "triples": (triples.U, triples.wins, triples.founded), "M": M, "mean": mean},
-            open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}.pkl", "wb"))
+            open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}{f'_live{LIVE:g}' if LIVE else ''}.pkl", "wb"))
 
 # a measure only: the caption's written words from its bag (ridge from the bags as they were heard, to the words)
 vocab = {}

@@ -148,3 +148,24 @@ tables are the right carrier for sound at 100 frames a second; where the brain r
 about 1 GB, no GPU); a camera page must be private at first (kid-a's public page has no login). Nothing is
 installed or built until Kris says. The steps that would make it worth watching are already in the queue: sounds
 pulling the eye, the stream brain naming what it fixates, a byte ear for typed text as a third stream.
+
+## The ear's way onto the clock (2026-11-27 19:52)
+
+The text-free ear that finds photographs in one voice (docs/VISION.md 16:41–18:40) is not in the stream brain
+yet. Piece by piece, what already works from the past alone and what does not:
+
+| piece | in the probes | live? |
+|---|---|---|
+| cochlea | 64 bands, 10 ms frames | yes (the stream brain hears through it) |
+| each band set against the voice | the caption's own mean and spread | no; a running mean and spread fading over 2 s gives bands 0.94 like them (`ear_causal_check.py`); retrieval on them is running (`LIVE=2`) |
+| hearing cortex | 80 ms window, 8 stretches of bands | yes (the stream brain has it with 4) |
+| its relay | settled in one batch | no; the relay circuit (local rule) is used for the eye, not tried on the ear |
+| cuts into stretches | troughs of loudness (50 ms of what follows) and "quiet" | yes for the troughs; the quiet rule is idle on read speech and untested on a room's sound |
+| kinds of two and three stretches | founded and moved caption by caption | yes in the one-pass ear (running, three readers) |
+| link to sight | Hebb's rule, a caption's bag with its photograph's code | yes in the one-pass ear; in a stream there is no "caption" and no "its photograph": the bag is what was heard in the last seconds and sight is the fixation then (not built) |
+| the hearing cortex's own development | on the first 1,000 captions before the rest | as the eye's cortex: before the life |
+
+Order: (1) the live bands on the retrieval test (queued); (2) the ear's relay as a circuit; (3) the kinds and the
+link inside `organic/stream.py` behind a switch, the bag a fading trace of the kinds heard, tied to what the eye
+holds; (4) what the page would show: a sound kind heard calls up what was seen with it, and a thing seen calls up
+its sound kinds. Each said before it runs, in docs/VISION.md.
