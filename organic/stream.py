@@ -111,6 +111,12 @@ class StreamBrain:
         # cortex then works beside the clock and the sight population gets each view when it is ready (tens of
         # milliseconds late, as a visual cortex is), and the frame is looked at once, not twice (organic/live.py).
         self.sight_later = None
+        # `room` (None: a sound is anything above digital silence, as in the probes): for a microphone, which is never
+        # silent. The ear keeps the quietest level of the last while (it sinks at once, rises over room[0] seconds: the
+        # background it has adapted to) and the loudest (rises at once, fades over room[1] seconds); a sound is what
+        # stands more than a tenth of the way from the one to the other, the text-free ear's rule for quiet (a tenth
+        # of the loudest moment) measured above the background. Provisional (docs/LIVE.md): set for the live page.
+        self.room, self.floor, self.top = None, None, None
         self.before, self.moving, self.pos, self.pos_seen, self.target = None, None, None, None, None
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
@@ -147,6 +153,18 @@ class StreamBrain:
         self.link_sum = None
         self.n_assoc = 0
         self.log = []
+
+    def _loud(self, row):
+        if row is None:
+            return False
+        level = float(np.sum(row))
+        if getattr(self, "room", None) is None:
+            return level > 1e-3
+        if self.floor is None:
+            self.floor = self.top = level
+        self.floor = min(level, self.floor + (DT / self.room[0]) * (level - self.floor))
+        self.top = max(level, self.top + (DT / self.room[1]) * (self.floor - self.top))
+        return level - self.floor > 0.1 * (self.top - self.floor) and self.top - self.floor > 0.1 * self.floor
 
     @property
     def assoc(self):
@@ -282,9 +300,10 @@ class StreamBrain:
                 self.saying, self.said_codes = None, []
         drive = self.habit / self.habit.max()
         strength = 1.0
+        is_loud = self._loud(sound_row)
         if self.echo_tau and self.sound is not None:
             self.echo_strength *= np.exp(-DT / self.echo_tau)
-            loud = sound_row is not None and float(np.sum(sound_row)) > 1e-3
+            loud = is_loud
             if loud and self.saying is None:  # a stretch of sound goes on (not one's own: suppressed while saying)
                 self.stretch = self.sound.x.copy() if self.stretch is None else self.stretch + self.sound.x
                 self.stretch_n += 1
@@ -303,7 +322,7 @@ class StreamBrain:
             m = np.maximum(c - c[known].mean(), 0) * known  # above the average gesture, as the filters answer above the average kind
             if m.max() > 0:
                 drive = drive + strength * m / m.max()  # each source taken relative to its own strongest, then together
-                world_loud = sound_row is not None and float(np.sum(sound_row)) > 1e-3
+                world_loud = is_loud
                 if self.heard_habit and world_loud and self.since_said >= 10:
                     # covert imitation leaves habits, while sound comes in and not from one's own voice: the suppression
                     # lasts while the hearing population still holds it (100 ms, twice its time constant). Tried without

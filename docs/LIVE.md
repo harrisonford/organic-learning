@@ -1,0 +1,120 @@
+# The live page: a camera, a microphone and text streamed to the brain (2026-11-27)
+
+Kris, 2026-11-27 16:00 and 21:30: a small app on SpacetimeDB that streams camera, text and sound to kid-a's brain in
+real time and lets it do whatever it wants; "it doesn't matter if it's bad, I just want to see hints of something
+forming"; SpacetimeDB so the page reacts well; hosting open ("we could host it ourselves but is there a better
+quicker option like in spacetimedb itself?"); design decisions delegated while he sleeps. This file is the state
+of that build: what runs, every decision and why, what was measured, what is not tested, what comes next.
+
+## Where it is (21:51)
+
+It runs. On the tailnet only: **port 9444 of the server's tailnet address, over https** (open it on a device that is on the
+tailnet, press the button, allow camera and microphone). Code: `~/kid-a/live/` (committed there, not pushed);
+the brain's side is `organic/live.py` and switches in `organic/stream.py`.
+
+Tested end to end without a person: a synthetic page (a moving square, a tone) through the database to the brain
+and back, and the real page in headless Chromium with a fake camera and microphone, over the tailnet address. **Not
+tested: a real camera, a real voice, a phone's browser.** That is the first thing to find out in the morning.
+
+## Hosting: the answer to Kris's question
+
+- **The model cannot run inside SpacetimeDB.** A module is a sandboxed function (TypeScript on V8, or WebAssembly):
+  no native libraries, no numpy, no state kept between calls, no file or network access in a reducer. SpacetimeDB's
+  own guide for models is a "sidecar": a process that connects like any client. So the brain is a process *beside*
+  the database wherever the database is.
+- **The database could be on their cloud (Maincloud) in one command** (free tier: about 3 million calls a month).
+  Not chosen: the brain would still run here, every frame and every 50 ms of sound would go to their cloud and come
+  back (two extra trips), a camera's pictures would leave the house, and at 30 calls a second the free tier lasts a
+  day of use.
+- **Chosen: everything on arch-server.** SpacetimeDB 2.16.3 self-hosted (installed in user space, no root),
+  the brain beside it, the page served from the same origin. A reducer call takes 3–4 ms round trip. The licence
+  (BSL 1.1) allows one self-hosted instance. Cost: the server's CPU is shared with the lives and probes (below).
+- If it ever goes public: Maincloud or a small VPS for the database and page, the brain staying here as a client
+  that dials out. The code does not change, only the address.
+
+## Shape
+
+    page (TypeScript)  ──reducers──▶  SpacetimeDB module  ──subscription──▶  bridge (Node)  ──local socket──▶  brain
+       ▲   camera 128×128 JPEG, 10 a second        event tables: frame_in, sound_in, text_in                    organic/live.py
+       │   sound 16 kHz, 50 ms pieces              gaze_out, voice_out; brain_state (one kept row)              (stream brain,
+       └──────────── subscription ◀──────────────────────────────────────────── reducers ◀──────────────────    10 ms clock)
+
+Three user services: `kid-a-live-db` (SpacetimeDB, 127.0.0.1:3000, in memory; publishes the module when it
+starts), `kid-a-live-brain` (Python), `kid-a-live-bridge` (Node). Tailscale serve, port 9444, tailnet only: `/` the
+built page, `/v1` the database (the Funnel ports were not touched; checked after).
+
+What the page shows: the camera with the eye's window over it and the trail of its jumps; what the cochlea handed
+on (64 bands, 24 s); the mouth's 32 gestures in the vowel space, flashing when made and growing with habit; time
+lived, counts, and how the brain keeps up with the clock. The brain's babble is played aloud.
+
+## Decisions (mine, 2026-11-27 21:30–21:51; each can be undone)
+
+1. **The brain is the stream brain (`organic/stream.py`) unchanged in what it does**, with the settings the probes
+   ended on: both reflexes of the eye (what stands out and what moves; pursuit), eight stretches of bands, habits
+   only from sounds heard. Not kid-a's turn-based brain, which has no clock. One brain (seed 0), born at 0 s on the
+   page's first use, kept in `out/live/brain_s0.pkl` every five minutes and when it sleeps; it wakes from there.
+2. **Sight works beside the clock** (`sight_later`): the visual cortex takes 50–100 ms a view on this machine while
+   probes run; done inside the 10 ms step it made a step take 127 ms. Now the fixated window is handed to a thread
+   and the sight population gets the answer when it is ready, about a tenth of a second late, which is what a
+   visual cortex's latency is; windows that arrive while it is busy are never looked at. This is the first organ
+   that is asynchronous in fact (docs/ASYNC.md, step (c)). With it a step takes 3–6 ms. Off by default: every
+   probe's path is as before (events, link, sight and habits compared on a small run: the same).
+3. **The camera frame is 128 pixels and the eye's window is its own 64**: the fovea gets the picture's real pixels
+   instead of 32 enlarged (`view`). Motion is found at the view's scale.
+4. **The sight–sound link is kept as a sum and a count** (one pass over 4 million synapses instead of three);
+   the same numbers.
+5. **A microphone is never silent**, and the stream brain called "sound" anything above digital zero. `room`: the
+   ear keeps the quietest level of the last while (rises over 10 s) and the loudest (fades over 10 minutes) and a
+   sound is what stands more than a tenth of the way from one to the other: the text-free ear's rule for quiet
+   (a tenth of the loudest moment) measured above the background. **Provisional and set by hand** (three numbers);
+   the right mechanism is the ear's own adaptation to the sound so far, measured tonight (`LIVE=2`, VISION.md
+   19:52). Live page only.
+6. **It sleeps when nothing comes in for 3 s**: its age is time lived with a world, and an idle page costs nothing.
+7. **Streams are event tables** (broadcast, not kept) and **the database runs in memory**: SpacetimeDB's log is
+   never compacted, and frames and sound would write about 9 GB a day. Nothing of the camera or the microphone is
+   stored anywhere; the brain keeps only itself.
+8. **The bridge is Node with the official client**, not Python: there is no maintained Python client, and the old
+   JSON protocol cannot subscribe to event tables. Python and Node talk over a local socket.
+9. **Private first**: tailnet only. The input tables are public inside the database (any connected page could read
+   another's frames), which is acceptable for one viewer on a private network and not for anything public.
+10. **Echo**: the browser's echo cancellation is asked for, so the brain's own babble from the loudspeaker should
+    not come back through the microphone. Untested on real hardware; if it does come back, the brain hears itself
+    twice (it already hears its own voice inside, as before).
+11. **Root was used once**, for the Tailscale serve port (the same way port 9443 exists). No system package was
+    installed; SpacetimeDB is in `~/.local`.
+
+## Measured
+
+- A 10 ms step: 3–6.6 ms beside three probes and a life (the cortex's look: 50–105 ms, 5–10 views a second);
+  no sound lost; the brain's clock level with the wall clock.
+- Reducer round trip: median 3–4 ms, worst 15–25 ms (local and through the tailnet address).
+- About three eye jumps and two babbles a second, as on recorded video.
+- Memory: database 260 MB, brain 140 MB asleep, bridge 30 MB.
+
+## Limits, said plainly
+
+- **It will not name, answer or read.** Typed letters arrive and are counted; no organ takes them yet.
+- What can form in a session: the map from gesture to sound, the babble's habits drifting toward vowels it hears
+  (measured on synthetic adults over 600 s, VISION.md 2026-11-26), the sight–sound link (learned, never read out).
+- The link's running mean weighs every pairing equally: after an hour a new pairing changes almost nothing.
+- One brain for all pages; two pages at once would mix their cameras.
+- The page's speed depends on what else the server runs. The probes are at Nice 15 and the brain is not.
+
+## Next (in this order)
+
+1. A real session (Kris): does the camera start on his device, is the gaze sensible, does the babble play, does
+   the room rule hold in his room, does echo come back.
+2. The word-learning ear inside the stream brain (docs/ASYNC.md, "The ear's way onto the clock"): live bands and
+   the relay circuit are running tonight; then the kinds and their link to what the eye holds, and on the page:
+   a sound kind heard calls up what was seen with it.
+3. Text as a third stream: an organ for typed letters (to be designed and said before it runs).
+4. Private inputs and one stream a page before anything public.
+
+## Operating it
+
+    systemctl --user status kid-a-live-db kid-a-live-brain kid-a-live-bridge
+    journalctl --user -u kid-a-live-brain -f
+    cd ~/kid-a/live && npm run build && systemctl --user restart kid-a-live-bridge       # after changing page or bridge
+    systemctl --user restart kid-a-live-db                                               # after changing the module
+    systemctl --user stop kid-a-live-brain && rm ~/organic-learning/out/live/brain_s0.pkl && systemctl --user start kid-a-live-brain   # a newborn
+    sudo tailscale serve --https=9444 off                                                # take the page down

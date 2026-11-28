@@ -65,6 +65,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **The live page** (Kris's go, 2026-11-27 21:30; docs/LIVE.md): services `kid-a-live-db` (SpacetimeDB 2.16.3, in
+  memory, 127.0.0.1:3000), `kid-a-live-brain` (the stream brain on the wall clock, `organic/live.py`; asleep when
+  nothing comes in), `kid-a-live-bridge` (Node); Tailscale serve port 9444, tailnet only. Code in ~/kid-a/live
+  (committed locally, not pushed). The brain is newborn (out/live/brain_s0.pkl appears at its first sleep). Tested
+  with a synthetic page and with the real page in headless Chromium; **a real camera, voice and phone are not
+  tested**: Kris's first session is the next step. It takes one or two cores when awake: probes stay at Nice 15.
 - **`organic-online-circuit`** (out/tmp/online_circuit_queue.sh; 2026-11-27 21:23; MemoryMax 2600M; about 1.2 s a
   caption, so three to four hours: ends about 00:45): the one-pass ear with its relay a circuit learning along
   the life (`RELAY=circuit`, its synapses changing once a caption), reader top2 →
@@ -461,6 +467,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
     Commons video with sound, then the learned pieces moved in one by one (docs/ASYNC.md).
 
 ## Decisions waiting for Kris
+- **The live page, after his first session** (docs/LIVE.md): whether the kid-a live code is pushed to its public
+  repository (it is committed locally); whether the page stays tailnet-only; the three numbers of the room rule
+  are provisional.
 - **(2026-11-27 10:10, partly answered) The disk.** Kris, 10:05: "limpia todo lo antiguo que no es usado en brains
   definitivamente los october brains". **Deleted 10:08–10:10** (lists kept in out/monitor/deleted_2026-11-27_*.txt;
   logs and score files kept; nothing had them open; kid-a serves from its own copies, answering 200 after): the 91
@@ -1836,3 +1845,14 @@ Still Kris's own:
   VISION.md 21:06; the default path gives the same lines as before plus a last line on the relay's evenness,
   checked): with blocks of 50 views it took 2 s a caption, so the circuit's synapses change once a caption; started
   for the second reader. The artifact is brought up to date when the third reader ends.
+
+- 2026-11-27 21:52 **Kris gave the go for the live page** ("keep working on all needed for the best poc possible
+  ... make design decisions"; asked how to host it and whether SpacetimeDB itself could). Built and running
+  (docs/LIVE.md; memoize): the model cannot run inside SpacetimeDB (sandboxed module), so everything is on this
+  server: SpacetimeDB self-hosted in memory, a Node bridge, the stream brain on the wall clock, the page on a
+  tailnet-only https port. `organic/live.py` (new); `organic/stream.py` got four switches, all off by default and
+  the default path checked the same on a small run (`view`, `sight_later`, `room`; the link kept as sum and
+  count). The first dry run took 127 ms a step (the cortex's look twice a frame, 55 ms each beside three probes);
+  with sight on its own thread a step takes 3-6 ms. End to end: reducer round trip 3-4 ms, three eye jumps and two
+  babbles a second, no sound lost. Root used once (Tailscale serve port 9444; Funnel ports checked untouched).
+  Not tested: real camera, voice, phone.

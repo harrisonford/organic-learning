@@ -15,10 +15,14 @@ the brain's own.
     live.run()             # until live.stop is set
 
 Events (dicts with "kind"):
-    gaze    every 50 ms: where the eye is in the frame (x, y, size as fractions), whether it jumped since the last
+    gaze    every 50 ms: where the eye is in the frame (x, y, size as fractions), whether it jumped since the last, and
+            what the cochlea gave in those 50 ms (64 bands, bytes)
     voice   a gesture of the mouth: its number, its two formants, and the sound it makes (16 kHz, 16-bit, 200 ms)
-    state   every second: the brain's age, how it keeps up with the clock, what it heard (64 bands), the gestures'
-            habits and how many times each was heard back, the sight-and-sound link's size
+    state   every second: the brain's age, how it keeps up with the clock, the gestures' habits and how many times
+            each was heard back, the sight-and-sound link's size; "asleep" when nothing has come in for a while
+
+With nothing coming in for `sleep_after` seconds the brain sleeps: it is kept on disk and its clock stops until a
+frame or a sound comes (its age is time lived with a world, and an idle page costs nothing).
 
 The brain is kept on disk (out/live/, never in git) every few minutes and when it stops, and wakes from there.
 """
@@ -89,7 +93,7 @@ class LaterSight:
 
 
 class LiveBrain:
-    def __init__(self, seed=0, home="out/live", emit=None, view=64, cortex_path=None, keep_every=300.0, settings=None):
+    def __init__(self, seed=0, home="out/live", emit=None, view=64, cortex_path=None, keep_every=300.0, settings=None, sleep_after=3.0):
         os.makedirs(home, exist_ok=True)
         self.home, self.seed, self.emit, self.keep_every = home, seed, emit or (lambda e: None), keep_every
         self.cortex = pickle.load(open(cortex_path or f"out/bench/cortex_ph_d_s{seed}.pkl", "rb"))
@@ -105,9 +109,12 @@ class LiveBrain:
             s.update(settings or {})
             self.brain = StreamBrain(self.cortex, self.hearing, seed=seed, tract=VocalTract(f0=280.0, seed=seed), **s)
         self.brain.sight_later = self.sight = LaterSight(self.cortex)
+        if getattr(self.brain, "room", None) is None:  # a microphone is never silent (organic/stream.py, `room`)
+            self.brain.room, self.brain.floor, self.brain.top = (10.0, 600.0), None, None
         self.ear, self.lock, self.stop = LiveEar(), threading.Lock(), threading.Event()
         self.frame, self.rows, self.texts = None, collections.deque(), collections.deque()
         self.count = collections.Counter()
+        self.sleep_after, self.last_in, self.awake = sleep_after, time.monotonic(), threading.Event()
 
     # --- what comes in, from any thread
     def see(self, img):
@@ -116,6 +123,8 @@ class LiveBrain:
         with self.lock:
             self.frame = img
             self.count["frames"] += 1
+        self.last_in = time.monotonic()
+        self.awake.set()
 
     def hear(self, samples):
         rows = self.ear.hear(samples)
@@ -125,6 +134,8 @@ class LiveBrain:
             while len(self.rows) > 100:  # more than a second behind: the oldest sound is lost
                 self.rows.popleft()
                 self.count["rows lost"] += 1
+        self.last_in = time.monotonic()
+        self.awake.set()
 
     def read(self, text):
         with self.lock:
@@ -156,19 +167,29 @@ class LiveBrain:
         if b.gestures is not None:
             share = b.habit / b.habit.sum()
             gestures = [[round(float(f1)), round(float(f2)), round(float(h), 4), int(k)] for (f1, f2), h, k in zip(b.gestures, share, b.amap_n)]
-        heard = np.mean(self._heard, axis=0) if self._heard else np.zeros(64, np.float32)
         return {"kind": "state", "age": round(b.t, 2), "step_ms": round(1000 * float(np.mean(took)), 2), "step_ms_max": round(1000 * float(np.max(took)), 2),
                 "behind_ms": round(1000 * behind), "sight_ms": round(1000 * float(np.mean(self.sight.took)), 1) if self.sight.took else 0.0, "views": len(self.sight.took),
                 "frames": n["frames"], "rows": n["rows"], "rows_lost": n["rows lost"], "letters": n["letters"],
                 "saccades": n["saccades"], "voices": n["voices"], "links": int(b.n_assoc),
                 "link_size": round(float(np.abs(b.link_sum[::8, ::8]).mean() / max(b.n_assoc, 1)), 6) if b.link_sum is not None else 0.0,
-                "heard": [int(v) for v in np.clip(heard * 12, 0, 255)], "gestures": gestures}
+                "floor": round(float(b.floor), 2) if b.floor is not None else None, "top": round(float(b.top), 2) if b.top is not None else None,
+                "gestures": gestures}
 
     def run(self, seconds=None):
         b, took, self._heard, jumped = self.brain, [], [], False
         start = nxt = time.monotonic()
         kept, steps = start, 0
         while not self.stop.is_set() and (seconds is None or time.monotonic() - start < seconds):
+            if time.monotonic() - self.last_in > self.sleep_after:  # nothing comes in: sleep until something does
+                self.keep()
+                self.emit({"kind": "state", "asleep": True, "age": round(b.t, 2)})
+                self.awake.clear()
+                while not self.stop.is_set() and not self.awake.wait(1.0):
+                    pass
+                nxt = kept = time.monotonic()
+                with self.lock:
+                    self.rows.clear()
+                continue
             with self.lock:
                 frame, self.frame = self.frame, None
                 row = self.rows.popleft() if self.rows else None
@@ -189,14 +210,14 @@ class LiveBrain:
                     pcm = (np.clip(b.said_pcm, -1, 1) * 32767).astype("<i2").tobytes() if b.said_pcm is not None else b""
                     self.emit({"kind": "voice", "gesture": int(e[1]), "f1": float(f1), "f2": float(f2), "pcm": pcm})
             if steps % 5 == 0:
-                g = self._gaze()
-                if g is not None:
-                    self.emit({"kind": "gaze", "x": g[0], "y": g[1], "size": g[2], "jumped": jumped})
-                jumped = False
+                g = self._gaze() or (0.25, 0.25, 0.5)
+                heard = np.clip(np.mean(self._heard, axis=0) * 16, 0, 255).astype(np.uint8).tobytes() if self._heard else bytes(64)
+                self.emit({"kind": "gaze", "x": g[0], "y": g[1], "size": g[2], "jumped": jumped, "heard": heard, "seeing": b.frame is not None})
+                jumped, self._heard = False, []
             now = time.monotonic()
             if steps % 100 == 0:
                 self.emit(self._state(took, max(0.0, now - nxt)))
-                took, self._heard, b.log, self.sight.took = [], [], [], []
+                took, b.log, self.sight.took = [], [], []
             if now - kept > self.keep_every:
                 self.keep()
                 kept = time.monotonic()
