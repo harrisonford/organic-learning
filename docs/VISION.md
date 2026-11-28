@@ -5274,3 +5274,92 @@ except the hearing cortex under it, developed on the first 1,000 captions. The c
 at every checkpoint, to see whether it is still settling at the end (225 of 1,024 at the end of the first run).
 **What I say:** each piece alone cost 1% (0.089) and 9% (0.082) against 0.090; together 0.074–0.084. The circuit's
 evenness still rises between 5,000 captions and the end (so it had not settled), from about 150 to 225.
+
+### 2026-11-28 03:24 — Every piece live at once: 0.079, as said; the circuit was not still settling (I was wrong)
+
+`organic-online-all-live` (second reader, bands fading over 0.5 s, the relay a circuit; 35 minutes):
+
+| captions heard | 1,000 | 2,500 | 5,000 | 7,500 | 8,927 (end) | control |
+|---|---|---|---|---|---|---|
+| photograph → caption, R@10 | 0.032 | 0.040 | 0.063 | 0.071 | **0.079** | 0.008 |
+| caption → photograph, R@10 | 0.034 | 0.044 | 0.060 | 0.082 | 0.088 | 0.012 |
+| circuit's evenness (of 1,024) | 224 | 223 | 222 | 224 | 224 | |
+
+Beside it at the end: each caption known whole and the relay fitted in a batch 0.090; only the past 0.089; the
+circuit alone 0.082. **Said 0.074–0.084: held** (0.079; the two costs add, 1% and 9% gave 12%). **Said the
+evenness would still rise from about 150 to 225 after 5,000 captions: wrong.** It is flat from the first
+checkpoint. (The circuit hears the first 1,000 captions once before the life begins, as the batch relay is fitted
+on them, so the first checkpoint is its 2,000th caption.) The circuit's 225 against the batch relay's 602 is
+therefore where this rule comes to rest on this sound, not a circuit caught on its way. One reader, one seed.
+
+So an ear in which nothing is fitted in a batch and nothing of a caption is known before it is heard, except the
+hearing cortex below (developed on the first 1,000 captions), keeps 88% of what the same ear gets with each caption known whole and a batch relay (0.079 of 0.090), on the one
+reader where it was tried.
+
+### 2026-11-28 03:24 — How much sound does the circuit need, and what when the voice changes (said before it runs)
+
+docs/LIVE.md decision 14 says the circuit "needs hours of sound to settle"; the flat line above says I did not
+know that. `experiments/relay_circuit_settle_check.py`: the circuit born random hears the second reader's
+captions in order (bands fading over 0.5 s, the kept ear's hearing cortex); its evenness on that reader's last
+200 captions after 0, 5, 10, 25, ... 2,000; then the same circuit hears the first reader for 1,000 captions,
+evenness on both voices along the way; beside them a circuit that heard only the first reader, and the batch
+relay on both voices.
+
+Seen on a ten-caption trial before saying anything: born 26 (the cortex's frames themselves: 27), 102 after 5
+captions (18 s of sound), 134 after 10. **What I say:** within a tenth of its resting value by 100 captions
+(about six minutes of sound) and flat from 250. On the change of voice: the circuit settled on the second reader
+gives the first reader 80–90% of what that reader's own circuit gives, and is level with it within 100 captions
+of the new voice; it then keeps at least 90% on the voice it left. If so, the page's relay can be a circuit born
+with the brain that follows whoever speaks, and decision 14's reason falls.
+
+### 2026-11-28 03:45 — The circuit rests after three minutes of sound and follows a new voice within one
+
+`experiments/relay_circuit_settle_check.py` → `out/bench/relay_circuit_settle_top2_top.log` (18 minutes).
+Evenness (participation ratio of 1,024) on each reader's last 200 captions, never heard by the circuit:
+
+| the circuit has heard | sound | on reader 2 | on reader 1 |
+|---|---|---|---|
+| nothing (born random) | 0 s | 27 | 28 |
+| 5 captions of reader 2 | 18 s | 109 | 105 |
+| 10 | 36 s | 145 | 130 |
+| 25 | 90 s | 198 | 174 |
+| 50 | 3 min | 225 | 189 |
+| 100 | 6 min | 225 | 194 |
+| 250 – 2,000 | 15 min – 2 h | 229–230 | 194–195 |
+| then 5 captions of reader 1 | 17 s | 214 | 223 |
+| 10 | 33 s | 203 | 233 |
+| 25 | 81 s | 186 | 241 |
+| 50 – 1,000 | 2.5 – 52 min | 175–179 | 239–245 |
+| only reader 1, 1,000 captions | 52 min | | 246 |
+
+The hearing cortex's frames before any relay: 28 / 29. The relay fitted in a batch on reader 2: 625 on reader 2,
+424 on reader 1.
+
+**Against what I said.** Within a tenth of rest by 100 captions and flat from 250: held, and faster (at rest
+after 50 captions, three minutes). On another voice it gives 80–90% of that voice's own circuit: held at the
+bottom (194 of 246, 79%). Level with it within 100 captions: held, within 10 to 25 (half a minute to a minute
+and a half). **It keeps at least 90% on the voice it left: wrong**, 76% (175 of 229), lost within the same minute.
+The circuit holds one voice at a time: it follows the speaker and forgets the last one as fast.
+
+What follows. (1) docs/LIVE.md decision 14's reason ("needs hours of sound to settle") was a guess and is
+wrong: three minutes. (2) The batch relay carries a voice it was not fitted on at 68% of its own (424 of 625);
+the circuit at 79%, and then follows. (3) What I do not know: the sound kinds are founded on the relay's code.
+A circuit that moves under them (in its first minutes, and at every change of speaker) may leave them standing
+on a code that is gone. The benchmark has one voice, so it can test the first and not the second.
+
+### 2026-11-28 03:45 — The circuit learning on the clock, kept and newborn (said before they run)
+
+`organic/hear_stream.py`: a relay that is a circuit now goes on learning in the stream ear (`relay_learns`):
+an utterance's frames are coded with the synapses as they were when it began, and at its end every synapse
+changes by them, as in the one-pass probe. The settled state is kept as one matrix between changes (a 10 ms
+row through the circuit: 0.06 ms; working out a change: about 0.1 s, which `relay_later` does beside the clock,
+for the page). Off unless asked; with it off and a batch relay nothing is changed.
+
+Two runs of `experiments/stream_kinds_probe.py` (the organ inside the stream brain; reader 2; read at 2,500 and
+5,000 captions): **A, `RELAY=learns`**, the circuit kept from the all-live probe (it has heard this reader)
+going on learning; **B, `RELAY=born`**, a circuit born random with the brain's first caption. Beside them: the
+same organ with the batch relay, 0.039 and 0.061; the all-live probe with caption bags, 0.040 and 0.063.
+**What I say:** A 0.034–0.040 and 0.052–0.062. B within a tenth of A (0.031–0.040 and 0.048–0.062): nearly all
+2,048 kinds are founded in the first hundred captions, on a code that is still spreading, but a kind moves
+toward what wins it, so they should follow. If B falls well under A, the kinds do not follow a moving relay and
+the page's circuit must be born before the kinds are.

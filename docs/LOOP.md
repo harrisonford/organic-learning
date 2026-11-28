@@ -65,7 +65,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-online-all-live`** (2026-11-28 02:26; MemoryMax 2600M; about 50 minutes): the second reader's ear with
+- **`organic-stream-relay-learns`, `-born`** (2026-11-28 03:45; MemoryMax 2600M each; about 40 minutes): the organ
+  inside the stream brain with the relay a circuit learning on the clock, kept from the all-live probe (A) or born
+  random with the brain (B) → out/bench/stream_kinds_top2_relay_learns_s0.log, ..._relay_born_s0.log. Said before:
+  VISION.md 03:45 (A 0.034-0.040 and 0.052-0.062; B within a tenth of A). If B holds, the circuit goes on the page.
+- (READ 03:24: 0.079.) **`organic-online-all-live`** (2026-11-28 02:26; MemoryMax 2600M; about 50 minutes): the second reader's ear with
   bands fading over 0.5 s and the relay a circuit, the circuit's evenness at every checkpoint →
   out/bench/grounded_online_top2_live0.5_circuit_s0.log. Said before: VISION.md 02:26 (0.074-0.084).
 - **Lives:** `tagr_s0` ENDED about 02:15 at 130,000; queue 29e's first two arms are read (VISION.md 02:24: replay
@@ -1928,3 +1932,10 @@ Still Kris's own:
   second reader only. **Replay of rewarded moments (29e): nothing on three seeds**, no stage protected, none
   harmed. The live brain's step: 3.9 ms on an idle machine, about 8 ms beside three probes (the probes are the
   cost; they stay at Nice 15). Started: every piece live at once (said before).
+- 2026-11-28 03:47 Health at 03:22: all healthy (8.0 GB available; tagb_s1 at 100,000). **Every piece live at
+  once: 0.079 against 0.090** (said 0.074-0.084; VISION.md 03:24; memoize); the circuit's evenness flat at 222-225
+  from the first checkpoint, so "still settling" was wrong. **How much sound the circuit needs**
+  (`experiments/relay_circuit_settle_check.py`; VISION.md 03:45; memoize): at rest after three minutes; on a new
+  voice 79% at once and level within a minute; 76% kept on the voice it left (I said 90%). LIVE.md decision 14
+  corrected. `organic/hear_stream.py`: a circuit relay can learn on the clock (`relay_learns`) and beside it
+  (`relay_later`); a row through the circuit 0.06 ms. Two stream runs started (above).

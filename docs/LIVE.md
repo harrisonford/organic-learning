@@ -114,7 +114,12 @@ More decisions:
 14. **The relay is the reader's, not the speaker's.** A voice through another voice's relay is coded half as
     evenly (VISION.md 2026-11-27 18:34). The relay as a circuit that learns from the microphone would fit itself
     to the speaker (it gives 0.082 against 0.090 on the benchmark) but needs hours of sound to settle; not on the
-    page yet.
+    page yet. **Corrected 2026-11-28 03:45:** "hours" was a guess and is wrong. Measured: born random, the circuit
+    is at rest after three minutes of sound, and on a new voice it is level with that voice's own circuit within
+    a minute (VISION.md 03:45). It also forgets the voice it left as fast. What is not known yet is whether the
+    sound kinds, founded on the relay's code, follow a relay that moves; two runs are measuring that, and the
+    circuit goes on the page when they are read (`relay_learns`, `relay_later` in `organic/hear_stream.py` are
+    built for it).
 
 15. **Typed letters are a third stream** (2026-11-28 01:32; `give_letters`, `type` in `organic/stream.py`): the
     page sends every keystroke as it is typed; each letter excites the unit of the run of 3 and of 4 letters that

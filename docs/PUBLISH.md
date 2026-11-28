@@ -315,7 +315,9 @@ organic learner behaves and what each part does, measured honestly, not a score.
   With only the past (bands against the last 2 s of sound; the same organ runs on a 10 ms clock and gives the very
   same bags, `organic/hear_stream.py`) the second reader reaches 0.070 against 0.090 (23:41); **adapting within
   half a second: 0.046 / 0.089 / 0.089 on the three readers against 0.057 / 0.090 / 0.095 known whole (2026-11-28
-  02:24).** The relay as a circuit: 0.082 against 0.090. The link in a stream (traces of a second, what is in view):
+  02:24).** The relay as a circuit: 0.082 against 0.090; **both at once, nothing in the ear fitted in a batch but
+  the hearing cortex below: 0.079 (03:24, one reader). The circuit is at rest after three minutes of sound and
+  follows a new voice within one, forgetting the last as fast (03:45).** The link in a stream (traces of a second, what is in view):
   0.075, the caption bag's number; inside the stream brain 0.061 at 5,000 captions against 0.069. Typed letters,
   runs of 3 and 4 hashed, no words cut: 0.093 against 0.088 for written words; the one-voice ear is at that
   ceiling. A live page runs these organs on a camera and a microphone (docs/LIVE.md). Queue 29e ended: replay of

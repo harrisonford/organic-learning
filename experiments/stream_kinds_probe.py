@@ -61,7 +61,16 @@ say(f"reader {READER}: {len(life_u)} captions with their photographs, {len(test_
 
 kept = pickle.load(open(EAR, "rb"))
 brain = StreamBrain(cortex, None, seed=SEED)
+# (2026-11-28 03:36) RELAY=learns: the kept relay, a circuit, goes on learning on the clock (hear_stream.py
+# `relay_learns`); RELAY=born: a circuit born random with this brain, nothing of it kept from before
+RELAY = os.environ.get("RELAY", "")
+if RELAY == "born":
+    from organic.cortex2 import RelayCircuit  # noqa: E402
+    kept["relay"] = RelayCircuit(kept["layer"].K * 8 if hasattr(kept["layer"], "K") else 1024, rate=1e-4, block=50, seed=SEED)
 brain.give_ear(StreamEar(kept["layer"], kept["relay"], tau=LIVE), kind_tau=TRACE)
+brain.kinds_ear.relay_learns = bool(RELAY)
+if RELAY:
+    say(f"the relay is a circuit that learns along the life ({RELAY})")
 brain.frame = np.zeros((2, 2, 3), np.float32)  # something is in view: the sight population is set by hand below
 ear, quiet_steps = brain.kinds_ear, int(round(PAUSE * 100))
 rec = lambda r: " ".join(f"R@{k} {np.mean(r < k):.3f}" for k in (1, 5, 10))  # noqa: E731

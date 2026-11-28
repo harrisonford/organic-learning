@@ -20,6 +20,7 @@ its last stretch ended. `pause()` says a silence was there (an utterance ended):
 probe closes a caption, so that with a pause after every caption this ear gives the probe's bags exactly
 (experiments/hear_stream_check.py). (organic/ear.py is the lives' byte ear; this is another organ.)
 """
+import copy, threading
 import numpy as np
 
 
@@ -55,6 +56,13 @@ class StreamEar:
         D = 2 * kinds * bands
         self.pairs, self.triples = Kinds(k23, 2 * D), Kinds(k23, 3 * D)
         self.mu, self.var, self.top = None, None, 0.0
+        # (2026-11-28) a relay that is a circuit (organic/cortex2.py RelayCircuit) goes on learning from what is heard,
+        # as in the one-pass probe: the frames of an utterance are coded with the synapses as they were when it began,
+        # and at its end (or after `relay_block` frames of an endless one) every synapse changes by them. Off unless asked.
+        # `relay_later`: that change is worked out beside the clock (about a tenth of a second for 1,024 cells) and the
+        # ear goes on with the synapses as they were until it is done.
+        self.relay_learns, self.relay_block, self.X = False, 1000, []
+        self.relay_later, self._relay_busy, self._relay_at = False, False, None
         self._fresh()
 
     def _fresh(self):
@@ -67,7 +75,40 @@ class StreamEar:
         r = self.relay
         if hasattr(r, "Z"):
             return unit((unit(c) - r.mu) @ r.Z)
-        return unit(r.code(unit(c)[None])[0])
+        x = unit(c)
+        if self.relay_learns and self.learning:
+            self.X.append(x)
+            if len(self.X) >= self.relay_block:
+                self._relay_learn()
+        if self._relay_at is None:
+            self._relay_at = self._settled(r)
+        inv, mu, scale = self._relay_at  # the circuit's settled state for any frame, with the synapses as they are
+        return unit(((x - mu) / scale) @ inv)
+
+    @staticmethod
+    def _settled(r):
+        import scipy.linalg as sl
+        D = len(r.mu)
+        r.code(np.zeros((1, D), np.float32))
+        return np.ascontiguousarray(sl.cho_solve(r._A, np.eye(D, dtype=np.float32))), r.mu.copy(), np.float32(np.sqrt(r.var))
+
+    def _relay_learn(self):
+        if not self.X or self._relay_busy:
+            return
+        X, self.X = np.asarray(self.X, np.float32), []
+
+        def work():
+            r = copy.copy(self.relay)
+            r.W, r.mu = r.W.copy(), r.mu.copy()
+            r.learn(X)
+            at = self._settled(r)
+            self.relay, self._relay_at, self._relay_busy = r, at, False
+
+        if self.relay_later:
+            self._relay_busy = True
+            threading.Thread(target=work, daemon=True).start()
+        else:
+            work()
 
     def _env(self, e, end=False):
         """Loudness at frame e smoothed over `smooth` frames (zeros beyond the utterance's ends, as the probe has it)."""
@@ -155,4 +196,6 @@ class StreamEar:
             self.cuts.append(n)
             self._close(n, out)
         self._fresh()
+        if self.relay_learns and self.learning:
+            self._relay_learn()
         return out
