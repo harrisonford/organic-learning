@@ -5008,3 +5008,24 @@ reader ends at 0.070–0.090 against 0.090 with the batch relay (within a fifth,
 under by more at 1,000 and 2,500 captions, while the kinds chase a relay that is still settling. If it ends under
 0.06, the kinds do not follow the circuit, and either the circuit must slow as it settles or the kinds must keep
 larger steps for as long as the relay moves.
+
+### 2026-11-27 22:29 — The ear on the clock is the probe's ear (checked: the very same bags)
+
+`organic/hear_stream.py` (`StreamEar`): the text-free ear with only the past, a row of the cochlea every 10 ms.
+Bands against the sound so far (fading over 2 s), the hearing cortex's answer to the last 80 ms, the relay, cuts at
+the troughs of loudness (known 50 ms after) and where quiet begins or ends, stretches of two halves, kinds of two
+and three stretches in a row, founded and moved as they are heard. A kind is known about 70 ms after its last
+stretch ends. `pause()` closes an utterance as the probe closes a caption.
+**Checked before anything is claimed for it** (`experiments/hear_stream_check.py`; the second reader's first 40
+captions, 148 s of sound, the kept ear's cortex and relay, kinds starting empty and learning): heard whole as the
+probe hears with `LIVE=2`, and row by row through `StreamEar` with a pause after each caption, **40 of 40 captions
+give the very same bag** (25.3 kinds a caption), the same 529 + 484 kinds founded, the kinds equal to 2e-6. It
+takes 0.38 ms for 10 ms of sound. So the retrieval run with `LIVE=2` that is on (second reader, ends about 23:25)
+is this organ's result too, as long as utterances are told apart by pauses; no separate run is owed for the ear
+itself. Its checkpoints so far: 0.021 at 1,000 captions (whole-caption bands 0.022) and 0.033 at 2,500 (0.042).
+What a stream still lacks is on the other side of the ear: there is no "caption" and no "its photograph". The bag
+must become a trace of the kinds heard in the last seconds and sight what the eye holds then; that link is the
+next thing to measure (on kept bags, in seconds, before it goes into the live brain).
+A mistake of mine, 22:24: I first wrote this organ to `organic/ear.py`, which is the lives' byte ear. Restored
+from git within a minute; no life or service loaded the file in between (the running life had it in memory, the
+release timers ran at 22:20 and 22:30; health all good after).

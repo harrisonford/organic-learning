@@ -1856,3 +1856,12 @@ Still Kris's own:
   with sight on its own thread a step takes 3-6 ms. End to end: reducer round trip 3-4 ms, three eye jumps and two
   babbles a second, no sound lost. Root used once (Tailscale serve port 9444; Funnel ports checked untouched).
   Not tested: real camera, voice, phone.
+- 2026-11-27 22:30 Health at 22:23: all healthy (4.8 GB available with three probes and the live page's
+  services; tagn_s0 at 125,000 of 130,000). Checkpoints: the third reader's one-pass ear 0.073 at 5,000 captions
+  (two-stage 0.065); live bands (second reader) 0.021 / 0.033 at 1,000 / 2,500 (whole-caption bands 0.022 /
+  0.042); the relay circuit 0.027 at 1,000 (batch relay 0.022). **The ear on the clock** (`organic/hear_stream.py`,
+  `experiments/hear_stream_check.py`; VISION.md 22:29): the very same bags as the probe's ear on 40 of 40
+  captions, 0.38 ms for 10 ms of sound. **Mistake:** I wrote it first over `organic/ear.py` (the lives' byte ear);
+  restored from git within a minute, nothing had loaded it. A new organ's file name is checked with `ls` before
+  writing from now on. Next: the link in a stream (a trace of kinds, what the eye holds), measured on kept bags
+  first; then the ear into `organic/live.py` behind a switch.
