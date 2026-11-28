@@ -65,7 +65,7 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-link-check`** (out/tmp/link_check_queue.sh; queued 2026-11-27 22:45 behind `organic-online-live`;
+- **`organic-link-check`** (out/tmp/link_check_queue.sh; queued 2026-11-27 22:43 behind `organic-online-live`;
   MemoryMax 2600M; about 75 minutes once it starts, most of it hearing the captions again): the link in a stream
   (`experiments/grounded_link_check.py`: traces of kinds fading over 0.5-8 s tied to what is in view, beside the
   caption-bag link) on the kept live-bands ear of the second reader → out/bench/grounded_link_top2_live2_s0.log;
@@ -1871,7 +1871,7 @@ Still Kris's own:
   restored from git within a minute, nothing had loaded it. A new organ's file name is checked with `ls` before
   writing from now on. Next: the link in a stream (a trace of kinds, what the eye holds), measured on kept bags
   first; then the ear into `organic/live.py` behind a switch.
-- 2026-11-27 22:45 The link in a stream written, said before (VISION.md 22:28) and queued behind the live-bands
+- 2026-11-27 22:43 The link in a stream written, said before (VISION.md 22:28) and queued behind the live-bands
   ear. Found on the way: a stretch's code reached the kinds at double precision, so every match copied the kinds
   (65 ms a kind; the probe's 0.87 s a caption is mostly this). Fixed in `organic/hear_stream.py` (the same bags,
   checked again: 40 of 40); **the probe itself is left as it is while its runs are on; to fix after they end**
