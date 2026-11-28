@@ -5009,7 +5009,7 @@ under by more at 1,000 and 2,500 captions, while the kinds chase a relay that is
 0.06, the kinds do not follow the circuit, and either the circuit must slow as it settles or the kinds must keep
 larger steps for as long as the relay moves.
 
-### 2026-11-27 22:29 — The ear on the clock is the probe's ear (checked: the very same bags)
+### 2026-11-27 22:26 — The ear on the clock is the probe's ear (checked: the very same bags)
 
 `organic/hear_stream.py` (`StreamEar`): the text-free ear with only the past, a row of the cochlea every 10 ms.
 Bands against the sound so far (fading over 2 s), the hearing cortex's answer to the last 80 ms, the relay, cuts at
@@ -5028,4 +5028,4 @@ must become a trace of the kinds heard in the last seconds and sight what the ey
 next thing to measure (on kept bags, in seconds, before it goes into the live brain).
 A mistake of mine, 22:24: I first wrote this organ to `organic/ear.py`, which is the lives' byte ear. Restored
 from git within a minute; no life or service loaded the file in between (the running life had it in memory, the
-release timers ran at 22:20 and 22:30; health all good after).
+release timers had run at 22:20; health all good after).

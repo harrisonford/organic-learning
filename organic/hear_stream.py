@@ -1,5 +1,5 @@
 """The text-free ear on the clock: sound in 10 ms at a time, sound kinds out as they are heard (docs/ASYNC.md, "The
-ear's way onto the clock"; docs/VISION.md 2026-11-27 22:30, said before it runs).
+ear's way onto the clock"; docs/VISION.md 2026-11-27 22:26).
 
 The ear that finds photographs in one voice (experiments/grounded_online_probe.py) hears a caption whole: its
 frames coded at once, cut into stretches, the stretches matched to kinds. This is the same ear, the same numbers,
