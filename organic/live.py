@@ -17,6 +17,8 @@ the brain's own.
 Events (dicts with "kind"):
     gaze    every 50 ms: where the eye is in the frame (x, y, size as fractions), whether it jumped since the last, and
             what the cochlea gave in those 50 ms (64 bands, bytes)
+    recall  when a sound kind is heard: the past view (a small JPEG of what the eye was on, kept in memory only) that
+            is most like what the eye held with the kinds now sounding, and how far it stands out among the views kept
     voice   a gesture of the mouth: its number, its two formants, and the sound it makes (16 kHz, 16-bit, 200 ms)
     state   every second: the brain's age, how it keeps up with the clock, the gestures' habits and how many times
             each was heard back, the sight-and-sound link's size; "asleep" when nothing has come in for a while
@@ -29,6 +31,7 @@ The brain is kept on disk (out/live/, never in git) every few minutes and when i
 import collections, os, pickle, threading, time
 import numpy as np
 from .cochlea import Cochlea, HOP, WINDOW
+from .hear_stream import StreamEar, unit
 from .stream import DT, StreamBrain
 from .vocal import VocalTract
 
@@ -73,7 +76,7 @@ class LaterSight:
     it was busy are never looked at) and `code` is its answer to the last one it finished."""
 
     def __init__(self, cortex):
-        self.cortex, self.code, self.want, self.took = cortex, None, None, []
+        self.cortex, self.code, self.want, self.took, self.seen = cortex, None, None, [], None
         self.wake, self.stop = threading.Event(), False
         threading.Thread(target=self._work, daemon=True).start()
 
@@ -89,6 +92,7 @@ class LaterSight:
             if w is not None:
                 t0 = time.monotonic()
                 self.code = self.cortex.whole(w, 4)
+                self.seen = (w, self.code)
                 self.took.append(time.monotonic() - t0)
 
 
@@ -111,6 +115,11 @@ class LiveBrain:
         self.brain.sight_later = self.sight = LaterSight(self.cortex)
         if getattr(self.brain, "room", None) is None:  # a microphone is never silent (organic/stream.py, `room`)
             self.brain.room, self.brain.floor, self.brain.top = (10.0, 600.0), None, None
+        born = os.path.join(home, "ear_born.pkl")  # the kinds' ear (organic/hear_stream.py): its cortex and relay developed on speech before the life
+        if getattr(self.brain, "kinds_ear", None) is None and os.path.exists(born):
+            k = pickle.load(open(born, "rb"))
+            self.brain.give_ear(StreamEar(k["layer"], k["relay"], tau=0.5), kind_tau=1.0)
+        self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=300), 0.0, 0.0, None  # what the eye was on, for showing a recall; never on disk
         self.ear, self.lock, self.stop = LiveEar(), threading.Lock(), threading.Event()
         self.frame, self.rows, self.texts = None, collections.deque(), collections.deque()
         self.count = collections.Counter()
@@ -173,7 +182,27 @@ class LiveBrain:
                 "saccades": n["saccades"], "voices": n["voices"], "links": int(b.n_assoc),
                 "link_size": round(float(np.abs(b.link_sum[::8, ::8]).mean() / max(b.n_assoc, 1)), 6) if b.link_sum is not None else 0.0,
                 "floor": round(float(b.floor), 2) if b.floor is not None else None, "top": round(float(b.top), 2) if b.top is not None else None,
-                "gestures": gestures}
+                "kinds_founded": (b.kinds_ear.pairs.founded + b.kinds_ear.triples.founded) if getattr(b, "kinds_ear", None) is not None else 0,
+                "kinds_heard": n["kinds"], "views_kept": len(self.views), "gestures": gestures}
+
+    def _recall(self):
+        """The kept view most like what the eye held with the kinds now sounding; how far it stands out among them."""
+        b = self.brain
+        r = b.recall()
+        if r is None or len(self.views) < 8:
+            return
+        codes = np.stack([c for c, _ in self.views]) - (b.sight_sum / b.sight_time).astype(np.float32)
+        like = unit(codes) @ unit(r)
+        best = int(np.argmax(like))
+        self.emit({"kind": "recall", "jpeg": self.views[best][1], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8))})
+
+    def _keep_view(self):
+        import io
+        from PIL import Image
+        w, code = self.sight.seen
+        out = io.BytesIO()
+        Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).save(out, "JPEG", quality=70)
+        self.views.append((code, out.getvalue()))
 
     def run(self, seconds=None):
         b, took, self._heard, jumped = self.brain, [], [], False
@@ -204,12 +233,20 @@ class LiveBrain:
                 if e[0] == "saccade":
                     jumped = True
                     self.count["saccades"] += 1
+                elif e[0] == "kind":
+                    self.count["kinds"] += 1
+                    if time.monotonic() - self.recall_at > 0.5:
+                        self.recall_at = time.monotonic()
+                        self._recall()
                 elif e[0] == "sound":
                     self.count["voices"] += 1
                     f1, f2 = (b.gestures[e[1]] if b.gestures is not None else (0, 0))
                     pcm = (np.clip(b.said_pcm, -1, 1) * 32767).astype("<i2").tobytes() if b.said_pcm is not None else b""
                     self.emit({"kind": "voice", "gesture": int(e[1]), "f1": float(f1), "f2": float(f2), "pcm": pcm})
             if steps % 5 == 0:
+                if self.sight.seen is not None and self.sight.seen is not self.last_seen and time.monotonic() - self.view_at > 0.5:
+                    self.last_seen, self.view_at = self.sight.seen, time.monotonic()
+                    self._keep_view()
                 g = self._gaze() or (0.25, 0.25, 0.5)
                 heard = np.clip(np.mean(self._heard, axis=0) * 16, 0, 255).astype(np.uint8).tobytes() if self._heard else bytes(64)
                 self.emit({"kind": "gaze", "x": g[0], "y": g[1], "size": g[2], "jumped": jumped, "heard": heard, "seeing": b.frame is not None})

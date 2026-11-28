@@ -117,6 +117,10 @@ class StreamBrain:
         # stands more than a tenth of the way from the one to the other, the text-free ear's rule for quiet (a tenth
         # of the loudest moment) measured above the background. Provisional (docs/LIVE.md): set for the live page.
         self.room, self.floor, self.top = None, None, None
+        # The text-free ear and its link to sight (None: not there, as before; `give_ear`; docs/VISION.md 2026-11-28
+        # 00:36 and 00:38): sound kinds as organic/hear_stream.py hears them, each leaving a trace that fades over
+        # `kind_tau` seconds, tied by Hebb's rule to what the eye holds while the trace lasts.
+        self.kinds_ear = None
         self.before, self.moving, self.pos, self.pos_seen, self.target = None, None, None, None, None
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
@@ -153,6 +157,46 @@ class StreamBrain:
         self.link_sum = None
         self.n_assoc = 0
         self.log = []
+
+    def give_ear(self, ear, kind_tau=1.0):
+        n = 2 * ear.k23
+        self.kinds_ear, self.kind_tau, self.kind_learn, self.kind_steps = ear, kind_tau, True, 0
+        self.kind_trace, self.kind_time = np.zeros(n, np.float32), np.zeros(n, np.float64)
+        self.kind_link, self.sight_sum, self.sight_time = None, None, 0.0
+
+    def _hear_kinds(self, row, is_loud, events):
+        """10 ms of the kinds' ear. Its own voice and what is under the room's level are quiet to it. Every 50 ms, Hebb's
+        rule: each sounding kind's synapses grow by its trace times what the eye holds (the sum; `recall` reads it)."""
+        ear = self.kinds_ear
+        self.kind_trace *= np.float32(np.exp(-DT / self.kind_tau))
+        if row is not None:
+            for what, k in ear.step(row, quiet=(not is_loud) or getattr(self, "since_said", 10 ** 6) < 10):
+                i = k + (ear.k23 if what == "triple" else 0)
+                self.kind_trace[i] += 1.0
+                events.append(("kind", i))
+        self.kind_steps += 1
+        if self.kind_learn and self.kind_steps % 5 == 0 and self.frame is not None:
+            idx = np.nonzero(self.kind_trace > 0.02)[0]
+            if len(idx):
+                v = self.sight.x
+                if self.kind_link is None:
+                    self.kind_link, self.sight_sum = np.zeros((len(self.kind_trace), len(v)), np.float32), np.zeros(len(v), np.float64)
+                w = self.kind_trace[idx] * np.float32(5 * DT / self.kind_tau)
+                self.kind_link[idx] += w[:, None] * v[None, :]
+                self.kind_time[idx] += w
+                self.sight_sum += float(w.sum()) * v
+                self.sight_time += float(w.sum())
+
+    def recall(self, trace=None):
+        """What the eye held with the kinds now sounding (or with `trace`), less what it held with kinds on the whole."""
+        q = self.kind_trace if trace is None else trace
+        if self.kind_link is None or self.sight_time <= 0:
+            return None
+        idx = np.nonzero((q > 0.02) & (self.kind_time > 0))[0]
+        t = float(q[idx] @ self.kind_time[idx]) if len(idx) else 0.0
+        if t <= 0:
+            return None
+        return (q[idx] @ self.kind_link[idx]) / t - (self.sight_sum / self.sight_time).astype(np.float32)
 
     def _loud(self, row):
         if row is None:
@@ -301,6 +345,8 @@ class StreamBrain:
         drive = self.habit / self.habit.max()
         strength = 1.0
         is_loud = self._loud(sound_row)
+        if getattr(self, "kinds_ear", None) is not None:
+            self._hear_kinds(sound_row, is_loud, events)
         if self.echo_tau and self.sound is not None:
             self.echo_strength *= np.exp(-DT / self.echo_tau)
             loud = is_loud

@@ -5101,3 +5101,67 @@ and over 30 s (the voice's own long average, steady but slow at a join).
 **What I say:** if joins are the cost, 0.5 s does better than 2 s (0.075–0.09) and 30 s worse (under 0.065). If
 instead a word needs a steady reference, 30 s does better and 0.5 s worse. If both end within 0.01 of 0.070, the
 fifth is neither, and the live ear is simply this good.
+
+### 2026-11-28 00:36 — Three results on the ear's way onto the clock (second reader; each said before)
+
+**1. Fading over half a second gives back what two seconds lost: 0.089 against 0.090.** `LIVE=0.5`
+(out/bench/grounded_online_top2_live0.5_s0.log): 0.025 / 0.042 / 0.069 / 0.079 / **0.089** at 1,000 / 2,500 / 5,000 /
+7,500 / all captions (rank 222), against 0.021 / 0.033 / 0.056 / 0.065 / 0.070 with 2 s and 0.022 / 0.042 / 0.077 /
+0.083 / 0.090 with each caption known whole. Control 0.014 (rank 526). Words heard 0.70 / 0.62 / 0.44 / 0.25 (whole:
+0.70 / 0.61 / 0.47 / 0.27). This is the outcome I gave for "the joins between recordings are the cost" (0.075–0.09);
+the other half of that test, 30 s (under 0.065 if joins are the cost), is running. If it holds, the ear with only
+the past loses nothing here, and what it needs is to adapt fast.
+
+**2. The relay as a circuit learning along the life: 0.082 against 0.090** (`RELAY=circuit`,
+out/bench/grounded_online_top2_circuit_s0.log): 0.027 / 0.039 / 0.060 / 0.077 / **0.082** (rank 243), control 0.008,
+words heard 0.67 / 0.57 / 0.47 / 0.25. Against what I said (21:06): the end within 0.070–0.090, held (nine tenths
+of the batch relay); "under by more early, while the kinds chase a relay still settling", wrong: level at 1,000
+and 2,500 (0.027 / 0.039 against 0.022 / 0.042) and behind in the middle; the code "a little less even, 450–600 of
+1,024", wrong: **225**, a third of the batch relay's 602. So after three million frames the circuit has evened
+its code far less than the batch relay and the ear loses only a tenth: the kinds need less evenness than the batch
+relay gives, or what the circuit evens first is what matters. Its rate was the eye's, unchanged; whether it is
+still settling at the end was not measured (no evenness along the way: to add).
+
+**3. The link in a stream works with traces of about a second** (`experiments/grounded_link_check.py`,
+out/bench/grounded_link_top2_live2_s0.log; the kept `LIVE=2` ear hearing its life again on the clock, kinds
+held; 8,927 photographs in view one after another, 1,000 pairs held out). Photograph → its caption in the first
+ten (median rank):
+
+| what Hebb's rule ties to the photograph in view | set as the probe sets a bag | as it is |
+|---|---|---|
+| the caption's bag | 0.075 (230) | 0.070 (232) |
+| traces fading over 0.5 s, captions back to back | 0.075 (281) | 0.068 (286) |
+| 1 s | 0.075 (295) | 0.060 (316) |
+| 2 s | 0.062 (325) | 0.052 (348) |
+| 4 s | 0.043 (360) | 0.029 (372) |
+| 8 s | 0.026 (394) | 0.015 (397) |
+| 0.5 s, a second of pause between captions | 0.077 (230) | 0.068 (240) |
+| 1 s | 0.077 (242) | 0.074 (260) |
+| 2 s | 0.075 (268) | 0.066 (288) |
+| 4 s | 0.070 (299) | 0.050 (325) |
+| 8 s | 0.050 (334) | 0.027 (352) |
+
+(The bag with kinds held gives 0.075 where the life as heard gave 0.070: as in the two-stage runs.)
+Against what I said (22:28): traces of 0.5–2 s give 85–100% of the bag's link: held in the first ten (100%, 100%,
+83%), though the median rank is worse without a pause (281–325 against 230); 4–8 s without a pause 60–80%: worse
+(57% and 35%); a pause "matters little for the long traces": wrong, it is what saves them (0.043 → 0.070 at 4 s);
+"as they are, half or less": wrong, nine tenths for short traces. **So the stream brain's link can be Hebb's rule
+between a kind's trace of about a second and what the eye holds, with no caption and no bookkeeping**; taking
+each kind against its running level and setting the length adds a tenth. Long traces tie a word to what is seen
+after it; pauses protect against that, as they would in speech to a child.
+
+### 2026-11-28 00:38 — The kinds' ear and its link inside the stream brain (said before it runs)
+
+`organic/stream.py` now has the organ behind a switch (`give_ear`; off, the brain is as before: events, link,
+sight and habits the same on a small run): the ear on the clock, each kind heard leaving a trace that fades over
+a second, and every 50 ms Hebb's rule between the sounding kinds' traces and the sight population (a sum, with no
+mean taken as it learns). `recall` reads it: what the eye held with the kinds now sounding, less what it held
+with kinds on the whole. Its own voice, and what is under the room's level, are quiet to this ear.
+`experiments/stream_kinds_probe.py` drives exactly that code with the second reader's captions, 10 ms at a time,
+the sight population holding a caption's photograph from its first sound until 0.3 s after its last, kinds
+starting empty; bands fading over 0.5 s (the ear's cortex and relay from that run). Read on the same 1,000
+held-out pairs at 2,500 and 5,000 captions.
+**What I say:** the bag-and-photograph link of the same ear gave 0.042 and 0.069 at those points; this link takes
+no mean while learning and weighs a kind by its time in view, which cost about a tenth to a fifth on kept bags
+(00:36). So 0.032–0.040 at 2,500 and 0.052–0.064 at 5,000, chance 0.010. Under 0.03 at 5,000 would mean the way
+`recall` takes out the common view is not the probe's way and has to be.

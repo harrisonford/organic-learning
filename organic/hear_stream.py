@@ -61,6 +61,7 @@ class StreamEar:
         self.z, self.sums = [], []  # the last rows of this utterance: its bands, its loudness
         self.C, self.loud, self.env, self.quiet = [], [], [], []  # a code frame each, since the utterance began
         self.cuts, self.done, self.chain = [0], 0, []  # cuts found; the last one closed; stretches in a row without a gap
+        self.told = []  # a code frame each: whether the listener said this moment holds no sound of the world (see step)
 
     def _through(self, c):
         r = self.relay
@@ -77,7 +78,7 @@ class StreamEar:
         v = self._env(e)
         self.top = max(v, self.top * (1 - self.k))
         self.env.append(v)
-        self.quiet.append(v < 0.1 * self.top)
+        self.quiet.append(v < 0.1 * self.top or self.told[e])
         if e >= 1 and self.quiet[e] != self.quiet[e - 1]:
             self.cuts.append(e)
 
@@ -109,7 +110,9 @@ class StreamEar:
             i += 1
         self.cuts = [c for c in cuts if c >= self.done]
 
-    def step(self, row):
+    def step(self, row, quiet=False):
+        """`quiet`: the listener's own word that this row is not a sound of the world (a room's hum under its level, or
+        its own voice): it counts as quiet whatever its loudness."""
         row, out = np.asarray(row, np.float32), []
         if self.mu is None:
             self.mu, self.var = row.copy(), np.ones_like(row)
@@ -125,6 +128,7 @@ class StreamEar:
         c = r[0, : self.bands * b].reshape(self.bands, b, self.n_kinds).mean(axis=1).ravel()
         self.C.append(self._through(c))
         self.loud.append(float(np.mean(self.sums)))
+        self.told.append(bool(quiet))
         j, h = len(self.C) - 1, self.smooth // 2
         if j - h >= 0:
             e = j - h  # the smoothed loudness of frame e is known now
@@ -134,7 +138,7 @@ class StreamEar:
                 self._close(e - self.half, out)
         if len(self.C) > 4000 and self.done > 2000:  # an endless utterance: what is long closed is let go
             d = self.done - 100
-            self.C, self.loud, self.env, self.quiet = self.C[d:], self.loud[d:], self.env[d:], self.quiet[d:]
+            self.C, self.loud, self.env, self.quiet, self.told = self.C[d:], self.loud[d:], self.env[d:], self.quiet[d:], self.told[d:]
             self.cuts, self.done = [c - d for c in self.cuts], self.done - d
         return out
 
