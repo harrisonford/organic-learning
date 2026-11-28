@@ -1949,7 +1949,7 @@ Still Kris's own:
   **Next:** read A and B; if B holds, the page's relay becomes a circuit born with the brain (`relay_learns="sound"`,
   `relay_later`), tested with the recorded-speech page test; then two voices in one life (does a kind survive the
   relay following a new speaker), which the one-voice benchmark cannot say.
-- 2026-11-28 04:36 Health at 04:29: all healthy (7.9 GB available; tagb_s1 at 105,000). **The circuit learning on
+- 2026-11-28 04:34 Health at 04:29: all healthy (7.9 GB available; tagb_s1 at 105,000). **The circuit learning on
   the clock, read** (VISION.md 04:30; memoize): kept 0.031 / 0.061, born with the first caption 0.031 / 0.055,
   batch relay 0.039 / 0.061; A's first number under my range, B inside; not told apart at 5,000. **Decision (mine):
   the page's relay is a circuit born with the brain** (`organic/live.py`; LIVE.md decision 17; page test passes: 593
