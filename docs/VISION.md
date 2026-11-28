@@ -5730,3 +5730,7 @@ organic learning as words"; the line "it was the code, not the rule" "is not hit
 as visual as possible and concise"; "a lot of things have changed given the real time nature of the model".
 Done at once: the line is out of the abstract, the section title and the notes. The rewrite (visual, concise,
 both words, the real-time work in) is at the head of the queue.
+
+**Seeds 1 and 2 of the born ear, reader 2, started 09:48** (`organic-online-layer-born-seeds`; a seed changes the
+visual cortex, the ear's birth and which 1,000 captions are held out). **What I say:** both end between 0.075
+and 0.097, controls at chance.

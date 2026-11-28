@@ -65,6 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-layer-born-seeds`** (2026-11-28 09:48; MemoryMax 2600M; about 80 minutes): the born ear on reader
+  2, seeds 1 then 2 → out/bench/grounded_online_top2_live0.5_circuit_layerborn_s{1,2}.log. Said before: VISION.md
+  09:46 (the note at its end: 0.075–0.097).
 - **`organic-two-voices-allborn`** started again 09:46 (the 08:59 start failed at once: its ear file's path was
   lost in the unit's command); four runs, about 4 hours; logs as below.
 - (READ 09:46.) `organic-online-layer-born-r13` (readers 1 and 3: 0.060, 0.095) and `organic-two-voices-kinds`
