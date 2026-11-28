@@ -165,12 +165,18 @@ class StreamBrain:
         self.kind_link, self.sight_sum, self.sight_time = None, None, 0.0
 
     def _hear_kinds(self, row, is_loud, events):
-        """10 ms of the kinds' ear. Its own voice and what is under the room's level are quiet to it. Every 50 ms, Hebb's
+        """10 ms of the kinds' ear, on the world's sound: what is under the room's level is quiet to it. Every 50 ms, Hebb's
         rule: each sounding kind's synapses grow by its trace times what the eye holds (the sum; `recall` reads it)."""
         ear = self.kinds_ear
         self.kind_trace *= np.float32(np.exp(-DT / self.kind_tau))
         if row is not None:
-            for what, k in ear.step(row, quiet=(not is_loud) or getattr(self, "since_said", 10 ** 6) < 10):
+            quiet = not is_loud
+            if getattr(self, "room", None) is not None and self.floor is not None:
+                # the room's level against the ear's own smoothed loudness (a row's own level dips between syllables, and
+                # the loudest moment is one voice's peak): a sound is what stands clear of the background the ear has
+                # adapted to, by `room_clear` (set by hand, provisional: docs/LIVE.md)
+                quiet = getattr(self, "room_clear", 1.25) * self.floor
+            for what, k in ear.step(row, quiet=quiet):
                 i = k + (ear.k23 if what == "triple" else 0)
                 self.kind_trace[i] += 1.0
                 events.append(("kind", i))
@@ -314,6 +320,7 @@ class StreamBrain:
             moved = self.sight.step(self.view if self.blind <= 0 else 0 * self.view)
         else:
             moved = False
+        world_row = sound_row  # what the world sounds like, before the mouth's own sound is added
         if self.own:  # the mouth's own sound reaches the ear with the world's (energies add; the cochlea compresses by 0.3)
             own = self.own.pop(0)
             sound_row = own if sound_row is None else (np.asarray(sound_row, np.float32) ** (1 / 0.3) + own ** (1 / 0.3)) ** 0.3
@@ -344,9 +351,11 @@ class StreamBrain:
                 self.saying, self.said_codes = None, []
         drive = self.habit / self.habit.max()
         strength = 1.0
-        is_loud = self._loud(sound_row)
+        # with a room's level kept (`room`), what counts as a sound is the world's; the kinds' ear hears the world's
+        # sound without the mouth's own (its own voice is taken out, as speaking-induced suppression does; to verify)
+        is_loud = self._loud(sound_row if getattr(self, "room", None) is None else world_row)
         if getattr(self, "kinds_ear", None) is not None:
-            self._hear_kinds(sound_row, is_loud, events)
+            self._hear_kinds(world_row, is_loud, events)
         if self.echo_tau and self.sound is not None:
             self.echo_strength *= np.exp(-DT / self.echo_tau)
             loud = is_loud

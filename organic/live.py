@@ -248,7 +248,13 @@ class LiveBrain:
                     self.last_seen, self.view_at = self.sight.seen, time.monotonic()
                     self._keep_view()
                 g = self._gaze() or (0.25, 0.25, 0.5)
-                heard = np.clip(np.mean(self._heard, axis=0) * 16, 0, 255).astype(np.uint8).tobytes() if self._heard else bytes(64)
+                heard = bytes(64)
+                if self._heard:  # for the page's picture only: each band between its own quietest and loudest of the last while
+                    h = np.mean(self._heard, axis=0)
+                    lo, hi = getattr(self, "_band", (h, h + 1e-3))
+                    lo, hi = np.minimum(h, lo + 0.005 * (h - lo)), np.maximum(h, hi + 0.002 * (lo - hi))
+                    self._band = (lo, hi)
+                    heard = np.clip(255 * (h - lo) / (hi - lo + 1e-3), 0, 255).astype(np.uint8).tobytes()
                 self.emit({"kind": "gaze", "x": g[0], "y": g[1], "size": g[2], "jumped": jumped, "heard": heard, "seeing": b.frame is not None})
                 jumped, self._heard = False, []
             now = time.monotonic()

@@ -91,6 +91,35 @@ lived, counts, and how the brain keeps up with the clock. The brain's babble is 
 - About three eye jumps and two babbles a second, as on recorded video.
 - Memory: database 260 MB, brain 140 MB asleep, bridge 30 MB.
 
+## The word-learning ear on the page (2026-11-28 00:50)
+
+The live brain now has the text-free ear and its link to sight (`give_ear` in `organic/stream.py`; the organ is
+`organic/hear_stream.py`, checked to give the very same sound kinds as the offline ear). Its hearing cortex and
+relay were developed on one SpokenCOCO reader before the life (`out/live/ear_born.pkl`); its 2,048 sound kinds
+start empty and are founded by what the microphone brings; every kind heard leaves a trace of about a second,
+tied by Hebb's rule to what the eye holds. The page has a new panel, **what a sound reminds it of**: when a kind
+is heard, the past view (of the last 300 fixations, kept in memory only, never on disk) most like what the eye
+held with the kinds now sounding, and how far it stands out among them. In the first minutes that is chance.
+
+More decisions:
+
+12. **The kinds' ear hears the world without the brain's own babble** (its own voice is taken out, not mixed in):
+    otherwise the babble, two a second, would found the kinds and deafen it to the speaker.
+13. **The room rule for this ear, changed after a test with recorded speech as the microphone:** the first rule
+    (a tenth of the way from the quietest to the loudest level, row by row) let through a fifth of the kinds in
+    clean speech, because a row's level dips between syllables and the loudest moment is one voice's peak. Now a
+    sound is what stands a quarter above the background on the ear's own smoothed loudness (`room_clear` 1.25, by
+    hand): a room's hum alone founds nothing, clean speech keeps 78% of its kinds, quiet speech over a hum 2.5
+    kinds a second. Still provisional.
+14. **The relay is the reader's, not the speaker's.** A voice through another voice's relay is coded half as
+    evenly (VISION.md 2026-11-27 18:34). The relay as a circuit that learns from the microphone would fit itself
+    to the speaker (it gives 0.082 against 0.090 on the benchmark) but needs hours of sound to settle; not on the
+    page yet.
+
+Tested: the page in headless Chromium with 100 s of recorded speech as the microphone: 534 kinds founded, recall
+pictures arriving, no errors; a step takes 8.5 ms with the ear (the margin to 10 ms is small on the loaded
+server). What the link is worth is measured on the benchmark, not on the page: VISION.md 2026-11-28 00:36, 00:38.
+
 ## Limits, said plainly
 
 - **It will not name, answer or read.** Typed letters arrive and are counted; no organ takes them yet.

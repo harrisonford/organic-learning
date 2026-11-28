@@ -65,6 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-stream-kinds`** (2026-11-28 00:38; MemoryMax 2600M; about 40 minutes): the stream brain's own kinds'
+  ear and link driven with the second reader's captions (`experiments/stream_kinds_probe.py`), read at 2,500 and
+  5,000 captions → out/bench/stream_kinds_top2_s0.log. Said before: VISION.md 00:38 (0.032-0.040 and 0.052-0.064).
 - **`organic-online-live2`** (out/tmp/online_live_queue2.sh; 2026-11-27 23:48; MemoryMax 2600M; the probe is fast
   now, perhaps half an hour a run): the live ear's fading time for the second reader, `LIVE=0.5` then `LIVE=30` →
   out/bench/grounded_online_top2_live{0.5,30}_s0.log, beside live2 (0.070) and whole captions (0.090). Said
@@ -1891,3 +1894,13 @@ Still Kris's own:
   fixed (same lines on a small run, 2.3 times faster there). `organic-link-check` started 23:41 (hearing the
   captions again, about an hour). The relay-circuit run is at 5,000 captions: 0.060 against 0.077 (0.027 / 0.039
   at 1,000 / 2,500 against 0.022 / 0.042). Artifact at version 13 (one-pass ear, ear on the clock).
+- 2026-11-28 00:51 Health at 00:35: all healthy (7.4 GB available; tagr_s0 at 115,000). **Three results, each said
+  before** (VISION.md 00:36; memoize): bands fading over 0.5 s give 0.089 against 0.090 known whole (2 s gave
+  0.070); the relay as a circuit 0.082 against 0.090 with a third of the evenness (225 of 1,024); the link in a
+  stream with traces of 0.5-1 s gives 0.075, the caption bag's own number, and plain Hebb nine tenths of it.
+  **The organ is in the stream brain** (`give_ear`, `recall`; default path the same, checked) **and on the live
+  page** (docs/LIVE.md, "The word-learning ear on the page"; kid-a commit, local). Found by testing the page with
+  recorded speech as the microphone: my room rule let through a fifth of the kinds; changed (a quarter above the
+  background on the ear's smoothed loudness), and the kinds' ear hears the world without the brain's own babble.
+  Thirty SpokenCOCO recordings were taken out of the archive for that test (out/tmp/wavs, out/tmp/speech_test.wav;
+  local only). The live brain is newborn again. `LIVE=30` is at 2,500 captions: 0.033.

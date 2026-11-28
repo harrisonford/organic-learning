@@ -78,7 +78,8 @@ class StreamEar:
         v = self._env(e)
         self.top = max(v, self.top * (1 - self.k))
         self.env.append(v)
-        self.quiet.append(v < 0.1 * self.top or self.told[e])
+        told = self.told[e]  # False, True, or a level of loudness under which the listener holds there is no sound
+        self.quiet.append(v < 0.1 * self.top or told is True or (told is not False and v < told))
         if e >= 1 and self.quiet[e] != self.quiet[e - 1]:
             self.cuts.append(e)
 
@@ -112,7 +113,8 @@ class StreamEar:
 
     def step(self, row, quiet=False):
         """`quiet`: the listener's own word that this row is not a sound of the world (a room's hum under its level, or
-        its own voice): it counts as quiet whatever its loudness."""
+        its own voice): it counts as quiet whatever its loudness. Or a number: the loudness (as this ear smooths it)
+        under which there is no sound, the room's level as the listener keeps it."""
         row, out = np.asarray(row, np.float32), []
         if self.mu is None:
             self.mu, self.var = row.copy(), np.ones_like(row)
@@ -128,7 +130,7 @@ class StreamEar:
         c = r[0, : self.bands * b].reshape(self.bands, b, self.n_kinds).mean(axis=1).ravel()
         self.C.append(self._through(c))
         self.loud.append(float(np.mean(self.sums)))
-        self.told.append(bool(quiet))
+        self.told.append(quiet if isinstance(quiet, bool) else float(quiet))
         j, h = len(self.C) - 1, self.smooth // 2
         if j - h >= 0:
             e = j - h  # the smoothed loudness of frame e is known now
