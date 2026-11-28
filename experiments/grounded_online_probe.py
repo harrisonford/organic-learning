@@ -262,6 +262,10 @@ for n, u in enumerate(life_u, 1):
     M_other += x[:, None] * V_life[other[n - 1]][None, :]
     if n in CHECKS or n == len(life_u):
         read(M, mean, f"after {n} captions (kinds founded {pairs.founded} + {triples.founded})")
+        if RELAY == "circuit":  # (2026-11-28) is the circuit still settling? its evenness on held-out sound along the life
+            Ce = np.concatenate([through(frames(u)[0], False)[::5] for u in test_u[:200]])
+            de = np.clip(np.linalg.eigvalsh(np.cov(Ce.T.astype(np.float64))), 0, None)
+            say(f"the circuit's code on held-out sound after {n} captions: participation ratio {de.sum() ** 2 / (de * de).sum():.0f} of {Ce.shape[1]}")
 Bt = read(M_other, mean, "the bags tied to other photographs (the control)")
 pickle.dump({"layer": layer, "relay": relay, "pairs": (pairs.U, pairs.wins, pairs.founded), "triples": (triples.U, triples.wins, triples.founded), "M": M, "mean": mean},
             open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}{f'_live{LIVE:g}' if LIVE else ''}{'_circuit' if RELAY == 'circuit' else ''}.pkl", "wb"))

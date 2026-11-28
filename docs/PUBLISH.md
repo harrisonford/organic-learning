@@ -313,8 +313,13 @@ organic learner behaves and what each part does, measured honestly, not a score.
   level with the two-stage ear at 5,000 captions or above (0.047 / 0.077 against 0.048 / 0.065) and 0.057 / 0.090
   at the end on two readers, control at chance; **third reader 0.095 (23:35): three readers 0.057 / 0.090 / 0.095.**
   With only the past (bands against the last 2 s of sound; the same organ runs on a 10 ms clock and gives the very
-  same bags, `organic/hear_stream.py`) the second reader reaches 0.070 against 0.090 (23:41). Running: the fading
-  time (0.5 s, 30 s), the relay as a circuit, the link in a stream. Kris may present the work to neuroscientists in about two weeks; the artifact
+  same bags, `organic/hear_stream.py`) the second reader reaches 0.070 against 0.090 (23:41); **adapting within
+  half a second: 0.046 / 0.089 / 0.089 on the three readers against 0.057 / 0.090 / 0.095 known whole (2026-11-28
+  02:24).** The relay as a circuit: 0.082 against 0.090. The link in a stream (traces of a second, what is in view):
+  0.075, the caption bag's number; inside the stream brain 0.061 at 5,000 captions against 0.069. Typed letters,
+  runs of 3 and 4 hashed, no words cut: 0.093 against 0.088 for written words; the one-voice ear is at that
+  ceiling. A live page runs these organs on a camera and a microphone (docs/LIVE.md). Queue 29e ended: replay of
+  rewarded moments, nothing on three seeds. Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
 - **2026-11-27 15:26: draft 11 emailed to Kris** (22 pages). One change: a paragraph at the end of "The relay,
   learned locally" (a batch relay fitted on photographs does not hold on CORe50's videos: 131–137 effective

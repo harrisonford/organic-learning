@@ -5232,3 +5232,45 @@ Two things follow. A letters organ for the stream brain needs no word cutting: r
 each letter typed, traces, Hebb to what the eye holds (built next, for the live page). And **the one-voice ear is
 at the eye's ceiling**: from sound alone it reaches 0.089–0.090 on this reader, where written words through the
 same link reach 0.088. On these photographs at this eye's size, more is to be had from sight, not from hearing.
+
+### 2026-11-28 02:24 — The ear with only the past on three readers; replay of rewarded moments on three seeds
+
+**Bands fading over half a second, three readers** (out/bench/grounded_online_top{,2,3}_live0.5_s0.log;
+photograph → its caption in the first ten of 1,000 held out, at the end of the life):
+
+| | first | second | third |
+|---|---|---|---|
+| each caption known whole | 0.057 | 0.090 | 0.095 |
+| only the past (0.5 s) | 0.046 | 0.089 | 0.089 |
+| kept | 81% | 99% | 94% |
+| control (only the past) | 0.009 | 0.014 | 0.010 |
+
+The caption's own words: rank 3 / 1 / 1 either way; words heard 0.53 / 0.47 / 0.28 / 0.13, 0.70 / 0.62 / 0.44 / 0.25,
+0.69 / 0.65 / 0.51 / 0.25 (known whole: 0.53 / 0.50 / 0.30 / 0.12, 0.70 / 0.61 / 0.47 / 0.27, 0.66 / 0.67 / 0.52 / 0.24).
+"Loses nothing" (01:27) was the second reader; on three it keeps four fifths to all, and the first reader, the
+weakest by every measure all along, is the one that loses. The claim that holds on three readers of one seed
+each: **an ear that knows nothing of an utterance before it hears it, adapting within half a second, finds the
+photographs five to nine times above chance, at 81–99% of the ear that knows each caption whole.**
+
+**Replay in sleep of the moments at which reward came (queue 29e), three seeds ended** (tagr against tagn, the same
+life from the same level with nothing changed; one test each at the end):
+
+| seed (last age) | echo | first words | two words | pages |
+|---|---|---|---|---|
+| 1 (110,000) | 0.41 / 0.40 | 0.48 / 0.46 | 0.48 / 0.40 | 0.15 / 0.18 |
+| 2 (120,000) | 0.42 / 0.52 | 0.49 / 0.46 | 0.50 / 0.49 | 0.18 / 0.18 |
+| 0 (130,000) | 0.60 / 0.51 | 0.47 / 0.47 | 0.48 / 0.48 | 0.24 / 0.19 |
+
+(replay of rewarded moments / nothing changed.) No direction on any stage: echo −0.10 to +0.09, first words 0 to
++0.03, two words 0 to +0.08, pages −0.03 to +0.05. The question was whether sleep protects the earlier stages
+when only rewarded moments come back: on three seeds it does not, and it does not harm. The third arm (replay as
+built on 2026-11-18, every moment) is running (tagb_s1 since about 02:20).
+
+### 2026-11-28 02:27 — Every piece live at once (said before it runs)
+
+Second reader, one pass: bands fading over 0.5 s **and** the relay a circuit learning along the life
+(`LIVE=0.5 RELAY=circuit`), kinds and link as before. Nothing in this ear is fitted in a batch or known ahead
+except the hearing cortex under it, developed on the first 1,000 captions. The circuit's evenness is now printed
+at every checkpoint, to see whether it is still settling at the end (225 of 1,024 at the end of the first run).
+**What I say:** each piece alone cost 1% (0.089) and 9% (0.082) against 0.090; together 0.074–0.084. The circuit's
+evenness still rises between 5,000 captions and the end (so it had not settled), from about 150 to 225.
