@@ -65,6 +65,13 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-layer-born`** (2026-11-28 06:40; MemoryMax 2600M; about 50 minutes): reader 2's one-pass ear
+  with every piece born with the life (`LIVE=0.5 RELAY=circuit LAYER=born`: the hearing cortex too, nothing heard
+  before the life) → out/bench/grounded_online_top2_live0.5_circuit_layerborn_s0.log; beside 0.032 / 0.040 /
+  0.063 / 0.071 / 0.079 with the cortex developed first. Said before: VISION.md 06:39 (0.018–0.030 at 1,000,
+  0.060–0.078 at the end; the cortex's kinds at rest by themselves from 2,500 on).
+- (PART READ 06:30: pair 1→2 all three runs; pair 2→3 and the kinds readouts still running, the last ends about
+  08:15.) The two-voice units below.
 - **`organic-two-voices-kinds`** (queued 2026-11-28 05:30 behind `organic-two-voices-born2`; MemoryMax 2600M; about
   90 minutes once it starts): reader 2 then reader 1 again, circuit then fixed relay, with the readout of what the
   second voice does to the kinds → out/bench/two_voices_top2_top_{born,batch}_kinds_s0.log. Said before: VISION.md
@@ -1973,3 +1980,17 @@ Still Kris's own:
   readers started, said before. **Next:** read them; if the pattern holds, look at why the first voice survives
   (do the kinds divide between the voices?) and write the second paper's opening around it in PUBLISH.md. The readout of the kinds is built and queued (VISION.md 05:30).
   Artifact at version 17.
+- 2026-11-28 06:42 Health at 06:29: all healthy (6.0 GB available, 291 GB free; tagb_s2 at 110,000). **Two voices,
+  the second pair (reader 1 then 2), read** (VISION.md 06:30; memoize): the first pair's pattern repeats only in
+  part. Circuit: later voice 0.030 against 0.041 alone (median rank 346 against 376), first voice 0.031 → 0.023;
+  fixed relay: later voice 0.027, first voice 0.026 → 0.015. Three of my four numbers out (two just, the fixed
+  relay's two plainly). In both pairs: the circuit's later voice is level with or ahead of the voice alone by
+  median rank, and the first voice slips with either relay, more with the fixed one. Not in both: the fixed
+  relay shutting a second voice out; the first voice kept whole. The kinds readout for the fixed relay: the two
+  voices use nearly different kinds (overlap 0.16; I had said over 0.6). What I wrote at 05:27 was too strong:
+  corrected in LIVE.md decision 17, PUBLISH.md and the artifact (version 18). **New step, said before it runs**
+  (VISION.md 06:39): the hearing cortex born with the life (`LAYER=born` in the one-pass probe; default path the
+  same on a small run), started as `organic-online-layer-born`. **Next:** read the third pair and the kinds
+  readouts (pair 2→1, both relays); read the born cortex; if it holds within what I said, build it into the
+  stream ear (`organic/hear_stream.py`) behind a switch and try it on the page with the recorded-speech test.
+

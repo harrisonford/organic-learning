@@ -37,6 +37,16 @@ LIVE = float(os.environ.get("LIVE", 0))
 # born random, it learns from the first FIRST captions' frames before the life and goes on learning from every
 # caption of the life; held still when the test captions are heard (VISION.md 21:05).
 RELAY = os.environ.get("RELAY", "batch")
+# (2026-11-28 06:33) LAYER=born: the hearing cortex itself is born with the life; nothing is heard before it. In place
+# of the decorrelation of its windows worked out from 800 clips, a circuit of interneurons with the relay's local
+# rule (RelayCircuit on the 64 values of a window, at the papers' rate for tens of cells); in place of 16,000
+# rounds on the first captions with a rate falling on a schedule, its kinds learn from each caption once it has
+# been heard, by the same winner-take-all rule with a conscience, each kind's rate falling with its own wins (as
+# the kinds above it). One window a frame, at a place chosen by chance: every such window to the circuit, and to
+# the kinds when its contrast is over 0.3 of the strongest so far (fading as the ear's loudest moment does; with
+# LIVE off, of the caption's strongest). With RELAY=circuit the relay too hears nothing before the life
+# (VISION.md 2026-11-28 06:39).
+LAYER = os.environ.get("LAYER", "")
 t0 = time.time()
 
 
@@ -125,16 +135,67 @@ def clip(u):
     return g[s: s + 100][..., None]
 
 
-# the hearing cortex below the kinds, from the first captions' sound alone (as grounded_speech_probe.py builds it)
+class BornLayer(Layer2):
+    """The hearing cortex born with the life (LAYER=born): its windows' correlations removed by a circuit that
+    learns as the sound comes, its kinds learning from every caption heard."""
+
+    def __init__(self, *a, **k):
+        from organic.cortex2 import RelayCircuit
+        super().__init__(*a, **k)
+        self.circuit, self.at, self.top = RelayCircuit(self.window * self.window * self.in_ch, rate=1e-3, block=50, seed=SEED), None, 0.0
+
+    def _drive(self, x):
+        from organic.cortex2 import _contrast, _windows
+        import scipy.linalg as sl
+        v, e = _contrast(_windows(x, self.window))
+        if self.at is None:  # the circuit's settled state as one matrix, until its synapses change
+            c = self.circuit
+            c.code(np.zeros((1, len(c.mu)), np.float32))
+            self.at = (np.ascontiguousarray(sl.cho_solve(c._A, np.eye(len(c.mu), dtype=np.float32))), c.mu.copy(), np.float32(np.sqrt(c.var)))
+        inv, mu, scale = self.at
+        v = ((v - mu) / scale) @ inv
+        v = v / (np.linalg.norm(v, axis=-1, keepdims=True) + 1e-8)
+        return v @ self.W[0].T, e, [(v, e)]
+
+    def hear(self, x):
+        """Learn from a caption that has just been heard: one window a frame."""
+        from organic.cortex2 import _contrast, _windows
+        raw_v, _ = _contrast(_windows(x, self.window))
+        _, e, ((v, _),) = self._drive(x)  # the windows as the kinds get them, with the circuit as it was
+        at = rng.integers(0, v.shape[1], len(v))
+        t = np.arange(len(v))
+        if LIVE:
+            strong, k = np.empty(len(v), bool), 0.01 / LIVE
+            for i, m in enumerate(e.max(axis=1)):
+                self.top = max(float(m), self.top * (1 - k))
+                strong[i] = e[i, at[i]] > 0.3 * self.top
+        else:
+            strong = e[t, at] > 0.3 * e.max()
+        W, wins = self.W[0], self.wins[0]
+        for s in v[t, at][strong]:
+            c = int(np.argmax(W @ s - 0.3 * (wins / (wins.mean() + 1e-8) - 1)))
+            wins[c] += 1
+            w = W[c] + (1.0 / (1 + wins[c] / 5)) * (s - W[c])
+            W[c] = w / np.linalg.norm(w)
+        self.circuit.learn(raw_v[t, at])
+        self.at = None
+
+
 first = life_u[:FIRST]
-layer = Layer2(1, KINDS, WINDOW, 1, seed=SEED)
-layer.settle((clip(first[i]) for i in rng.choice(len(first), min(800, len(first)), replace=False)), rng)
-for n in range(DEV):
-    layer.learn(clip(first[rng.integers(len(first))]), rng, rate=0.05 * (1 - n / DEV) + 0.005)
+if LAYER == "born":
+    layer, first = BornLayer(1, KINDS, WINDOW, 1, seed=SEED), []
+else:  # the hearing cortex below the kinds, from the first captions' sound alone (as grounded_speech_probe.py builds it)
+    layer = Layer2(1, KINDS, WINDOW, 1, seed=SEED)
+    layer.settle((clip(first[i]) for i in rng.choice(len(first), min(800, len(first)), replace=False)), rng)
+    for n in range(DEV):
+        layer.learn(clip(first[rng.integers(len(first))]), rng, rate=0.05 * (1 - n / DEV) + 0.005)
 
 
-def frames(u):
-    r = layer.respond(gram(u)[..., None], pooled=False)
+def frames(u, learning=False):
+    x = gram(u)[..., None]
+    r = layer.respond(x, pooled=False)
+    if learning and LAYER == "born":
+        layer.hear(x)  # after its answer to this caption is taken
     b = r.shape[1] // BANDS
     codes = r[:, : BANDS * b].reshape(r.shape[0], BANDS, b, KINDS).mean(axis=2).reshape(r.shape[0], -1)
     return codes, np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
@@ -158,11 +219,11 @@ else:
 
     def through(c, learning):
         return unit((unit(c) - relay.mu) @ relay.Z)
-say(f"hearing cortex and its relay, from the first {len(first)} captions' sound")
+say("hearing cortex and its relay born with the life: nothing heard before it" if LAYER == "born" else f"hearing cortex and its relay, from the first {len(first)} captions' sound")
 
 
 def stretches(u, learning=False):
-    c, loud = frames(u)
+    c, loud = frames(u, learning)
     C = through(c, learning)
     env = np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
     quiet = env < 0.1 * (loudest(env, 0.0 if started[u["uttid"]] is None else started[u["uttid"]][2])[0] if LIVE else env.max())
@@ -262,13 +323,19 @@ for n, u in enumerate(life_u, 1):
     M_other += x[:, None] * V_life[other[n - 1]][None, :]
     if n in CHECKS or n == len(life_u):
         read(M, mean, f"after {n} captions (kinds founded {pairs.founded} + {triples.founded})")
+        if LAYER == "born":  # does the hearing cortex come to rest? each kind against itself at the last reading
+            now = layer.W[0].copy()
+            if n != CHECKS[0]:
+                cs = np.sort((now * last_W).sum(1))
+                say(f"the hearing cortex's kinds against themselves at the last reading (cosine): lowest tenth {cs[len(cs) // 10]:.2f}, median {np.median(cs):.2f}; wins a kind {layer.wins[0].min():.0f} to {layer.wins[0].max():.0f}")
+            last_W = now
         if RELAY == "circuit":  # (2026-11-28) is the circuit still settling? its evenness on held-out sound along the life
             Ce = np.concatenate([through(frames(u)[0], False)[::5] for u in test_u[:200]])
             de = np.clip(np.linalg.eigvalsh(np.cov(Ce.T.astype(np.float64))), 0, None)
             say(f"the circuit's code on held-out sound after {n} captions: participation ratio {de.sum() ** 2 / (de * de).sum():.0f} of {Ce.shape[1]}")
 Bt = read(M_other, mean, "the bags tied to other photographs (the control)")
 pickle.dump({"layer": layer, "relay": relay, "pairs": (pairs.U, pairs.wins, pairs.founded), "triples": (triples.U, triples.wins, triples.founded), "M": M, "mean": mean},
-            open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}{f'_live{LIVE:g}' if LIVE else ''}{'_circuit' if RELAY == 'circuit' else ''}.pkl", "wb"))
+            open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}{f'_live{LIVE:g}' if LIVE else ''}{'_circuit' if RELAY == 'circuit' else ''}{'_layerborn' if LAYER == 'born' else ''}.pkl", "wb"))
 
 # a measure only: the caption's written words from its bag (ridge from the bags as they were heard, to the words)
 vocab = {}

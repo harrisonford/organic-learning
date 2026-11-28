@@ -5468,3 +5468,85 @@ kinds (overlap under 0.5), and the kinds are of two sorts, moved and not (lower 
 0.7, upper quartile over 0.95). With the fixed relay the second voice falls on the first voice's kinds
 (overlap over 0.6): its sounds are not told apart from the first voice's, which would be why it ties to little.
 I hold this loosely; I have not seen these numbers for any ear.
+
+### 2026-11-28 06:30 — Two voices, the second pair (reader 1 then reader 2): the pattern repeats only in part
+
+The order turned round: reader 1 for 2,500 captions, then reader 2 for 2,500. Photograph → its caption in the
+first ten of 1,000 (chance 0.010; one number is known to about ±0.006), and the median rank of the right
+caption (chance 500; known to about ±12):
+
+| | circuit born with the brain | relay fitted on the first voice, fixed |
+|---|---|---|
+| first voice, at the change | 0.031 (rank 396) | 0.026 (356) |
+| later voice, before it is heard | 0.013 (470) | 0.012 (458) |
+| later voice, at the end | 0.030 (346) | 0.027 (385) |
+| first voice, at the end | 0.023 (426) | 0.015 (419) |
+
+The later voice alone from birth: 0.041 (376).
+
+**Against what I said (05:27).** Circuit, later voice at 0.8–1.1 of alone: 0.73, **just under** (by median rank
+it is ahead of alone, 346 against 376). Circuit, first voice keeps at least four fifths: 0.74, **just under**.
+Fixed relay, later voice under 0.6 of alone: **wrong**, 0.66, and not told apart from the circuit's (0.027 and
+0.030). Fixed relay, first voice kept: **wrong**, it keeps 0.58. So in this pair the fixed relay does not shut
+the second voice out, and the first voice is partly lost with either relay.
+
+**The two pairs side by side** (first pair: 05:27). Ratios of numbers this small are loose (each ratio known to
+about ±0.2), so the median ranks are the steadier reading:
+
+| | pair 2→1 | pair 1→2 |
+|---|---|---|
+| circuit: later voice / alone | 0.95 (rank 358 / 361) | 0.73 (346 / 376) |
+| fixed: later voice / alone | 0.41 (456 / 361) | 0.66 (385 / 376) |
+| circuit: first voice kept | 1.00 (374 → 392) | 0.74 (396 → 426) |
+| fixed: first voice kept | 1.00 (369 → 408) | 0.58 (356 → 419) |
+
+What holds in both pairs: with the circuit the later voice's median rank is level with or ahead of the voice
+alone; the first voice's median rank slips with either relay (18 and 30 places with the circuit, 39 and 63
+with the fixed relay). What does not hold in both: that the fixed relay shuts a second voice out (true of the
+relay fitted on reader 2 meeting reader 1, not of the relay fitted on reader 1 meeting reader 2), and that the
+first voice is kept whole. **What I wrote at 05:27 ("the ear with the circuit learns a second speaker as well
+as if born to it and the first is still found") was one pair; it is now "about as well, and the first is found
+somewhat less well".** The fixed relay's harm depends on which voice it was fitted to. The third pair (reader
+2 then 3) is running.
+
+**The kinds, with the fixed relay, this pair** (the readout of 05:30 was already in the probe when this run
+began): the two voices' held-out captions use nearly different kinds (**overlap 0.16**; I had said over 0.6
+for a fixed relay: **wrong**). Three kinds in ten are won nine tenths in the first voice and have not moved
+since the change (upper quartile of a kind against itself: 0.99); the rest moved towards the second voice
+(median cosine 0.53) and are won six times in ten in it; no kind is won nine tenths in the second voice. Half
+of each voice's use is carried by 202 and 323 of the 2,048 kinds. So the kinds divide between the voices even
+when the relay does not change: the division is the kinds' own doing (their competition), not the relay's.
+The first voice's loss (0.026 → 0.015) goes with seven kinds in ten having been pulled towards the second
+voice. The same readout for the pair 2→1 with both relays is queued.
+
+### 2026-11-28 06:39 — The hearing cortex born with the life (said before it runs)
+
+**What is still fitted beforehand.** Since 04:34 the page's ear has a relay born with the brain, but the hearing
+cortex under it (128 kinds of 8 × 8 windows on the cochlea) is still developed before the life: its windows'
+correlations removed by a matrix worked out from 800 clips, then 16,000 rounds of learning on the first 1,000
+captions with a rate falling on a schedule that knows how long it will go on. On the page that cortex is a
+SpokenCOCO reader's; whoever speaks to it is heard through another person's cortex.
+
+**The organic check.** A hearing cortex is tuned by the sound an animal hears early in life, and that tuning
+then slows (the critical period of the rat's primary auditory cortex; Zhang, Bao & Merzenich 2001; de
+Villers-Sidani et al. 2007: from memory, not opened again today). Nothing here is new machinery: the circuit of
+interneurons the relay already uses (on a window's 64 values, at the published rate for tens of cells, 1e-3),
+and for the kinds the rule they already have (winner-take-all with a conscience), with each kind's rate falling
+with its own wins as the sound kinds above it do, in place of the schedule. One window a frame at a place
+chosen by chance; the kinds learn only from windows with contrast (over 0.3 of the strongest lately, the
+existing gate, kept running as the ear's loudest moment is). No new constant.
+
+**The switch.** `LAYER=born` in `experiments/grounded_online_probe.py` (the default path gives the very same
+lines on a small run, checked). With `RELAY=circuit` the relay too hears nothing before the life. A caption is
+answered by the cortex as it was when the caption began, then the cortex learns from it. The probe prints how
+far the cortex's kinds moved between readings, to see whether it comes to rest by itself.
+
+**The run.** Reader 2, bands fading over 0.5 s, relay a circuit, cortex born: every piece of the ear learning
+from the first caption on, nothing heard twice. Beside the same with the cortex developed first (03:24):
+0.032 / 0.040 / 0.063 / 0.071 / 0.079 at 1,000 / 2,500 / 5,000 / 7,500 / the end.
+
+**What I say.** It costs something early and little late: **0.018–0.030 at 1,000, 0.060–0.078 at the end**,
+the control at chance. The cortex's kinds come to rest by themselves (median cosine with the last reading at
+least 0.99 from 2,500 on). What could make it worse than that: the circuit only brings the strong directions
+of a window down to the average (the batch matrix evens all of them), and the kinds found on windows less
+evened may be more alike; I have no number for that, so the lower end is a guess.

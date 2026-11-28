@@ -319,9 +319,12 @@ organic learner behaves and what each part does, measured honestly, not a score.
   the hearing cortex below: 0.079 (03:24, one reader). The circuit is at rest after three minutes of sound and
   follows a new voice within one, forgetting the last as fast (03:45). Born random with the brain inside the
   stream brain it ends where a finished relay ends (0.055 against 0.061, not told apart; 04:30). Two voices in
-  one life (05:27, one pair of readers; two more running): with the circuit the second voice is learned as
-  well as alone (0.037 / 0.039) and the first is kept (0.031); with a relay fitted on the first voice the
-  second ends at 0.016. This may be the second paper's sharpest result if it repeats.** The link in a stream (traces of a second, what is in view):
+  one life (05:27, 06:30; two pairs of readers, a third running): with the circuit the second voice is learned
+  about as well as alone (0.037 / 0.039 and 0.030 / 0.041; median rank level or ahead in both) and the first
+  slips a little (0.031 → 0.031 and 0.031 → 0.023; 18 and 30 places of median rank); with a relay fitted on
+  the first voice the second ends at 0.016 and 0.027 and the first slips more (39 and 63 places). The first
+  pair alone looked sharper than the two together; not a headline until the third pair and more seeds. The
+  two voices use nearly different kinds even with a fixed relay (overlap 0.16).** The link in a stream (traces of a second, what is in view):
   0.075, the caption bag's number; inside the stream brain 0.061 at 5,000 captions against 0.069. Typed letters,
   runs of 3 and 4 hashed, no words cut: 0.093 against 0.088 for written words; the one-voice ear is at that
   ceiling. A live page runs these organs on a camera and a microphone (docs/LIVE.md). Queue 29e ended: replay of
