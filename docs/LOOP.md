@@ -71,7 +71,7 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   childhood.npz). Said before: VISION.md 11:13. **To do as levels arrive:** host the newest level on the page
   (copy the level and childhood.npz into out/live/, Kris's 10-minute brain kept aside as
   out/live/brain_s0.kris-1052.pkl, restart `kid-a-live-brain` then the bridge), run the page test, tell Kris.
-- **A research agent** (started 10:55): how infants and other vocal learners come to stop vocalising, wait and
+- (IN 11:18: docs/RESEARCH_TURNS.md; the organic check is VISION.md 11:20.) **A research agent** (started 10:55): how infants and other vocal learners come to stop vocalising, wait and
   answer (turn-taking; mechanisms and their numbers; every reference opened) → docs/RESEARCH_TURNS.md. Then the
   organic check and a probe before anything goes into the mouth (Kris, 10:50: the brain "doesnt shut up").
 - **The live page was rebuilt after Kris's first session** (Svelte 5, one screen; LIVE.md decisions 19–21). His
@@ -2096,4 +2096,11 @@ Still Kris's own:
   ran clean; levels of one brain kept in order), started as `organic-live-childhood`, said before. `organic/live.py`
   searches a raised brain's childhood photographs in a recall. The 11:09 check of the seeds and the two-voice
   runs is still owed (next iteration).
+- 2026-11-28 11:21 **The survey of turn-taking is in** (docs/RESEARCH_TURNS.md; VISION.md 11:20; memoize). Our mouth
+  is a clock at thirty times an infant's rate; what biology has is a drive that builds and is spent, held down
+  by a heard voice and released after it, and a prediction of one's own voice. Organic check: the drive and the
+  voice's inhibition go in (behind a switch, said before, measured by the infant observations); the own-voice
+  prediction after them (it would also take out the loudspeaker's echo); learning from being answered later; no
+  oscillator, no muting rule. **Next:** the baseline observations on the present mouth; Choi 2015 from its PDF;
+  then the drive as a probe. And at 11:40: host the childhood's first level; read the seeds and the two voices.
 

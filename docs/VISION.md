@@ -5767,3 +5767,66 @@ window; a camera frame is 128 and the eye moves over it); the silence is true si
 the stream brain it was 0.060 at 5,000). From typed letters at the end: **0.07–0.10** (0.093 for letter runs
 in the offline measure). And what it will not do: understand Kris's voice (a voice never heard finds 1–3.5%),
 or wait before it babbles.
+
+### 2026-11-28 11:20 — How a brain comes to wait and answer: the survey is in, and the organic check
+
+Kris (10:50): the page's brain "doesnt shut up"; "we need to research how human brains grasp this communication
+dynamic". The survey is `docs/RESEARCH_TURNS.md` (an agent's, about 150 references, each marked as read in
+full, abstract only, or listing only; seven read through a page-fetch tool are to be checked against their
+PDFs before a number of theirs is used: Choi 2015 first).
+
+**What it found, in five lines.**
+1. **Our mouth has no counterpart in biology.** It makes two gestures a second for ever (`babble_rate`). An
+   awake infant alone makes about 4 speech-like sounds a minute and vocalises 5–7% of the time (Oller 2019;
+   Iyer 2016), in bouts that follow arousal; a marmoset alone calls about every 10 s (Borjon 2016). Ours is
+   about thirty times an infant's rate. The fault is not that it does not wait. It is that it has no drive:
+   only a clock.
+2. **A voice does not silence a young infant.** In the first five months a third of an infant's sounds overlap
+   the mother's, and her voice makes a sound from the infant more likely, not less (Anderson 1977; Hilbrink
+   2015; Dominguez 2016). Taking turns comes gradually over months. So a baby that talks over you is faithful;
+   one that never does is not.
+3. **The best-established mechanism** for "stop while the other calls, answer after" is two things together: a
+   drive to vocalise that builds up and is spent by vocalising, and inhibition of that drive (or of the
+   premotor stage) by a heard voice, released when it ends. Causal in zebra finches (Benichov & Vallentin 2020:
+   block the inhibition and replies come sooner and overlap), recorded in wrens, behavioural in marmosets (92%
+   of calls placed in silent gaps, Roy 2011), old knowledge in frogs and insects. Published as equations (Choi,
+   Takahashi & Ghazanfar 2015). That marmosets are *coupled oscillators* is contested (not replicated in 42
+   animals, Grijseels 2024); suppression while the other calls, a rise for a few seconds after, and a
+   refractory 2.2 s after one's own call are agreed by both sides.
+4. **One's own voice is told from another's by a prediction, not a flag** (auditory cortex is suppressed from
+   before one's own sound: Eliades & Wang 2003). Infant marmosets at first treat a parent's call as their own
+   and stop doing so at about day 17 (Takahashi 2016, one study).
+5. **Waiting is partly learned from being answered.** Infants come to expect a reply between 2 and 5 months and
+   vocalise more for a while when it fails (Goldstein 2009; Elmlinger 2023). Whether replies speed up
+   turn-taking is disputed.
+
+**The organic check, part by part.**
+- *A drive in place of the clock* (the survey's mechanism 1): well established (the gate in the midbrain,
+  activity ramping to a threshold before a call, call rate following arousal). **Goes in.** The mouth's
+  fixed-rate source is the thing to replace: a drive that integrates the brain's own arousal and noise, opens
+  the mouth for one utterance at a threshold, is spent by it, and rests after (the refractory period). What
+  arousal is in this brain has to be something it already has (things happening: a sound the ear holds to be
+  the world's, something moving in view), not a new clock.
+- *A heard voice holds the drive down, then lets it go* (mechanism 2): well established where it can be
+  tested. **Goes in**, as a leaky trace of the world's sound subtracted from the drive's growth; the same sound
+  raises arousal more slowly, which is what the infant and meerkat data need. What must then be *seen* and not
+  built: fewer onsets while a voice sounds, a burst after it ends, some overlap left.
+- *A prediction of one's own voice* (mechanism 3): exists, well established. **What the brain has now is the
+  wrong shortcut by the survey's own list**: the mouth's sound is kept out of the word-learning ear by knowing
+  it is its own (and the loudspeaker's echo is outside even that, which is very likely what filled Kris's
+  session). The organic form is at hand: babbling already learns what each gesture sounds like (the
+  auditory-motor map); that prediction, taken from what is heard, is the corollary discharge, and it would also
+  take out the echo. **Goes in after the drive**, measured on the echo.
+- *Being answered teaches waiting* (mechanism 4): the expectation is established, its effect on timing less so.
+  **Later**, and only with a partner that answers: the lives' adults, or Kris.
+- *An oscillator with a phase rule* (mechanism 5): **not to be added**; whatever rhythm there is must fall out
+  of the first two.
+- **Not a rule "be silent while there is sound", no voice detector that mutes the mouth, no fixed reply delay,
+  no rate set to 4 a minute by hand.** The survey lists these as the wrong shortcuts and I agree.
+
+**Before anything is built:** (a) the mouth as it is, measured the way infants are (sounds a minute alone, share
+of time vocalising, share of onsets inside a partner's voice against a shuffled control, gaps from the partner's
+end to its onset): the baseline, which needs no new mechanism; (b) Choi 2015's equations and constants read
+from the PDF; (c) then the drive behind a switch in `organic/stream.py`, said before it runs, measured by the
+same observations (they are observations, never targets). The brain being raised now has the old mouth; the
+next one is raised with the new one.
