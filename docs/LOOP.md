@@ -1980,7 +1980,7 @@ Still Kris's own:
   readers started, said before. **Next:** read them; if the pattern holds, look at why the first voice survives
   (do the kinds divide between the voices?) and write the second paper's opening around it in PUBLISH.md. The readout of the kinds is built and queued (VISION.md 05:30).
   Artifact at version 17.
-- 2026-11-28 06:42 Health at 06:29: all healthy (6.0 GB available, 291 GB free; tagb_s2 at 110,000). **Two voices,
+- 2026-11-28 06:40 Health at 06:29: all healthy (6.0 GB available, 291 GB free; tagb_s2 at 110,000). **Two voices,
   the second pair (reader 1 then 2), read** (VISION.md 06:30; memoize): the first pair's pattern repeats only in
   part. Circuit: later voice 0.030 against 0.041 alone (median rank 346 against 376), first voice 0.031 → 0.023;
   fixed relay: later voice 0.027, first voice 0.026 → 0.015. Three of my four numbers out (two just, the fixed
