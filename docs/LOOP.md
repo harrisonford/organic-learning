@@ -65,6 +65,10 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-two-voices-kinds`** (queued 2026-11-28 05:30 behind `organic-two-voices-born2`; MemoryMax 2600M; about
+  90 minutes once it starts): reader 2 then reader 1 again, circuit then fixed relay, with the readout of what the
+  second voice does to the kinds → out/bench/two_voices_top2_top_{born,batch}_kinds_s0.log. Said before: VISION.md
+  05:30.
 - **`organic-two-voices-born2`** and **`organic-two-voices-rest2`** (2026-11-28 05:27; MemoryMax 2600M each; about
   100 and 130 minutes): two voices again for reader 1 then 2, and reader 2 then 3 (circuit born; later voice
   alone; fixed relay) → out/bench/two_voices_top_top2_*_s0.log, two_voices_top2_top3_*_s0.log. Said before:
@@ -1967,4 +1971,5 @@ Still Kris's own:
   ends at 0.016 and the first stays at 0.039. Two of my four numbers wrong (the first voice is not lost; the fixed
   relay shuts the second voice out more than I said). LIVE.md decision 17 has the result. Two more pairs of
   readers started, said before. **Next:** read them; if the pattern holds, look at why the first voice survives
-  (do the kinds divide between the voices?) and write the second paper's opening around it in PUBLISH.md.
+  (do the kinds divide between the voices?) and write the second paper's opening around it in PUBLISH.md. The readout of the kinds is built and queued (VISION.md 05:30).
+  Artifact at version 17.

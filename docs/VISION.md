@@ -5454,3 +5454,17 @@ repeats in both: with the circuit the later voice ends at 0.8–1.1 of what it r
 keeps at least four fifths of what it had at the change; with the fixed relay the later voice ends under 0.6 of
 alone and the first voice is kept. Reader 1 is the weak reader (about 0.02–0.03 at 2,500 captions), so where it
 is the first voice the ratios will be loose.
+
+### 2026-11-28 05:30 — Why is the first voice not lost? A readout of the kinds (said before it runs)
+
+`experiments/stream_kinds_probe.py` now prints, at the end of a two-voice life: for every kind, the share of
+its wins that came in the second voice; how far each kind has moved since the change (cosine with itself);
+and how much the two voices' held-out captions use the same kinds (overlap of the two use distributions: 1 the
+same kinds as often, 0 none shared). A measure only. Queued behind the running pairs: reader 2 then reader 1
+again, with the circuit and with the fixed relay (`organic-two-voices-kinds`).
+
+**What I say.** With the circuit the kinds divide: the two voices' held-out captions mostly use different
+kinds (overlap under 0.5), and the kinds are of two sorts, moved and not (lower quartile of the cosine under
+0.7, upper quartile over 0.95). With the fixed relay the second voice falls on the first voice's kinds
+(overlap over 0.6): its sounds are not told apart from the first voice's, which would be why it ties to little.
+I hold this loosely; I have not seen these numbers for any ear.

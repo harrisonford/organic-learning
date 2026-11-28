@@ -111,6 +111,7 @@ def read(name, test_u=None, V_test=None):
     held = (ear.mu.copy(), ear.var.copy(), ear.top, brain.kind_trace.copy())
     ear.learning = brain.kind_learn = False
     R, none = np.zeros((len(test_u), V_test.shape[1]), np.float32), 0
+    used = np.zeros(len(brain.kind_trace))  # how often each kind is heard in these held-out captions
     for n, u in enumerate(test_u):
         ear.mu, ear.var, ear.top = held[0].copy(), held[1].copy(), held[2]
         brain.kind_trace[:] = 0
@@ -120,6 +121,9 @@ def read(name, test_u=None, V_test=None):
             total += brain.kind_trace
         for what, k in ear.pause():
             brain.kind_trace[k + (ear.k23 if what == "triple" else 0)] += 1.0
+            events.append(("kind", k + (ear.k23 if what == "triple" else 0)))
+        for _, i in events:
+            used[i] += 1
         total += brain.kind_trace * quiet_steps / 2
         r = brain.recall(total)
         if r is None:
@@ -133,6 +137,7 @@ def read(name, test_u=None, V_test=None):
     r_cap, r_img = (S > np.diag(S)[:, None]).sum(1), (S > np.diag(S)[None, :]).sum(0)
     say(f"{name}: photograph -> its caption among {len(test_u)}: {rec(r_img)}; caption -> its photograph: {rec(r_cap)}; median rank {np.median(r_img) + 1:.0f} / {np.median(r_cap) + 1:.0f}"
         f" (captions that called up nothing: {none}; kinds founded {ear.pairs.founded} + {ear.triples.founded})")
+    return used
 
 
 kinds = 0
@@ -143,10 +148,24 @@ for n, u in enumerate(life_u if FIRST_HEARD else [], 1):
 if THEN:
     if FIRST_HEARD:
         read(f"the second voice ({THEN}) before any of it is heard", test2_u, V_test2)
+        # (2026-11-28 05:28) a measure only: where the kinds are at the change, to see what the second voice does to them
+        U0 = (ear.pairs.U.copy(), ear.triples.U.copy())
+        wins0 = np.concatenate([ear.pairs.wins, ear.triples.wins]).copy()
     kinds = 0
     for n, u in enumerate(life2_u, 1):
         kinds += hear(u, V_life2[n - 1])
         if n in CHECKS or n == len(life2_u):
             read(f"after {n} captions of the second voice ({kinds / n:.1f} kinds a caption), the second voice", test2_u, V_test2)
             if FIRST_HEARD:
-                read(f"after {n} captions of the second voice, the first voice ({READER})")
+                u1 = read(f"after {n} captions of the second voice, the first voice ({READER})")
+                if n == len(life2_u):
+                    u2 = read("the second voice once more, for its kinds", test2_u, V_test2)
+                    wins = np.concatenate([ear.pairs.wins, ear.triples.wins])
+                    share = (wins - wins0) / np.maximum(wins, 1)  # of a kind's wins in the whole life, those won in the second voice
+                    moved = np.concatenate([(a * b).sum(1) for a, b in zip(U0, (ear.pairs.U, ear.triples.U))])
+                    p1, p2 = u1 / u1.sum(), u2 / u2.sum()
+                    say(f"the kinds: of a kind's wins, the share won in the second voice: quartiles {np.percentile(share, 25):.2f} / {np.median(share):.2f} / {np.percentile(share, 75):.2f}; "
+                        f"kinds won nine tenths in one voice: {np.mean(share < 0.1):.2f} the first, {np.mean(share > 0.9):.2f} the second; "
+                        f"a kind against itself at the change (cosine): quartiles {np.percentile(moved, 25):.2f} / {np.median(moved):.2f} / {np.percentile(moved, 75):.2f}; "
+                        f"held-out use of the kinds by the two voices: overlap {np.minimum(p1, p2).sum():.2f} (1 the same kinds as often, 0 no kind shared), "
+                        f"kinds carrying half of each voice's use {int(np.searchsorted(np.cumsum(np.sort(p1)[::-1]), 0.5)) + 1} / {int(np.searchsorted(np.cumsum(np.sort(p2)[::-1]), 0.5)) + 1} of {len(p1)}")
