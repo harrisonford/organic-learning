@@ -5266,7 +5266,7 @@ life from the same level with nothing changed; one test each at the end):
 when only rewarded moments come back: on three seeds it does not, and it does not harm. The third arm (replay as
 built on 2026-11-18, every moment) is running (tagb_s1 since about 02:20).
 
-### 2026-11-28 02:27 — Every piece live at once (said before it runs)
+### 2026-11-28 02:26 — Every piece live at once (said before it runs)
 
 Second reader, one pass: bands fading over 0.5 s **and** the relay a circuit learning along the life
 (`LIVE=0.5 RELAY=circuit`), kinds and link as before. Nothing in this ear is fitted in a batch or known ahead

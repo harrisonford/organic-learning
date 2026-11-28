@@ -65,9 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-online-all-live`** (2026-11-28 02:27; MemoryMax 2600M; about 50 minutes): the second reader's ear with
+- **`organic-online-all-live`** (2026-11-28 02:26; MemoryMax 2600M; about 50 minutes): the second reader's ear with
   bands fading over 0.5 s and the relay a circuit, the circuit's evenness at every checkpoint →
-  out/bench/grounded_online_top2_live0.5_circuit_s0.log. Said before: VISION.md 02:27 (0.074-0.084).
+  out/bench/grounded_online_top2_live0.5_circuit_s0.log. Said before: VISION.md 02:26 (0.074-0.084).
 - **Lives:** `tagr_s0` ENDED about 02:15 at 130,000; queue 29e's first two arms are read (VISION.md 02:24: replay
   of rewarded moments, nothing on three seeds). **`tagb_s1`** (replay of every moment) running since about 02:20,
   to 110,000; then tagb_s2 (120,000), tagb_s0 (130,000). Lists put right by hand at 02:24. In the entries of
@@ -1922,7 +1922,7 @@ Still Kris's own:
   I had said two thirds); the one-voice ear (0.089-0.090) is at that ceiling. Built into the stream brain
   (`give_letters`, `TraceLink`; default path the same, checked) and the live page (every keystroke; the recall
   panel answers letters too); page test with speech and typing passes. The live brain is newborn again.
-- 2026-11-28 02:28 Health at 02:24: one alert (tagr_s0 had ended as planned at 130,000; lists put right, tagb_s1
+- 2026-11-28 02:26 Health at 02:24: one alert (tagr_s0 had ended as planned at 130,000; lists put right, tagb_s1
   added; all healthy after; 8.2 GB available, 292 GB free). **The ear with only the past on three readers: 0.046 /
   0.089 / 0.089 against 0.057 / 0.090 / 0.095** (VISION.md 02:24; memoize): 81-99% kept; "loses nothing" was the
   second reader only. **Replay of rewarded moments (29e): nothing on three seeds**, no stage protected, none
