@@ -69,11 +69,11 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   one-pass ear with every piece born with the life, readers 1 and 3 →
   out/bench/grounded_online_top_live0.5_circuit_layerborn_s0.log, ..._top3_.... Said before: VISION.md 07:51
   (reader 1 0.038–0.054, reader 3 0.076–0.094).
-- **`organic-stream-layer-born`** (2026-11-28 07:41, started when the one-pass run ended; MemoryMax 2600M; about 50
+- **`organic-stream-layer-born`** (2026-11-28 07:40, started when the one-pass run ended; MemoryMax 2600M; about 50
   minutes): the stream brain's ear with nothing kept from before (`RELAY=born LAYER=born`), reader 2, read at
   2,500 and 5,000 → out/bench/stream_kinds_top2_all_born_s0.log; beside the relay born alone 0.031 / 0.055. Said
   before: VISION.md 07:40 (0.028–0.045 and 0.048–0.062).
-- (READ 07:51: 0.086 at the end; its control line to be added.) `organic-online-layer-born`, below.
+- (READ 07:51: 0.086 at the end; control 0.008.) `organic-online-layer-born`, below.
 - (READ 07:37–07:52: all three pairs; only `organic-two-voices-kinds` still runs, to about 09:30.)
 - **`organic-online-layer-born`** (2026-11-28 06:40; MemoryMax 2600M; about 50 minutes): reader 2's one-pass ear
   with every piece born with the life (`LIVE=0.5 RELAY=circuit LAYER=born`: the hearing cortex too, nothing heard

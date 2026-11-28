@@ -5628,8 +5628,9 @@ Photograph → its caption in the first ten of 1,000 (chance 0.010; ±0.008 at t
 | cortex developed first, relay a circuit (03:24) | 0.032 | 0.040 | 0.063 | 0.071 | 0.079 (236) |
 | cortex and relay fitted first, each caption known whole (11-27) | | | | | 0.090 |
 
-The relay's evenness 189–204 of 1,024 (222–225 above a developed cortex). The control line is still being
-computed as I write; it is added below when the run ends.
+The relay's evenness 189–204 of 1,024 (222–225 above a developed cortex). The control (bags tied to other
+photographs; added 07:54 when the run ended): 0.008, chance. The caption's own written words from its bag, a
+measure only: 0.824 in the first ten (0.817 with the cortex developed first).
 
 **Against what I said (06:39).** 0.018–0.030 at 1,000: **too low** (0.032). 0.060–0.078 at the end: **too
 low** (0.086). The cortex's kinds come to rest by themselves: **held** (median cosine with the last reading
