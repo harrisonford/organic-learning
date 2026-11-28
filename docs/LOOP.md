@@ -1932,10 +1932,15 @@ Still Kris's own:
   second reader only. **Replay of rewarded moments (29e): nothing on three seeds**, no stage protected, none
   harmed. The live brain's step: 3.9 ms on an idle machine, about 8 ms beside three probes (the probes are the
   cost; they stay at Nice 15). Started: every piece live at once (said before).
-- 2026-11-28 03:47 Health at 03:22: all healthy (8.0 GB available; tagb_s1 at 100,000). **Every piece live at
+- 2026-11-28 03:46 Health at 03:22: all healthy (8.0 GB available; tagb_s1 at 100,000). **Every piece live at
   once: 0.079 against 0.090** (said 0.074-0.084; VISION.md 03:24; memoize); the circuit's evenness flat at 222-225
   from the first checkpoint, so "still settling" was wrong. **How much sound the circuit needs**
   (`experiments/relay_circuit_settle_check.py`; VISION.md 03:45; memoize): at rest after three minutes; on a new
   voice 79% at once and level within a minute; 76% kept on the voice it left (I said 90%). LIVE.md decision 14
   corrected. `organic/hear_stream.py`: a circuit relay can learn on the clock (`relay_learns`) and beside it
-  (`relay_later`); a row through the circuit 0.06 ms. Two stream runs started (above).
+  (`relay_later`); a row through the circuit 0.06 ms. Two stream runs started (above). `relay_learns="sound"`: the circuit
+  learns only from frames the ear does not hold to be quiet (for a microphone; on clean speech 99% of frames, the
+  same kinds). Default path checked again: 40 of 40 captions the very same bag. Artifact at version 16.
+  **Next:** read A and B; if B holds, the page's relay becomes a circuit born with the brain (`relay_learns="sound"`,
+  `relay_later`), tested with the recorded-speech page test; then two voices in one life (does a kind survive the
+  relay following a new speaker), which the one-voice benchmark cannot say.

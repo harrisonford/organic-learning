@@ -59,6 +59,8 @@ class StreamEar:
         # (2026-11-28) a relay that is a circuit (organic/cortex2.py RelayCircuit) goes on learning from what is heard,
         # as in the one-pass probe: the frames of an utterance are coded with the synapses as they were when it began,
         # and at its end (or after `relay_block` frames of an endless one) every synapse changes by them. Off unless asked.
+        # True: by every frame, as the probe; "sound": only by the frames this ear does not hold to be quiet (a
+        # microphone is never silent, and a circuit that heard the room for minutes would be the room's).
         # `relay_later`: that change is worked out beside the clock (about a tenth of a second for 1,024 cells) and the
         # ear goes on with the synapses as they were until it is done.
         self.relay_learns, self.relay_block, self.X = False, 1000, []
@@ -69,6 +71,7 @@ class StreamEar:
         self.z, self.sums = [], []  # the last rows of this utterance: its bands, its loudness
         self.C, self.loud, self.env, self.quiet = [], [], [], []  # a code frame each, since the utterance began
         self.cuts, self.done, self.chain = [0], 0, []  # cuts found; the last one closed; stretches in a row without a gap
+        self.F = []  # a frame each as the relay receives it (kept only when `relay_learns` is "sound")
         self.told = []  # a code frame each: whether the listener said this moment holds no sound of the world (see step)
 
     def _through(self, c):
@@ -76,7 +79,9 @@ class StreamEar:
         if hasattr(r, "Z"):
             return unit((unit(c) - r.mu) @ r.Z)
         x = unit(c)
-        if self.relay_learns and self.learning:
+        if self.relay_learns == "sound":  # only frames this ear holds to be sound (not quiet) reach the circuit's learning
+            self.F.append(x)
+        elif self.relay_learns and self.learning:
             self.X.append(x)
             if len(self.X) >= self.relay_block:
                 self._relay_learn()
@@ -123,6 +128,10 @@ class StreamEar:
         self.quiet.append(v < 0.1 * self.top or told is True or (told is not False and v < told))
         if e >= 1 and self.quiet[e] != self.quiet[e - 1]:
             self.cuts.append(e)
+        if self.relay_learns == "sound" and self.learning and not self.quiet[e]:
+            self.X.append(self.F[e])
+            if len(self.X) >= self.relay_block:
+                self._relay_learn()
 
     def _trough(self, t):
         if t >= 1 and self.env[t] == min(self.env[max(0, t - self.half): t + self.half + 1]):
@@ -182,6 +191,7 @@ class StreamEar:
         if len(self.C) > 4000 and self.done > 2000:  # an endless utterance: what is long closed is let go
             d = self.done - 100
             self.C, self.loud, self.env, self.quiet, self.told = self.C[d:], self.loud[d:], self.env[d:], self.quiet[d:], self.told[d:]
+            self.F = self.F[d:]
             self.cuts, self.done = [c - d for c in self.cuts], self.done - d
         return out
 
