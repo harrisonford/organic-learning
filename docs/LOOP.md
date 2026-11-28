@@ -2025,7 +2025,7 @@ Still Kris's own:
   (`organic/live.py`: `HearingLayer`, `layer_learns="sound"`), tested with the recorded-speech page test, LIVE.md
   decision 18; then two voices with the cortex born too; the kinds readout for the pair 2→1; seeds for the
   two-voice table.
-- 2026-11-28 09:00 Health at 08:50: one alert (tagb_s2 had ended as planned at 120,000; lists put right, tagb_s0
+- 2026-11-28 08:59 Health at 08:50: one alert (tagb_s2 had ended as planned at 120,000; lists put right, tagb_s0
   added; all healthy after; 4.7 GB available, 289 GB free). **The whole ear born, on the clock: 0.033 / 0.060**
   (said 0.028–0.045 and 0.048–0.062; VISION.md 08:58; memoize) against 0.039 / 0.061 kept. **Decision (mine): the
   page's ear is born whole** (`organic/live.py`; LIVE.md decision 18; page test passes; a step 9.8 ms under a load
