@@ -16,22 +16,39 @@ abstract, body = body[len("## Abstract"):body.index("\n## ")].strip(), body[body
 body = re.sub(r"^(#+) \d+\. ", r"\1 ", body, flags=re.M)  # "## 3. Experiment 1" -> "## Experiment 1"
 body = re.sub(r"^#(#+) ", r"\1 ", body, flags=re.M)  # one level up: the draft's sections are "##"
 FIGURES = [  # (the words that first point to it, the file, its width, the caption); numbered in this order
-    ("Figure 1, `fig_architecture.pdf`,", "fig_architecture.pdf", 100,
-     "The learner's parts, and how each comes to be what it is. Blue parts learn online by a local rule; the two orange "
-     "parts are computed in batch before learning begins; the green part learns from reward; the grey part is a fixed reflex. "
-     "No error is sent back from one part to the part before it."),
-    ("Figure 2, `fig_life.pdf`,", "fig_life.pdf", 92,
-     "One life (seed 0). Lines: score above blind answering on held-out questions, every 5,000 moments. The band on top shows "
-     "the stage the world was in. Below: what the learner babbled with nothing said to it, and what it answered when asked "
-     "to name a picture, at four ages (the first short samples in the log, not chosen)."),
-    ("Figure 3, `fig_examples.pdf`,", "fig_examples.pdf", 100,
-     "What a learner says after 115,000 moments. Top: single pictures; bottom: picture-book pages, where it must look at one "
-     "thing. These are the first six held-out items of each kind, in order, not chosen. Above each picture, the question; "
-     "below, the answer."),
-    ("Figure 4, `fig_benchmark.pdf`,", "fig_benchmark.pdf", 92,
+    ("Figure 1, `fig_organism.pdf`,", "fig_organism.pdf", 100,
+     "The learner's parts, and how each comes to be what it is. Blue parts are born with the life and learn by a local rule "
+     "as the stream comes; the purple part learns by a local rule but is developed before the life; the orange part is "
+     "computed in a batch beforehand; grey parts are not learned. No error is sent back from one part to the part before it."),
+    ("Figure 2, `fig_benchmark.pdf`,", "fig_benchmark.pdf", 88,
      "CIFAR-10 seen once: held-out accuracy against labelled pictures seen. Lines: mean of three seeds; bands: their range. "
      "Backpropagation with four replays per new picture is one seed."),
-    ("Figure 5, `fig_ablation.pdf`,", "fig_ablation.pdf", 100,
+    ("Figure 3, `fig_credit.pdf`,", "fig_credit.pdf", 100,
+     "Who earned the win. Held-out pictures named after 50,000 seen once, for one layer of plastic synapses learning by a local "
+     "rule (blue) and for backpropagation of the same shape (orange), reading the cortex's code as it comes (left pair) or "
+     "decorrelated once more by the relay (right pair). Mean of three seeds; bars show the standard deviation. Dashed: a "
+     "streaming linear discriminant on the relayed code."),
+    ("Figure 4, `fig_ear.pdf`,", "fig_ear.pdf", 100,
+     "An ear born with the life. Top: along one life of spoken captions, each heard once beside its photograph, how often an "
+     "unseen photograph's own caption is among the first ten of 1,000, for three speakers; blue, every part of the ear starts "
+     "from random numbers and nothing is known of a caption before it is heard; orange, hearing cortex and relay prepared "
+     "beforehand and each caption normalised whole. Bottom: one speaker at the end of the life as the preparation is removed "
+     "piece by piece; bars are the sampling error of one test. One seed each."),
+    ("Figure 5, `fig_voices.pdf`,", "fig_voices.pdf", 100,
+     "A second voice. The ear hears one speaker for 2,500 captions, then another for 2,500. Left: the later voice at the end, "
+     "as a share of what that voice reaches when heard alone from birth. Middle: the first voice at the end, as a share of "
+     "what it was when the voice changed. Right: how far the two voices use the same sound units (1: the same units as often; "
+     "0: none shared). Three pairs of speakers, one seed each."),
+    ("Figure 6, `fig_clock.pdf`,", "fig_clock.pdf", 100,
+     "One sentence through the ear on the 10 ms clock (a real caption; only its loudness is shown)."),
+    ("Figure 7, `fig_life.pdf`,", "fig_life.pdf", 88,
+     "One life in the staged world (seed 0). Lines: score above blind answering on held-out questions, every 5,000 moments. "
+     "The band on top shows the stage the world was in. Below: what the learner babbled with nothing said to it, and what it "
+     "answered when asked to name a picture, at four ages (the first short samples in the log, not chosen)."),
+    ("Figure 8, `fig_examples.pdf`,", "fig_examples.pdf", 96,
+     "What a learner says after 115,000 moments. Top: single pictures; bottom: picture-book pages, where it must look at one "
+     "thing. The first six held-out items of each kind, in order, not chosen. Above each picture, the question; below, the answer."),
+    ("Figure 9, `fig_ablation.pdf`,", "fig_ablation.pdf", 96,
      "A life with one part removed, at 50,000 moments: score above blind answering. Bars: mean of three seeds; "
      "dots: the seeds; dashed line: the whole learner's mean."),
 ]

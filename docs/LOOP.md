@@ -358,7 +358,9 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
 
 ## Queue (in order; the paper's needs are in docs/PUBLISH.md)
-**0. The paper, rewritten to Kris's brief of 2026-11-28 09:44** (his words in VISION.md 09:46 and in the notes at the
+**0. (DONE 10:08: draft 12 emailed; PUBLISH.md. What is left: seeds into the hearing figures as they end, the
+[check] references, the question whether the visual cortex saw the hearing test's photographs, Kris's reading.)
+The paper, rewritten to Kris's brief of 2026-11-28 09:44** (his words in VISION.md 09:46 and in the notes at the
 top of docs/paper/DRAFT.md): the words "organic learning" and "organic intelligence"; "it was the code, not the
 rule" gone (done 09:46); as visual as possible and concise (draft 11 is 22 pages, about 14,500 words, five
 figures: aim at a third of that, one figure a claim); the real-time work in (the ear born whole on three
@@ -2054,4 +2056,13 @@ Still Kris's own:
   intelligence"; "it was the code, not the rule" is out (done in DRAFT.md); as visual as possible and concise;
   the real-time work in; and a rundown, given. Saved to memory and memoize. **Next:** queue item 0 (the paper's
   rewrite, draft 12); seeds 1 and 2 of the born ear on reader 2; read the all-born two voices.
+- 2026-11-28 10:09 Health at 09:59: all healthy (5.8 GB available, 289 GB free; tagb_s0 at 120,000). **Draft 12 of
+  the paper written, built and emailed to Kris** (queue item 0; PUBLISH.md 10:08): 12 pages against 22, nine
+  figures against five, both of his words, the disliked line gone, the real-time work in; draft 11 kept as
+  `docs/paper/SUPPLEMENT.md`; five new figures from `experiments/paper_figures12.py`. Four statements of mine in
+  the first writing did not match the logs and were put right before the build (how often my predictions failed;
+  what a fixed relay did on video; how a word carries to an unheard voice; what "only the past" costs). The
+  email miscounted the references written from memory (said four, named three). **Next:** read seeds 1 and 2
+  of the born ear and the all-born two voices; put the seeds into fig_ear; find out whether the visual cortex's
+  development photographs include the hearing tests' photographs (the draft says "may").
 

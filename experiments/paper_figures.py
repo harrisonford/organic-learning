@@ -27,9 +27,9 @@ for l in open("out/bench/backprop_full.log"):
         rows["backprop replay " + m.group(2)][int(m.group(1))] = {int(a): float(b) for a, b in re.findall(r"(\d+) (0\.\d+)", m.group(3))}
 
 SERIES = [  # (log key, label, colour, marker, label's nudge in points)
-    ("cells+relay", "word cells through the relay", "#2a78d6", "o", -11),
+    ("cells+relay", "local rule (word cells) through the relay", "#2a78d6", "o", -11),
     ("backprop replay 0", "backprop, same shape, one pass", "#eb6834", "s", 0),
-    ("backprop replay 4", "backprop, 4 pictures lived again per new one (1 seed)", "#1baf7a", "^", 9),
+    ("backprop replay 4", "backprop, 4 old pictures replayed per new one (1 seed)", "#1baf7a", "^", 9),
     ("cells", "word cells, no relay", "#eda100", "D", 0),
     ("slda+relay", "streaming LDA through the relay", "#e87ba4", "v", 0),
 ]

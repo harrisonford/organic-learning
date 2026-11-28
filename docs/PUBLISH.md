@@ -346,4 +346,20 @@ organic learner behaves and what each part does, measured honestly, not a score.
   early), with the nearest-class-mean rows and the second-moment reading; the development section retitled "What our
   Hebbian development is worth" with both sizes; "What we got wrong" now has five assumptions (the enlargement added;
   the abstract had said three while the section listed four).
+- **2026-11-28 10:08: draft 12 emailed to Kris** (12 pages, about 4,700 words, nine figures), rewritten to his brief
+  of 09:44 (VISION.md 09:46): the words "organic learning" (the method: five commitments) and "organic
+  intelligence" (the aim; "we have not built one"); "it was the code, not the rule" gone; one figure a claim;
+  the real-time work in. **This makes one paper of what these notes called two**: seeing in one pass and who
+  earned the win; an ear born with the life (three speakers, one seed each); a second voice; the 10 ms clock and
+  the live page; the staged childhood as one section that says the real-time learner has no stages; six wrong
+  assumptions (the sixth: that the ear had to be prepared). Draft 11 is kept whole as
+  `docs/paper/SUPPLEMENT.md` (every table, control and setting) and the paper points to it. New figures:
+  `experiments/paper_figures12.py` (fig_organism, fig_credit, fig_ear, fig_voices, fig_clock). **Pending in it:**
+  seeds for the hearing and two-voice results. **To check by hand (REFERENCES.md, five new rows):** the SpokenCOCO
+  paper and Harwath, Torralba & Glass 2016 (both from memory), Dean et al. 2005 and Rabinowitz et al. 2011
+  (identifiers checked, text not opened), and the note that "organoid intelligence" is another field's name
+  (from memory). The email said "four references from memory" and named three: three is right. **A caveat the
+  draft states and that needs a check:** the visual cortex was developed without labels on COCO photographs
+  that may include the hearing test's photographs. Kris's title is kept with the second word added; two others
+  are in the note at the top of DRAFT.md. Nothing uploaded anywhere.
 

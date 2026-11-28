@@ -83,3 +83,9 @@ what we say it says. **Status** is how the assistant knows the entry:
 Not cited yet but in the notes, if wanted: the Dragon Hatchling (arXiv 2509.26507; trained by backpropagation
 through time), Monty (arXiv 2507.04494), "Alignment Without Binding" (workshop, 2026; a frozen random encoder beat
 local credit assignment).
+| ☐ | Hsu, Harwath, Song & Glass. SpokenCOCO (people reading the MSCOCO captions aloud). Cited in docs/WORLD.md as a NeurIPS 2020 workshop paper on self-supervised learning for speech; **venue, year and title to be confirmed** | https://sls.csail.mit.edu/downloads/placesaudio/ (the corpus page, opened 2026-11-26 for the licence) | the speech corpus of the hearing sections (draft 12) | memory; the corpus page was opened, the paper was not |
+| ☐ | Harwath, Torralba & Glass (2016). Unsupervised learning of spoken language with visual context. *NeurIPS* | to be found by hand | the paradigm's reference: spoken captions and images learned by backpropagation, retrieval far above ours (draft 12, "An ear born with the life", Related work) | memory |
+| ☐ | Dean, Harper & McAlpine (2005). Neural population coding of sound level adapts to stimulus statistics. *Nature Neuroscience* | https://doi.org/10.1038/nn1541 | auditory neurons adapt to the level of recent sound (the ear's adaptation over half a second) | identifier checked in the registry (for the talk artifact); text not opened |
+| ☐ | Rabinowitz, Willmore, Schnupp & King (2011). Contrast gain control in auditory cortex. *Neuron* | https://doi.org/10.1016/j.neuron.2011.04.030 | auditory cortex adapts to the contrast of recent sound | identifier checked in the registry (for the talk artifact); text not opened |
+| ☐ | "Organoid intelligence" as the name of a research programme (Smirnova et al. 2023, *Frontiers in Science*, from memory) | to be found by hand | the appendix's note that "organic intelligence" is not that | memory |
+
