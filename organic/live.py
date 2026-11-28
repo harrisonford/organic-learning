@@ -136,6 +136,15 @@ class LiveBrain:
         # tied to what the eye holds now, and showed nothing but the present view), and the search is done beside the clock.
         self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=1200), 0.0, 0.0, None
         self.letters_since, self.letters_last, self.sound_held, self._recalling = 0.0, 0.0, collections.deque(maxlen=100), False
+        # (2026-11-28 11:15) a brain that was raised before it is hosted (experiments/live_childhood.py) brings the
+        # photographs of its childhood: a recall is searched among them too, so the page can show which one a sound or
+        # typed letters call up. Each code less the childhood's average, at unit length; never changed.
+        self.childhood, cp = None, os.path.join(home, "childhood.npz")
+        if os.path.exists(cp):
+            z = np.load(cp)
+            ends = z["ends"]
+            mean = z["codes"].astype(np.float32).mean(0)
+            self.childhood = (unit(z["codes"].astype(np.float32) - mean), mean, [z["jpeg"][a:e].tobytes() for a, e in zip(np.concatenate([[0], ends[:-1]]), ends)])
         self.ear, self.lock, self.stop = LiveEar(), threading.Lock(), threading.Event()
         self.frame, self.rows, self.texts = None, collections.deque(), collections.deque()
         self.count = collections.Counter()
@@ -213,17 +222,23 @@ class LiveBrain:
         r = b.letters.recall() if letters else b.recall()
         before = (self.letters_since if letters else time.monotonic() - 2 * b.kind_tau) - 0.5
         views = [v for v in self.views if v[2] < before]
-        if r is None or len(views) < 8 or self._recalling:
+        if r is None or (len(views) < 8 and self.childhood is None) or self._recalling:
             return
         self._recalling = True
 
         def search():
             try:
-                codes = np.stack([v[0] for v in views])
-                codes = codes - codes.mean(0)
-                like = unit(codes) @ unit(r)
+                q, like, pictures = unit(r), [], []
+                if self.childhood is not None:
+                    like.append(self.childhood[0] @ q)
+                    pictures += self.childhood[2]
+                if views:
+                    codes = np.stack([v[0] for v in views])
+                    like.append(unit(codes - (self.childhood[1] if self.childhood is not None else codes.mean(0))) @ q)
+                    pictures += [v[1] for v in views]
+                like = np.concatenate(like)
                 best = int(np.argmax(like))
-                self.emit({"kind": "recall", "jpeg": views[best][1], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8)), "letters": letters})
+                self.emit({"kind": "recall", "jpeg": pictures[best], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8)), "letters": letters})
             finally:
                 self._recalling = False
 

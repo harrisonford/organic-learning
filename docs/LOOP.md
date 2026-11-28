@@ -65,6 +65,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-live-childhood`** (2026-11-28 11:13; MemoryMax 3000M; about 3 hours): the page's own brain raised offline
+  on reader 2's 8,927 captions with their photographs and letters (`experiments/live_childhood.py`) →
+  out/bench/live_childhood_top2_s0.log; levels kept in out/live_raised/ (brain_s0_level{1000,2500,5000,7500,8927}.pkl,
+  childhood.npz). Said before: VISION.md 11:13. **To do as levels arrive:** host the newest level on the page
+  (copy the level and childhood.npz into out/live/, Kris's 10-minute brain kept aside as
+  out/live/brain_s0.kris-1052.pkl, restart `kid-a-live-brain` then the bridge), run the page test, tell Kris.
 - **A research agent** (started 10:55): how infants and other vocal learners come to stop vocalising, wait and
   answer (turn-taking; mechanisms and their numbers; every reference opened) → docs/RESEARCH_TURNS.md. Then the
   organic check and a probe before anything goes into the mouth (Kris, 10:50: the brain "doesnt shut up").
@@ -363,6 +369,10 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
 
 ## Queue (in order; the paper's needs are in docs/PUBLISH.md)
+**00. Kris, 2026-11-28 about 11:07: the page hosts a trained brain, not a newborn** ("i want the trained model even
+if its bad"), and the wait-and-respond dynamic is researched and then built into the architecture, organic over
+performance. In hand: the childhood (Running), the survey (docs/RESEARCH_TURNS.md when in). Then: the organic
+check and a probe for a mouth that listens; raise the next brain with it; levels of one brain in order.
 **0. (DONE 10:08: draft 12 emailed; PUBLISH.md. What is left: seeds into the hearing figures as they end, the
 [check] references, the question whether the visual cortex saw the hearing test's photographs, Kris's reading.)
 The paper, rewritten to Kris's brief of 2026-11-28 09:44** (his words in VISION.md 09:46 and in the notes at the
@@ -2080,4 +2090,10 @@ Still Kris's own:
   **Next:** read the survey, write the organic check for a mouth that listens, probe it; ask whether the born
   ear should hear its own voice at all (speaking-induced suppression is in the brain's inner path only; the
   loudspeaker's echo is outside it); the 11:09 check of the seeds and the two-voice runs.
+- 2026-11-28 11:15 **Kris: the page should host a trained brain** (VISION.md 11:13; his words there). No brain of
+  the page's kind had lived longer than a test, so one is being raised: `experiments/live_childhood.py` (the
+  page's own LiveBrain, reader 2's captions on the clock with photographs and letters; a trial of 40 captions
+  ran clean; levels of one brain kept in order), started as `organic-live-childhood`, said before. `organic/live.py`
+  searches a raised brain's childhood photographs in a recall. The 11:09 check of the seeds and the two-voice
+  runs is still owed (next iteration).
 

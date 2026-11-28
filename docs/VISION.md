@@ -5734,3 +5734,36 @@ both words, the real-time work in) is at the head of the queue.
 **Seeds 1 and 2 of the born ear, reader 2, started 09:48** (`organic-online-layer-born-seeds`; a seed changes the
 visual cortex, the ear's birth and which 1,000 captions are held out). **What I say:** both end between 0.075
 and 0.097, controls at chance.
+
+### 2026-11-28 11:13 — A childhood for the live page's brain (Kris's direction; said before it runs)
+
+**Kris, 11:08**, after learning that the page hosted a newborn: "i thought the model we hosted was already
+trained ... i want that best model to host it and use it on this app so it's not a new born really what i want,
+i want the trained model even if its bad but as you just saw getting a feel of how the model works is great at
+finding improvements"; and on the babble that never stops: "we research on how attention or just resting
+communication dynamic is learned on the brain we include on the architecture (remember organic over
+performance)".
+
+**What "the trained model" can mean here, plainly.** The brains that have had a childhood are the lives' (the
+staged world; kid-a's levels): they take a picture and a typed line and answer in letters, one moment at a
+time. The page's brain is another body: an eye, an ear and a mouth on a 10 ms clock. No such brain has lived
+longer than a test. So the trained model for the page has to be raised: the page's own brain, built by the
+page's own code, given a childhood before it is hosted.
+
+**The childhood** (`experiments/live_childhood.py`): reader 2's 8,927 spoken captions (9.2 hours of speech),
+each once, on the clock, the photograph it describes held in the eye's view, the caption's letters arriving as
+it is spoken (as subtitles would), half a second of silence between. Everything in the brain runs as on the
+page: the ear born whole and learning only from what it holds to be sound, the room's level, the babbling
+mouth (its own voice kept out of the word-learning ear), the two Hebbian links (sound to sight, letters to
+sight). Kept at 1,000 / 2,500 / 5,000 / 7,500 captions and the end: levels of one brain, in order. The
+photographs seen are kept beside it so the page can show which one a sound or a typed word calls up.
+A trial of 40 captions runs at about 1.2 s a caption: about three hours for the whole.
+
+**What differs from the page:** the photograph is given to the eye whole (it is 64 pixels, the eye's own
+window; a camera frame is 128 and the eye moves over it); the silence is true silence.
+
+**What I say** (read on 1,000 photographs never seen, captions never heard). From the sound at the end:
+**0.045–0.075** in the first ten (the one-pass ear reaches 0.086 with clean caption ends and no mouth; inside
+the stream brain it was 0.060 at 5,000). From typed letters at the end: **0.07–0.10** (0.093 for letter runs
+in the offline measure). And what it will not do: understand Kris's voice (a voice never heard finds 1–3.5%),
+or wait before it babbles.
