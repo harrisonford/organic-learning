@@ -1894,7 +1894,7 @@ Still Kris's own:
   fixed (same lines on a small run, 2.3 times faster there). `organic-link-check` started 23:41 (hearing the
   captions again, about an hour). The relay-circuit run is at 5,000 captions: 0.060 against 0.077 (0.027 / 0.039
   at 1,000 / 2,500 against 0.022 / 0.042). Artifact at version 13 (one-pass ear, ear on the clock).
-- 2026-11-28 00:51 Health at 00:35: all healthy (7.4 GB available; tagr_s0 at 115,000). **Three results, each said
+- 2026-11-28 00:50 Health at 00:35: all healthy (7.4 GB available; tagr_s0 at 115,000). **Three results, each said
   before** (VISION.md 00:36; memoize): bands fading over 0.5 s give 0.089 against 0.090 known whole (2 s gave
   0.070); the relay as a circuit 0.082 against 0.090 with a third of the evenness (225 of 1,024); the link in a
   stream with traces of 0.5-1 s gives 0.075, the caption bag's own number, and plain Hebb nine tenths of it.
