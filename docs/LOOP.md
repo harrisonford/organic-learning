@@ -65,6 +65,9 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-live-r1`, `-r3`** (2026-11-28 01:27; MemoryMax 2600M each; about 45 minutes): the ear with
+  only the past, bands fading over 0.5 s, for the first and third readers → out/bench/grounded_online_top_live0.5_s0.log,
+  grounded_online_top3_live0.5_s0.log; beside whole captions 0.057 and 0.095 (the second reader: 0.089 against 0.090).
 - **`organic-stream-kinds`** (2026-11-28 00:38; MemoryMax 2600M; about 40 minutes): the stream brain's own kinds'
   ear and link driven with the second reader's captions (`experiments/stream_kinds_probe.py`), read at 2,500 and
   5,000 captions → out/bench/stream_kinds_top2_s0.log. Said before: VISION.md 00:38 (0.032-0.040 and 0.052-0.064).
@@ -1904,3 +1907,11 @@ Still Kris's own:
   background on the ear's smoothed loudness), and the kinds' ear hears the world without the brain's own babble.
   Thirty SpokenCOCO recordings were taken out of the archive for that test (out/tmp/wavs, out/tmp/speech_test.wav;
   local only). The live brain is newborn again. `LIVE=30` is at 2,500 captions: 0.033.
+- 2026-11-28 01:36 Health at 01:27: all healthy (7.9 GB available; tagr_s0 at 125,000). **Fading over 30 s: 0.063**
+  (0.5 s 0.089, 2 s 0.070, whole 0.090): the ear must adapt fast; both halves of what I said held (VISION.md
+  01:27; memoize); readers 1 and 3 at 0.5 s started. **The organ inside the stream brain: 0.039 / 0.061** at 2,500 /
+  5,000 captions, as said (the bag link: 0.042 / 0.069). **Typed letters** (VISION.md 01:28, 01:29; memoize): runs of
+  3 and 4 letters hashed to 2,048 units find a caption's photograph as well as whole words (0.093 against 0.088;
+  I had said two thirds); the one-voice ear (0.089-0.090) is at that ceiling. Built into the stream brain
+  (`give_letters`, `TraceLink`; default path the same, checked) and the live page (every keystroke; the recall
+  panel answers letters too); page test with speech and typing passes. The live brain is newborn again.

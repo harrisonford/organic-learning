@@ -94,6 +94,40 @@ def motion(img, before, reach=3):
     return np.maximum(m - np.median(m), 0)
 
 
+class TraceLink:
+    """Units that leave a trace fading over `tau` seconds, tied by Hebb's rule to what the eye holds while the trace
+    lasts (every 50 ms, a sum; the kinds' link in StreamBrain is the same rule). `recall`: what the eye held with the
+    units now active, less what it held with units on the whole."""
+
+    def __init__(self, n, tau):
+        self.tau, self.trace, self.time, self.steps = tau, np.zeros(n, np.float32), np.zeros(n, np.float64), 0
+        self.link, self.sight_sum, self.sight_time = None, None, 0.0
+
+    def step(self, sight):
+        self.trace *= np.float32(np.exp(-DT / self.tau))
+        self.steps += 1
+        if sight is not None and self.steps % 5 == 0:
+            idx = np.nonzero(self.trace > 0.02)[0]
+            if len(idx):
+                if self.link is None:
+                    self.link, self.sight_sum = np.zeros((len(self.trace), len(sight)), np.float32), np.zeros(len(sight), np.float64)
+                w = self.trace[idx] * np.float32(5 * DT / self.tau)
+                self.link[idx] += w[:, None] * sight[None, :]
+                self.time[idx] += w
+                self.sight_sum += float(w.sum()) * sight
+                self.sight_time += float(w.sum())
+
+    def recall(self, q=None):
+        q = self.trace if q is None else q
+        if self.link is None or self.sight_time <= 0:
+            return None
+        idx = np.nonzero((q > 0.02) & (self.time > 0))[0]
+        t = float(q[idx] @ self.time[idx]) if len(idx) else 0.0
+        if t <= 0:
+            return None
+        return (q[idx] @ self.link[idx]) / t - (self.sight_sum / self.sight_time).astype(np.float32)
+
+
 class StreamBrain:
     def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0, echo_tau=None, heard_habit=0.0,
                  motion_drive=False, pursuit_tau=None, view=None):
@@ -121,6 +155,10 @@ class StreamBrain:
         # 00:36 and 00:38): sound kinds as organic/hear_stream.py hears them, each leaving a trace that fades over
         # `kind_tau` seconds, tied by Hebb's rule to what the eye holds while the trace lasts.
         self.kinds_ear = None
+        # Typed letters as a stream (None: not there; `give_letters`; docs/VISION.md 2026-11-28 01:28, 01:29): each
+        # letter typed excites the unit of the run of 3 and of 4 letters that ends with it (a fixed hash, as the
+        # lives' ear codes runs of bytes; no word is cut), and each unit's trace is tied to what the eye holds.
+        self.letters = None
         self.before, self.moving, self.pos, self.pos_seen, self.target = None, None, None, None, None
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
@@ -157,6 +195,25 @@ class StreamBrain:
         self.link_sum = None
         self.n_assoc = 0
         self.log = []
+
+    def give_letters(self, units=2048, tau=2.0):
+        self.letters, self.typed, self.typed_at = TraceLink(units, tau), b" ", self.t
+
+    def type(self, byte, events=None):
+        """A letter typed now. A pause of two seconds, or a new line, begins a new run (as a space does)."""
+        import zlib
+        if self.t - self.typed_at > 2.0 or byte in (10, 13):
+            self.typed = b" "
+        self.typed_at = self.t
+        if byte in (10, 13):
+            return
+        self.typed = (self.typed + bytes([byte]).lower())[-4:]
+        for n in (3, 4):
+            if len(self.typed) >= n:
+                u = zlib.crc32(self.typed[-n:]) % len(self.letters.trace)
+                self.letters.trace[u] += 1.0
+                if events is not None:
+                    events.append(("letters", u))
 
     def give_ear(self, ear, kind_tau=1.0):
         n = 2 * ear.k23
@@ -356,6 +413,8 @@ class StreamBrain:
         is_loud = self._loud(sound_row if getattr(self, "room", None) is None else world_row)
         if getattr(self, "kinds_ear", None) is not None:
             self._hear_kinds(world_row, is_loud, events)
+        if getattr(self, "letters", None) is not None:
+            self.letters.step(self.sight.x if self.frame is not None else None)
         if self.echo_tau and self.sound is not None:
             self.echo_strength *= np.exp(-DT / self.echo_tau)
             loud = is_loud

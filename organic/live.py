@@ -11,7 +11,7 @@ the brain's own.
     live = LiveBrain(seed=0, emit=print)
     live.see(frame)        # H x W x 3, floats in [0, 1] or bytes 0..255; square
     live.hear(samples)     # mono, 16 kHz, floats in [-1, 1]; any length
-    live.read("hello")     # typed text: kept and counted, no organ takes it yet (docs/LIVE.md)
+    live.read("h")         # typed letters as they are typed: runs of 3 and 4 letters are the letters organ's units
     live.run()             # until live.stop is set
 
 Events (dicts with "kind"):
@@ -119,6 +119,8 @@ class LiveBrain:
         if getattr(self.brain, "kinds_ear", None) is None and os.path.exists(born):
             k = pickle.load(open(born, "rb"))
             self.brain.give_ear(StreamEar(k["layer"], k["relay"], tau=0.5), kind_tau=1.0)
+        if getattr(self.brain, "letters", None) is None:
+            self.brain.give_letters()
         self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=300), 0.0, 0.0, None  # what the eye was on, for showing a recall; never on disk
         self.ear, self.lock, self.stop = LiveEar(), threading.Lock(), threading.Event()
         self.frame, self.rows, self.texts = None, collections.deque(), collections.deque()
@@ -148,8 +150,10 @@ class LiveBrain:
 
     def read(self, text):
         with self.lock:
-            self.texts.append((time.time(), text))
+            self.texts.extend(text.encode("utf-8", "replace"))
             self.count["letters"] += len(text)
+        self.last_in = time.monotonic()
+        self.awake.set()
 
     # --- the brain's own thread
     def keep(self):
@@ -185,16 +189,18 @@ class LiveBrain:
                 "kinds_founded": (b.kinds_ear.pairs.founded + b.kinds_ear.triples.founded) if getattr(b, "kinds_ear", None) is not None else 0,
                 "kinds_heard": n["kinds"], "views_kept": len(self.views), "gestures": gestures}
 
-    def _recall(self):
-        """The kept view most like what the eye held with the kinds now sounding; how far it stands out among them."""
+    def _recall(self, letters=False):
+        """The kept view most like what the eye held with the kinds now sounding (or the letters now typed); how far it
+        stands out among them."""
         b = self.brain
-        r = b.recall()
+        r = b.letters.recall() if letters else b.recall()
         if r is None or len(self.views) < 8:
             return
-        codes = np.stack([c for c, _ in self.views]) - (b.sight_sum / b.sight_time).astype(np.float32)
+        codes = np.stack([c for c, _ in self.views])
+        codes = codes - codes.mean(0)
         like = unit(codes) @ unit(r)
         best = int(np.argmax(like))
-        self.emit({"kind": "recall", "jpeg": self.views[best][1], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8))})
+        self.emit({"kind": "recall", "jpeg": self.views[best][1], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8)), "letters": letters})
 
     def _keep_view(self):
         import io
@@ -223,8 +229,11 @@ class LiveBrain:
                 frame, self.frame = self.frame, None
                 row = self.rows.popleft() if self.rows else None
                 waiting = len(self.rows)
+                typed, self.texts = bytes(self.texts), collections.deque()
             t0 = time.monotonic()
             events = b.step(frame, row)
+            for byte in typed:
+                b.type(byte, events)
             took.append(time.monotonic() - t0)
             steps += 1
             if row is not None:
@@ -238,6 +247,10 @@ class LiveBrain:
                     if time.monotonic() - self.recall_at > 0.5:
                         self.recall_at = time.monotonic()
                         self._recall()
+                elif e[0] == "letters":
+                    if time.monotonic() - self.recall_at > 0.5:
+                        self.recall_at = time.monotonic()
+                        self._recall(letters=True)
                 elif e[0] == "sound":
                     self.count["voices"] += 1
                     f1, f2 = (b.gestures[e[1]] if b.gestures is not None else (0, 0))

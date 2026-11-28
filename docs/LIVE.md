@@ -116,13 +116,24 @@ More decisions:
     to the speaker (it gives 0.082 against 0.090 on the benchmark) but needs hours of sound to settle; not on the
     page yet.
 
+15. **Typed letters are a third stream** (2026-11-28 01:35; `give_letters`, `type` in `organic/stream.py`): the
+    page sends every keystroke as it is typed; each letter excites the unit of the run of 3 and of 4 letters that
+    ends with it (a fixed hash into 2,048 units, as the lives' byte ear codes runs; no word is cut); each unit
+    leaves a trace of two seconds tied by Hebb's rule to what the eye holds; Enter or a two-second pause begins a
+    new run. On the captions as written this code finds a caption's photograph as well as whole words do
+    (0.093 against 0.088, VISION.md 01:29). The recall panel answers letters as it answers sounds. The two-second
+    trace is by hand, inside the range measured for sound kinds with pauses.
+16. **The recall panel compares against the views it keeps, less their own average** (not the life's average
+    view), so that a view stands out for what is particular to it.
+
 Tested: the page in headless Chromium with 100 s of recorded speech as the microphone: 534 kinds founded, recall
 pictures arriving, no errors; a step takes 8.5 ms with the ear (the margin to 10 ms is small on the loaded
 server). What the link is worth is measured on the benchmark, not on the page: VISION.md 2026-11-28 00:36, 00:38.
 
 ## Limits, said plainly
 
-- **It will not name, answer or read.** Typed letters arrive and are counted; no organ takes them yet.
+- **It will not name or answer.** It ties sounds and typed letters to what it sees and shows what they call up;
+  it does not say or write anything back but babble.
 - What can form in a session: the map from gesture to sound, the babble's habits drifting toward vowels it hears
   (measured on synthetic adults over 600 s, VISION.md 2026-11-26), the sight–sound link (learned, never read out).
 - The link's running mean weighs every pairing equally: after an hour a new pairing changes almost nothing.
@@ -136,7 +147,7 @@ server). What the link is worth is measured on the benchmark, not on the page: V
 2. The word-learning ear inside the stream brain (docs/ASYNC.md, "The ear's way onto the clock"): live bands and
    the relay circuit are running tonight; then the kinds and their link to what the eye holds, and on the page:
    a sound kind heard calls up what was seen with it.
-3. Text as a third stream: an organ for typed letters (to be designed and said before it runs).
+3. (Done 01:35: typed letters as a third stream.) Sounds and letters meeting: a word typed while it is said.
 4. Private inputs and one stream a page before anything public.
 
 ## Operating it

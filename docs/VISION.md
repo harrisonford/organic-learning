@@ -5165,3 +5165,70 @@ held-out pairs at 2,500 and 5,000 captions.
 no mean while learning and weighs a kind by its time in view, which cost about a tenth to a fifth on kept bags
 (00:36). So 0.032–0.040 at 2,500 and 0.052–0.064 at 5,000, chance 0.010. Under 0.03 at 5,000 would mean the way
 `recall` takes out the common view is not the probe's way and has to be.
+
+### 2026-11-28 01:27 — Two more, each as said: the ear must adapt fast, and the organ in the brain does what the kept bags did
+
+**The fading time, second half** (`LIVE=30`, out/bench/grounded_online_top2_live30_s0.log): 0.021 / 0.033 / 0.046 /
+0.052 / **0.063** (rank 290), control 0.009; the caption's own words at rank 3 (rank 1 for every other version),
+words heard 0.61 / 0.49 / 0.34 / 0.13. The second reader, in order of how fast the ear adapts:
+
+| each band against | at the end | words heard, rarest band |
+|---|---|---|
+| the last 0.5 s | 0.089 | 0.25 |
+| the last 2 s | 0.070 | 0.22 |
+| the last 30 s | 0.063 | 0.13 |
+| the caption, known whole | 0.090 | 0.27 |
+
+Both halves of what I said at 23:41 for "the joins between recordings are the cost" came out (0.5 s inside
+0.075–0.09; 30 s under 0.065). What it shows is narrower than what it suggests: an ear that adapts within half a
+second loses nothing against one that knows the caption whole, on recordings that each have their own level.
+Whether fast adaptation matters as much in one unbroken recording is not shown by this; a microphone that is
+moved, a head that turns, a second speaker are joins too. The first and third readers at 0.5 s are running
+(`organic-online-live-r1`, `-r3`), for the claim on three.
+
+**The organ inside the stream brain** (`experiments/stream_kinds_probe.py`, out/bench/stream_kinds_top2_s0.log;
+`give_ear`'s own code driven 10 ms at a time, kinds starting empty, traces of a second, the photograph in view
+until 0.3 s after its caption): 0.039 at 2,500 captions (rank 369) and **0.061 at 5,000** (rank 306); every test
+caption called something up. I had said 0.032–0.040 and 0.052–0.064: held. The same ear with a bag tied to its
+photograph and the mean taken as it learns: 0.042 and 0.069. So what is on the live page is, on the benchmark,
+nine tenths of the probe's link. Not measured: the brain's own eye in place of the photograph's code (a fixation
+is half the picture), a room, a voice the relay was not fitted to.
+
+### 2026-11-28 01:28 — Typed letters as a third stream (said before measuring)
+
+Kris wants text streamed to the live brain too, and the page says honestly that no organ reads it. The lives'
+ear already has a code for letters with no tokenizer: each byte, and each short run of bytes, excites its own
+fixed set of neurons (organic/ear.py, after the hashed n-grams of the Byte Latent Transformer). In a stream that
+is all a letter organ needs: each letter typed excites the units of the runs that end with it, each unit leaves a
+trace, and Hebb's rule ties the traces to what the eye holds, as for the sound kinds. No words are cut.
+Measured first where it costs seconds (`experiments/letters_link_check.py`): the second reader's captions as
+written, runs of 2, 3 and 4 letters (spaces included) each hashed to one of 2,048 units, a caption's units tied
+to its photograph's code in one pass (the probe's link, and plain), read on the same 1,000 held-out pairs.
+Beside it the caption's written words (one unit a word): the eye's ceiling with this link.
+**What I say:** written words give about 0.07 (the diagnostic of 17:33 gave 0.071 with 5,000 pairs; here 8,927).
+Runs of letters share units by collision and the common runs ("th", "ing", " a ") are everywhere, so with the
+mean taken they give two thirds of the words' number (0.04–0.055); runs of 4 do best, runs of 2 worst (under
+0.03); plain, without the mean, half of that.
+
+### 2026-11-28 01:29 — Runs of letters do as well as written words (I had said two thirds)
+
+`experiments/letters_link_check.py`, out/bench/letters_link_top2_s0.log; the second reader's 8,927 captions as
+written, one pass, 1,000 pairs held out; photograph → its caption in the first ten (median rank):
+
+| a caption's units | the mean taken | plain |
+|---|---|---|
+| one unit a written word (4,780 words) | 0.088 (233) | 0.065 (292) |
+| runs of 2 letters, hashed to 2,048 units | 0.064 (217) | 0.058 (292) |
+| runs of 3 | 0.087 (162) | 0.083 (214) |
+| runs of 4 | 0.101 (156) | 0.083 (180) |
+| runs of 3 and 4 | 0.093 (149) | 0.085 (204) |
+| runs of 2, 3 and 4 | 0.100 (166) | 0.079 (236) |
+
+What I said: two thirds of the words' number with the mean taken, runs of 4 best and 2 worst, plain half of that.
+The order held; the sizes did not: runs of 3 and 4 letters **match or pass whole words** (the median rank is much
+better, 149–166 against 233), and plain Hebb keeps nine tenths. A run is shared by a word's forms ("skate",
+"skateboard", "skating"), which a unit a word cannot do; collisions in 2,048 units cost little.
+Two things follow. A letters organ for the stream brain needs no word cutting: runs of 3 and 4 letters ending at
+each letter typed, traces, Hebb to what the eye holds (built next, for the live page). And **the one-voice ear is
+at the eye's ceiling**: from sound alone it reaches 0.089–0.090 on this reader, where written words through the
+same link reach 0.088. On these photographs at this eye's size, more is to be had from sight, not from hearing.
