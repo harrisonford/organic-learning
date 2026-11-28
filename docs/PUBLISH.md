@@ -306,7 +306,13 @@ organic learner behaves and what each part does, measured honestly, not a score.
   ear that grows up in one voice finds the photographs from its own sound kinds (R@10 0.048 against 0.067 from
   written words through the same Hebb link, shuffled 0.005) and hears rare words. If three readers agree, this is
   the opening result of the second paper (speech grounded in sight with no text and no backprop, starting as an
-  infant does, in one voice), with the paradigm's visually grounded speech as its reference row. Kris may present the work to neuroscientists in about two weeks; the artifact
+  infant does, in one voice), with the paradigm's visually grounded speech as its reference row. **Second-paper
+  notes since (2026-11-27 18:30–21:04):** the lexicon does not carry to a voice never heard (R@10 0.033 / 0.013) and a
+  new link does not mend it; two voices' kinds match as the same written word through sight 20–30% of the time
+  (chance 2%); and **the ear learns in one pass** (kinds and link together, a caption and its photograph once):
+  level with the two-stage ear at 5,000 captions or above (0.047 / 0.077 against 0.048 / 0.065) and 0.057 / 0.090
+  at the end on two readers, control at chance, third reader running. Running: the same from the past alone (bands
+  against the sound so far) and with the relay a circuit. Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
 - **2026-11-27 15:26: draft 11 emailed to Kris** (22 pages). One change: a paragraph at the end of "The relay,
   learned locally" (a batch relay fitted on photographs does not hold on CORe50's videos: 131–137 effective

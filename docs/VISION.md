@@ -4950,3 +4950,61 @@ steady for a word said twice, not equal to the old ones. A word's bands now depe
 instead of on its whole caption: no worse a reference. The live ear ends within a fifth of the same reader's
 whole-caption one-pass ear at every checkpoint, and the words heard by how often they are said within 0.05. If it
 loses half, a word's bands move too much with what came just before, and a slower fading (8 s and more) is next.
+
+### 2026-11-27 21:04 — The one-voice ear in one pass, two readers: level with the two-stage ear or above (I had said under)
+
+`experiments/grounded_online_probe.py`, the first and second readers (out/bench/grounded_online_{top,top2}_s0.log;
+the third is running and ends about 23:25). One life each: a caption and its photograph once, the kinds moving and
+the link growing together; read on the same 1,000 held-out pairs as the two-stage ear. Photograph → its caption
+in the first ten of 1,000 (median rank of the right caption):
+
+| captions heard | first reader | second reader | two-stage ear at as many pairs (three readers, VISION.md 17:36) |
+|---|---|---|---|
+| 1,000 | 0.025 (418) | 0.022 (406) | 0.029–0.037 |
+| 2,500 | 0.034 (428) | 0.042 (324) | 0.036–0.050 |
+| 5,000 | 0.047 (342) | 0.077 (280) | 0.048 (318) and 0.065 (240) for these two readers |
+| 7,500 | 0.055 (325) | 0.083 (238) | not run |
+| all (9,670 / 8,927) | **0.057 (294)** | **0.090 (216)** | not run |
+| the bags tied to other photographs | 0.012 (478) | 0.007 (476) | 0.005, 0.007 (shuffled) |
+
+A measure only, the caption's own written words from its bag, median rank among 1,000: 3 and 1 (two-stage: 3 and
+1); words heard by how often they are said (30+ / 15–29 / 8–14 / 4–7 of the test captions): 0.53 / 0.50 / 0.30 /
+0.12 and 0.70 / 0.61 / 0.47 / 0.27 (two-stage: 0.49 / 0.42 / 0.22 / 0.10 and 0.68 / 0.58 / 0.42 / 0.21).
+
+**Against what I said (18:40).** Under the two-stage ear at as many pairs: so at 1,000 and 2,500 (a little), **not
+at 5,000**, where the first reader is level (0.047 against 0.048; I had said 0.035–0.045) and the second above
+(0.077 against 0.065; I had said 0.045–0.06). By the end level or above: held for the first (0.057 in the
+0.05–0.07 I gave), above my range for the second (0.090 against 0.065–0.085). The control at chance: held. So the
+worry was wrong: kinds that still move do not spoil the link. Why, as far as these runs show: all the kinds are
+founded within the first 1,000 captions and then only drift, each step smaller as a kind wins more (its step is
+1 / (1 + wins / 5)), so a bag made at caption 2,000 still means nearly the same at caption 9,000; and in one pass
+the kinds are shaped by the very captions the link is tied on, 5,000 of them instead of 4,000 others. The rarer
+words gain most (0.30 against 0.22, 0.47 against 0.42 in the third band), which is where the photographs are told
+apart (14:36).
+**Limits.** Two readers, one seed, one order of the life; the two-stage rows at 7,500 and the end do not exist,
+so "above" at the end is partly more pairs, not the single pass. The hearing cortex and its relay are still
+developed first, on the first 1,000 captions' sound, and each caption is still known whole when its bands are set
+(the live-bands run for the second reader is on, 19:52). Still rising at the end for both readers.
+
+### 2026-11-27 21:06 — The ear's relay as a circuit that learns along the life (said before it runs)
+
+Second piece on the ear's way onto the clock (docs/ASYNC.md): the hearing relay is still a matrix settled in one
+batch from the first captions. `RELAY=circuit` in the one-pass probe puts the relay circuit in its place
+(interneurons with a local rule, Lipshutz, Pehlevan & Chklovskii 2022; `organic/cortex2.py`, the same class the
+eye uses, its rate 1e-4 unchanged; its synapses change once a caption, about 330 frames, instead of once every
+50 views: with blocks of 50 a caption took 2 s, the settled state being worked out anew for each block, and a small
+run gave the same evenness either way). Born random, it
+learns from the first 1,000 captions' frames before the life (as the hearing cortex under it develops there) and
+goes on learning from every caption of the life; held still for the test captions. With it off the probe is as
+before (checked on a small run). A line at the end of every run now says how evenly the relay's code uses its
+directions on held-out sound (the batch relays: 570–643 of 1,024, 18:34).
+What is new against the eye's case (CORe50, 11:53, 15:19): under the relay sit the kinds, founded in the first
+1,000 captions and then moving by smaller and smaller steps. If the circuit keeps turning its code, old kinds
+point where no stretch falls any more. The circuit sees far more views here (330 frames a caption, three million
+in a life, against 10,000 frames on CORe50), so most of its settling should be over in the first thousand
+captions.
+**What I say:** the circuit's code is a little less even than the batch relay's (450–600 of 1,024); the second
+reader ends at 0.070–0.090 against 0.090 with the batch relay (within a fifth, likelier under than over), and
+under by more at 1,000 and 2,500 captions, while the kinds chase a relay that is still settling. If it ends under
+0.06, the kinds do not follow the circuit, and either the circuit must slow as it settles or the kinds must keep
+larger steps for as long as the relay moves.

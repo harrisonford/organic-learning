@@ -65,13 +65,19 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-circuit`** (out/tmp/online_circuit_queue.sh; 2026-11-27 21:23; MemoryMax 2600M; about 1.2 s a
+  caption, so three to four hours: ends about 00:45): the one-pass ear with its relay a circuit learning along
+  the life (`RELAY=circuit`, its synapses changing once a caption), reader top2 →
+  out/bench/grounded_online_top2_circuit_s0.log; beside grounded_online_top2_s0.log (0.090 at the end; relay's
+  evenness 630). Said before: VISION.md 21:06 (0.070–0.090; evenness 450–600). Then LIVE and the circuit together,
+  and the readers top and top3 for whichever holds.
 - **`organic-online-live`** (out/tmp/online_live_queue.sh; queued 2026-11-27 19:52 behind `organic-online-ear-b`;
   MemoryMax 2600M; about 140 minutes once it starts, so it ends about 23:20): the one-pass ear with nothing known
   of a caption before it is heard (`LIVE=2`: every band against the sound so far, fading over 2 s), reader top2 →
   out/bench/grounded_online_top2_live2_s0.log; to be read beside grounded_online_top2_s0.log. Said before:
   VISION.md 19:52 (within a fifth at every checkpoint). If it holds: readers top and top3, then the ear's relay as
   a circuit (docs/ASYNC.md, "The ear's way onto the clock").
-- **`organic-online-ear-a`** (readers top, then top3) and **`organic-online-ear-b`** (top2)
+- **`organic-online-ear-a`** (reader top ENDED 21:04, read; top3 running to about 23:25) and **`organic-online-ear-b`** (top2, ENDED 20:55, read: VISION.md 21:04)
   (out/tmp/online_ear_queue.sh; 2026-11-27 18:41; MemoryMax 2600M each; about 140 minutes a reader, 0.87 s a caption, not the 100 first written: top and top2 end about
   21:00, top3 about 23:25): the one-voice
   ear in one pass, kinds and link learning together (`experiments/grounded_online_probe.py`) →
@@ -1819,3 +1825,14 @@ Still Kris's own:
   (both better than said). `LIVE` switch in the one-pass probe (off: the same lines as before, checked); the run is
   queued for the second reader. docs/ASYNC.md has the ear's way onto the clock, piece by piece. Three references
   on adaptation to sound level found in Crossref (Dean 2005, Dean 2008, Rabinowitz 2011), to be read.
+- 2026-11-27 21:24 Health at 20:53: all healthy (6.2 GB available, 296 GB free; tagn_s0 at 120,000 of 130,000).
+  Kris asked at 20:24 for the model's status and whether it can be hosted for the live page: answered (the stream
+  brain is hostable as it is, the work for a first page is the app's plumbing; the word-learning ear needs three
+  more steps; nothing installed, his go and where the brain runs are still open). **The one-pass ear, two readers
+  ended** (VISION.md 21:04; memoize): R@10 0.057 and 0.090 at the end (two-stage ear: 0.048 and 0.065 with 5,000
+  pairs), level or above already at 5,000 captions (0.047 / 0.077), control at chance; I had said under at as many
+  pairs: wrong from 5,000 on. Moving kinds do not spoil the link. The live-bands run (second reader) is at 1,000
+  captions: 0.021 against 0.022. **Next piece, the ear's relay as a circuit** (`RELAY=circuit`, said before:
+  VISION.md 21:06; the default path gives the same lines as before plus a last line on the relay's evenness,
+  checked): with blocks of 50 views it took 2 s a caption, so the circuit's synapses change once a caption; started
+  for the second reader. The artifact is brought up to date when the third reader ends.

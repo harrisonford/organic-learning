@@ -31,6 +31,12 @@ CHECKS = [int(x) for x in os.environ.get("CHECKS", "1000,2500,5000,7500").split(
 # tenth of the loudest moment so far, all fading over LIVE seconds; the life's captions are one stream in the order
 # heard, and a test caption is heard by an ear that has just heard the first FIRST captions (VISION.md 19:42).
 LIVE = float(os.environ.get("LIVE", 0))
+# (2026-11-27 21:04) RELAY=circuit: the hearing relay is the circuit of interneurons with its local rule
+# (organic/cortex2.py RelayCircuit, the eye's rate; its synapses change once a caption, not once every 50 views) in
+# place of the matrix settled in one batch:
+# born random, it learns from the first FIRST captions' frames before the life and goes on learning from every
+# caption of the life; held still when the test captions are heard (VISION.md 21:05).
+RELAY = os.environ.get("RELAY", "batch")
 t0 = time.time()
 
 
@@ -134,13 +140,30 @@ def frames(u):
     return codes, np.convolve(raw(u).sum(axis=1), np.ones(WINDOW) / WINDOW, "valid")[: len(codes)]
 
 
-relay = Relay(0.0005).settle(np.concatenate([unit(frames(first[i])[0])[::5] for i in rng.choice(len(first), min(400, len(first)), replace=False)]))
+if RELAY == "circuit":
+    from organic.cortex2 import RelayCircuit  # noqa: E402
+    relay = RelayCircuit(KINDS * BANDS, rate=1e-4, block=50, seed=SEED)
+
+    def through(c, learning):
+        X = unit(c)
+        C = unit(relay.code(X))  # the caption's frames with the synapses as they were when it began
+        if learning:
+            relay.learn(X)  # one block a caption (about 330 frames; blocks of 50 took 2 s a caption, the settled state worked out anew each block)
+        return C
+
+    for u in first:
+        through(frames(u)[0], True)
+else:
+    relay = Relay(0.0005).settle(np.concatenate([unit(frames(first[i])[0])[::5] for i in rng.choice(len(first), min(400, len(first)), replace=False)]))
+
+    def through(c, learning):
+        return unit((unit(c) - relay.mu) @ relay.Z)
 say(f"hearing cortex and its relay, from the first {len(first)} captions' sound")
 
 
-def stretches(u):
+def stretches(u, learning=False):
     c, loud = frames(u)
-    C = unit((unit(c) - relay.mu) @ relay.Z)
+    C = through(c, learning)
     env = np.convolve(loud, np.ones(SMOOTH) / SMOOTH, "same")
     quiet = env < 0.1 * (loudest(env, 0.0 if started[u["uttid"]] is None else started[u["uttid"]][2])[0] if LIVE else env.max())
     troughs = [t for t in range(1, len(env) - 1) if env[t] == env[max(0, t - HALF): t + HALF + 1].min()]
@@ -182,7 +205,7 @@ pairs, triples = Kinds(K23, 2 * D), Kinds(K23, 3 * D)
 
 
 def bag(u, learning):
-    ss = stretches(u)
+    ss = stretches(u, learning)
     v, gap = [s for s, _ in ss], [g for _, g in ss]
     out = np.zeros(2 * K23, np.float32)
     P = [np.concatenate(v[i: i + 2]) / np.sqrt(2) for i in range(len(v) - 1) if not gap[i]]
@@ -240,7 +263,7 @@ for n, u in enumerate(life_u, 1):
         read(M, mean, f"after {n} captions (kinds founded {pairs.founded} + {triples.founded})")
 Bt = read(M_other, mean, "the bags tied to other photographs (the control)")
 pickle.dump({"layer": layer, "relay": relay, "pairs": (pairs.U, pairs.wins, pairs.founded), "triples": (triples.U, triples.wins, triples.founded), "M": M, "mean": mean},
-            open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}{f'_live{LIVE:g}' if LIVE else ''}.pkl", "wb"))
+            open(f"out/bench/grounded_online_ear_s{SEED}_r{READER}{f'_live{LIVE:g}' if LIVE else ''}{'_circuit' if RELAY == 'circuit' else ''}.pkl", "wb"))
 
 # a measure only: the caption's written words from its bag (ridge from the bags as they were heard, to the words)
 vocab = {}
@@ -269,3 +292,7 @@ nt = (Wt > 0).sum(0)
 cor = lambda lo, hi: np.median([np.corrcoef(P[:, k], Wt[:, k] > 0)[0, 1] for k in np.nonzero((nt >= lo) & (nt < hi))[0]])  # noqa: E731
 say(f"the caption's own written words from its bag (bags as heard along the life, kinds as they ended): {rec(r_w)}, median rank {np.median(r_w) + 1:.0f}; "
     f"words heard (correlation median), said in 30+ / 15-29 / 8-14 / 4-7 of the test captions: {cor(30, 10**6):.2f} / {cor(15, 30):.2f} / {cor(8, 15):.2f} / {cor(4, 8):.2f}")
+# how evenly the relay's code uses its directions on sound never heard (participation ratio; the batch relays gave 570-643 of 1,024, VISION.md 18:34)
+Ct = np.concatenate([through(frames(u)[0], False)[::5] for u in test_u[:300]])
+d = np.clip(np.linalg.eigvalsh(np.cov(Ct.T.astype(np.float64))), 0, None)
+say(f"the hearing relay ({RELAY}) on held-out sound: participation ratio {d.sum() ** 2 / (d * d).sum():.0f} of {Ct.shape[1]}")
