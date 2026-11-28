@@ -5409,3 +5409,48 @@ circuit; with the fixed relay of the other voice lower (0.6–0.9). The first vo
 another voice later: under half of 0.031 with the circuit (which has left it; the kinds have moved), more kept
 with the fixed relay (half to four fifths). If the later voice learns as well as alone, a page that many people
 speak to works one speaker at a time; what it would not do is hold two.
+
+### 2026-11-28 05:27 — Two voices in one life: the circuit lets the second voice in and the first is not lost
+
+`out/bench/two_voices_top2_top_{born,alone,batch}_s0.log`. The organ inside the stream brain; reader 2 for 2,500
+captions, then reader 1 for 2,500; photograph → its caption in the first ten of 1,000 held out (chance 0.010; one
+number known to about ±0.006 here):
+
+| | relay a circuit born with the brain | relay fitted on the first voice, fixed |
+|---|---|---|
+| first voice, at the change | 0.031 | 0.039 |
+| later voice, before any of it is heard | 0.019 | 0.011 |
+| later voice, at the end | **0.037** | **0.016** |
+| first voice, at the end | **0.031** | 0.039 |
+| later voice alone from birth (circuit), same captions and tests | 0.039 | |
+
+Median ranks (of 1,000; 500 is chance): the later voice at the end 358 with the circuit, 456 with the fixed relay,
+361 alone; the first voice 374 → 392 with the circuit, 369 → 408 with the fixed relay.
+
+**Against what I said.** First voice at the change 0.031: as said. Later voice before it is heard, chance to
+twice chance: held (0.019 and 0.011). Later voice at the end with the circuit, 0.8–1.0 of alone: held (0.95).
+With the fixed relay 0.6–0.9 of alone: **wrong, 0.4**; through the first voice's relay the second voice hardly
+gets in. First voice at the end with the circuit, under half: **wrong, all of it** (0.031 → 0.031; its median rank
+slips from 374 to 392). With the fixed relay half to four fifths: wrong the same way, all of it.
+
+What it says, on one pair of readers and one seed: the ear with the circuit learns a second speaker as well as
+if it had been born to that speaker, and what it tied for the first speaker is still found. I had read the
+circuit's evenness (76% kept on the voice it left) as "it holds one voice at a time"; the ear as a whole does
+not behave that way. I do not know why the first voice survives: the link is a sum, so its pairings are still
+there, and the kinds may have divided between the voices rather than moved; not looked at yet. The fixed relay is
+the batch ear's case, and it says why the 2026-11-27 ears were bound to a voice: not only the kinds, the relay.
+
+For the page: decision 17 (the circuit) is the difference between a second speaker being learned and not.
+
+**tagb_s1 ended at 110,000** (replay of every moment in sleep; lists put right, tagb_s2 running): echo 0.60,
+first words 0.42, two words 0.39, pages 0.17, against the life with nothing changed 0.40 / 0.46 / 0.40 / 0.18.
+One seed; echo has ranged 0.40–0.60 across these lives, so nothing is read until seeds 2 and 0 end.
+
+### 2026-11-28 05:27 — Two voices again, two more pairs (said before they run)
+
+A claim needs more than one pair. The same three runs for **reader 1 then reader 2** (the order turned round)
+and **reader 2 then reader 3**; the hearing cortex is the first reader's in each. **What I say:** the pattern
+repeats in both: with the circuit the later voice ends at 0.8–1.1 of what it reaches alone and the first voice
+keeps at least four fifths of what it had at the change; with the fixed relay the later voice ends under 0.6 of
+alone and the first voice is kept. Reader 1 is the weak reader (about 0.02–0.03 at 2,500 captions), so where it
+is the first voice the ratios will be loose.

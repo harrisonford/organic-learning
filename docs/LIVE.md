@@ -127,8 +127,11 @@ More decisions:
     relay (still developed on a SpokenCOCO reader). The circuit learns only from frames the ear holds to be
     sound, so that a room's hum does not become its world; a change every 3.3 s of sound, worked out beside the
     clock (about 0.1 s). The page shows how much sound it has learned from; it is at rest after about three
-    minutes of speech, and follows a new speaker within one. What a second speaker does to the kinds is being
-    measured (two voices in one life, VISION.md 04:34).
+    minutes of speech, and follows a new speaker within one. **A second speaker, measured (VISION.md 05:27,
+    one pair of readers, one seed; two more pairs running):** after 2,500 captions of one reader and 2,500 of
+    another, the ear with the circuit has learned the second as well as if born to it (0.037 against 0.039)
+    and still finds the first (0.031, as at the change). With the relay it had before (fitted on one voice,
+    fixed) the second voice ends at 0.016.
 
 15. **Typed letters are a third stream** (2026-11-28 01:32; `give_letters`, `type` in `organic/stream.py`): the
     page sends every keystroke as it is typed; each letter excites the unit of the run of 3 and of 4 letters that

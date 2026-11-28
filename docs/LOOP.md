@@ -65,7 +65,13 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-two-voices-born`** and **`organic-two-voices-rest`** (2026-11-28 04:34; MemoryMax 2600M each; about 50
+- **`organic-two-voices-born2`** and **`organic-two-voices-rest2`** (2026-11-28 05:27; MemoryMax 2600M each; about
+  100 and 130 minutes): two voices again for reader 1 then 2, and reader 2 then 3 (circuit born; later voice
+  alone; fixed relay) → out/bench/two_voices_top_top2_*_s0.log, two_voices_top2_top3_*_s0.log. Said before:
+  VISION.md 05:27.
+- **Lives:** `tagb_s1` ENDED 04:32 at 110,000 (echo 0.60, first words 0.42, two words 0.39, pages 0.17; nothing
+  read on one seed); **`tagb_s2`** running to 120,000, then tagb_s0 (130,000). Lists put right at 05:26.
+- (READ 05:27.) **`organic-two-voices-born`** and **`organic-two-voices-rest`** (2026-11-28 04:34; MemoryMax 2600M each; about 50
   and 75 minutes): the organ inside the stream brain hears reader 2 for 2,500 captions, then reader 1 for 2,500;
   relay a circuit born with the brain; then (second unit, one after the other) the later voice alone, and the
   relay fitted in a batch and fixed → out/bench/two_voices_top2_top_{born,alone,batch}_s0.log. Said before:
@@ -1955,3 +1961,10 @@ Still Kris's own:
   the page's relay is a circuit born with the brain** (`organic/live.py`; LIVE.md decision 17; page test passes: 593
   kinds in 112 s, a step 4.0 ms; kid-a commit bf94dec, local; the brain newborn again). `stream_kinds_probe.py`
   can give a second voice after the first (`THEN`, `FIRST_HEARD`); three runs started, said before (VISION.md 04:34).
+- 2026-11-28 05:27 Health at 05:26: one alert (tagb_s1 had ended as planned at 110,000; lists put right, tagb_s2
+  added; 8.0 GB available, 291 GB free). **Two voices in one life** (VISION.md 05:27; memoize): with the circuit
+  the later voice ends at 0.037 (alone 0.039) and the first stays at 0.031; with the fixed relay the later voice
+  ends at 0.016 and the first stays at 0.039. Two of my four numbers wrong (the first voice is not lost; the fixed
+  relay shuts the second voice out more than I said). LIVE.md decision 17 has the result. Two more pairs of
+  readers started, said before. **Next:** read them; if the pattern holds, look at why the first voice survives
+  (do the kinds divide between the voices?) and write the second paper's opening around it in PUBLISH.md.
