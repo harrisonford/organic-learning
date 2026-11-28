@@ -116,7 +116,7 @@ More decisions:
     to the speaker (it gives 0.082 against 0.090 on the benchmark) but needs hours of sound to settle; not on the
     page yet.
 
-15. **Typed letters are a third stream** (2026-11-28 01:35; `give_letters`, `type` in `organic/stream.py`): the
+15. **Typed letters are a third stream** (2026-11-28 01:32; `give_letters`, `type` in `organic/stream.py`): the
     page sends every keystroke as it is typed; each letter excites the unit of the run of 3 and of 4 letters that
     ends with it (a fixed hash into 2,048 units, as the lives' byte ear codes runs; no word is cut); each unit
     leaves a trace of two seconds tied by Hebb's rule to what the eye holds; Enter or a two-second pause begins a
@@ -147,7 +147,7 @@ server). What the link is worth is measured on the benchmark, not on the page: V
 2. The word-learning ear inside the stream brain (docs/ASYNC.md, "The ear's way onto the clock"): live bands and
    the relay circuit are running tonight; then the kinds and their link to what the eye holds, and on the page:
    a sound kind heard calls up what was seen with it.
-3. (Done 01:35: typed letters as a third stream.) Sounds and letters meeting: a word typed while it is said.
+3. (Done 01:32: typed letters as a third stream.) Sounds and letters meeting: a word typed while it is said.
 4. Private inputs and one stream a page before anything public.
 
 ## Operating it

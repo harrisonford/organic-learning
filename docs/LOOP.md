@@ -1907,7 +1907,7 @@ Still Kris's own:
   background on the ear's smoothed loudness), and the kinds' ear hears the world without the brain's own babble.
   Thirty SpokenCOCO recordings were taken out of the archive for that test (out/tmp/wavs, out/tmp/speech_test.wav;
   local only). The live brain is newborn again. `LIVE=30` is at 2,500 captions: 0.033.
-- 2026-11-28 01:36 Health at 01:27: all healthy (7.9 GB available; tagr_s0 at 125,000). **Fading over 30 s: 0.063**
+- 2026-11-28 01:32 Health at 01:27: all healthy (7.9 GB available; tagr_s0 at 125,000). **Fading over 30 s: 0.063**
   (0.5 s 0.089, 2 s 0.070, whole 0.090): the ear must adapt fast; both halves of what I said held (VISION.md
   01:27; memoize); readers 1 and 3 at 0.5 s started. **The organ inside the stream brain: 0.039 / 0.061** at 2,500 /
   5,000 captions, as said (the bag link: 0.042 / 0.069). **Typed letters** (VISION.md 01:28, 01:29; memoize): runs of
