@@ -5029,3 +5029,25 @@ next thing to measure (on kept bags, in seconds, before it goes into the live br
 A mistake of mine, 22:24: I first wrote this organ to `organic/ear.py`, which is the lives' byte ear. Restored
 from git within a minute; no life or service loaded the file in between (the running life had it in memory, the
 release timers had run at 22:20; health all good after).
+
+### 2026-11-27 22:28 — The link in a stream: traces of kinds and what is in view (said before it runs)
+
+The ear on the clock gives kinds one at a time; the link so far ties a whole caption's bag to its photograph. In a
+stream each kind heard leaves a trace that fades, and Hebb's rule ties the traces to what is in view while both
+last. `experiments/grounded_link_check.py`: the kept live-bands ear of the second reader (when its run ends) hears
+its life's captions again on the clock, kinds held, which gives every kind and its moment; the life is then one
+stream, caption after caption with 0 or 1 s between, each photograph in view from its caption's first sound to
+the next caption's; the link is what Hebb's rule sums: for each photograph, the time each kind's trace spent in
+view with it, its own caption's and what still fades from the captions before. Traces fading over 0.5, 1, 2, 4,
+8 s; entered as the probe enters a bag (less the running mean, at unit length) or as they are. Read on the 1,000
+held-out pairs, beside the caption-bag link. Seconds once the captions are heard (about half an hour).
+What differs from a bag: a kind heard late in a caption has little time with its photograph before the next one
+comes, and with long traces the last caption's kinds are tied to this photograph too (the photographs are in
+random order, so that is noise, not a false rule).
+**What I say:** with the probe's setting of the row, traces of 0.5–2 s give 85–100% of the caption-bag link (the
+bag's count becomes a weight by time in view, most of it kept); at 4–8 s with no pause, 60–80% (a third to a half
+of a row is the captions before). A second of pause helps the short traces a little (late kinds get their time)
+and matters little for the long. Entered as they are (no mean taken, no length set), half or less, for bags and
+traces alike: the common kinds swamp the rest; if so, the stream brain's link needs each kind's trace taken
+against its own running level, which a synapse can do (a presynaptic threshold), and the length set by the
+population (divisive normalisation).

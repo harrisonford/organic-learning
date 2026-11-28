@@ -32,6 +32,7 @@ class Kinds:
         self.U, self.wins, self.founded = np.zeros((n, dim), np.float32), np.zeros(n), 0
 
     def __call__(self, s, learning):
+        s = np.asarray(s, np.float32)  # (a stretch code at double precision made every match copy the kinds: 65 ms a kind)
         if learning and self.founded < len(self.U):
             self.U[self.founded], self.wins[self.founded] = s, 1
             self.founded += 1
