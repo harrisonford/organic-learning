@@ -5768,7 +5768,7 @@ the stream brain it was 0.060 at 5,000). From typed letters at the end: **0.07�
 in the offline measure). And what it will not do: understand Kris's voice (a voice never heard finds 1–3.5%),
 or wait before it babbles.
 
-### 2026-11-28 11:20 — How a brain comes to wait and answer: the survey is in, and the organic check
+### 2026-11-28 11:19 — How a brain comes to wait and answer: the survey is in, and the organic check
 
 Kris (10:50): the page's brain "doesnt shut up"; "we need to research how human brains grasp this communication
 dynamic". The survey is `docs/RESEARCH_TURNS.md` (an agent's, about 150 references, each marked as read in
