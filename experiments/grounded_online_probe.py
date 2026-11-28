@@ -184,6 +184,7 @@ class Kinds:
         self.U, self.wins, self.founded = np.zeros((n, dim), np.float32), np.zeros(n), 0
 
     def __call__(self, s, learning):
+        s = np.asarray(s, np.float32)  # (2026-11-27 23:41) at double precision every match copied the kinds: 65 ms a kind, most of a run
         if learning and self.founded < len(self.U):
             self.U[self.founded], self.wins[self.founded] = s, 1
             self.founded += 1
@@ -197,7 +198,7 @@ class Kinds:
         return c
 
     def many(self, S):
-        return np.argmax(self.U[: self.founded] @ S.T, axis=0)
+        return np.argmax(self.U[: self.founded] @ np.asarray(S, np.float32).T, axis=0)
 
 
 D = 2 * KINDS * BANDS

@@ -5051,3 +5051,53 @@ and matters little for the long. Entered as they are (no mean taken, no length s
 traces alike: the common kinds swamp the rest; if so, the stream brain's link needs each kind's trace taken
 against its own running level, which a synapse can do (a presynaptic threshold), and the length set by the
 population (divisive normalisation).
+
+### 2026-11-27 23:35 — The one-voice ear in one pass, three readers: 0.057 / 0.090 / 0.095
+
+The third reader ended (out/bench/grounded_online_top3_s0.log): photograph → its caption in the first ten of 1,000
+held out, 0.025 at 1,000 captions, 0.046 at 2,500, 0.073 at 5,000 (the two-stage ear with 5,000 pairs: 0.065),
+0.095 at 7,500 and **0.095 at the end** (8,058 captions; median rank 212), the control link 0.006 (rank 498). The
+caption's own written words from its bag: rank 1; words heard by how often they are said 0.66 / 0.67 / 0.52 / 0.24
+(two-stage: 0.62 / 0.61 / 0.45 / 0.21). So on three readers of one seed each:
+
+| | first | second | third |
+|---|---|---|---|
+| two-stage ear, 5,000 pairs | 0.048 | 0.065 | 0.065 |
+| one pass, at 5,000 captions | 0.047 | 0.077 | 0.073 |
+| one pass, at the end (9,670 / 8,927 / 8,058) | 0.057 | 0.090 | 0.095 |
+| control at the end | 0.012 | 0.007 | 0.006 |
+
+What I said at 18:40 for the third reader (as for the second): 0.045–0.06 at 5,000, wrong (0.073); 0.065–0.085 by
+the end, wrong (0.095), both too low. The claim that holds on three readers: **one pass, kinds and link learning
+together, is no worse than two stages at as many pairs and goes on rising with more.** The curve flattens for
+the third reader between 7,500 and the end (0.095 both), not for the second. The first reader stays the weakest
+by every measure, as in the two-stage runs.
+
+### 2026-11-27 23:41 — The ear with only the past (second reader): 0.070 against 0.090; about a fifth is lost
+
+`LIVE=2` (out/bench/grounded_online_top2_live2_s0.log), the same reader, order and test as the whole-caption run;
+by 22:26 this is also the on-clock organ's result (`organic/hear_stream.py`, the very same bags):
+
+| captions heard | bands against the sound so far (2 s) | each caption known whole | lost |
+|---|---|---|---|
+| 1,000 | 0.021 | 0.022 | 5% |
+| 2,500 | 0.033 | 0.042 | 21% |
+| 5,000 | 0.056 | 0.077 | 27% |
+| 7,500 | 0.065 | 0.083 | 22% |
+| all 8,927 | **0.070** (rank 236) | 0.090 (rank 216) | 22% |
+| control | 0.005 (rank 516) | 0.007 | |
+
+The caption's own written words from its bag: rank 1 for both (R@1 0.51 against 0.55); words heard by how often
+they are said 0.69 / 0.57 / 0.43 / 0.22 against 0.70 / 0.61 / 0.47 / 0.27.
+**Against what I said (19:52):** "within a fifth at every checkpoint": missed, narrowly, at three of five (21–27%);
+the words heard within 0.05: held. Not the half that would have called for another design: the live ear finds
+the photographs seven times above chance and is above the two-stage whole-caption ear (0.065).
+**What the fifth may be, not yet shown.** The captions are separate recordings. Known whole, each is set against
+its own level; with only the past, the first seconds of every caption are set against the recording before it.
+A real stream has no such joins, so some of the loss may belong to the benchmark and not to the ear. Two runs can
+tell, now that a run takes much less (the probe matched every kind at double precision, 65 ms a kind; fixed
+23:41, checked against the old path on a small run): fading over 0.5 s (the ear is over a join six times sooner)
+and over 30 s (the voice's own long average, steady but slow at a join).
+**What I say:** if joins are the cost, 0.5 s does better than 2 s (0.075–0.09) and 30 s worse (under 0.065). If
+instead a word needs a steady reference, 30 s does better and 0.5 s worse. If both end within 0.01 of 0.070, the
+fifth is neither, and the live ear is simply this good.

@@ -311,8 +311,10 @@ organic learner behaves and what each part does, measured honestly, not a score.
   new link does not mend it; two voices' kinds match as the same written word through sight 20–30% of the time
   (chance 2%); and **the ear learns in one pass** (kinds and link together, a caption and its photograph once):
   level with the two-stage ear at 5,000 captions or above (0.047 / 0.077 against 0.048 / 0.065) and 0.057 / 0.090
-  at the end on two readers, control at chance, third reader running. Running: the same from the past alone (bands
-  against the sound so far) and with the relay a circuit. Kris may present the work to neuroscientists in about two weeks; the artifact
+  at the end on two readers, control at chance; **third reader 0.095 (23:35): three readers 0.057 / 0.090 / 0.095.**
+  With only the past (bands against the last 2 s of sound; the same organ runs on a 10 ms clock and gives the very
+  same bags, `organic/hear_stream.py`) the second reader reaches 0.070 against 0.090 (23:41). Running: the fading
+  time (0.5 s, 30 s), the relay as a circuit, the link in a stream. Kris may present the work to neuroscientists in about two weeks; the artifact
   (https://claude.ai/artifact/NLZYiDC19SLy3UHpsvRHwL) carries the parts, their stand-ins and checked references.
 - **2026-11-27 15:26: draft 11 emailed to Kris** (22 pages). One change: a paragraph at the end of "The relay,
   learned locally" (a batch relay fitted on photographs does not hold on CORe50's videos: 131–137 effective
