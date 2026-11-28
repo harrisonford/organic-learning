@@ -130,7 +130,12 @@ class LiveBrain:
             self.brain.give_ear(ear, kind_tau=1.0)
         if getattr(self.brain, "letters", None) is None:
             self.brain.give_letters()
-        self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=300), 0.0, 0.0, None  # what the eye was on, for showing a recall; never on disk
+        # what the eye was on, for showing a recall: (code, picture, when kept), one every half second, the last ten minutes;
+        # never on disk. (2026-11-28 10:58, after Kris's first session) The page shows which PAST view a sound or typed
+        # letters call up: views kept since the sound or the letters began are left out (a unit met for the first time is
+        # tied to what the eye holds now, and showed nothing but the present view), and the search is done beside the clock.
+        self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=1200), 0.0, 0.0, None
+        self.letters_since, self.letters_last, self.sound_held, self._recalling = 0.0, 0.0, collections.deque(maxlen=100), False
         self.ear, self.lock, self.stop = LiveEar(), threading.Lock(), threading.Event()
         self.frame, self.rows, self.texts = None, collections.deque(), collections.deque()
         self.count = collections.Counter()
@@ -198,20 +203,31 @@ class LiveBrain:
                 "kinds_founded": (b.kinds_ear.pairs.founded + b.kinds_ear.triples.founded) if getattr(b, "kinds_ear", None) is not None else 0,
                 "kinds_heard": n["kinds"], "views_kept": len(self.views), "gestures": gestures,
                 "relay_heard": float(getattr(getattr(getattr(b, "kinds_ear", None), "relay", None), "n", 0)) / 100,
-                "cortex_heard": float(getattr(getattr(getattr(getattr(b, "kinds_ear", None), "layer", None), "circuit", None), "n", 0)) / 100}
+                "cortex_heard": float(getattr(getattr(getattr(getattr(b, "kinds_ear", None), "layer", None), "circuit", None), "n", 0)) / 100,
+                "hearing": round(float(np.mean(self.sound_held)), 2) if self.sound_held else 0.0}  # share of the last second its ear held to be sound
 
     def _recall(self, letters=False):
         """The kept view most like what the eye held with the kinds now sounding (or the letters now typed); how far it
         stands out among them."""
         b = self.brain
         r = b.letters.recall() if letters else b.recall()
-        if r is None or len(self.views) < 8:
+        before = (self.letters_since if letters else time.monotonic() - 2 * b.kind_tau) - 0.5
+        views = [v for v in self.views if v[2] < before]
+        if r is None or len(views) < 8 or self._recalling:
             return
-        codes = np.stack([c for c, _ in self.views])
-        codes = codes - codes.mean(0)
-        like = unit(codes) @ unit(r)
-        best = int(np.argmax(like))
-        self.emit({"kind": "recall", "jpeg": self.views[best][1], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8)), "letters": letters})
+        self._recalling = True
+
+        def search():
+            try:
+                codes = np.stack([v[0] for v in views])
+                codes = codes - codes.mean(0)
+                like = unit(codes) @ unit(r)
+                best = int(np.argmax(like))
+                self.emit({"kind": "recall", "jpeg": views[best][1], "likeness": float(like[best]), "stands_out": float((like[best] - like.mean()) / (like.std() + 1e-8)), "letters": letters})
+            finally:
+                self._recalling = False
+
+        threading.Thread(target=search, daemon=True).start()
 
     def _keep_view(self):
         import io
@@ -219,7 +235,7 @@ class LiveBrain:
         w, code = self.sight.seen
         out = io.BytesIO()
         Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).save(out, "JPEG", quality=70)
-        self.views.append((code, out.getvalue()))
+        self.views.append((code, out.getvalue(), time.monotonic()))
 
     def run(self, seconds=None):
         b, took, self._heard, jumped = self.brain, [], [], False
@@ -243,12 +259,18 @@ class LiveBrain:
                 typed, self.texts = bytes(self.texts), collections.deque()
             t0 = time.monotonic()
             events = b.step(frame, row)
+            if typed:
+                if t0 - self.letters_last > 2.0:
+                    self.letters_since = t0
+                self.letters_last = t0
             for byte in typed:
                 b.type(byte, events)
             took.append(time.monotonic() - t0)
             steps += 1
             if row is not None:
                 self._heard.append(row)
+                q = getattr(getattr(b, "kinds_ear", None), "quiet", None)
+                self.sound_held.append(bool(q) and not q[-1])
             for e in events:
                 if e[0] == "saccade":
                     jumped = True
@@ -282,9 +304,11 @@ class LiveBrain:
                 self.emit({"kind": "gaze", "x": g[0], "y": g[1], "size": g[2], "jumped": jumped, "heard": heard, "seeing": b.frame is not None})
                 jumped, self._heard = False, []
             now = time.monotonic()
-            if steps % 100 == 0:
+            if steps % 25 == 0:
                 self.emit(self._state(took, max(0.0, now - nxt)))
-                took, b.log, self.sight.took = [], [], []
+                took = []
+                if steps % 100 == 0:
+                    b.log, self.sight.took = [], []
             if now - kept > self.keep_every:
                 self.keep()
                 kept = time.monotonic()

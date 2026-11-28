@@ -65,6 +65,11 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **A research agent** (started 10:55): how infants and other vocal learners come to stop vocalising, wait and
+  answer (turn-taking; mechanisms and their numbers; every reference opened) → docs/RESEARCH_TURNS.md. Then the
+  organic check and a probe before anything goes into the mouth (Kris, 10:50: the brain "doesnt shut up").
+- **The live page was rebuilt after Kris's first session** (Svelte 5, one screen; LIVE.md decisions 19–21). His
+  brain of that session (630 s old) is in place; the test brain was removed.
 - **`organic-online-layer-born-seeds`** (2026-11-28 09:48; MemoryMax 2600M; about 80 minutes): the born ear on reader
   2, seeds 1 then 2 → out/bench/grounded_online_top2_live0.5_circuit_layerborn_s{1,2}.log. Said before: VISION.md
   09:46 (the note at its end: 0.075–0.097).
@@ -2065,4 +2070,14 @@ Still Kris's own:
   email miscounted the references written from memory (said four, named three). **Next:** read seeds 1 and 2
   of the born ear and the all-born two voices; put the seeds into fig_ear; find out whether the visual cortex's
   development photographs include the hearing tests' photographs (the draft says "may").
+- 2026-11-28 11:04 **Kris tested the live page** (about 10:40–10:52) and wrote what he found (LIVE.md, "Kris's first
+  session"; his words in memory). Done at once: the page rebuilt in Svelte 5 on one screen (camera as the stage,
+  the two waves along its edge, a glass dock with icons, typed lines kept; kid-a commit 8211254, local); a recall
+  now searches the past and not the present view, over ten minutes of views, beside the clock; the brain reports
+  whether it hears. Found in the brain's own record: its ear held 485 of 630 s to be sound, so the ear born with
+  the brain very likely formed on its own babble from the loudspeaker; not verified. Not changed: the babble
+  that never stops; a survey of turn-taking is running first. Page tests pass at desktop and phone size.
+  **Next:** read the survey, write the organic check for a mouth that listens, probe it; ask whether the born
+  ear should hear its own voice at all (speaking-induced suppression is in the brain's inner path only; the
+  loudspeaker's echo is outside it); the 11:09 check of the seeds and the two-voice runs.
 

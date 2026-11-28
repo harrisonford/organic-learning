@@ -195,3 +195,43 @@ server). What the link is worth is measured on the benchmark, not on the page: V
     systemctl --user restart kid-a-live-db                                               # after changing the module
     systemctl --user stop kid-a-live-brain && rm ~/organic-learning/out/live/brain_s0.pkl && systemctl --user start kid-a-live-brain   # a newborn
     sudo tailscale serve --https=9444 off                                                # take the page down
+
+## Kris's first session (2026-11-28, about 10:40 to 10:52) and what was changed after it
+
+**What he found** (his words in the loop's memory; shortened here): it babbles vowels all the time and never
+waits for him; he could not tell whether it heard him; typed words ("dog", "banana") seemed to call up only
+what it was looking at; the page was too long, too wordy, not on one screen; he had hoped for Svelte 5.
+
+**What the brain's own record of the session says** (its kept state, read at 10:54): it lived 630 s, founded
+1,950 of its 2,048 sound units, and its ear held **485 of those 630 s to be sound**. Nobody talks for three
+quarters of ten minutes: most of that was very likely its own babble coming back from the loudspeaker into the
+microphone (two babbles a second, the browser's echo cancellation notwithstanding), or the room. So the ear
+"born with the brain" (decision 18) formed on a mixture in which the brain's own voice may be the largest
+part. **Not verified**: there is no recording (nothing is stored); the new page shows it directly (below).
+
+19. **The page is Svelte 5 and one screen** (2026-11-28 11:00; `~/kid-a/live/web/src/App.svelte`; kid-a commit
+    8211254, local). The camera with the eye's window on it is the whole stage. Along its lower edge two lines:
+    the microphone's wave as the browser gets it (blue), and the brain's own voice (yellow), drawn even when
+    its loudspeaker is switched off. The blue line is bright while the brain's ear holds what comes in to be
+    sound and dim when it holds it to be quiet, and an ear mark lights with it: that is the answer to "is it
+    hearing me", and it also shows the echo (the blue line moving with the yellow one while nobody speaks:
+    headphones, or the voice switch, end it). A glass dock at the bottom: three icons (microphone, camera, its
+    voice), the field, send. What was typed stays as short lines beside the stage, each with the past view it
+    called up if one stood out. What a sound or letters call up, and the mouth's map, are two tiles; the numbers
+    are behind an icon. Tested headless at 1440 × 900 and 390 × 844: no scrolling, no console errors.
+20. **A recall shows the past, not the present** (`organic/live.py`): views kept since the letters began (for a
+    sound: in the last two and a half seconds) are left out of the search. Before, a unit met for the first
+    time was tied only to what the eye held at that moment, so the tile showed the present view: what Kris saw.
+    Views are kept for ten minutes (1,200, one each half second) in place of two and a half, and the search runs
+    beside the clock. A word still means nothing to this brain until its letters have been typed several times
+    over the same thing; the tile is faint when the best past view is no more than chance.
+21. **The brain says whether it hears** (the state event's `hearing`: the share of the last second its ear held
+    to be sound; the state goes out four times a second).
+
+**Not changed yet, on purpose: the babble that never stops.** The mouth is a spontaneous source at a fixed two
+gestures a second (`babble_rate`), with nothing that listens. Kris: "we are missing mechanisms to make it
+'chill' like wait and respond ... we need to research how human brains grasp this communication dynamic". A
+survey is running (how infants and other vocal learners come to stop, wait and answer: docs/RESEARCH_TURNS.md
+when it is in); the mechanism goes in after its organic check, not as a rule "be silent while there is sound".
+Until then the voice switch on the dock silences the loudspeaker (the brain goes on babbling; its wave shows).
+
