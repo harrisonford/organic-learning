@@ -65,6 +65,16 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-online-layer-born-r13`** (2026-11-28 07:51; MemoryMax 2600M; about 2 hours, one after the other): the
+  one-pass ear with every piece born with the life, readers 1 and 3 →
+  out/bench/grounded_online_top_live0.5_circuit_layerborn_s0.log, ..._top3_.... Said before: VISION.md 07:51
+  (reader 1 0.038–0.054, reader 3 0.076–0.094).
+- **`organic-stream-layer-born`** (2026-11-28 07:41, started when the one-pass run ended; MemoryMax 2600M; about 50
+  minutes): the stream brain's ear with nothing kept from before (`RELAY=born LAYER=born`), reader 2, read at
+  2,500 and 5,000 → out/bench/stream_kinds_top2_all_born_s0.log; beside the relay born alone 0.031 / 0.055. Said
+  before: VISION.md 07:40 (0.028–0.045 and 0.048–0.062).
+- (READ 07:51: 0.086 at the end; its control line to be added.) `organic-online-layer-born`, below.
+- (READ 07:37–07:52: all three pairs; only `organic-two-voices-kinds` still runs, to about 09:30.)
 - **`organic-online-layer-born`** (2026-11-28 06:40; MemoryMax 2600M; about 50 minutes): reader 2's one-pass ear
   with every piece born with the life (`LIVE=0.5 RELAY=circuit LAYER=born`: the hearing cortex too, nothing heard
   before the life) → out/bench/grounded_online_top2_live0.5_circuit_layerborn_s0.log; beside 0.032 / 0.040 /
@@ -1993,4 +2003,18 @@ Still Kris's own:
   same on a small run), started as `organic-online-layer-born`. **Next:** read the third pair and the kinds
   readouts (pair 2→1, both relays); read the born cortex; if it holds within what I said, build it into the
   stream ear (`organic/hear_stream.py`) behind a switch and try it on the page with the recorded-speech test.
+- 2026-11-28 07:52 Health at 07:37: all healthy (4.8 GB available, 291 GB free; tagb_s2 at 115,000). **Two voices,
+  third pair (reader 2 then 3), read** (VISION.md 07:37; memoize): circuit, later voice 0.046 against 0.045
+  alone, first voice 0.031 → 0.029; fixed relay 0.047 and 0.039 → 0.038. Three pairs: with the circuit the later
+  voice ends at 0.95 / 0.73 / 1.02 of alone and the first keeps 1.00 / 0.74 / 0.94; the fixed relay's later voice
+  0.41 / 0.66 / 1.04: its harm goes with how unlike the voices are. Kinds divide between unlike voices and are
+  shared and moved between like ones. **The hearing cortex born with the life, read** (VISION.md 07:51; memoize):
+  0.032 / 0.048 / 0.059 / 0.072 / 0.086 against 0.032 / 0.040 / 0.063 / 0.071 / 0.079 with the cortex developed
+  first: no cost; I had said 0.060–0.078. Its kinds come to rest by themselves. **Built for the clock**
+  (`HearingLayer`, `layer_learns` in `organic/hear_stream.py`; default path the same, 40 of 40 bags; VISION.md
+  07:40). LIVE.md decision 17, PUBLISH.md and the artifact (version 19) carry the three pairs and the born
+  cortex. **Next:** read the stream run and readers 1 and 3; if they hold, the page's ear is born whole
+  (`organic/live.py`: `HearingLayer`, `layer_learns="sound"`), tested with the recorded-speech page test, LIVE.md
+  decision 18; then two voices with the cortex born too; the kinds readout for the pair 2→1; seeds for the
+  two-voice table.
 

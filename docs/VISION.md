@@ -5550,3 +5550,102 @@ the control at chance. The cortex's kinds come to rest by themselves (median cos
 least 0.99 from 2,500 on). What could make it worse than that: the circuit only brings the strong directions
 of a window down to the average (the batch matrix evens all of them), and the kinds found on windows less
 evened may be more alike; I have no number for that, so the lower end is a guess.
+
+### 2026-11-28 07:37 — Two voices, the third pair (reader 2 then reader 3): three pairs side by side
+
+Reader 2 for 2,500 captions, then reader 3 for 2,500. Photograph → its caption in the first ten of 1,000
+(chance 0.010, ±0.006), the median rank in brackets:
+
+| | circuit born with the brain | relay fitted on the first voice, fixed |
+|---|---|---|
+| first voice, at the change | 0.031 (374) | 0.039 (369) |
+| later voice, before it is heard | 0.018 (430) | 0.035 (420) |
+| later voice, at the end | 0.046 (347) | 0.047 (344) |
+| first voice, at the end | 0.029 (367) | 0.038 (360) |
+
+The later voice alone from birth: 0.045 (330).
+
+**Against what I said (05:27).** Circuit, later voice at 0.8–1.1 of alone: **held** (1.02). Circuit, first
+voice keeps at least four fifths: **held** (0.94; its median rank does not slip). Fixed relay, later voice
+under 0.6 of alone: **wrong**, 1.04: reader 3 is learned through reader 2's relay as well as alone. Fixed
+relay, first voice kept: **held** (0.038 against 0.039; read at 07:40).
+
+**Three pairs:**
+
+| | 2→1 | 1→2 | 2→3 |
+|---|---|---|---|
+| circuit: later voice / alone | 0.95 (rank 358 / 361) | 0.73 (346 / 376) | 1.02 (347 / 330) |
+| circuit: first voice kept | 1.00 (374 → 392) | 0.74 (396 → 426) | 0.94 (374 → 367) |
+| fixed: later voice / alone | 0.41 (456 / 361) | 0.66 (385 / 376) | 1.04 (344 / 330) |
+| fixed: first voice kept | 1.00 (369 → 408) | 0.58 (356 → 419) | 0.97 (369 → 360) |
+
+What I can say on three pairs, one seed each: **an ear whose relay is a circuit learning with it learns a
+second speaker about as well as if born to that speaker (0.73–1.02 of alone, level by median rank), and what
+it tied for the first speaker is mostly still found (0.74–1.00).** A relay fitted to the first voice and
+fixed does anything from shutting the second voice out (reader 2's relay, reader 1's voice) to nothing at all
+(reader 2's relay, reader 3's voice): its harm goes with how unlike the two voices are. Readers 2 and 3 are
+alike to this ear: before any of reader 3 is heard, reader 2's ear already finds some of reader 3's
+photographs (0.018 and 0.035 against 0.011–0.019 for the pairs with reader 1).
+
+**The kinds, with the circuit, this pair** (said at 05:30 for another pair: "the kinds divide, overlap under
+0.5; two sorts, moved and not"). Overlap of the two voices' held-out use **0.48**; a kind's share of wins in
+the second voice 0.41 / 0.48 / 0.53 (quartiles): nearly every kind is won by both voices; a kind against
+itself at the change 0.73 / 0.77 / 0.83: all moved a little, none stayed, none left. So for two voices that
+are alike the kinds are **shared and moved**, not divided: the "two sorts" I said is wrong for this pair. For
+readers 1 and 2 with a fixed relay (06:30) they divided (overlap 0.16, three in ten unmoved). Whether kinds
+divide or are shared goes with how unlike the voices are; the readout for the pair 2→1 with both relays is
+running.
+
+### 2026-11-28 07:40 — The born hearing cortex on the clock (built; said before its run)
+
+The one-pass run of 06:39 is at 5,000 captions: **0.032 / 0.048 / 0.059** at 1,000 / 2,500 / 5,000 against
+0.032 / 0.040 / 0.063 with the cortex developed first (the end is not in yet, so the full reading waits). The
+cortex's kinds are at rest by themselves: against the last reading, median cosine 1.00 and lowest tenth 0.99 at
+2,500, 1.00 at 5,000. The early cost I said (0.018–0.030 at 1,000) is not there.
+
+On that showing the organ is built for the 10 ms clock, behind a switch: `HearingLayer` in
+`organic/hear_stream.py` (the layer with its circuit and its kinds' own rule) and `layer_learns` on the stream
+ear (off, every frame, or only frames the ear holds to be sound; the picks of an utterance are learned from at
+its end, as the relay's). A dead microphone's windows (all alike) teach the circuit nothing. The default path
+is the very same: 40 of 40 captions the same bag as the probe's (`experiments/hear_stream_check.py`). A row
+through an ear with both circuits learning takes 1.6 ms beside three probes.
+
+**The run.** `experiments/stream_kinds_probe.py` with `RELAY=born LAYER=born`: the stream brain's ear with
+nothing kept from before, reader 2, read at 2,500 and 5,000 captions. Beside the relay born alone (04:30):
+0.031 / 0.055, and the batch ear 0.039 / 0.061.
+
+**What I say.** Not told apart from the relay born alone: **0.028–0.045 at 2,500 and 0.048–0.062 at 5,000.**
+
+### 2026-11-28 07:51 — The hearing cortex born with the life, read: no cost (one reader, one seed)
+
+Reader 2, each caption heard once with its photograph, nothing heard before the life; every piece of the ear
+(hearing cortex, its circuit, the relay's circuit, the sound kinds, the link) learning from the first caption.
+Photograph → its caption in the first ten of 1,000 (chance 0.010; ±0.008 at these levels):
+
+| captions heard | 1,000 | 2,500 | 5,000 | 7,500 | 8,927 (the end) |
+|---|---|---|---|---|---|
+| **all born with the life** | 0.032 | 0.048 | 0.059 | 0.072 | **0.086** (median rank 219) |
+| cortex developed first, relay a circuit (03:24) | 0.032 | 0.040 | 0.063 | 0.071 | 0.079 (236) |
+| cortex and relay fitted first, each caption known whole (11-27) | | | | | 0.090 |
+
+The relay's evenness 189–204 of 1,024 (222–225 above a developed cortex). The control line is still being
+computed as I write; it is added below when the run ends.
+
+**Against what I said (06:39).** 0.018–0.030 at 1,000: **too low** (0.032). 0.060–0.078 at the end: **too
+low** (0.086). The cortex's kinds come to rest by themselves: **held** (median cosine with the last reading
+1.00 from 2,500 on, lowest tenth 0.99 then 1.00; every kind in use, 14,600–17,400 wins each). I expected a
+cost and there is none that 1,000 test pairs can show; the born cortex is not told apart from the developed
+one at any reading, and nothing says it is better either (0.086 against 0.079 is one ±0.008 apart).
+
+What that means: on this reader an ear with nothing prepared, hearing each sentence once, ends level with the
+ear whose cortex was developed on 1,000 captions and whose relay was a matrix worked out from them (0.086 /
+0.079 / 0.090). The schedule, the 16,000 rounds and the batch decorrelation bought nothing that the circuit and
+a rate falling with each kind's own wins do not give. One reader, one seed: readers 1 and 3 are started
+(`organic-online-layer-born-r13`). **What I say for them:** reader 1 0.038–0.054 (0.046 with only the past and
+fitted pieces), reader 3 0.076–0.094 (0.089).
+
+**Added 07:52, the kinds for the pair 2→3 with the fixed relay:** overlap of the two voices' use 0.35 (0.48 with
+the circuit); one kind in six is won nine tenths in the first voice (one in twenty-five with the circuit); a
+kind against itself at the change 0.58 / 0.66 / 0.84 (0.73 / 0.77 / 0.83). With the relay fixed the kinds move
+further and divide more than with a relay that follows the voice, and the scores are the same (0.047 / 0.038
+against 0.046 / 0.029): for like voices either way of sharing the kinds works.

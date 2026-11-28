@@ -319,12 +319,13 @@ organic learner behaves and what each part does, measured honestly, not a score.
   the hearing cortex below: 0.079 (03:24, one reader). The circuit is at rest after three minutes of sound and
   follows a new voice within one, forgetting the last as fast (03:45). Born random with the brain inside the
   stream brain it ends where a finished relay ends (0.055 against 0.061, not told apart; 04:30). Two voices in
-  one life (05:27, 06:30; two pairs of readers, a third running): with the circuit the second voice is learned
-  about as well as alone (0.037 / 0.039 and 0.030 / 0.041; median rank level or ahead in both) and the first
-  slips a little (0.031 → 0.031 and 0.031 → 0.023; 18 and 30 places of median rank); with a relay fitted on
-  the first voice the second ends at 0.016 and 0.027 and the first slips more (39 and 63 places). The first
-  pair alone looked sharper than the two together; not a headline until the third pair and more seeds. The
-  two voices use nearly different kinds even with a fixed relay (overlap 0.16).** The link in a stream (traces of a second, what is in view):
+  one life (05:27, 06:30, 07:37; three pairs of readers, one seed each): with the circuit the second voice is
+  learned about as well as alone (0.95, 0.73, 1.02 of alone; level by median rank in all three) and the first
+  is mostly kept (1.00, 0.74, 0.94); with a relay fitted on the first voice the second ends at 0.41, 0.66,
+  1.04 of alone: the fixed relay's harm goes with how unlike the voices are. The kinds divide between unlike
+  voices (overlap of use 0.16, readers 1 and 2, fixed relay) and are shared and moved between like ones (0.48,
+  readers 2 and 3, circuit). Needs seeds before it is a claim. The hearing cortex born with the life too
+  (06:39): 0.032 / 0.048 / 0.059 at 1,000 / 2,500 / 5,000 against 0.032 / 0.040 / 0.063 developed first.** The link in a stream (traces of a second, what is in view):
   0.075, the caption bag's number; inside the stream brain 0.061 at 5,000 captions against 0.069. Typed letters,
   runs of 3 and 4 hashed, no words cut: 0.093 against 0.088 for written words; the one-voice ear is at that
   ceiling. A live page runs these organs on a camera and a microphone (docs/LIVE.md). Queue 29e ended: replay of

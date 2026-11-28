@@ -83,10 +83,18 @@ RELAY = os.environ.get("RELAY", "")
 if RELAY == "born":
     from organic.cortex2 import RelayCircuit  # noqa: E402
     kept["relay"] = RelayCircuit(kept["layer"].K * 8 if hasattr(kept["layer"], "K") else 1024, rate=1e-4, block=50, seed=SEED)
+# (2026-11-28 07:40) LAYER=born: the hearing cortex too is born with this brain and learns on the clock (hear_stream.py
+# HearingLayer, `layer_learns`); with RELAY=born nothing of the ear is kept from before (VISION.md 07:40)
+LAYER = os.environ.get("LAYER", "")
+if LAYER == "born":
+    from organic.hear_stream import HearingLayer  # noqa: E402
+    kept["layer"] = HearingLayer(seed=SEED)
 brain.give_ear(StreamEar(kept["layer"], kept["relay"], tau=LIVE), kind_tau=TRACE)
-brain.kinds_ear.relay_learns = bool(RELAY)
+brain.kinds_ear.relay_learns, brain.kinds_ear.layer_learns = bool(RELAY), LAYER == "born"
 if RELAY:
     say(f"the relay is a circuit that learns along the life ({RELAY})")
+if LAYER:
+    say("the hearing cortex is born with the brain and learns along the life")
 brain.frame = np.zeros((2, 2, 3), np.float32)  # something is in view: the sight population is set by hand below
 ear, quiet_steps = brain.kinds_ear, int(round(PAUSE * 100))
 rec = lambda r: " ".join(f"R@{k} {np.mean(r < k):.3f}" for k in (1, 5, 10))  # noqa: E731

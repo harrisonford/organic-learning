@@ -22,6 +22,7 @@ probe closes a caption, so that with a pause after every caption this ear gives 
 """
 import copy, threading
 import numpy as np
+from .cortex2 import Layer2, RelayCircuit, _contrast, _windows
 
 
 def unit(X):
@@ -49,6 +50,52 @@ class Kinds:
         return c
 
 
+class HearingLayer(Layer2):
+    """A hearing cortex born with the brain (2026-11-28 07:40; docs/VISION.md 06:39, measured there as LAYER=born of
+    experiments/grounded_online_probe.py). The same layer as the kept ears' (organic/cortex2.py Layer2: kinds of
+    window x window patches of the cochlea), with nothing fitted beforehand: the correlations of its windows are
+    removed by a circuit of interneurons with the relay's local rule (RelayCircuit on a window's values, at the
+    published rate for tens of cells), and its kinds learn by their own rule (winner-take-all with a conscience),
+    each kind's rate falling with its own wins as the sound kinds' do. One window a frame, at a place chosen by
+    chance: `pick` after each answer, `learn_from` with the picks of an utterance when it has ended (the ear
+    decides which; the kinds take only windows with contrast)."""
+
+    def __init__(self, kinds=128, window=8, seed=0, rate=1e-3):
+        super().__init__(1, kinds, window, 1, seed=seed)
+        self.circuit = RelayCircuit(window * window, rate=rate, block=50, seed=seed)
+        self.at, self.top, self.rng, self.last = None, 0.0, np.random.default_rng(seed), None
+
+    def _drive(self, x):
+        raw, e = _contrast(_windows(x, self.window))
+        if self.at is None:  # the circuit's settled state as one matrix, until its synapses change
+            self.at = StreamEar._settled(self.circuit)
+        inv, mu, scale = self.at
+        v = unit(((raw - mu) / scale) @ inv)
+        self.last = (raw, v, e)
+        return v @ self.W[0].T, e, [(v, e)]
+
+    def pick(self, k):
+        """One window of the last frame answered: as the circuit gets it, as the kinds get it, and whether its
+        contrast is over 0.3 of the strongest lately (fading at k a frame)."""
+        raw, v, e = self.last
+        at = int(self.rng.integers(raw.shape[1]))
+        self.top = max(float(e[-1].max()), self.top * (1 - k))
+        return raw[-1, at], v[-1, at], bool(e[-1, at] > 0.3 * self.top)
+
+    def learn_from(self, picks):
+        W, wins = self.W[0], self.wins[0]
+        for _, s, strong in picks:
+            if strong:
+                c = int(np.argmax(W @ s - 0.3 * (wins / (wins.mean() + 1e-8) - 1)))
+                wins[c] += 1
+                w = W[c] + (1.0 / (1 + wins[c] / 5)) * (s - W[c])
+                W[c] = w / np.linalg.norm(w)
+        R = np.stack([r for r, _, _ in picks])
+        if float(R.std(axis=0).max()) > 1e-6:  # windows all alike (a dead microphone) teach the circuit nothing
+            self.circuit.learn(R)
+            self.at = None
+
+
 class StreamEar:
     def __init__(self, layer, relay, kinds=128, bands=8, k23=1024, tau=2.0, window=8, half=5, smooth=5, learning=True):
         self.layer, self.relay, self.n_kinds, self.bands, self.k23 = layer, relay, kinds, bands, k23
@@ -65,14 +112,18 @@ class StreamEar:
         # ear goes on with the synapses as they were until it is done.
         self.relay_learns, self.relay_block, self.X = False, 1000, []
         self.relay_later, self._relay_busy, self._relay_at = False, False, None
+        # (2026-11-28 07:40) `layer_learns` with a HearingLayer: the hearing cortex too learns from what is heard, by
+        # the picks of an utterance at its end (or after `relay_block` frames of an endless one). True: every frame;
+        # "sound": only frames this ear does not hold to be quiet. Off unless asked.
+        self.layer_learns, self.P = False, []
         self._fresh()
 
     def __setstate__(self, d):  # an ear kept before the relay could learn, or while a change was being worked out
         self.__dict__.update(d)
-        for k, v in (("relay_learns", False), ("relay_block", 1000), ("relay_later", False), ("_relay_at", None)):
+        for k, v in (("relay_learns", False), ("relay_block", 1000), ("relay_later", False), ("_relay_at", None), ("layer_learns", False)):
             self.__dict__.setdefault(k, v)
-        self.__dict__.setdefault("X", [])
-        self.__dict__.setdefault("F", [])
+        for k in ("X", "F", "P", "L"):
+            self.__dict__.setdefault(k, [])
         self._relay_busy = False
 
     def _fresh(self):
@@ -80,6 +131,7 @@ class StreamEar:
         self.C, self.loud, self.env, self.quiet = [], [], [], []  # a code frame each, since the utterance began
         self.cuts, self.done, self.chain = [0], 0, []  # cuts found; the last one closed; stretches in a row without a gap
         self.F = []  # a frame each as the relay receives it (kept only when `relay_learns` is "sound")
+        self.L = []  # a frame each: the hearing cortex's pick (kept only when `layer_learns`)
         self.told = []  # a code frame each: whether the listener said this moment holds no sound of the world (see step)
 
     def _through(self, c):
@@ -123,6 +175,11 @@ class StreamEar:
         else:
             work()
 
+    def _layer_learn(self):
+        if self.P:
+            P, self.P = self.P, []
+            self.layer.learn_from(P)
+
     def _env(self, e, end=False):
         """Loudness at frame e smoothed over `smooth` frames (zeros beyond the utterance's ends, as the probe has it)."""
         h = self.smooth // 2
@@ -140,6 +197,10 @@ class StreamEar:
             self.X.append(self.F[e])
             if len(self.X) >= self.relay_block:
                 self._relay_learn()
+        if self.layer_learns and self.learning and (self.layer_learns is True or not self.quiet[e]):
+            self.P.append(self.L[e])
+            if len(self.P) >= self.relay_block:
+                self._layer_learn()
 
     def _trough(self, t):
         if t >= 1 and self.env[t] == min(self.env[max(0, t - self.half): t + self.half + 1]):
@@ -187,6 +248,8 @@ class StreamEar:
         b = r.shape[1] // self.bands
         c = r[0, : self.bands * b].reshape(self.bands, b, self.n_kinds).mean(axis=1).ravel()
         self.C.append(self._through(c))
+        if self.layer_learns:
+            self.L.append(self.layer.pick(self.k))
         self.loud.append(float(np.mean(self.sums)))
         self.told.append(quiet if isinstance(quiet, bool) else float(quiet))
         j, h = len(self.C) - 1, self.smooth // 2
@@ -199,7 +262,7 @@ class StreamEar:
         if len(self.C) > 4000 and self.done > 2000:  # an endless utterance: what is long closed is let go
             d = self.done - 100
             self.C, self.loud, self.env, self.quiet, self.told = self.C[d:], self.loud[d:], self.env[d:], self.quiet[d:], self.told[d:]
-            self.F = self.F[d:]
+            self.F, self.L = self.F[d:], self.L[d:]
             self.cuts, self.done = [c - d for c in self.cuts], self.done - d
         return out
 
@@ -216,4 +279,6 @@ class StreamEar:
         self._fresh()
         if self.relay_learns and self.learning:
             self._relay_learn()
+        if self.layer_learns and self.learning:
+            self._layer_learn()
         return out
