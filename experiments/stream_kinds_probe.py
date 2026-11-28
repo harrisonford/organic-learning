@@ -29,16 +29,30 @@ utts = [u for u in map(json.loads, open(os.path.join(DIR, "cochlea.jsonl"))) if 
 count = {}
 for u in utts:
     count[u["speaker"]] = count.get(u["speaker"], 0) + 1
-who = sorted(count, key=count.get, reverse=True)[int(READER[3:] or 1) - 1] if READER.startswith("top") else READER
-utts = [u for u in utts if u["speaker"] == who]
 grams = np.memmap(os.path.join(DIR, "cochlea_64.f16"), np.float16, "r").reshape(-1, 64)
-by_image = {}
-for u in utts:
-    by_image.setdefault(u["image"], []).append(u)
-images = sorted(by_image)
-images = [images[i] for i in rng.permutation(len(images))]
-test_u = [by_image[i][int(rng.integers(len(by_image[i])))] for i in images[:TEST]]
-life_u = [by_image[i][int(rng.integers(len(by_image[i])))] for i in images[TEST:]][:MAXU]
+all_utts = utts
+
+
+def people(reader, n, taken=()):
+    """One reader's held-out captions and life, a caption a photograph; no photograph in `taken`."""
+    who = sorted(count, key=count.get, reverse=True)[int(reader[3:] or 1) - 1] if reader.startswith("top") else reader
+    by_image = {}
+    for u in all_utts:
+        if u["speaker"] == who and u["image"] not in taken:
+            by_image.setdefault(u["image"], []).append(u)
+    images = sorted(by_image)
+    images = [images[i] for i in rng.permutation(len(images))]
+    test = [by_image[i][int(rng.integers(len(by_image[i])))] for i in images[:TEST]]
+    return test, [by_image[i][int(rng.integers(len(by_image[i])))] for i in images[TEST:]][:n]
+
+
+test_u, life_u = people(READER, MAXU)
+# (2026-11-28 04:34) THEN=<reader>: after the first reader's life a second voice, THEN_N captions with their photographs
+# (none of them seen with the first voice); both readers' held-out pairs are read at the change and at the end.
+# FIRST_HEARD=0: the first life is not heard at all (the second voice alone, on the same captions and tests).
+THEN, THEN_N, FIRST_HEARD = os.environ.get("THEN", ""), int(os.environ.get("THEN_N", 2500)), os.environ.get("FIRST_HEARD", "1") != "0"
+if THEN:
+    test2_u, life2_u = people(THEN, THEN_N, {u["image"] for u in test_u + life_u})
 raw = lambda u: np.asarray(grams[u["start"]: u["start"] + u["rows"]], np.float32)  # noqa: E731
 
 cortex = pickle.load(open(f"out/bench/cortex_ph_d_s{SEED}.pkl", "rb"))
@@ -56,6 +70,8 @@ def see(us):
 
 
 V_life, V_test = see(life_u), see(test_u)
+if THEN:
+    V_life2, V_test2 = see(life2_u), see(test2_u)
 cortex.relay = vrelay
 say(f"reader {READER}: {len(life_u)} captions with their photographs, {len(test_u)} held out; ear fading over {LIVE:g} s, traces over {TRACE:g} s, {PAUSE:g} s after each caption")
 
@@ -90,7 +106,8 @@ def hear(u, v):
     return len(events)
 
 
-def read(name):
+def read(name, test_u=None, V_test=None):
+    test_u, V_test = (globals()["test_u"], globals()["V_test"]) if test_u is None else (test_u, V_test)
     held = (ear.mu.copy(), ear.var.copy(), ear.top, brain.kind_trace.copy())
     ear.learning = brain.kind_learn = False
     R, none = np.zeros((len(test_u), V_test.shape[1]), np.float32), 0
@@ -119,7 +136,17 @@ def read(name):
 
 
 kinds = 0
-for n, u in enumerate(life_u, 1):
+for n, u in enumerate(life_u if FIRST_HEARD else [], 1):
     kinds += hear(u, V_life[n - 1])
     if n in CHECKS or n == len(life_u):
         read(f"after {n} captions ({kinds / n:.1f} kinds a caption)")
+if THEN:
+    if FIRST_HEARD:
+        read(f"the second voice ({THEN}) before any of it is heard", test2_u, V_test2)
+    kinds = 0
+    for n, u in enumerate(life2_u, 1):
+        kinds += hear(u, V_life2[n - 1])
+        if n in CHECKS or n == len(life2_u):
+            read(f"after {n} captions of the second voice ({kinds / n:.1f} kinds a caption), the second voice", test2_u, V_test2)
+            if FIRST_HEARD:
+                read(f"after {n} captions of the second voice, the first voice ({READER})")

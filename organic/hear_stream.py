@@ -67,6 +67,14 @@ class StreamEar:
         self.relay_later, self._relay_busy, self._relay_at = False, False, None
         self._fresh()
 
+    def __setstate__(self, d):  # an ear kept before the relay could learn, or while a change was being worked out
+        self.__dict__.update(d)
+        for k, v in (("relay_learns", False), ("relay_block", 1000), ("relay_later", False), ("_relay_at", None)):
+            self.__dict__.setdefault(k, v)
+        self.__dict__.setdefault("X", [])
+        self.__dict__.setdefault("F", [])
+        self._relay_busy = False
+
     def _fresh(self):
         self.z, self.sums = [], []  # the last rows of this utterance: its bands, its loudness
         self.C, self.loud, self.env, self.quiet = [], [], [], []  # a code frame each, since the utterance began

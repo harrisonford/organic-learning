@@ -65,7 +65,12 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
-- **`organic-stream-relay-learns`, `-born`** (2026-11-28 03:45; MemoryMax 2600M each; about 40 minutes): the organ
+- **`organic-two-voices-born`** and **`organic-two-voices-rest`** (2026-11-28 04:34; MemoryMax 2600M each; about 50
+  and 75 minutes): the organ inside the stream brain hears reader 2 for 2,500 captions, then reader 1 for 2,500;
+  relay a circuit born with the brain; then (second unit, one after the other) the later voice alone, and the
+  relay fitted in a batch and fixed → out/bench/two_voices_top2_top_{born,alone,batch}_s0.log. Said before:
+  VISION.md 04:34.
+- (READ 04:30: A 0.031 / 0.061, B 0.031 / 0.055.) **`organic-stream-relay-learns`, `-born`** (2026-11-28 03:45; MemoryMax 2600M each; about 40 minutes): the organ
   inside the stream brain with the relay a circuit learning on the clock, kept from the all-live probe (A) or born
   random with the brain (B) → out/bench/stream_kinds_top2_relay_learns_s0.log, ..._relay_born_s0.log. Said before:
   VISION.md 03:45 (A 0.034-0.040 and 0.052-0.062; B within a tenth of A). If B holds, the circuit goes on the page.
@@ -1944,3 +1949,9 @@ Still Kris's own:
   **Next:** read A and B; if B holds, the page's relay becomes a circuit born with the brain (`relay_learns="sound"`,
   `relay_later`), tested with the recorded-speech page test; then two voices in one life (does a kind survive the
   relay following a new speaker), which the one-voice benchmark cannot say.
+- 2026-11-28 04:36 Health at 04:29: all healthy (7.9 GB available; tagb_s1 at 105,000). **The circuit learning on
+  the clock, read** (VISION.md 04:30; memoize): kept 0.031 / 0.061, born with the first caption 0.031 / 0.055,
+  batch relay 0.039 / 0.061; A's first number under my range, B inside; not told apart at 5,000. **Decision (mine):
+  the page's relay is a circuit born with the brain** (`organic/live.py`; LIVE.md decision 17; page test passes: 593
+  kinds in 112 s, a step 4.0 ms; kid-a commit bf94dec, local; the brain newborn again). `stream_kinds_probe.py`
+  can give a second voice after the first (`THEN`, `FIRST_HEARD`); three runs started, said before (VISION.md 04:34).

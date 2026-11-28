@@ -5363,3 +5363,49 @@ same organ with the batch relay, 0.039 and 0.061; the all-live probe with captio
 2,048 kinds are founded in the first hundred captions, on a code that is still spreading, but a kind moves
 toward what wins it, so they should follow. If B falls well under A, the kinds do not follow a moving relay and
 the page's circuit must be born before the kinds are.
+
+### 2026-11-28 04:30 — The circuit learning on the clock, kept and newborn: read
+
+`out/bench/stream_kinds_top2_relay_learns_s0.log`, `..._relay_born_s0.log` (40 minutes each). The organ inside
+the stream brain, reader 2, photograph → its caption in the first ten of 1,000 held out:
+
+| relay | at 2,500 captions | at 5,000 |
+|---|---|---|
+| fitted in a batch (00:38's run) | 0.039 | 0.061 |
+| A: circuit kept from the all-live probe, learning on | 0.031 | 0.061 |
+| B: circuit born random with the first caption | 0.031 | 0.055 |
+
+**Against what I said.** A 0.034–0.040 and 0.052–0.062: the first is under my range (0.031), the second inside.
+B within a tenth of A: the same at 2,500 and a tenth under at 5,000 (0.055 against 0.061), inside the range I
+gave. With 1,000 test pairs one number here is known to about ±0.008, so A, B and the batch relay are not told
+apart at 5,000, and at 2,500 both circuits are a little under the batch relay. One reader, one seed.
+
+What it says: the sound kinds do follow a relay that is born with them. Nearly all 2,048 are founded in the
+first hundred captions, while the circuit's code goes from an evenness of 27 to 225, and the ear ends where the
+ear with a finished relay ends. So nothing has to be fitted before the life except the hearing cortex under the
+relay. **Decision (mine): the page's relay becomes a circuit born with the brain**, learning from the frames the
+ear holds to be sound, its changes worked out beside the clock. What is still not measured: a change of speaker
+in the middle of a life (the circuit follows within a minute; whether the kinds founded in the first voice
+serve the second is the next run).
+
+### 2026-11-28 04:34 — The circuit is on the page; two voices in one life (said before it runs)
+
+**On the page** (`organic/live.py`): the live ear's relay is a circuit born random with the brain, learning from
+the frames the ear holds to be sound (`relay_learns="sound"`), a change every 3.3 s of sound worked out beside
+the clock. Page test in headless Chromium with 100 s of recorded speech as the microphone: 593 kinds founded,
+the relay learned from 96 s of sound, a step 4.0 ms, no sound lost, no errors. The brain is newborn again.
+
+**Two voices.** `experiments/stream_kinds_probe.py` with `THEN`: the organ inside the stream brain hears the
+second reader's 2,500 captions with their photographs, then the first reader's 2,500 (other photographs, none
+seen before); both readers' 1,000 held-out pairs are read at the change and at the end. Three runs: the relay a
+circuit born with the brain (what the page has now); the relay fitted in a batch on the first voice heard and
+then fixed (what the page had); and the later voice alone from birth, same captions and tests (`FIRST_HEARD=0`).
+This is the page's case: whoever speaks to it after the first speaker.
+
+**What I say.** The voice heard first, at the change: 0.031 (run B's number, the same captions). The later voice
+before any of it is heard: chance to twice chance (0.010–0.020); a voice never heard is not understood (2026-11-27).
+The later voice at the end: within a fifth of what it reaches alone, a little under it (0.8–1.0 of it) with the
+circuit; with the fixed relay of the other voice lower (0.6–0.9). The first voice at the end, 2,500 captions of
+another voice later: under half of 0.031 with the circuit (which has left it; the kinds have moved), more kept
+with the fixed relay (half to four fifths). If the later voice learns as well as alone, a page that many people
+speak to works one speaker at a time; what it would not do is hold two.

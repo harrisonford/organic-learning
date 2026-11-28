@@ -118,7 +118,14 @@ class LiveBrain:
         born = os.path.join(home, "ear_born.pkl")  # the kinds' ear (organic/hear_stream.py): its cortex and relay developed on speech before the life
         if getattr(self.brain, "kinds_ear", None) is None and os.path.exists(born):
             k = pickle.load(open(born, "rb"))
-            self.brain.give_ear(StreamEar(k["layer"], k["relay"], tau=0.5), kind_tau=1.0)
+            # (2026-11-28 04:30) the relay is a circuit born random with the brain (organic/cortex2.py RelayCircuit),
+            # learning by its local rule from the frames the ear holds to be sound, a change every 3.3 s of sound
+            # worked out beside the clock; only the hearing cortex under it was developed before the life
+            # (docs/VISION.md 2026-11-28 03:45, 04:30). It is at rest after about three minutes of speech.
+            from .cortex2 import RelayCircuit
+            ear = StreamEar(k["layer"], RelayCircuit(len(k["relay"].mu), rate=1e-4, block=50, seed=seed), tau=0.5)
+            ear.relay_learns, ear.relay_later, ear.relay_block = "sound", True, 330
+            self.brain.give_ear(ear, kind_tau=1.0)
         if getattr(self.brain, "letters", None) is None:
             self.brain.give_letters()
         self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=300), 0.0, 0.0, None  # what the eye was on, for showing a recall; never on disk
@@ -187,7 +194,8 @@ class LiveBrain:
                 "link_size": round(float(np.abs(b.link_sum[::8, ::8]).mean() / max(b.n_assoc, 1)), 6) if b.link_sum is not None else 0.0,
                 "floor": round(float(b.floor), 2) if b.floor is not None else None, "top": round(float(b.top), 2) if b.top is not None else None,
                 "kinds_founded": (b.kinds_ear.pairs.founded + b.kinds_ear.triples.founded) if getattr(b, "kinds_ear", None) is not None else 0,
-                "kinds_heard": n["kinds"], "views_kept": len(self.views), "gestures": gestures}
+                "kinds_heard": n["kinds"], "views_kept": len(self.views), "gestures": gestures,
+                "relay_heard": float(getattr(getattr(getattr(b, "kinds_ear", None), "relay", None), "n", 0)) / 100}
 
     def _recall(self, letters=False):
         """The kept view most like what the eye held with the kinds now sounding (or the letters now typed); how far it

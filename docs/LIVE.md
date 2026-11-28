@@ -120,6 +120,15 @@ More decisions:
     sound kinds, founded on the relay's code, follow a relay that moves; two runs are measuring that, and the
     circuit goes on the page when they are read (`relay_learns`, `relay_later` in `organic/hear_stream.py` are
     built for it).
+17. **The relay is a circuit born with the brain** (2026-11-28 04:34; replaces 14). The two runs: inside the
+    stream brain a circuit born random with the first caption ends at 0.055 against 0.061 for a kept one and
+    0.061 for the batch relay, not told apart with 1,000 test pairs (VISION.md 04:30): the kinds follow a relay
+    born with them. So the page's ear now has nothing of any speaker in it but the hearing cortex under the
+    relay (still developed on a SpokenCOCO reader). The circuit learns only from frames the ear holds to be
+    sound, so that a room's hum does not become its world; a change every 3.3 s of sound, worked out beside the
+    clock (about 0.1 s). The page shows how much sound it has learned from; it is at rest after about three
+    minutes of speech, and follows a new speaker within one. What a second speaker does to the kinds is being
+    measured (two voices in one life, VISION.md 04:34).
 
 15. **Typed letters are a third stream** (2026-11-28 01:32; `give_letters`, `type` in `organic/stream.py`): the
     page sends every keystroke as it is typed; each letter excites the unit of the run of 3 and of 4 letters that
@@ -130,6 +139,9 @@ More decisions:
     trace is by hand, inside the range measured for sound kinds with pauses.
 16. **The recall panel compares against the views it keeps, less their own average** (not the life's average
     view), so that a view stands out for what is particular to it.
+
+Tested again 04:31 with the circuit relay: 593 kinds founded in 112 s, the relay learned from 96 s of sound, a step
+4.0 ms on a quiet machine, no sound lost, no errors.
 
 Tested: the page in headless Chromium with 100 s of recorded speech as the microphone: 534 kinds founded, recall
 pictures arriving, no errors; a step takes 8.5 ms with the ear (the margin to 10 ms is small on the loaded
