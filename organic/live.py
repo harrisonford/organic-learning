@@ -136,7 +136,7 @@ class LiveBrain:
         # tied to what the eye holds now, and showed nothing but the present view), and the search is done beside the clock.
         self.views, self.view_at, self.recall_at, self.last_seen = collections.deque(maxlen=1200), 0.0, 0.0, None
         self.letters_since, self.letters_last, self.sound_held, self._recalling = 0.0, 0.0, collections.deque(maxlen=100), False
-        # (2026-11-28 11:15) a brain that was raised before it is hosted (experiments/live_childhood.py) brings the
+        # (2026-11-28 11:14) a brain that was raised before it is hosted (experiments/live_childhood.py) brings the
         # photographs of its childhood: a recall is searched among them too, so the page can show which one a sound or
         # typed letters call up. Each code less the childhood's average, at unit length; never changed.
         self.childhood, cp = None, os.path.join(home, "childhood.npz")

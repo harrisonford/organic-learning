@@ -2090,7 +2090,7 @@ Still Kris's own:
   **Next:** read the survey, write the organic check for a mouth that listens, probe it; ask whether the born
   ear should hear its own voice at all (speaking-induced suppression is in the brain's inner path only; the
   loudspeaker's echo is outside it); the 11:09 check of the seeds and the two-voice runs.
-- 2026-11-28 11:15 **Kris: the page should host a trained brain** (VISION.md 11:13; his words there). No brain of
+- 2026-11-28 11:14 **Kris: the page should host a trained brain** (VISION.md 11:13; his words there). No brain of
   the page's kind had lived longer than a test, so one is being raised: `experiments/live_childhood.py` (the
   page's own LiveBrain, reader 2's captions on the clock with photographs and letters; a trial of 40 captions
   ran clean; levels of one brain kept in order), started as `organic-live-childhood`, said before. `organic/live.py`
