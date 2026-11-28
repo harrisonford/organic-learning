@@ -96,13 +96,21 @@ def motion(img, before, reach=3):
 
 class StreamBrain:
     def __init__(self, cortex, hearing, seed=0, motor_units=32, fixation_rate=3.5, babble_rate=2.0, tract=None, bands=4, habit_step=1.0, echo_tau=None, heard_habit=0.0,
-                 motion_drive=False, pursuit_tau=None):
+                 motion_drive=False, pursuit_tau=None, view=None):
         self.rng = np.random.default_rng(seed)
         # Two reflexes of the eye, off by default (2026-11-27, docs/VISION.md 04:57): `motion_drive`, what moves against
         # the view's own flow draws saccades as well as what stands out (each relative to its own strongest, then
         # added: the colliculus's priority map; to verify); `pursuit_tau` (seconds), between saccades the eye drifts
         # toward the centre of that motion within its own field (smooth pursuit: Lisberger 2010).
         self.motion_drive, self.pursuit_tau = motion_drive, pursuit_tau
+        # `view` (pixels; None: the frame's own size, as before): the size the fixated half of the frame is brought to for
+        # the cortex. A camera frame of 128 with view 64 gives the fovea the picture's own pixels (2026-11-27, docs/LIVE.md).
+        self.view_size, self.said_pcm = view, None
+        # `sight_later` (None: the cortex answers within the step, as before): an object the fixated window is handed
+        # to, `sight_later(window)`, whose `code` is the cortex's answer to the last window it finished, or None. The
+        # cortex then works beside the clock and the sight population gets each view when it is ready (tens of
+        # milliseconds late, as a visual cortex is), and the frame is looked at once, not twice (organic/live.py).
+        self.sight_later = None
         self.before, self.moving, self.pos, self.pos_seen, self.target = None, None, None, None, None
         self.cortex, self.hearing = cortex, hearing  # a VisualCortex2 with its relay; a Layer2 on the cochlea's frames
         self.t, self.frame, self.places, self.where = 0.0, None, [], 4  # the centre place to begin with
@@ -133,9 +141,16 @@ class StreamBrain:
         # Imitation reads the stretch being heard, or else the echo. None: the 50 ms hearing population, as before.
         self.echo_tau, self.echo, self.echo_strength, self.stretch, self.stretch_n = echo_tau, None, 0.0, None, 0
         self.heard_habit = heard_habit  # habits from what is heard: a heard sound strengthens the habits of the gestures it matches
-        self.assoc = None  # sight <-> sound, Hebb's rule while both stream (experiments/av_probe.py)
+        # sight <-> sound, Hebb's rule while both stream (experiments/av_probe.py): `assoc` is the running mean of the
+        # two populations' product; kept as the sum and the count (2026-11-27: one pass over the synapses a step
+        # instead of three, for the live brain; the same numbers to rounding)
+        self.link_sum = None
         self.n_assoc = 0
         self.log = []
+
+    @property
+    def assoc(self):
+        return None if self.link_sum is None else self.link_sum / max(self.n_assoc, 1)
 
     def _see(self):
         """The code of what the eye is on: the fixated half of the frame, enlarged to fill the view."""
@@ -146,7 +161,12 @@ class StreamBrain:
             self.pos_seen = self.pos.copy()
         side = self.frame.shape[0] // 2
         w = self.frame[r: r + side, c: c + side]
-        w = np.asarray(Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).resize(self.frame.shape[:2][::-1], Image.BILINEAR), np.float32) / 255
+        size = self.frame.shape[:2][::-1] if getattr(self, "view_size", None) is None else (self.view_size, self.view_size)
+        if w.shape[:2][::-1] != size:
+            w = np.asarray(Image.fromarray((np.clip(w, 0, 1) * 255).astype(np.uint8)).resize(size, Image.BILINEAR), np.float32) / 255
+        if getattr(self, "sight_later", None) is not None:
+            self.sight_later(w)
+            return self.view if getattr(self, "view", None) is not None else self.cortex.whole(w, 4)
         return self.cortex.whole(w, 4)
 
     def _pursuit_target(self):
@@ -186,7 +206,14 @@ class StreamBrain:
             self.frame = np.asarray(frame, np.float32)
             self.places = places(self.frame)
             if self.motion_drive or self.pursuit_tau:  # what moved since the frame before, against the view's own flow
-                self.moving = motion(self.frame, self.before) if self.before is not None else None
+                f = self.frame.shape[0] // self.view_size if getattr(self, "view_size", None) else 1
+                if f > 1:  # a frame larger than the eye's view: what moves is found at the view's scale, each point f x f pixels
+                    H = self.frame.shape[0] // f * f
+                    small = self.frame[:H, :H].reshape(H // f, f, H // f, f, -1).mean(axis=(1, 3))
+                    self.moving = np.kron(motion(small, self.before_small), np.ones((f, f), np.float32)) if self.before is not None else None
+                    self.before_small = small
+                else:
+                    self.moving = motion(self.frame, self.before) if self.before is not None else None
                 self.before = self.frame
                 if self.moving is not None:
                     self.moving_places = np.array([s for _, _, s in places(np.repeat(self.moving[..., None], 3, axis=2))], np.float32)
@@ -217,8 +244,11 @@ class StreamBrain:
             if self.pursuit_tau and self.target is not None and self.blind <= 0:  # pursuit: the eye drifts after the motion
                 self.pos += (DT / self.pursuit_tau) * (self.target - self.pos)
                 drifted = np.abs(self.pos - self.pos_seen).max() >= 2 if self.pos_seen is not None else True
-            if self.blind <= 0 and (k is not None or frame is not None or drifted):
+            later = getattr(self, "sight_later", None)
+            if self.blind <= 0 and (k is not None or drifted or (frame is not None and later is None)):
                 self.view = self._see()
+            if later is not None and later.code is not None:
+                self.view = later.code
             moved = self.sight.step(self.view if self.blind <= 0 else 0 * self.view)
         else:
             moved = False
@@ -230,7 +260,7 @@ class StreamBrain:
             if h is not None:
                 if self.sound is None:
                     self.sound = Leaky(len(h), tau=0.05)
-                    self.assoc = np.zeros((len(h), len(self.sight.x)), np.float32)
+                    self.link_sum = np.zeros((len(h), len(self.sight.x)), np.float32)
                 heard = self.sound.step(h)
                 self.steps_since_link = getattr(self, "steps_since_link", 0) + 1
                 # Hebb's rule while both stream (the running mean of their product), at the pace the two populations
@@ -238,7 +268,8 @@ class StreamBrain:
                 if (heard or moved) and self.frame is not None and self.steps_since_link >= 5:
                     self.steps_since_link = 0
                     self.n_assoc += 1
-                    self.assoc += (np.outer(self.sound.x, self.sight.x) - self.assoc) / self.n_assoc
+                    from scipy.linalg.blas import sger
+                    sger(1.0, self.sight.x, self.sound.x, a=self.link_sum.T, overwrite_a=1)  # link_sum += outer(sound, sight), in place
         self.since_said = 0 if (self.saying is not None or self.own) else getattr(self, "since_said", 10 ** 6) + 1
         if self.saying is not None and self.sound is not None:  # while a gesture sounds, what is heard is kept for its map
             self.said_codes.append(self.sound.x.copy())
@@ -285,7 +316,8 @@ class StreamBrain:
             if self.tract is not None:
                 from .cochlea import Cochlea
                 self._ear = getattr(self, "_ear", None) or Cochlea()
-                self.own = list(self._ear.hear(self.tract.say(*self.gestures[u], ms=200)))
+                self.said_pcm = self.tract.say(*self.gestures[u], ms=200)  # kept for whoever plays it aloud (the live page)
+                self.own = list(self._ear.hear(self.said_pcm))
                 self.saying, self.said_codes = u, []
         for e in events:
             self.log.append((round(self.t, 3),) + e)
