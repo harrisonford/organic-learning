@@ -2,8 +2,10 @@
 
 **Second draft, 2026-11-23, rewritten after three independent readings (a style survey of well-known papers, a
 hostile referee, a cold reader). Not for circulation.** This note is not part of the paper (the build leaves it
-out). The title and the term "organic learning" are Kris's (2026-11-23); "It Was the Code, Not the Rule" stays
-as a possible subtitle. Every number is from a log in `out/`. **[pending]** marks a run that is not finished. References are tracked
+out). The title and the term "organic learning" are Kris's (2026-11-23). **Kris, 2026-11-28:** the draft uses
+"organic learning" and "organic intelligence" as its words; the line "it was the code, not the rule" (and its
+variants) is out: it does not land for him; the paper is to be as visual as possible and concise, and to take
+in the real-time work. The rewrite to that brief is the next draft (docs/LOOP.md). Every number is from a log in `out/`. **[pending]** marks a run that is not finished. References are tracked
 in REFERENCES.md and each must be opened by hand before anything is sent. Other titles to choose from:
 "Raising a Learner Without Backpropagation: What Helped, What Did Nothing, What We Got Wrong";
 "We Built a Brain-Like Learner Without Backprop. The Whitening Did the Work.";
@@ -16,8 +18,8 @@ in REFERENCES.md and each must be opened by hand before anything is sent. Other 
 We set out to show that a learner made only of local learning rules, with no backpropagation, can learn from a
 single pass through its experience. It can. On CIFAR-10 shown once, one picture at a time, it names 69% of
 held-out pictures; a network of the same shape trained end to end by backpropagation names 62%. Then we took the
-learner apart to see which part had earned the win, and the credit went somewhere we had not expected. It belongs
-to the code and not to the rule. Two fixed decorrelation steps, one before the feature layer and one after it, do
+learner apart to see which part had earned the win, and it was not the local learning rule. Two fixed
+decorrelation steps, one before the feature layer and one after it, do
 the work: a gradient-trained readout on the same code does exactly as well as our local one, random filters do as
 well as the Hebbian filters we had carefully developed (on pictures enlarged to fit the learner's eye; at the
 pictures' own size the developed filters are two to three points better), and without the second decorrelation
@@ -249,7 +251,7 @@ The learner is ahead of one-pass backpropagation at every point of the stream: b
 by 7 at the end. Backpropagation catches up when it is allowed to revisit four old pictures for every new one,
 which is five times the number of updates; we ran that on one seed only. So far, so pleasing.
 
-### But the credit belongs to the code
+### Which part earned the win
 
 Take the relay away and the order flips. Without it the word cells reach 0.591, and one-pass backpropagation, at
 0.616, is ahead of them. Like for like, backpropagation wins. Everything the learner gains over it, and three

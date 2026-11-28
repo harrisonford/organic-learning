@@ -65,6 +65,10 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-two-voices-allborn`** started again 09:46 (the 08:59 start failed at once: its ear file's path was
+  lost in the unit's command); four runs, about 4 hours; logs as below.
+- (READ 09:46.) `organic-online-layer-born-r13` (readers 1 and 3: 0.060, 0.095) and `organic-two-voices-kinds`
+  (fixed relay 2→1: overlap 0.12).
 - **`organic-two-voices-allborn`** (2026-11-28 08:59; MemoryMax 2600M; four runs one after the other, about 4
   hours): two voices with the hearing cortex born too (2→1, reader 1 alone, 1→2, reader 2 alone) →
   out/bench/two_voices_top2_top_allborn{,_alone}_s0.log, two_voices_top_top2_allborn{,_alone}_s0.log. Said before:
@@ -351,6 +355,11 @@ the same as tmux with its server on the desktop: `herdr` starts or reattaches, C
   `TAG=plat SEEDS="0 1 2" ARM=routes WORLD=4 MAX_GB=5 TOTAL=120000 CORTEX=data/visual_cortex2.pkl CORTEX_LAYERS=0 EXTRA="-E CHAT=0.2 -E FULL=1 -E LOOKING=1 -E MATCH=1 -E EPISODES=1 -E INTAKE=1 -E GATE=plateau" experiments/conv_pipeline.sh`
 
 ## Queue (in order; the paper's needs are in docs/PUBLISH.md)
+**0. The paper, rewritten to Kris's brief of 2026-11-28 09:44** (his words in VISION.md 09:46 and in the notes at the
+top of docs/paper/DRAFT.md): the words "organic learning" and "organic intelligence"; "it was the code, not the
+rule" gone (done 09:46); as visual as possible and concise (draft 11 is 22 pages, about 14,500 words, five
+figures: aim at a third of that, one figure a claim); the real-time work in (the ear born whole on three
+readers, two voices, the 10 ms clock, the live page). Then build and email draft 12 (rule 9).
 **A. The controlled core on a public benchmark** (offline; decides whether the efficiency claim survives)
 1. `bench_stream.py` on seed 0: word cells with and without relay and store against nearest class mean, streaming
    LDA and ridge, developed and random filters; accuracy against pictures seen; one-shot at a lag of 20.
@@ -2034,4 +2043,12 @@ Still Kris's own:
   moved (overlap 0.44), not divided: my "kinds divide between unlike voices" was the fixed relay's case. tagb
   seed 2: nothing. **Next:** read reader 1's end and reader 3; the fixed relay's kinds for 2→1; the all-born two
   voices; then seeds for the born ear (seeds 1 and 2 on reader 2) and the second paper's opening in PUBLISH.md.
+- 2026-11-28 09:47 Health at 09:45: all healthy (7.9 GB available, 289 GB free; tagb_s0 at 120,000). **The ear born
+  whole on three readers: 0.060 / 0.086 / 0.095** against 0.046 / 0.089 / 0.089 prepared with only the past and
+  0.057 / 0.090 / 0.095 prepared and whole (VISION.md 09:46; memoize); I had said 0.038–0.054 and 0.076–0.094.
+  The fixed relay's kinds for 2→1: overlap 0.12 (circuit 0.44). `organic-two-voices-allborn` had failed at its
+  start (my path) and is started again. **Kris, 09:44:** the paper uses "organic learning" and "organic
+  intelligence"; "it was the code, not the rule" is out (done in DRAFT.md); as visual as possible and concise;
+  the real-time work in; and a rundown, given. Saved to memory and memoize. **Next:** queue item 0 (the paper's
+  rewrite, draft 12); seeds 1 and 2 of the born ear on reader 2; read the all-born two voices.
 

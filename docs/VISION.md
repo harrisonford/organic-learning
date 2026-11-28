@@ -5696,3 +5696,37 @@ nearly still and only its circuit and the relay follow. Runs: 2→1 and 1→2 wi
 voice alone with everything born. **What I say:** as with the kept cortex: the later voice ends at 0.75–1.1 of
 alone, the first voice keeps at least 0.7 of what it had at the change; the cortex's kinds hardly move after
 the change (median cosine with themselves at least 0.98).
+
+### 2026-11-28 09:46 — The ear born whole on three readers; the fixed relay's kinds; Kris's directions for the paper
+
+**Three readers, everything born with the life, each caption heard once** (photograph → its caption in the
+first ten of 1,000; chance 0.010; ±0.008):
+
+| | reader 1 | reader 2 | reader 3 |
+|---|---|---|---|
+| **all born, only the past** | **0.060** (median rank 248) | **0.086** (219) | **0.095** (222) |
+| prepared cortex and relay, only the past (02:24) | 0.046 (286) | 0.089 | 0.089 (219) |
+| prepared cortex and relay, each caption known whole (11-27) | 0.057 (294) | 0.090 | 0.095 (212) |
+| control (bags tied to other photographs) | 0.009 | 0.008 | 0.014 |
+
+**Against what I said (07:51):** reader 1 0.038–0.054: **too low** (0.060; it was 0.068 at 7,500). Reader 3
+0.076–0.094: **just over** (0.095). On three readers the ear with nothing prepared is level with the prepared
+ear or ahead of it (reader 1: 0.060 against 0.046 with only the past; 14 thousandths is under two of these
+±0.008, so "level" is what I can say). The hearing cortex's kinds came to rest by themselves in all three
+(cosine with the last reading 1.00 from 2,500 captions). The caption's own written words from its bag, a
+measure only: 0.74 / 0.82 / 0.85 in the first ten. One seed each: seeds 1 and 2 are the next runs.
+
+**The kinds for the pair 2→1 with the fixed relay** (said at 05:30: overlap over 0.6): **0.12**, wrong. One
+kind in four stays the first voice's and has not moved (upper quartile of the cosine 0.96); the others moved
+towards the second voice (median 0.59). With the circuit on the same pair: overlap 0.44, one kind in fifty the
+first voice's alone. So for both pairs with reader 1: a relay fixed to another voice makes the new voice take
+kinds for itself (0.12, 0.16); a relay that follows the voice lets the kinds be shared (0.44).
+
+**A unit of mine failed and is started again** (09:46): `organic-two-voices-allborn` could not find its ear
+file (a variable lost in the unit's command). Nothing was lost but 45 minutes.
+
+**Kris, 09:44** (his words, for the draft): "for draft purposes i think i should use organic intelligence and
+organic learning as words"; the line "it was the code, not the rule" "is not hitting for me"; "make the paper
+as visual as possible and concise"; "a lot of things have changed given the real time nature of the model".
+Done at once: the line is out of the abstract, the section title and the notes. The rewrite (visual, concise,
+both words, the real-time work in) is at the head of the queue.
