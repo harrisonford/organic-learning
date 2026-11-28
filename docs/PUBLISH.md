@@ -325,7 +325,12 @@ organic learner behaves and what each part does, measured honestly, not a score.
   1.04 of alone: the fixed relay's harm goes with how unlike the voices are. The kinds divide between unlike
   voices (overlap of use 0.16, readers 1 and 2, fixed relay) and are shared and moved between like ones (0.48,
   readers 2 and 3, circuit). Needs seeds before it is a claim. The hearing cortex born with the life too
-  (06:39): 0.032 / 0.048 / 0.059 at 1,000 / 2,500 / 5,000 against 0.032 / 0.040 / 0.063 developed first.** The link in a stream (traces of a second, what is in view):
+  (06:39, 07:51): 0.032 / 0.048 / 0.059 / 0.072 / 0.086 at 1,000 / 2,500 / 5,000 / 7,500 / the end against
+  0.032 / 0.040 / 0.063 / 0.071 / 0.079 developed first, control 0.008: an ear with nothing prepared, each
+  sentence heard once, ends level with the prepared ear (0.090). On the 10 ms clock inside the stream brain
+  0.033 / 0.060 against 0.039 / 0.061 kept (08:58). Reader 1 is at 0.068 at 7,500 (0.055 prepared); readers 1
+  and 3 to the end, and seeds, before this is a claim. If it holds on three readers this is the second paper's
+  spine: nothing in the ear is fitted, staged or scheduled.** The link in a stream (traces of a second, what is in view):
   0.075, the caption bag's number; inside the stream brain 0.061 at 5,000 captions against 0.069. Typed letters,
   runs of 3 and 4 hashed, no words cut: 0.093 against 0.088 for written words; the one-voice ear is at that
   ceiling. A live page runs these organs on a camera and a microphone (docs/LIVE.md). Queue 29e ended: replay of

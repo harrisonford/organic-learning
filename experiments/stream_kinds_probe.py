@@ -159,6 +159,7 @@ if THEN:
         # (2026-11-28 05:28) a measure only: where the kinds are at the change, to see what the second voice does to them
         U0 = (ear.pairs.U.copy(), ear.triples.U.copy())
         wins0 = np.concatenate([ear.pairs.wins, ear.triples.wins]).copy()
+        W0 = ear.layer.W[0].copy() if LAYER == "born" else None  # (2026-11-28 08:58) and where the hearing cortex's kinds are
     kinds = 0
     for n, u in enumerate(life2_u, 1):
         kinds += hear(u, V_life2[n - 1])
@@ -177,3 +178,6 @@ if THEN:
                         f"a kind against itself at the change (cosine): quartiles {np.percentile(moved, 25):.2f} / {np.median(moved):.2f} / {np.percentile(moved, 75):.2f}; "
                         f"held-out use of the kinds by the two voices: overlap {np.minimum(p1, p2).sum():.2f} (1 the same kinds as often, 0 no kind shared), "
                         f"kinds carrying half of each voice's use {int(np.searchsorted(np.cumsum(np.sort(p1)[::-1]), 0.5)) + 1} / {int(np.searchsorted(np.cumsum(np.sort(p2)[::-1]), 0.5)) + 1} of {len(p1)}")
+                    if W0 is not None:
+                        cw = np.sort((W0 * ear.layer.W[0]).sum(1))
+                        say(f"the hearing cortex's kinds against themselves at the change (cosine): lowest tenth {cw[len(cw) // 10]:.2f}, median {np.median(cw):.2f}")

@@ -95,7 +95,8 @@ lived, counts, and how the brain keeps up with the clock. The brain's babble is 
 
 The live brain now has the text-free ear and its link to sight (`give_ear` in `organic/stream.py`; the organ is
 `organic/hear_stream.py`, checked to give the very same sound kinds as the offline ear). Its hearing cortex and
-relay were developed on one SpokenCOCO reader before the life (`out/live/ear_born.pkl`); its 2,048 sound kinds
+relay were at first developed on one SpokenCOCO reader before the life (`out/live/ear_born.pkl`); since
+2026-11-28 both are born with the brain (decisions 17 and 18) and that file is no longer read. Its 2,048 sound kinds
 start empty and are founded by what the microphone brings; every kind heard leaves a trace of about a second,
 tied by Hebb's rule to what the eye holds. The page has a new panel, **what a sound reminds it of**: when a kind
 is heard, the past view (of the last 300 fixations, kept in memory only, never on disk) most like what the eye
@@ -135,6 +136,19 @@ More decisions:
     fixed) the second voice ends at 0.41, 0.66 and 1.04 of alone: shut out when the voices are unlike, no
     harm when they are alike. What I wrote at 05:27 ("the first kept whole; the fixed relay shuts a second
     speaker out") was the first pair alone and too strong.
+
+18. **The hearing cortex is born with the brain too** (2026-11-28 08:58; VISION.md 06:39, 07:51, 08:58). The last
+    piece of the ear that was a SpokenCOCO reader's. `HearingLayer` in `organic/hear_stream.py`: the same 128
+    kinds of 8 × 8 windows on the cochlea, with the correlations of its windows removed by a circuit of
+    interneurons (the relay's rule, at the published rate for tens of cells) and its kinds learning by their
+    own rule, each kind's rate falling with its own wins; one window a frame, from the frames the ear holds to
+    be sound, learned from every 3.3 s of sound. Measured before it went on the page: in one pass with
+    everything born, reader 2 ends at 0.086 against 0.079 with the cortex developed first (no cost; the
+    cortex's kinds come to rest by themselves), and inside the stream brain 0.033 / 0.060 at 2,500 / 5,000
+    captions against 0.039 / 0.061 for the ear kept from a finished life. Page test with recorded speech
+    passes (594 kinds in 112 s; no sound lost). A row through the ear costs the same as before. So whoever
+    speaks to the page first is the voice its hearing forms on. Not yet known: a real microphone and room;
+    whether the cortex, slowed by then, serves a second speaker as well (runs started 08:59).
 
 15. **Typed letters are a third stream** (2026-11-28 01:32; `give_letters`, `type` in `organic/stream.py`): the
     page sends every keystroke as it is typed; each letter excites the unit of the run of 3 and of 4 letters that

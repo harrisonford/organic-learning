@@ -115,16 +115,18 @@ class LiveBrain:
         self.brain.sight_later = self.sight = LaterSight(self.cortex)
         if getattr(self.brain, "room", None) is None:  # a microphone is never silent (organic/stream.py, `room`)
             self.brain.room, self.brain.floor, self.brain.top = (10.0, 600.0), None, None
-        born = os.path.join(home, "ear_born.pkl")  # the kinds' ear (organic/hear_stream.py): its cortex and relay developed on speech before the life
-        if getattr(self.brain, "kinds_ear", None) is None and os.path.exists(born):
-            k = pickle.load(open(born, "rb"))
-            # (2026-11-28 04:30) the relay is a circuit born random with the brain (organic/cortex2.py RelayCircuit),
-            # learning by its local rule from the frames the ear holds to be sound, a change every 3.3 s of sound
-            # worked out beside the clock; only the hearing cortex under it was developed before the life
-            # (docs/VISION.md 2026-11-28 03:45, 04:30). It is at rest after about three minutes of speech.
+        if getattr(self.brain, "kinds_ear", None) is None:
+            # The kinds' ear (organic/hear_stream.py) is born with the brain, all of it: nothing in it was developed on
+            # anybody's speech before the life. (2026-11-28 04:30) The relay is a circuit born random (organic/cortex2.py
+            # RelayCircuit), learning by its local rule from the frames the ear holds to be sound, a change every 3.3 s
+            # of sound worked out beside the clock; at rest after about three minutes of speech (docs/VISION.md
+            # 2026-11-28 03:45, 04:30). (2026-11-28 08:55) The hearing cortex under it too (HearingLayer: its own
+            # circuit and its kinds' own rule, from the same frames; docs/VISION.md 2026-11-28 07:51, 08:55). Until
+            # then it was a SpokenCOCO reader's, kept in ear_born.pkl; that file is no longer read.
             from .cortex2 import RelayCircuit
-            ear = StreamEar(k["layer"], RelayCircuit(len(k["relay"].mu), rate=1e-4, block=50, seed=seed), tau=0.5)
-            ear.relay_learns, ear.relay_later, ear.relay_block = "sound", True, 330
+            from .hear_stream import HearingLayer
+            ear = StreamEar(HearingLayer(seed=seed), RelayCircuit(1024, rate=1e-4, block=50, seed=seed), tau=0.5)
+            ear.relay_learns, ear.relay_later, ear.relay_block, ear.layer_learns = "sound", True, 330, "sound"
             self.brain.give_ear(ear, kind_tau=1.0)
         if getattr(self.brain, "letters", None) is None:
             self.brain.give_letters()
@@ -195,7 +197,8 @@ class LiveBrain:
                 "floor": round(float(b.floor), 2) if b.floor is not None else None, "top": round(float(b.top), 2) if b.top is not None else None,
                 "kinds_founded": (b.kinds_ear.pairs.founded + b.kinds_ear.triples.founded) if getattr(b, "kinds_ear", None) is not None else 0,
                 "kinds_heard": n["kinds"], "views_kept": len(self.views), "gestures": gestures,
-                "relay_heard": float(getattr(getattr(getattr(b, "kinds_ear", None), "relay", None), "n", 0)) / 100}
+                "relay_heard": float(getattr(getattr(getattr(b, "kinds_ear", None), "relay", None), "n", 0)) / 100,
+                "cortex_heard": float(getattr(getattr(getattr(getattr(b, "kinds_ear", None), "layer", None), "circuit", None), "n", 0)) / 100}
 
     def _recall(self, letters=False):
         """The kept view most like what the eye held with the kinds now sounding (or the letters now typed); how far it

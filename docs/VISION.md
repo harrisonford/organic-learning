@@ -5650,3 +5650,49 @@ the circuit); one kind in six is won nine tenths in the first voice (one in twen
 kind against itself at the change 0.58 / 0.66 / 0.84 (0.73 / 0.77 / 0.83). With the relay fixed the kinds move
 further and divide more than with a relay that follows the voice, and the scores are the same (0.047 / 0.038
 against 0.046 / 0.029): for like voices either way of sharing the kinds works.
+
+### 2026-11-28 08:58 — The whole ear born: on the clock as predicted; on the page; reader 1 so far; two more readouts
+
+**The stream brain with nothing of the ear kept from before** (`RELAY=born LAYER=born`, reader 2; said at
+07:40: 0.028–0.045 and 0.048–0.062): **0.033 at 2,500 and 0.060 at 5,000** (median rank 358 and 300). Both
+**held**. Beside the relay born alone 0.031 / 0.055 (rank 374 / 328) and the ear kept from a finished life 0.039
+/ 0.061 (306 at 5,000). The ear on the 10 ms clock, every piece of it learning from the first frame, ends where
+the prepared ear ends.
+
+**Decision (mine): the page's ear is born whole** (`organic/live.py`; docs/LIVE.md decision 18). A newborn live
+brain now gets a `HearingLayer` and a relay circuit, both learning from the frames the ear holds to be sound;
+`out/live/ear_born.pkl` (a SpokenCOCO reader's cortex) is no longer read. The page shows how much sound the
+hearing cortex has learned from. Tested with the recorded speech as the microphone and typing: 594 sound kinds
+founded in 112 s, cortex and relay each learned from 96 s of sound, no sound lost, no console errors, recall
+answering. A 10 ms step took 9.8 ms in that test, with the machine's load at 16–17 (three probes and a life):
+a row through the ear costs the same with the born cortex as with the kept one (1.2–1.8 ms either way, measured
+side by side under that load), so the step time is the machine, not the organ (3.9 ms idle, about 8 ms beside
+three probes, measured at 02:26). The brain is newborn again. What this is not yet: tested with a real
+microphone and room; the gate "frames the ear holds to be sound" was not in the probes (clean speech, 99% of
+frames).
+
+**Reader 1 with everything born, so far** (the run ends about 09:10): 0.023 / 0.042 / 0.052 / 0.068 at 1,000 /
+2,500 / 5,000 / 7,500 (median rank 440 / 363 / 296 / 269), against 0.025 / 0.034 / 0.047 / 0.055 with fitted
+pieces and each caption known whole and 0.018 / 0.032 / 0.035 / 0.051 with fitted pieces and only the past. I
+said 0.038–0.054 at the end; it is over that before the end.
+
+**The kinds for the pair 2→1 with the circuit** (said at 05:30: divided, overlap under 0.5, two sorts): overlap
+of the two voices' use **0.44**; a kind's share of wins in the second voice 0.43 / 0.49 / 0.54; one kind in
+fifty stays the first voice's; a kind against itself at the change 0.69 / 0.75 / 0.80. **Not two sorts**: with
+the circuit nearly every kind is won by both voices and all have moved a little, for unlike voices (2 and 1)
+as for like ones (2 and 3: 0.48). What I wrote at 07:37 ("kinds divide between unlike voices") was the fixed
+relay's case (1→2: 0.16). The picture now: a relay that follows the voice lets the kinds be shared; through a
+relay fixed to another voice the new voice lands elsewhere and takes kinds for itself. The fixed relay's
+readout for 2→1 is still running.
+
+**Replay of every moment in sleep, seed 2** (`tagb_s2` ended at 120,000; lists put right, tagb_s0 running): echo
+0.41, first words 0.47, two words 0.46, pages 0.19, against the life with nothing changed 0.52 / 0.46 / 0.49 /
+0.18. With seed 1 (0.60 / 0.42 / 0.39 / 0.17 against 0.40 / 0.46 / 0.40 / 0.18): nothing in either direction
+on two seeds; the third is running.
+
+**Next, said before it runs: two voices with the cortex born too.** The born cortex's kinds slow with their own
+wins (after 2,500 captions about 4,500 wins each, a rate near 0.001), so at the change of voice the cortex is
+nearly still and only its circuit and the relay follow. Runs: 2→1 and 1→2 with everything born, and each later
+voice alone with everything born. **What I say:** as with the kept cortex: the later voice ends at 0.75–1.1 of
+alone, the first voice keeps at least 0.7 of what it had at the change; the cortex's kinds hardly move after
+the change (median cosine with themselves at least 0.98).

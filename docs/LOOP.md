@@ -65,6 +65,14 @@ herdr (v0.9.5, installed for the user on 2026-11-24 at Kris's request, from its 
 the same as tmux with its server on the desktop: `herdr` starts or reattaches, Ctrl-b q detaches.
 
 ## Running
+- **`organic-two-voices-allborn`** (2026-11-28 08:59; MemoryMax 2600M; four runs one after the other, about 4
+  hours): two voices with the hearing cortex born too (2→1, reader 1 alone, 1→2, reader 2 alone) →
+  out/bench/two_voices_top2_top_allborn{,_alone}_s0.log, two_voices_top_top2_allborn{,_alone}_s0.log. Said before:
+  VISION.md 08:58.
+- **The live page's ear is born whole** since 08:56 (LIVE.md decision 18); the brain is newborn; kid-a commit local.
+- **Lives:** `tagb_s2` ENDED about 08:00 at 120,000 (echo 0.41, first words 0.47, two words 0.46, pages 0.19;
+  nothing on two seeds); **`tagb_s0`** running to 130,000 (about 14:00). Lists put right at 08:50.
+- (READ 08:55: 0.033 / 0.060.) `organic-stream-layer-born`, below.
 - **`organic-online-layer-born-r13`** (2026-11-28 07:51; MemoryMax 2600M; about 2 hours, one after the other): the
   one-pass ear with every piece born with the life, readers 1 and 3 →
   out/bench/grounded_online_top_live0.5_circuit_layerborn_s0.log, ..._top3_.... Said before: VISION.md 07:51
@@ -2017,4 +2025,13 @@ Still Kris's own:
   (`organic/live.py`: `HearingLayer`, `layer_learns="sound"`), tested with the recorded-speech page test, LIVE.md
   decision 18; then two voices with the cortex born too; the kinds readout for the pair 2→1; seeds for the
   two-voice table.
+- 2026-11-28 09:00 Health at 08:50: one alert (tagb_s2 had ended as planned at 120,000; lists put right, tagb_s0
+  added; all healthy after; 4.7 GB available, 289 GB free). **The whole ear born, on the clock: 0.033 / 0.060**
+  (said 0.028–0.045 and 0.048–0.062; VISION.md 08:58; memoize) against 0.039 / 0.061 kept. **Decision (mine): the
+  page's ear is born whole** (`organic/live.py`; LIVE.md decision 18; page test passes; a step 9.8 ms under a load
+  of 16–17, the ear's row the same cost as before; kid-a commit local; brain newborn). Reader 1 with everything
+  born is at 0.068 at 7,500 (I said 0.038–0.054 at the end). The kinds for 2→1 with the circuit: shared and
+  moved (overlap 0.44), not divided: my "kinds divide between unlike voices" was the fixed relay's case. tagb
+  seed 2: nothing. **Next:** read reader 1's end and reader 3; the fixed relay's kinds for 2→1; the all-born two
+  voices; then seeds for the born ear (seeds 1 and 2 on reader 2) and the second paper's opening in PUBLISH.md.
 
